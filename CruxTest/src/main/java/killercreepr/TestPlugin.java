@@ -1,0 +1,60 @@
+package killercreepr;
+
+import killercreepr.crux.config.bukkit.json.registry.DefaultJsonRegistry;
+import killercreepr.crux.config.common.json.container.JsonListHandler;
+import killercreepr.sometests.BlockBo;
+import killercreepr.sometests.JsonT;
+import killercreepr.sometests.TestCf;
+import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+
+public class TestPlugin extends JavaPlugin implements Listener {
+    @Override
+    public void onEnable() {
+        super.onEnable();
+        getServer().getPluginManager().registerEvents(this, this);
+        //getServer().getPluginManager().registerEvents(new MenuListener(), this);
+
+        DefaultJsonRegistry.REGISTRY.register(
+                BlockBo.class
+        );
+
+        cfg = new TestCf(this, "test");
+        cfg.setup();
+
+        DefaultJsonRegistry.REGISTRY.CONTAINER_REGISTRY.entrySet().forEach(entyr ->{
+            getLogger().log(Level.WARNING, "ayo: " + entyr.getKey());
+        });
+
+        testJson = new JsonT(this, "test_json_boi");
+        testJson.reloadIfNeeded();
+        List<BlockBo> list = new ArrayList<>(){{
+            add(new BlockBo(1, 0, 0));
+            add(new BlockBo(0, 1, 0));
+            add(new BlockBo(0, 0, 1));
+        }};
+        DefaultJsonRegistry.REGISTRY.registerContainerHandler(list.getClass(), new JsonListHandler());
+        getLogger().log(Level.WARNING, "ayodwjfiowjhfoiw: " + list.getClass());
+        testJson.add("prop", list);
+        testJson.save();
+    }
+    protected TestCf cfg;
+    protected JsonT testJson;
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
+        Bukkit.broadcastMessage(cfg.AYO.get() + "");
+        Player p = event.getPlayer();
+        double v = p.getAttribute(Attribute.GENERIC_SCALE).getValue();
+        p.getAttribute(Attribute.GENERIC_SCALE).setBaseValue(v - .001D);
+    }
+}

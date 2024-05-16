@@ -126,15 +126,15 @@ public interface ICruxJson extends ICruxFile {
         return jsonRegistry().deserialize(base, clazz);
     }
 
-    default <T extends JsonSerializable> @NotNull JsonObject add(@NotNull String property, @NotNull T object){
+    default <T> @NotNull JsonObject add(@NotNull String property, @NotNull T object){
         return add(json(), property, object);
     }
 
     /**
      * @return The first base JsonObject, for chaining.
      */
-    default <T extends JsonSerializable> @NotNull JsonObject add(@NotNull JsonObject base, @NotNull String property, @NotNull T object){
-        base.add(property, jsonRegistry().serialize(object));
+    default <T> @NotNull JsonObject add(@NotNull JsonObject base, @NotNull String property, @NotNull T object){
+        base.add(property, jsonRegistry().serializeObject(object));
         return base;
     }
 }

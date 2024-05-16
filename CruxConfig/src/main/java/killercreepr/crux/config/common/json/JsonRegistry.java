@@ -6,6 +6,7 @@ import killercreepr.crux.config.common.json.annotation.JsonSerializer;
 import killercreepr.crux.config.common.json.container.JsonContainerHandler;
 import killercreepr.crux.config.common.json.container.JsonListHandler;
 import killercreepr.crux.config.common.json.registry.JsonContainerHandlerRegistry;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,6 +15,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 public class JsonRegistry {
     public final String DESERIALIZE_METHOD_NAME = "deserializeFromJson";
@@ -74,6 +76,7 @@ public class JsonRegistry {
     public @NotNull JsonObject serializeObject(@NotNull Object object){
         if(object instanceof JsonSerializable s) return serialize(s);
         JsonContainerHandler<?> handler = getContainerHandler(object.getClass());
+        Bukkit.getLogger().log(Level.WARNING, "looking for: " + object.getClass());
         if(handler == null) throw new RuntimeException("Cannot find serialization method for " + object + " (class " + object.getClass().getName() + ")");
         JsonElement element = handler.attemptSerializeToJson(this, object);
         if(element == null)

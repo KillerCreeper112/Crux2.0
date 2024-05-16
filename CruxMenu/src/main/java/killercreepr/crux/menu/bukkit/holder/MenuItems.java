@@ -1,4 +1,4 @@
-package killercreepr.crux.menu.holder;
+package killercreepr.crux.menu.bukkit.holder;
 
 import org.jetbrains.annotations.NotNull;
 

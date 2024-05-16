@@ -1,9 +1,10 @@
 package killercreepr.crux.location;
 
 import org.bukkit.Location;
-import org.bukkit.util.Consumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Consumer;
 
 public class DynamicInfo {
     private final Consumer<Location> locationConsumer;

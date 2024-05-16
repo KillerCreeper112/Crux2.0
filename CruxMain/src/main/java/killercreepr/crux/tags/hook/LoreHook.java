@@ -1,6 +1,6 @@
 package killercreepr.crux.tags.hook;
 
-import killerceepr.crux.tags.tag.LoreResolver;
+import killercreepr.crux.tags.tag.LoreResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

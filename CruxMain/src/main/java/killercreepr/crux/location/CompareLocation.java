@@ -1,6 +1,6 @@
 package killercreepr.crux.location;
 
-import killerceepr.crux.Crux;
+import killercreepr.crux.Crux;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 

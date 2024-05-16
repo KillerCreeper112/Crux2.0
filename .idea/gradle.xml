@@ -10,6 +10,7 @@
             <option value="$PROJECT_DIR$/CruxConfig" />
             <option value="$PROJECT_DIR$/CruxMain" />
             <option value="$PROJECT_DIR$/CruxMenu" />
+            <option value="$PROJECT_DIR$/CruxTest" />
           </set>
         </option>
       </GradleProjectSettings>

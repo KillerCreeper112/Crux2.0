@@ -1,7 +1,7 @@
 package killercreepr.crux.data;
 
-import killerceepr.crux.Crux;
-import killerceepr.crux.tags.container.StringHookContainer;
+import killercreepr.crux.Crux;
+import killercreepr.crux.tags.container.StringHookContainer;
 import net.kyori.adventure.title.Title;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

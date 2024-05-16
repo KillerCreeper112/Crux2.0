@@ -1,7 +1,5 @@
-package killercreepr.crux.config.bukkit.data;
+package killercreepr.crux.menu.bukkit.config.data;
 
-import killercreepr.crux.config.bukkit.CruxConfig;
-import killercreepr.crux.config.bukkit.value.ConfigValue;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.Holder;
 import killercreepr.crux.menu.bukkit.holder.MenuItemHolder;

@@ -1,6 +1,6 @@
 package killercreepr.crux.util;
 
-import killerceepr.crux.registries.Registries;
+import killercreepr.crux.registries.Registries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

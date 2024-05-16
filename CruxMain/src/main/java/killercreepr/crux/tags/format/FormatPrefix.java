@@ -1,7 +1,7 @@
 package killercreepr.crux.tags.format;
 
-import killerceepr.crux.tags.container.ObjectHookContainer;
-import killerceepr.crux.tags.tag.ObjectTag;
+import killercreepr.crux.tags.container.ObjectHookContainer;
+import killercreepr.crux.tags.tag.ObjectTag;
 import org.jetbrains.annotations.NotNull;
 
 public interface FormatPrefix {

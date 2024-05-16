@@ -1,10 +1,10 @@
-package killercreepr.crux.menu.holder;
+package killercreepr.crux.menu.bukkit.holder;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.Holder;
-import killercreepr.crux.menu.MenuInfo;
-import killercreepr.crux.menu.MenuItem;
+import killercreepr.crux.menu.bukkit.MenuInfo;
+import killercreepr.crux.menu.bukkit.MenuItem;
 import killercreepr.crux.tags.container.ObjectStringHookContainer;
 import killercreepr.crux.tags.container.StringHookContainer;
 import killercreepr.crux.tags.defaults.CClaimTags;

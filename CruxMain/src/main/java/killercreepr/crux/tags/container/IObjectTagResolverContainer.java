@@ -1,8 +1,8 @@
 package killercreepr.crux.tags.container;
 
-import killerceepr.crux.data.DataExchange;
-import killerceepr.crux.tags.Tags;
-import killerceepr.crux.tags.format.FormatPrefix;
+import killercreepr.crux.data.DataExchange;
+import killercreepr.crux.tags.Tags;
+import killercreepr.crux.tags.format.FormatPrefix;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -1,10 +1,10 @@
 package killercreepr.crux.tags.tag;
 
-import killerceepr.crux.tags.Tags;
-import killerceepr.crux.tags.container.ObjectHookContainer;
-import killerceepr.crux.tags.format.FormatPrefix;
-import killerceepr.crux.tags.hook.LoreHook;
-import killerceepr.crux.tags.hook.StringHook;
+import killercreepr.crux.tags.Tags;
+import killercreepr.crux.tags.container.ObjectHookContainer;
+import killercreepr.crux.tags.format.FormatPrefix;
+import killercreepr.crux.tags.hook.LoreHook;
+import killercreepr.crux.tags.hook.StringHook;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -1,6 +1,6 @@
 package killercreepr.crux.util;
 
-import killerceepr.crux.Crux;
+import killercreepr.crux.Crux;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;

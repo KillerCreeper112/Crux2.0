@@ -1,32 +1,17 @@
 package killercreepr.crux;
 
-import io.papermc.paper.event.player.AsyncChatEvent;
-import killercreepr.crux.config.MenuFolder;
-import killercreepr.crux.config.TestCfg;
 import killercreepr.crux.hooks.PlaceholderAPIHook;
-import killercreepr.crux.menu.bukkit.actions.MenuAction;
-import killercreepr.crux.menu.bukkit.actions.custom.CloseInventoryAction;
-import killercreepr.crux.menu.bukkit.actions.custom.OpenMenuAction;
-import killercreepr.crux.menu.bukkit.actions.custom.SoundAction;
-import killercreepr.crux.menu.bukkit.actions.custom.UpdateMenuAction;
-import killercreepr.crux.menu.bukkit.holder.MenuHolder;
-import killercreepr.crux.menu.bukkit.listener.MenuListener;
-import killercreepr.crux.menu.bukkit.registry.MenuRegistry;
-import killercreepr.crux.registry.Registry;
 import killercreepr.crux.tags.Tags;
 import killercreepr.crux.tags.defaults.CClaimTags;
 import killercreepr.crux.tags.format.Format;
 import killercreepr.crux.tags.minimessage.*;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -52,11 +37,11 @@ public class Crux extends JavaPlugin implements Listener {
                     ).build(), TAGS
     );
 
-    private final MenuRegistry MENU_REGISTRY = new MenuRegistry(FORMAT);
+    /*private final MenuRegistry MENU_REGISTRY = new MenuRegistry(FORMAT);
 
     public @NotNull MenuRegistry getMenuRegistry() {
         return MENU_REGISTRY;
-    }
+    }*/
 
     private static Crux instance;
     public static Crux inst(){ return instance; }
@@ -72,26 +57,21 @@ public class Crux extends JavaPlugin implements Listener {
             placeholderAPIHook = new PlaceholderAPIHook();
         }else placeholderAPIHook = null;
 
-        Registry<MenuAction> actions = MENU_REGISTRY.MENU_ACTIONS;
+        /*Registry<MenuAction> actions = MENU_REGISTRY.MENU_ACTIONS;
         actions.register(new OpenMenuAction(key("menu")));
         actions.register(new UpdateMenuAction(key("update")));
         actions.register(new SoundAction(key("sound")));
         actions.register(new CloseInventoryAction(key("close")));
 
-        new MenuFolder(this, "menu", getMenuRegistry()).register();
+        new MenuFolder(this, "menu", getMenuRegistry()).register();*/
 
         new CClaimTags(this, FORMAT.getTags());
 
         //todo remove test
-        getServer().getPluginManager().registerEvents(this, this);
-        getServer().getPluginManager().registerEvents(new MenuListener(), this);
-
-        TestCfg cfg = new TestCfg(this, "testayo");
-        cfg.setup();
-        log(Level.WARNING, cfg.TEST.get() + "");
+        //getServer().getPluginManager().registerEvents(new MenuListener(), this);
     }
 
-    @EventHandler(ignoreCancelled = true)
+    /*@EventHandler(ignoreCancelled = true)
     public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
         new MenuFolder(this, "menu", getMenuRegistry()).register();
     }
@@ -104,7 +84,7 @@ public class Crux extends JavaPlugin implements Listener {
             MenuHolder menu = MENU_REGISTRY.MENU_HOLDERS.get(Crux.key(plain));
             if(menu != null) menu.open(p);
         });
-    }
+    }*/
 
     @Override
     public void onDisable() {

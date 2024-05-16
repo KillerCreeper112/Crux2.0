@@ -1,6 +1,6 @@
 package killercreepr.crux.location;
 
-import killerceepr.crux.data.Holder;
+import killercreepr.crux.data.Holder;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;

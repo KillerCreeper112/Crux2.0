@@ -1,7 +1,7 @@
 package killercreepr.crux.tags.hook;
 
-import killerceepr.crux.data.Holder;
-import killerceepr.crux.tags.Tags;
+import killercreepr.crux.data.Holder;
+import killercreepr.crux.tags.Tags;
 import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.ParsingException;
 import net.kyori.adventure.text.minimessage.tag.Tag;

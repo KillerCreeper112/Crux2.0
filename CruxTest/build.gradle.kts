@@ -2,11 +2,14 @@
 version = "1.0"
 plugins {
     alias(libs.plugins.paperweight)
+    alias(libs.plugins.runPaper)
+    alias(libs.plugins.shadow)
 }
 
 dependencies {
     paperweight.paperDevBundle(libs.versions.paper)
-    implementation(libs.crunch)
+    implementation(project(":CruxMain"))
+    implementation(project(":CruxConfig"))
 }
 
 tasks{

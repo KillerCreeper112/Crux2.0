@@ -1,6 +1,6 @@
 package killercreepr.crux.tags.container;
 
-import killerceepr.crux.tags.hook.StringHookedObject;
+import killercreepr.crux.tags.hook.StringHookedObject;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

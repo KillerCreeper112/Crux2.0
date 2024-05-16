@@ -1,4 +1,4 @@
-package killercreepr.crux.menu.holder;
+package killercreepr.crux.menu.bukkit.holder;
 
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.Holder;
@@ -25,13 +25,13 @@ public class MenuHolder implements Keyed {
     protected final @Nullable String title;
     protected final @NotNull String size;
     //priority => item
-    protected final @NotNull killercreepr.crux.menu.holder.MenuItems items;
+    protected final @NotNull MenuItems items;
     protected final @NotNull DataExchange info;
 
     public MenuHolder(@NotNull NamespacedKey key,
                       @Nullable String title,
                       @NotNull String size,
-                      @NotNull killercreepr.crux.menu.holder.MenuItems items,
+                      @NotNull MenuItems items,
                       @NotNull DataExchange info) {
         this.key = key;
         this.title = title;
@@ -68,7 +68,7 @@ public class MenuHolder implements Keyed {
         return size;
     }
 
-    public @NotNull killercreepr.crux.menu.holder.MenuItems getItems() {
+    public @NotNull MenuItems getItems() {
         return items;
     }
 }

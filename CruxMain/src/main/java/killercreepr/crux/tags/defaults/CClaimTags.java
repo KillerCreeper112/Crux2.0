@@ -1,13 +1,13 @@
 package killercreepr.crux.tags.defaults;
 
-import killerceepr.crux.Crux;
-import killerceepr.crux.data.Holder;
-import killerceepr.crux.tags.Tags;
-import killerceepr.crux.tags.container.StringHookContainer;
-import killerceepr.crux.tags.format.FormatPrefix;
-import killerceepr.crux.tags.hook.LoreHook;
-import killerceepr.crux.tags.hook.StringHook;
-import killerceepr.crux.tags.tag.ObjectTag;
+import killercreepr.crux.Crux;
+import killercreepr.crux.data.Holder;
+import killercreepr.crux.tags.Tags;
+import killercreepr.crux.tags.container.StringHookContainer;
+import killercreepr.crux.tags.format.FormatPrefix;
+import killercreepr.crux.tags.hook.LoreHook;
+import killercreepr.crux.tags.hook.StringHook;
+import killercreepr.crux.tags.tag.ObjectTag;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,15 +1,15 @@
 package killercreepr.crux.tags;
 
-import killerceepr.crux.data.DataExchange;
-import killerceepr.crux.data.Holder;
-import killerceepr.crux.tags.container.LoreHookContainer;
-import killerceepr.crux.tags.container.ObjectHookContainer;
-import killerceepr.crux.tags.container.StringHookContainer;
-import killerceepr.crux.tags.format.FormatPrefix;
-import killerceepr.crux.tags.hook.LoreHook;
-import killerceepr.crux.tags.hook.StringHook;
-import killerceepr.crux.tags.tag.LoreResolver;
-import killerceepr.crux.tags.tag.ObjectTag;
+import killercreepr.crux.data.DataExchange;
+import killercreepr.crux.data.Holder;
+import killercreepr.crux.tags.container.LoreHookContainer;
+import killercreepr.crux.tags.container.ObjectHookContainer;
+import killercreepr.crux.tags.container.StringHookContainer;
+import killercreepr.crux.tags.format.FormatPrefix;
+import killercreepr.crux.tags.hook.LoreHook;
+import killercreepr.crux.tags.hook.StringHook;
+import killercreepr.crux.tags.tag.LoreResolver;
+import killercreepr.crux.tags.tag.ObjectTag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

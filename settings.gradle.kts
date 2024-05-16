@@ -4,7 +4,9 @@ rootProject.name = "Crux"
 include(
     "CruxMain",
     "CruxConfig",
-    "CruxMenu"
+    "CruxMenu",
+
+    "CruxTest"
 )
 
 pluginManagement {

@@ -2,6 +2,7 @@ package killercreepr.crux.menu.bukkit;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.DataExchange;
+import killercreepr.crux.menu.bukkit.holder.MenuHolder;
 import killercreepr.crux.tags.container.ObjectStringHookContainer;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -15,16 +16,16 @@ import java.util.Map;
 import java.util.Optional;
 
 public class ConfigMenu extends Menu{
-    protected final killercreepr.crux.menu.holder.MenuHolder holder;
+    protected final MenuHolder holder;
     protected final DataExchange info;
     protected final ObjectStringHookContainer tags;
 
     protected final Map<Integer, MenuItem> items = new HashMap<>();
-    public ConfigMenu(@NotNull killercreepr.crux.menu.holder.MenuHolder holder, @NotNull DataExchange info){
+    public ConfigMenu(@NotNull MenuHolder holder, @NotNull DataExchange info){
         this(holder, info, null);
     }
 
-    public ConfigMenu(@NotNull killercreepr.crux.menu.holder.MenuHolder holder, @NotNull DataExchange info, @Nullable ObjectStringHookContainer tags){
+    public ConfigMenu(@NotNull MenuHolder holder, @NotNull DataExchange info, @Nullable ObjectStringHookContainer tags){
         this.holder = holder;
         this.info = info;
         this.tags = new ObjectStringHookContainer(holder.getRegistry().getFormat().getTags());
@@ -51,7 +52,7 @@ public class ConfigMenu extends Menu{
         return info;
     }
 
-    public ConfigMenu setItems(@NotNull killercreepr.crux.menu.holder.MenuHolder holder){
+    public ConfigMenu setItems(@NotNull MenuHolder holder){
         Player viewer = info.getObjectOrThrow("viewer", Player.class);
         MenuInfo menuInfo = new MenuInfo(this, info, tags);
         holder.getItems().items().forEach(menuItem -> {
@@ -74,7 +75,7 @@ public class ConfigMenu extends Menu{
         return this;
     }
 
-    public @NotNull killercreepr.crux.menu.holder.MenuHolder getHolder() {
+    public @NotNull MenuHolder getHolder() {
         return holder;
     }
 

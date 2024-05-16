@@ -1,8 +1,7 @@
 package killercreepr.crux.data;
 
-import killerceepr.crux.Crux;
-import killerceepr.crux.tags.container.StringHookContainer;
-import me.clip.placeholderapi.PlaceholderAPI;
+import killercreepr.crux.Crux;
+import killercreepr.crux.tags.container.StringHookContainer;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -54,7 +53,7 @@ public class MsgContainer {
         if(a instanceof Player p) return use(p, placeholders, tags);
         if(chat != null){
             for(String s : chat){
-                a.sendMessage(deserialize(PlaceholderAPI.setPlaceholders(placeholders, s), tags));
+                //todo a.sendMessage(deserialize(PlaceholderAPI.setPlaceholders(placeholders, s), tags));
             }
         }
         return this;
@@ -70,11 +69,11 @@ public class MsgContainer {
         }
         if(chat != null){
             for(String s : chat){
-                p.sendMessage(deserialize(PlaceholderAPI.setPlaceholders(placeholders == null ? p : placeholders, s), tags));
+                //todo p.sendMessage(deserialize(PlaceholderAPI.setPlaceholders(placeholders == null ? p : placeholders, s), tags));
             }
         }
-        if(actionBar != null) p.sendActionBar(deserialize(PlaceholderAPI.setPlaceholders(placeholders == null ? p : placeholders, actionBar), tags));
-        if(title != null) p.showTitle(title.build(p, tags));
+        //todo if(actionBar != null) p.sendActionBar(deserialize(PlaceholderAPI.setPlaceholders(placeholders == null ? p : placeholders, actionBar), tags));
+        //todo if(title != null) p.showTitle(title.build(p, tags));
         if(sound != null) sound.play(p, false);
         return this;
     }

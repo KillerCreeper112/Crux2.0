@@ -1,7 +1,11 @@
 package killercreepr.crux.menu.bukkit.registry;
 
+import killercreepr.crux.menu.bukkit.actions.MenuAction;
 import killercreepr.crux.registry.KeyedRegistry;
+import killercreepr.crux.registry.Registry;
 import killercreepr.crux.registry.SimpleKeyedRegistry;
+import killercreepr.crux.registry.SimpleRegistry;
+import killercreepr.crux.tags.format.Format;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +20,7 @@ public class MenuRegistry {
             return super.register(key, value);
         }
     };
-    public final Registry<killercreepr.crux.menu.actions.MenuAction> MENU_ACTIONS = new SimpleRegistry<>(new HashSet<>());
+    public final Registry<MenuAction> MENU_ACTIONS = new SimpleRegistry<>(new HashSet<>());
 
     private final @NotNull Format format;
     public MenuRegistry(@NotNull Format format) {
