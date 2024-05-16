@@ -2,6 +2,7 @@ package killercreepr.crux.config.bukkit.file;
 
 import com.google.gson.JsonObject;
 import killercreepr.crux.config.bukkit.value.CfgValue;
+import killercreepr.crux.config.common.annotations.Config;
 import killercreepr.crux.config.common.file.ICfg;
 import killercreepr.crux.config.common.json.JsonRegistry;
 import org.bukkit.Bukkit;
@@ -142,6 +143,7 @@ public class JsonCfg extends CruxJson implements ICfg<JsonObject, CfgValue<?>> {
      */
     @Override
     public void register() {
+        reloadIfNeeded();
         getAllValues().forEach((path, value) ->{
             Object found = get(path);
             value.getType().attemptSetValue(found);

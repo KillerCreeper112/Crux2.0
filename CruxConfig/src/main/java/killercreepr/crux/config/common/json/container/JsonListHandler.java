@@ -12,25 +12,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 @JsonSerializer(id = "list")
-public class JsonListHandler implements JsonContainerHandler<List<? extends JsonSerializable>> {
+public class JsonListHandler implements JsonContainerHandler<List<Object>> {
     @Override
-    public @NotNull JsonElement serializeToJson(@NotNull JsonRegistry registry, @NotNull List<? extends JsonSerializable> object) {
+    public @NotNull JsonElement serializeToJson(@NotNull JsonRegistry registry, @NotNull List<Object> object) {
         JsonArray a = new JsonArray();
-        for(JsonSerializable s : object){
-            a.add(registry.serialize(s));
+        for(Object s : object){
+            a.add(registry.serializeObject(s));
         }
         return a;
     }
 
     @Override
-    public @Nullable List<? extends JsonSerializable> deserializeFromJson(@NotNull JsonRegistry registry, @Nullable JsonElement element){
+    public @Nullable List<Object> deserializeFromJson(@NotNull JsonRegistry registry, @Nullable JsonElement element){
         if(!(element instanceof JsonArray a)) return null;
-        List<JsonSerializable> list = new ArrayList<>();
+        List<Object> list = new ArrayList<>();
         a.forEach(ee ->{
             Object o = registry.deserialize(ee);
             if(o==null) return;
-            if(!(o instanceof JsonSerializable s)) return;
-            list.add(s);
+            list.add(o);
         });
         return list;
     }

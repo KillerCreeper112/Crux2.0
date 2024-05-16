@@ -3,12 +3,11 @@ package killercreepr.crux.config.common.json;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import killercreepr.crux.config.bukkit.file.JsonCfg;
 import killercreepr.crux.config.common.json.annotation.JsonSerializer;
 import killercreepr.crux.config.common.json.container.JsonContainerHandler;
 import killercreepr.crux.config.common.json.container.JsonListHandler;
+import killercreepr.crux.config.common.json.container.JsonMapHandler;
 import killercreepr.crux.config.common.json.registry.JsonContainerHandlerRegistry;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,7 +16,6 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 public class JsonRegistry {
     public final String DESERIALIZE_METHOD_NAME = "deserializeFromJson";
@@ -26,6 +24,7 @@ public class JsonRegistry {
 
     public JsonRegistry() {
         registerContainerHandler(List.class, new JsonListHandler());
+        registerContainerHandler(Map.class, new JsonMapHandler());
     }
 
     public <T extends JsonSerializable> void register(@NotNull String name, @NotNull Class<T> clazz){
@@ -85,10 +84,19 @@ public class JsonRegistry {
         };
     }
 
+    public @Nullable JsonContainerHandler<?> findContainerHandler(@NotNull Class<?> from){
+        for(Map.Entry<Class<?>, JsonContainerHandler<?>> entry : CONTAINER_REGISTRY.entrySet()){
+            Class<?> clazz = entry.getKey();
+            if(clazz.isAssignableFrom(from)){
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
     public @NotNull JsonElement serializeObject(@NotNull Object object){
         if(object instanceof JsonSerializable s) return serialize(s);
-        JsonContainerHandler<?> handler = getContainerHandler(object.getClass());
-        Bukkit.getLogger().log(Level.WARNING, "looking for: " + object.getClass());
+        JsonContainerHandler<?> handler = findContainerHandler(object.getClass());
         if(handler == null){
             JsonElement ele = tryPrimitive(object);
             if(ele == null){
@@ -115,7 +123,14 @@ public class JsonRegistry {
     }
 
     public @Nullable Object deserialize(@Nullable JsonElement from){
-        if(!(from instanceof JsonObject o)) return null;
+        if(!(from instanceof JsonObject o)){
+            if(from instanceof JsonPrimitive pr){
+                if(pr.isBoolean()) return pr.getAsBoolean();
+                if(pr.isNumber()) return pr.getAsNumber();
+                if(pr.isString()) return pr.getAsString();
+            }
+            return null;
+        }
         JsonElement e = o.get("id");
         if(e == null) return null;
         String id = e.getAsString();

@@ -43,7 +43,6 @@ public class TestPlugin extends JavaPlugin implements Listener {
             add(new BlockBo(0, 1, 0));
             add(new BlockBo(0, 0, 1));
         }};
-        DefaultJsonRegistry.REGISTRY.registerContainerHandler(list.getClass(), new JsonListHandler());
         getLogger().log(Level.WARNING, "ayodwjfiowjhfoiw: " + list.getClass());
         testJson.add("prop", list);
         testJson.save();
@@ -57,7 +56,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
-        Bukkit.broadcastMessage(cfgtest.STRING_MAN.get() + "");
+        Bukkit.broadcastMessage(cfgtest.STRING_MAN.value() + "");
         Player p = event.getPlayer();
         double v = p.getAttribute(Attribute.GENERIC_SCALE).getValue();
         p.getAttribute(Attribute.GENERIC_SCALE).setBaseValue(v + .01D);
