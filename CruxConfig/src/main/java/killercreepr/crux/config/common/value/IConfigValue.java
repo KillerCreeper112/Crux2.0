@@ -41,6 +41,16 @@ public interface IConfigValue<T, C extends ICruxConfig<?>> {
     void setValue(@Nullable T value);
 
     /**
+     * Attempts to cast the object and set the value.
+     */
+    default void attemptSetValue(@Nullable Object object){
+        try{
+            setValue((T) object);
+        }catch (ClassCastException ignored){
+        }
+    }
+
+    /**
      * Attempts to cast the provided object.
      */
     default @Nullable T attemptCast(@Nullable Object o) {

@@ -1,6 +1,6 @@
 package killercreepr.crux.config.bukkit.data;
 
-import killercreepr.crux.config.bukkit.CruxConfig;
+import killercreepr.crux.config.bukkit.file.CruxConfig;
 import killercreepr.crux.config.bukkit.value.ConfigValue;
 import killercreepr.crux.data.CreateSound;
 import net.kyori.adventure.key.Key;

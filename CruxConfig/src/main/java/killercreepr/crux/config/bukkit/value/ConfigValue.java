@@ -1,6 +1,6 @@
 package killercreepr.crux.config.bukkit.value;
 
-import killercreepr.crux.config.bukkit.CruxConfig;
+import killercreepr.crux.config.bukkit.file.CruxConfig;
 import killercreepr.crux.config.common.file.ICruxConfig;
 import killercreepr.crux.config.common.value.IConfigValue;
 import net.kyori.adventure.text.Component;

@@ -1,4 +1,4 @@
-package killercreepr.crux.config.bukkit;
+package killercreepr.crux.config.bukkit.file;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -54,7 +54,6 @@ public class CruxJson extends CruxFolder implements ICruxJson {
         existedBefore = file.exists();
         if(reloadIfExists) reloadIfExists();
     }
-
 
     @Override
     public @NotNull JsonRegistry jsonRegistry() {

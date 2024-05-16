@@ -1,7 +1,7 @@
 package killercreepr.crux.config.bukkit.data;
 
 import killercreepr.crux.Crux;
-import killercreepr.crux.config.bukkit.CruxConfig;
+import killercreepr.crux.config.bukkit.file.CruxConfig;
 import killercreepr.crux.config.bukkit.value.ConfigValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;

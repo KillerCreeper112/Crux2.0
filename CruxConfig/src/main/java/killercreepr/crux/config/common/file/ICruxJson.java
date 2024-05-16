@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import killercreepr.crux.config.common.json.JsonRegistry;
-import killercreepr.crux.config.common.json.JsonSerializable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -128,6 +127,14 @@ public interface ICruxJson extends ICruxFile {
 
     default <T> @NotNull JsonObject add(@NotNull String property, @NotNull T object){
         return add(json(), property, object);
+    }
+
+    default <T> @Nullable JsonElement remove(@NotNull String property){
+        return remove(json(), property);
+    }
+
+    default <T> @Nullable JsonElement remove(@NotNull JsonObject base, @NotNull String property){
+        return base.remove(property);
     }
 
     /**

@@ -1,4 +1,4 @@
-package killercreepr.crux.config.bukkit;
+package killercreepr.crux.config.bukkit.file;
 
 import killercreepr.crux.config.bukkit.value.CfgValue;
 import killercreepr.crux.config.common.file.ICfg;
