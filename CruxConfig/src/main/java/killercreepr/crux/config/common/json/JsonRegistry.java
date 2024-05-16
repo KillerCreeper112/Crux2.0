@@ -2,6 +2,8 @@ package killercreepr.crux.config.common.json;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import killercreepr.crux.config.bukkit.file.JsonCfg;
 import killercreepr.crux.config.common.json.annotation.JsonSerializer;
 import killercreepr.crux.config.common.json.container.JsonContainerHandler;
 import killercreepr.crux.config.common.json.container.JsonListHandler;
@@ -73,11 +75,27 @@ public class JsonRegistry {
         return get(getSerializeID(from));
     }
 
-    public @NotNull JsonObject serializeObject(@NotNull Object object){
+    public @Nullable JsonPrimitive tryPrimitive(@NotNull Object o){
+        return switch (o) {
+            case String s -> new JsonPrimitive(s);
+            case Number s -> new JsonPrimitive(s);
+            case Boolean s -> new JsonPrimitive(s);
+            case Character s -> new JsonPrimitive(s);
+            default -> null;
+        };
+    }
+
+    public @NotNull JsonElement serializeObject(@NotNull Object object){
         if(object instanceof JsonSerializable s) return serialize(s);
         JsonContainerHandler<?> handler = getContainerHandler(object.getClass());
         Bukkit.getLogger().log(Level.WARNING, "looking for: " + object.getClass());
-        if(handler == null) throw new RuntimeException("Cannot find serialization method for " + object + " (class " + object.getClass().getName() + ")");
+        if(handler == null){
+            JsonElement ele = tryPrimitive(object);
+            if(ele == null){
+                throw new RuntimeException("Cannot find serialization method for " + object + " (class " + object.getClass().getName() + ")");
+            }
+            return ele;
+        }
         JsonElement element = handler.attemptSerializeToJson(this, object);
         if(element == null)
             throw new RuntimeException("Object cannot be serialized with " + handler + " (" + object + ")");
@@ -88,7 +106,7 @@ public class JsonRegistry {
         return o;
     }
 
-    public <T extends JsonSerializable> @NotNull JsonObject serialize(@NotNull T object){
+    public <T extends JsonSerializable> @NotNull JsonElement serialize(@NotNull T object){
         String id = getSerializeID(object.getClass());
         JsonObject o = new JsonObject();
         o.addProperty("id", id);

@@ -3,6 +3,7 @@ package killercreepr;
 import killercreepr.crux.config.bukkit.json.registry.DefaultJsonRegistry;
 import killercreepr.crux.config.common.json.container.JsonListHandler;
 import killercreepr.sometests.BlockBo;
+import killercreepr.sometests.JsonCfgtest;
 import killercreepr.sometests.JsonT;
 import killercreepr.sometests.TestCf;
 import org.bukkit.Bukkit;
@@ -46,15 +47,19 @@ public class TestPlugin extends JavaPlugin implements Listener {
         getLogger().log(Level.WARNING, "ayodwjfiowjhfoiw: " + list.getClass());
         testJson.add("prop", list);
         testJson.save();
+
+        cfgtest = new JsonCfgtest(this, "test_my_man");
+        cfgtest.setup();
     }
     protected TestCf cfg;
     protected JsonT testJson;
+    protected JsonCfgtest cfgtest;
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
-        Bukkit.broadcastMessage(cfg.AYO.get() + "");
+        Bukkit.broadcastMessage(cfgtest.STRING_MAN.get() + "");
         Player p = event.getPlayer();
         double v = p.getAttribute(Attribute.GENERIC_SCALE).getValue();
-        p.getAttribute(Attribute.GENERIC_SCALE).setBaseValue(v - .001D);
+        p.getAttribute(Attribute.GENERIC_SCALE).setBaseValue(v + .01D);
     }
 }
