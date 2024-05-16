@@ -1,8 +1,8 @@
 package killercreepr.sometests;
 
+import killercreepr.crux.config.bukkit.data.GenericValue;
 import killercreepr.crux.config.bukkit.file.Cfg;
 import killercreepr.crux.config.bukkit.file.CruxConfig;
-import killercreepr.crux.config.bukkit.data.GenericValue;
 import killercreepr.crux.config.bukkit.value.CfgValue;
 import killercreepr.crux.config.common.annotations.Config;
 import org.bukkit.plugin.Plugin;

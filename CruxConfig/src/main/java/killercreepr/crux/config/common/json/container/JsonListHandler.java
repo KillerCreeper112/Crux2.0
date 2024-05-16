@@ -3,7 +3,6 @@ package killercreepr.crux.config.common.json.container;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import killercreepr.crux.config.common.json.JsonRegistry;
-import killercreepr.crux.config.common.json.JsonSerializable;
 import killercreepr.crux.config.common.json.annotation.JsonSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -1,7 +1,6 @@
 package killercreepr;
 
 import killercreepr.crux.config.bukkit.json.registry.DefaultJsonRegistry;
-import killercreepr.crux.config.common.json.container.JsonListHandler;
 import killercreepr.sometests.BlockBo;
 import killercreepr.sometests.JsonCfgtest;
 import killercreepr.sometests.JsonT;
@@ -16,6 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 public class TestPlugin extends JavaPlugin implements Listener {
@@ -57,8 +57,11 @@ public class TestPlugin extends JavaPlugin implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
         Bukkit.broadcastMessage(cfgtest.STRING_MAN.value() + "");
+        cfgtest.MAP_MAN.getOrDefault(Map.of()).forEach((k, v) ->{
+            Bukkit.broadcastMessage(k + " -> " + v);
+        });
         Player p = event.getPlayer();
         double v = p.getAttribute(Attribute.GENERIC_SCALE).getValue();
-        p.getAttribute(Attribute.GENERIC_SCALE).setBaseValue(v + .01D);
+        p.getAttribute(Attribute.GENERIC_SCALE).setBaseValue(v + .5D);
     }
 }

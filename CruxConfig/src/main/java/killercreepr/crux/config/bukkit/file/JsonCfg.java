@@ -2,10 +2,8 @@ package killercreepr.crux.config.bukkit.file;
 
 import com.google.gson.JsonObject;
 import killercreepr.crux.config.bukkit.value.CfgValue;
-import killercreepr.crux.config.common.annotations.Config;
 import killercreepr.crux.config.common.file.ICfg;
 import killercreepr.crux.config.common.json.JsonRegistry;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,7 +12,6 @@ import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 public class JsonCfg extends CruxJson implements ICfg<JsonObject, CfgValue<?>> {
     /**
