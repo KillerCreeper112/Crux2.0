@@ -4,7 +4,7 @@ import killercreepr.crux.Crux;
 import killercreepr.crux.config.bukkit.CruxConfig;
 import killercreepr.crux.config.bukkit.value.ConfigValue;
 import killercreepr.crux.data.DataExchange;
-import killercreepr.crux.menu.holder.MenuHolder;
+import killercreepr.crux.menu.bukkit.holder.MenuHolder;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

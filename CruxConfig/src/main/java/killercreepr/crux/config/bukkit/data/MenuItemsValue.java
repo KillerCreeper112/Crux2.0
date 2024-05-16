@@ -2,8 +2,8 @@ package killercreepr.crux.config.bukkit.data;
 
 import killercreepr.crux.config.bukkit.CruxConfig;
 import killercreepr.crux.config.bukkit.value.ConfigValue;
-import killercreepr.crux.menu.holder.MenuItemHolder;
-import killercreepr.crux.menu.holder.MenuItems;
+import killercreepr.crux.menu.bukkit.holder.MenuItemHolder;
+import killercreepr.crux.menu.bukkit.holder.MenuItems;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;

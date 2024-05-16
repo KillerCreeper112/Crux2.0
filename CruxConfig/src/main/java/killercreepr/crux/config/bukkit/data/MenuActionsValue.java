@@ -3,7 +3,7 @@ package killercreepr.crux.config.bukkit.data;
 import killercreepr.crux.Crux;
 import killercreepr.crux.config.bukkit.CruxConfig;
 import killercreepr.crux.config.bukkit.value.ConfigValue;
-import killercreepr.crux.menu.holder.MenuItemHolder;
+import killercreepr.crux.menu.bukkit.holder.MenuItemHolder;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.inventory.ClickType;

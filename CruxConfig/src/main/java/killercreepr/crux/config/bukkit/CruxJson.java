@@ -1,100 +1,93 @@
 package killercreepr.crux.config.bukkit;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import killercreepr.crux.config.bukkit.json.registry.DefaultJsonRegistry;
+import killercreepr.crux.config.common.file.ICruxJson;
+import killercreepr.crux.config.common.json.JsonRegistry;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.io.File;
+import java.io.FileReader;
 
-public class CruxJson extends CruxFolder {
+public class CruxJson extends CruxFolder implements ICruxJson {
+    protected final @NotNull JsonRegistry jsonRegistry;
     protected JsonObject json;
     protected FileReader reader;
     protected final Gson parser = new Gson();
     protected final boolean existedBefore;
 
-    public CruxJson(@NotNull Plugin plugin, @NotNull String path) {
-        super(plugin, path + ".json");
-        existedBefore = file.exists();
-        reloadIfExists();
+    public CruxJson(@NotNull Plugin plugin, @NotNull String path){
+        this(plugin, path, DefaultJsonRegistry.REGISTRY);
     }
-
     public CruxJson(@NotNull File file){
-        super(file);
+        this(file, DefaultJsonRegistry.REGISTRY);
+    }
+
+    public CruxJson(@NotNull Plugin plugin, @NotNull String path, boolean reloadIfExists){
+        this(plugin, path, DefaultJsonRegistry.REGISTRY, reloadIfExists);
+    }
+    public CruxJson(@NotNull File file, boolean reloadIfExists){
+        this(file, DefaultJsonRegistry.REGISTRY, reloadIfExists);
+    }
+
+   public CruxJson(@NotNull Plugin plugin, @NotNull String path, @NotNull JsonRegistry jsonRegistry) {
+        this(plugin, path, jsonRegistry, true);
+    }
+
+    public CruxJson(@NotNull File file, @NotNull JsonRegistry jsonRegistry) {
+        this(file, jsonRegistry, true);
+    }
+
+    public CruxJson(@NotNull Plugin plugin, @NotNull String path, @NotNull JsonRegistry jsonRegistry, boolean reloadIfExists) {
+        super(plugin, path + ".json");
+        this.jsonRegistry = jsonRegistry;
         existedBefore = file.exists();
-        reloadIfExists();
+        if(reloadIfExists) reloadIfExists();
     }
 
-    public void reloadIfNeeded(){
-        if(json == null) reload();
+    public CruxJson(@NotNull File file, @NotNull JsonRegistry jsonRegistry, boolean reloadIfExists) {
+        super(file);
+        this.jsonRegistry = jsonRegistry;
+        existedBefore = file.exists();
+        if(reloadIfExists) reloadIfExists();
     }
 
-    public JsonObject reloadIfExists(){
-        if(!file.exists()) return null;
-        reload();
+
+    @Override
+    public @NotNull JsonRegistry jsonRegistry() {
+        return jsonRegistry;
+    }
+
+    @Override
+    public @Nullable FileReader reader() {
+        return reader;
+    }
+
+    @Override
+    public void reader(@Nullable FileReader reader) {
+        this.reader = reader;
+    }
+
+    @Override
+    public @Nullable JsonObject json() {
         return json;
     }
 
-    public void reload() {
-        try {
-            if(!file.getParentFile().exists()) file.getParentFile().mkdirs();
-            if(!file.exists()) {
-                PrintWriter pw = new PrintWriter(file, StandardCharsets.UTF_8);
-                pw.print("{");
-                pw.print("}");
-                pw.flush();
-                pw.close();
-            }
-            if(reader == null) reader = new FileReader(file);
-            json = parser.fromJson(reader, JsonObject.class);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+    @Override
+    public void json(@Nullable JsonObject json) {
+        this.json = json;
     }
 
-    public final boolean createDefault(){
-        return createDefault(false);
+    @Override
+    public @NotNull Gson parser() {
+        return parser;
     }
 
-    public final boolean createDefault(boolean pretty){
-        if(existedBefore) return false;
-        setDefaults();
-        return save(pretty);
-    }
-
-    public void setDefaults(){}
-
-    public boolean save(){
-        return save(false);
-    }
-
-    public boolean existedBefore(){ return existedBefore; }
-
-    public boolean save(boolean pretty) {
-        if(json == null) return false;
-        if(json.size() < 1){
-            try{ reader.close(); } catch (IOException ignored){}
-            return file.delete();
-        }
-        try {
-            String json = pretty ? new GsonBuilder().setPrettyPrinting().create().toJson(this.json) :
-                    new GsonBuilder().create().toJson(this.json);
-            FileWriter fw = new FileWriter(file);
-            fw.write(json);
-            fw.flush();
-            fw.close();
-            reader.close();
-            return true;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return false;
-        }
-    }
-
-    public void close(){
-        if(json == null) return;
-        try{ reader.close(); } catch (IOException ignored){}
+    @Override
+    public boolean existedBefore() {
+        return existedBefore;
     }
 }

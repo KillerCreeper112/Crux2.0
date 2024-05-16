@@ -1,0 +1,12 @@
+package killercreepr.crux.config.common.json;
+
+import com.google.gson.JsonElement;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Requires a public static @Nullable ?Object deserializeFromJson(@Nullable JsonElement from) to be created.
+ */
+public interface JsonSerializable {
+    @NotNull
+    JsonElement serializeToJson();
+}
