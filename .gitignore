@@ -1,0 +1,4 @@
+# Project exclude paths
+/.gradle/
+/CruxMain/build/
+/CruxMain/build/classes/java/main/

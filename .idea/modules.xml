@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CruxConfig/Crux.CruxConfig.main.iml" filepath="$PROJECT_DIR$/.idea/modules/CruxConfig/Crux.CruxConfig.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CruxConfig/Crux.CruxConfig.test.iml" filepath="$PROJECT_DIR$/.idea/modules/CruxConfig/Crux.CruxConfig.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CruxMain/Crux.CruxMain.main.iml" filepath="$PROJECT_DIR$/.idea/modules/CruxMain/Crux.CruxMain.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CruxMain/Crux.CruxMain.test.iml" filepath="$PROJECT_DIR$/.idea/modules/CruxMain/Crux.CruxMain.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CruxMenu/Crux.CruxMenu.main.iml" filepath="$PROJECT_DIR$/.idea/modules/CruxMenu/Crux.CruxMenu.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CruxMenu/Crux.CruxMenu.test.iml" filepath="$PROJECT_DIR$/.idea/modules/CruxMenu/Crux.CruxMenu.test.iml" />
+    </modules>
+  </component>
+</project>

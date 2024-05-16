@@ -1,0 +1,13 @@
+[plugins]
+kotlin = {id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+runPaper = { id = "xyz.jpenilla.run-paper", version.ref = "run_paper" }
+paperweight = { id = "io.papermc.paperweight.userdev", version.ref = "paperweight" }
+
+[libraries]
+paper = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper" }
+
+[versions]
+paperweight = "1.7.1"
+paper = "1.20.6-R0.1-SNAPSHOT"
+kotlin = "1.9.23"
+run_paper = "2.3.0"
