@@ -56,6 +56,6 @@ public class UniformNumber implements NumberProvider {
     }
     @Override
     public String toString() {
-        return "[" + this.minInclusive + "-" + this.maxInclusive + "]";
+        return "UniformNumber{min=" + this.minInclusive + ", max=" + this.maxInclusive + "}";
     }
 }

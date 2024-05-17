@@ -5,7 +5,6 @@ import killercreepr.cruxconfig.config.common.yaml.NumTest;
 import killercreepr.cruxconfig.config.common.yaml.YamlContext;
 import killercreepr.cruxconfig.config.common.yaml.container.YamlObjectHandler;
 import killercreepr.cruxconfig.config.common.yaml.element.*;
-import killercreepr.cruxconfig.config.registry.DefaultYamlRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,16 +37,9 @@ public class YamlRegistry {
         return null;
     }
 
-    public @NotNull Object serializeObject(@NotNull Object object){
+    public @Nullable YamlElement serialize(@NotNull Object object){
         YamlObjectHandler<?> handler = findContainerHandler(object.getClass());
-        if(handler == null) return object;
-        YamlElement element = handler.attemptSerializeToYaml(new YamlContext(this), object);
-        if(element == null) return object;
-        return element;
-    }
-
-    public @NotNull YamlElement serialize(@NotNull Object object){
-        YamlObjectHandler<?> handler = findContainerHandler(object.getClass());
+        if(handler == null) return null;
         return handler.attemptSerializeToYaml(new YamlContext(this), object);
     }
 
@@ -64,7 +56,7 @@ public class YamlRegistry {
         throw new UnsupportedOperationException("Object cannot be cast to " + clazz.getSimpleName() + " (" + object + ")!");
     }
 
-    public @NotNull YamlElement fromObject(@NotNull Object o){
+    public @NotNull YamlElement serializeObject(@NotNull Object o){
         if(o instanceof YamlElement d) return d;
         if(o instanceof String s) return new YamlPrimitive(s);
         if(o instanceof Number s) return new YamlPrimitive(s);
@@ -74,28 +66,15 @@ public class YamlRegistry {
             return convertCollection(Arrays.stream(((Object[]) o)).toList());
         }
         if(o instanceof Map<?,?> l) return convertMap(l);
-        Object oo = serializeObject(o);
-        if(oo instanceof YamlElement d) return d;
-        return new YamlGeneric(oo);
-    }
-
-    public @NotNull Object toSerializable(@NotNull Object o){
-        if(o instanceof YamlElement d) return d;
-        if(o instanceof String s) return new YamlPrimitive(s);
-        if(o instanceof Number s) return new YamlPrimitive(s);
-        if(o instanceof Boolean s) return new YamlPrimitive(s);
-        if(o instanceof Collection<?> l) return convertCollection(l);
-        if(o.getClass().isArray()){
-            return convertCollection(Arrays.stream(((Object[]) o)).toList());
-        }
-        if(o instanceof Map<?,?> l) return convertMap(l);
-        return DefaultYamlRegistry.REGISTRY.serializeObject(o);
+        YamlElement serialized = serialize(o);
+        if(serialized != null) return serialized;
+        return new YamlGeneric(o);
     }
 
     public @NotNull YamlArray convertCollection(@NotNull Collection<?> list){
         YamlArray array = new YamlArray(list.size());
         for(Object o : list){
-            array.add(fromObject(o));
+            array.add(serializeObject(o));
         }
         return array;
     }
@@ -104,7 +83,7 @@ public class YamlRegistry {
         YamlObject array = new YamlObject();
         for(Map.Entry<?, ?> entry : list.entrySet()){
             if(!(entry.getKey() instanceof String key)) return array;
-            array.add(key, fromObject(entry.getValue()));
+            array.add(key, serializeObject(entry.getValue()));
         }
         return array;
     }

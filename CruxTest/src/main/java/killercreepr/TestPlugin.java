@@ -1,5 +1,6 @@
 package killercreepr;
 
+import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.crux.valueproviders.number.UniformNumber;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.common.json.container.GenericJsonHandler;
@@ -18,9 +19,7 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 
 public class TestPlugin extends JavaPlugin implements Listener {
@@ -67,15 +66,18 @@ public class TestPlugin extends JavaPlugin implements Listener {
                 getLogger().log(Level.WARNING, k + " -> " + v);
             });
         }
-        cfg.set("test", new HashMap<>(){{
-            put("a_num", new UniformNumber(2, 25));
-        }});
+        cfg.set("test", new UniformNumber(2, 25));
+
         /*cfg.set("test", new HashMap<>(){{
             put(null, 2);
             put("test.test.hey", 10);
         }});*/
         cfg.save();
+
+        provider = cfg.deserialize(NumberProvider.class, "test");
+        getLogger().log(Level.WARNING, "AND THE CONFIG HAS FOUND test IN: " + provider);
     }
+    protected NumberProvider provider;
     protected TestCf cfg;
     protected JsonT testJson;
     protected JsonCfgtest cfgtest;
@@ -83,11 +85,11 @@ public class TestPlugin extends JavaPlugin implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
         Bukkit.broadcastMessage(cfgtest.STRING_MAN.value() + "");
-        cfgtest.MAP_MAN.getOrDefault(Map.of()).forEach((k, v) ->{
+        /*cfgtest.MAP_MAN.getOrDefault(Map.of()).forEach((k, v) ->{
             Bukkit.broadcastMessage(k + " -> " + v);
-        });
+        });*/
         Player p = event.getPlayer();
         double v = p.getAttribute(Attribute.GENERIC_SCALE).getValue();
-        p.getAttribute(Attribute.GENERIC_SCALE).setBaseValue(v + .5D);
+        p.getAttribute(Attribute.GENERIC_SCALE).setBaseValue(v + provider.value().doubleValue());
     }
 }

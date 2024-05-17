@@ -28,4 +28,9 @@ public class ConstantNumber implements NumberProvider{
     public @NotNull Number getMaxValue() {
         return constant;
     }
+
+    @Override
+    public String toString() {
+        return "ConstantNumber{value=" + constant + "}";
+    }
 }

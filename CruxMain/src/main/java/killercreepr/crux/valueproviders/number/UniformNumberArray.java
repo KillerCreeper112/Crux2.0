@@ -69,6 +69,6 @@ public class UniformNumberArray implements NumberProvider {
     }
     @Override
     public String toString() {
-        return Arrays.toString(numbers);
+        return "UniformNumberArray{values=" + Arrays.toString(numbers) + "}";
     }
 }

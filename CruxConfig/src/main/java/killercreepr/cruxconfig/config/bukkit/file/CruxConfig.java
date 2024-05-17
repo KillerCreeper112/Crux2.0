@@ -1,7 +1,10 @@
 package killercreepr.cruxconfig.config.bukkit.file;
 
 import killercreepr.cruxconfig.config.common.file.ICruxConfig;
-import killercreepr.cruxconfig.config.common.yaml.element.*;
+import killercreepr.cruxconfig.config.common.yaml.element.YamlArray;
+import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
+import killercreepr.cruxconfig.config.common.yaml.element.YamlGeneric;
+import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
 import killercreepr.cruxconfig.config.registry.DefaultYamlRegistry;
 import org.bukkit.configuration.ConfigurationSection;
@@ -88,17 +91,22 @@ public class CruxConfig extends CruxFolder implements ICruxConfig<FileConfigurat
 
     @Override
     public void set(@NotNull String path, @Nullable Object value){
-        value = YamlElement.toSerializable(value);
-        if(value instanceof YamlElement e){
-            setElement(cfg.getRoot(), path, e);
+        if(value==null){
+            cfg.set(path, null);
             return;
         }
-        cfg.set(path, value);
+        setElement(path, yamlRegistry.serializeObject(value));
+    }
+
+    public void setElement(@NotNull String path, @NotNull YamlElement element){
+        ConfigurationSection section = cfg.getRoot();
+        if(section == null) throw new UnsupportedOperationException("Configuration has no root!");
+        setElement(section, path, element);
     }
 
     public void setElement(@NotNull ConfigurationSection section, @NotNull String path, @NotNull YamlElement element){
         if(element instanceof YamlGeneric r){
-            section.set(path, yamlRegistry.serializeObject(r.getAsObject()));
+            section.set(path, yamlRegistry.serializeObject(r.getAsObject()).getAsObject());
             return;
         }
         if(element instanceof YamlArray a){
@@ -130,7 +138,6 @@ public class CruxConfig extends CruxFolder implements ICruxConfig<FileConfigurat
         throw new UnsupportedOperationException("Cannot serialize YamlElement! (" + element.getClass().getSimpleName() + ")");
     }
 
-
     @Override
     public void set(@NotNull String path, @Nullable Object value, @NotNull String @Nullable... comments){
         cfg.set(path, value);
@@ -151,6 +158,30 @@ public class CruxConfig extends CruxFolder implements ICruxConfig<FileConfigurat
         return cfg.get(path);
     }
 
+    public <T> @Nullable T deserialize(@NotNull Class<T> clazz, @NotNull String path){
+        ConfigurationSection section = cfg.getRoot();
+        if(section == null) throw new UnsupportedOperationException("Configuration has no root!");
+        return deserialize(clazz, section, path);
+    }
+
+    public <T> @Nullable T deserialize(@NotNull Class<T> clazz, @NotNull ConfigurationSection section, @NotNull String path){
+        YamlElement yaml = getAsYamlObject(section, path);
+        if(yaml==null) return null;
+        return yamlRegistry.deserialize(clazz, yaml);
+    }
+
+    public @Nullable Object deserializeObject(@NotNull Class<?> clazz, @NotNull String path){
+        ConfigurationSection section = cfg.getRoot();
+        if(section == null) throw new UnsupportedOperationException("Configuration has no root!");
+        return deserialize(clazz, section, path);
+    }
+
+    public @Nullable Object deserializeObject(@NotNull Class<?> clazz, @NotNull ConfigurationSection section, @NotNull String path){
+        YamlElement yaml = getAsYamlObject(section, path);
+        if(yaml==null) return null;
+        return yamlRegistry.deserializeObject(clazz, yaml);
+    }
+
     public @Nullable YamlElement getAsYamlObject(@NotNull String path){
         ConfigurationSection root = cfg.getRoot();
         if(root == null) return new YamlObject();
@@ -168,7 +199,7 @@ public class CruxConfig extends CruxFolder implements ICruxConfig<FileConfigurat
             }
             return map;
         }
-        return YamlElement.fromObject(object);
+        return yamlRegistry.serializeObject(object);
     }
 
 
@@ -177,6 +208,7 @@ public class CruxConfig extends CruxFolder implements ICruxConfig<FileConfigurat
         return cfg.contains(path);
     }
 
+    //Convenience
     public static @NotNull String addDot(@NotNull String s){
         return ICruxConfig.addDot(s);
     }

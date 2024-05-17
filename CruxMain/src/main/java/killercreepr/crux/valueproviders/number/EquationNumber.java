@@ -36,4 +36,9 @@ public class EquationNumber implements NumberProvider{
     public @NotNull Number value(@Nullable EvaluationEnvironment ev) {
         return CruxMath.evaluate(equation, ev);
     }
+
+    @Override
+    public String toString() {
+        return "EquationNumber{equation=" + equation + "}";
+    }
 }

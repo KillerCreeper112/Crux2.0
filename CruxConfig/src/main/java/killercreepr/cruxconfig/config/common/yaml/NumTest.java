@@ -44,7 +44,7 @@ public class NumTest implements YamlObjectHandler<NumberProvider> {
         if(e==null) return null;
         YamlRegistry registry = context.getRegistry();
         if(e instanceof YamlGeneric g){
-            if(g.isNumber()) new ConstantNumber(g.getAsNumber());
+            if(g.isNumber()) return new ConstantNumber(g.getAsNumber());
             return new EquationNumber(g.getAsString());
         }
         if(e instanceof YamlObject map){
@@ -57,8 +57,8 @@ public class NumTest implements YamlObjectHandler<NumberProvider> {
             YamlElement max = map.get("max");
             if(min != null && max != null){
                 return new UniformNumber(//todo
-                        (NumberProvider) registry.deserialize(NumberProvider.class, min),
-                        (NumberProvider) registry.deserialize(NumberProvider.class, max)
+                        registry.deserialize(NumberProvider.class, min),
+                        registry.deserialize(NumberProvider.class, max)
                 );
             }
         }
@@ -66,7 +66,7 @@ public class NumTest implements YamlObjectHandler<NumberProvider> {
             List<NumberProvider> list = new ArrayList<>();
             for(YamlElement ele : a){
                 list.add(
-                        (NumberProvider) registry.deserialize(NumberProvider.class, ele)
+                        registry.deserialize(NumberProvider.class, ele)
                 );
             }
             return new UniformNumberArray(list.toArray(new NumberProvider[0]));

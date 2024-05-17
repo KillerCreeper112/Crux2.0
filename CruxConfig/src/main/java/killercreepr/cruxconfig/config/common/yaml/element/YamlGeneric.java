@@ -1,7 +1,5 @@
 package killercreepr.cruxconfig.config.common.yaml.element;
 
-import com.google.gson.internal.LazilyParsedNumber;
-
 public class YamlGeneric extends YamlElement {
     protected final Object value;
     public YamlGeneric(Object value) {
@@ -29,16 +27,18 @@ public class YamlGeneric extends YamlElement {
 
     @Override
     public Number getAsNumber() {
-        if (value instanceof Number) {
-            return (Number) value;
-        } else if (value instanceof String) {
-            return new LazilyParsedNumber((String) value);
-        }
+        if (value instanceof Number n) return n;
+        if(value instanceof String d) return Double.parseDouble(d);
         throw new UnsupportedOperationException("Primitive is neither a number nor a string");
     }
 
     public boolean isString() {
         return value instanceof String;
+    }
+
+    @Override
+    public String getAsString() {
+        return value.toString();
     }
 
     @Override
