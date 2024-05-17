@@ -1,9 +1,6 @@
 package killercreepr.cruxconfig.config.common.yaml.registry;
 
 import killercreepr.crux.util.CruxReflect;
-import killercreepr.crux.valueproviders.number.ConstantNumber;
-import killercreepr.crux.valueproviders.number.EquationNumber;
-import killercreepr.crux.valueproviders.number.UniformNumber;
 import killercreepr.cruxconfig.config.common.yaml.YamlContext;
 import killercreepr.cruxconfig.config.common.yaml.automatic.AutoYamlSerializer;
 import killercreepr.cruxconfig.config.common.yaml.element.*;
@@ -16,15 +13,6 @@ import java.util.function.Function;
 
 public class YamlRegistry {
     public final YamlObjectHandlerRegistry HANDLER_REGISTRY = new YamlObjectHandlerRegistry(this);
-
-    public YamlRegistry() {
-        registerHandler(
-                AutoYamlSerializer.notNull(ConstantNumber.class),
-                AutoYamlSerializer.notNull(EquationNumber.class),
-                AutoYamlSerializer.notNull(UniformNumber.class)
-        );
-        //registerHandler(NumberProvider.class, new NumTest());
-    }
 
     public void registerHandler(@NotNull AutoYamlSerializer<?>... serializers){
         for(AutoYamlSerializer<?> d : serializers){
@@ -96,8 +84,13 @@ public class YamlRegistry {
         return object;
     }
 
+
     public @NotNull Map<?, ?> convertMap(@NotNull Class<?> type, @NotNull Map<?, ?> map){
-        Class<?> first = CruxReflect.getFirstMapClass((Class<? extends Map<?,?>>) type);
+        Class<?> first = CruxReflect.attemptGetFirstMapClass((Class<? extends Map<?,?>>) type);
+        if(first == null){
+            if(true) throw new UnsupportedOperationException("WOM OW");
+            return map;
+        }
         Map<Object, Object> newMap = CruxReflect.attemptCreation(map.getClass());
         if(Double.class.isAssignableFrom(first)){
             computeMap(newMap, map, key -> Double.parseDouble((String) key));

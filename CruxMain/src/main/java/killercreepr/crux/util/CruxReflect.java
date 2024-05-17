@@ -15,9 +15,38 @@ public class CruxReflect {
         };
     }
 
-    public static <T extends Map<?, ?>> Class<?> getFirstMapClass(Class<T> type){
-        Type[] typeArgs = ((ParameterizedType) type.getGenericSuperclass()).getActualTypeArguments();
-        return resolveClass(typeArgs[0]);
+    public static <T extends Map<?, ?>> Class<?> attemptGetFirstMapClass(Class<T> type){
+        try{
+            return getFirstMapClass(type);
+        }catch (Exception e){ return null; }
+    }
+
+    public static <T extends Map<?, ?>> Class<?> getFirstMapClass(Class<T> type) {
+        Type genericSuperclass = type.getGenericSuperclass();
+
+        if (genericSuperclass instanceof ParameterizedType) {
+            Type[] typeArgs = ((ParameterizedType) genericSuperclass).getActualTypeArguments();
+            if (typeArgs.length > 0) {
+                Type firstTypeArg = typeArgs[0];
+                if (firstTypeArg instanceof Class) {
+                    return (Class<?>) firstTypeArg;
+                } else if (firstTypeArg instanceof ParameterizedType) {
+                    // If the type argument itself is parameterized (e.g., Map<K, V>), you may need further resolution.
+                    // You may implement the resolveClass method to handle this case.
+                    // return resolveClass((ParameterizedType) firstTypeArg);
+                    throw new IllegalArgumentException("Nested parameterized types are not supported yet.");
+                } else if (firstTypeArg instanceof WildcardType) {
+                    // Handle wildcard types if needed.
+                    throw new IllegalArgumentException("Wildcard types are not supported yet.");
+                } else {
+                    throw new IllegalArgumentException("Unsupported type argument: " + firstTypeArg.getTypeName());
+                }
+            } else {
+                throw new IllegalArgumentException("No type arguments found for the superclass.");
+            }
+        } else {
+            throw new IllegalArgumentException("The superclass is not parameterized.");
+        }
     }
 
     public static Class<?> resolveClass(Type type) {

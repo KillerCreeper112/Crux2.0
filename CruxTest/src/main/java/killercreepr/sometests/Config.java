@@ -40,7 +40,7 @@ public class Config extends Cfg {
             .actionBar("<yellow>Now we talking")
             .build());
     public final CfgValue<Map<Integer, Integer>> TEST_MAP = new CfgValue<>(new CommonValue<>(
-            Map.class,
+            (Class<Map<Integer, Integer>>) (Class<?>) HashMap.class,
             new HashMap<>(){{
                 put(1, 3);
                 put(23, 10);
