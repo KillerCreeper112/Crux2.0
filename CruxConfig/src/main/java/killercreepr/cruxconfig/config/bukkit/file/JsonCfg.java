@@ -2,19 +2,17 @@ package killercreepr.cruxconfig.config.bukkit.file;
 
 import com.google.gson.JsonObject;
 import killercreepr.cruxconfig.config.bukkit.value.CfgValue;
-import killercreepr.cruxconfig.config.common.file.ICfg;
+import killercreepr.cruxconfig.config.common.file.IJsonCfg;
 import killercreepr.cruxconfig.config.common.json.JsonRegistry;
-import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class JsonCfg extends CruxJson implements ICfg<JsonObject, CfgValue<?>> {
+public class JsonCfg extends CruxJson implements IJsonCfg<JsonObject, CfgValue<?>> {
     /**
      * @param plugin The plugin to use as a base directory.
      * @param path The plath in which this file will exist.
@@ -64,18 +62,18 @@ public class JsonCfg extends CruxJson implements ICfg<JsonObject, CfgValue<?>> {
 
     /**
      *
-     * @param checkForExisting If true and the config values' path already exists, it will not
+     * @param overwriteExisting If true and the config values' path already exists, it will not
      *                         overwrite it.
      * @return If the config was changed at all, returns true. Otherwise, false.
      */
     @Override
-    public boolean setupContents(boolean checkForExisting){
+    public boolean setupContents(boolean overwriteExisting){
         reloadIfNeeded();
         boolean changed = false;
         for(Map.Entry<String, CfgValue<?>> entry : getAllValues().entrySet()){
             String path = entry.getKey();
             CfgValue<?> value = entry.getValue();
-            if(checkForExisting && contains(path)) continue;
+            if(!overwriteExisting && contains(path)) continue;
             Object v = value.getType().getDefaultValue();
             if(v==null) continue;
             //set value
@@ -88,12 +86,26 @@ public class JsonCfg extends CruxJson implements ICfg<JsonObject, CfgValue<?>> {
     }
 
     @Override
-    public @NotNull LinkedHashMap<String, CfgValue<?>> getAllValues() {
-        return ICfg.super.getAllValues();
+    public boolean setupContents(boolean overwriteExisting, boolean useCurrentValues) {
+        reloadIfNeeded();
+        boolean changed = false;
+        for(Map.Entry<String, CfgValue<?>> entry : getAllValues().entrySet()){
+            String path = entry.getKey();
+            CfgValue<?> value = entry.getValue();
+            if(!overwriteExisting && contains(path)) continue;
+            Object v = useCurrentValues ? value.getType().getValue() : value.getType().getDefaultValue();
+            //set value
+            set(path, v);
+            //set comments
+            this.setComments(path, value.getComments());
+            changed = true;
+        }
+        return changed;
     }
 
     @Override
     public @NotNull JsonObject config() {
+        reloadIfNeeded();
         return json();
     }
 
@@ -133,6 +145,7 @@ public class JsonCfg extends CruxJson implements ICfg<JsonObject, CfgValue<?>> {
 
     @Override
     public boolean contains(@NotNull String path) {
+        reloadIfNeeded();
         return json().has(path);
     }
 
@@ -149,13 +162,13 @@ public class JsonCfg extends CruxJson implements ICfg<JsonObject, CfgValue<?>> {
     }
 
     @Override
-    public boolean createDefault() {
-        return super.createDefault();
+    public void reload() {
+        super.reload();
     }
 
     @Override
-    public @NotNull YamlRegistry yamlRegistry() {
-        return null; //todo not good
+    public boolean createDefault() {
+        return super.createDefault();
     }
 
     @Override

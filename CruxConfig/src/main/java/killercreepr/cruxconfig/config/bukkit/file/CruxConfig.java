@@ -1,6 +1,7 @@
 package killercreepr.cruxconfig.config.bukkit.file;
 
 import killercreepr.cruxconfig.config.common.file.ICruxConfig;
+import killercreepr.cruxconfig.config.common.file.IYamlCfg;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlArray;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlGeneric;
@@ -8,6 +9,8 @@ import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -19,7 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CruxConfig extends CruxFolder implements ICruxConfig<FileConfiguration> {
+public class CruxConfig extends CruxFolder implements IYamlCfg<MemoryConfiguration> {
     protected final YamlRegistry yamlRegistry;
     protected final FileConfiguration cfg;
 
@@ -80,6 +83,15 @@ public class CruxConfig extends CruxFolder implements ICruxConfig<FileConfigurat
         if(file.exists()) return false;
         setDefaults();
         return save();
+    }
+
+    public void reload() {
+        if(!file.exists()) return;
+        try{
+            cfg.load(file);
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

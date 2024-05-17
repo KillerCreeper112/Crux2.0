@@ -12,32 +12,60 @@ public interface ICfg<T, V extends ICfgValue<?>> extends ICruxConfig<T> {
      * Sets up the configuration contents and registers each values.
      */
     default void setup(){
-        if(setupContents()) save();
-        register();
+        setup(true);
     }
 
     /**
      * @return Whether the config contents where changed.
      */
     default boolean setupContents(){
+        return setupContents(false);
+    }
+
+    /**
+     * @return Whether the config contents where changed.
+     * @param useCurrentValues Whether the config should set the config up with the default config values or
+     *                         the current set values.
+     */
+    default boolean setupContents(boolean useCurrentValues){
         Config cfg = this.getClass().getAnnotation(Config.class);
         final boolean autoUpdate = cfg != null && cfg.autoUpdate();
-        boolean checkForExisting = false;
+        boolean overwriteExisting = true;
         if(file().exists()){
             if(!autoUpdate) return false;
-            checkForExisting = true;
+            overwriteExisting = false;
         }
-        return setupContents(checkForExisting);
+        return setupContents(overwriteExisting, useCurrentValues);
     }
 
     /**
      *
-     * @param checkForExisting If true and the config values' path already exists, it will not
+     * @param overwriteExisting If false and the config values' path already exists, it will not
      *                         overwrite it.
+     * @param useCurrentValues Whether the config should set the config up with the default config values or
+     *                         the current set values.
      * @return If the config was changed at all, returns true. Otherwise, false.
      */
-    boolean setupContents(boolean checkForExisting);
+    boolean setupContents(boolean overwriteExisting, boolean useCurrentValues);
 
+    /**
+     * Convenience method for storage configs.
+     */
+    default boolean saveContents(){
+        return saveContents(false);
+    }
+
+    default boolean saveContents(boolean overwriteExisting){
+        if(setupContents(overwriteExisting, true)) return save();
+        return false;
+    }
+
+    default void setup(boolean reloadAfter){
+        if(setupContents()) save();
+        if(!reloadAfter) return;
+        reload();
+        register();
+    }
     /**
      * @return All of the
      */

@@ -81,6 +81,13 @@ public interface IConfigValue<T, C extends ICruxConfig<?>> {
         set(cfg, path, getDefaultValue());
     }
 
+    /**
+     * Serializes the current object of this config value in the provided config and path.
+     */
+    default void setCurrentValue(@NotNull C cfg, @NotNull String path){
+        set(cfg, path, getValue());
+    }
+
     //Convenience methods.
     default @Nullable String getString(){
         if(getValue() instanceof String x) return x;

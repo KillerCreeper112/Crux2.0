@@ -25,7 +25,7 @@ public interface ICfgValue<T> extends Holder<T> {
     /**
      * @return The config value OR, if the config value is null, returns the defaultValue.
      */
-    default @Nullable T getOrDefault(@Nullable T defaultValue){
+    default T getOrDefault(@Nullable T defaultValue){
         if(getType().getValue() == null) return defaultValue;
         return cast(getType().getValue(), defaultValue);
     }
