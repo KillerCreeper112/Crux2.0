@@ -1,9 +1,10 @@
 package killercreepr.cruxconfig.config.bukkit.file;
 
 import killercreepr.cruxconfig.config.common.file.ICruxConfig;
-import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
+import killercreepr.cruxconfig.config.common.yaml.element.*;
+import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
+import killercreepr.cruxconfig.config.registry.DefaultYamlRegistry;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -12,24 +13,39 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class CruxConfig extends CruxFolder implements ICruxConfig<FileConfiguration> {
+    protected final YamlRegistry yamlRegistry;
     protected final FileConfiguration cfg;
+
     public CruxConfig(@NotNull Plugin plugin, @NotNull String path){
-        super(plugin, path + ".yml");
-        cfg = YamlConfiguration.loadConfiguration(file);
+        this(plugin, path, DefaultYamlRegistry.REGISTRY);
     }
 
     public CruxConfig(@NotNull File file){
-        super(file);
-        cfg = YamlConfiguration.loadConfiguration(file);
+        this(file, DefaultYamlRegistry.REGISTRY);
     }
 
     public CruxConfig(@NotNull CruxConfig cfg){
-        this(cfg.file());
+        this(cfg.file(), DefaultYamlRegistry.REGISTRY);
+    }
+
+    public CruxConfig(@NotNull Plugin plugin, @NotNull String path, @NotNull YamlRegistry registry){
+        super(plugin, path + ".yml");
+        cfg = YamlConfiguration.loadConfiguration(file);
+        this.yamlRegistry = registry;
+    }
+
+    public CruxConfig(@NotNull File file, @NotNull YamlRegistry registry){
+        super(file);
+        cfg = YamlConfiguration.loadConfiguration(file);
+        this.yamlRegistry = registry;
+    }
+
+    public CruxConfig(@NotNull CruxConfig cfg, @NotNull YamlRegistry registry){
+        this(cfg.file(), registry);
     }
 
     @Override
@@ -63,22 +79,58 @@ public class CruxConfig extends CruxFolder implements ICruxConfig<FileConfigurat
         return save();
     }
 
+    @Override
+    public @NotNull YamlRegistry yamlRegistry() {
+        return yamlRegistry;
+    }
+
     protected void setDefaults(){}
 
     @Override
     public void set(@NotNull String path, @Nullable Object value){
+        value = YamlElement.toSerializable(value);
         if(value instanceof YamlElement e){
-            if(e.map().size() == 1){
-                Object d = e.map().get(null);
-                if(d != null){
-                    set(path, d);
-                    return;
-                }
-            }
+            setElement(cfg.getRoot(), path, e);
             return;
         }
         cfg.set(path, value);
     }
+
+    public void setElement(@NotNull ConfigurationSection section, @NotNull String path, @NotNull YamlElement element){
+        if(element instanceof YamlGeneric r){
+            section.set(path, yamlRegistry.serializeObject(r.getAsObject()));
+            return;
+        }
+        if(element instanceof YamlArray a){
+            if(a.isEmpty()){
+                section.set(path, new ArrayList<>());
+                return;
+            }
+            YamlElement first = a.get(0);
+            if(first instanceof YamlGeneric){
+                List<Object> list = new ArrayList<>();
+                for(YamlElement e : a){
+                    list.add(e.getAsObject());
+                }
+                section.set(path, list);
+                return;
+            }
+            int index = -1;
+            for(YamlElement e : a){
+                index++;
+                setElement(section, addDot(path) + index, e);
+            }
+            return;
+        }
+
+        if(element instanceof YamlObject a){
+            a.forEach((key, value) -> setElement(section, addDot(path) + key, value));
+            return;
+        }
+        throw new UnsupportedOperationException("Cannot serialize YamlElement! (" + element.getClass().getSimpleName() + ")");
+    }
+
+
     @Override
     public void set(@NotNull String path, @Nullable Object value, @NotNull String @Nullable... comments){
         cfg.set(path, value);
@@ -99,36 +151,37 @@ public class CruxConfig extends CruxFolder implements ICruxConfig<FileConfigurat
         return cfg.get(path);
     }
 
-    public @NotNull YamlElement getElement(@NotNull String path){
-        return new YamlElement(getAsMap(path));
-    }
-
-    public @NotNull Map<String, Object> getAsMap(@NotNull String path){
+    public @Nullable YamlElement getAsYamlObject(@NotNull String path){
         ConfigurationSection root = cfg.getRoot();
-        if(root == null) return new HashMap<>();
-        return getAsMap(root, path);
+        if(root == null) return new YamlObject();
+        return getAsYamlObject(root, path);
     }
 
-    public @NotNull Map<String, Object> getAsMap(@NotNull ConfigurationSection section, @NotNull String path){
-        Map<String, Object> map = new HashMap<>();
+    public @Nullable YamlElement getAsYamlObject(@NotNull ConfigurationSection section, @NotNull String path){
         Object object = section.get(path);
-        if(object == null) return map;
-        if(object instanceof MemorySection sec){
+        if(object == null) return null;
+        if(object instanceof ConfigurationSection sec){
+            YamlObject map = new YamlObject();
             for(String s : sec.getKeys(false)){
-                Map<String, Object> found = getAsMap(sec, s);
-                Object d = found.size() == 1 ? found.get(null) : found;
-                if(d==null) d = found;
-                map.put(s, d);
+                YamlElement found = getAsYamlObject(sec, s);
+                map.add(s, found);
             }
             return map;
         }
-        map.put(null, object);
-        return map;
+        return YamlElement.fromObject(object);
     }
 
 
     @Override
     public boolean contains(@NotNull String path) {
         return cfg.contains(path);
+    }
+
+    public static @NotNull String addDot(@NotNull String s){
+        return ICruxConfig.addDot(s);
+    }
+
+    public static @NotNull String removeDot(@NotNull String s){
+        return ICruxConfig.removeDot(s);
     }
 }

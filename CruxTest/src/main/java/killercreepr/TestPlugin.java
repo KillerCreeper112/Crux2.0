@@ -1,7 +1,9 @@
 package killercreepr;
 
+import killercreepr.crux.valueproviders.number.UniformNumber;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.common.json.container.GenericJsonHandler;
+import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
 import killercreepr.cruxconfig.config.registry.DefaultJsonRegistry;
 import killercreepr.sometests.BlockBo;
 import killercreepr.sometests.JsonCfgtest;
@@ -16,6 +18,7 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -53,7 +56,20 @@ public class TestPlugin extends JavaPlugin implements Listener {
         cfgtest.setup();
 
         CruxConfig cfg = new CruxConfig(this, "testconfigyes");
-        cfg.getAsMap("test").forEach((k, v) -> getLogger().log(Level.WARNING, k + " -> " + v));
+        if(cfg.getAsYamlObject("test") instanceof YamlObject map){
+            map.forEach((k, v) ->{
+                if(v instanceof YamlObject sub){
+                    sub.forEach((kk, vv) ->{
+                        getLogger().log(Level.WARNING, k + " -> " + kk + " -> " + vv);
+                    });
+                    return;
+                }
+                getLogger().log(Level.WARNING, k + " -> " + v);
+            });
+        }
+        cfg.set("test", new HashMap<>(){{
+            put("a_num", new UniformNumber(2, 25));
+        }});
         /*cfg.set("test", new HashMap<>(){{
             put(null, 2);
             put("test.test.hey", 10);

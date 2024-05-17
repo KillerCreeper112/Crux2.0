@@ -1,56 +1,41 @@
 package killercreepr.cruxconfig.config.common.yaml.registry;
 
-import killercreepr.crux.registry.MappedRegistry;
 import killercreepr.crux.registry.SimpleMappedRegistry;
-import killercreepr.cruxconfig.config.common.yaml.YamlRegistry;
 import killercreepr.cruxconfig.config.common.yaml.container.YamlObjectHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-public class YamlContainerHandlerRegistry extends SimpleMappedRegistry<Class<?>, YamlObjectHandler<?>> {
+public class YamlObjectHandlerRegistry extends SimpleMappedRegistry<Class<?>, YamlObjectHandler<?>> {
     protected final @NotNull YamlRegistry registry;
 
-    public YamlContainerHandlerRegistry(@NotNull Map<Class<?>, YamlObjectHandler<?>> map, @NotNull YamlRegistry registry) {
+    public YamlObjectHandlerRegistry(@NotNull Map<Class<?>, YamlObjectHandler<?>> map, @NotNull YamlRegistry registry) {
         super(map);
         this.registry = registry;
     }
 
-    public YamlContainerHandlerRegistry(@NotNull YamlRegistry registry) {
+    public YamlObjectHandlerRegistry(@NotNull YamlRegistry registry) {
         this.registry = registry;
     }
 
-    public final MappedRegistry<String, Class<?>> registryByName = SimpleMappedRegistry.fromHashMap();
     @Override
     public @NotNull YamlObjectHandler<?> register(@NotNull Class<?> key, @NotNull YamlObjectHandler<?> value) {
-        registryByName.register(registry.getSerializerID(value), key);
         return super.register(key, value);
     }
 
     @Override
     public @Nullable YamlObjectHandler<?> remove(@NotNull Class<?> key) {
         YamlObjectHandler<?> removed = super.remove(key);
-        if(removed != null) registryByName.remove(registry.getSerializerID(removed));
         return removed;
     }
 
     @Override
     public boolean remove(@NotNull Class<?> key, @NotNull YamlObjectHandler<?> value) {
-        registryByName.remove(registry.getSerializerID(value), key);
         return super.remove(key, value);
-    }
-
-    public @Nullable YamlObjectHandler<?> getByName(@NotNull String id){
-        Class<?> found = registryByName.get(id);
-        return found==null ? null : get(found);
     }
 
     public @NotNull YamlRegistry getRegistry() {
         return registry;
-    }
-
-    public MappedRegistry<String, Class<?>> getRegistryByName() {
-        return registryByName;
     }
 }

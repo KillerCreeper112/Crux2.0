@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import killercreepr.cruxconfig.config.bukkit.value.CfgValue;
 import killercreepr.cruxconfig.config.common.file.ICfg;
 import killercreepr.cruxconfig.config.common.json.JsonRegistry;
+import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -150,6 +151,11 @@ public class JsonCfg extends CruxJson implements ICfg<JsonObject, CfgValue<?>> {
     @Override
     public boolean createDefault() {
         return super.createDefault();
+    }
+
+    @Override
+    public @NotNull YamlRegistry yamlRegistry() {
+        return null; //todo not good
     }
 
     @Override

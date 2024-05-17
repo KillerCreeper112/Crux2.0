@@ -1,5 +1,6 @@
 package killercreepr.cruxconfig.config.common.yaml;
 
+import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
 import org.jetbrains.annotations.NotNull;
 
 public class YamlContext {

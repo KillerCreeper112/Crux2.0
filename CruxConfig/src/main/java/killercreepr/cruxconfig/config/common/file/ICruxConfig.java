@@ -1,5 +1,6 @@
 package killercreepr.cruxconfig.config.common.file;
 
+import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,4 +32,7 @@ public interface ICruxConfig<T> extends ICruxFile {
     void register();
     boolean save();
     boolean createDefault();
+
+    @NotNull
+    YamlRegistry yamlRegistry();
 }
