@@ -6,7 +6,7 @@ import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.bukkit.json.handlers.BukkitJsonHandlers;
 import killercreepr.cruxconfig.config.common.json.container.GenericJsonHandler;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
-import killercreepr.cruxconfig.config.registry.DefaultJsonRegistry;
+import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import killercreepr.sometests.BlockBo;
 import killercreepr.sometests.JsonCfgtest;
 import killercreepr.sometests.JsonT;
@@ -30,15 +30,16 @@ public class TestPlugin extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(this, this);
         //getServer().getPluginManager().registerEvents(new MenuListener(), this);
 
-        DefaultJsonRegistry.REGISTRY.registerContainerHandler(
+        CfgRegistries.JSON.registerContainerHandler(
                 new GenericJsonHandler<>("block_bo", BlockBo.class)
         );
-        BukkitJsonHandlers.init(DefaultJsonRegistry.REGISTRY);
+        BukkitJsonHandlers.initJson(CfgRegistries.JSON);
+        BukkitJsonHandlers.initYaml(CfgRegistries.YAML);
 
         cfg = new TestCf(this, "test");
         cfg.setup();
 
-        DefaultJsonRegistry.REGISTRY.CONTAINER_REGISTRY.entrySet().forEach(entyr ->{
+        CfgRegistries.JSON.CONTAINER_REGISTRY.entrySet().forEach(entyr ->{
             getLogger().log(Level.WARNING, "ayo: " + entyr.getKey());
         });
 

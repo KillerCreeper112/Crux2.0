@@ -5,13 +5,11 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import killercreepr.cruxconfig.config.common.json.JsonRegistry;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.logging.Level;
 
 public interface ICruxJson extends ICruxFile {
     @NotNull
@@ -76,7 +74,6 @@ public interface ICruxJson extends ICruxFile {
 
     default boolean save(boolean pretty) {
         JsonObject json = json();
-        Bukkit.getLogger().log(Level.WARNING, " DWJIFHIWFIHWIHFIW " + json + " JSON");
         if(json == null) return false;
         FileReader reader = reader();
         if(json.isEmpty()){
@@ -144,7 +141,6 @@ public interface ICruxJson extends ICruxFile {
      * @return The first base JsonObject, for chaining.
      */
     default <T> @NotNull JsonObject add(@NotNull JsonObject base, @NotNull String property, @NotNull T object){
-        Bukkit.getLogger().warning("AYO MAN STTING SERIALIZED: " + jsonRegistry().serializeObject(object) + " FROM: " + object);
         base.add(property, jsonRegistry().serializeObject(object));
         return base;
     }

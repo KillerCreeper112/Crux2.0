@@ -6,7 +6,7 @@ import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlGeneric;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
-import killercreepr.cruxconfig.config.registry.DefaultYamlRegistry;
+import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -24,15 +24,15 @@ public class CruxConfig extends CruxFolder implements ICruxConfig<FileConfigurat
     protected final FileConfiguration cfg;
 
     public CruxConfig(@NotNull Plugin plugin, @NotNull String path){
-        this(plugin, path, DefaultYamlRegistry.REGISTRY);
+        this(plugin, path, CfgRegistries.YAML);
     }
 
     public CruxConfig(@NotNull File file){
-        this(file, DefaultYamlRegistry.REGISTRY);
+        this(file, CfgRegistries.YAML);
     }
 
     public CruxConfig(@NotNull CruxConfig cfg){
-        this(cfg.file(), DefaultYamlRegistry.REGISTRY);
+        this(cfg.file(), CfgRegistries.YAML);
     }
 
     public CruxConfig(@NotNull Plugin plugin, @NotNull String path, @NotNull YamlRegistry registry){

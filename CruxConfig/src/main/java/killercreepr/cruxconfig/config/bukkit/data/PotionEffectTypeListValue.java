@@ -1,16 +1,11 @@
 package killercreepr.cruxconfig.config.bukkit.data;
 
-import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
-import killercreepr.cruxconfig.config.bukkit.value.ConfigValue;
-import org.bukkit.NamespacedKey;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class PotionEffectTypeListValue extends ConfigValue<List<PotionEffectType>> {
+public class PotionEffectTypeListValue extends CommonValue<List<PotionEffectType>> {
 
     public PotionEffectTypeListValue(@Nullable List<PotionEffectType> defaultValue) {
         super((Class<List<PotionEffectType>>) (Class<?>) List.class, defaultValue);
@@ -20,7 +15,7 @@ public class PotionEffectTypeListValue extends ConfigValue<List<PotionEffectType
         this(null);
     }
 
-    @Nullable
+    /*@Nullable
     @Override
     public List<PotionEffectType> get(@NotNull CruxConfig cfg, @NotNull String path) {
         List<PotionEffectType> list = new ArrayList<>();
@@ -41,5 +36,5 @@ public class PotionEffectTypeListValue extends ConfigValue<List<PotionEffectType
         List<String> list = new ArrayList<>();
         object.forEach(p -> list.add(p.getKey().asString()));
         cfg.config().set(removeDot(path), list);
-    }
+    }*/
 }

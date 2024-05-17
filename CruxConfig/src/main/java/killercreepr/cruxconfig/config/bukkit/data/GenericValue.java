@@ -18,7 +18,7 @@ public class GenericValue extends ConfigValue<Object> {
     @Nullable
     @Override
     public Object get(@NotNull CruxConfig cfg, @NotNull String path) {
-        return cfg.config().get(path);
+        return cfg.get(path);
     }
 
     @Override

@@ -9,32 +9,33 @@ import java.util.function.BiConsumer;
 
 public class YamlObject extends YamlElement {
     protected final Map<String, YamlElement> members = new LinkedHashMap<>();
-    public void add(String property, YamlElement value) {
+    public YamlObject add(String property, YamlElement value) {
         members.put(property, value);
+        return this;
     }
 
-    public void addAll(@NotNull YamlObject object) {
-        addAll(object.asMap());
+    public YamlObject addAll(@NotNull YamlObject object) {
+        addAll(object.asMap()); return this;
     }
 
-    public void addAll(@NotNull Map<String, YamlElement> map) {
-        members.putAll(map);
+    public YamlObject addAll(@NotNull Map<String, YamlElement> map) {
+        members.putAll(map); return this;
     }
 
     public YamlElement remove(String property) {
         return members.remove(property);
     }
 
-    public void addProperty(String property, String value) {
-        add(property, new YamlPrimitive(value));
+    public YamlObject addProperty(String property, String value) {
+        add(property, new YamlPrimitive(value)); return this;
     }
 
-    public void addProperty(String property, Number value) {
-        add(property, new YamlPrimitive(value));
+    public YamlObject addProperty(String property, Number value) {
+        add(property, new YamlPrimitive(value)); return this;
     }
 
-    public void addProperty(String property, Boolean value) {
-        add(property, new YamlPrimitive(value));
+    public YamlObject addProperty(String property, Boolean value) {
+        add(property, new YamlPrimitive(value)); return this;
     }
 
     public Set<Map.Entry<String, YamlElement>> entrySet() {
@@ -59,6 +60,22 @@ public class YamlObject extends YamlElement {
 
     public YamlElement get(String memberName) {
         return members.get(memberName);
+    }
+    public YamlElement getOrDefault(String memberName, YamlElement defaultValue){
+        return members.getOrDefault(memberName, defaultValue);
+    }
+
+    public <T> T getObject(String memberName){
+        return getOrDefaultObject(memberName, null);
+    }
+    public <T> T getOrDefaultObject(String memberName, T defaultValue){
+        YamlElement e = get(memberName);
+        if(e==null) return defaultValue;
+        Object o = e.getAsObject();
+        if(o==null) return defaultValue;
+        try{
+            return (T) o;
+        }catch (ClassCastException ignored){ return defaultValue; }
     }
 
     public YamlPrimitive getAsYamlPrimitive(String memberName) {

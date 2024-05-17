@@ -1,4 +1,4 @@
-package killercreepr.cruxconfig.config.common.yaml.container;
+package killercreepr.cruxconfig.config.common.yaml.handler;
 
 import killercreepr.cruxconfig.config.common.yaml.YamlContext;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;

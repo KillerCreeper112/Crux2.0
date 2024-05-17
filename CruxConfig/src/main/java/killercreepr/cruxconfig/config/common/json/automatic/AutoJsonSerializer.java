@@ -6,7 +6,6 @@ import killercreepr.crux.util.CruxReflect;
 import killercreepr.cruxconfig.config.common.json.JsonContext;
 import killercreepr.cruxconfig.config.common.json.JsonRegistry;
 import killercreepr.cruxconfig.config.common.json.JsonSerializable;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,7 +13,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.logging.Level;
 
 public class AutoJsonSerializer<T> implements JsonSerializable {
     protected final @NotNull T object;
@@ -49,7 +47,6 @@ public class AutoJsonSerializer<T> implements JsonSerializable {
         for(Field field : CruxReflect.getNonStaticDeclaredFields(clazz)){
             Object found  = registry.deserialize(jsonMap.get(field.getName()));
             fields.put(field.getName(), found);
-            Bukkit.getLogger().log(Level.WARNING, "FIELD - " + field.getName());
         }
         return CruxReflect.attemptCreation(clazz, fields);
     }

@@ -1,7 +1,8 @@
-package killercreepr.cruxconfig.config.common.yaml;
+package killercreepr.cruxconfig.config.bukkit.yaml.handler;
 
 import killercreepr.crux.valueproviders.number.*;
-import killercreepr.cruxconfig.config.common.yaml.container.YamlObjectHandler;
+import killercreepr.cruxconfig.config.common.yaml.YamlContext;
+import killercreepr.cruxconfig.config.common.yaml.handler.YamlObjectHandler;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlArray;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlGeneric;
@@ -13,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NumTest implements YamlObjectHandler<NumberProvider> {
+public class YamlNumberProvider implements YamlObjectHandler<NumberProvider> {
     @Override
     public @NotNull YamlElement serializeToYaml(@NotNull YamlContext context, @NotNull NumberProvider object) {
         YamlRegistry registry = context.getRegistry();

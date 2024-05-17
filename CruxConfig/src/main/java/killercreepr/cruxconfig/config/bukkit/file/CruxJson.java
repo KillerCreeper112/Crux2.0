@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import killercreepr.cruxconfig.config.common.file.ICruxJson;
 import killercreepr.cruxconfig.config.common.json.JsonRegistry;
-import killercreepr.cruxconfig.config.registry.DefaultJsonRegistry;
+import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,17 +20,17 @@ public class CruxJson extends CruxFolder implements ICruxJson {
     protected final boolean existedBefore;
 
     public CruxJson(@NotNull Plugin plugin, @NotNull String path){
-        this(plugin, path, DefaultJsonRegistry.REGISTRY);
+        this(plugin, path, CfgRegistries.JSON);
     }
     public CruxJson(@NotNull File file){
-        this(file, DefaultJsonRegistry.REGISTRY);
+        this(file, CfgRegistries.JSON);
     }
 
     public CruxJson(@NotNull Plugin plugin, @NotNull String path, boolean reloadIfExists){
-        this(plugin, path, DefaultJsonRegistry.REGISTRY, reloadIfExists);
+        this(plugin, path, CfgRegistries.JSON, reloadIfExists);
     }
     public CruxJson(@NotNull File file, boolean reloadIfExists){
-        this(file, DefaultJsonRegistry.REGISTRY, reloadIfExists);
+        this(file, CfgRegistries.JSON, reloadIfExists);
     }
 
    public CruxJson(@NotNull Plugin plugin, @NotNull String path, @NotNull JsonRegistry jsonRegistry) {

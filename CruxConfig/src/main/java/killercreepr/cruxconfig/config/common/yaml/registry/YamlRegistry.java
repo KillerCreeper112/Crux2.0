@@ -5,9 +5,8 @@ import killercreepr.crux.valueproviders.number.EquationNumber;
 import killercreepr.crux.valueproviders.number.UniformNumber;
 import killercreepr.cruxconfig.config.common.yaml.YamlContext;
 import killercreepr.cruxconfig.config.common.yaml.automatic.AutoYamlSerializer;
-import killercreepr.cruxconfig.config.common.yaml.container.YamlObjectHandler;
 import killercreepr.cruxconfig.config.common.yaml.element.*;
-import org.bukkit.Bukkit;
+import killercreepr.cruxconfig.config.common.yaml.handler.YamlObjectHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,7 +42,6 @@ public class YamlRegistry {
     }
 
     public @NotNull Collection<YamlObjectHandler<?>> findPotentialHandlers(@NotNull Class<?> from){
-        Bukkit.getLogger().warning("FINDING POTENTIAL handlers: " + from.getSimpleName());
         Collection<YamlObjectHandler<?>> handlers = new HashSet<>();
         for(Map.Entry<Class<?>, YamlObjectHandler<?>> entry : HANDLER_REGISTRY.entrySet()){
             Class<?> clazz = entry.getKey();
@@ -83,7 +81,6 @@ public class YamlRegistry {
 
     public @Nullable Object deserializeObject(@NotNull Class<?> clazz, @Nullable YamlElement from){
         for(YamlObjectHandler<?> handler : findPotentialHandlers(clazz)){
-            Bukkit.getLogger().warning("AYO CHECKING THIS RIGHT NOW: " + clazz.getSimpleName() + " POTENTIAL: " + ((AutoYamlSerializer)handler).getType().getSimpleName());
             Object o = handler.deserializeFromYaml(new YamlContext(this), from);
             if(o!=null) return o;
         }

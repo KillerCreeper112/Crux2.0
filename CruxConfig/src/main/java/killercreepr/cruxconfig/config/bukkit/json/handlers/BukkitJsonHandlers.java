@@ -1,17 +1,26 @@
 package killercreepr.cruxconfig.config.bukkit.json.handlers;
 
+import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.cruxconfig.config.bukkit.yaml.handler.YamlNumberProvider;
+import killercreepr.cruxconfig.config.bukkit.yaml.handler.YamlPotionEffect;
 import killercreepr.cruxconfig.config.common.json.JsonRegistry;
 import killercreepr.cruxconfig.config.common.json.container.GenericJsonHandler;
+import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
 public class BukkitJsonHandlers {
-    public static void init(@NotNull JsonRegistry registry){
+    public static void initJson(@NotNull JsonRegistry registry){
         registry.registerContainerHandler(
                 new GenericJsonHandler<>("vector", Vector.class),
                 new GenericJsonHandler<>("uuid", UUID.class)
         );
+    }
+    public static void initYaml(@NotNull YamlRegistry registry){
+        registry.registerHandler(PotionEffect.class, new YamlPotionEffect());
+        registry.registerHandler(NumberProvider.class, new YamlNumberProvider());
     }
 }
