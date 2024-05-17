@@ -12,14 +12,25 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.BiPredicate;
 
 public class AutoYamlSerializer<T> implements YamlObjectHandler<T> {
-    protected final Class<T> type;
-    public AutoYamlSerializer(Class<T> type) {
-        this.type = type;
+    public static <T> AutoYamlSerializer<T> notNull(@NotNull Class<T> type){
+        return new AutoYamlSerializer<>(type, (name, value) -> value != null);
     }
 
-    public Class<T> getType() {
+    protected final @NotNull Class<T> type;
+    protected final @Nullable BiPredicate<String, Object> isValid;
+    public AutoYamlSerializer(@NotNull Class<T> type, @Nullable BiPredicate<String, Object> isValid) {
+        this.type = type;
+        this.isValid = isValid;
+    }
+
+    public AutoYamlSerializer(@NotNull Class<T> type) {
+        this(type, null);
+    }
+
+    public @NotNull Class<T> getType() {
         return type;
     }
 
@@ -49,9 +60,10 @@ public class AutoYamlSerializer<T> implements YamlObjectHandler<T> {
         Map<String, YamlElement> yamlMap = o.asMap();
         for(Field field : CruxReflect.getNonStaticDeclaredFields(type)){
             Object found  = registry.deserialize(field.getType(), yamlMap.get(field.getName()));
-            if(found == null && field.getAnnotation(NotNull.class) != null) return null;
+            if(isValid != null && !isValid.test(field.getName(), found)) return null;
             fields.put(field.getName(), found);
         }
         return CruxReflect.attemptCreation(type, fields);
     }
+
 }

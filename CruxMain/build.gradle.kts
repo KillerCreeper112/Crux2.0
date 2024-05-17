@@ -7,7 +7,6 @@ plugins {
 dependencies {
     paperweight.paperDevBundle(libs.versions.paper)
     implementation(libs.crunch)
-    implementation("org.jetbrains:annotations:24.1.0")
 }
 
 tasks{

@@ -42,7 +42,6 @@ public interface ICfg<T, V extends ICfgValue<?>> extends ICruxConfig<T> {
      * @return All of the
      */
     default @NotNull LinkedHashMap<String, V> getAllValues(){
-
         LinkedHashMap<String, V> map = new LinkedHashMap<>();
         CruxReflect.getNonStaticParsedDeclaredFields(this).forEach((name, v) ->{
             if(!(v instanceof ICfgValue<?> value)) return;

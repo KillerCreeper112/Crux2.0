@@ -21,9 +21,9 @@ public class YamlRegistry {
 
     public YamlRegistry() {
         registerHandler(
-                new AutoYamlSerializer<>(ConstantNumber.class),
-                new AutoYamlSerializer<>(EquationNumber.class),
-                new AutoYamlSerializer<>(UniformNumber.class)
+                AutoYamlSerializer.notNull(ConstantNumber.class),
+                AutoYamlSerializer.notNull(EquationNumber.class),
+                AutoYamlSerializer.notNull(UniformNumber.class)
         );
         //registerHandler(NumberProvider.class, new NumTest());
     }
