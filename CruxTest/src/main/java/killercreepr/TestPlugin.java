@@ -37,6 +37,10 @@ public class TestPlugin extends JavaPlugin implements Listener {
     public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
         Player p = event.getPlayer();
         cfg.SWAP_HAND_EFFECTS.value().forEach(p::addPotionEffect);
+        //p.sendMessage(cfg.TEST_MAP.value() + "");
+        cfg.TEST_MAP.value().forEach((key, value) ->{
+            p.sendMessage("key: " + key + " -> " + (value + 20));
+        });
     }
 
     @EventHandler(ignoreCancelled = true)

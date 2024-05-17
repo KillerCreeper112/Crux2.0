@@ -3,14 +3,8 @@ package killercreepr.crux.util;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.lang.reflect.*;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class CruxReflect {
@@ -19,6 +13,21 @@ public class CruxReflect {
             if(filter != null && !filter.test(field)) return false;
             return !Modifier.isStatic(field.getModifiers());
         };
+    }
+
+    public static <T extends Map<?, ?>> Class<?> getFirstMapClass(Class<T> type){
+        Type[] typeArgs = ((ParameterizedType) type.getGenericSuperclass()).getActualTypeArguments();
+        return resolveClass(typeArgs[0]);
+    }
+
+    public static Class<?> resolveClass(Type type) {
+        if (type instanceof Class) {
+            return (Class<?>) type;
+        } else if (type instanceof ParameterizedType t) {
+            return (Class<?>) t.getRawType();
+        } else {
+            throw new IllegalArgumentException("Type cannot be resolved: " + type);
+        }
     }
 
     public static @NotNull LinkedHashMap<String, Object> getNonStaticParsedDeclaredFields(@NotNull Object from, @Nullable Predicate<Field> filter){
@@ -64,6 +73,10 @@ public class CruxReflect {
         }
         return list.toArray(new Field[0]);
     }
+    public static <T> @Nullable T attemptCreation(@NotNull Class<T> type){
+        return attemptCreation(type, new HashMap<>());
+    }
+
 
     public static <T> @Nullable T attemptCreation(@NotNull Class<T> type, @NotNull Map<String, Object> fields){
         Object[] fieldsArray = fields.values().toArray(new Object[0]);

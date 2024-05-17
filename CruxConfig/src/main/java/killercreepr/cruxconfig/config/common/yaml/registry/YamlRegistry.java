@@ -1,5 +1,6 @@
 package killercreepr.cruxconfig.config.common.yaml.registry;
 
+import killercreepr.crux.util.CruxReflect;
 import killercreepr.crux.valueproviders.number.ConstantNumber;
 import killercreepr.crux.valueproviders.number.EquationNumber;
 import killercreepr.crux.valueproviders.number.UniformNumber;
@@ -11,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Function;
 
 public class YamlRegistry {
     public final YamlObjectHandlerRegistry HANDLER_REGISTRY = new YamlObjectHandlerRegistry(this);
@@ -79,18 +81,44 @@ public class YamlRegistry {
     public @Nullable Object deserializeObject(@NotNull Class<?> clazz, @Nullable YamlElement from){
         for(YamlObjectHandler<?> handler : findPotentialHandlers(clazz)){
             Object o = handler.deserializeFromYaml(new YamlContext(this), from);
-            if(o!=null) return deserializeObject(o);
+            if(o!=null){
+                Object object = deserializeObject(o);
+                return convertObject(clazz, object);
+            }
         }
-        return from==null?null: deserializeObject(from.getAsObject());
+        return from==null?null: convertObject(clazz, deserializeObject(from.getAsObject()));
     }
-    //YamlObjectHandler<?> handler = findContainerHandler(clazz);
-    //        /*for(YamlObjectHandler<?> handler : findPotentialHandlers(clazz)){
-    //            Object o = handler.deserializeFromYaml(new YamlContext(this), from);
-    //            if(o==null) continue;
-    //            return o;
-    //        }*/
-    //        if(handler==null) return null;
-    //        return handler.deserializeFromYaml(new YamlContext(this), from);
+
+    public @NotNull Object convertObject(@NotNull Class<?> clazz, @NotNull Object object){
+        if(object instanceof Map<?,?> map && Map.class.isAssignableFrom(clazz)){
+            return convertMap(clazz, map);
+        }
+        return object;
+    }
+
+    public @NotNull Map<?, ?> convertMap(@NotNull Class<?> type, @NotNull Map<?, ?> map){
+        Class<?> first = CruxReflect.getFirstMapClass((Class<? extends Map<?,?>>) type);
+        Map<Object, Object> newMap = CruxReflect.attemptCreation(map.getClass());
+        if(Double.class.isAssignableFrom(first)){
+            computeMap(newMap, map, key -> Double.parseDouble((String) key));
+        }else if(Float.class.isAssignableFrom(first)){
+            computeMap(newMap, map, key -> Float.parseFloat((String) key));
+        }else if(Long.class.isAssignableFrom(first)){
+            computeMap(newMap, map, key -> Long.parseLong((String) key));
+        }else if(Integer.class.isAssignableFrom(first)){
+            computeMap(newMap, map, key -> Integer.parseInt((String) key));
+        }else if(Short.class.isAssignableFrom(first)){
+            computeMap(newMap, map, key -> Short.parseShort((String) key));
+        }
+        return newMap;
+    }
+
+    public @NotNull Map<Object, Object> computeMap(@NotNull Map<Object, Object> newMap,
+                                                   @NotNull Map<?, ?> map,
+                                                   @NotNull Function<Object, Object> keyFunction){
+        map.forEach((key, value) -> newMap.put(keyFunction.apply(key), value));
+        return newMap;
+    }
 
     public <T> @Nullable T deserialize(@NotNull Class<T> clazz, @Nullable YamlElement from){
         Object object = deserializeObject(clazz, from);
@@ -151,8 +179,7 @@ public class YamlRegistry {
     public @NotNull YamlObject serializeMap(@NotNull Map<?, ?> list){
         YamlObject array = new YamlObject();
         for(Map.Entry<?, ?> entry : list.entrySet()){
-            if(!(entry.getKey() instanceof String key)) return array;
-            array.add(key, serializeObject(entry.getValue()));
+            array.add(entry.getKey() + "", serializeObject(entry.getValue()));
         }
         return array;
     }
