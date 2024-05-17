@@ -1,10 +1,10 @@
 package killercreepr.cruxconfig.config.common.file;
 
+import killercreepr.crux.util.CruxReflect;
 import killercreepr.cruxconfig.config.common.annotations.Config;
 import killercreepr.cruxconfig.config.common.value.ICfgValue;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
 
 public interface ICfg<T, V extends ICfgValue<?>> extends ICruxConfig<T> {
@@ -42,19 +42,13 @@ public interface ICfg<T, V extends ICfgValue<?>> extends ICruxConfig<T> {
      * @return All of the
      */
     default @NotNull LinkedHashMap<String, V> getAllValues(){
+
         LinkedHashMap<String, V> map = new LinkedHashMap<>();
-        for (Field field : this.getClass().getDeclaredFields()) {
-            field.setAccessible(true);
-            try{
-                if(!(field.get(this) instanceof ICfgValue<?> value)) continue;
-                try{
-                    String path = value.getPath() == null ? field.getName().toLowerCase() : value.getPath();
-                    map.put(path, (V) value);
-                }catch (ClassCastException ignored){}
-            }catch (IllegalAccessException e){
-                e.printStackTrace();
-            }
-        }
+        CruxReflect.getNonStaticParsedDeclaredFields(this).forEach((name, v) ->{
+            if(!(v instanceof ICfgValue<?> value)) return;
+            String path = value.getPath() == null ? name.toLowerCase() : value.getPath();
+            map.put(path, (V) value);
+        });
         return map;
     }
 

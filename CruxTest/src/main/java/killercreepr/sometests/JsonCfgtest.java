@@ -8,6 +8,7 @@ import killercreepr.cruxconfig.config.bukkit.file.CruxJson;
 import killercreepr.cruxconfig.config.bukkit.file.JsonCfg;
 import killercreepr.cruxconfig.config.bukkit.value.CfgValue;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -26,6 +27,7 @@ public class JsonCfgtest extends JsonCfg {
     public final CfgValue<NumberProvider> NUMBER = new CfgValue<>(new NumberProviderValue(
             new UniformNumber(22.2, 100.222)
     ));
+    public final CfgValue<Vector> VECTOR = new CfgValue<>(new GenericValue(new Vector(0.3, 12, -2)));
     public JsonCfgtest(@NotNull Plugin plugin, @NotNull String path) {
         super(plugin, path);
     }

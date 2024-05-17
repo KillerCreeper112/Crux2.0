@@ -6,13 +6,37 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public class CruxReflect {
-    public static @NotNull Map<String, Object> getDeclaredFields(@NotNull Object from) {
-        Map<String, Object> fields = new LinkedHashMap<>();
+    public static @NotNull Predicate<Field> NON_STATIC(@Nullable Predicate<Field> filter){
+        return field ->{
+            if(filter != null && !filter.test(field)) return false;
+            return !Modifier.isStatic(field.getModifiers());
+        };
+    }
+
+    public static @NotNull LinkedHashMap<String, Object> getNonStaticParsedDeclaredFields(@NotNull Object from, @Nullable Predicate<Field> filter){
+        return getParsedDeclaredFields(from, NON_STATIC(filter));
+    }
+
+    public static @NotNull LinkedHashMap<String, Object> getNonStaticParsedDeclaredFields(@NotNull Object from){
+        return getNonStaticParsedDeclaredFields(from, null);
+    }
+
+    public static @NotNull LinkedHashMap<String, Object> getParsedDeclaredFields(@NotNull Object from){
+        return getParsedDeclaredFields(from, null);
+    }
+
+    public static @NotNull LinkedHashMap<String, Object> getParsedDeclaredFields(@NotNull Object from, @Nullable Predicate<Field> filter) {
+        LinkedHashMap<String, Object> fields = new LinkedHashMap<>();
         for(Field field : from.getClass().getDeclaredFields()){
+            if(filter != null && !filter.test(field)) continue;
             try{
                 boolean accessible = field.canAccess(from);
                 field.setAccessible(true);
@@ -22,6 +46,23 @@ public class CruxReflect {
             }catch (IllegalAccessException ignored){}
         }
         return fields;
+    }
+
+    public static @NotNull Field[] getNonStaticDeclaredFields(@NotNull Class<?> type){
+        return getNonStaticDeclaredFields(type, null);
+    }
+
+    public static @NotNull Field[] getNonStaticDeclaredFields(@NotNull Class<?> type, @Nullable Predicate<Field> filter){
+        return getDeclaredFields(type, NON_STATIC(filter));
+    }
+
+    public static @NotNull Field[] getDeclaredFields(@NotNull Class<?> type, @Nullable Predicate<Field> filter){
+        Collection<Field> list = new ArrayList<>();
+        for(Field field : type.getDeclaredFields()){
+            if(filter != null && !filter.test(field)) continue;
+            list.add(field);
+        }
+        return list.toArray(new Field[0]);
     }
 
     public static <T> @Nullable T attemptCreation(@NotNull Class<T> type, @NotNull Map<String, Object> fields){

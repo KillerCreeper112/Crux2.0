@@ -3,6 +3,7 @@ package killercreepr;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.crux.valueproviders.number.UniformNumber;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
+import killercreepr.cruxconfig.config.bukkit.json.handlers.BukkitJsonHandlers;
 import killercreepr.cruxconfig.config.common.json.container.GenericJsonHandler;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
 import killercreepr.cruxconfig.config.registry.DefaultJsonRegistry;
@@ -32,6 +33,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
         DefaultJsonRegistry.REGISTRY.registerContainerHandler(
                 new GenericJsonHandler<>("block_bo", BlockBo.class)
         );
+        BukkitJsonHandlers.init(DefaultJsonRegistry.REGISTRY);
 
         cfg = new TestCf(this, "test");
         cfg.setup();

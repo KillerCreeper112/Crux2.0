@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -25,7 +26,8 @@ public class AutoJsonSerializer<T> implements JsonSerializable {
     public @NotNull JsonElement serializeToJson(@NotNull JsonContext context) {
         JsonObject o = new JsonObject();
         JsonRegistry registry = context.getRegistry();
-        for(Field field : object.getClass().getDeclaredFields()){
+        for(Field field : CruxReflect.getNonStaticDeclaredFields(object.getClass())){
+            if(Modifier.isStatic(field.getModifiers())) continue;
             try{
                 boolean x = field.canAccess(object);
                 field.setAccessible(true);
@@ -44,7 +46,7 @@ public class AutoJsonSerializer<T> implements JsonSerializable {
         JsonRegistry registry = context.getRegistry();
         Map<String, Object> fields = new LinkedHashMap<>();
         Map<String, JsonElement> jsonMap = o.asMap();
-        for(Field field : clazz.getDeclaredFields()){
+        for(Field field : CruxReflect.getNonStaticDeclaredFields(clazz)){
             Object found  = registry.deserialize(jsonMap.get(field.getName()));
             fields.put(field.getName(), found);
             Bukkit.getLogger().log(Level.WARNING, "FIELD - " + field.getName());

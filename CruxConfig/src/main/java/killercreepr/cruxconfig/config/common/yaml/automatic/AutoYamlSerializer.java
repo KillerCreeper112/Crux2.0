@@ -27,7 +27,7 @@ public class AutoYamlSerializer<T> implements YamlObjectHandler<T> {
     public @NotNull YamlElement serializeToYaml(@NotNull YamlContext context, @NotNull T object) {
         YamlObject map = new YamlObject();
         YamlRegistry registry = context.getRegistry();
-        for(Field field : object.getClass().getDeclaredFields()){
+        for(Field field : CruxReflect.getNonStaticDeclaredFields(object.getClass())){
             try{
                 boolean x = field.canAccess(object);
                 field.setAccessible(true);
@@ -47,8 +47,9 @@ public class AutoYamlSerializer<T> implements YamlObjectHandler<T> {
         YamlRegistry registry = context.getRegistry();
         Map<String, Object> fields = new LinkedHashMap<>();
         Map<String, YamlElement> yamlMap = o.asMap();
-        for(Field field : type.getDeclaredFields()){
+        for(Field field : CruxReflect.getNonStaticDeclaredFields(type)){
             Object found  = registry.deserialize(field.getType(), yamlMap.get(field.getName()));
+            if(found == null && field.getAnnotation(NotNull.class) != null) return null;
             fields.put(field.getName(), found);
         }
         return CruxReflect.attemptCreation(type, fields);
