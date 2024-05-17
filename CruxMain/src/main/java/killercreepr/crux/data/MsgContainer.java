@@ -5,6 +5,7 @@ import killercreepr.crux.tags.container.StringHookContainer;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -48,7 +49,7 @@ public class MsgContainer {
     }
 
 
-    public MsgContainer use(@NotNull Audience a, @Nullable Player placeholders, @Nullable StringHookContainer tags){
+    public MsgContainer use(@NotNull Audience a, @Nullable OfflinePlayer placeholders, @Nullable StringHookContainer tags){
         if(isBroadcast()) return broadcast(tags);
         if(a instanceof Player p) return use(p, placeholders, tags);
         if(chat != null){
@@ -59,11 +60,11 @@ public class MsgContainer {
         return this;
     }
 
-    public MsgContainer use(@NotNull Player p, @Nullable Player placeholders, @Nullable StringHookContainer tags){
+    public MsgContainer use(@NotNull Player p, @Nullable OfflinePlayer placeholders, @Nullable StringHookContainer tags){
         return use(p, placeholders, true, tags);
     }
 
-    public MsgContainer use(@NotNull Player p, @Nullable Player placeholders, boolean broadcastCheck, @Nullable StringHookContainer tags){
+    public MsgContainer use(@NotNull Player p, @Nullable OfflinePlayer placeholders, boolean broadcastCheck, @Nullable StringHookContainer tags){
         if(broadcastCheck && broadcast){
             return broadcast(tags);
         }

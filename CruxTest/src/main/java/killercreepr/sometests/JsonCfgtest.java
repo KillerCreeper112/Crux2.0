@@ -1,13 +1,12 @@
 package killercreepr.sometests;
 
-import killercreepr.crux.config.bukkit.data.GenericValue;
-import killercreepr.crux.config.bukkit.data.NumberProviderValue;
-import killercreepr.crux.config.bukkit.file.CruxJson;
-import killercreepr.crux.config.bukkit.file.JsonCfg;
-import killercreepr.crux.config.bukkit.value.CfgValue;
-import killercreepr.crux.valueproviders.number.ConstantNumber;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.crux.valueproviders.number.UniformNumber;
+import killercreepr.cruxconfig.config.bukkit.data.GenericValue;
+import killercreepr.cruxconfig.config.bukkit.data.NumberProviderValue;
+import killercreepr.cruxconfig.config.bukkit.file.CruxJson;
+import killercreepr.cruxconfig.config.bukkit.file.JsonCfg;
+import killercreepr.cruxconfig.config.bukkit.value.CfgValue;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 

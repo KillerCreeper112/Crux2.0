@@ -1,10 +1,10 @@
 package killercreepr.sometests;
 
-import killercreepr.crux.config.bukkit.data.GenericValue;
-import killercreepr.crux.config.bukkit.file.Cfg;
-import killercreepr.crux.config.bukkit.file.CruxConfig;
-import killercreepr.crux.config.bukkit.value.CfgValue;
-import killercreepr.crux.config.common.annotations.Config;
+import killercreepr.cruxconfig.config.bukkit.data.GenericValue;
+import killercreepr.cruxconfig.config.bukkit.file.Cfg;
+import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
+import killercreepr.cruxconfig.config.bukkit.value.CfgValue;
+import killercreepr.cruxconfig.config.common.annotations.Config;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 

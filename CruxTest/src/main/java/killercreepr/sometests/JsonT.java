@@ -1,7 +1,7 @@
 package killercreepr.sometests;
 
-import killercreepr.crux.config.bukkit.file.CruxJson;
-import killercreepr.crux.config.common.json.JsonRegistry;
+import killercreepr.cruxconfig.config.bukkit.file.CruxJson;
+import killercreepr.cruxconfig.config.common.json.JsonRegistry;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 

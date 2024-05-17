@@ -1,6 +1,7 @@
 package killercreepr;
 
-import killercreepr.crux.config.bukkit.json.registry.DefaultJsonRegistry;
+import killercreepr.cruxconfig.config.common.json.container.GenericJsonHandler;
+import killercreepr.cruxconfig.config.registry.DefaultJsonRegistry;
 import killercreepr.sometests.BlockBo;
 import killercreepr.sometests.JsonCfgtest;
 import killercreepr.sometests.JsonT;
@@ -25,8 +26,8 @@ public class TestPlugin extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(this, this);
         //getServer().getPluginManager().registerEvents(new MenuListener(), this);
 
-        DefaultJsonRegistry.REGISTRY.register(
-                BlockBo.class
+        DefaultJsonRegistry.REGISTRY.registerContainerHandler(
+                new GenericJsonHandler<>("block_bo", BlockBo.class)
         );
 
         cfg = new TestCf(this, "test");
