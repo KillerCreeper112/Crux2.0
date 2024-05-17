@@ -4,10 +4,16 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import killercreepr.crux.config.common.json.annotation.JsonSerializer;
+import killercreepr.crux.config.common.json.annotation.JsonSerializerID;
 import killercreepr.crux.config.common.json.container.JsonContainerHandler;
 import killercreepr.crux.config.common.json.container.JsonListHandler;
 import killercreepr.crux.config.common.json.container.JsonMapHandler;
+import killercreepr.crux.config.common.json.container.GenericJsonHandler;
 import killercreepr.crux.config.common.json.registry.JsonContainerHandlerRegistry;
+import killercreepr.crux.valueproviders.number.ConstantNumber;
+import killercreepr.crux.valueproviders.number.EquationNumber;
+import killercreepr.crux.valueproviders.number.UniformNumber;
+import killercreepr.crux.valueproviders.number.UniformNumberArray;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,6 +31,12 @@ public class JsonRegistry {
     public JsonRegistry() {
         registerContainerHandler(List.class, new JsonListHandler());
         registerContainerHandler(Map.class, new JsonMapHandler());
+        registerContainerHandler(
+                new GenericJsonHandler<>("constant_number", ConstantNumber.class),
+                new GenericJsonHandler<>("equation_number", EquationNumber.class),
+                new GenericJsonHandler<>("uniform_number", UniformNumber.class),
+                new GenericJsonHandler<>("uniform_number_array", UniformNumberArray.class)
+        );
     }
 
     public <T extends JsonSerializable> void register(@NotNull String name, @NotNull Class<T> clazz){
@@ -35,10 +47,21 @@ public class JsonRegistry {
         CONTAINER_REGISTRY.register(clazz, object);
     }
 
+    public <T extends GenericJsonHandler<?>> void registerContainerHandler(@NotNull T... objects){
+        for(T object : objects){
+            registerContainerHandler(object.getType(), object);
+        }
+    }
+
     public void register(@NotNull Class<? extends JsonSerializable>... clazzes){
         for(Class<? extends JsonSerializable> clazz : clazzes){
             register(clazz);
         }
+    }
+
+    public @NotNull String getSerializerID(@NotNull Object object){
+        if(object instanceof JsonSerializerID i) return i.jsonSerializerID();
+        return getSerializeID(object.getClass());
     }
 
     public <T> @NotNull String getSerializeID(@NotNull Class<T> clazz){
@@ -104,10 +127,10 @@ public class JsonRegistry {
             }
             return ele;
         }
-        JsonElement element = handler.attemptSerializeToJson(this, object);
+        JsonElement element = handler.attemptSerializeToJson(new JsonContext(this), object);
         if(element == null)
             throw new RuntimeException("Object cannot be serialized with " + handler + " (" + object + ")");
-        String id = getSerializeID(handler.getClass());
+        String id = getSerializerID(handler);
         JsonObject o = new JsonObject();
         o.addProperty("id", id);
         o.add("value", element);
@@ -118,7 +141,7 @@ public class JsonRegistry {
         String id = getSerializeID(object.getClass());
         JsonObject o = new JsonObject();
         o.addProperty("id", id);
-        o.add("value", object.serializeToJson());
+        o.add("value", object.serializeToJson(new JsonContext(this)));
         return o;
     }
 
@@ -137,13 +160,14 @@ public class JsonRegistry {
         Class<? extends JsonSerializable> clazz = get(id);
         if(clazz == null){
             JsonContainerHandler<?> handler = CONTAINER_REGISTRY.getByName(id);
-            return handler == null ? null : handler.deserializeFromJson(this, o.get("value"));
+            return handler == null ? null : handler.deserializeFromJson(new JsonContext(this), o.get("value"));
         }
         JsonElement value = o.get("value");
 
         Class<?>[] parameterTypes = { JsonElement.class };
         try {
             Method method = clazz.getMethod(DESERIALIZE_METHOD_NAME, parameterTypes);
+            if(method.getParameterCount() > 1) return method.invoke(null, new JsonContext(this), value);
             return method.invoke(null, value);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException x) {
             x.printStackTrace();

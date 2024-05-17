@@ -24,20 +24,20 @@ public class JsonContainerHandlerRegistry extends SimpleMappedRegistry<Class<?>,
     public final MappedRegistry<String, Class<?>> registryByName = SimpleMappedRegistry.fromHashMap();
     @Override
     public @NotNull JsonContainerHandler<?> register(@NotNull Class<?> key, @NotNull JsonContainerHandler<?> value) {
-        registryByName.register(registry.getSerializeID(value.getClass()), key);
+        registryByName.register(registry.getSerializerID(value), key);
         return super.register(key, value);
     }
 
     @Override
     public @Nullable JsonContainerHandler<?> remove(@NotNull Class<?> key) {
         JsonContainerHandler<?> removed = super.remove(key);
-        if(removed != null) registryByName.remove(registry.getSerializeID(removed.getClass()));
+        if(removed != null) registryByName.remove(registry.getSerializerID(removed));
         return removed;
     }
 
     @Override
     public boolean remove(@NotNull Class<?> key, @NotNull JsonContainerHandler<?> value) {
-        registryByName.remove(registry.getSerializeID(value.getClass()), key);
+        registryByName.remove(registry.getSerializerID(value), key);
         return super.remove(key, value);
     }
 

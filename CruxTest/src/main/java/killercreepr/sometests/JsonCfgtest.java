@@ -1,9 +1,13 @@
 package killercreepr.sometests;
 
 import killercreepr.crux.config.bukkit.data.GenericValue;
+import killercreepr.crux.config.bukkit.data.NumberProviderValue;
 import killercreepr.crux.config.bukkit.file.CruxJson;
 import killercreepr.crux.config.bukkit.file.JsonCfg;
 import killercreepr.crux.config.bukkit.value.CfgValue;
+import killercreepr.crux.valueproviders.number.ConstantNumber;
+import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.valueproviders.number.UniformNumber;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,6 +23,9 @@ public class JsonCfgtest extends JsonCfg {
                 put("test2", 20);
                 put("test3", 35);
             }}
+    ));
+    public final CfgValue<NumberProvider> NUMBER = new CfgValue<>(new NumberProviderValue(
+            new UniformNumber(22.2, 100.222)
     ));
     public JsonCfgtest(@NotNull Plugin plugin, @NotNull String path) {
         super(plugin, path);

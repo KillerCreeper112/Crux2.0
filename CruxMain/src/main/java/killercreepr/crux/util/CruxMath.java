@@ -71,8 +71,9 @@ public class CruxMath {
         return Crunch.compileExpression(eq).evaluate();
     }
 
-    public static double evaluate(@Nullable String eq, @NotNull EvaluationEnvironment ev){
+    public static double evaluate(@Nullable String eq, @Nullable EvaluationEnvironment ev){
         if(eq == null || eq.isBlank()) return 0D;
+        if(ev==null) return evaluate(eq);
         return Crunch.compileExpression(eq, ev).evaluate();
     }
 }

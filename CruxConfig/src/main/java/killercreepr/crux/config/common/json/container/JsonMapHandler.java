@@ -3,6 +3,7 @@ package killercreepr.crux.config.common.json.container;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import killercreepr.crux.config.common.json.JsonContext;
 import killercreepr.crux.config.common.json.JsonRegistry;
 import killercreepr.crux.config.common.json.annotation.JsonSerializer;
 import org.jetbrains.annotations.NotNull;
@@ -14,8 +15,9 @@ import java.util.Map;
 @JsonSerializer(id = "map")
 public class JsonMapHandler implements JsonContainerHandler<Map<Object, Object>> {
     @Override
-    public @NotNull JsonElement serializeToJson(@NotNull JsonRegistry registry, @NotNull Map<Object, Object> object) {
+    public @NotNull JsonElement serializeToJson(@NotNull JsonContext context, @NotNull Map<Object, Object> object) {
         JsonArray o = new JsonArray();
+        JsonRegistry registry = context.getRegistry();
         object.forEach((key, value) ->{
             JsonObject sub = new JsonObject();
             sub.add("key", registry.serializeObject(key));
@@ -26,9 +28,10 @@ public class JsonMapHandler implements JsonContainerHandler<Map<Object, Object>>
     }
 
     @Override
-    public @Nullable Map<Object, Object> deserializeFromJson(@NotNull JsonRegistry registry, @Nullable JsonElement element){
+    public @Nullable Map<Object, Object> deserializeFromJson(@NotNull JsonContext context, @Nullable JsonElement element){
         if(!(element instanceof JsonArray a)) return null;
         Map<Object, Object> list = new HashMap<>();
+        JsonRegistry registry = context.getRegistry();
         a.forEach(ee ->{
             if(!(ee instanceof JsonObject o)) return;
             Object key = registry.deserialize(o.get("key"));

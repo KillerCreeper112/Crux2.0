@@ -2,6 +2,7 @@ package killercreepr.sometests;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import killercreepr.crux.config.common.json.JsonContext;
 import killercreepr.crux.config.common.json.JsonSerializable;
 import killercreepr.crux.config.common.json.annotation.JsonSerializer;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 public record BlockBo(int x, int y, int z) implements JsonSerializable {
 
     @Override
-    public @NotNull JsonElement serializeToJson() {
+    public @NotNull JsonElement serializeToJson(@NotNull JsonContext context) {
         JsonObject o =new JsonObject();
         o.addProperty("x", x);
         o.addProperty("y", y);

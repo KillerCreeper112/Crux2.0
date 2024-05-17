@@ -2,6 +2,7 @@ package killercreepr.crux.valueproviders.number;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import redempt.crunch.functional.EvaluationEnvironment;
 
 import java.util.Random;
 
@@ -11,7 +12,13 @@ public interface NumberProvider extends NumberHolder {
 
     @NotNull Number getMinValue();
     @NotNull Number getMaxValue();
-
     @Override
-    default @Nullable Number value(){ return sample(); }
+    default @NotNull Number value(){ return value(null); }
+
+    /**
+     * @return Used primarily for equation numbers to allow for variables to be replaced with certain numbers.
+     */
+    default @NotNull Number value(@Nullable EvaluationEnvironment ev){
+        return sample();
+    }
 }
