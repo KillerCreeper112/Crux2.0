@@ -99,6 +99,10 @@ public class CruxConfig extends CruxFolder implements ICruxConfig<FileConfigurat
         return cfg.get(path);
     }
 
+    public @NotNull YamlElement getElement(@NotNull String path){
+        return new YamlElement(getAsMap(path));
+    }
+
     public @NotNull Map<String, Object> getAsMap(@NotNull String path){
         ConfigurationSection root = cfg.getRoot();
         if(root == null) return new HashMap<>();

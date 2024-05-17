@@ -2,7 +2,7 @@ package killercreepr.cruxconfig.config.common.yaml;
 
 import killercreepr.cruxconfig.config.common.yaml.annotation.YamlSerializer;
 import killercreepr.cruxconfig.config.common.yaml.annotation.YamlSerializerID;
-import killercreepr.cruxconfig.config.common.yaml.container.YamlContainerHandler;
+import killercreepr.cruxconfig.config.common.yaml.container.YamlObjectHandler;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlContainerHandlerRegistry;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +23,7 @@ public class YamlRegistry {
         REGISTRY.put(name, clazz);
     }
 
-    public <T extends YamlContainerHandler<?>> void registerContainerHandler(@NotNull Class<?> clazz, @NotNull T object){
+    public <T extends YamlObjectHandler<?>> void registerContainerHandler(@NotNull Class<?> clazz, @NotNull T object){
         CONTAINER_REGISTRY.register(clazz, object);
     }
 
@@ -60,7 +60,7 @@ public class YamlRegistry {
         return REGISTRY.remove(name);
     }
 
-    public @Nullable YamlContainerHandler<?> getContainerHandler(@NotNull Class<?> clazz){
+    public @Nullable YamlObjectHandler<?> getContainerHandler(@NotNull Class<?> clazz){
         return CONTAINER_REGISTRY.get(clazz);
     }
 
@@ -72,8 +72,8 @@ public class YamlRegistry {
         return get(getSerializeID(from));
     }
 
-    public @Nullable YamlContainerHandler<?> findContainerHandler(@NotNull Class<?> from){
-        for(Map.Entry<Class<?>, YamlContainerHandler<?>> entry : CONTAINER_REGISTRY.entrySet()){
+    public @Nullable YamlObjectHandler<?> findContainerHandler(@NotNull Class<?> from){
+        for(Map.Entry<Class<?>, YamlObjectHandler<?>> entry : CONTAINER_REGISTRY.entrySet()){
             Class<?> clazz = entry.getKey();
             if(clazz.isAssignableFrom(from)){
                 return entry.getValue();
@@ -82,18 +82,18 @@ public class YamlRegistry {
         return null;
     }
 
-    public <T extends YamlSerializable> @NotNull YamlElement serialize(@NotNull T object){
-        YamlContainerHandler<?> handler = findContainerHandler(object.getClass());
+    public @NotNull YamlElement serialize(@NotNull Object object){
+        YamlObjectHandler<?> handler = findContainerHandler(object.getClass());
         return handler.attemptSerializeToYaml(new YamlContext(this), object);
     }
 
     public @Nullable Object deserialize(@NotNull Class<?> clazz, @Nullable YamlElement from){
-        YamlContainerHandler<?> handler = findContainerHandler(clazz);
+        YamlObjectHandler<?> handler = findContainerHandler(clazz);
         return handler == null ? null : handler.deserializeFromYaml(new YamlContext(this), from);
     }
 
     public <T> @Nullable T deserializeExact(@NotNull Class<T> clazz, @Nullable YamlElement from){
-        YamlContainerHandler<?> handler = findContainerHandler(clazz);
+        YamlObjectHandler<?> handler = findContainerHandler(clazz);
         return handler == null ? null : (T) handler.deserializeFromYaml(new YamlContext(this), from);
     }
 
