@@ -3,7 +3,7 @@ package killercreepr.cruxconfig.config.common.json.container;
 import com.google.gson.JsonElement;
 import killercreepr.cruxconfig.config.common.json.JsonContext;
 import killercreepr.cruxconfig.config.common.json.annotation.JsonSerializerID;
-import killercreepr.cruxconfig.config.common.json.automatic.AutomaticSerializer;
+import killercreepr.cruxconfig.config.common.json.automatic.AutoJsonSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,12 +21,12 @@ public class GenericJsonHandler<T> implements JsonContainerHandler<Object>, Json
 
     @Override
     public @NotNull JsonElement serializeToJson(@NotNull JsonContext context, @NotNull Object object) {
-        return new AutomaticSerializer<>(object).serializeToJson(context);
+        return new AutoJsonSerializer<>(object).serializeToJson(context);
     }
 
     @Override
     public @Nullable Object deserializeFromJson(@NotNull JsonContext context, @Nullable JsonElement e) {
-        return AutomaticSerializer.deserializeFromJson(type, context, e);
+        return AutoJsonSerializer.deserializeFromJson(type, context, e);
     }
 
     @Override

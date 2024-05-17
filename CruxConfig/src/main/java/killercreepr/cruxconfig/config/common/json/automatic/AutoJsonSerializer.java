@@ -2,6 +2,7 @@ package killercreepr.cruxconfig.config.common.json.automatic;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import killercreepr.crux.util.CruxReflect;
 import killercreepr.cruxconfig.config.common.json.JsonContext;
 import killercreepr.cruxconfig.config.common.json.JsonRegistry;
 import killercreepr.cruxconfig.config.common.json.JsonSerializable;
@@ -9,16 +10,14 @@ import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
-public class AutomaticSerializer<T> implements JsonSerializable {
+public class AutoJsonSerializer<T> implements JsonSerializable {
     protected final @NotNull T object;
-    public AutomaticSerializer(@NotNull T object) {
+    public AutoJsonSerializer(@NotNull T object) {
         this.object = object;
     }
 
@@ -50,32 +49,6 @@ public class AutomaticSerializer<T> implements JsonSerializable {
             fields.put(field.getName(), found);
             Bukkit.getLogger().log(Level.WARNING, "FIELD - " + field.getName());
         }
-        Object[] fieldsArray = fields.values().toArray(new Object[0]);
-        Bukkit.getLogger().log(Level.WARNING, fieldsArray.length + " LEN + " + fields.keySet());
-
-        for(Constructor<?> constructor : clazz.getConstructors()){
-            try{
-                T object = (T) constructor.newInstance();
-                fields.forEach((key, value) ->{
-                    try {
-                        Field field = object.getClass().getField(key);
-                        boolean x = field.canAccess(object);
-                        field.setAccessible(true);
-                        field.set(object, value);
-                        field.setAccessible(x);
-                    } catch (NoSuchFieldException | IllegalAccessException ignored) {}
-                });
-                return object;
-            }catch (InvocationTargetException | InstantiationException |
-                    IllegalAccessException | IllegalArgumentException ignored){
-                try{
-                    T object = (T) constructor.newInstance(fieldsArray);
-                    return object;
-                }catch (InvocationTargetException | InstantiationException |
-                        IllegalAccessException | IllegalArgumentException ignoredAgain){
-                }
-            }
-        }
-        return null;
+        return CruxReflect.attemptCreation(clazz, fields);
     }
 }
