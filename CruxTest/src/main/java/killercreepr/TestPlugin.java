@@ -1,5 +1,6 @@
 package killercreepr;
 
+import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.common.json.container.GenericJsonHandler;
 import killercreepr.cruxconfig.config.registry.DefaultJsonRegistry;
 import killercreepr.sometests.BlockBo;
@@ -50,6 +51,14 @@ public class TestPlugin extends JavaPlugin implements Listener {
 
         cfgtest = new JsonCfgtest(this, "test_my_man");
         cfgtest.setup();
+
+        CruxConfig cfg = new CruxConfig(this, "testconfigyes");
+        cfg.getAsMap("test").forEach((k, v) -> getLogger().log(Level.WARNING, k + " -> " + v));
+        /*cfg.set("test", new HashMap<>(){{
+            put(null, 2);
+            put("test.test.hey", 10);
+        }});*/
+        cfg.save();
     }
     protected TestCf cfg;
     protected JsonT testJson;

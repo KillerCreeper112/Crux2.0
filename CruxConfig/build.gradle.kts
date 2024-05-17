@@ -7,6 +7,7 @@ plugins{
 
 dependencies {
     compileOnly(project(":CruxMain"))
+    compileOnly(libs.crunch)
     //compileOnly("org.jetbrains:annotations.24.0.1")
     /*compileOnly("org.jetbrains", "annotations", "24.0.1")
     compileOnly("com.google.code.gson", "gson", "2.10.1")*/
