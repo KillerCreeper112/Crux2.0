@@ -119,4 +119,41 @@ public class MsgContainer {
     public boolean isEmpty(){
         return chat == null && actionBar == null && title == null && sound == null;
     }
+
+    public static class Builder{
+        protected List<String> chat;
+        protected String actionBar;
+        protected CreateTitle title;
+        protected CreateSound sound;
+        protected boolean broadcast;
+
+        public @NotNull MsgContainer build(){
+            return new MsgContainer(chat, actionBar, title, sound).setBroadcast(broadcast);
+        }
+
+        public Builder chat(String chat) {
+            this.chat = chat == null ? null : List.of(chat); return this;
+        }
+
+        public Builder broadcast(boolean broadcast) {
+            this.broadcast = broadcast;
+            return this;
+        }
+
+        public Builder chat(List<String> chat) {
+            this.chat = chat; return this;
+        }
+
+        public Builder actionBar(String actionBar) {
+            this.actionBar = actionBar; return this;
+        }
+
+        public Builder title(CreateTitle title) {
+            this.title = title; return this;
+        }
+
+        public Builder sound(CreateSound sound) {
+            this.sound = sound; return this;
+        }
+    }
 }

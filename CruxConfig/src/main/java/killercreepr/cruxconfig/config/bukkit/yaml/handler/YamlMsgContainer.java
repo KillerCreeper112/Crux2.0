@@ -10,6 +10,7 @@ import killercreepr.cruxconfig.config.common.yaml.element.YamlGeneric;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
 import killercreepr.cruxconfig.config.common.yaml.handler.YamlObjectHandler;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,7 +48,8 @@ public class YamlMsgContainer implements YamlObjectHandler<MsgContainer> {
         }
         if(!(e instanceof YamlObject o)) return null;
         YamlRegistry registry = context.getRegistry();
-        List<String> chat = o.getObject("chat");
+        List<String> chat = registry.deserialize(List.class, o.get("chat"));
+        Bukkit.getLogger().warning("CHAT MAN? " + new ArrayList<>(chat));
         String actionBar = o.getObject("action_bar");
         CreateTitle title = registry.deserialize(CreateTitle.class, o.get("title"));
         CreateSound sound = registry.deserialize(CreateSound.class, o.get("sound"));

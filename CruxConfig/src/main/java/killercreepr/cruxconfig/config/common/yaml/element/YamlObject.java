@@ -65,6 +65,17 @@ public class YamlObject extends YamlElement {
         return members.getOrDefault(memberName, defaultValue);
     }
 
+    public <T> T getObject(@NotNull Class<T> type, String memberName){
+        return getObject(type, memberName, null);
+    }
+
+    public <T> T getObject(@NotNull Class<T> type, String memberName, T defaultValue){
+        Object o = getOrDefaultObject(memberName, defaultValue);
+        if(o == null) return defaultValue;
+        if(type.isAssignableFrom(o.getClass())) return type.cast(o);
+        return defaultValue;
+    }
+
     public <T> T getObject(String memberName){
         return getOrDefaultObject(memberName, null);
     }
@@ -73,6 +84,25 @@ public class YamlObject extends YamlElement {
         if(e==null) return defaultValue;
         Object o = e.getAsObject();
         if(o==null) return defaultValue;
+
+        if (defaultValue instanceof Number && o instanceof Number valueNumber) {
+            // If both defaultValue and o are numeric types, perform conversion if necessary
+
+            if (defaultValue instanceof Float) {
+                o = valueNumber.floatValue();
+            } else if (defaultValue instanceof Long) {
+                o = valueNumber.longValue();
+            } else if (defaultValue instanceof Integer) {
+                o = valueNumber.intValue();
+            }else if(defaultValue instanceof Double){
+                o = valueNumber.doubleValue();
+            }else if(defaultValue instanceof Short){
+                o = valueNumber.shortValue();
+            }else if(defaultValue instanceof Byte){
+                o = valueNumber.byteValue();
+            }
+        }
+
         try{
             return (T) o;
         }catch (ClassCastException ignored){ return defaultValue; }
