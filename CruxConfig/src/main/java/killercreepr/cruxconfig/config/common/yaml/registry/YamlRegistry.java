@@ -1,6 +1,5 @@
 package killercreepr.cruxconfig.config.common.yaml.registry;
 
-import killercreepr.crux.util.CruxReflect;
 import killercreepr.cruxconfig.config.common.yaml.YamlContext;
 import killercreepr.cruxconfig.config.common.yaml.automatic.AutoYamlSerializer;
 import killercreepr.cruxconfig.config.common.yaml.element.*;
@@ -9,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.function.Function;
 
 public class YamlRegistry {
     public final YamlObjectHandlerRegistry HANDLER_REGISTRY = new YamlObjectHandlerRegistry(this);
@@ -69,48 +67,9 @@ public class YamlRegistry {
     public @Nullable Object deserializeObject(@NotNull Class<?> clazz, @Nullable YamlElement from){
         for(YamlObjectHandler<?> handler : findPotentialHandlers(clazz)){
             Object o = handler.deserializeFromYaml(new YamlContext(this), from);
-            if(o!=null){
-                Object object = deserializeObject(o);
-                return convertObject(clazz, object);
-            }
+            if(o!=null) return deserializeObject(o);
         }
-        return from==null?null: convertObject(clazz, deserializeObject(from.getAsObject()));
-    }
-
-    public @NotNull Object convertObject(@NotNull Class<?> clazz, @NotNull Object object){
-        if(object instanceof Map<?,?> map && Map.class.isAssignableFrom(clazz)){
-            return convertMap(clazz, map);
-        }
-        return object;
-    }
-
-
-    public @NotNull Map<?, ?> convertMap(@NotNull Class<?> type, @NotNull Map<?, ?> map){
-        Class<?> first = CruxReflect.attemptGetFirstMapClass((Class<? extends Map<?,?>>) type);
-        if(first == null){
-            if(true) throw new UnsupportedOperationException("WOM OW");
-            return map;
-        }
-        Map<Object, Object> newMap = CruxReflect.attemptCreation(map.getClass());
-        if(Double.class.isAssignableFrom(first)){
-            computeMap(newMap, map, key -> Double.parseDouble((String) key));
-        }else if(Float.class.isAssignableFrom(first)){
-            computeMap(newMap, map, key -> Float.parseFloat((String) key));
-        }else if(Long.class.isAssignableFrom(first)){
-            computeMap(newMap, map, key -> Long.parseLong((String) key));
-        }else if(Integer.class.isAssignableFrom(first)){
-            computeMap(newMap, map, key -> Integer.parseInt((String) key));
-        }else if(Short.class.isAssignableFrom(first)){
-            computeMap(newMap, map, key -> Short.parseShort((String) key));
-        }
-        return newMap;
-    }
-
-    public @NotNull Map<Object, Object> computeMap(@NotNull Map<Object, Object> newMap,
-                                                   @NotNull Map<?, ?> map,
-                                                   @NotNull Function<Object, Object> keyFunction){
-        map.forEach((key, value) -> newMap.put(keyFunction.apply(key), value));
-        return newMap;
+        return from==null?null:deserializeObject(from.getAsObject());
     }
 
     public <T> @Nullable T deserialize(@NotNull Class<T> clazz, @Nullable YamlElement from){

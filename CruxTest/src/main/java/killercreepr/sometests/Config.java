@@ -3,7 +3,7 @@ package killercreepr.sometests;
 import killercreepr.crux.data.CreateSound;
 import killercreepr.crux.data.CreateTitle;
 import killercreepr.crux.data.MsgContainer;
-import killercreepr.cruxconfig.config.bukkit.data.CommonValue;
+import killercreepr.cruxconfig.config.bukkit.data.MapValue;
 import killercreepr.cruxconfig.config.bukkit.data.PotionEffectListValue;
 import killercreepr.cruxconfig.config.bukkit.file.Cfg;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
@@ -39,12 +39,11 @@ public class Config extends Cfg {
                     Duration.ofMillis(50L*40), Duration.ZERO)))
             .actionBar("<yellow>Now we talking")
             .build());
-    public final CfgValue<Map<Integer, Integer>> TEST_MAP = new CfgValue<>(new CommonValue<>(
-            (Class<Map<Integer, Integer>>) (Class<?>) HashMap.class,
+    public final CfgValue<Map<Integer, Integer>> TEST_MAP = new CfgValue<>(new MapValue(
             new HashMap<>(){{
                 put(1, 3);
                 put(23, 10);
-            }}
+            }}, Integer.class
     ));
     public Config(@NotNull Plugin plugin, @NotNull String path) {
         super(plugin, path);
