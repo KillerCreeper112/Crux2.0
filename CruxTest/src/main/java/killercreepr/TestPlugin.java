@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.List;
 import java.util.logging.Level;
 
 public class TestPlugin extends JavaPlugin implements Listener {
@@ -36,7 +37,12 @@ public class TestPlugin extends JavaPlugin implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
         Player p = event.getPlayer();
-        cfg.SWAP_HAND_EFFECTS.value().forEach(p::addPotionEffect);
+        if(cfg.SWAP_HAND_EFFECTS.value() instanceof List<?> c){
+            getLogger().warning("DWJIJWIFW " + c.get(0) + " - " + c.get(0).getClass().getSimpleName());
+        }
+        cfg.SWAP_HAND_EFFECTS.value().forEach(value ->{
+            p.addPotionEffect(value);
+        });
         //p.sendMessage(cfg.TEST_MAP.value() + "");
         cfg.TEST_MAP.value().forEach((key, value) ->{
             p.sendMessage("key: " + key + " -> " + (value + 20));

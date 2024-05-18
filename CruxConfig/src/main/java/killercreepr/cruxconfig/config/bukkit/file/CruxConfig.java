@@ -19,8 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class CruxConfig extends CruxFolder implements IYamlCfg<MemoryConfiguration> {
     protected final YamlRegistry yamlRegistry;
@@ -116,7 +115,42 @@ public class CruxConfig extends CruxFolder implements IYamlCfg<MemoryConfigurati
         setElement(section, path, element);
     }
 
+    public @NotNull Object serializeReady(@NotNull YamlElement element){
+        if(element instanceof YamlGeneric r){
+            return yamlRegistry.serializeObject(r.getAsObject()).getAsObject();
+        }
+        if(element instanceof YamlArray a){
+            if(a.isEmpty()){
+                return new ArrayList<>();
+            }
+            YamlElement first = a.get(0);
+            if(first instanceof YamlGeneric){
+                List<Object> list = new ArrayList<>();
+                for(YamlElement e : a){
+                    list.add(e.getAsObject());
+                }
+                return list;
+            }
+            List<Object> mapList = new ArrayList<>();
+            for(YamlElement e : a){
+                mapList.add(serializeReady(e));
+            }
+            return mapList;
+        }
+
+        if(element instanceof YamlObject a){
+            Map<String, Object> map = new LinkedHashMap<>();
+            a.forEach((key, value) -> map.put(key, serializeReady(value)));
+            return map;
+        }
+        throw new IllegalArgumentException("no sir");
+    }
+
     public void setElement(@NotNull ConfigurationSection section, @NotNull String path, @NotNull YamlElement element){
+        if(true){
+            section.set(path, serializeReady(element));
+            return;
+        }
         if(element instanceof YamlGeneric r){
             section.set(path, yamlRegistry.serializeObject(r.getAsObject()).getAsObject());
             return;
@@ -135,6 +169,8 @@ public class CruxConfig extends CruxFolder implements IYamlCfg<MemoryConfigurati
                 section.set(path, list);
                 return;
             }
+            List<Map<?, ?>> mapList = new ArrayList<>();
+
             int index = -1;
             for(YamlElement e : a){
                 index++;

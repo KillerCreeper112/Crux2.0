@@ -1,17 +1,9 @@
 package killercreepr.cruxconfig.config.bukkit.data;
 
-
-import killercreepr.crux.valueproviders.number.*;
-import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
-import killercreepr.cruxconfig.config.bukkit.value.ConfigValue;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.jetbrains.annotations.NotNull;
+import killercreepr.crux.valueproviders.number.NumberProvider;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class NumberProviderValue extends ConfigValue<NumberProvider> {
+public class NumberProviderValue extends CommonValue<NumberProvider> {
     public NumberProviderValue(@Nullable NumberProvider defaultValue) {
         super(NumberProvider.class, defaultValue);
     }
@@ -20,7 +12,7 @@ public class NumberProviderValue extends ConfigValue<NumberProvider> {
         this(null);
     }
 
-    protected @Nullable NumberProvider tryObject(@Nullable Object o){
+    /*protected @Nullable NumberProvider tryObject(@Nullable Object o){
         if(o instanceof Number constant) return new ConstantNumber(constant);
         if(o instanceof String equation) return new EquationNumber(equation);
         if(isArrayOfType(o, Number.class)) return new UniformNumberArray((Number[]) o);
@@ -90,5 +82,5 @@ public class NumberProviderValue extends ConfigValue<NumberProvider> {
             throw new RuntimeException("Unsupported number provide class cannot be set in a config! (" + object.getClass() + ")");
         }
         throw new RuntimeException("Unsupported number provide class cannot be set in a config! (" + object.getClass() + ")");
-    }
+    }*/
 }

@@ -4,6 +4,7 @@ import killercreepr.cruxconfig.config.common.yaml.YamlContext;
 import killercreepr.cruxconfig.config.common.yaml.automatic.AutoYamlSerializer;
 import killercreepr.cruxconfig.config.common.yaml.element.*;
 import killercreepr.cruxconfig.config.common.yaml.handler.YamlObjectHandler;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -67,19 +68,33 @@ public class YamlRegistry {
     public @Nullable Object deserializeObject(@NotNull Class<?> clazz, @Nullable YamlElement from){
         for(YamlObjectHandler<?> handler : findPotentialHandlers(clazz)){
             Object o = handler.deserializeFromYaml(new YamlContext(this), from);
-            if(o!=null) return deserializeObject(o);
+            if(o!=null){
+                return formatObject(clazz, deserializeObject(o));
+            }
         }
-        return from==null?null:deserializeObject(from.getAsObject());
+        Object object = from==null?null:deserializeObject(from.getAsObject());
+        if(object==null) return null;
+        return formatObject(clazz, object);
+    }
+
+    public @NotNull Object formatObject(@NotNull Class<?> clazz, @NotNull Object object){
+        if(clazz.isAssignableFrom(Collection.class) && object instanceof Map<?,?> map){
+            Bukkit.getLogger().warning("COLLECTION: " + map.values());
+            return new ArrayList<>(map.values());
+        }
+        return object;
     }
 
     public <T> @Nullable T deserialize(@NotNull Class<T> clazz, @Nullable YamlElement from){
         Object object = deserializeObject(clazz, from);
         if(object==null) return null;
+        //if(object.getClass().isAssignableFrom(clazz)) return clazz.cast(object);
         if(clazz.isAssignableFrom(object.getClass())) return clazz.cast(object);
-        throw new UnsupportedOperationException("Object cannot be cast to " + clazz.getSimpleName() + " (" + object + ")!");
+        throw new UnsupportedOperationException("Object cannot be cast to " + clazz.getSimpleName() + " (" + object + ")! " + object.getClass().getSimpleName());
     }
 
     public @NotNull Object deserializeObject(@NotNull Object o){
+        Bukkit.getLogger().warning("TRYING " + o + " (" + o.getClass().getSimpleName() + ")");
         if(o instanceof Collection<?> l) return deserializeCollection(l);
         if(o.getClass().isArray()){
             return deserializeCollection(Arrays.stream(((Object[]) o)).toList());
