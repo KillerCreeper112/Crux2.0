@@ -23,7 +23,9 @@ import java.lang.reflect.Type;
  *  (Note the {} brackets)
  *  <p>
  *  This is more of a workaround than an actual proper implementation, but it does work,
- *  and it works quite well enough for this system.
+ *  and it works quite well enough for this system. Maybe in the future I will look into creating
+ *  some sort of methods where the user will need to input what types they are using but even that
+ *  will start to get messy when considering nesting.
  *  <p>
  *  <a href="https://stackoverflow.com/questions/3437897/how-do-i-get-a-class-instance-of-generic-type-t">
  *      Check out this stackoverflow post, "How do I get a class instance of generic type T?"</a>
