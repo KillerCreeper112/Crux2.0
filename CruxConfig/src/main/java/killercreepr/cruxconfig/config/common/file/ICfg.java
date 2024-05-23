@@ -2,12 +2,12 @@ package killercreepr.cruxconfig.config.common.file;
 
 import killercreepr.crux.util.CruxReflect;
 import killercreepr.cruxconfig.config.common.annotations.Config;
-import killercreepr.cruxconfig.config.common.value.ICfgValue;
+import killercreepr.cruxconfig.config.common.value.IConfigValue;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashMap;
 
-public interface ICfg<T, V extends ICfgValue<?>> extends ICruxConfig<T> {
+public interface ICfg<T, V extends IConfigValue<?, ?>> extends ICruxConfig<T> {
     /**
      * Sets up the configuration contents and registers each values.
      */
@@ -72,7 +72,7 @@ public interface ICfg<T, V extends ICfgValue<?>> extends ICruxConfig<T> {
     default @NotNull LinkedHashMap<String, V> getAllValues(){
         LinkedHashMap<String, V> map = new LinkedHashMap<>();
         CruxReflect.getNonStaticParsedDeclaredFields(this).forEach((name, v) ->{
-            if(!(v instanceof ICfgValue<?> value)) return;
+            if(!(v instanceof IConfigValue<?, ?> value)) return;
             String path = value.getPath() == null ? name.toLowerCase() : value.getPath();
             map.put(path, (V) value);
         });

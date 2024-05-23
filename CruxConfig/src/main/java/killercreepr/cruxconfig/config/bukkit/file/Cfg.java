@@ -41,10 +41,8 @@ public class Cfg extends CruxConfig implements ICfg<MemoryConfiguration, CfgValu
             CfgValue<?> value = entry.getValue();
             if(!overwriteExisting && contains(path)) continue;
             //set value
-            value.set(this, path, value.value());
-            //value.setValue(value.get(this, path));
-            /*if(useCurrentValues) value.getType().setCurrentValue(this, path);
-            else value.getType().setDefault(this, path);*/
+            if(useCurrentValues) value.attemptSet(this, path, value.getValue());
+            else value.attemptSet(this, path, value.getDefaultValue());
             //set comments
             this.setComments(path, value.getComments());
             changed = true;

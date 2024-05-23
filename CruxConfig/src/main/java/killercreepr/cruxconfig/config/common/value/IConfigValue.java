@@ -112,6 +112,17 @@ public interface IConfigValue<T, C extends ICruxConfig<?>> {
      */
     void set(@NotNull C cfg, @NotNull String path, @Nullable T object);
 
+    default boolean attemptSet(@NotNull C cfg, @NotNull String path, @Nullable Object object){
+        if(object == null){
+            set(cfg, path, null);
+            return true;
+        }
+        T o = attemptCast(object);
+        if(o==null) return false;
+        set(cfg, path, o);
+        return true;
+    }
+
     /**
      * Serializes the default object of this config value in the provided config and path.
      */
