@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class CommonValue<T> extends CfgValue<T>{
     public CommonValue() {
+        super();
     }
 
     public CommonValue(@Nullable T defaultValue) {

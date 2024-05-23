@@ -23,7 +23,9 @@ import java.time.Duration;
 import java.util.*;
 
 public class Config extends Cfg {
-    public final CfgValue<Collection<PotionEffect>> SWAP_HAND_EFFECTS = new CommonValue<>();
+    public final CfgValue<Collection<PotionEffect>> SWAP_HAND_EFFECTS = new CommonValue<>(List.of(
+            new PotionEffect(PotionEffectType.HEALTH_BOOST, 20, 20)
+    )){};
     public final MsgValue RELOADING_CONFIGS = new MsgValue(new MsgContainer.Builder()
             .chat(List.of(
                     "<gray>Test msg!",
@@ -37,7 +39,7 @@ public class Config extends Cfg {
     public final CfgValue<Map<String, String>> STRINGS_MAN = new CommonValue<>(new LinkedHashMap<>(){{
         put("test", "another");
         put("dog", "cat");
-    }});
+    }}){};
     /*public final MsgValue MSG_1 = new MsgValue("<red>This is not good");
     public final MsgValue MSG_2 = new MsgValue(new MsgContainer.Builder()
             .chat(List.of(

@@ -44,6 +44,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
         Player p = event.getPlayer();
+        cfg.SWAP_HAND_EFFECTS.value().forEach(ee -> p.addPotionEffect(ee));
     }
 
     @EventHandler(ignoreCancelled = true)

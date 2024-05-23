@@ -106,7 +106,7 @@ public class YamlRegistry {
      */
     public @Nullable Object deserializeObject(@NotNull Type type, @Nullable YamlElement from){
         Bukkit.getLogger().severe("DESERLIAIING OBJECT: " + type + " FROM " + from);
-        if(from != null){
+        /*if(from != null){
             if(isSubtypeOfCollection(type) && from.isYamlArray()){
                 Type[] args = getTypeArguments(type);
                 Class<?> rawType = (Class<?>) ((ParameterizedType) type).getRawType();
@@ -117,6 +117,21 @@ public class YamlRegistry {
                 return deserializeObjectMap(rawType, args[0], args[1], from.getAsYamlObject());
             }
         }
+        if(!(type instanceof Class<?> clazz)){
+            throw new UnsupportedOperationException(type + " is not a class instance!");
+        }*/
+        if(from == null) return null;
+
+        if(isSubtypeOfCollection(type)){
+            Type[] args = getTypeArguments(type);
+            Class<?> rawType = (Class<?>) ((ParameterizedType) type).getRawType();
+            return deserializeObjectCollection(rawType, args[0], from.getAsYamlArray());
+        }else if(isSubtypeOfMap(type)){
+            Type[] args = getTypeArguments(type);
+            Class<?> rawType = (Class<?>) ((ParameterizedType) type).getRawType();
+            return deserializeObjectMap(rawType, args[0], args[1], from.getAsYamlObject());
+        }
+
         if(!(type instanceof Class<?> clazz)){
             throw new UnsupportedOperationException(type + " is not a class instance!");
         }
