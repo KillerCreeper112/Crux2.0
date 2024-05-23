@@ -15,6 +15,10 @@ public interface IConfigValue<T, C extends ICruxConfig<?>> {
      * @return The config value.
      */
     @Nullable T getValue();
+    default T getOrDefaultValue(){
+        T value = value();
+        return value == null ? getDefaultValue() : value;
+    }
 
 
     /**

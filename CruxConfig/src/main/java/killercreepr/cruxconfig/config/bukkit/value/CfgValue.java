@@ -16,6 +16,10 @@ public abstract class CfgValue<T> implements IConfigValue<T, CruxConfig> {
     protected final @NotNull String @Nullable[] comments;
     protected final @NotNull Type parameterType;
 
+    public CfgValue() {
+        this(null);
+    }
+
     public CfgValue(@Nullable T defaultValue) {
         this(defaultValue, null);
     }

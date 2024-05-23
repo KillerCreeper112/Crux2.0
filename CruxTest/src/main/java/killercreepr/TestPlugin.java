@@ -27,33 +27,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
         super.onEnable();
         BukkitCfgHandlers.initJson(CfgRegistries.JSON);
         BukkitCfgHandlers.initYaml(CfgRegistries.YAML);
-        //cfg = new Config(this, "config");
 
-        TestConfigValue<Collection<PotionEffect>> test = new TestConfigValue<>() {
-            @Override
-            public @Nullable Collection<PotionEffect> get(@NotNull CruxConfig cfg, @NotNull String path) {
-                return List.of();
-            }
-
-            @Override
-            public void set(@NotNull CruxConfig cfg, @NotNull String path, @Nullable Collection<PotionEffect> object) {
-
-            }
-        };
-        test.save();
-
-        TestConfigValue<Map<Integer, PotionEffect>> again = new TestConfigValue<>() {
-            @Override
-            public @Nullable Map<Integer, PotionEffect> get(@NotNull CruxConfig cfg, @NotNull String path) {
-                return Map.of();
-            }
-
-            @Override
-            public void set(@NotNull CruxConfig cfg, @NotNull String path, @Nullable Map<Integer, PotionEffect> object) {
-
-            }
-        };
-        again.save();
         cfg = new Config(this, "config");
         cfg.setup();
         getServer().getPluginManager().registerEvents(this, this);
@@ -70,14 +44,6 @@ public class TestPlugin extends JavaPlugin implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
         Player p = event.getPlayer();
-        getLogger().warning("LET's SEE?? " + cfg.SWAP_HAND_EFFECTS.value());
-        cfg.SWAP_HAND_EFFECTS.value().forEach(value ->{
-            value.forEach(d -> p.addPotionEffect(d));
-        });
-        //p.sendMessage(cfg.TEST_MAP.value() + "");
-        /*cfg.TEST_MAP.value().forEach((key, value) ->{
-            p.sendMessage("key: " + key + " -> " + (value + 20));
-        });*/
     }
 
     @EventHandler(ignoreCancelled = true)

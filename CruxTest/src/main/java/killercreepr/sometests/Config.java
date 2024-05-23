@@ -1,9 +1,16 @@
 package killercreepr.sometests;
 
+import killercreepr.crux.data.CreateSound;
+import killercreepr.crux.data.CreateTitle;
+import killercreepr.crux.data.MsgContainer;
 import killercreepr.cruxconfig.config.bukkit.file.Cfg;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.bukkit.value.CfgValue;
+import killercreepr.cruxconfig.config.bukkit.value.CommonValue;
+import killercreepr.cruxconfig.config.bukkit.value.MsgValue;
+import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -12,61 +19,25 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.lang.reflect.ParameterizedType;
-import java.util.Collection;
-import java.util.List;
+import java.time.Duration;
+import java.util.*;
 
 public class Config extends Cfg {
-    public final CfgValue<Collection<Collection<PotionEffect>>> SWAP_HAND_EFFECTS = new CfgValue<>(List.of(
-            List.of(
-                    new PotionEffect(PotionEffectType.SPEED, 20, 20),
-                    new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 100, 0, false, false, false)
-            ),
-            List.of(
-                    new PotionEffect(PotionEffectType.STRENGTH, 20, 20),
-                    new PotionEffect(PotionEffectType.HEALTH_BOOST, 100, 0, false, false, false)
-            )
-    )) {
-        @Override
-        public @Nullable Collection<Collection<PotionEffect>> get(@NotNull CruxConfig cfg, @NotNull String path) {
-            return (Collection<Collection<PotionEffect>>) cfg.deserializeObject(getParameterType(), path);
-        }
-
-        @Override
-        public void set(@NotNull CruxConfig cfg, @NotNull String path, @Nullable Object object) {
-            cfg.set(path, object);
-        }
-
-        @Override
-        public void register(@NotNull CruxConfig cfg, @NotNull String path) {
-            set(cfg, path, value);
-            setValue(get(cfg, path));
-        }
-    };
-
-    public final CfgValue<Collection<Collection<Integer>>> TEST = new CfgValue<>(List.of(
-            List.of(
-                    1, 2, 3, 4, 5, 6, 7, 8, 9
-            ),
-            List.of(
-                    100, 105, 115, 200
-            )
-    )) {
-        @Override
-        public @Nullable Collection<Collection<Integer>> get(@NotNull CruxConfig cfg, @NotNull String path) {
-            return (Collection<Collection<Integer>>) cfg.deserializeObject(getParameterType(), path);
-        }
-
-        @Override
-        public void set(@NotNull CruxConfig cfg, @NotNull String path, @Nullable Object object) {
-            cfg.set(path, object);
-        }
-
-        @Override
-        public void register(@NotNull CruxConfig cfg, @NotNull String path) {
-            set(cfg, path, value);
-            setValue(get(cfg, path));
-        }
-    };
+    public final CfgValue<Collection<PotionEffect>> SWAP_HAND_EFFECTS = new CommonValue<>();
+    public final MsgValue RELOADING_CONFIGS = new MsgValue(new MsgContainer.Builder()
+            .chat(List.of(
+                    "<gray>Test msg!",
+                    "<yellow>Ayo my man!"
+            ))
+            .sound(new CreateSound(Sound.BLOCK_SNIFFER_EGG_PLOP))
+            .title(new CreateTitle("<yellow>Reloading configs", "sub sub sub", Title.Times.times(Duration.ZERO,
+                    Duration.ofMillis(50L*40), Duration.ZERO)))
+            .actionBar("<yellow>Now we talking")
+            .build());
+    public final CfgValue<Map<String, String>> STRINGS_MAN = new CommonValue<>(new LinkedHashMap<>(){{
+        put("test", "another");
+        put("dog", "cat");
+    }});
     /*public final MsgValue MSG_1 = new MsgValue("<red>This is not good");
     public final MsgValue MSG_2 = new MsgValue(new MsgContainer.Builder()
             .chat(List.of(
