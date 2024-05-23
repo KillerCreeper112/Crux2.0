@@ -69,4 +69,9 @@ public class YamlGeneric extends YamlElement {
     public byte getAsByte() {
         return isNumber() ? getAsNumber().byteValue() : Byte.parseByte(getAsString());
     }
+
+    @Override
+    public String toString() {
+        return "YamlGeneric{" + value.toString() + "}";
+    }
 }

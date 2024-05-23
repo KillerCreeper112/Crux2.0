@@ -5,12 +5,46 @@ import killercreepr.cruxconfig.config.common.file.ICruxConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface IConfigValue<T, C extends ICruxConfig<?>> {
-    @NotNull Class<T> getType();
+import java.lang.reflect.Type;
 
+public interface IConfigValue<T, C extends ICruxConfig<?>> {
+    @NotNull Type getParameterType();
     @Nullable T getDefaultValue();
 
+    /**
+     * @return The config value.
+     */
     @Nullable T getValue();
+
+
+    /**
+     * @return The config path. If this is null, it will
+     */
+    @Nullable String getPath();
+    @NotNull String @Nullable[] getComments();
+
+
+    /**
+     * @return The config value OR, if the config value is null, returns the defaultValue.
+     */
+    default T getOrDefault(@Nullable T defaultValue){
+        if(getValue() == null) return defaultValue;
+        return cast(getValue(), defaultValue);
+    }
+
+    default @Nullable T cast(@Nullable Object obj, @Nullable T classCastExceptionReturn) {
+        try {
+            return (T) obj;
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+            return classCastExceptionReturn;
+        }
+    }
+
+    @Nullable
+    default T value(){
+        return getValue();
+    }
 
     /**
      * Returns the default value if the value is null. Otherwise returns the value.
@@ -43,10 +77,12 @@ public interface IConfigValue<T, C extends ICruxConfig<?>> {
     /**
      * Attempts to cast the object and set the value.
      */
-    default void attemptSetValue(@Nullable Object object){
+    default boolean attemptSetValue(@Nullable Object object){
         try{
             setValue((T) object);
+            return true;
         }catch (ClassCastException ignored){
+            return false;
         }
     }
 
@@ -55,8 +91,10 @@ public interface IConfigValue<T, C extends ICruxConfig<?>> {
      */
     default @Nullable T attemptCast(@Nullable Object o) {
         if(o == null) return null;
-        Class<T> clazz = getType();
-        return o.getClass().isAssignableFrom(clazz) ? clazz.cast(o) : null;
+        try{
+            return (T) o;
+        }catch (ClassCastException ignored){}
+        return null;
     }
 
     /**

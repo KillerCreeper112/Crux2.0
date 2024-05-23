@@ -1,7 +1,6 @@
 package killercreepr.cruxconfig.config.bukkit.data;
 
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
-import killercreepr.cruxconfig.config.bukkit.value.ConfigValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

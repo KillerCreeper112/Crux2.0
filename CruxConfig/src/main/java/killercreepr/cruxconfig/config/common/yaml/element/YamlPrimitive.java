@@ -10,5 +10,8 @@ public class YamlPrimitive extends YamlGeneric{
     public YamlPrimitive(Number value){
         super(value);
     }
-
+    @Override
+    public String toString() {
+        return "YamlPrimitive{" + value.toString() + "}";
+    }
 }

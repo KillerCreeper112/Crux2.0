@@ -41,8 +41,10 @@ public class Cfg extends CruxConfig implements ICfg<MemoryConfiguration, CfgValu
             CfgValue<?> value = entry.getValue();
             if(!overwriteExisting && contains(path)) continue;
             //set value
-            if(useCurrentValues) value.getType().setCurrentValue(this, path);
-            else value.getType().setDefault(this, path);
+            value.set(this, path, value.value());
+            //value.setValue(value.get(this, path));
+            /*if(useCurrentValues) value.getType().setCurrentValue(this, path);
+            else value.getType().setDefault(this, path);*/
             //set comments
             this.setComments(path, value.getComments());
             changed = true;
@@ -58,6 +60,6 @@ public class Cfg extends CruxConfig implements ICfg<MemoryConfiguration, CfgValu
     @Override
     public void register() {
         super.register();
-        getAllValues().forEach((path, value) -> value.getType().register(this, path));
+        getAllValues().forEach((path, value) -> value.register(this, path));
     }
 }

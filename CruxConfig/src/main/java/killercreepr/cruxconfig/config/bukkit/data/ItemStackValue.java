@@ -2,7 +2,6 @@ package killercreepr.cruxconfig.config.bukkit.data;
 
 import killercreepr.crux.Crux;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
-import killercreepr.cruxconfig.config.bukkit.value.ConfigValue;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;

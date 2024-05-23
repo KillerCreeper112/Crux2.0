@@ -19,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.*;
 
 public class CruxConfig extends CruxFolder implements IYamlCfg<MemoryConfiguration> {
@@ -212,16 +213,16 @@ public class CruxConfig extends CruxFolder implements IYamlCfg<MemoryConfigurati
         return deserialize(clazz, section, path);
     }
 
-    public <T> @Nullable T deserialize(@NotNull Class<T> clazz, @NotNull ConfigurationSection section, @NotNull String path){
+    public <T> @Nullable T deserialize(@NotNull Type clazz, @NotNull ConfigurationSection section, @NotNull String path){
         YamlElement yaml = getAsYamlObject(section, path);
         if(yaml==null) return null;
-        return yamlRegistry.deserialize(clazz, yaml);
+        return (T) yamlRegistry.deserializeObject(clazz, yaml);
     }
 
-    public @Nullable Object deserializeObject(@NotNull Class<?> clazz, @NotNull String path){
+    public @Nullable Object deserializeObject(@NotNull Type type, @NotNull String path){
         ConfigurationSection section = cfg.getRoot();
         if(section == null) throw new UnsupportedOperationException("Configuration has no root!");
-        return deserialize(clazz, section, path);
+        return deserialize(type, section, path);
     }
 
     public @Nullable Object deserializeObject(@NotNull Class<?> clazz, @NotNull ConfigurationSection section, @NotNull String path){

@@ -1,12 +1,14 @@
 package killercreepr.cruxconfig.config.common.value;
 
 import killercreepr.crux.data.Holder;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
+import java.util.logging.Level;
+
 public interface ICfgValue<T> extends Holder<T> {
-    @NotNull
-    IConfigValue<?, ?> getType();
 
     /**
      * @return The config path. If this is null, it will
@@ -18,16 +20,14 @@ public interface ICfgValue<T> extends Holder<T> {
     /**
      * @return The config value.
      */
-    default @Nullable T get(){
-        return cast(getType().getValue(), null);
-    }
+    @Nullable T get();
 
     /**
      * @return The config value OR, if the config value is null, returns the defaultValue.
      */
     default T getOrDefault(@Nullable T defaultValue){
-        if(getType().getValue() == null) return defaultValue;
-        return cast(getType().getValue(), defaultValue);
+        if(get() == null) return defaultValue;
+        return cast(get(), defaultValue);
     }
 
     default @Nullable T cast(@Nullable Object obj, @Nullable T classCastExceptionReturn) {
@@ -45,8 +45,6 @@ public interface ICfgValue<T> extends Holder<T> {
         return get();
     }
 
-    default ICfgValue<T> setValue(@Nullable T value){
-        getType().attemptSetValue(value);
-        return this;
-    }
+    ICfgValue<T> setValue(@Nullable T value);
+    boolean attemptSetValue(@Nullable Object value);
 }

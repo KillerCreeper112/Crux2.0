@@ -2,7 +2,6 @@ package killercreepr.cruxconfig.config.bukkit.data;
 
 import killercreepr.crux.Crux;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
-import killercreepr.cruxconfig.config.bukkit.value.ConfigValue;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.EquipmentSlot;

@@ -1,36 +1,74 @@
 package killercreepr.sometests;
 
-import killercreepr.crux.data.CreateSound;
-import killercreepr.crux.data.CreateTitle;
-import killercreepr.crux.data.MsgContainer;
-import killercreepr.cruxconfig.config.bukkit.data.CollectionValue;
-import killercreepr.cruxconfig.config.bukkit.data.MapValue;
 import killercreepr.cruxconfig.config.bukkit.file.Cfg;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.bukkit.value.CfgValue;
-import killercreepr.cruxconfig.config.bukkit.value.MsgValue;
-import net.kyori.adventure.title.Title;
-import org.bukkit.Sound;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.time.Duration;
+import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Config extends Cfg {
-    public final CfgValue<Collection<PotionEffect>> SWAP_HAND_EFFECTS = new CfgValue<>(new CollectionValue<>(
+    public final CfgValue<Collection<Collection<PotionEffect>>> SWAP_HAND_EFFECTS = new CfgValue<>(List.of(
             List.of(
-                    new PotionEffect(PotionEffectType.SPEED, 300, 0),
-                    new PotionEffect(PotionEffectType.GLOWING, 300, 0)),
-            Collection.class
-    ));
-    public final MsgValue MSG_1 = new MsgValue("<red>This is not good");
+                    new PotionEffect(PotionEffectType.SPEED, 20, 20),
+                    new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 100, 0, false, false, false)
+            ),
+            List.of(
+                    new PotionEffect(PotionEffectType.STRENGTH, 20, 20),
+                    new PotionEffect(PotionEffectType.HEALTH_BOOST, 100, 0, false, false, false)
+            )
+    )) {
+        @Override
+        public @Nullable Collection<Collection<PotionEffect>> get(@NotNull CruxConfig cfg, @NotNull String path) {
+            Bukkit.getLogger().severe("AYO TEST: " + getParameterType());
+            return (Collection<Collection<PotionEffect>>) cfg.deserializeObject(getParameterType(), path);
+        }
+
+        @Override
+        public void set(@NotNull CruxConfig cfg, @NotNull String path, @Nullable Object object) {
+            cfg.set(path, object);
+        }
+
+        @Override
+        public void register(@NotNull CruxConfig cfg, @NotNull String path) {
+            set(cfg, path, value);
+            setValue(get(cfg, path));
+        }
+    };
+
+    public final CfgValue<Collection<Collection<Integer>>> TEST = new CfgValue<>(List.of(
+            List.of(
+                    1, 2, 3, 4, 5, 6, 7, 8, 9
+            ),
+            List.of(
+                    100, 105, 115, 200
+            )
+    )) {
+        @Override
+        public @Nullable Collection<Collection<Integer>> get(@NotNull CruxConfig cfg, @NotNull String path) {
+            return (Collection<Collection<Integer>>) cfg.deserializeObject(getParameterType(), path);
+        }
+
+        @Override
+        public void set(@NotNull CruxConfig cfg, @NotNull String path, @Nullable Object object) {
+            cfg.set(path, object);
+        }
+
+        @Override
+        public void register(@NotNull CruxConfig cfg, @NotNull String path) {
+            set(cfg, path, value);
+            setValue(get(cfg, path));
+        }
+    };
+    /*public final MsgValue MSG_1 = new MsgValue("<red>This is not good");
     public final MsgValue MSG_2 = new MsgValue(new MsgContainer.Builder()
             .chat(List.of(
                     "<gray>Test msg!",
@@ -46,7 +84,7 @@ public class Config extends Cfg {
                 put(1, 3);
                 put(23, 10);
             }}, Integer.class
-    ));
+    ));*/
     public Config(@NotNull Plugin plugin, @NotNull String path) {
         super(plugin, path);
     }
@@ -57,5 +95,10 @@ public class Config extends Cfg {
 
     public Config(@NotNull CruxConfig cfg) {
         super(cfg);
+    }
+
+    @Override
+    public void setup() {
+        super.setup();
     }
 }

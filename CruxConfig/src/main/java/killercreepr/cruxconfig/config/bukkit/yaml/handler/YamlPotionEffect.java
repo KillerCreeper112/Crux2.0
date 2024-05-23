@@ -5,6 +5,7 @@ import killercreepr.cruxconfig.config.common.yaml.YamlContext;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
 import killercreepr.cruxconfig.config.common.yaml.handler.YamlObjectHandler;
+import org.bukkit.Bukkit;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -25,6 +26,7 @@ public class YamlPotionEffect implements YamlObjectHandler<PotionEffect> {
 
     @Override
     public @Nullable PotionEffect deserializeFromYaml(@NotNull YamlContext context, @Nullable YamlElement e) {
+        Bukkit.getLogger().warning("DESERLIAZING POTION EFFECT FROM: " + e);
         if(!(e instanceof YamlObject o)) return null;
         PotionEffectType type = PotionEffectType.getByKey(Crux.minecraftKey(o.getOrDefaultObject("type", "a")));
         if(type==null) return null;
