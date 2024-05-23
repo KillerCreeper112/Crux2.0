@@ -10,7 +10,6 @@ import killercreepr.cruxconfig.config.common.yaml.element.YamlGeneric;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
 import killercreepr.cruxconfig.config.common.yaml.handler.YamlObjectHandler;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

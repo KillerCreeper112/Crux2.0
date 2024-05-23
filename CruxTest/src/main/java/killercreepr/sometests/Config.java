@@ -28,7 +28,6 @@ public class Config extends Cfg {
     )) {
         @Override
         public @Nullable Collection<Collection<PotionEffect>> get(@NotNull CruxConfig cfg, @NotNull String path) {
-            Bukkit.getLogger().severe("AYO TEST: " + getParameterType());
             return (Collection<Collection<PotionEffect>>) cfg.deserializeObject(getParameterType(), path);
         }
 

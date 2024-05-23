@@ -12,8 +12,13 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
-import java.util.logging.Level;
 
+/**
+ * Represents a registry specifically developed to handle YAML syntax.
+ * Keep in mind, this functions differently than Crux's JSON framework.
+ * It was made primarily for saving and extracting config values. Therefor meaning that the
+ * software knows exactly what classes it needs to serialize and what classes it needs to deserialize.
+ */
 public class YamlRegistry {
     public final YamlObjectHandlerRegistry HANDLER_REGISTRY = new YamlObjectHandlerRegistry(this);
 
@@ -96,6 +101,9 @@ public class YamlRegistry {
         return false;
     }
 
+    /**
+     * This should be used
+     */
     public @Nullable Object deserializeObject(@NotNull Type type, @Nullable YamlElement from){
         Bukkit.getLogger().severe("DESERLIAIING OBJECT: " + type + " FROM " + from);
         if(from != null){
@@ -103,10 +111,11 @@ public class YamlRegistry {
                 Type[] args = getTypeArguments(type);
                 Class<?> rawType = (Class<?>) ((ParameterizedType) type).getRawType();
                 return deserializeObjectCollection(rawType, args[0], from.getAsYamlArray());
-            }/*else if(isSubtypeOfMap(type) && from.isYamlObject()){
+            }else if(isSubtypeOfMap(type) && from.isYamlObject()){
                 Type[] args = getTypeArguments(type);
-                return deserializeObjectMap(type, args[0], args[1], from.getAsYamlObject());
-            }*/
+                Class<?> rawType = (Class<?>) ((ParameterizedType) type).getRawType();
+                return deserializeObjectMap(rawType, args[0], args[1], from.getAsYamlObject());
+            }
         }
         if(!(type instanceof Class<?> clazz)){
             throw new UnsupportedOperationException(type + " is not a class instance!");
@@ -130,29 +139,35 @@ public class YamlRegistry {
 
         Collection<Object> map = (Collection<Object> ) createdMap;
         from.forEach((value) ->{
-            //todo deal with null
-            map.add(deserializeObject(firstType, value));
+            Object parsedValue = deserializeObject(firstType, value);
+            if(parsedValue==null) return;
+            map.add(parsedValue);
         });
         return createdMap;
     }
 
-    public @Nullable Object deserializeObjectMap(@NotNull Class<?> mapClazz, @NotNull Class<?> firstClazz, @NotNull Class<?> secondClazz,
+    public @Nullable Object deserializeObjectMap(@NotNull Class<?> mapClazz, @NotNull Type firstType, @NotNull Type secondType,
                                                  @NotNull YamlObject from){
         Object createdMap = CruxReflect.attemptCreation(mapClazz);
         if(createdMap == null) createdMap = new HashMap<>();
 
         Map<Object, Object> map = (Map<Object, Object>) createdMap;
         from.forEach((key, value) ->{
+            Object parsedValue = deserializeObject(secondType, value);
+            if(parsedValue == null) return;
             Object parsedKey = key;
-            if(firstClazz.isAssignableFrom(Integer.class)){
+            if(firstType == Integer.class){
                 parsedKey = Integer.parseInt(key);
-            }else if(firstClazz.isAssignableFrom(Double.class)){
+            }else if(firstType == Double.class){
                 parsedKey = Double.parseDouble(key);
-            }else if(firstClazz.isAssignableFrom(Float.class)){
+            }else if(firstType == Float.class){
                 parsedKey = Float.parseFloat(key);
+            }else if(firstType == Short.class){
+                parsedKey = Short.parseShort(key);
+            }else if(firstType == Long.class){
+                parsedKey = Long.parseLong(key);
             }
-            //todo deal with null
-            map.put(parsedKey, deserializeObject(secondClazz, value));
+            map.put(parsedKey, parsedValue);
         });
         return createdMap;
     }
@@ -167,29 +182,12 @@ public class YamlRegistry {
     public <T> @Nullable T deserialize(@NotNull Class<T> clazz, @Nullable YamlElement from){
         Object object = deserializeObject(clazz, from);
         if(object==null) return null;
-        //if(object.getClass().isAssignableFrom(clazz)) return clazz.cast(object);
         if(clazz.isAssignableFrom(object.getClass())) return clazz.cast(object);
         throw new UnsupportedOperationException("Object cannot be cast to " + clazz.getSimpleName() + " (" + object + ")! " + object.getClass().getSimpleName());
     }
 
-    /*public <T> @NotNull Object deserializeObject(@NotNull Class<T> clazz, @NotNull Object o){
-        Bukkit.getLogger().warning("TRYING " + o + " (" + o.getClass().getSimpleName() + ")");
-        if(o instanceof Collection<?> l){
-            ParameterizedType type = (ParameterizedType) l.getClass().getGenericSuperclass();
-            Bukkit.getLogger().log(Level.WARNING, "type of a man: " + type.getActualTypeArguments()[0]);
-            return deserializeCollection(l);
-        }
-        if(o.getClass().isArray()){
-            return deserializeCollection(Arrays.stream(((Object[]) o)).toList());
-        }
-        if(o instanceof Map<?,?> l) return deserializeMap(l);
-        if(o instanceof YamlElement g) return deserializeObject(g.getAsObject());
-        return o;
-    }*/
-
     public @NotNull Object deserializeObject(@NotNull Object o){
         if(o instanceof Collection<?> l){
-            ParameterizedType type = (ParameterizedType) l.getClass().getGenericSuperclass();
             return deserializeCollection(l);
         }
         if(o.getClass().isArray()){

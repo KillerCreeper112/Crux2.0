@@ -71,7 +71,6 @@ public class TestPlugin extends JavaPlugin implements Listener {
     public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
         Player p = event.getPlayer();
         getLogger().warning("LET's SEE?? " + cfg.SWAP_HAND_EFFECTS.value());
-        Bukkit.getLogger().severe("HAHA: " + cfg.TEST.value());
         cfg.SWAP_HAND_EFFECTS.value().forEach(value ->{
             value.forEach(d -> p.addPotionEffect(d));
         });

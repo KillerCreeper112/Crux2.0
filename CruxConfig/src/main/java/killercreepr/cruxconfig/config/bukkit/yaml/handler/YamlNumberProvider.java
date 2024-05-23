@@ -2,11 +2,11 @@ package killercreepr.cruxconfig.config.bukkit.yaml.handler;
 
 import killercreepr.crux.valueproviders.number.*;
 import killercreepr.cruxconfig.config.common.yaml.YamlContext;
-import killercreepr.cruxconfig.config.common.yaml.handler.YamlObjectHandler;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlArray;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlGeneric;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
+import killercreepr.cruxconfig.config.common.yaml.handler.YamlObjectHandler;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
