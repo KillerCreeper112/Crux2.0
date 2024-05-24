@@ -15,16 +15,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class YamlDataExchange implements YamlObjectHandler<DataExchange> {
-    @Override
-    public @NotNull YamlElement serializeToYaml(@NotNull YamlContext context, @NotNull DataExchange object) {
-        throw new UnsupportedOperationException("DataExchange may not be serialized!");
+public class YamlDataExchange extends YamlModuled<DataExchange> {
+    public YamlDataExchange(@NotNull YamlMenuModule menuModule) {
+        super(menuModule);
     }
 
     @Override
-    public @Nullable DataExchange deserializeFromYaml(@NotNull YamlContext context, @Nullable YamlElement e) {
+    public @Nullable DataExchange deserializeFromYaml(@NotNull YamlContext context, @Nullable YamlElement e, @Nullable YamlObject menuContext) {
         if(!(e instanceof YamlObject o)) return null;
-        YamlRegistry registry = context.getRegistry();
         DataExchange.Builder builder = new DataExchange.Builder();
         o.forEach((s, element) ->{
             switch (s.toLowerCase()){
@@ -32,8 +30,9 @@ public class YamlDataExchange implements YamlObjectHandler<DataExchange> {
                     Map<String, MenuItemHolder> items = new HashMap<>();
                     if(!(element instanceof YamlObject subSection)) return;
                     subSection.forEach((ss, subElement) ->{
-                        //todo
-                        if(!(registry.deserializeObject(MenuItemHolder.class, subElement) instanceof MenuItemHolder menuItem)) return;
+                        MenuItemHolder menuItem = menuModule.getYamlMenuItem().deserializeFromYaml(
+                                context, subElement, menuContext
+                        );
                         items.put(ss, menuItem);
                     });
                     if(!items.isEmpty()) builder.put(s.toLowerCase(), Holder.directObject(items));

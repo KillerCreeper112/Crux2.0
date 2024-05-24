@@ -1,6 +1,7 @@
 package killercreepr.crux.menu.bukkit.registry;
 
 import killercreepr.crux.menu.bukkit.actions.MenuAction;
+import killercreepr.crux.menu.bukkit.holder.MenuHolder;
 import killercreepr.crux.registry.KeyedRegistry;
 import killercreepr.crux.registry.Registry;
 import killercreepr.crux.registry.SimpleKeyedRegistry;
@@ -13,9 +14,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class MenuRegistry {
-    public final KeyedRegistry<killercreepr.crux.menu.holder.MenuHolder> MENU_HOLDERS = new SimpleKeyedRegistry<>(new HashMap<>()){
+    public final KeyedRegistry<MenuHolder> MENU_HOLDERS = new SimpleKeyedRegistry<>(new HashMap<>()){
         @Override
-        public @NotNull killercreepr.crux.menu.holder.MenuHolder register(@NotNull NamespacedKey key, @NotNull killercreepr.crux.menu.holder.MenuHolder value) {
+        public @NotNull MenuHolder register(@NotNull NamespacedKey key, @NotNull MenuHolder value) {
             value.setRegistry(MenuRegistry.this);
             return super.register(key, value);
         }

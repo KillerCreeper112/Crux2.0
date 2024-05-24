@@ -4,6 +4,7 @@ import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.Holder;
 import killercreepr.crux.menu.bukkit.ConfigMenu;
 import killercreepr.crux.menu.bukkit.registry.MenuRegistry;
+import killercreepr.crux.valueproviders.number.NumberProvider;
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -23,14 +24,14 @@ public class MenuHolder implements Keyed {
 
     protected final @NotNull NamespacedKey key;
     protected final @Nullable String title;
-    protected final @NotNull String size;
+    protected final @NotNull NumberProvider size;
     //priority => item
     protected final @NotNull MenuItems items;
     protected final @NotNull DataExchange info;
 
     public MenuHolder(@NotNull NamespacedKey key,
                       @Nullable String title,
-                      @NotNull String size,
+                      @NotNull NumberProvider size,
                       @NotNull MenuItems items,
                       @NotNull DataExchange info) {
         this.key = key;
@@ -64,7 +65,7 @@ public class MenuHolder implements Keyed {
         return title;
     }
 
-    public @NotNull String getSize() {
+    public @NotNull NumberProvider getSize() {
         return size;
     }
 

@@ -1,8 +1,8 @@
 package killercreepr.crux.valueproviders.number;
 
+import killercreepr.crux.valueproviders.InputContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import redempt.crunch.functional.EvaluationEnvironment;
 
 import java.util.Random;
 
@@ -18,7 +18,8 @@ public interface NumberProvider extends NumberHolder {
     /**
      * @return Used primarily for equation numbers to allow for variables to be replaced with certain numbers.
      */
-    default @NotNull Number value(@Nullable EvaluationEnvironment ev){
+    default @NotNull Number value(@Nullable InputContext ev){
         return sample();
     }
+
 }

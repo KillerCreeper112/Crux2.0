@@ -4,6 +4,7 @@ import killercreepr.crux.Crux;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.menu.bukkit.holder.MenuHolder;
 import killercreepr.crux.tags.container.ObjectStringHookContainer;
+import killercreepr.crux.valueproviders.EquationContext;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -30,7 +31,7 @@ public class ConfigMenu extends Menu{
         this.info = info;
         this.tags = new ObjectStringHookContainer(holder.getRegistry().getFormat().getTags());
         if(tags != null) this.tags.putAll(tags);
-        reconstruct(Bukkit.createInventory(null, buildSize(), buildTitle()));
+        reconstruct(Bukkit.createInventory(null, getInventorySize(buildSize()), buildTitle()));
     }
 
     public @NotNull Component buildTitle(){
@@ -39,9 +40,10 @@ public class ConfigMenu extends Menu{
     }
 
     public int buildSize(){
-        return (int) Double.parseDouble(holder.getRegistry().getFormat().setPlaceholders(
+        return holder.getSize().value(new EquationContext(holder.getRegistry().getFormat(), buildTags())).intValue();
+        /*return (int) Double.parseDouble(holder.getRegistry().getFormat().setPlaceholders(
                 holder.getSize(), buildTags()
-        ));
+        ));*/
     }
 
     public @NotNull ObjectStringHookContainer buildTags(){

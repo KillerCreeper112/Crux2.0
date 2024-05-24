@@ -1,6 +1,10 @@
 package killercreepr.crux.valueproviders.number;
 
+import killercreepr.crux.tags.container.ObjectStringHookContainer;
+import killercreepr.crux.tags.format.Format;
 import killercreepr.crux.util.CruxMath;
+import killercreepr.crux.valueproviders.EquationContext;
+import killercreepr.crux.valueproviders.InputContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redempt.crunch.functional.EvaluationEnvironment;
@@ -33,8 +37,9 @@ public class EquationNumber implements NumberProvider{
     }
 
     @Override
-    public @NotNull Number value(@Nullable EvaluationEnvironment ev) {
-        return CruxMath.evaluate(equation, ev);
+    public @NotNull Number value(@Nullable InputContext context) {
+        if(context == null) return CruxMath.evaluate(equation);
+        return Double.parseDouble(context.input(equation));
     }
 
     @Override
