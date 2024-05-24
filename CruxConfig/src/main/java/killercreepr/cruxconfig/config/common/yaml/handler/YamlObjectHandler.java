@@ -1,6 +1,6 @@
 package killercreepr.cruxconfig.config.common.yaml.handler;
 
-import killercreepr.cruxconfig.config.common.yaml.YamlContext;
+import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -85,7 +85,7 @@ public class YamlObject extends YamlElement {
         Object o = e.getAsObject();
         if(o==null) return defaultValue;
 
-        if (defaultValue instanceof Number && o instanceof Number valueNumber) {
+        /*todo maybe? if (defaultValue instanceof Number && o instanceof Number valueNumber) {
             // If both defaultValue and o are numeric types, perform conversion if necessary
 
             if (defaultValue instanceof Float) {
@@ -101,7 +101,7 @@ public class YamlObject extends YamlElement {
             }else if(defaultValue instanceof Byte){
                 o = valueNumber.byteValue();
             }
-        }
+        }*/
 
         try{
             return (T) o;

@@ -1,4 +1,4 @@
-package killercreepr.crux.menu.bukkit.config.data;
+package killercreepr.crux.menu.bukkit.config.handlers;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.config.bukkit.CruxConfig;

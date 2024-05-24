@@ -83,6 +83,10 @@ public class ObjectStringHookContainer extends StringHookContainer implements IO
         return this;
     }
 
+    public boolean isEmpty(){
+        return prefixBuilders.isEmpty();
+    }
+
     public @NotNull Tags getTags() {
         return tags;
     }

@@ -1,7 +1,7 @@
 package killercreepr.cruxconfig.config.bukkit.yaml.handler;
 
 import killercreepr.crux.Crux;
-import killercreepr.cruxconfig.config.common.yaml.YamlContext;
+import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
 import killercreepr.cruxconfig.config.common.yaml.handler.YamlObjectHandler;

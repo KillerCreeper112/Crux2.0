@@ -1,4 +1,4 @@
-package killercreepr.cruxconfig.config.common.yaml;
+package killercreepr.cruxconfig.config.common.yaml.context;
 
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
 import org.jetbrains.annotations.NotNull;

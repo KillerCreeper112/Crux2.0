@@ -1,7 +1,7 @@
 package killercreepr.cruxconfig.config.common.yaml.automatic;
 
 import killercreepr.crux.util.CruxReflect;
-import killercreepr.cruxconfig.config.common.yaml.YamlContext;
+import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
 import killercreepr.cruxconfig.config.common.yaml.handler.YamlObjectHandler;

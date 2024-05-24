@@ -1,7 +1,7 @@
 package killercreepr.cruxconfig.config.common.yaml.registry;
 
 import killercreepr.crux.util.CruxReflect;
-import killercreepr.cruxconfig.config.common.yaml.YamlContext;
+import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
 import killercreepr.cruxconfig.config.common.yaml.automatic.AutoYamlSerializer;
 import killercreepr.cruxconfig.config.common.yaml.element.*;
 import killercreepr.cruxconfig.config.common.yaml.handler.YamlObjectHandler;
@@ -104,7 +104,7 @@ public class YamlRegistry {
     /**
      * This should be used
      */
-    public @Nullable Object deserializeObject(@NotNull Type type, @Nullable YamlElement from){
+    public @Nullable Object deserializeObject(@NotNull Type type, @NotNull YamlElement from, @NotNull YamlContext context){
         Bukkit.getLogger().severe("DESERLIAIING OBJECT: " + type + " FROM " + from);
         /*if(from != null){
             if(isSubtypeOfCollection(type) && from.isYamlArray()){
@@ -120,7 +120,6 @@ public class YamlRegistry {
         if(!(type instanceof Class<?> clazz)){
             throw new UnsupportedOperationException(type + " is not a class instance!");
         }*/
-        if(from == null) return null;
 
         if(isSubtypeOfCollection(type)){
             Type[] args = getTypeArguments(type);
@@ -137,14 +136,18 @@ public class YamlRegistry {
         }
 
         for(YamlObjectHandler<?> handler : findPotentialHandlers(clazz)){
-            Object o = handler.deserializeFromYaml(new YamlContext(this), from);
+            Object o = handler.deserializeFromYaml(context, from);
             if(o!=null){
                 return formatObject(clazz, deserializeObject(o));
             }
         }
-        Object object = from==null?null:deserializeObject(from.getAsObject());
-        if(object==null) return null;
+        Object object = deserializeObject(from.getAsObject());
         return formatObject(clazz, object);
+    }
+
+    public @Nullable Object deserializeObject(@NotNull Type type, @Nullable YamlElement from){
+        if(from==null) return null;
+        return deserializeObject(type, from, new YamlContext(this));
     }
 
     public @Nullable Object deserializeObjectCollection(@NotNull Class<?> mapClazz, @NotNull Type firstType,
