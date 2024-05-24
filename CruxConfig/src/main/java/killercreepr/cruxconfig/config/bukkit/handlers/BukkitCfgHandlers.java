@@ -10,6 +10,7 @@ import killercreepr.cruxconfig.config.common.json.container.GenericJsonHandler;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
 import org.bukkit.Material;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -32,6 +33,16 @@ public class BukkitCfgHandlers {
         registry.registerHandler(CreateTitle.class, new YamlCreateTitle());
         registry.registerHandler(PotionEffectType.class, new YamlPotionEffectType());
         registry.registerHandler(Material.class, new YamlMaterial());
-        registry.registerHandler(AttributeModifier.Operation.class, new YamlGenericEnum<>(AttributeModifier.Operation.class));
+        registerEnums(registry,
+                AttributeModifier.Operation.class,
+                EquipmentSlot.class
+        );
+    }
+
+    @SafeVarargs
+    public static void registerEnums(@NotNull YamlRegistry registry, @NotNull Class<? extends Enum<?>>... enums){
+        for(Class<? extends Enum<?>> e : enums){
+            registry.registerHandler(e, new YamlGenericEnum(e));
+        }
     }
 }
