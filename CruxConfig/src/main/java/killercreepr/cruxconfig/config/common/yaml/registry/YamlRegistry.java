@@ -197,6 +197,13 @@ public class YamlRegistry {
         return object;
     }
 
+    public <T> @Nullable T deserialize(@NotNull Class<T> clazz, @NotNull YamlElement from, @NotNull YamlContext context){
+        Object object = deserializeObject(clazz, from, context);
+        if(object==null) return null;
+        if(clazz.isAssignableFrom(object.getClass())) return clazz.cast(object);
+        throw new UnsupportedOperationException("Object cannot be cast to " + clazz.getSimpleName() + " (" + object + ")! " + object.getClass().getSimpleName());
+    }
+
     public <T> @Nullable T deserialize(@NotNull Class<T> clazz, @Nullable YamlElement from){
         Object object = deserializeObject(clazz, from);
         if(object==null) return null;

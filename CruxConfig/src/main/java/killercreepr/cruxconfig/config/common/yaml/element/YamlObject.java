@@ -61,9 +61,34 @@ public class YamlObject extends YamlElement {
     public YamlElement get(String memberName) {
         return members.get(memberName);
     }
+
+    /**
+     * Searches, in order, for the member names. It will return the first YamlElement that
+     * comes back not-null.
+     */
+    public YamlElement search(String... memberNames){
+        for(String s : memberNames){
+            YamlElement e = get(s);
+            if(e != null) return e;
+        }
+        return null;
+    }
+
     public YamlElement getOrDefault(String memberName, YamlElement defaultValue){
         return members.getOrDefault(memberName, defaultValue);
     }
+
+    public <T> T searchForObject(@NotNull Class<T> type, String... memberNames){
+        return searchForObject(type, null, memberNames);
+    }
+
+    public <T> T searchForObject(@NotNull Class<T> type, T defaultValue, String... memberNames){
+        Object o = searchOrDefaultObject(defaultValue, memberNames);
+        if(o == null) return defaultValue;
+        if(type.isAssignableFrom(o.getClass())) return type.cast(o);
+        return defaultValue;
+    }
+
 
     public <T> T getObject(@NotNull Class<T> type, String memberName){
         return getObject(type, memberName, null);
@@ -79,11 +104,26 @@ public class YamlObject extends YamlElement {
     public <T> T getObject(String memberName){
         return getOrDefaultObject(memberName, null);
     }
+
+    public <T> T searchOrDefaultObject(T defaultValue, String... memberNames){
+        YamlElement e = search(memberNames);
+        if(e==null) return defaultValue;
+        return getOrDefault(e, defaultValue);
+    }
+
+    public <T> T getOrDefault(@NotNull YamlElement e, T defaultValue){
+        Object o = e.getAsObject();
+        if(o==null) return defaultValue;
+
+        try{
+            return (T) o;
+        }catch (ClassCastException ignored){ return defaultValue; }
+    }
+
     public <T> T getOrDefaultObject(String memberName, T defaultValue){
         YamlElement e = get(memberName);
         if(e==null) return defaultValue;
-        Object o = e.getAsObject();
-        if(o==null) return defaultValue;
+        return getOrDefault(e, defaultValue);
 
         /*todo maybe? if (defaultValue instanceof Number && o instanceof Number valueNumber) {
             // If both defaultValue and o are numeric types, perform conversion if necessary
@@ -102,10 +142,6 @@ public class YamlObject extends YamlElement {
                 o = valueNumber.byteValue();
             }
         }*/
-
-        try{
-            return (T) o;
-        }catch (ClassCastException ignored){ return defaultValue; }
     }
 
     public YamlPrimitive getAsYamlPrimitive(String memberName) {

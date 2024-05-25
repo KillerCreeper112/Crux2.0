@@ -19,7 +19,7 @@ public class YamlMenuItems extends YamlModuled<MenuItems> {
         if(!(e instanceof YamlObject o)) return null;
         MenuItems map = new MenuItems(new TreeMap<>());
         o.forEach((key, value) ->{
-            MenuItemHolder item = menuModule.yamlMenuItem.deserializeFromYaml(context, value, menuContext);
+            MenuItemHolder item = menuModule.getYamlMenuItem().deserializeFromYaml(context, value, menuContext);
             if(item != null) map.add(item);
         });
         return map;
