@@ -1,8 +1,8 @@
 package killercreepr.cruxconfig.config.common.yaml.registry;
 
 import killercreepr.crux.util.CruxReflect;
-import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
 import killercreepr.cruxconfig.config.common.yaml.automatic.AutoYamlSerializer;
+import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
 import killercreepr.cruxconfig.config.common.yaml.element.*;
 import killercreepr.cruxconfig.config.common.yaml.handler.YamlObjectHandler;
 import org.bukkit.Bukkit;

@@ -3,7 +3,6 @@ package killercreepr.crux.valueproviders.number;
 import killercreepr.crux.valueproviders.InputContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import redempt.crunch.functional.EvaluationEnvironment;
 
 import java.util.Random;
 

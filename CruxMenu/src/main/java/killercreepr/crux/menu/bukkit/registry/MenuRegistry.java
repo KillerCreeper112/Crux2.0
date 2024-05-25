@@ -1,8 +1,11 @@
 package killercreepr.crux.menu.bukkit.registry;
 
+import killercreepr.crux.data.DataExchange;
+import killercreepr.crux.menu.bukkit.MenuItem;
 import killercreepr.crux.menu.bukkit.actions.MenuAction;
 import killercreepr.crux.menu.bukkit.config.handlers.*;
 import killercreepr.crux.menu.bukkit.holder.MenuHolder;
+import killercreepr.crux.menu.bukkit.holder.MenuItems;
 import killercreepr.crux.registry.KeyedRegistry;
 import killercreepr.crux.registry.Registry;
 import killercreepr.crux.registry.SimpleKeyedRegistry;
@@ -52,6 +55,9 @@ public class MenuRegistry {
 
     public void register(@NotNull YamlRegistry registry){
         registry.registerHandler(MenuHolder.class, menuModule);
+        registry.registerHandler(DataExchange.class, menuModule.getYamlDataExchange());
+        registry.registerHandler(MenuItem.class, menuModule.getYamlMenuItem());
+        registry.registerHandler(MenuItems.class, menuModule.getYamlMenuItems());
     }
 
     public void loadConfiguration(@NotNull File folder){

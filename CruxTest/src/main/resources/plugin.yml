@@ -1,3 +1,5 @@
 name: testttt
 version: '1.0'
 main: killercreepr.TestPlugin
+commands:
+  reloadtest:

@@ -1,13 +1,9 @@
 package killercreepr.crux.valueproviders.number;
 
-import killercreepr.crux.tags.container.ObjectStringHookContainer;
-import killercreepr.crux.tags.format.Format;
 import killercreepr.crux.util.CruxMath;
-import killercreepr.crux.valueproviders.EquationContext;
 import killercreepr.crux.valueproviders.InputContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import redempt.crunch.functional.EvaluationEnvironment;
 
 import java.util.Random;
 

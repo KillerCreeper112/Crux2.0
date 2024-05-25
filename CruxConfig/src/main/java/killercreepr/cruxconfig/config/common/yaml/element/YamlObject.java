@@ -176,6 +176,11 @@ public class YamlObject extends YamlElement {
         return members.hashCode();
     }
 
+    @Override
+    public String toString() {
+        return "YamlObject{" + members + "}";
+    }
+
     public void forEach(BiConsumer<String, YamlElement> action) {
         members.forEach(action);
     }

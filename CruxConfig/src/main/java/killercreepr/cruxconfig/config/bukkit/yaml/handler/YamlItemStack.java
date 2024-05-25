@@ -100,7 +100,7 @@ public class YamlItemStack implements YamlObjectHandler<ItemStack> {
         CruxItem item = new CruxItem(stack).amount(amount);
 
         String displayName = o.getObject(String.class, "display_name");
-        List<String> lore = o.getObject(List.class, "lore");
+        List<String> lore = registry.deserialize((Class<List<String>>) (Class<?>) List.class, o.get("lore"));
 
         if(displayName != null) item.displayName(displayName);
         if(lore != null) item.loreFromString(lore);

@@ -2,10 +2,7 @@ package killercreepr.cruxconfig.config.common.yaml.element;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class YamlArray extends YamlElement implements Iterable<YamlElement> {
     protected final List<YamlElement> elements;
@@ -135,6 +132,11 @@ public class YamlArray extends YamlElement implements Iterable<YamlElement> {
 
     public List<YamlElement> asList() {
         return elements;
+    }
+
+    @Override
+    public String toString() {
+        return "YamlArray{" + Arrays.toString(elements.toArray()) + "}";
     }
 
     @Override

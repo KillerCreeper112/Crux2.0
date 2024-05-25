@@ -1,9 +1,7 @@
 package killercreepr.crux.menu.bukkit.actions.custom;
 
-import killercreepr.crux.Crux;
 import killercreepr.crux.menu.bukkit.actions.ActionInfo;
 import killercreepr.crux.menu.bukkit.actions.SimpleMenuAction;
-import killercreepr.crux.menu.bukkit.holder.MenuHolder;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
