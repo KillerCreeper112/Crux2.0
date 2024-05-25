@@ -2,7 +2,9 @@ package killercreepr;
 
 import io.papermc.paper.event.player.ChatEvent;
 import killercreepr.crux.Crux;
+import killercreepr.crux.menu.bukkit.listener.MenuListener;
 import killercreepr.crux.menu.bukkit.registry.MenuRegistry;
+import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxconfig.config.bukkit.handlers.BukkitCfgHandlers;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
@@ -19,18 +21,19 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.logging.Level;
 
-public class TestPlugin extends JavaPlugin implements Listener {
+public class TestPlugin extends CruxPlugin implements Listener {
     protected final MenuRegistry menuRegistry = new MenuRegistry(Crux.FORMAT);
 
     @Override
-    public void onEnable() {
+    public void enabled() {
         Crux.setInstance(this); //todo stop this doodoo
-        super.onEnable();
+        super.enabled();
         BukkitCfgHandlers.initJson(CfgRegistries.JSON);
         BukkitCfgHandlers.initYaml(CfgRegistries.YAML);
 
         cfg = new Config(this, "config");
         cfg.setup();
+        registerListeners(new MenuListener());
         getServer().getPluginManager().registerEvents(this, this);
 
         menuRegistry.register(CfgRegistries.YAML);
@@ -56,6 +59,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
     public void onChat(ChatEvent event) {
         getLogger().log(Level.WARNING, "Rleoading configs");
         cfg.setup();
+        menuRegistry.loadConfiguration(new CruxFolder(this, "menus").file());
     }
 
     @Override

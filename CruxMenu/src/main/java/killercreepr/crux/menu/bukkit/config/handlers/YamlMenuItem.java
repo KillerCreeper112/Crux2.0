@@ -46,6 +46,7 @@ public class YamlMenuItem extends YamlModuled<MenuItemHolder> {
         DataExchange.Builder extraInfo = new DataExchange.Builder();
         if(base != null) extraInfo.putAll(base.info());//addDot(path) + "extra"
         extraInfo.putAll(registry.deserialize(DataExchange.class, o.get("data")));
+        extraInfo.putAll(registry.deserialize(DataExchange.class, o));
         //todo? extraInfo.putAll(new DataExchangeValue().get(config, removeDot(path)));
         //extraInfo.putAll(new DataExchangeValue().get(config, addDot(path) + "data"));
         //addCustomInfo(item);

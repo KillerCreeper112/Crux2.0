@@ -9,6 +9,9 @@ import killercreepr.crux.tags.container.ObjectLoreHookContainer;
 import killercreepr.crux.tags.container.ObjectStringHookContainer;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.crux.util.CruxString;
+import killercreepr.crux.valueproviders.EquationContext;
+import killercreepr.crux.valueproviders.InputContext;
+import killercreepr.crux.valueproviders.number.NumberProvider;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.Player;
@@ -33,11 +36,16 @@ public class MenuItem {
     }
 
     public @NotNull Optional<Integer> getSlot(){
-        Number x = base.info().getObject("slot", Number.class).orElse(null);
+        NumberProvider provider = base.info().getObject("slot", NumberProvider.class).orElse(null);
+        if(provider != null) return Optional.of(
+                provider.value(this::setPlaceholders).intValue()
+        );
+        return Optional.empty();
+        /*Number x = base.info().getObject("slot", Number.class).orElse(null);
         if(x != null) return Optional.of(x.intValue());
         String eq = base.info().getObject("slot", String.class).orElse(null);
         if(eq == null) return Optional.empty();
-        return Optional.of((int) CruxMath.evaluate(setPlaceholders(eq)));
+        return Optional.of((int) CruxMath.evaluate(setPlaceholders(eq)));*/
     }
 
     public boolean canDisplay(){

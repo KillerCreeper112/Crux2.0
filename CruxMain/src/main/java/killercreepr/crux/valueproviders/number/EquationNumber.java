@@ -35,7 +35,7 @@ public class EquationNumber implements NumberProvider{
     @Override
     public @NotNull Number value(@Nullable InputContext context) {
         if(context == null) return CruxMath.evaluate(equation);
-        return Double.parseDouble(context.input(equation));
+        return CruxMath.evaluate(context.input(equation));
     }
 
     @Override

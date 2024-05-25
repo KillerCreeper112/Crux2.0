@@ -109,7 +109,7 @@ public class YamlItemStack implements YamlObjectHandler<ItemStack> {
 
         item.editMeta(meta ->{
             Boolean glint = o.searchForObject(Boolean.class, "enchant_glint_override",
-                    "glint_override");
+                    "glint_override", "glow");
             if(glint != null) meta.setEnchantmentGlintOverride(glint);
 
             Integer maxStack = o.getObject(Integer.class, "max_stack_size");

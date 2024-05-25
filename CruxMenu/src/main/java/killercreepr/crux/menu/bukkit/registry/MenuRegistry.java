@@ -1,8 +1,11 @@
 package killercreepr.crux.menu.bukkit.registry;
 
+import killercreepr.crux.Crux;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.menu.bukkit.MenuItem;
 import killercreepr.crux.menu.bukkit.actions.MenuAction;
+import killercreepr.crux.menu.bukkit.actions.custom.CommandAction;
+import killercreepr.crux.menu.bukkit.config.YamlDataProvider;
 import killercreepr.crux.menu.bukkit.config.handlers.*;
 import killercreepr.crux.menu.bukkit.holder.MenuHolder;
 import killercreepr.crux.menu.bukkit.holder.MenuItems;
@@ -11,12 +14,18 @@ import killercreepr.crux.registry.Registry;
 import killercreepr.crux.registry.SimpleKeyedRegistry;
 import killercreepr.crux.registry.SimpleRegistry;
 import killercreepr.crux.tags.format.Format;
+import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.bukkit.handlers.BukkitCfgHandlers;
+import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
+import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
+import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.checkerframework.checker.units.qual.N;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.HashMap;
@@ -38,6 +47,8 @@ public class MenuRegistry {
     public MenuRegistry(@NotNull Format format, @NotNull YamlMenuModule menuModule) {
         this.format = format;
         this.menuModule = menuModule;
+
+        MENU_ACTIONS.register(new CommandAction(new NamespacedKey("test", "command")));
     }
 
     public MenuRegistry(@NotNull Format format) {
@@ -47,6 +58,8 @@ public class MenuRegistry {
         menuModule.setYamlMenuItems(new YamlMenuItems(menuModule));
         menuModule.setYamlDataExchange(new YamlDataExchange(menuModule));
         menuModule.setYamlItemStack(BukkitCfgHandlers.ITEM_STACK);
+
+        menuModule.getYamlDataExchange().getDataTypes().register("slot", YamlDataProvider.generic(NumberProvider.class));
     }
 
     public @NotNull Format getFormat() {
