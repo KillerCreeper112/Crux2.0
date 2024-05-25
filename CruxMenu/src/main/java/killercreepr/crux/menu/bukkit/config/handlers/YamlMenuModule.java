@@ -15,6 +15,8 @@ import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.TreeMap;
+
 public class YamlMenuModule implements YamlObjectHandler<MenuHolder> {
     protected YamlMenuItem yamlMenuItem;
     protected YamlMenuItems yamlMenuItems;
@@ -40,6 +42,7 @@ public class YamlMenuModule implements YamlObjectHandler<MenuHolder> {
         DataExchange extraInfo = registry.deserialize(DataExchange.class, o.get("data"));
 
         MenuItems menuItems = yamlMenuItems.deserializeFromYaml(context, o.get("items"), o);
+        if(menuItems == null) menuItems = new MenuItems(new TreeMap<>());
 
         NamespacedKey key = Crux.key(id);
         return new MenuHolder(key, title, size,

@@ -13,4 +13,14 @@ public class SimpleKeyedRegistry<T extends Keyed> extends SimpleMappedRegistry<N
     public SimpleKeyedRegistry() {
         super();
     }
+
+    @Override
+    public @NotNull T register(@NotNull T object){
+        return register(object.getKey(), object);
+    }
+
+    @Override
+    public boolean unregister(@NotNull T object) {
+        return remove(object.getKey()) != null;
+    }
 }

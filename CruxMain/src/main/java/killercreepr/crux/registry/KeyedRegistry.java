@@ -12,5 +12,10 @@ public interface KeyedRegistry<T extends Keyed> extends MappedRegistry<Namespace
     default @NotNull T register(@NotNull T object){
         return register(object.getKey(), object);
     }
+
+    @Override
+    default boolean unregister(@NotNull T object) {
+        return remove(object.getKey()) != null;
+    }
 }
 
