@@ -6,6 +6,7 @@ import killercreepr.crux.menu.bukkit.holder.MenuHolder;
 import killercreepr.crux.menu.bukkit.holder.MenuItems;
 import killercreepr.crux.valueproviders.number.ConstantNumber;
 import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.cruxconfig.config.bukkit.yaml.handler.YamlItemStack;
 import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
@@ -22,6 +23,7 @@ public class YamlMenuModule implements YamlObjectHandler<MenuHolder> {
     protected YamlMenuItems yamlMenuItems;
     protected YamlDataExchange yamlDataExchange;
     protected YamlMenuActions yamlMenuActions;
+    protected YamlItemStack yamlItemStack;
 
     @Override
     public @NotNull YamlElement serializeToYaml(@NotNull YamlContext context, @NotNull MenuHolder object) {
@@ -41,7 +43,7 @@ public class YamlMenuModule implements YamlObjectHandler<MenuHolder> {
         if(size == null) size = new ConstantNumber(27);
         DataExchange extraInfo = registry.deserialize(DataExchange.class, o.get("data"));
 
-        MenuItems menuItems = yamlMenuItems.deserializeFromYaml(context, o.get("items"), o);
+        MenuItems menuItems = getYamlMenuItems().deserializeFromYaml(context, o.get("items"), o);
         if(menuItems == null) menuItems = new MenuItems(new TreeMap<>());
 
         NamespacedKey key = Crux.key(id);
@@ -81,5 +83,13 @@ public class YamlMenuModule implements YamlObjectHandler<MenuHolder> {
 
     public void setYamlMenuActions(YamlMenuActions yamlMenuActions) {
         this.yamlMenuActions = yamlMenuActions;
+    }
+
+    public YamlItemStack getYamlItemStack() {
+        return yamlItemStack;
+    }
+
+    public void setYamlItemStack(YamlItemStack yamlItemStack) {
+        this.yamlItemStack = yamlItemStack;
     }
 }

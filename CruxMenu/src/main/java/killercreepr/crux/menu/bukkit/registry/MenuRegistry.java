@@ -9,6 +9,7 @@ import killercreepr.crux.registry.SimpleKeyedRegistry;
 import killercreepr.crux.registry.SimpleRegistry;
 import killercreepr.crux.tags.format.Format;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
+import killercreepr.cruxconfig.config.bukkit.handlers.BukkitCfgHandlers;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
@@ -42,6 +43,7 @@ public class MenuRegistry {
         menuModule.setYamlMenuActions(new YamlMenuActions(menuModule));
         menuModule.setYamlMenuItems(new YamlMenuItems(menuModule));
         menuModule.setYamlDataExchange(new YamlDataExchange(menuModule));
+        menuModule.setYamlItemStack(BukkitCfgHandlers.ITEM_STACK);
     }
 
     public @NotNull Format getFormat() {

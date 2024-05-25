@@ -16,6 +16,7 @@ import org.bukkit.World;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemRarity;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
@@ -33,24 +34,38 @@ public class BukkitCfgHandlers {
                 new GenericJsonHandler<>("uuid", UUID.class)
         );
     }
+
+    public static final YamlPotionEffect POTION_EFFECT = new YamlPotionEffect();
+    public static final YamlNumberProvider NUMBER_PROVIDER = new YamlNumberProvider();
+    public static final YamlMsgContainer MSG_CONTAINER = new YamlMsgContainer();
+    public static final YamlCreateSound CREATE_SOUND = new YamlCreateSound();
+    public static final YamlCreateTitle CREATE_TITLE = new YamlCreateTitle();
+    public static final YamlPotionEffectType POTION_EFFECT_TYPE = new YamlPotionEffectType();
+    public static final YamlMaterial MATERIAL = new YamlMaterial();
+    public static final YamlComponent COMPONENT = new YamlComponent();
+    public static final YamlItemStack ITEM_STACK = new YamlItemStack();
+
     public static void initYaml(@NotNull YamlRegistry registry){
-        registry.registerHandler(PotionEffect.class, new YamlPotionEffect());
-        registry.registerHandler(NumberProvider.class, new YamlNumberProvider());
-        registry.registerHandler(MsgContainer.class, new YamlMsgContainer());
-        registry.registerHandler(CreateSound.class, new YamlCreateSound());
-        registry.registerHandler(CreateTitle.class, new YamlCreateTitle());
-        registry.registerHandler(PotionEffectType.class, new YamlPotionEffectType());
-        registry.registerHandler(Material.class, new YamlMaterial());
+        registry.registerHandler(PotionEffect.class, POTION_EFFECT);
+        registry.registerHandler(NumberProvider.class, NUMBER_PROVIDER);
+        registry.registerHandler(MsgContainer.class, MSG_CONTAINER);
+        registry.registerHandler(CreateSound.class, CREATE_SOUND);
+        registry.registerHandler(CreateTitle.class, CREATE_TITLE);
+        registry.registerHandler(PotionEffectType.class, POTION_EFFECT_TYPE);
+        registry.registerHandler(Material.class, MATERIAL);
+        registry.registerHandler(Component.class, COMPONENT);
+        registry.registerHandler(ItemStack.class, ITEM_STACK);
+
+        registry.registerHandler(TrimMaterial.class, new YamlGenericKeyedRegistry<>(RegistryKey.TRIM_MATERIAL));
+        registry.registerHandler(TrimPattern.class, new YamlGenericKeyedRegistry<>(RegistryKey.TRIM_PATTERN));
+        registry.registerHandler(new AutoYamlSerializer<>(ArmorTrim.class));
+
         registerEnums(registry,
                 AttributeModifier.Operation.class,
                 EquipmentSlot.class,
                 World.Environment.class,
                 ItemRarity.class
         );
-        registry.registerHandler(TrimMaterial.class, new YamlGenericKeyedRegistry<>(RegistryKey.TRIM_MATERIAL));
-        registry.registerHandler(TrimPattern.class, new YamlGenericKeyedRegistry<>(RegistryKey.TRIM_PATTERN));
-        registry.registerHandler(new AutoYamlSerializer<>(ArmorTrim.class));
-        registry.registerHandler(Component.class, new YamlComponent());
     }
 
     @SafeVarargs

@@ -51,13 +51,13 @@ public class YamlMenuItem extends YamlModuled<MenuItemHolder> {
         //extraInfo.putAll(new DataExchangeValue().get(config, addDot(path) + "data"));
         //addCustomInfo(item);
 
-        ItemStack i = new ItemStack(Material.STONE);//todo
-        /*if(base == null) i = new ItemStackValue().get(config, addDot(path) + "item");
+        ItemStack i;
+        if(base == null) i = registry.deserialize(ItemStack.class, o.get("item"));
         else{
             ItemStack baseClone = base.getItem().value();
             if(baseClone != null) baseClone = baseClone.clone();
-            i = new ItemStackValue().get(config, addDot(path) + "item", baseClone);
-        }*/
+            i = menuModule.getYamlItemStack().deserializeFromYaml(context, o.get("item"), baseClone);
+        }
 
         YamlObject display;
         if(o.get("display") instanceof YamlObject oo) display = oo;
