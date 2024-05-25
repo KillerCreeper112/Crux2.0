@@ -32,8 +32,8 @@ public class YamlCreateSound implements YamlObjectHandler<CreateSound> {
                     o.getOrDefaultObject("source", "").toUpperCase());
         }
         catch (IllegalArgumentException ignored){ source = net.kyori.adventure.sound.Sound.Source.MASTER; }
-        float volume = o.getOrDefaultObject("volume", 2f);
-        float pitch = o.getOrDefaultObject("pitch", 1f);
+        float volume = (float) (double) o.getOrDefaultObject("volume", 2D);
+        float pitch = (float) (double) o.getOrDefaultObject("pitch", 1D);
         try{
             Sound s = Sound.valueOf(keyName.toUpperCase());
             return new CreateSound(s, source,

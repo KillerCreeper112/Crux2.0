@@ -32,6 +32,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+        Crux.setInstance(this); //todo stop this doodoo
         super.onEnable();
         BukkitCfgHandlers.initJson(CfgRegistries.JSON);
         BukkitCfgHandlers.initYaml(CfgRegistries.YAML);
@@ -47,6 +48,7 @@ public class TestPlugin extends JavaPlugin implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
+        menuRegistry.MENU_HOLDERS.get(Crux.key("testayo")).open(event.getPlayer());
         /*if(event.isSneaking()){
             cfg.MSG_1.use(event.getPlayer());
         }else cfg.MSG_2.use(event.getPlayer());*/

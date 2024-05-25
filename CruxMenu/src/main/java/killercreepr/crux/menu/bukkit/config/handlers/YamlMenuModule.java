@@ -32,6 +32,7 @@ public class YamlMenuModule implements YamlObjectHandler<MenuHolder> {
         YamlRegistry registry = context.getRegistry();
 
         String id = o.getObject(String.class, "id");
+        if(id == null) return null;
         String titleString = o.getObject(String.class, "title");
         String title = titleString == null ? "" : titleString;
         NumberProvider size = registry.deserialize(NumberProvider.class, o.get("size"));

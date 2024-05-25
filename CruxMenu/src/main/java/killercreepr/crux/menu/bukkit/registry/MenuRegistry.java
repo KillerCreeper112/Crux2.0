@@ -63,5 +63,7 @@ public class MenuRegistry {
     public void loadConfiguration(@NotNull CruxConfig cfg){
         MenuHolder holder = cfg.deserialize(MenuHolder.class, "");
         Bukkit.getLogger().log(Level.WARNING, "Menu Holder: " + holder);
+        if(holder == null) return;
+        MENU_HOLDERS.register(holder);
     }
 }

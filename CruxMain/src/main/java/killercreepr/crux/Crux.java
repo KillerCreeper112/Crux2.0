@@ -43,8 +43,12 @@ public class Crux extends JavaPlugin implements Listener {
         return MENU_REGISTRY;
     }*/
 
-    private static Crux instance;
-    public static Crux inst(){ return instance; }
+    private static Plugin instance;
+    public static Plugin inst(){ return instance; }
+
+    public static void setInstance(Plugin instance) {
+        Crux.instance = instance;
+    }
 
     private PlaceholderAPIHook placeholderAPIHook;
 
