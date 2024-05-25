@@ -32,7 +32,7 @@ public class TestPlugin extends CruxPlugin implements Listener {
 
         cfg = new Config(this, "config");
         cfg.setup();
-        registerListeners(new MenuListener());
+        registerListeners(new MenuListener(this));
         getServer().getPluginManager().registerEvents(this, this);
 
         menuRegistry.register(CfgRegistries.YAML);

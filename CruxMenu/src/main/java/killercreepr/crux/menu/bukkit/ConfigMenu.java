@@ -2,6 +2,7 @@ package killercreepr.crux.menu.bukkit;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.DataExchange;
+import killercreepr.crux.menu.bukkit.api.events.menu.MenuRefreshEvent;
 import killercreepr.crux.menu.bukkit.holder.MenuHolder;
 import killercreepr.crux.tags.container.ObjectStringHookContainer;
 import killercreepr.crux.valueproviders.EquationContext;
@@ -87,10 +88,12 @@ public class ConfigMenu extends Menu{
         return this;
     }
 
-    public ConfigMenu refresh(){
+    public MenuRefreshEvent refresh(){
+        MenuRefreshEvent event = new MenuRefreshEvent(this);
+        if(!event.callEvent()) return event;
         clearActions();
         setItems(holder);
-        return this;
+        return event;
     }
 
     public ConfigMenu setItem(int slot, @Nullable MenuItem item, @NotNull Player viewer){
