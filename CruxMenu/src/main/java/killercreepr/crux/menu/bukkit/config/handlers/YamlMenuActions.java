@@ -43,6 +43,6 @@ public class YamlMenuActions extends YamlModuled<Map<ClickType, Collection<Strin
 
     @Override
     public @Nullable Map<ClickType, Collection<String>> deserializeFromYaml(@NotNull YamlContext context, @Nullable YamlElement e, @Nullable YamlObject menuContext) {
-        throw new UnsupportedOperationException();//todo msg
+        throw new UnsupportedOperationException("MenuActions does not have a deserialize implementation!");//todo msg
     }
 }

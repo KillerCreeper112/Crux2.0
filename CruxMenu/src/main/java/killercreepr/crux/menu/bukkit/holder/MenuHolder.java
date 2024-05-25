@@ -53,7 +53,9 @@ public class MenuHolder implements Keyed {
         DataExchange.Builder builder = new DataExchange.Builder().putAll(data);
         builder.put("viewer", Holder.direct(p));
         ConfigMenu menu = new ConfigMenu(this, builder.build());
-        return (ConfigMenu) menu.setItems(this).open(p);
+        menu.load();
+        menu.open(p);
+        return menu;
     }
 
     @Override

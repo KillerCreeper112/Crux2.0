@@ -17,9 +17,9 @@ import java.util.Map;
 import java.util.Optional;
 
 public class ConfigMenu extends Menu{
-    protected final MenuHolder holder;
-    protected final DataExchange info;
-    protected final ObjectStringHookContainer tags;
+    protected final @NotNull MenuHolder holder;
+    protected final @NotNull DataExchange info;
+    protected final @NotNull ObjectStringHookContainer tags;
 
     protected final Map<Integer, MenuItem> items = new HashMap<>();
     public ConfigMenu(@NotNull MenuHolder holder, @NotNull DataExchange info){
@@ -54,6 +54,9 @@ public class ConfigMenu extends Menu{
         return info;
     }
 
+    /**
+     * Sets the MenuHolder's items and click actions.
+     */
     public ConfigMenu setItems(@NotNull MenuHolder holder){
         Player viewer = info.getObjectOrThrow("viewer", Player.class);
         MenuInfo menuInfo = new MenuInfo(this, info, tags);
@@ -61,9 +64,37 @@ public class ConfigMenu extends Menu{
             MenuItem i = menuItem.getDisplayItem(viewer, menuInfo);
             Optional<Integer> slot = i.getSlot();
             if(slot.isEmpty() || !i.canDisplay()) return;
-            setItem(slot.get(), i, i.buildItem(viewer));
+            setItem(slot.get(), i, viewer);
         });
         return this;
+    }
+
+    /**
+     * Resets the inventory. Namely, clears the items and click actions.
+     */
+    public ConfigMenu reset(){
+        items.clear();
+        inventory.clear();
+        clearActions();
+        return this;
+    }
+
+    /**
+     * Called after creation.
+     */
+    public ConfigMenu load(){
+        refresh();
+        return this;
+    }
+
+    public ConfigMenu refresh(){
+        clearActions();
+        setItems(holder);
+        return this;
+    }
+
+    public ConfigMenu setItem(int slot, @Nullable MenuItem item, @NotNull Player viewer){
+        return setItem(slot, item, item==null?null:item.buildItem(viewer));
     }
 
     public ConfigMenu setItem(int slot, @Nullable MenuItem item, @Nullable ItemStack display){
