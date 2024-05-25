@@ -26,11 +26,11 @@ public class MenuItemHolder {
     protected final @NotNull DataExchange info;
     protected final @Nullable String displayName;
     protected final @Nullable List<String> displayLore;
-    protected final @Nullable Map<ClickType, Collection<String>> clickActions;
+    protected final @Nullable ClickActions clickActions;
 
     public MenuItemHolder(@NotNull Holder<ItemStack> item, @NotNull DataExchange info,
                           @Nullable String displayName, @Nullable List<String> displayLore,
-                          @Nullable Map<ClickType, Collection<String>> clickActions) {
+                          @Nullable ClickActions clickActions) {
         this.item = item;
         this.info = info;
         this.displayName = displayName;
@@ -59,7 +59,7 @@ public class MenuItemHolder {
         return displayLore;
     }
 
-    public @Nullable Map<ClickType, Collection<String>> getClickActions() {
+    public @Nullable ClickActions getClickActions() {
         return clickActions;
     }
 

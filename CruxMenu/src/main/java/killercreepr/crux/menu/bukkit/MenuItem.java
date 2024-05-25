@@ -3,6 +3,8 @@ package killercreepr.crux.menu.bukkit;
 import killercreepr.crux.Crux;
 import killercreepr.crux.menu.bukkit.actions.ActionContext;
 import killercreepr.crux.menu.bukkit.actions.MenuAction;
+import killercreepr.crux.menu.bukkit.api.events.menu.MenuItemClickEvent;
+import killercreepr.crux.menu.bukkit.holder.ClickActions;
 import killercreepr.crux.menu.bukkit.holder.MenuItemHolder;
 import killercreepr.crux.registry.Registry;
 import killercreepr.crux.tags.container.ObjectLoreHookContainer;
@@ -102,19 +104,26 @@ public class MenuItem {
         return item;
     }
 
-    public void click(@NotNull Player p, @NotNull InventoryClickEvent event){
-        if(base.getClickActions() == null) return;
+    public @NotNull MenuItemClickEvent click(@NotNull Player p, @NotNull InventoryClickEvent event){
         ActionContext actionInfo = new ActionContext(info.getMenu(), info.getInfo(), info.getResolvers(), this, event);
-        base.getClickActions().getOrDefault(event.getClick(), List.of()).forEach(s -> performAction(p, s, actionInfo));
+        MenuItemClickEvent clickEvent = new MenuItemClickEvent(p, actionInfo.getMenu(), this, actionInfo, base.getClickActions());
+        if(!clickEvent.callEvent()) return clickEvent;
+
+        ClickActions actions = clickEvent.getClickActions();
+        if(actions == null) return clickEvent;
+
+        ActionContext context = clickEvent.getContext();
+        actions.getOrDefault(event.getClick(), List.of()).forEach(s -> performAction(p, s, context));
+        return clickEvent;
     }
 
     public static final Pattern ACTION_PATTERN = Pattern.compile("\\[(.*?)]");
-    private static @NotNull String extractAction(@NotNull String input) {
+    private static @Nullable String extractAction(@NotNull String input) {
         Matcher matcher = ACTION_PATTERN.matcher(input);
         if (matcher.find()) {
             return matcher.group(1).trim();
         }
-        return "";
+        return null;
     }
 
     public boolean performAction(@NotNull Player p, @NotNull String action, @NotNull ActionContext actionInfo){
@@ -124,6 +133,7 @@ public class MenuItem {
     public boolean performAction(@NotNull Player p, @NotNull String action,
                                  @NotNull ActionContext actionInfo, @NotNull Registry<MenuAction> actions){
         String actionName = extractAction(action);
+        if(actionName == null) return false;
         String result = Crux.FORMAT.setPlaceholders(action.replaceFirst("\\[.*?]\\s*", ""),
                 actionInfo.getResolvers());
         for(MenuAction a : actions){

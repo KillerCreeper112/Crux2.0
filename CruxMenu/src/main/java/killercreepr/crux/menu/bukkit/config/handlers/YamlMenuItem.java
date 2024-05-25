@@ -2,6 +2,7 @@ package killercreepr.crux.menu.bukkit.config.handlers;
 
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.Holder;
+import killercreepr.crux.menu.bukkit.holder.ClickActions;
 import killercreepr.crux.menu.bukkit.holder.MenuItemHolder;
 import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
@@ -63,7 +64,7 @@ public class YamlMenuItem extends YamlModuled<MenuItemHolder> {
         if(o.get("display") instanceof YamlObject oo) display = oo;
         else display = null;
 
-        Map<ClickType, Collection<String>> clickActions = menuModule.getYamlMenuActions().deserializeFromYaml(
+        ClickActions clickActions = menuModule.getYamlMenuActions().deserializeFromYaml(
                 context, o.get("actions"), base
         );
 
