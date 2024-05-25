@@ -10,6 +10,7 @@ dependencies {
     paperweight.paperDevBundle(libs.versions.paper)
     implementation(project(":CruxMain"))
     implementation(project(":CruxConfig"))
+    implementation(project(":CruxMenu"))
 }
 
 tasks{

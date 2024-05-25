@@ -1,6 +1,7 @@
 package killercreepr.crux.valueproviders.number;
 
 import com.google.common.base.Preconditions;
+import killercreepr.crux.valueproviders.InputContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redempt.crunch.functional.EvaluationEnvironment;
@@ -34,7 +35,7 @@ public class UniformNumberArray implements NumberProvider {
     }
 
     @Override
-    public @NotNull Number value(@Nullable EvaluationEnvironment ev) {
+    public @NotNull Number value(@Nullable InputContext ev) {
         return sampleProvider(new Random()).value(ev);
     }
 

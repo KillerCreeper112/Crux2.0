@@ -1,7 +1,13 @@
 package killercreepr;
 
 import io.papermc.paper.event.player.ChatEvent;
+import killercreepr.crux.Crux;
+import killercreepr.crux.menu.bukkit.ConfigMenu;
+import killercreepr.crux.menu.bukkit.holder.MenuHolder;
+import killercreepr.crux.menu.bukkit.registry.MenuRegistry;
+import killercreepr.crux.tags.format.Format;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
+import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxconfig.config.bukkit.handlers.BukkitCfgHandlers;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import killercreepr.sometests.Config;
@@ -22,6 +28,8 @@ import java.util.Map;
 import java.util.logging.Level;
 
 public class TestPlugin extends JavaPlugin implements Listener {
+    protected final MenuRegistry menuRegistry = new MenuRegistry(Crux.FORMAT);
+
     @Override
     public void onEnable() {
         super.onEnable();
@@ -31,6 +39,9 @@ public class TestPlugin extends JavaPlugin implements Listener {
         cfg = new Config(this, "config");
         cfg.setup();
         getServer().getPluginManager().registerEvents(this, this);
+
+        menuRegistry.register(CfgRegistries.YAML);
+        menuRegistry.loadConfiguration(new CruxFolder(this, "menus").file());
     }
     protected Config cfg;
 

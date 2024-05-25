@@ -16,9 +16,9 @@ public class OpenMenuAction extends SimpleMenuAction {
     @Override
     public boolean execute(@NotNull Player p, @NotNull ActionInfo actionInfo, @NotNull String[] args) {
         //todo
-        MenuHolder menuHolder = Crux.inst().getMenuRegistry().MENU_HOLDERS.get(Crux.key(args[0]));
+        /*MenuHolder menuHolder = Crux.inst().getMenuRegistry().MENU_HOLDERS.get(Crux.key(args[0]));
         if(menuHolder == null) return false;
-        menuHolder.open(p, actionInfo.getInfo());
+        menuHolder.open(p, actionInfo.getInfo());*/
         return true;
     }
 }

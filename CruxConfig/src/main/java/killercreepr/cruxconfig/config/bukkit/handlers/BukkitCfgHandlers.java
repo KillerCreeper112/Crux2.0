@@ -9,6 +9,7 @@ import killercreepr.cruxconfig.config.common.json.JsonRegistry;
 import killercreepr.cruxconfig.config.common.json.container.GenericJsonHandler;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.potion.PotionEffect;
@@ -35,7 +36,8 @@ public class BukkitCfgHandlers {
         registry.registerHandler(Material.class, new YamlMaterial());
         registerEnums(registry,
                 AttributeModifier.Operation.class,
-                EquipmentSlot.class
+                EquipmentSlot.class,
+                World.Environment.class
         );
     }
 

@@ -1,17 +1,23 @@
 package killercreepr.crux.menu.bukkit.registry;
 
 import killercreepr.crux.menu.bukkit.actions.MenuAction;
+import killercreepr.crux.menu.bukkit.config.handlers.*;
 import killercreepr.crux.menu.bukkit.holder.MenuHolder;
 import killercreepr.crux.registry.KeyedRegistry;
 import killercreepr.crux.registry.Registry;
 import killercreepr.crux.registry.SimpleKeyedRegistry;
 import killercreepr.crux.registry.SimpleRegistry;
 import killercreepr.crux.tags.format.Format;
+import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
+import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.logging.Level;
 
 public class MenuRegistry {
     public final KeyedRegistry<MenuHolder> MENU_HOLDERS = new SimpleKeyedRegistry<>(new HashMap<>()){
@@ -23,12 +29,39 @@ public class MenuRegistry {
     };
     public final Registry<MenuAction> MENU_ACTIONS = new SimpleRegistry<>(new HashSet<>());
 
-    private final @NotNull Format format;
-    public MenuRegistry(@NotNull Format format) {
+    protected final @NotNull Format format;
+    protected final @NotNull YamlMenuModule menuModule;
+    public MenuRegistry(@NotNull Format format, @NotNull YamlMenuModule menuModule) {
         this.format = format;
+        this.menuModule = menuModule;
+    }
+
+    public MenuRegistry(@NotNull Format format) {
+        this(format, new YamlMenuModule());
+        menuModule.setYamlMenuItem(new YamlMenuItem(menuModule));
+        menuModule.setYamlMenuActions(new YamlMenuActions(menuModule));
+        menuModule.setYamlMenuItems(new YamlMenuItems(menuModule));
+        menuModule.setYamlDataExchange(new YamlDataExchange(menuModule));
     }
 
     public @NotNull Format getFormat() {
         return format;
+    }
+
+    public void register(@NotNull YamlRegistry registry){
+        registry.registerHandler(MenuHolder.class, menuModule);
+    }
+
+    public void loadConfiguration(@NotNull File folder){
+        File[] list = folder.listFiles();
+        if(list==null) return;
+        for(File f : list){
+            loadConfiguration(new CruxConfig(f));
+        }
+    }
+
+    public void loadConfiguration(@NotNull CruxConfig cfg){
+        MenuHolder holder = cfg.deserialize(MenuHolder.class, "");
+        Bukkit.getLogger().log(Level.WARNING, "Menu Holder: " + holder);
     }
 }

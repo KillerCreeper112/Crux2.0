@@ -1,14 +1,11 @@
 package killercreepr.crux.menu.bukkit.config.handlers;
 
-import com.google.gson.JsonObject;
 import killercreepr.crux.Crux;
-import killercreepr.crux.menu.bukkit.config.handlers.old.MenuHolderValue;
 import killercreepr.crux.menu.bukkit.holder.MenuItemHolder;
 import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.inventory.ClickType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
