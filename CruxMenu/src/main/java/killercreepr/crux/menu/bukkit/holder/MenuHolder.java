@@ -3,6 +3,7 @@ package killercreepr.crux.menu.bukkit.holder;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.Holder;
 import killercreepr.crux.menu.bukkit.ConfigMenu;
+import killercreepr.crux.menu.bukkit.api.events.menu.MenuOpenEvent;
 import killercreepr.crux.menu.bukkit.registry.MenuRegistry;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import org.bukkit.Keyed;
@@ -13,7 +14,6 @@ import org.jetbrains.annotations.Nullable;
 
 public class MenuHolder implements Keyed {
     protected MenuRegistry registry;
-
     public MenuHolder setRegistry(@NotNull MenuRegistry registry) {
         this.registry = registry; return this;
     }
@@ -45,17 +45,17 @@ public class MenuHolder implements Keyed {
         return info;
     }
 
-    public @NotNull ConfigMenu open(@NotNull Player p){
+    public @NotNull MenuOpenEvent open(@NotNull Player p){
         return open(p, DataExchange.empty());
     }
 
-    public @NotNull ConfigMenu open(@NotNull Player p, @NotNull DataExchange data){
+    public @NotNull MenuOpenEvent open(@NotNull Player p, @NotNull DataExchange data){
         DataExchange.Builder builder = new DataExchange.Builder().putAll(data);
         builder.put("viewer", Holder.direct(p));
+
         ConfigMenu menu = new ConfigMenu(this, builder.build());
         menu.load();
-        menu.open(p);
-        return menu;
+        return menu.open(p);
     }
 
     @Override

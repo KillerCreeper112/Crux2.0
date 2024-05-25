@@ -1,6 +1,5 @@
 package killercreepr.crux.menu.bukkit.registry;
 
-import killercreepr.crux.Crux;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.menu.bukkit.MenuItem;
 import killercreepr.crux.menu.bukkit.actions.MenuAction;
@@ -17,15 +16,10 @@ import killercreepr.crux.tags.format.Format;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.bukkit.handlers.BukkitCfgHandlers;
-import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
-import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
-import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
-import org.checkerframework.checker.units.qual.N;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.HashMap;

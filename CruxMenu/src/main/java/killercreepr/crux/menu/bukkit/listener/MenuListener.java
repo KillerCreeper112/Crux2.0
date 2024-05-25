@@ -1,27 +1,35 @@
 package killercreepr.crux.menu.bukkit.listener;
 
 import killercreepr.crux.menu.bukkit.Menu;
+import killercreepr.crux.menu.bukkit.api.events.menu.MenuCloseEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.plugin.Plugin;
 
 public class MenuListener implements Listener {
+    protected final Plugin plugin;
+
+    public MenuListener(Plugin plugin) {
+        this.plugin = plugin;
+    }
+
     @EventHandler
     private void inventoryDrag(InventoryDragEvent event){
-        Player p = (Player) event.getWhoClicked();
-        Menu.getMenu(p).ifPresent(menu ->{
-            event.setCancelled(true);
-            if(menu.getGeneralDragAction() != null) menu.getGeneralDragAction().drag(p, event);
-        });
+        if(!(event.getWhoClicked() instanceof Player p)) return;
+        Menu menu = Menu.menu(p);
+        if(menu==null) return;
+        event.setCancelled(true);
+        if(menu.getGeneralDragAction() != null) menu.getGeneralDragAction().drag(p, event);
     }
 
     @EventHandler
     private void inventoryClick(InventoryClickEvent event){
-        Player p = (Player) event.getWhoClicked();
-        Menu menu = Menu.getMenu(p).orElse(null);
+        if(!(event.getWhoClicked() instanceof Player p)) return;
+        Menu menu = Menu.menu(p);
         if(menu == null) return;
         event.setCancelled(true);
         if(event.getClickedInventory() != null){
@@ -39,7 +47,13 @@ public class MenuListener implements Listener {
 
     @EventHandler
     private void inventoryClose(InventoryCloseEvent event){
-        Player p = (Player) event.getPlayer();
-        Menu.getMenu(p).ifPresent(menu -> menu.close(p));
+        if(!(event.getPlayer() instanceof Player p)) return;
+        Menu menu = Menu.menu(p);
+        if(menu == null) return;
+        MenuCloseEvent closeEvent = menu.close(p);
+        if(!closeEvent.isCancelled()) return;
+
+        //open the menu back up silently.
+        plugin.getServer().getScheduler().runTask(plugin, task -> p.openInventory(menu.getInventory()));
     }
 }

@@ -2,7 +2,6 @@ package killercreepr.crux;
 
 import killercreepr.crux.hooks.PlaceholderAPIHook;
 import killercreepr.crux.tags.Tags;
-import killercreepr.crux.tags.defaults.CClaimTags;
 import killercreepr.crux.tags.format.Format;
 import killercreepr.crux.tags.minimessage.*;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -11,18 +10,20 @@ import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Level;
 
-public class Crux extends JavaPlugin implements Listener {
+public class Crux{
+    public static final String NAMESPACE = "crux";
     public static final Tags TAGS = new Tags();
     public static final Format FORMAT = new Format(
             MiniMessage.builder()
@@ -36,6 +37,7 @@ public class Crux extends JavaPlugin implements Listener {
                             .build()
                     ).build(), TAGS
     );
+    private static final Logger log = Logger.getLogger(Crux.class.getName());
 
     /*private final MenuRegistry MENU_REGISTRY = new MenuRegistry(FORMAT);
 
@@ -43,37 +45,31 @@ public class Crux extends JavaPlugin implements Listener {
         return MENU_REGISTRY;
     }*/
 
-    private static Plugin instance;
-    public static Plugin inst(){ return instance; }
+    protected static @Nullable PlaceholderAPIHook placeholderAPIHook;
 
-    public static void setInstance(Plugin instance) {
-        Crux.instance = instance;
+    public static @Nullable PlaceholderAPIHook getPlaceholderAPIHook(){ return placeholderAPIHook; }
+
+    public static void setPlaceholderAPIHook(@Nullable PlaceholderAPIHook placeholderAPIHook) {
+        Crux.placeholderAPIHook = placeholderAPIHook;
     }
-
-    private PlaceholderAPIHook placeholderAPIHook;
-
-    public @Nullable PlaceholderAPIHook getPlaceholderAPIHook(){ return placeholderAPIHook; }
-
-    @Override
-    public void onEnable() {
-        instance = this;
+    /*public void onEnable() {
         if(getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")){
             placeholderAPIHook = new PlaceholderAPIHook();
         }else placeholderAPIHook = null;
 
-        /*Registry<MenuAction> actions = MENU_REGISTRY.MENU_ACTIONS;
+        *//*Registry<MenuAction> actions = MENU_REGISTRY.MENU_ACTIONS;
         actions.register(new OpenMenuAction(key("menu")));
         actions.register(new UpdateMenuAction(key("update")));
         actions.register(new SoundAction(key("sound")));
         actions.register(new CloseInventoryAction(key("close")));
 
-        new MenuFolder(this, "menu", getMenuRegistry()).register();*/
+        new MenuFolder(this, "menu", getMenuRegistry()).register();*//*
 
         new CClaimTags(this, FORMAT.getTags());
 
         //todo remove test
         //getServer().getPluginManager().registerEvents(new MenuListener(), this);
-    }
+    }*/
 
     /*@EventHandler(ignoreCancelled = true)
     public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
@@ -90,13 +86,12 @@ public class Crux extends JavaPlugin implements Listener {
         });
     }*/
 
-    @Override
     public void onDisable() {
         HandlerList.unregisterAll((Plugin) this);
     }
 
     public static void log(@NotNull Level level, @NotNull String msg){
-        inst().getLogger().log(level, msg);
+        log.log(level, msg);
     }
 
     public static @NotNull NamespacedKey key(@NotNull String key){
@@ -104,7 +99,7 @@ public class Crux extends JavaPlugin implements Listener {
     }
 
     public static @NotNull NamespacedKey key(@NotNull String[] key){
-        return key.length > 1 ? new NamespacedKey(key[0], key[1]) : new NamespacedKey(inst(), key[0]);
+        return key.length > 1 ? new NamespacedKey(key[0], key[1]) : new NamespacedKey(NAMESPACE, key[0]);
     }
 
     public static @NotNull NamespacedKey minecraftKey(@NotNull String key){

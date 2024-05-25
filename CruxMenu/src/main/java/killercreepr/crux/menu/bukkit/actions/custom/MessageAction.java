@@ -1,7 +1,7 @@
 package killercreepr.crux.menu.bukkit.actions.custom;
 
 import killercreepr.crux.Crux;
-import killercreepr.crux.menu.bukkit.actions.ActionInfo;
+import killercreepr.crux.menu.bukkit.actions.ActionContext;
 import killercreepr.crux.menu.bukkit.actions.SimpleMenuAction;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -14,7 +14,7 @@ public class MessageAction extends SimpleMenuAction {
     }
 
     @Override
-    public boolean execute(@NotNull Player p, @NotNull ActionInfo actionInfo, @NotNull String[] args) {
+    public boolean execute(@NotNull Player p, @NotNull ActionContext actionInfo, @NotNull String[] args) {
         p.sendMessage(Crux.FORMAT.deserialize(args[0]));
         return true;
     }

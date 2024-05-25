@@ -4,6 +4,8 @@ import com.google.common.collect.Maps;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.security.InvalidParameterException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -11,9 +13,9 @@ import java.util.Optional;
 public class DataExchange {
     public static @NotNull DataExchange empty(){ return new DataExchange(Maps.newHashMap()); }
 
-    protected final Map<String, Holder<Object>> data;
+    protected final @NotNull Map<String, Holder<Object>> data;
     public DataExchange(@NotNull Map<String, Holder<Object>> data){
-        this.data = data;
+        this.data = Collections.unmodifiableMap(data);
     }
 
     public DataExchange(@NotNull String id, @NotNull Holder<Object> holder){
@@ -21,18 +23,27 @@ public class DataExchange {
         data.put(id, holder);
     }
 
+    /**
+     * @return A new DataExchange with the appended info.
+     */
     public @NotNull DataExchange append(@NotNull DataExchange info){
         Map<String, Holder<Object>> data = new HashMap<>(this.data);
         data.putAll(info.getData());
         return new DataExchange(data);
     }
 
+    /**
+     * @return A new DataExchange with the appended object.
+     */
     public @NotNull DataExchange append(@NotNull String id, @NotNull Holder<Object> object){
         Map<String, Holder<Object>> data = new HashMap<>(this.data);
         data.put(id, object);
         return new DataExchange(data);
     }
 
+    /**
+     * @return A new DataExchange with the removed values.
+     */
     public @NotNull DataExchange removeIf(@NotNull Predicate<Object> predicate){
         Map<String, Holder<Object>> data = new HashMap<>(this.data);
         data.entrySet().removeIf((entry) -> predicate.test(entry.getKey(), entry.getValue()));
@@ -63,25 +74,40 @@ public class DataExchange {
     }
 
     public @NotNull Optional<Object> getObject(@NotNull String id){
-        Holder<?> holder = data.getOrDefault(id, null);
-        return Optional.ofNullable(holder==null?null:holder.value());
+        return Optional.ofNullable(get(id));
     }
 
     public <T> @NotNull Optional<T> getObject(@NotNull String id, @NotNull Class<T> find){
-        Object found = getObject(id).orElse(null);
-        if(found == null || !(find.isAssignableFrom(found.getClass()))) return Optional.empty();
-        return Optional.of(find.cast(found));
+        return Optional.ofNullable(get(id, find));
+    }
+
+    public @Nullable Object get(@NotNull String id){
+        Holder<?> holder = data.getOrDefault(id, null);
+        return holder==null?null:holder.value();
+    }
+
+    public <T> @Nullable T get(@NotNull String id, @NotNull Class<T> find){
+        Object found = get(id);
+        if(found == null || !(find.isAssignableFrom(found.getClass()))) return null;
+        return find.cast(found);
     }
 
     //Convenience methods.
-    public @NotNull Object getObjectOrThrow(@NotNull String id){
-        return getObject(id).orElseThrow(() -> new RuntimeException(id + " is not present!"));
+    public @NotNull Object getOrThrow(@NotNull String id){
+        Object object = get(id);
+        if(object==null) throw new IllegalArgumentException(id + " is not present!");
+        return object;
     }
 
-    public <T> @NotNull T getObjectOrThrow(@NotNull String id, @NotNull Class<T> find){
-        return getObject(id, find).orElseThrow(() -> new RuntimeException(id + " is not present!"));
+    public <T> @NotNull T getOrThrow(@NotNull String id, @NotNull Class<T> find){
+        T object = get(id, find);
+        if(object==null) throw new IllegalArgumentException(id + " is not present!");
+        return object;
     }
 
+    /**
+     * @return An immutable map containing this DataExchange's data.
+     */
     public @NotNull Map<String, Holder<Object>> getData() {
         return data;
     }

@@ -4,7 +4,7 @@ import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class SimpleMenuAction implements MenuAction {
-    private final NamespacedKey key;
+    protected final NamespacedKey key;
     public SimpleMenuAction(@NotNull NamespacedKey key) {
         this.key = key;
     }

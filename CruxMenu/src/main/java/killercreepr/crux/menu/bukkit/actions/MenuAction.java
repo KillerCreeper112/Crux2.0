@@ -6,5 +6,5 @@ import org.jetbrains.annotations.NotNull;
 
 public interface MenuAction extends Keyed {
     boolean has(@NotNull String x);
-    boolean execute(@NotNull Player p, @NotNull ActionInfo info, @NotNull String[] args);
+    boolean execute(@NotNull Player p, @NotNull ActionContext info, @NotNull String[] args);
 }

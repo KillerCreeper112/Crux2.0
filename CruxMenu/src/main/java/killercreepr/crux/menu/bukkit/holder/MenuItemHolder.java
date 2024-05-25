@@ -3,7 +3,7 @@ package killercreepr.crux.menu.bukkit.holder;
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.Holder;
-import killercreepr.crux.menu.bukkit.MenuInfo;
+import killercreepr.crux.menu.bukkit.MenuContext;
 import killercreepr.crux.menu.bukkit.MenuItem;
 import killercreepr.crux.tags.container.ObjectStringHookContainer;
 import killercreepr.crux.tags.container.StringHookContainer;
@@ -42,7 +42,7 @@ public class MenuItemHolder {
         return info;
     }
 
-    public @NotNull MenuItem getDisplayItem(@NotNull Player p, @NotNull MenuInfo info) {
+    public @NotNull MenuItem getDisplayItem(@NotNull Player p, @NotNull MenuContext info) {
         Evaluation evaluation = new Evaluation(this, p, info);
         return new MenuItem(this, evaluation.evaluateInfo());
     }
@@ -70,9 +70,9 @@ public class MenuItemHolder {
     public static class Evaluation{
         private final @NotNull MenuItemHolder item;
         private final @NotNull Player p;
-        private final @NotNull MenuInfo info;
+        private final @NotNull MenuContext info;
 
-        public Evaluation(@NotNull MenuItemHolder item, @NotNull Player p, @NotNull MenuInfo info) {
+        public Evaluation(@NotNull MenuItemHolder item, @NotNull Player p, @NotNull MenuContext info) {
             this.item = item;
             this.p = p;
             this.info = info;
@@ -85,7 +85,7 @@ public class MenuItemHolder {
             add(new CClaimTags.TestBois("3 boi"));
             add(new CClaimTags.TestBois("4 boi"));
         }};
-        public @NotNull MenuInfo evaluateInfo(){
+        public @NotNull MenuContext evaluateInfo(){
             DataExchange info = this.info.getInfo().append(item.info());
             DataExchange.Builder extraInfo = new DataExchange.Builder();
             ObjectStringHookContainer resolvers = new ObjectStringHookContainer(this.info.getResolvers());
@@ -101,7 +101,7 @@ public class MenuItemHolder {
                 extraInfo.set("outpost", post);
             });*/
             resolvers.setPrefixBuilder("member",(data, id, object) -> FormatPrefix.addonPlusHook(""));
-            return new MenuInfo(this.info.getMenu(), extraInfo.build(), resolvers);
+            return new MenuContext(this.info.getMenu(), extraInfo.build(), resolvers);
         }
     }
 }

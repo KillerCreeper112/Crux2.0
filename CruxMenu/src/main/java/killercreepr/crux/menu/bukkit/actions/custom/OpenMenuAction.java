@@ -1,7 +1,9 @@
 package killercreepr.crux.menu.bukkit.actions.custom;
 
-import killercreepr.crux.menu.bukkit.actions.ActionInfo;
+import killercreepr.crux.Crux;
+import killercreepr.crux.menu.bukkit.actions.ActionContext;
 import killercreepr.crux.menu.bukkit.actions.SimpleMenuAction;
+import killercreepr.crux.menu.bukkit.holder.MenuHolder;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -12,11 +14,10 @@ public class OpenMenuAction extends SimpleMenuAction {
     }
 
     @Override
-    public boolean execute(@NotNull Player p, @NotNull ActionInfo actionInfo, @NotNull String[] args) {
-        //todo
-        /*MenuHolder menuHolder = Crux.inst().getMenuRegistry().MENU_HOLDERS.get(Crux.key(args[0]));
+    public boolean execute(@NotNull Player p, @NotNull ActionContext context, @NotNull String[] args) {
+        MenuHolder menuHolder = context.getMenu().getHolder().getRegistry().MENU_HOLDERS.get(Crux.key(args[0]));
         if(menuHolder == null) return false;
-        menuHolder.open(p, actionInfo.getInfo());*/
+        menuHolder.open(p, context.getInfo());
         return true;
     }
 }

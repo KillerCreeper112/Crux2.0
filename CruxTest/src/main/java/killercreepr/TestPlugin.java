@@ -26,7 +26,6 @@ public class TestPlugin extends CruxPlugin implements Listener {
 
     @Override
     public void enabled() {
-        Crux.setInstance(this); //todo stop this doodoo
         super.enabled();
         BukkitCfgHandlers.initJson(CfgRegistries.JSON);
         BukkitCfgHandlers.initYaml(CfgRegistries.YAML);

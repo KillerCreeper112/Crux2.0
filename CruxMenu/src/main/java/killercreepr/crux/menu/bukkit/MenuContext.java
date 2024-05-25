@@ -4,12 +4,12 @@ import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.tags.container.ObjectStringHookContainer;
 import org.jetbrains.annotations.NotNull;
 
-public class MenuInfo {
-    private final @NotNull ConfigMenu menu;
-    private final @NotNull DataExchange info;
-    private final @NotNull ObjectStringHookContainer resolvers;
+public class MenuContext {
+    protected final @NotNull ConfigMenu menu;
+    protected final @NotNull DataExchange info;
+    protected final @NotNull ObjectStringHookContainer resolvers;
 
-    public MenuInfo(@NotNull ConfigMenu menu, @NotNull DataExchange info, @NotNull ObjectStringHookContainer resolvers) {
+    public MenuContext(@NotNull ConfigMenu menu, @NotNull DataExchange info, @NotNull ObjectStringHookContainer resolvers) {
         this.menu = menu;
         this.info = info;
         this.resolvers = resolvers;

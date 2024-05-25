@@ -58,10 +58,10 @@ public class ConfigMenu extends Menu{
      * Sets the MenuHolder's items and click actions.
      */
     public ConfigMenu setItems(@NotNull MenuHolder holder){
-        Player viewer = info.getObjectOrThrow("viewer", Player.class);
-        MenuInfo menuInfo = new MenuInfo(this, info, tags);
+        Player viewer = info.getOrThrow("viewer", Player.class);
+        MenuContext menuContext = new MenuContext(this, info, tags);
         holder.getItems().items().forEach(menuItem -> {
-            MenuItem i = menuItem.getDisplayItem(viewer, menuInfo);
+            MenuItem i = menuItem.getDisplayItem(viewer, menuContext);
             Optional<Integer> slot = i.getSlot();
             if(slot.isEmpty() || !i.canDisplay()) return;
             setItem(slot.get(), i, viewer);
