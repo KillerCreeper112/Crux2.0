@@ -66,7 +66,7 @@ public class MenuItem {
     public @NotNull ObjectStringHookContainer buildTags(){
         ObjectStringHookContainer resolvers = new ObjectStringHookContainer(info.getResolvers().getContext());
         resolvers.hookAll(info.getMenu().getHolder().info());
-        resolvers.putAll(info.getMenu().getTags());
+        resolvers.putAll(info.getMenu().buildTags());
         resolvers.hookAll(base.info());
         resolvers.hookAll(info.getInfo());
         return resolvers;
@@ -76,12 +76,13 @@ public class MenuItem {
         ItemStack item = base.getItem().value();
         if(item == null) return null;
         item = item.clone();
+        ObjectStringHookContainer tags = buildTags();
         if(base.getDisplayName() != null){
             ItemMeta meta = item.getItemMeta();
             if(meta != null){
                 meta.displayName(
                         CruxItem.NO_ITALICS
-                                .append(getFormat().deserialize(p, null, base.getDisplayName(), buildTags()))
+                                .append(getFormat().deserialize(p, null, base.getDisplayName(), tags))
                 );
                 item.setItemMeta(meta);
             }
@@ -89,7 +90,7 @@ public class MenuItem {
         if(base.getDisplayLore() != null){
             List<Component> lore = item.lore();
             if(lore == null) lore = new ArrayList<>();
-            ObjectLoreHookContainer loreResolvers = new ObjectLoreHookContainer(info.getResolvers().getContext(), buildTags());
+            ObjectLoreHookContainer loreResolvers = new ObjectLoreHookContainer(info.getResolvers().getContext(), tags);
             loreResolvers.hookAll(info.getInfo());
             List<Component> add = new ArrayList<>();
             for(String s : base.getDisplayLore()){
@@ -99,10 +100,8 @@ public class MenuItem {
                     list.add(s);
                 }
                 for(String format : list){
-                    Bukkit.broadcastMessage(format + " - before");
-                    Bukkit.broadcast(getFormat().deserialize(p, null, format, buildTags()));
                     add.add(CruxItem.NO_ITALICS
-                            .append(getFormat().deserialize(p, null, format, buildTags())));
+                            .append(getFormat().deserialize(p, null, format, tags)));
                 }
             }
             lore.addAll(add);

@@ -10,6 +10,10 @@ import java.util.Map;
 import java.util.Optional;
 
 public class DataExchange {
+    public static @NotNull DataExchange.Builder builder(){
+        return new DataExchange.Builder();
+    }
+
     public static @NotNull DataExchange empty(){ return new DataExchange(Maps.newHashMap()); }
 
     protected final @NotNull Map<String, Holder<Object>> data;
@@ -117,6 +121,10 @@ public class DataExchange {
 
     public static class Builder{
         protected final Map<String, Holder<Object>> data = new HashMap<>();
+
+        public Builder put(@NotNull String id, @NotNull Object direct){
+            return put(id, Holder.direct(direct));
+        }
 
         public Builder put(@NotNull String id, @NotNull Holder<Object> holder){
             data.put(id, holder);

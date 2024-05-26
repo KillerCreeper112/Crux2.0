@@ -51,7 +51,7 @@ public class MenuHolder implements Keyed {
 
     public @NotNull MenuOpenEvent open(@NotNull Player p, @NotNull DataExchange data){
         DataExchange.Builder builder = new DataExchange.Builder().putAll(data);
-        builder.put("viewer", Holder.direct(p));
+        builder.put("viewer", p);
 
         ConfigMenu menu = new ConfigMenu(this, builder.build());
         menu.load();

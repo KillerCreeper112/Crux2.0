@@ -2,6 +2,8 @@ package killercreepr;
 
 import io.papermc.paper.event.player.ChatEvent;
 import killercreepr.crux.Crux;
+import killercreepr.crux.data.DataExchange;
+import killercreepr.crux.data.Holder;
 import killercreepr.crux.menu.bukkit.listener.MenuListener;
 import killercreepr.crux.menu.bukkit.registry.MenuRegistry;
 import killercreepr.crux.plugin.CruxPlugin;
@@ -44,7 +46,10 @@ public class TestPlugin extends CruxPlugin implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
-        menuRegistry.MENU_HOLDERS.get(Crux.key("testayo")).open(event.getPlayer());
+        menuRegistry.MENU_HOLDERS.get(Crux.key("testayo")).open(event.getPlayer(),
+                DataExchange.builder()
+                        .put("test_ayo", Holder.direct(new CClaimTags.TestBois("test_bois")))
+                        .build());
         /*if(event.isSneaking()){
             cfg.MSG_1.use(event.getPlayer());
         }else cfg.MSG_2.use(event.getPlayer());*/

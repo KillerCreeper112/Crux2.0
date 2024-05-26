@@ -170,7 +170,6 @@ public class Format {
             for (StringHookedObject<?> hooked : resolvers.get().values()) {
                 Bukkit.broadcastMessage("testing ----- " + hooked.identifier() + " / " + placeholderID);
                 if(!placeholderID.equalsIgnoreCase(hooked.identifier())) continue;
-                Bukkit.broadcastMessage(hooked.identifier() + " ----- " + hooked.request(args, context));
                 String request = hooked.request(args, context);
                 if (request != null) {
                     replacementList.add(request);

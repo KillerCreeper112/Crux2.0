@@ -48,6 +48,8 @@ public class ConfigMenu extends Menu{
 
     public @NotNull ObjectStringHookContainer buildTags(){
         ObjectStringHookContainer tags = new ObjectStringHookContainer(holder.getRegistry().getFormat().buildContext());
+        tags.hookAll(info());
+        tags.putAll(getTags());
         return tags;
     }
     public @NotNull DataExchange info(){
