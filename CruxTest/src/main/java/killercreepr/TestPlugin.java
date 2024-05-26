@@ -5,6 +5,7 @@ import killercreepr.crux.Crux;
 import killercreepr.crux.menu.bukkit.listener.MenuListener;
 import killercreepr.crux.menu.bukkit.registry.MenuRegistry;
 import killercreepr.crux.plugin.CruxPlugin;
+import killercreepr.crux.tags.defaults.CClaimTags;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxconfig.config.bukkit.handlers.BukkitCfgHandlers;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
@@ -37,6 +38,8 @@ public class TestPlugin extends CruxPlugin implements Listener {
 
         menuRegistry.register(CfgRegistries.YAML);
         menuRegistry.loadConfiguration(new CruxFolder(this, "menus").file());
+
+        new CClaimTags(Crux.TAGS);
     }
     protected Config cfg;
 

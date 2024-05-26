@@ -9,11 +9,14 @@ import killercreepr.crux.menu.bukkit.holder.MenuItemHolder;
 import killercreepr.crux.registry.Registry;
 import killercreepr.crux.tags.container.ObjectLoreHookContainer;
 import killercreepr.crux.tags.container.ObjectStringHookContainer;
+import killercreepr.crux.tags.format.Format;
+import killercreepr.crux.util.CruxItem;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.crux.util.CruxString;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -33,6 +36,10 @@ public class MenuItem {
     public MenuItem(@NotNull MenuItemHolder base, @NotNull MenuContext info) {
         this.base = base;
         this.info = info;
+    }
+
+    public @NotNull Format getFormat(){
+        return info.getMenu().getHolder().getRegistry().getFormat();
     }
 
     public @NotNull Optional<Integer> getSlot(){
@@ -59,7 +66,7 @@ public class MenuItem {
     }
 
     public @NotNull ObjectStringHookContainer buildTags(){
-        ObjectStringHookContainer resolvers = new ObjectStringHookContainer(info.getResolvers().getTags());
+        ObjectStringHookContainer resolvers = new ObjectStringHookContainer(info.getResolvers().getContext());
         resolvers.hookAll(info.getMenu().getHolder().info());
         resolvers.putAll(info.getMenu().getTags());
         resolvers.hookAll(base.info());
@@ -75,8 +82,8 @@ public class MenuItem {
             ItemMeta meta = item.getItemMeta();
             if(meta != null){
                 meta.displayName(
-                        Component.empty().decoration(TextDecoration.ITALIC, false)
-                                .append(Crux.FORMAT.deserialize(p, null, base.getDisplayName(), buildTags()))
+                        CruxItem.NO_ITALICS
+                                .append(getFormat().deserialize(p, null, base.getDisplayName(), buildTags()))
                 );
                 item.setItemMeta(meta);
             }
@@ -84,18 +91,18 @@ public class MenuItem {
         if(base.getDisplayLore() != null){
             List<Component> lore = item.lore();
             if(lore == null) lore = new ArrayList<>();
-            ObjectLoreHookContainer loreResolvers = new ObjectLoreHookContainer(info.getResolvers().getTags(), buildTags());
+            ObjectLoreHookContainer loreResolvers = new ObjectLoreHookContainer(info.getResolvers().getContext(), buildTags());
             loreResolvers.hookAll(info.getInfo());
             List<Component> add = new ArrayList<>();
             for(String s : base.getDisplayLore()){
-                List<String> list = Crux.FORMAT.deserializeLore(p, null, s, loreResolvers);
+                List<String> list = getFormat().deserializeLore(p, null, s, loreResolvers);
                 if(list == null){
                     list = new ArrayList<>();
                     list.add(s);
                 }
                 for(String format : list){
-                    add.add(Component.empty().decoration(TextDecoration.ITALIC, false)
-                            .append(Crux.FORMAT.deserialize(p, null, format, buildTags())));
+                    add.add(CruxItem.NO_ITALICS
+                            .append(getFormat().deserialize(p, null, format, buildTags())));
                 }
             }
             lore.addAll(add);
@@ -134,7 +141,7 @@ public class MenuItem {
                                  @NotNull ActionContext actionInfo, @NotNull Registry<MenuAction> actions){
         String actionName = extractAction(action);
         if(actionName == null) return false;
-        String result = Crux.FORMAT.setPlaceholders(action.replaceFirst("\\[.*?]\\s*", ""),
+        String result = getFormat().setPlaceholders(action.replaceFirst("\\[.*?]\\s*", ""),
                 actionInfo.getResolvers());
         for(MenuAction a : actions){
             if(!a.has(actionName)) continue;

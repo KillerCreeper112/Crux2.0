@@ -78,15 +78,15 @@ public class Tags {
         return container;
     }*/
 
-    public @NotNull StringHookContainer hookAllTagResolvers(@NotNull DataExchange info){
-        return hookAllTagResolvers(info, null);
+    public @NotNull StringHookContainer hookAllTagResolvers(@NotNull FormatContext context, @NotNull DataExchange info){
+        return hookAllTagResolvers(context, info, null);
     }
 
-    public @NotNull StringHookContainer hookAllTagResolvers(@NotNull DataExchange info, @Nullable FormatPrefix prefix){
-        StringHookContainer container = new StringHookContainer();
+    public @NotNull StringHookContainer hookAllTagResolvers(@NotNull FormatContext context, @NotNull DataExchange info, @Nullable FormatPrefix prefix){
+        StringHookContainer container = new StringHookContainer(context);
         for(Holder<Object> o : info.getData().values()){
             if(o == null) continue;
-            container.putAll(hookStringResolvers(o, prefix));
+            container.putAll(hookStringResolvers(context, o, prefix));
         }
         return container;
     }
@@ -107,8 +107,8 @@ public class Tags {
     /**
      * @return Requests the base TagResolvers from this object and any hooked objects it may have.
      */
-    public @NotNull StringHookContainer hookStringResolvers(@NotNull Holder<?> holder, @Nullable FormatPrefix prefix){
-        StringHookContainer container = new StringHookContainer();
+    public @NotNull StringHookContainer hookStringResolvers(@NotNull FormatContext context, @NotNull Holder<?> holder, @Nullable FormatPrefix prefix){
+        StringHookContainer container = new StringHookContainer(context);
         Object object = holder.value();
         if(object == null) return container;
         for(ObjectTag<Object> tag : getTagsFromObject(object)){

@@ -1,6 +1,7 @@
 package killercreepr.crux.tags.container;
 
 import killercreepr.crux.data.DataExchange;
+import killercreepr.crux.tags.FormatContext;
 import killercreepr.crux.tags.Tags;
 import killercreepr.crux.tags.format.FormatPrefix;
 import org.jetbrains.annotations.NotNull;
@@ -15,19 +16,19 @@ public interface IObjectTagResolverContainer {
 
     IObjectTagResolverContainer hookAll(@NotNull DataExchange info);
 
-    IObjectTagResolverContainer hookAll(@NotNull DataExchange info, @NotNull Tags tags);
+    IObjectTagResolverContainer hookAll(@NotNull FormatContext context, @NotNull DataExchange info);
 
     IObjectTagResolverContainer hookAll(@NotNull DataExchange info, @Nullable Map<String, PrefixBuilder> prefix);
 
-    IObjectTagResolverContainer hookAll(@NotNull DataExchange info, @NotNull Tags tags, @Nullable Map<String, PrefixBuilder> prefixBuilders);
+    IObjectTagResolverContainer hookAll(@NotNull FormatContext context, @NotNull DataExchange info, @Nullable Map<String, PrefixBuilder> prefixBuilders);
 
     IObjectTagResolverContainer hook(@Nullable Object info);
 
-    IObjectTagResolverContainer hook(@Nullable Object info, @NotNull Tags tags);
+    IObjectTagResolverContainer hook(@NotNull FormatContext context, @Nullable Object info);
 
-    IObjectTagResolverContainer hook(@Nullable Object info, @Nullable FormatPrefix prefix);
+    //IObjectTagResolverContainer hook(@Nullable Object info, @Nullable FormatPrefix prefix);
 
-    IObjectTagResolverContainer hook(@Nullable Object info, @NotNull Tags tags, @Nullable FormatPrefix prefix);
+    IObjectTagResolverContainer hook(@NotNull FormatContext context, @Nullable Object info, @Nullable FormatPrefix prefix);
     @NotNull Map<String, PrefixBuilder> getPrefixBuilders();
     interface PrefixBuilder{
         @Nullable FormatPrefix build(@NotNull DataExchange info, @NotNull String id, @NotNull Object object);

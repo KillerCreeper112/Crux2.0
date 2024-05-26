@@ -91,7 +91,7 @@ public class MenuItemHolder {
             ObjectStringHookContainer resolvers = new ObjectStringHookContainer(this.info.getResolvers());
 
             info.getObject("outpost_id", String.class).ifPresent(eq ->{
-                int outpostID = (int) CruxMath.evaluate(Crux.FORMAT.deserializeString(eq, resolvers));
+                int outpostID = (int) CruxMath.evaluate(this.info.getMenu().getHolder().getRegistry().getFormat().deserializeString(eq, resolvers));
                 extraInfo.put("outpost", Holder.direct(ayo.get(outpostID)));
             });
 

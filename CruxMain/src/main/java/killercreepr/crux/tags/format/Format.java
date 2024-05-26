@@ -1,7 +1,10 @@
 package killercreepr.crux.tags.format;
 
+import io.netty.util.internal.UnstableApi;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.Holder;
+import killercreepr.crux.tags.FormatArgs;
+import killercreepr.crux.tags.FormatContext;
 import killercreepr.crux.tags.Tags;
 import killercreepr.crux.tags.container.LoreHookContainer;
 import killercreepr.crux.tags.container.StringHookContainer;
@@ -11,6 +14,7 @@ import killercreepr.crux.util.CruxMath;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -32,6 +36,11 @@ public class Format {
     public Format(@NotNull MiniMessage FORMAT, @NotNull Tags TAGS) {
         this.FORMAT = FORMAT;
         this.TAGS = TAGS;
+    }
+
+    @UnstableApi
+    public @NotNull FormatContext buildContext(){
+        return new FormatContext(this);
     }
 
     public @NotNull MiniMessage getFormat() {
@@ -64,6 +73,9 @@ public class Format {
     }
 
     public @NotNull Component deserialize(@NotNull String text, @Nullable StringHookContainer resolvers){
+        if(resolvers != null){
+            Bukkit.broadcastMessage(resolvers.getTags().keySet() + " ----- tags");
+        }
         text = setPlaceholders(text, resolvers);
         return resolvers == null ? FORMAT.deserialize(text) : FORMAT.deserialize(text, resolvers.buildTagResolvers());
     }
@@ -72,9 +84,11 @@ public class Format {
         return deserialize(viewer, tagsPrefix, text, null);
     }
 
-    public @NotNull Component deserialize(@NotNull Player viewer, @Nullable FormatPrefix tagsPrefix, @NotNull String text, @Nullable StringHookContainer resolvers){
-        StringHookContainer container = new StringHookContainer(resolvers);
-        container.putAll(TAGS.hookStringResolvers(Holder.directObject(viewer), tagsPrefix));
+    public @NotNull Component deserialize(@NotNull Player viewer, @Nullable FormatPrefix tagsPrefix,
+                                          @NotNull String text, @Nullable StringHookContainer resolvers){
+        FormatContext context = buildContext();
+        StringHookContainer container = new StringHookContainer(context, resolvers);
+        container.putAll(TAGS.hookStringResolvers(context, Holder.directObject(viewer), tagsPrefix));
         return deserialize(formatRawText(viewer, text), container);
     }
 
@@ -82,9 +96,11 @@ public class Format {
         return deserialize(info, tagsPrefix, text, null);
     }
 
-    public @NotNull Component deserialize(@NotNull DataExchange info, @Nullable FormatPrefix tagsPrefix, @NotNull String text, @Nullable StringHookContainer resolvers){
-        StringHookContainer container = new StringHookContainer(resolvers);
-        container.putAll(TAGS.hookAllTagResolvers(info, tagsPrefix));
+    public @NotNull Component deserialize(@NotNull DataExchange info, @Nullable FormatPrefix tagsPrefix,
+                                          @NotNull String text, @Nullable StringHookContainer resolvers){
+        FormatContext context = buildContext();
+        StringHookContainer container = new StringHookContainer(context, resolvers);
+        container.putAll(TAGS.hookAllTagResolvers(context, info, tagsPrefix));
         OfflinePlayer player = info.getObject(OfflinePlayer.class).orElse(null);
         if(player != null) text = formatRawText(player, text);
         return deserialize(text, container);
@@ -144,16 +160,17 @@ public class Format {
     private @NotNull String processPlaceholders(@NotNull String text, @NotNull StringHookContainer resolvers) {
         Matcher matcher = STRING_PATTERN.matcher(text);
         StringBuilder result = new StringBuilder(text.length());
+        FormatContext context = buildContext();
 
         while (matcher.find()) {
             String placeholderID = matcher.group(1);
             String optionalParameter = matcher.group(2);
-            String[] args = optionalParameter == null ? new String[0] : optionalParameter.split(":");
+            FormatArgs args = new FormatArgs(optionalParameter == null ? new String[0] : optionalParameter.split(":"));
             List<String> replacementList = new ArrayList<>();
 
             for (StringHookedObject<?> hooked : resolvers.get().values()) {
                 if(!placeholderID.equalsIgnoreCase(hooked.identifier())) continue;
-                String request = hooked.request(args);
+                String request = hooked.request(args, context);
                 if (request != null) {
                     replacementList.add(request);
                 }
@@ -179,6 +196,7 @@ public class Format {
     public @Nullable List<String> deserializeLore(@NotNull Player viewer, @Nullable FormatPrefix tagsPrefix, @NotNull String text, @Nullable LoreHookContainer resolvers){
         LoreHookContainer container = new LoreHookContainer(resolvers);
         container.putAll(TAGS.hookLoreTags(viewer, tagsPrefix));
+
         return deserializeLore(formatRawText(viewer, text), container);
     }
 
@@ -203,7 +221,7 @@ public class Format {
             String optionalParameter = matcher.group(2);
 
             List<String> addons = processPlaceholder(container,
-                    placeholder, optionalParameter == null ? new String[0] : optionalParameter.split(":"));
+                    placeholder, new FormatArgs(optionalParameter == null ? new String[0] : optionalParameter.split(":")));
             if(addons != null){
                 addon.addAll(addons);
                 found = true;
@@ -212,10 +230,13 @@ public class Format {
         return found ? addon : null;
     }
 
-    private @Nullable List<String> processPlaceholder(@NotNull LoreHookContainer container, @NotNull String placeholder, @NotNull String[] args) {
+    private @Nullable List<String> processPlaceholder(@NotNull LoreHookContainer container,
+                                                      @NotNull String placeholder,
+                                                      @NotNull FormatArgs args) {
+        FormatContext context = buildContext();
         for(Map.Entry<String, LoreResolver> entry : container.get().entrySet()){
             if(entry.getKey().equalsIgnoreCase(placeholder)){
-                return entry.getValue().resolve(args);
+                return entry.getValue().resolve(args, context);
             }
         }
         return null;

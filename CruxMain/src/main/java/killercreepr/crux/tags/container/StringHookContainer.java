@@ -1,5 +1,6 @@
 package killercreepr.crux.tags.container;
 
+import killercreepr.crux.tags.FormatContext;
 import killercreepr.crux.tags.hook.StringHookedObject;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.NotNull;
@@ -11,16 +12,32 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class StringHookContainer implements TagsContainer<StringHookedObject<?>> {
+    protected final @NotNull FormatContext context;
     private final Map<String, StringHookedObject<?>> tags = new HashMap<>();
-    public StringHookContainer(@Nullable StringHookContainer container){
+    public StringHookContainer(@NotNull FormatContext context, @Nullable StringHookContainer container){
+        this.context = context;
         this.putAll(container);
     }
 
-    public StringHookContainer(){}
+    public StringHookContainer(@NotNull StringHookContainer container){
+        this(container.getContext(), container);
+    }
+
+    public StringHookContainer(@NotNull FormatContext context){
+        this.context = context;
+    }
+
+    public Map<String, StringHookedObject<?>> getTags() {
+        return tags;
+    }
+
+    public @NotNull FormatContext getContext() {
+        return context;
+    }
 
     @Override
     public @NotNull StringHookContainer clone(){
-        return new StringHookContainer(this);
+        return new StringHookContainer(context, this);
     }
 
     public StringHookContainer put(@NotNull StringHookedObject<?> hooked){
@@ -31,7 +48,7 @@ public class StringHookContainer implements TagsContainer<StringHookedObject<?>>
     public @NotNull TagResolver[] buildTagResolvers(){
         Collection<TagResolver> list = new HashSet<>();
         tags.values().forEach(hooked ->{
-            TagResolver resolver = hooked.tagResolver();
+            TagResolver resolver = hooked.tagResolver(context);
             if(resolver != null) list.add(resolver);
         });
         return list.toArray(new TagResolver[0]);
