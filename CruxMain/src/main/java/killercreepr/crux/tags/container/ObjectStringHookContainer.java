@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
+//todo just make generally better naming
 public class ObjectStringHookContainer extends StringHookContainer implements IObjectTagResolverContainer{
     private final Map<String, PrefixBuilder> prefixBuilders = new HashMap<>();
     public ObjectStringHookContainer(@NotNull FormatContext context, @Nullable StringHookContainer container) {

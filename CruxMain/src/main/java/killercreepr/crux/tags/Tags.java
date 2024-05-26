@@ -148,7 +148,7 @@ public class Tags {
             if(hookContainer != null){
                 hookContainer.forEach((o, hooks) ->{
                     for(LoreHook<?> hook : hooks){
-                        //todo prefix
+                        //todo prefix (not too sure what this means anymore)..
                         container.put(pre + hook.identifier(), LoreResolver.generic(pre+hook.identifier(), o, hook));
                     }
                 });

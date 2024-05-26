@@ -2,8 +2,9 @@ package killercreepr.crux.data;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.tags.container.StringHookContainer;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,20 +19,21 @@ public class CreateTitle {
         this.times = times;
     }
 
-    public @NotNull Title build(@NotNull Player p, @Nullable StringHookContainer tags){
+    public @NotNull Title build(@Nullable OfflinePlayer placeholders, @Nullable StringHookContainer tags){
         return Title.title(
-                Crux.FORMAT.deserialize(p, null, title == null ? "" : title, tags),
-                Crux.FORMAT.deserialize(p, null, subTitle == null ? "" : subTitle, tags),
+                deserialize(placeholders, title, tags),
+                deserialize(placeholders, subTitle, tags),
                 times
         );
     }
 
     public @NotNull Title build(@Nullable StringHookContainer tags){
-        return Title.title(
-                Crux.FORMAT.deserialize(title == null ? "" : title, tags),
-                Crux.FORMAT.deserialize(subTitle == null ? "" : subTitle, tags),
-                times
-        );
+        return build(null, tags);
+    }
+
+    protected @NotNull Component deserialize(@Nullable OfflinePlayer viewer, @Nullable String input, @Nullable StringHookContainer tags){
+        if(input == null) return Component.empty();
+        return Crux.FORMAT.deserialize(viewer, null, input, tags);
     }
 
     public @Nullable String getTitle() {

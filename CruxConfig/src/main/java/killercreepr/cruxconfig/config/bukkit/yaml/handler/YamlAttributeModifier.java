@@ -24,7 +24,7 @@ public class YamlAttributeModifier implements YamlObjectHandler<AttributeModifie
     @Override
     public @Nullable AttributeModifier deserializeFromYaml(@NotNull YamlContext context, @Nullable YamlElement e) {
         if(!(e instanceof YamlObject o)) return null;
-        //todo
+        //todo make proper deserialization
         return null;
     }
 }

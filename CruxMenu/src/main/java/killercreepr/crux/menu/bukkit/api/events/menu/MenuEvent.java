@@ -4,7 +4,6 @@ import killercreepr.crux.menu.bukkit.Menu;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 
-//todo
 public abstract class MenuEvent extends Event {
     protected final @NotNull Menu menu;
     public MenuEvent(@NotNull Menu menu) {

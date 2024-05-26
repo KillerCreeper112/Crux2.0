@@ -14,9 +14,7 @@ import killercreepr.crux.util.CruxMath;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -77,15 +75,15 @@ public class Format {
         return resolvers == null ? FORMAT.deserialize(text) : FORMAT.deserialize(text, resolvers.buildTagResolvers());
     }
 
-    public @NotNull Component deserialize(@NotNull Player viewer, @Nullable FormatPrefix tagsPrefix, @NotNull String text){
+    public @NotNull Component deserialize(@Nullable OfflinePlayer viewer, @Nullable FormatPrefix tagsPrefix, @NotNull String text){
         return deserialize(viewer, tagsPrefix, text, null);
     }
 
-    public @NotNull Component deserialize(@NotNull Player viewer, @Nullable FormatPrefix tagsPrefix,
+    public @NotNull Component deserialize(@Nullable OfflinePlayer viewer, @Nullable FormatPrefix tagsPrefix,
                                           @NotNull String text, @Nullable StringHookContainer resolvers){
         FormatContext context = buildContext();
         StringHookContainer container = new StringHookContainer(context, resolvers);
-        container.putAll(TAGS.hookStringResolvers(context, Holder.directObject(viewer), tagsPrefix));
+        if(viewer != null) container.putAll(TAGS.hookStringResolvers(context, Holder.directObject(viewer), tagsPrefix));
         return deserialize(formatRawText(viewer, text), container);
     }
 
@@ -119,11 +117,11 @@ public class Format {
         return PlainTextComponentSerializer.plainText().serialize(deserialize(text, resolvers));
     }
 
-    public @NotNull String deserializeString(@NotNull Player viewer, @Nullable FormatPrefix tagsPrefix, @NotNull String text){
+    public @NotNull String deserializeString(@Nullable OfflinePlayer viewer, @Nullable FormatPrefix tagsPrefix, @NotNull String text){
         return deserializeString(viewer, tagsPrefix, text, null);
     }
 
-    public @NotNull String deserializeString(@NotNull Player viewer, @Nullable FormatPrefix tagsPrefix, @NotNull String text, @Nullable StringHookContainer resolvers){
+    public @NotNull String deserializeString(@Nullable OfflinePlayer viewer, @Nullable FormatPrefix tagsPrefix, @NotNull String text, @Nullable StringHookContainer resolvers){
         return PlainTextComponentSerializer.plainText().serialize(deserialize(viewer, tagsPrefix, text, resolvers));
     }
 
@@ -137,8 +135,6 @@ public class Format {
 
     public @NotNull String setPlaceholders(@NotNull String text, @Nullable StringHookContainer resolvers){
         if(resolvers == null) return text;
-        Bukkit.broadcastMessage("before----- " + text);
-        Bukkit.broadcastMessage("after------- " + processPlaceholders(text, resolvers));
         return processEquations(processPlaceholders(text, resolvers));
     }
 
@@ -168,7 +164,6 @@ public class Format {
             List<String> replacementList = new ArrayList<>();
 
             for (StringHookedObject<?> hooked : resolvers.get().values()) {
-                Bukkit.broadcastMessage("testing ----- " + hooked.identifier() + " / " + placeholderID);
                 if(!placeholderID.equalsIgnoreCase(hooked.identifier())) continue;
                 String request = hooked.request(args, context);
                 if (request != null) {
@@ -189,28 +184,29 @@ public class Format {
 
     //LORE
 
-    public @Nullable List<String> deserializeLore(@NotNull Player viewer, @Nullable FormatPrefix tagsPrefix, @NotNull String text){
+    public @Nullable List<String> deserializeLore(@Nullable OfflinePlayer viewer, @Nullable FormatPrefix tagsPrefix, @NotNull String text){
         return deserializeLore(viewer, tagsPrefix, text, null);
     }
 
-    public @Nullable List<String> deserializeLore(@NotNull Player viewer, @Nullable FormatPrefix tagsPrefix, @NotNull String text, @Nullable LoreHookContainer resolvers){
+    public @Nullable List<String> deserializeLore(@Nullable OfflinePlayer viewer, @Nullable FormatPrefix tagsPrefix, @NotNull String text, @Nullable LoreHookContainer resolvers){
         LoreHookContainer container = new LoreHookContainer(resolvers);
-        container.putAll(TAGS.hookLoreTags(viewer, tagsPrefix));
+        if(viewer != null) container.putAll(TAGS.hookLoreTags(viewer, tagsPrefix));
 
         return deserializeLore(formatRawText(viewer, text), container);
     }
 
-    /*public @Nullable List<String> deserializeLore(@NotNull DataExchange info, @Nullable FormatPrefix tagsPrefix, @NotNull String text){
+    public @Nullable List<String> deserializeLore(@NotNull DataExchange info, @Nullable FormatPrefix tagsPrefix, @NotNull String text){
         return deserializeLore(info, tagsPrefix, text, null);
-    }*/
+    }
 
-    /*public @Nullable List<String> deserializeLore(@NotNull DataExchange info, @Nullable FormatPrefix tagsPrefix, @NotNull String text, @Nullable LoreHookContainer resolvers){
+    public @Nullable List<String> deserializeLore(@NotNull DataExchange info, @Nullable FormatPrefix tagsPrefix, @NotNull String text,
+                                                  @Nullable LoreHookContainer resolvers){
         LoreHookContainer container = new LoreHookContainer(resolvers);
         container.putAll(TAGS.hookAllLoreTags(info, tagsPrefix));
-        OfflinePlayer player = info.get(OfflinePlayer.class).orElse(null);
+        OfflinePlayer player = info.get(OfflinePlayer.class);
         if(player != null) text = formatRawText(player, text);
         return deserializeLore(text, container);
-    }*/
+    }
 
     public @Nullable List<String> deserializeLore(@NotNull String text, @NotNull LoreHookContainer container){
         Matcher matcher = LORE_PATTERN.matcher(text);

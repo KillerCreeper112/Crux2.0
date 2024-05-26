@@ -54,7 +54,7 @@ public class MsgContainer {
         if(a instanceof Player p) return use(p, placeholders, tags);
         if(chat != null){
             for(String s : chat){
-                //todo a.sendMessage(deserialize(PlaceholderAPI.setPlaceholders(placeholders, s), tags));
+                a.sendMessage(deserialize(placeholders, s, tags));
             }
         }
         return this;
@@ -70,11 +70,11 @@ public class MsgContainer {
         }
         if(chat != null){
             for(String s : chat){
-                //todo p.sendMessage(deserialize(PlaceholderAPI.setPlaceholders(placeholders == null ? p : placeholders, s), tags));
+                p.sendMessage(deserialize(placeholders, s, tags));
             }
         }
-        //todo if(actionBar != null) p.sendActionBar(deserialize(PlaceholderAPI.setPlaceholders(placeholders == null ? p : placeholders, actionBar), tags));
-        //todo if(title != null) p.showTitle(title.build(p, tags));
+        if(actionBar != null) p.sendActionBar(deserialize(placeholders, actionBar, tags));
+        if(title != null) p.showTitle(title.build(p, tags));
         if(sound != null) sound.play(p, false);
         return this;
     }
@@ -86,10 +86,9 @@ public class MsgContainer {
         return this;
     }
 
-    protected @NotNull Component deserialize(@Nullable String input, @Nullable StringHookContainer tags){
+    protected @NotNull Component deserialize(@Nullable OfflinePlayer viewer, @Nullable String input, @Nullable StringHookContainer tags){
         if(input == null) return Component.empty();
-        if(tags == null) return Crux.FORMAT.deserialize(input);
-        return Crux.FORMAT.deserialize(input, tags);
+        return Crux.FORMAT.deserialize(viewer, null, input, tags);
     }
 
     public @Nullable List<String> getChat() {

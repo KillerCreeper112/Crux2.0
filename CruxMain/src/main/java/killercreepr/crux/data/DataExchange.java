@@ -56,13 +56,17 @@ public class DataExchange {
     public boolean has(@NotNull String id){ return data.containsKey(id); }
 
     public <T> @NotNull Optional<T> getObject(@NotNull Class<T> findFirst){
+        return Optional.ofNullable(get(findFirst));
+    }
+
+    public <T> @Nullable T get(@NotNull Class<T> findFirst){
         for(Holder<?> o : data.values()){
             if(o == null) continue;
             Object value = o.value();
             if(value==null) continue;
-            if(findFirst.isAssignableFrom(value.getClass())) return Optional.of(findFirst.cast(value));
+            if(findFirst.isAssignableFrom(value.getClass())) return findFirst.cast(value);
         }
-        return Optional.empty();
+        return null;
     }
 
     public <T> @NotNull Map<String, T> getObjects(@NotNull Class<T> findAll){

@@ -15,6 +15,13 @@ public class CruxReflect {
         };
     }
 
+    public static Type[] getTypeArguments(@NotNull Type type){
+        if(type instanceof ParameterizedType t){
+            return t.getActualTypeArguments();
+        }
+        return new Type[0];
+    }
+
     public static <T extends Map<?, ?>> Class<?> attemptGetFirstMapClass(Class<T> type){
         try{
             return getFirstMapClass(type);

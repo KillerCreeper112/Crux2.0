@@ -7,6 +7,10 @@ plugins {
 dependencies {
     paperweight.paperDevBundle(libs.versions.paper)
     implementation(libs.crunch)
+
+    compileOnly(files(
+        "E:\\Plugins\\FIVERR\\A_ICEYPLAYZ\\cclaim\\run\\plugins\\PlaceholderAPI-2.11.4.jar"
+    ))
 }
 
 tasks{

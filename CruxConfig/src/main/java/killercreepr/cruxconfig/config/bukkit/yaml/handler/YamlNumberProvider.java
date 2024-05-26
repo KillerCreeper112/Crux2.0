@@ -49,7 +49,7 @@ public class YamlNumberProvider implements YamlObjectHandler<NumberProvider> {
             return new EquationNumber(g.getAsString());
         }
         if(e instanceof YamlObject map){
-            YamlElement value = map.get("value");//todo better implementation
+            YamlElement value = map.get("value");
             if(value instanceof YamlGeneric g){
                 if(g.isNumber()) new ConstantNumber(value.getAsNumber());
                 return new EquationNumber(value.getAsString());
@@ -57,7 +57,7 @@ public class YamlNumberProvider implements YamlObjectHandler<NumberProvider> {
             YamlElement min = map.get("min");
             YamlElement max = map.get("max");
             if(min != null && max != null){
-                return new UniformNumber(//todo
+                return new UniformNumber(
                         registry.deserialize(NumberProvider.class, min),
                         registry.deserialize(NumberProvider.class, max)
                 );
@@ -66,27 +66,12 @@ public class YamlNumberProvider implements YamlObjectHandler<NumberProvider> {
         if(e instanceof YamlArray a){
             List<NumberProvider> list = new ArrayList<>();
             for(YamlElement ele : a){
-                list.add(
-                        registry.deserialize(NumberProvider.class, ele)
-                );
+                NumberProvider value = registry.deserialize(NumberProvider.class, ele);
+                if(value==null) continue;
+                list.add(value);
             }
             return new UniformNumberArray(list.toArray(new NumberProvider[0]));
         }
         return null;
-        /*if(e==null) return null;
-        YamlRegistry registry = context.getRegistry();
-        Map<String, Object> args = e.asMap();
-        if(args.size() == 1){
-            Object first = args.get(null);
-            if(first == null) args.get("value");
-            if(first != null){
-                if(first instanceof Number n) return new ConstantNumber(n);
-                if(first instanceof List<?> d){
-                    return new UniformNumberArray(d.toArray(new Number[0]));
-                }
-            }
-        }
-        Object min = registry.deserialize(NumberProvider.class, );
-        Object max = args.get("max");*/
     }
 }

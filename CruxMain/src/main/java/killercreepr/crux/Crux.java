@@ -1,6 +1,5 @@
 package killercreepr.crux;
 
-import killercreepr.crux.hooks.PlaceholderAPIHook;
 import killercreepr.crux.tags.Tags;
 import killercreepr.crux.tags.format.Format;
 import killercreepr.crux.tags.minimessage.*;
@@ -43,13 +42,6 @@ public class Crux{
         return MENU_REGISTRY;
     }*/
 
-    protected static @Nullable PlaceholderAPIHook placeholderAPIHook;
-
-    public static @Nullable PlaceholderAPIHook getPlaceholderAPIHook(){ return placeholderAPIHook; }
-
-    public static void setPlaceholderAPIHook(@Nullable PlaceholderAPIHook placeholderAPIHook) {
-        Crux.placeholderAPIHook = placeholderAPIHook;
-    }
     /*public void onEnable() {
         if(getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")){
             placeholderAPIHook = new PlaceholderAPIHook();
@@ -65,7 +57,6 @@ public class Crux{
 
         new CClaimTags(this, FORMAT.getTags());
 
-        //todo remove test
         //getServer().getPluginManager().registerEvents(new MenuListener(), this);
     }*/
 

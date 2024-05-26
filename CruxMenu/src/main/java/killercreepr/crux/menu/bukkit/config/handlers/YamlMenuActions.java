@@ -44,6 +44,6 @@ public class YamlMenuActions extends YamlModuled<ClickActions> {
 
     @Override
     public @Nullable ClickActions deserializeFromYaml(@NotNull YamlContext context, @Nullable YamlElement e, @Nullable YamlObject menuContext) {
-        throw new UnsupportedOperationException("MenuActions does not have a deserialize implementation!");//todo msg
+        throw new UnsupportedOperationException("MenuActions does not have a deserialize implementation!");
     }
 }

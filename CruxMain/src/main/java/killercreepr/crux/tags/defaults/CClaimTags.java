@@ -7,7 +7,12 @@ import killercreepr.crux.tags.format.FormatPrefix;
 import killercreepr.crux.tags.hook.LoreHook;
 import killercreepr.crux.tags.hook.StringHook;
 import killercreepr.crux.tags.tag.ObjectTag;
+import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Registry;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -54,12 +59,54 @@ public class CClaimTags {
                     @Override
                     public @NotNull Collection<StringHook<OfflinePlayer>> requestStrings(@NotNull OfflinePlayer object, @NotNull Tags tags) {
                         return new StringHook.Builder<>(OfflinePlayer.class)
-                                .generic("name", (p, args, context) -> p.isOnline() ? p.getPlayer().getName() : "Not Found")
+                                .generic("name", (p, args, context) -> p.getName() + "")
+                                .generic("display_name", (p, args, context) ->{
+                                    Player online = p.getPlayer();
+                                    if(online==null) return "not online";
+                                    return context.getFormat().serialize(online.displayName());
+                                })
+                                .generic("world", (p, args, context) ->{
+                                    Player online = p.getPlayer();
+                                    if(online==null) return "not online";
+                                    return online.getWorld().getName();
+                                })
+                                .generic("gamemode", (p, args, context) ->{
+                                    Player online = p.getPlayer();
+                                    if(online==null) return "not online";
+                                    return online.getGameMode().toString().toLowerCase();
+                                })
+                                .generic("ping", (p, args, context) -> p.isOnline()?p.getPlayer().getPing()+"" :"0")
                                 .generic("uuid", (p, args, context) -> p.getUniqueId().toString())
                                 .generic("health", (p, args, context) -> p.isOnline() ? p.getPlayer().getHealth()+"" : "0")
                                 .generic("exp", (p, args, context) -> p.isOnline() ? p.getPlayer().getExp()+"" : "0")
+                                .generic("total_exp", (p, args, context) -> p.isOnline() ? p.getPlayer().getTotalExperience()+"" : "0")
                                 .generic("level", (p, args, context) ->p.isOnline() ? p.getPlayer().getLevel()+"" : "0")
                                 .generic("exp_to_level", (p, args, context) ->p.isOnline() ? p.getPlayer().getExpToLevel()+"" : "0")
+                                .generic("no_damage_ticks", (p, args, context) -> p.isOnline()?p.getPlayer().getNoDamageTicks()+"":"0")
+                                .generic("attribute", (player, args, context) ->{
+                                    Player p = player.getPlayer();
+                                    if(p==null) return null;
+                                    //<player_attribute:(attribute):[value_to_get{value, default, base},default=value]>
+                                    NamespacedKey key = NamespacedKey.fromString(args.get(0));
+                                    if(key == null) return "invalid key - " + args.get(0);
+                                    Attribute attribute = Registry.ATTRIBUTE.get(key);
+                                    if(attribute == null) return "attribute not found- " + key;
+
+                                    AttributeInstance instance = p.getAttribute(attribute);
+                                    if(instance==null) return "0";
+
+                                    String check = args.getOrDefault(1, "value").toLowerCase();
+                                    double x;
+                                    switch (check){
+                                        case "value" -> x = instance.getValue();
+                                        case "default" -> x = instance.getDefaultValue();
+                                        case "base" -> x = instance.getBaseValue();
+                                        default -> {
+                                            return "invalid arg- " + check + " valid={value, default, base}";
+                                        }
+                                    }
+                                    return Double.toString(x);
+                                })
                                 .build();
                     }
 

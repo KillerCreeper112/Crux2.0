@@ -74,14 +74,6 @@ public class YamlRegistry {
         return handler.attemptSerializeToYaml(new YamlContext(this), object);
     }
 
-    //todo move this into cruxreflection
-    public Type[] getTypeArguments(@NotNull Type type){
-        if(type instanceof ParameterizedType t){
-            return t.getActualTypeArguments();
-        }
-        return new Type[0];
-    }
-
     public static boolean isSubtypeOfCollection(Type type) {
         if (type instanceof ParameterizedType parameterizedType) {
             Type rawType = parameterizedType.getRawType();
@@ -122,11 +114,11 @@ public class YamlRegistry {
         }*/
 
         if(isSubtypeOfCollection(type)){
-            Type[] args = getTypeArguments(type);
+            Type[] args = CruxReflect.getTypeArguments(type);
             Class<?> rawType = (Class<?>) ((ParameterizedType) type).getRawType();
             return deserializeObjectCollection(rawType, args[0], from.getAsYamlArray());
         }else if(isSubtypeOfMap(type)){
-            Type[] args = getTypeArguments(type);
+            Type[] args = CruxReflect.getTypeArguments(type);
             Class<?> rawType = (Class<?>) ((ParameterizedType) type).getRawType();
             return deserializeObjectMap(rawType, args[0], args[1], from.getAsYamlObject());
         }

@@ -1,7 +1,6 @@
 package killercreepr.crux.menu.bukkit.holder;
 
 import killercreepr.crux.data.DataExchange;
-import killercreepr.crux.data.Holder;
 import killercreepr.crux.menu.bukkit.ConfigMenu;
 import killercreepr.crux.menu.bukkit.api.events.menu.MenuOpenEvent;
 import killercreepr.crux.menu.bukkit.registry.MenuRegistry;
