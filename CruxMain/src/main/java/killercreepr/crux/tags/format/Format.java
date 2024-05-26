@@ -14,6 +14,7 @@ import killercreepr.crux.util.CruxMath;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -136,6 +137,8 @@ public class Format {
 
     public @NotNull String setPlaceholders(@NotNull String text, @Nullable StringHookContainer resolvers){
         if(resolvers == null) return text;
+        Bukkit.broadcastMessage("before----- " + text);
+        Bukkit.broadcastMessage("after------- " + processPlaceholders(text, resolvers));
         return processEquations(processPlaceholders(text, resolvers));
     }
 
@@ -165,7 +168,9 @@ public class Format {
             List<String> replacementList = new ArrayList<>();
 
             for (StringHookedObject<?> hooked : resolvers.get().values()) {
+                Bukkit.broadcastMessage("testing ----- " + hooked.identifier() + " / " + placeholderID);
                 if(!placeholderID.equalsIgnoreCase(hooked.identifier())) continue;
+                Bukkit.broadcastMessage(hooked.identifier() + " ----- " + hooked.request(args, context));
                 String request = hooked.request(args, context);
                 if (request != null) {
                     replacementList.add(request);

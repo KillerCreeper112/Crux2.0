@@ -69,13 +69,13 @@ public class CClaimTags {
                                 .generic("team_members", (p, args, context) ->{
                                     List<String> teamMembers = List.of(
                                             "<red>one", "<yellow>two", "thReee", "FoR",
-                                            "<yellow>{{8+3+2}} <- <gray>That should be a parsed equation (8+3+2)",
+                                            "<yellow>{{8+3+2 + <player_health>}} <- <gray>That should be a parsed equation (8+3+2+<player_health>)",
                                             "<player_name>, <green><player_health>"
                                     );
                                     List<String> list = new ArrayList<>();
                                     teamMembers.forEach(m ->{
                                         StringHookContainer container = tags
-                                                .hookStringResolvers(context, Holder.directObject(object), FormatPrefix.addonPlusHook("member_"));
+                                                .hookStringResolvers(context, Holder.directObject(object), null);
                                         list.add(context.getFormat().setPlaceholders(m, container));
                                     });
                                     return list;
