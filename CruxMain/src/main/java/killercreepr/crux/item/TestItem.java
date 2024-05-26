@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,10 +39,30 @@ public class TestItem implements DynamicItem{
     }
 
     @Override
+    public @NotNull DynamicItem withType(@NotNull String material) {
+        return new TestItem(material, amount, components);
+    }
+
+    @Override
+    public @NotNull DynamicItem withAmount(@NotNull String amount) {
+        return new TestItem(material, amount, components);
+    }
+
+    @Override
+    public @NotNull DynamicItem withComponent(@NotNull DynamicItemComponent component) {
+        return new Builder(material)
+                .amount(amount)
+                .components(components)
+                .addComponent(component)
+                .build();
+    }
+
+    @Override
     public @Nullable CruxItem build(@NotNull InputContext context) {
         Material material = Material.matchMaterial(context.input(material()));
         if(material == null) return null;
         CruxItem item = new CruxItem(new ItemStack(material, amount==null?1:(int) Double.parseDouble(context.input(amount))));
+        if(components == null) return item;
         for(DynamicItemComponent component : components.values()){
             component.apply(item, context);
         }
@@ -68,6 +89,28 @@ public class TestItem implements DynamicItem{
         public Builder addComponent(@NotNull DynamicItemComponent c){
             components.put(c.name(), c);
             return this;
+        }
+
+        public Builder addComponents(@Nullable Map<String, DynamicItemComponent> c){
+            if(c==null) return this;
+            components.putAll(c);
+            return this;
+        }
+
+        public Builder addComponents(@Nullable Collection<DynamicItemComponent> components){
+            if(components==null) return this;
+            components.forEach(this::addComponent);
+            return this;
+        }
+
+        public Builder components(@Nullable Map<String, DynamicItemComponent> components){
+            this.components.clear();
+            return addComponents(components);
+        }
+
+        public Builder components(@Nullable Collection<DynamicItemComponent> components){
+            this.components.clear();
+            return addComponents(components);
         }
 
         public @NotNull TestItem build(){

@@ -5,18 +5,30 @@ import killercreepr.crux.util.CruxString;
 import killercreepr.crux.valueproviders.InputContext;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class DynamicSingleValueComponent implements DynamicItemComponent {
-    protected final @NotNull String value;
-    public DynamicSingleValueComponent(@NotNull String value) {
+    protected final @NotNull Object value;
+    public DynamicSingleValueComponent(@NotNull Object value) {
         this.value = value;
     }
 
-    public @NotNull String getValue() {
+    public @NotNull Object getValue() {
         return value;
     }
 
     public @NotNull String parse(@NotNull InputContext context){
-        return context.input(value);
+        return context.input(value.toString());
+    }
+
+    public @NotNull List<String> parseStringList(@NotNull InputContext context){
+        if(!(value instanceof List<?> l)) return List.of();
+        List<String> list = new ArrayList<>();
+        for(Object s : l){
+            list.add(context.input(s.toString()));
+        }
+        return list;
     }
 
     public boolean parseBool(@NotNull InputContext context){
