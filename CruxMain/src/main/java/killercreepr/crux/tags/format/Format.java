@@ -121,7 +121,9 @@ public class Format {
         return deserializeString(viewer, tagsPrefix, text, null);
     }
 
-    public @NotNull String deserializeString(@Nullable OfflinePlayer viewer, @Nullable FormatPrefix tagsPrefix, @NotNull String text, @Nullable StringHookContainer resolvers){
+    public @NotNull String deserializeString(@Nullable OfflinePlayer viewer,
+                                             @Nullable FormatPrefix tagsPrefix,
+                                             @NotNull String text, @Nullable StringHookContainer resolvers){
         return PlainTextComponentSerializer.plainText().serialize(deserialize(viewer, tagsPrefix, text, resolvers));
     }
 

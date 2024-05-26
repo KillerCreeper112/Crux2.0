@@ -2,12 +2,13 @@ package killercreepr.cruxconfig.config.common.yaml.element;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
-public class YamlObject extends YamlElement {
+public class YamlObject extends YamlElement implements Iterable<Map.Entry<String, YamlElement>> {
     protected final Map<String, YamlElement> members = new LinkedHashMap<>();
     public YamlObject add(String property, YamlElement value) {
         members.put(property, value);
@@ -183,5 +184,11 @@ public class YamlObject extends YamlElement {
 
     public void forEach(BiConsumer<String, YamlElement> action) {
         members.forEach(action);
+    }
+
+    @NotNull
+    @Override
+    public Iterator<Map.Entry<String, YamlElement>> iterator() {
+        return members.entrySet().iterator();
     }
 }
