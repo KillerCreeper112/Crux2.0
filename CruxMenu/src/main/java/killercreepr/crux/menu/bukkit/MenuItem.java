@@ -1,6 +1,5 @@
 package killercreepr.crux.menu.bukkit;
 
-import killercreepr.crux.Crux;
 import killercreepr.crux.menu.bukkit.actions.ActionContext;
 import killercreepr.crux.menu.bukkit.actions.MenuAction;
 import killercreepr.crux.menu.bukkit.api.events.menu.MenuItemClickEvent;
@@ -15,7 +14,6 @@ import killercreepr.crux.util.CruxMath;
 import killercreepr.crux.util.CruxString;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -101,6 +99,8 @@ public class MenuItem {
                     list.add(s);
                 }
                 for(String format : list){
+                    Bukkit.broadcastMessage(format + " - before");
+                    Bukkit.broadcast(getFormat().deserialize(p, null, format, buildTags()));
                     add.add(CruxItem.NO_ITALICS
                             .append(getFormat().deserialize(p, null, format, buildTags())));
                 }

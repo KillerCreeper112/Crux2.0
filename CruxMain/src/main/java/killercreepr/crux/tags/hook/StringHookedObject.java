@@ -34,7 +34,7 @@ public class StringHookedObject<T> implements HookedObject<T, StringHook<T>> {
     public @Nullable TagResolver tagResolver(@NotNull FormatContext context){
         T object = holder.value();
         if(object == null) return null;
-        return hook.tagResolver(context, object, hook.identifier());
+        return hook.tagResolver(context, object, prefix);
     }
 
     @Override

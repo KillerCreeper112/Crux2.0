@@ -1,6 +1,5 @@
 package killercreepr.crux.menu.bukkit.holder;
 
-import killercreepr.crux.Crux;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.Holder;
 import killercreepr.crux.menu.bukkit.MenuContext;
@@ -11,15 +10,12 @@ import killercreepr.crux.tags.defaults.CClaimTags;
 import killercreepr.crux.tags.format.FormatPrefix;
 import killercreepr.crux.util.CruxMath;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 public class MenuItemHolder {
     protected final @NotNull Holder<ItemStack> item;

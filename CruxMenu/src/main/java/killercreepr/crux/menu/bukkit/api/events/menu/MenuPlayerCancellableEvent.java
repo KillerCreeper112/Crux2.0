@@ -3,8 +3,6 @@ package killercreepr.crux.menu.bukkit.api.events.menu;
 import killercreepr.crux.menu.bukkit.Menu;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class MenuPlayerCancellableEvent extends MenuPlayerEvent implements Cancellable {

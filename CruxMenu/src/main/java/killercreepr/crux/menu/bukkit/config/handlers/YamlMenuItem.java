@@ -8,14 +8,11 @@ import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 public class YamlMenuItem extends YamlModuled<MenuItemHolder> {
     public YamlMenuItem(@NotNull YamlMenuModule menuModule) {
@@ -68,11 +65,17 @@ public class YamlMenuItem extends YamlModuled<MenuItemHolder> {
                 context, o.get("actions"), base
         );
 
+        List<String> displayLore = display == null ? null : registry.deserialize((Class<List<String>>) (Class<?>) List.class , display.get("lore"));
+        if(displayLore == null){
+            if(base != null) displayLore = base.getDisplayLore();
+        }
+
+
         MenuItemHolder item = new MenuItemHolder(
                 Holder.direct(i),
                 extraInfo.build(),
                 display == null ? null : display.getObject(String.class, "name", base==null?null:base.getDisplayName()),
-                display == null ? null : display.getObject(List.class, "lore",base==null?null:base.getDisplayLore()),
+                displayLore,
                 clickActions
         );
 

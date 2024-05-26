@@ -1,6 +1,5 @@
 package killercreepr.crux.tags.defaults;
 
-import killercreepr.crux.Crux;
 import killercreepr.crux.data.Holder;
 import killercreepr.crux.tags.Tags;
 import killercreepr.crux.tags.container.StringHookContainer;

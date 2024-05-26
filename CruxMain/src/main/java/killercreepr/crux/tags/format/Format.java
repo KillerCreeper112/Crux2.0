@@ -14,7 +14,6 @@ import killercreepr.crux.util.CruxMath;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -73,9 +72,6 @@ public class Format {
     }
 
     public @NotNull Component deserialize(@NotNull String text, @Nullable StringHookContainer resolvers){
-        if(resolvers != null){
-            Bukkit.broadcastMessage(resolvers.getTags().keySet() + " ----- tags");
-        }
         text = setPlaceholders(text, resolvers);
         return resolvers == null ? FORMAT.deserialize(text) : FORMAT.deserialize(text, resolvers.buildTagResolvers());
     }
