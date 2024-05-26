@@ -1,7 +1,7 @@
 package killercreepr.crux.item;
 
+import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.util.CruxItem;
-import killercreepr.crux.valueproviders.InputContext;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -12,12 +12,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TestItem implements DynamicItem{
+public class BukkitDynamicItem implements DynamicItem{
     protected final @NotNull String material;
     protected final @Nullable String amount;
     protected final @Nullable Map<String, DynamicItemComponent> components;
 
-    public TestItem(@NotNull String material, @Nullable String amount, @Nullable Map<String, DynamicItemComponent> components) {
+    public BukkitDynamicItem(@NotNull String material, @Nullable String amount, @Nullable Map<String, DynamicItemComponent> components) {
         this.material = material;
         this.amount = amount;
         this.components = components == null ? null : Collections.unmodifiableMap(components);
@@ -40,12 +40,12 @@ public class TestItem implements DynamicItem{
 
     @Override
     public @NotNull DynamicItem withType(@NotNull String material) {
-        return new TestItem(material, amount, components);
+        return new BukkitDynamicItem(material, amount, components);
     }
 
     @Override
     public @NotNull DynamicItem withAmount(@NotNull String amount) {
-        return new TestItem(material, amount, components);
+        return new BukkitDynamicItem(material, amount, components);
     }
 
     @Override
@@ -58,15 +58,29 @@ public class TestItem implements DynamicItem{
     }
 
     @Override
-    public @Nullable CruxItem build(@NotNull InputContext context) {
-        Material material = Material.matchMaterial(context.input(material()));
+    public @Nullable CruxItem build(@NotNull TextParserContext context) {
+        Material material = Material.matchMaterial(context.parseString(material()));
         if(material == null) return null;
-        CruxItem item = new CruxItem(new ItemStack(material, amount==null?1:(int) Double.parseDouble(context.input(amount))));
+        CruxItem item = new CruxItem(new ItemStack(material, amount==null?1:(int) Double.parseDouble(context.parseString(amount))));
         if(components == null) return item;
         for(DynamicItemComponent component : components.values()){
             component.apply(item, context);
         }
         return item;
+    }
+
+    @Override
+    public @NotNull BukkitDynamicItem clone() {
+        try {
+            BukkitDynamicItem item = (BukkitDynamicItem) super.clone();
+            BukkitDynamicItem.Builder builder = new Builder(item.material())
+                    .amount(amount())
+                    .components(components())
+                    ;
+            return builder.build();
+        } catch (CloneNotSupportedException e) {
+            throw new Error(e);
+        }
     }
 
     public static class Builder{
@@ -113,8 +127,8 @@ public class TestItem implements DynamicItem{
             return addComponents(components);
         }
 
-        public @NotNull TestItem build(){
-            return new TestItem(material, amount, components.isEmpty()?null:components);
+        public @NotNull BukkitDynamicItem build(){
+            return new BukkitDynamicItem(material, amount, components.isEmpty()?null:components);
         }
     }
 }

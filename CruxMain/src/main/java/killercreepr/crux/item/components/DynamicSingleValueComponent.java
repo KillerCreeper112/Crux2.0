@@ -1,8 +1,10 @@
 package killercreepr.crux.item.components;
 
+import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.item.DynamicItemComponent;
 import killercreepr.crux.util.CruxString;
-import killercreepr.crux.valueproviders.InputContext;
+import killercreepr.crux.valueproviders.number.NumberProvider;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -18,35 +20,63 @@ public abstract class DynamicSingleValueComponent implements DynamicItemComponen
         return value;
     }
 
-    public @NotNull String parse(@NotNull InputContext context){
-        return context.input(value.toString());
+    public @NotNull String parseString(@NotNull TextParserContext context){
+        return context.parseString(value.toString());
     }
 
-    public @NotNull List<String> parseStringList(@NotNull InputContext context){
+    public @NotNull Component parseComponent(@NotNull TextParserContext context){
+        return context.parseComponent(value.toString());
+    }
+
+    public @NotNull List<Component> parseComponentList(@NotNull TextParserContext context){
+        List<Object> unparsed;
+        if((value instanceof List<?> l)) unparsed = (List<Object>) l;
+        else if(value instanceof String s){
+            unparsed = new ArrayList<>();
+            unparsed.add(s);
+        }else unparsed = new ArrayList<>();
+
+        List<String> list = new ArrayList<>();
+        for(Object s : unparsed){
+            list.add(s.toString());
+        }
+        return context.parseComponentLore(list);
+    }
+
+    public @NotNull List<String> parseStringList(@NotNull TextParserContext context){
         if(!(value instanceof List<?> l)) return List.of();
         List<String> list = new ArrayList<>();
         for(Object s : l){
-            list.add(context.input(s.toString()));
+            list.add(context.parseString(s.toString()));
         }
         return list;
     }
 
-    public boolean parseBool(@NotNull InputContext context){
-        return CruxString.parseBoolean(parse(context));
+    public boolean parseBool(@NotNull TextParserContext context){
+        if(value instanceof Boolean b) return b;
+        return CruxString.parseBoolean(parseString(context));
     }
 
-    public double parseDouble(@NotNull InputContext context){
-        return Double.parseDouble(parse(context));
+    public double parseDouble(@NotNull TextParserContext context){
+        if(value instanceof Number n) return n.doubleValue();
+        if(value instanceof NumberProvider n) return n.value().doubleValue();
+        return Double.parseDouble(parseString(context));
     }
 
-    public int parseInt(@NotNull InputContext context){
+    public int parseInt(@NotNull TextParserContext context){
+        if(value instanceof Number n) return n.intValue();
+        if(value instanceof NumberProvider n) return n.value().intValue();
         return (int) parseDouble(context);
     }
-    public long parseLong(@NotNull InputContext context){
+    public long parseLong(@NotNull TextParserContext context){
+        if(value instanceof Number n) return n.longValue();
+        if(value instanceof NumberProvider n) return n.value().longValue();
         return (long) parseDouble(context);
     }
 
-    public float parseFloat(@NotNull InputContext context){
+    public float parseFloat(@NotNull TextParserContext context){
+        if(value instanceof Number n) return n.floatValue();
+        if(value instanceof NumberProvider n) return n.value().floatValue();
         return (float) parseDouble(context);
     }
 }

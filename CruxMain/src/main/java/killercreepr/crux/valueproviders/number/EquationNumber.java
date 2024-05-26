@@ -1,7 +1,7 @@
 package killercreepr.crux.valueproviders.number;
 
+import killercreepr.crux.context.InputContext;
 import killercreepr.crux.util.CruxMath;
-import killercreepr.crux.valueproviders.InputContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

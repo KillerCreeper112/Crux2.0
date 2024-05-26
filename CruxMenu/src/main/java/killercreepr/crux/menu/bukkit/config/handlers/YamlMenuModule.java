@@ -6,7 +6,7 @@ import killercreepr.crux.menu.bukkit.holder.MenuHolder;
 import killercreepr.crux.menu.bukkit.holder.MenuItems;
 import killercreepr.crux.valueproviders.number.ConstantNumber;
 import killercreepr.crux.valueproviders.number.NumberProvider;
-import killercreepr.cruxconfig.config.bukkit.yaml.handler.YamlItemStack;
+import killercreepr.cruxconfig.config.bukkit.yaml.handler.item.YamlDynamicItem;
 import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
@@ -23,7 +23,7 @@ public class YamlMenuModule implements YamlObjectHandler<MenuHolder> {
     protected YamlMenuItems yamlMenuItems;
     protected YamlDataExchange yamlDataExchange;
     protected YamlMenuActions yamlMenuActions;
-    protected YamlItemStack yamlItemStack;
+    protected YamlDynamicItem yamlDynamicItem;
 
     @Override
     public @NotNull YamlElement serializeToYaml(@NotNull YamlContext context, @NotNull MenuHolder object) {
@@ -85,11 +85,11 @@ public class YamlMenuModule implements YamlObjectHandler<MenuHolder> {
         this.yamlMenuActions = yamlMenuActions;
     }
 
-    public YamlItemStack getYamlItemStack() {
-        return yamlItemStack;
+    public YamlDynamicItem getYamlDynamicItem() {
+        return yamlDynamicItem;
     }
 
-    public void setYamlItemStack(YamlItemStack yamlItemStack) {
-        this.yamlItemStack = yamlItemStack;
+    public void setYamlDynamicItem(YamlDynamicItem yamlItemStack) {
+        this.yamlDynamicItem = yamlItemStack;
     }
 }

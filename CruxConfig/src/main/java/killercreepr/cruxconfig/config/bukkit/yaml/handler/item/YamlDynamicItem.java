@@ -1,8 +1,8 @@
 package killercreepr.cruxconfig.config.bukkit.yaml.handler.item;
 
+import killercreepr.crux.item.BukkitDynamicItem;
 import killercreepr.crux.item.DynamicItem;
 import killercreepr.crux.item.DynamicItemComponent;
-import killercreepr.crux.item.TestItem;
 import killercreepr.crux.item.components.*;
 import killercreepr.crux.registry.MappedRegistry;
 import killercreepr.crux.registry.SimpleMappedRegistry;
@@ -143,11 +143,11 @@ public class YamlDynamicItem implements YamlObjectHandler<DynamicItem> {
 
     public @Nullable DynamicItem buildItem(@NotNull YamlContext context, @Nullable YamlElement e){
         if(e instanceof YamlGeneric s){
-            return new TestItem.Builder(s.getAsString()).build();
+            return new BukkitDynamicItem.Builder(s.getAsString()).build();
         }
         if(!(e instanceof YamlObject o)) return null;
         if(o.get("material") instanceof YamlGeneric s){
-            return new TestItem.Builder(s.getAsString()).build();
+            return new BukkitDynamicItem.Builder(s.getAsString()).build();
         }
         return null;
     }

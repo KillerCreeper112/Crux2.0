@@ -2,6 +2,7 @@ package killercreepr.crux.menu.bukkit.holder;
 
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.Holder;
+import killercreepr.crux.item.DynamicItem;
 import killercreepr.crux.menu.bukkit.MenuContext;
 import killercreepr.crux.menu.bukkit.MenuItem;
 import killercreepr.crux.tags.container.ObjectStringHookContainer;
@@ -18,19 +19,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MenuItemHolder {
-    protected final @NotNull Holder<ItemStack> item;
+    protected final @NotNull Holder<DynamicItem> item;
     protected final @NotNull DataExchange info;
-    protected final @Nullable String displayName;
-    protected final @Nullable List<String> displayLore;
     protected final @Nullable ClickActions clickActions;
 
-    public MenuItemHolder(@NotNull Holder<ItemStack> item, @NotNull DataExchange info,
-                          @Nullable String displayName, @Nullable List<String> displayLore,
+    public MenuItemHolder(@NotNull Holder<DynamicItem> item, @NotNull DataExchange info,
                           @Nullable ClickActions clickActions) {
         this.item = item;
         this.info = info;
-        this.displayName = displayName;
-        this.displayLore = displayLore;
         this.clickActions = clickActions;
     }
 
@@ -43,16 +39,8 @@ public class MenuItemHolder {
         return new MenuItem(this, evaluation.evaluateInfo());
     }
 
-    public @NotNull Holder<ItemStack> getItem() {
+    public @NotNull Holder<DynamicItem> getItem() {
         return item;
-    }
-
-    public @Nullable String getDisplayName() {
-        return displayName;
-    }
-
-    public @Nullable List<String> getDisplayLore() {
-        return displayLore;
     }
 
     public @Nullable ClickActions getClickActions() {

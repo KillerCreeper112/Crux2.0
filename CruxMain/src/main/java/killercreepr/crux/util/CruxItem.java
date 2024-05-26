@@ -1,6 +1,7 @@
 package killercreepr.crux.util;
 
 import killercreepr.crux.Crux;
+import killercreepr.crux.tags.format.Format;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
@@ -26,16 +27,25 @@ public class CruxItem implements Cloneable {
     }
     public static final @NotNull Component NO_ITALICS = Component.empty().decoration(TextDecoration.ITALIC, false);
     protected @NotNull ItemStack item;
+    protected @NotNull Format format;
     public CruxItem(@NotNull Material material) {
         this(new ItemStack(material));
     }
     public CruxItem(@NotNull ItemStack item) {
+        this(Crux.FORMAT, item);
+    }
+
+    public CruxItem(@NotNull Format format, @NotNull Material material) {
+        this(format, new ItemStack(material));
+    }
+    public CruxItem(@NotNull Format format, @NotNull ItemStack item) {
+        this.format = format;
         this.item = item;
     }
 
     private Component c(@Nullable String s){
         if(s==null) return null;
-        return c(Crux.FORMAT.deserialize(s));
+        return c(format.deserialize(s));
     }
 
     private Component c(@Nullable Component s){

@@ -13,6 +13,8 @@ import org.bukkit.Registry;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -85,7 +87,7 @@ public class CClaimTags {
                                 .generic("no_damage_ticks", (p, args, context) -> p.isOnline()?p.getPlayer().getNoDamageTicks()+"":"0")
                                 .generic("attribute", (player, args, context) ->{
                                     Player p = player.getPlayer();
-                                    if(p==null) return null;
+                                    if(p==null) return "not online";
                                     //<player_attribute:(attribute):[value_to_get{value, default, base},default=value]>
                                     NamespacedKey key = NamespacedKey.fromString(args.get(0));
                                     if(key == null) return "invalid key - " + args.get(0);
@@ -106,6 +108,13 @@ public class CClaimTags {
                                         }
                                     }
                                     return Double.toString(x);
+                                })
+                                .generic("equipment", (player, args, context) ->{
+                                    Player p = player.getPlayer();
+                                    if(p==null) return "not online";
+                                    EquipmentSlot slot = EquipmentSlot.valueOf(args.get(0).toUpperCase());
+                                    ItemStack item = p.getInventory().getItem(slot);
+                                    return item.getType().toString().toLowerCase();
                                 })
                                 .build();
                     }

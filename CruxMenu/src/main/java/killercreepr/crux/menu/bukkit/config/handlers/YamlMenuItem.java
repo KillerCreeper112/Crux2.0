@@ -2,17 +2,15 @@ package killercreepr.crux.menu.bukkit.config.handlers;
 
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.Holder;
+import killercreepr.crux.item.DynamicItem;
 import killercreepr.crux.menu.bukkit.holder.ClickActions;
 import killercreepr.crux.menu.bukkit.holder.MenuItemHolder;
 import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class YamlMenuItem extends YamlModuled<MenuItemHolder> {
     public YamlMenuItem(@NotNull YamlMenuModule menuModule) {
@@ -42,46 +40,27 @@ public class YamlMenuItem extends YamlModuled<MenuItemHolder> {
         }
 
         DataExchange.Builder extraInfo = new DataExchange.Builder();
-        if(base != null) extraInfo.putAll(base.info());//addDot(path) + "extra"
+        if(base != null) extraInfo.putAll(base.info());
         extraInfo.putAll(registry.deserialize(DataExchange.class, o.get("data")));
         extraInfo.putAll(registry.deserialize(DataExchange.class, o));
 
-        ItemStack i;
-        if(base == null) i = registry.deserialize(ItemStack.class, o.get("item"));
+        DynamicItem i;
+        if(base == null) i = registry.deserialize(DynamicItem.class, o.get("item"));
         else{
-            ItemStack baseClone = base.getItem().value();
+            DynamicItem baseClone = base.getItem().value();
             if(baseClone != null) baseClone = baseClone.clone();
-            i = menuModule.getYamlItemStack().deserializeFromYaml(context, o.get("item"), baseClone);
+            i = menuModule.getYamlDynamicItem().deserializeFromYaml(context, o.get("item"), baseClone);
         }
-
-        YamlObject display;
-        if(o.get("display") instanceof YamlObject oo) display = oo;
-        else display = null;
 
         ClickActions clickActions = menuModule.getYamlMenuActions().deserializeFromYaml(
                 context, o.get("actions"), base
         );
 
-        List<String> displayLore = display == null ? null : registry.deserialize((Class<List<String>>) (Class<?>) List.class , display.get("lore"));
-        if(displayLore == null){
-            if(base != null) displayLore = base.getDisplayLore();
-        }
-
-
         MenuItemHolder item = new MenuItemHolder(
                 Holder.direct(i),
                 extraInfo.build(),
-                display == null ? null : display.getObject(String.class, "name", base==null?null:base.getDisplayName()),
-                displayLore,
                 clickActions
         );
-
-        /*MenuItemHolder item = new MenuItemHolder(Holder.direct(i),
-                extraInfo.build(),
-                cfg.getString(addDot(path) + "display.name", base == null ? null : base.getDisplayName()),
-                cfg.isList(addDot(path) + "display.lore") ?
-                        cfg.getStringList(addDot(path) + "display.lore") :
-                        base == null ? null : base.getDisplayLore(), new MenuActionsValue().get(config, addDot(path) + "actions", base));*/
         return item;
     }
 }

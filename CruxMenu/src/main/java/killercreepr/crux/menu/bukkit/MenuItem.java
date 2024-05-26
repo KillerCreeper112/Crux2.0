@@ -1,5 +1,7 @@
 package killercreepr.crux.menu.bukkit;
 
+import killercreepr.crux.context.FormatParserContext;
+import killercreepr.crux.item.DynamicItem;
 import killercreepr.crux.menu.bukkit.actions.ActionContext;
 import killercreepr.crux.menu.bukkit.actions.MenuAction;
 import killercreepr.crux.menu.bukkit.api.events.menu.MenuItemClickEvent;
@@ -9,19 +11,15 @@ import killercreepr.crux.registry.Registry;
 import killercreepr.crux.tags.container.ObjectLoreHookContainer;
 import killercreepr.crux.tags.container.ObjectStringHookContainer;
 import killercreepr.crux.tags.format.Format;
-import killercreepr.crux.util.CruxItem;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.crux.util.CruxString;
 import killercreepr.crux.valueproviders.number.NumberProvider;
-import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -72,41 +70,19 @@ public class MenuItem {
     }
 
     public @Nullable ItemStack buildItem(@NotNull Player p){
-        ItemStack item = base.getItem().value();
+        DynamicItem item = base.getItem().value();
         if(item == null) return null;
         item = item.clone();
         ObjectStringHookContainer tags = buildTags();
-        if(base.getDisplayName() != null){
-            ItemMeta meta = item.getItemMeta();
-            if(meta != null){
-                meta.displayName(
-                        CruxItem.NO_ITALICS
-                                .append(getFormat().deserialize(p, null, base.getDisplayName(), tags))
-                );
-                item.setItemMeta(meta);
-            }
-        }
-        if(base.getDisplayLore() != null){
-            List<Component> lore = item.lore();
-            if(lore == null) lore = new ArrayList<>();
-            ObjectLoreHookContainer loreResolvers = new ObjectLoreHookContainer(info.getResolvers().getContext(), tags);
-            loreResolvers.hookAll(info.getInfo());
-            List<Component> add = new ArrayList<>();
-            for(String s : base.getDisplayLore()){
-                List<String> list = getFormat().deserializeLore(p, null, s, loreResolvers);
-                if(list == null){
-                    list = new ArrayList<>();
-                    list.add(s);
-                }
-                for(String format : list){
-                    add.add(CruxItem.NO_ITALICS
-                            .append(getFormat().deserialize(p, null, format, tags)));
-                }
-            }
-            lore.addAll(add);
-            item.lore(lore);
-        }
-        return item;
+        ObjectLoreHookContainer loreTags = new ObjectLoreHookContainer(info.getResolvers().getContext(), tags);
+        loreTags.hookAll(info.getInfo());
+
+        FormatParserContext context = new FormatParserContext.Builder(getFormat())
+                .viewer(p)
+                .stringTags(tags)
+                .loreTags(loreTags)
+                .build();
+        return item.buildItem(context);
     }
 
     public @NotNull MenuItemClickEvent click(@NotNull Player p, @NotNull InventoryClickEvent event){

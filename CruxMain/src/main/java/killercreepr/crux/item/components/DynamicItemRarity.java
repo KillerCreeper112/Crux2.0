@@ -1,7 +1,7 @@
 package killercreepr.crux.item.components;
 
+import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.util.CruxItem;
-import killercreepr.crux.valueproviders.InputContext;
 import org.bukkit.inventory.ItemRarity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,13 +17,13 @@ public class DynamicItemRarity extends DynamicSingleValueComponent{
     }
 
     @Override
-    public void apply(@NotNull CruxItem item, @NotNull InputContext context) {
+    public void apply(@NotNull CruxItem item, @NotNull TextParserContext context) {
         item.editMeta(meta -> meta.setRarity(parseObject(context)));
     }
 
-    public @Nullable ItemRarity parseObject(@NotNull InputContext context){
+    public @Nullable ItemRarity parseObject(@NotNull TextParserContext context){
         try{
-            return ItemRarity.valueOf(parse(context).toUpperCase());
+            return ItemRarity.valueOf(parseString(context).toUpperCase());
         }catch (IllegalArgumentException ignored){ return null; }
     }
 }

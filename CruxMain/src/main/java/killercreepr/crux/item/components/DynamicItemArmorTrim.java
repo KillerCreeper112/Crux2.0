@@ -2,9 +2,9 @@ package killercreepr.crux.item.components;
 
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
+import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.item.DynamicItemComponent;
 import killercreepr.crux.util.CruxItem;
-import killercreepr.crux.valueproviders.InputContext;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
@@ -35,16 +35,16 @@ public class DynamicItemArmorTrim implements DynamicItemComponent {
     }
 
     @Override
-    public void apply(@NotNull CruxItem item, @NotNull InputContext context) {
+    public void apply(@NotNull CruxItem item, @NotNull TextParserContext context) {
         item.editMeta(ArmorMeta.class, meta -> meta.setTrim(parseObject(context)));
     }
 
-    public @Nullable ArmorTrim parseObject(@NotNull InputContext context){
-        NamespacedKey key = NamespacedKey.fromString(context.input(trimMaterial.toString()));
+    public @Nullable ArmorTrim parseObject(@NotNull TextParserContext context){
+        NamespacedKey key = NamespacedKey.fromString(context.parseString(trimMaterial.toString()));
         if(key==null) return null;
         TrimMaterial m = RegistryAccess.registryAccess().getRegistry(RegistryKey.TRIM_MATERIAL).get(key);
         if(m==null) return null;
-        key = NamespacedKey.fromString(context.input(trimPattern.toString()));
+        key = NamespacedKey.fromString(context.parseString(trimPattern.toString()));
         if(key==null) return null;
         TrimPattern p = RegistryAccess.registryAccess().getRegistry(RegistryKey.TRIM_PATTERN).get(key);
         if(p==null) return null;

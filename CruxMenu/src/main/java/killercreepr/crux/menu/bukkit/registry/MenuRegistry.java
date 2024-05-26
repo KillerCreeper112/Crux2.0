@@ -51,7 +51,7 @@ public class MenuRegistry {
         menuModule.setYamlMenuActions(new YamlMenuActions(menuModule));
         menuModule.setYamlMenuItems(new YamlMenuItems(menuModule));
         menuModule.setYamlDataExchange(new YamlDataExchange(menuModule));
-        menuModule.setYamlItemStack(BukkitCfgHandlers.ITEM_STACK);
+        menuModule.setYamlDynamicItem(BukkitCfgHandlers.DYNAMIC_ITEM);
 
         menuModule.getYamlDataExchange().getDataTypes().register("slot", YamlDataProvider.generic(NumberProvider.class));
     }

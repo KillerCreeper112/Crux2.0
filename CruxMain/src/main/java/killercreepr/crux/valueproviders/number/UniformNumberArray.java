@@ -1,7 +1,7 @@
 package killercreepr.crux.valueproviders.number;
 
 import com.google.common.base.Preconditions;
-import killercreepr.crux.valueproviders.InputContext;
+import killercreepr.crux.context.InputContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

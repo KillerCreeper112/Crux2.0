@@ -1,10 +1,10 @@
 package killercreepr.crux.menu.bukkit;
 
+import killercreepr.crux.context.EquationContext;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.menu.bukkit.api.events.menu.MenuRefreshEvent;
 import killercreepr.crux.menu.bukkit.holder.MenuHolder;
 import killercreepr.crux.tags.container.ObjectStringHookContainer;
-import killercreepr.crux.valueproviders.EquationContext;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

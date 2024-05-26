@@ -1,7 +1,7 @@
 package killercreepr.crux.item.components;
 
+import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.util.CruxItem;
-import killercreepr.crux.valueproviders.InputContext;
 import org.jetbrains.annotations.NotNull;
 
 public class DynamicItemCustomModelData extends DynamicSingleValueComponent{
@@ -15,7 +15,7 @@ public class DynamicItemCustomModelData extends DynamicSingleValueComponent{
     }
 
     @Override
-    public void apply(@NotNull CruxItem item, @NotNull InputContext context) {
+    public void apply(@NotNull CruxItem item, @NotNull TextParserContext context) {
         item.editMeta(meta -> meta.setCustomModelData(parseInt(context)));
     }
 }

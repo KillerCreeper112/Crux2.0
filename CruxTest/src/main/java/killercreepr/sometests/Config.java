@@ -3,7 +3,7 @@ package killercreepr.sometests;
 import killercreepr.crux.data.CreateSound;
 import killercreepr.crux.data.CreateTitle;
 import killercreepr.crux.data.MsgContainer;
-import killercreepr.crux.item.TestItem;
+import killercreepr.crux.item.BukkitDynamicItem;
 import killercreepr.crux.item.components.DynamicItemEnchantGlintOverride;
 import killercreepr.crux.item.components.DynamicItemLore;
 import killercreepr.crux.item.components.DynamicItemName;
@@ -45,7 +45,7 @@ public class Config extends Cfg {
         put("dog", "cat");
     }}){};
 
-    public final CfgValue<TestItem> DYANMIC = new CommonValue<>(new TestItem.Builder("diamond")
+    public final CfgValue<BukkitDynamicItem> DYANMIC = new CommonValue<>(new BukkitDynamicItem.Builder("diamond")
             .amount("5")
             .addComponent(new DynamicItemName("<red>Ayo test"))
             .addComponent(new DynamicItemLore(List.of("<yellow>ANOTHER", "<red>YOOO")))
