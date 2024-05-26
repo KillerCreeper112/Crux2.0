@@ -4,8 +4,10 @@ import io.papermc.paper.registry.RegistryKey;
 import killercreepr.crux.data.CreateSound;
 import killercreepr.crux.data.CreateTitle;
 import killercreepr.crux.data.MsgContainer;
+import killercreepr.crux.item.DynamicItem;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.bukkit.yaml.handler.*;
+import killercreepr.cruxconfig.config.bukkit.yaml.handler.item.YamlDynamicItem;
 import killercreepr.cruxconfig.config.common.json.JsonRegistry;
 import killercreepr.cruxconfig.config.common.json.container.GenericJsonHandler;
 import killercreepr.cruxconfig.config.common.yaml.automatic.AutoYamlSerializer;
@@ -44,6 +46,7 @@ public class BukkitCfgHandlers {
     public static final YamlMaterial MATERIAL = new YamlMaterial();
     public static final YamlComponent COMPONENT = new YamlComponent();
     public static final YamlItemStack ITEM_STACK = new YamlItemStack();
+    public static final YamlDynamicItem DYNAMIC_ITEM = new YamlDynamicItem();
 
     public static void initYaml(@NotNull YamlRegistry registry){
         registry.registerHandler(PotionEffect.class, POTION_EFFECT);
@@ -55,6 +58,7 @@ public class BukkitCfgHandlers {
         registry.registerHandler(Material.class, MATERIAL);
         registry.registerHandler(Component.class, COMPONENT);
         registry.registerHandler(ItemStack.class, ITEM_STACK);
+        registry.registerHandler(DynamicItem.class, DYNAMIC_ITEM);
 
         registry.registerHandler(TrimMaterial.class, new YamlGenericKeyedRegistry<>(RegistryKey.TRIM_MATERIAL));
         registry.registerHandler(TrimPattern.class, new YamlGenericKeyedRegistry<>(RegistryKey.TRIM_PATTERN));
