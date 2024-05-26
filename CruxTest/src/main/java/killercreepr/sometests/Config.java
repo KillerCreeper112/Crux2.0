@@ -3,6 +3,10 @@ package killercreepr.sometests;
 import killercreepr.crux.data.CreateSound;
 import killercreepr.crux.data.CreateTitle;
 import killercreepr.crux.data.MsgContainer;
+import killercreepr.crux.item.TestItem;
+import killercreepr.crux.item.components.DynamicItemEnchantGlintOverride;
+import killercreepr.crux.item.components.DynamicItemLore;
+import killercreepr.crux.item.components.DynamicItemName;
 import killercreepr.cruxconfig.config.bukkit.file.Cfg;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.bukkit.value.CfgValue;
@@ -40,6 +44,13 @@ public class Config extends Cfg {
         put("test", "another");
         put("dog", "cat");
     }}){};
+
+    public final CfgValue<TestItem> DYANMIC = new CommonValue<>(new TestItem.Builder("diamond")
+            .amount("5")
+            .addComponent(new DynamicItemName("<red>Ayo test"))
+            .addComponent(new DynamicItemLore(List.of("<yellow>ANOTHER", "<red>YOOO")))
+            .addComponent(new DynamicItemEnchantGlintOverride("true"))
+            .build()){};
     /*public final MsgValue MSG_1 = new MsgValue("<red>This is not good");
     public final MsgValue MSG_2 = new MsgValue(new MsgContainer.Builder()
             .chat(List.of(

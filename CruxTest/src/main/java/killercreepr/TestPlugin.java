@@ -8,6 +8,7 @@ import killercreepr.crux.menu.bukkit.listener.MenuListener;
 import killercreepr.crux.menu.bukkit.registry.MenuRegistry;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.tags.defaults.CClaimTags;
+import killercreepr.crux.valueproviders.InputContext;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxconfig.config.bukkit.handlers.BukkitCfgHandlers;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
@@ -49,7 +50,14 @@ public class TestPlugin extends CruxPlugin implements Listener {
         menuRegistry.MENU_HOLDERS.get(Crux.key("testayo")).open(event.getPlayer(),
                 DataExchange.builder()
                         .put("test_ayo", Holder.direct(new CClaimTags.TestBois("test_bois")))
-                        .build());
+                        .build()).getMenu().setItem(13, cfg.DYANMIC.value().build(
+                new InputContext() {
+                    @Override
+                    public @NotNull String input(@NotNull String text) {
+                        return text;
+                    }
+                }
+        ).item());
         /*if(event.isSneaking()){
             cfg.MSG_1.use(event.getPlayer());
         }else cfg.MSG_2.use(event.getPlayer());*/

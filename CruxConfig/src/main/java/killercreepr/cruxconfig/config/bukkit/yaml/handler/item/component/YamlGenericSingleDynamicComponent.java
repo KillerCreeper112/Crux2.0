@@ -6,11 +6,15 @@ import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface YamlGenericSingleDynamicComponent extends YamlSingleDynamicComponent{
+public abstract class YamlGenericSingleDynamicComponent<T extends DynamicSingleValueComponent> extends YamlSingleDynamicComponent<T>{
+    protected YamlGenericSingleDynamicComponent(@NotNull Class<T> type) {
+        super(type);
+    }
+
     @Override
-    default @Nullable DynamicSingleValueComponent deserialize(@NotNull YamlContext context, @NotNull YamlElement value) {
+    public @Nullable T deserialize(@NotNull YamlContext context, @NotNull YamlElement value) {
         return deserialize(context.getRegistry().deserializeObject(value));
     }
 
-    @Nullable DynamicSingleValueComponent deserialize(@NotNull Object object);
+    public abstract @Nullable T deserialize(@NotNull Object object);
 }

@@ -38,6 +38,6 @@ public class YamlCreateTitle implements YamlObjectHandler<CreateTitle> {
     }
 
     public Duration parseTicks(@NotNull YamlObject o, @NotNull String id){
-        return Duration.ofMillis(o.getOrDefaultObject(id, 0)*50L);
+        return Duration.ofMillis((long) o.getOrDefaultObject(id, 0)*50);
     }
 }

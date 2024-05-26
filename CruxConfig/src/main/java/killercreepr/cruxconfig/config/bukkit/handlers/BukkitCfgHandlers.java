@@ -4,7 +4,7 @@ import io.papermc.paper.registry.RegistryKey;
 import killercreepr.crux.data.CreateSound;
 import killercreepr.crux.data.CreateTitle;
 import killercreepr.crux.data.MsgContainer;
-import killercreepr.crux.item.DynamicItem;
+import killercreepr.crux.item.TestItem;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.bukkit.yaml.handler.*;
 import killercreepr.cruxconfig.config.bukkit.yaml.handler.item.YamlDynamicItem;
@@ -58,7 +58,8 @@ public class BukkitCfgHandlers {
         registry.registerHandler(Material.class, MATERIAL);
         registry.registerHandler(Component.class, COMPONENT);
         registry.registerHandler(ItemStack.class, ITEM_STACK);
-        registry.registerHandler(DynamicItem.class, DYNAMIC_ITEM);
+        registry.registerHandler(TestItem.class, DYNAMIC_ITEM);
+        DYNAMIC_ITEM.registerComponents(registry);
 
         registry.registerHandler(TrimMaterial.class, new YamlGenericKeyedRegistry<>(RegistryKey.TRIM_MATERIAL));
         registry.registerHandler(TrimPattern.class, new YamlGenericKeyedRegistry<>(RegistryKey.TRIM_PATTERN));

@@ -28,56 +28,56 @@ public class YamlDynamicItem implements YamlObjectHandler<DynamicItem> {
     }
 
     public YamlDynamicItem() {
-        COMPONENT_REGISTRY.register("name", new YamlGenericSingleDynamicComponent() {
+        COMPONENT_REGISTRY.register("name", new YamlGenericSingleDynamicComponent<>(DynamicItemName.class) {
             @Override
-            public @NotNull DynamicSingleValueComponent deserialize(@NotNull Object object) {
+            public @NotNull DynamicItemName deserialize(@NotNull Object object) {
                 return new DynamicItemName(object);
             }
         });
 
-        COMPONENT_REGISTRY.register("lore", new YamlGenericSingleDynamicComponent() {
+        COMPONENT_REGISTRY.register("lore", new YamlGenericSingleDynamicComponent<>(DynamicItemLore.class) {
             @Override
-            public @NotNull DynamicSingleValueComponent deserialize(@NotNull Object object) {
+            public @NotNull DynamicItemLore deserialize(@NotNull Object object) {
                 return new DynamicItemLore(object);
             }
         });
 
-        COMPONENT_REGISTRY.register("custom_model_data", new YamlGenericSingleDynamicComponent() {
+        COMPONENT_REGISTRY.register("custom_model_data", new YamlGenericSingleDynamicComponent<>(DynamicItemCustomModelData.class) {
             @Override
-            public @NotNull DynamicSingleValueComponent deserialize(@NotNull Object object) {
+            public @NotNull DynamicItemCustomModelData deserialize(@NotNull Object object) {
                 return new DynamicItemCustomModelData(object);
             }
         });
 
-        COMPONENT_REGISTRY.register("unbreakable", new YamlGenericSingleDynamicComponent() {
+        COMPONENT_REGISTRY.register("unbreakable", new YamlGenericSingleDynamicComponent<>(DynamicItemUnbreakable.class) {
             @Override
-            public @NotNull DynamicSingleValueComponent deserialize(@NotNull Object object) {
+            public @NotNull DynamicItemUnbreakable deserialize(@NotNull Object object) {
                 return new DynamicItemUnbreakable(object);
             }
         });
 
-        COMPONENT_REGISTRY.register("enchant_glint_override", new YamlGenericSingleDynamicComponent() {
+        COMPONENT_REGISTRY.register("enchant_glint_override", new YamlGenericSingleDynamicComponent<>(DynamicItemEnchantGlintOverride.class) {
             @Override
-            public @NotNull DynamicSingleValueComponent deserialize(@NotNull Object object) {
+            public @NotNull DynamicItemEnchantGlintOverride deserialize(@NotNull Object object) {
                 return new DynamicItemEnchantGlintOverride(object);
             }
         });
 
-        COMPONENT_REGISTRY.register("max_stack_size", new YamlGenericSingleDynamicComponent() {
+        COMPONENT_REGISTRY.register("max_stack_size", new YamlGenericSingleDynamicComponent<>(DynamicItemMaxStackSize.class) {
             @Override
-            public @NotNull DynamicSingleValueComponent deserialize(@NotNull Object object) {
+            public @NotNull DynamicItemMaxStackSize deserialize(@NotNull Object object) {
                 return new DynamicItemMaxStackSize(object);
             }
         });
 
-        COMPONENT_REGISTRY.register("fire_resistant", new YamlGenericSingleDynamicComponent() {
+        COMPONENT_REGISTRY.register("fire_resistant", new YamlGenericSingleDynamicComponent<>(DynamicItemFireResistant.class) {
             @Override
-            public @NotNull DynamicSingleValueComponent deserialize(@NotNull Object object) {
+            public @NotNull DynamicItemFireResistant deserialize(@NotNull Object object) {
                 return new DynamicItemFireResistant(object);
             }
         });
 
-        COMPONENT_REGISTRY.register("armor_trim", new YamlDynamicItemComponent<DynamicItemArmorTrim>() {
+        COMPONENT_REGISTRY.register("armor_trim", new YamlDynamicItemComponent<>(DynamicItemArmorTrim.class) {
 
             @Override
             public @NotNull YamlElement serializeToYaml(@NotNull YamlContext context, @NotNull DynamicItemArmorTrim object) {
@@ -100,24 +100,40 @@ public class YamlDynamicItem implements YamlObjectHandler<DynamicItem> {
             }
         });
 
-        COMPONENT_REGISTRY.register("hide_tooltip", new YamlGenericSingleDynamicComponent() {
+        COMPONENT_REGISTRY.register("hide_tooltip", new YamlGenericSingleDynamicComponent<>(DynamicItemHideTooltip.class) {
             @Override
-            public @NotNull DynamicSingleValueComponent deserialize(@NotNull Object object) {
+            public @NotNull DynamicItemHideTooltip deserialize(@NotNull Object object) {
                 return new DynamicItemHideTooltip(object);
             }
         });
 
-        COMPONENT_REGISTRY.register("rarity", new YamlGenericSingleDynamicComponent() {
+        COMPONENT_REGISTRY.register("rarity", new YamlGenericSingleDynamicComponent<>(DynamicItemRarity.class) {
             @Override
-            public @NotNull DynamicSingleValueComponent deserialize(@NotNull Object object) {
+            public @NotNull DynamicItemRarity deserialize(@NotNull Object object) {
                 return new DynamicItemRarity(object);
             }
         });
     }
 
+    public YamlDynamicItem registerComponents(@NotNull YamlRegistry registry){
+        for(YamlDynamicItemComponent<?> c : COMPONENT_REGISTRY){
+            registry.registerHandler(c.getType(), c);
+        }
+        return this;
+    }
+
     @Override
     public @NotNull YamlElement serializeToYaml(@NotNull YamlContext context, @NotNull DynamicItem item) {
-        return null;//todo
+        YamlRegistry registry = context.getRegistry();
+        YamlObject o = new YamlObject();
+        o.add("material", registry.serializeObject(item.material()));
+        o.add("amount", registry.serializeObject(item.amount()));
+        if(item.components() != null){
+            item.components().forEach((key, value) ->{
+                o.add(key, registry.serializeObject(value));
+            });
+        }
+        return o;
     }
 
     @Override
