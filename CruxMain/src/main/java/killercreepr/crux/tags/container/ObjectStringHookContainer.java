@@ -1,8 +1,8 @@
 package killercreepr.crux.tags.container;
 
+import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.Holder;
-import killercreepr.crux.tags.FormatContext;
 import killercreepr.crux.tags.format.FormatPrefix;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,7 +13,7 @@ import java.util.Map;
 //todo just make generally better naming
 public class ObjectStringHookContainer extends StringHookContainer implements IObjectTagResolverContainer{
     private final Map<String, PrefixBuilder> prefixBuilders = new HashMap<>();
-    public ObjectStringHookContainer(@NotNull FormatContext context, @Nullable StringHookContainer container) {
+    public ObjectStringHookContainer(@NotNull TextParserContext context, @Nullable StringHookContainer container) {
         super(context);
         if(container instanceof ObjectStringHookContainer c){
             prefixBuilders.putAll(c.getPrefixBuilders());
@@ -24,11 +24,11 @@ public class ObjectStringHookContainer extends StringHookContainer implements IO
         super(container);
     }
 
-    public @NotNull FormatContext getContext() {
+    public @NotNull TextParserContext getContext() {
         return context;
     }
 
-    public ObjectStringHookContainer(@NotNull FormatContext context) {
+    public ObjectStringHookContainer(@NotNull TextParserContext context) {
         super(context);
     }
     @Override
@@ -46,7 +46,7 @@ public class ObjectStringHookContainer extends StringHookContainer implements IO
         return hookAll(context, info, prefixBuilders);
     }
     @Override
-    public ObjectStringHookContainer hookAll(@NotNull FormatContext context,  @NotNull DataExchange info){
+    public ObjectStringHookContainer hookAll(@NotNull TextParserContext context,  @NotNull DataExchange info){
         return hookAll(context, info, prefixBuilders);
     }
     @Override
@@ -54,7 +54,7 @@ public class ObjectStringHookContainer extends StringHookContainer implements IO
         return hookAll(context, info, prefix);
     }
     @Override
-    public ObjectStringHookContainer hookAll(@NotNull FormatContext context, @NotNull DataExchange info, @Nullable Map<String, PrefixBuilder> prefixBuilders){
+    public ObjectStringHookContainer hookAll(@NotNull TextParserContext context, @NotNull DataExchange info, @Nullable Map<String, PrefixBuilder> prefixBuilders){
         if(prefixBuilders == null){
             putAll(context.getFormat().getTags().hookAllTagResolvers(context, info));
             return this;
@@ -74,7 +74,7 @@ public class ObjectStringHookContainer extends StringHookContainer implements IO
     }
 
     @Override
-    public ObjectStringHookContainer hook(@NotNull FormatContext context, @Nullable Object info){
+    public ObjectStringHookContainer hook(@NotNull TextParserContext context, @Nullable Object info){
         return hook(context, info, null);
     }
 
@@ -82,7 +82,7 @@ public class ObjectStringHookContainer extends StringHookContainer implements IO
         return hook(context, info, prefix);
     }
 
-    public ObjectStringHookContainer hook(@NotNull FormatContext context, @Nullable Object info, @Nullable FormatPrefix prefix){
+    public ObjectStringHookContainer hook(@NotNull TextParserContext context, @Nullable Object info, @Nullable FormatPrefix prefix){
         if(info == null) return this;
         putAll(context.getFormat().getTags().hookStringResolvers(context, Holder.directObject(info), prefix));
         return this;

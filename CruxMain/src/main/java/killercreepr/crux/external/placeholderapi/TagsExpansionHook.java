@@ -1,5 +1,6 @@
 package killercreepr.crux.external.placeholderapi;
 
+import killercreepr.crux.context.FormatParserContext;
 import killercreepr.crux.tags.FormatArgs;
 import killercreepr.crux.tags.container.ObjectHookContainer;
 import killercreepr.crux.tags.format.Format;
@@ -58,7 +59,7 @@ public class TagsExpansionHook extends PlaceholderExpansion {
                     for(StringHook<OfflinePlayer> hook : tagHooks){
                         //found hook to parse!
                         if(noUnderscore(hook.identifier()).equalsIgnoreCase(hookIdentifier)){
-                            return hook.parse(player, hookArgs, format.buildContext());
+                            return hook.parse(player, hookArgs, new FormatParserContext.Builder(format).viewer(player).build());
                         }
                     }
                 }
@@ -73,7 +74,9 @@ public class TagsExpansionHook extends PlaceholderExpansion {
                     if(noUnderscore(hook.identifier()).equalsIgnoreCase(hookIdentifier)){
                         Object value = hookContainer.getHolder().value();
                         if(value == null) continue;
-                        return hook.parseObject(value, hookArgs, format.buildContext());
+                        return hook.parseObject(value, hookArgs, new FormatParserContext.Builder(format)
+                                .viewer(player)
+                                .build());
                     }
                 }
             }

@@ -1,8 +1,8 @@
 package killercreepr.crux.tags.hook;
 
+import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.data.Holder;
 import killercreepr.crux.tags.FormatArgs;
-import killercreepr.crux.tags.FormatContext;
 import killercreepr.crux.tags.Tags;
 import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.ParsingException;
@@ -18,11 +18,11 @@ public abstract class StringHook<T> extends ObjectHook<T>{
     public StringHook(@NotNull Class<T> object) {
         super(object);
     }
-    public @Nullable String parseObject(@NotNull Object object, @NotNull FormatArgs args,  @NotNull FormatContext context){
+    public @Nullable String parseObject(@NotNull Object object, @NotNull FormatArgs args,  @NotNull TextParserContext context){
         return parse((T) object, args, context);
     }
 
-    public abstract @Nullable String parse(@NotNull T object, @NotNull FormatArgs args, @NotNull FormatContext context);
+    public abstract @Nullable String parse(@NotNull T object, @NotNull FormatArgs args, @NotNull TextParserContext context);
 
     public @NotNull StringHookedObject<T> hook(@NotNull Tags tags, @NotNull Holder<T> holder, @NotNull String prefix){
         return new StringHookedObject<>(tags, prefix, holder, this);
@@ -35,7 +35,7 @@ public abstract class StringHook<T> extends ObjectHook<T>{
     /**
      * @return Builds a MiniMessage TagResolver for this hook.
      */
-    public @Nullable TagResolver tagResolver(@NotNull FormatContext context, @NotNull T object, @NotNull String prefix){
+    public @Nullable TagResolver tagResolver(@NotNull TextParserContext context, @NotNull T object, @NotNull String prefix){
         return new TagResolver() {
             @Override
             public @Nullable Tag resolve(@NotNull String name, @NotNull ArgumentQueue arguments, @NotNull Context ctx) throws ParsingException {
@@ -55,12 +55,12 @@ public abstract class StringHook<T> extends ObjectHook<T>{
         };
     }
 
-    public @Nullable TagResolver tagResolverObject(@NotNull FormatContext context, @NotNull Object object, @NotNull String prefix){
+    public @Nullable TagResolver tagResolverObject(@NotNull TextParserContext context, @NotNull Object object, @NotNull String prefix){
         return tagResolver(context, (T) object, prefix);
     }
 
     public interface IStringHookBuilder<T>{
-        @Nullable String parse(@NotNull T object, @NotNull FormatArgs args, @NotNull FormatContext format);
+        @Nullable String parse(@NotNull T object, @NotNull FormatArgs args, @NotNull TextParserContext format);
     }
 
     public static class Builder<T>{
@@ -86,7 +86,7 @@ public abstract class StringHook<T> extends ObjectHook<T>{
             hooks.forEach((id, i) ->{
                 list.add(new StringHook<T>(object) {
                     @Override
-                    public @Nullable String parse(@NotNull T object, @NotNull FormatArgs args, @NotNull FormatContext context) {
+                    public @Nullable String parse(@NotNull T object, @NotNull FormatArgs args, @NotNull TextParserContext context) {
                         return i.parse(object, args, context);
                     }
 

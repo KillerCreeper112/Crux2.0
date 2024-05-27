@@ -1,10 +1,10 @@
 package killercreepr.crux.tags.format;
 
-import io.netty.util.internal.UnstableApi;
+import killercreepr.crux.context.FormatParserContext;
+import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.Holder;
 import killercreepr.crux.tags.FormatArgs;
-import killercreepr.crux.tags.FormatContext;
 import killercreepr.crux.tags.Tags;
 import killercreepr.crux.tags.container.LoreHookContainer;
 import killercreepr.crux.tags.container.StringHookContainer;
@@ -13,6 +13,7 @@ import killercreepr.crux.tags.tag.LoreResolver;
 import killercreepr.crux.util.CruxMath;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
@@ -30,15 +31,11 @@ public class Format {
     private final Pattern STRING_PATTERN = Pattern.compile("<(\\w+)(?::([^>]+))?>");
     private final Pattern LORE_PATTERN = Pattern.compile("\\{(\\w+)(?::([^{}]+))?}");
     private static final Pattern EQUATION_PATTERN = Pattern.compile("\\{\\{(.+?)\\}\\}");
+    private static final Pattern B_EQUATION_PATTERN = Pattern.compile("\\{b\\{(.+?)\\}\\}");
 
     public Format(@NotNull MiniMessage FORMAT, @NotNull Tags TAGS) {
         this.FORMAT = FORMAT;
         this.TAGS = TAGS;
-    }
-
-    @UnstableApi
-    public @NotNull FormatContext buildContext(){
-        return new FormatContext(this);
     }
 
     public @NotNull MiniMessage getFormat() {
@@ -72,7 +69,12 @@ public class Format {
 
     public @NotNull Component deserialize(@NotNull String text, @Nullable StringHookContainer resolvers){
         text = setPlaceholders(text, resolvers);
-        return resolvers == null ? FORMAT.deserialize(text) : FORMAT.deserialize(text, resolvers.buildTagResolvers());
+        TextParserContext context = new FormatParserContext.Builder(this)
+                .stringTags(resolvers)
+                .build();
+        Collection<TagResolver> tags = new HashSet<>();
+        if(resolvers != null) tags.addAll(Arrays.stream(resolvers.buildTagResolvers()).toList());
+        return tags.isEmpty() ? FORMAT.deserialize(text) : FORMAT.deserialize(text, tags.toArray(new TagResolver[0]));
     }
 
     public @NotNull Component deserialize(@Nullable OfflinePlayer viewer, @Nullable FormatPrefix tagsPrefix, @NotNull String text){
@@ -81,7 +83,11 @@ public class Format {
 
     public @NotNull Component deserialize(@Nullable OfflinePlayer viewer, @Nullable FormatPrefix tagsPrefix,
                                           @NotNull String text, @Nullable StringHookContainer resolvers){
-        FormatContext context = buildContext();
+        TextParserContext context = new FormatParserContext.Builder(this)
+                .viewer(viewer)
+                .tagsPrefix(tagsPrefix)
+                .stringTags(resolvers)
+                .build();
         StringHookContainer container = new StringHookContainer(context, resolvers);
         if(viewer != null) container.putAll(TAGS.hookStringResolvers(context, Holder.directObject(viewer), tagsPrefix));
         return deserialize(formatRawText(viewer, text), container);
@@ -93,7 +99,10 @@ public class Format {
 
     public @NotNull Component deserialize(@NotNull DataExchange info, @Nullable FormatPrefix tagsPrefix,
                                           @NotNull String text, @Nullable StringHookContainer resolvers){
-        FormatContext context = buildContext();
+        TextParserContext context = new FormatParserContext.Builder(this)
+                .tagsPrefix(tagsPrefix)
+                .stringTags(resolvers)
+                .build();
         StringHookContainer container = new StringHookContainer(context, resolvers);
         container.putAll(TAGS.hookAllTagResolvers(context, info, tagsPrefix));
         OfflinePlayer player = info.getObject(OfflinePlayer.class).orElse(null);
@@ -151,14 +160,29 @@ public class Format {
             matcher.appendReplacement(result, Matcher.quoteReplacement(evaluatedValue));
         }
         matcher.appendTail(result);
+        return processEvalExBool(result.toString());
+    }
+
+    public static @NotNull String processEvalExBool(@NotNull String text) {
+        Matcher matcher = B_EQUATION_PATTERN.matcher(text);
+        StringBuilder result = new StringBuilder();
+        while (matcher.find()) {
+            String expression = matcher.group(1);
+            String evaluatedValue;
+            try{ evaluatedValue = CruxMath.evaluateEvalEx(expression) + ""; }
+            catch (IllegalArgumentException ignored){ continue; }
+            matcher.appendReplacement(result, Matcher.quoteReplacement(evaluatedValue));
+        }
+        matcher.appendTail(result);
         return result.toString();
     }
 
     private @NotNull String processPlaceholders(@NotNull String text, @NotNull StringHookContainer resolvers) {
         Matcher matcher = STRING_PATTERN.matcher(text);
         StringBuilder result = new StringBuilder(text.length());
-        FormatContext context = buildContext();
-
+        TextParserContext context = new FormatParserContext.Builder(this)
+                .stringTags(resolvers)
+                .build();
         while (matcher.find()) {
             String placeholderID = matcher.group(1);
             String optionalParameter = matcher.group(2);
@@ -231,7 +255,9 @@ public class Format {
     private @Nullable List<String> processPlaceholder(@NotNull LoreHookContainer container,
                                                       @NotNull String placeholder,
                                                       @NotNull FormatArgs args) {
-        FormatContext context = buildContext();
+        TextParserContext context = new FormatParserContext.Builder(this)
+                .loreTags(container)
+                .build();
         for(Map.Entry<String, LoreResolver> entry : container.get().entrySet()){
             if(entry.getKey().equalsIgnoreCase(placeholder)){
                 return entry.getValue().resolve(args, context);

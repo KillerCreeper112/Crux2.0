@@ -1,5 +1,6 @@
 package killercreepr.crux.tags;
 
+import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.Holder;
 import killercreepr.crux.tags.container.LoreHookContainer;
@@ -78,11 +79,11 @@ public class Tags {
         return container;
     }*/
 
-    public @NotNull StringHookContainer hookAllTagResolvers(@NotNull FormatContext context, @NotNull DataExchange info){
+    public @NotNull StringHookContainer hookAllTagResolvers(@NotNull TextParserContext context, @NotNull DataExchange info){
         return hookAllTagResolvers(context, info, null);
     }
 
-    public @NotNull StringHookContainer hookAllTagResolvers(@NotNull FormatContext context, @NotNull DataExchange info, @Nullable FormatPrefix prefix){
+    public @NotNull StringHookContainer hookAllTagResolvers(@NotNull TextParserContext context, @NotNull DataExchange info, @Nullable FormatPrefix prefix){
         StringHookContainer container = new StringHookContainer(context);
         for(Holder<Object> o : info.getData().values()){
             if(o == null) continue;
@@ -107,7 +108,7 @@ public class Tags {
     /**
      * @return Requests the base TagResolvers from this object and any hooked objects it may have.
      */
-    public @NotNull StringHookContainer hookStringResolvers(@NotNull FormatContext context, @NotNull Holder<?> holder, @Nullable FormatPrefix prefix){
+    public @NotNull StringHookContainer hookStringResolvers(@NotNull TextParserContext context, @NotNull Holder<?> holder, @Nullable FormatPrefix prefix){
         StringHookContainer container = new StringHookContainer(context);
         Object object = holder.value();
         if(object == null) return container;

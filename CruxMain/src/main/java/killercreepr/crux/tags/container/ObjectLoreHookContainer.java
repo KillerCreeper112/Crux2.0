@@ -1,7 +1,7 @@
 package killercreepr.crux.tags.container;
 
+import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.data.DataExchange;
-import killercreepr.crux.tags.FormatContext;
 import killercreepr.crux.tags.format.FormatPrefix;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -10,9 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ObjectLoreHookContainer extends LoreHookContainer implements IObjectTagResolverContainer{
-    private final @NotNull FormatContext context;
+    private final @NotNull TextParserContext context;
     private final Map<String, PrefixBuilder> prefixBuilders = new HashMap<>();
-    public ObjectLoreHookContainer(@NotNull FormatContext context, @Nullable LoreHookContainer container) {
+    public ObjectLoreHookContainer(@NotNull TextParserContext context, @Nullable LoreHookContainer container) {
         super(container);
         this.context = context;
         if(container instanceof IObjectTagResolverContainer c){
@@ -21,12 +21,12 @@ public class ObjectLoreHookContainer extends LoreHookContainer implements IObjec
     }
 
     //yeah i get it messy messy man
-    public ObjectLoreHookContainer(@NotNull FormatContext context, @NotNull IObjectTagResolverContainer c) {
+    public ObjectLoreHookContainer(@NotNull TextParserContext context, @NotNull IObjectTagResolverContainer c) {
         this.context = context;
         prefixBuilders.putAll(c.getPrefixBuilders());
     }
 
-    public ObjectLoreHookContainer(@NotNull FormatContext context) {
+    public ObjectLoreHookContainer(@NotNull TextParserContext context) {
         this.context = context;
     }
 
@@ -44,7 +44,7 @@ public class ObjectLoreHookContainer extends LoreHookContainer implements IObjec
         return hookAll(context, info, prefixBuilders);
     }
 
-    public ObjectLoreHookContainer hookAll(@NotNull FormatContext context, @NotNull DataExchange info){
+    public ObjectLoreHookContainer hookAll(@NotNull TextParserContext context, @NotNull DataExchange info){
         return hookAll(context, info, prefixBuilders);
     }
 
@@ -52,7 +52,7 @@ public class ObjectLoreHookContainer extends LoreHookContainer implements IObjec
         return hookAll(context, info, prefix);
     }
 
-    public ObjectLoreHookContainer hookAll(@NotNull FormatContext context, @NotNull DataExchange info, @Nullable Map<String, PrefixBuilder> prefixBuilders){
+    public ObjectLoreHookContainer hookAll(@NotNull TextParserContext context, @NotNull DataExchange info, @Nullable Map<String, PrefixBuilder> prefixBuilders){
         if(prefixBuilders == null){
             putAll(context.getFormat().getTags().hookAllLoreTags(info));
             return this;
@@ -71,21 +71,21 @@ public class ObjectLoreHookContainer extends LoreHookContainer implements IObjec
         return hook(context, info);
     }
 
-    public ObjectLoreHookContainer hook(@NotNull FormatContext context, @Nullable Object info){
+    public ObjectLoreHookContainer hook(@NotNull TextParserContext context, @Nullable Object info){
         return hook(context, info, null);
     }
 
-    public ObjectLoreHookContainer hook(@NotNull FormatContext context, @Nullable Object info, @Nullable FormatPrefix prefix){
+    public ObjectLoreHookContainer hook(@NotNull TextParserContext context, @Nullable Object info, @Nullable FormatPrefix prefix){
         return hook(context, info, prefix);
     }
 
-    public ObjectLoreHookContainer hook(@Nullable Object info, @NotNull FormatContext tags, @Nullable FormatPrefix prefix){
+    public ObjectLoreHookContainer hook(@Nullable Object info, @NotNull TextParserContext tags, @Nullable FormatPrefix prefix){
         if(info == null) return this;
         putAll(tags.getFormat().getTags().hookLoreTags(info, prefix));
         return this;
     }
 
-    public @NotNull FormatContext getContext() {
+    public @NotNull TextParserContext getContext() {
         return context;
     }
 

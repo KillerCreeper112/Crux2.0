@@ -1,8 +1,8 @@
 package killercreepr.crux.tags.hook;
 
+import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.data.Holder;
 import killercreepr.crux.tags.FormatArgs;
-import killercreepr.crux.tags.FormatContext;
 import killercreepr.crux.tags.Tags;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.NotNull;
@@ -21,17 +21,17 @@ public class StringHookedObject<T> implements HookedObject<T, StringHook<T>> {
         this.hook = hook;
     }
 
-    public @Nullable String request(@NotNull FormatContext context){
+    public @Nullable String request(@NotNull TextParserContext context){
         return request(new FormatArgs(new String[0]), context);
     }
 
-    public @Nullable String request(@NotNull FormatArgs args, @NotNull FormatContext context){
+    public @Nullable String request(@NotNull FormatArgs args, @NotNull TextParserContext context){
         T object = holder.value();
         if(object == null) return null;
         return hook.parseObject(object, args, context);
     }
 
-    public @Nullable TagResolver tagResolver(@NotNull FormatContext context){
+    public @Nullable TagResolver tagResolver(@NotNull TextParserContext context){
         T object = holder.value();
         if(object == null) return null;
         return hook.tagResolver(context, object, prefix);

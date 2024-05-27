@@ -1,6 +1,6 @@
 package killercreepr.crux.tags.container;
 
-import killercreepr.crux.tags.FormatContext;
+import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.tags.hook.StringHookedObject;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.NotNull;
@@ -12,9 +12,9 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class StringHookContainer implements TagsContainer<StringHookedObject<?>> {
-    protected final @NotNull FormatContext context;
+    protected final @NotNull TextParserContext context;
     private final Map<String, StringHookedObject<?>> tags = new HashMap<>();
-    public StringHookContainer(@NotNull FormatContext context, @Nullable StringHookContainer container){
+    public StringHookContainer(@NotNull TextParserContext context, @Nullable StringHookContainer container){
         this.context = context;
         this.putAll(container);
     }
@@ -23,7 +23,7 @@ public class StringHookContainer implements TagsContainer<StringHookedObject<?>>
         this(container.getContext(), container);
     }
 
-    public StringHookContainer(@NotNull FormatContext context){
+    public StringHookContainer(@NotNull TextParserContext context){
         this.context = context;
     }
 
@@ -31,7 +31,7 @@ public class StringHookContainer implements TagsContainer<StringHookedObject<?>>
         return tags;
     }
 
-    public @NotNull FormatContext getContext() {
+    public @NotNull TextParserContext getContext() {
         return context;
     }
 

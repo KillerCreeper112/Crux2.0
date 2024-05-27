@@ -1,7 +1,7 @@
 package killercreepr.crux.tags.tag;
 
+import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.tags.FormatArgs;
-import killercreepr.crux.tags.FormatContext;
 import killercreepr.crux.tags.hook.LoreHook;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,7 +17,7 @@ public interface LoreResolver {
             }
 
             @Override
-            public @Nullable List<String> resolve(@NotNull FormatArgs args, @NotNull FormatContext context) {
+            public @Nullable List<String> resolve(@NotNull FormatArgs args, @NotNull TextParserContext context) {
                 return result;
             }
         };
@@ -31,12 +31,12 @@ public interface LoreResolver {
             }
 
             @Override
-            public @Nullable List<String> resolve(@NotNull FormatArgs args, @NotNull FormatContext context) {
+            public @Nullable List<String> resolve(@NotNull FormatArgs args, @NotNull TextParserContext context) {
                 return hook.parseObject(object, args, context);
             }
         };
     }
 
     boolean has(final @NotNull String name);
-    @Nullable List<String> resolve(@NotNull FormatArgs args, @NotNull FormatContext context);
+    @Nullable List<String> resolve(@NotNull FormatArgs args, @NotNull TextParserContext context);
 }

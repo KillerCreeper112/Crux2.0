@@ -1,6 +1,7 @@
 package killercreepr.crux.menu.bukkit;
 
 import killercreepr.crux.context.EquationContext;
+import killercreepr.crux.context.FormatParserContext;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.menu.bukkit.api.events.menu.MenuRefreshEvent;
 import killercreepr.crux.menu.bukkit.holder.MenuHolder;
@@ -29,7 +30,8 @@ public class ConfigMenu extends Menu{
     public ConfigMenu(@NotNull MenuHolder holder, @NotNull DataExchange info, @Nullable ObjectStringHookContainer tags){
         this.holder = holder;
         this.info = info;
-        this.tags = new ObjectStringHookContainer(holder.getRegistry().getFormat().buildContext());
+        this.tags = new ObjectStringHookContainer(new FormatParserContext.Builder(holder.getRegistry().getFormat())
+                .stringTags(tags).build());
         if(tags != null) this.tags.putAll(tags);
         reconstruct(Bukkit.createInventory(null, getInventorySize(buildSize()), buildTitle()));
     }
@@ -47,7 +49,8 @@ public class ConfigMenu extends Menu{
     }
 
     public @NotNull ObjectStringHookContainer buildTags(){
-        ObjectStringHookContainer tags = new ObjectStringHookContainer(holder.getRegistry().getFormat().buildContext());
+        ObjectStringHookContainer tags = new ObjectStringHookContainer(new FormatParserContext.Builder(holder.getRegistry().getFormat())
+                .build());
         tags.hookAll(info());
         tags.putAll(getTags());
         return tags;
