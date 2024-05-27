@@ -31,6 +31,9 @@ public class FormatArgs {
     public boolean has(int atIndex){
         return atIndex >= 0 && atIndex < args.length;
     }
+    public boolean isEmpty(){
+        return args.length == 0;
+    }
 
     public @NotNull String get(int index){
         return args[index];

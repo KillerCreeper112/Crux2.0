@@ -1,5 +1,8 @@
 package killercreepr.crux.util;
 
+import com.ezylang.evalex.EvaluationException;
+import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.parser.ParseException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redempt.crunch.Crunch;
@@ -75,5 +78,15 @@ public class CruxMath {
         if(eq == null || eq.isBlank()) return 0D;
         if(ev==null) return evaluate(eq);
         return Crunch.compileExpression(eq, ev).evaluate();
+    }
+
+    public static boolean evaluateEvalEx(@Nullable String eq){
+        if(eq==null || eq.isBlank()) return false;
+        try{
+            return new Expression(eq).evaluate().getBooleanValue();
+        }catch (EvaluationException | ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

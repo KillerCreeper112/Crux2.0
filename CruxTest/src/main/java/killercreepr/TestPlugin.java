@@ -1,5 +1,8 @@
 package killercreepr;
 
+import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.config.ExpressionConfiguration;
+import com.ezylang.evalex.data.EvaluationValue;
 import io.papermc.paper.event.player.ChatEvent;
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.DataExchange;
@@ -12,6 +15,7 @@ import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxconfig.config.bukkit.handlers.BukkitCfgHandlers;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import killercreepr.sometests.Config;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -41,7 +45,26 @@ public class TestPlugin extends CruxPlugin implements Listener {
         menuRegistry.loadConfiguration(new CruxFolder(this, "menus").file());
 
         new CClaimTags(Crux.TAGS);
+
+
+        // Define your expression
+        String expressionString = "\"test\"!=\"test\"";
+        // Create and evaluate the expression
+        Expression expression = new Expression(expressionString);
+        try{
+            EvaluationValue result = expression.evaluate();
+            log("test: === " + result.getBooleanValue());
+        }catch (Exception d){
+            d.printStackTrace();
+        }
+
+       /* log("test: " + parseAndTest("test==test"));
+        log("test: " + parseAndTest("test== test && man==ma"));
+        log("test: " + parseAndTest("test== test && man==man"));
+
+        log("test: " + parseAndTest("(test== test && man==ma) || (boy == bo || ee == ee)"));*/
     }
+
     protected Config cfg;
 
     @EventHandler(ignoreCancelled = true)

@@ -7,6 +7,7 @@ plugins {
 dependencies {
     paperweight.paperDevBundle(libs.versions.paper)
     implementation(libs.crunch)
+    implementation("com.ezylang:EvalEx:3.2.0")
 
     compileOnly(files(
         "E:\\Plugins\\FIVERR\\A_ICEYPLAYZ\\cclaim\\run\\plugins\\PlaceholderAPI-2.11.4.jar"

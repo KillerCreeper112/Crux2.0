@@ -6,6 +6,7 @@ import net.kyori.adventure.text.minimessage.ParsingException;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,6 +17,7 @@ public class CheckBoolTag implements TagResolver {
         String[] args = arguments.pop().value().split(",");
         int amountTrue = 0;
         for(String s : args){
+            Bukkit.broadcastMessage(s + " checking bool");
             if(CruxString.parseBoolean(s)) amountTrue++;
         }
         boolean value = amountTrue >= args.length;
