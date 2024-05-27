@@ -6,6 +6,7 @@ import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.item.DynamicItemComponent;
 import killercreepr.crux.util.CruxItem;
 import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
 import org.bukkit.inventory.meta.trim.TrimMaterial;

@@ -2,6 +2,7 @@ package killercreepr.crux.item;
 
 import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.util.CruxItem;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -59,9 +60,16 @@ public class BukkitDynamicItem implements DynamicItem{
 
     @Override
     public @Nullable CruxItem build(@NotNull TextParserContext context) {
-        Material material = Material.matchMaterial(context.parseString(material()));
-        if(material == null) return null;
-        CruxItem item = new CruxItem(new ItemStack(material, amount==null?1:(int) Double.parseDouble(context.parseString(amount))));
+        String parsed = context.parseString(material());
+        Material material = Material.matchMaterial(parsed);
+        ItemStack built;
+        if(material == null){
+            try{
+                built = Bukkit.getItemFactory().createItemStack(parsed);
+            }catch (IllegalArgumentException ignored){ return null; }
+        }else built = new ItemStack(material);
+        CruxItem item = new CruxItem(built);
+        item.amount(amount==null?1:(int) Double.parseDouble(context.parseString(amount)));
         if(components == null) return item;
         for(DynamicItemComponent component : components.values()){
             component.apply(item, context);
