@@ -15,6 +15,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,7 +29,7 @@ public class Format {
     private final Tags TAGS;
     private final Collection<RawTextFormat> RAW_TEXT = new HashSet<>();
 
-    private final Pattern STRING_PATTERN = Pattern.compile("<(\\w+)(?::([^>]+))?>");
+    private final Pattern STRING_PATTERN = Pattern.compile("<([^<>]+?)>");//Pattern.compile("<(\\w+)(?::([^>]*))?>");//Pattern.compile("<(\\w+)(?::([^>]+))?>");
     private final Pattern LORE_PATTERN = Pattern.compile("\\{(\\w+)(?::([^{}]+))?}");
     private static final Pattern EQUATION_PATTERN = Pattern.compile("\\{\\{(.+?)\\}\\}");
     private static final Pattern B_EQUATION_PATTERN = Pattern.compile("\\{b\\{(.+?)\\}\\}");
@@ -146,6 +147,7 @@ public class Format {
 
     public @NotNull String setPlaceholders(@NotNull String text, @Nullable StringHookContainer resolvers){
         if(resolvers == null) return text;
+        Bukkit.broadcastMessage("before: " + text);
         return processEquations(processPlaceholders(text, resolvers));
     }
 
@@ -177,35 +179,51 @@ public class Format {
         return result.toString();
     }
 
-    private @NotNull String processPlaceholders(@NotNull String text, @NotNull StringHookContainer resolvers) {
+    public @NotNull String processPlaceholders(@NotNull String text, @NotNull StringHookContainer resolvers) {
+        Bukkit.broadcastMessage("before(p): " + text);
         Matcher matcher = STRING_PATTERN.matcher(text);
         StringBuilder result = new StringBuilder(text.length());
         TextParserContext context = new FormatParserContext.Builder(this)
                 .stringTags(resolvers)
                 .build();
         while (matcher.find()) {
-            String placeholderID = matcher.group(1);
-            String optionalParameter = matcher.group(2);
-            FormatArgs args = new FormatArgs(optionalParameter == null ? new String[0] : optionalParameter.split(":"));
-            List<String> replacementList = new ArrayList<>();
+            String placeholder = matcher.group(1);
+            String[] parts = placeholder.split(":");
+            placeholder = parts[0];
 
-            for (StringHookedObject<?> hooked : resolvers.get().values()) {
-                if(!placeholderID.equalsIgnoreCase(hooked.identifier())) continue;
-                String request = hooked.request(args, context);
-                if (request != null) {
-                    replacementList.add(request);
-                }
-            }
+            String[] arguments = new String[parts.length - 1];
+            System.arraycopy(parts, 1, arguments, 0, parts.length - 1);
 
-            // Replace the matched substring with the longest replacement
-            replacementList.stream()
-                    .max(Comparator.comparingInt(String::length)).ifPresent(longestReplacement ->
-                            matcher.appendReplacement(result, Matcher.quoteReplacement(longestReplacement)));
-
+            Bukkit.broadcastMessage(placeholder + " placeholder");
+            String replacement = resolvePlaceholder(placeholder, new FormatArgs(arguments), context, resolvers);
+            matcher.appendReplacement(result, replacement);
         }
-
         matcher.appendTail(result);
+        Bukkit.broadcastMessage("after: " + result);
         return result.toString();
+    }
+
+    private String resolvePlaceholder(String placeholderID, FormatArgs args, TextParserContext context, StringHookContainer resolvers) {
+        List<String> replacementList = new ArrayList<>();
+        boolean found = false; // Flag to indicate if any resolution was successful
+        for (StringHookedObject<?> hooked : resolvers.get().values()) {
+            if (!placeholderID.equalsIgnoreCase(hooked.identifier())) continue;
+            String request = hooked.request(args, context);
+            if (request != null) {
+                found = true; // Resolution was successful
+                // Recursively process nested placeholders
+                request = processPlaceholders(request, resolvers);
+                replacementList.add(request);
+            }
+        }
+        if (!found) {
+            // If no resolution was successful, return the original placeholder
+            return "<" + placeholderID + (args.isEmpty() ? "" : ":" + processPlaceholders(String.join(":", args.getArgs()), resolvers)) + ">";
+        }
+        // Return the longest replacement
+        return replacementList.stream()
+                .max(Comparator.comparingInt(String::length))
+                .orElse("<" + placeholderID + (args.isEmpty() ? "" : ":" + processPlaceholders(String.join(":", args.getArgs()), resolvers))+ ">");
     }
 
     //LORE

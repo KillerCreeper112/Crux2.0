@@ -1,7 +1,6 @@
 package killercreepr;
 
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.config.ExpressionConfiguration;
 import com.ezylang.evalex.data.EvaluationValue;
 import io.papermc.paper.event.player.ChatEvent;
 import killercreepr.crux.Crux;
@@ -15,7 +14,6 @@ import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxconfig.config.bukkit.handlers.BukkitCfgHandlers;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import killercreepr.sometests.Config;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

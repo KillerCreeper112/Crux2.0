@@ -1,6 +1,5 @@
 package killercreepr.crux.tags.minimessage;
 
-import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.util.CruxString;
 import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.ParsingException;
