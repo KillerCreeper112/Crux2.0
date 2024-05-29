@@ -1,5 +1,6 @@
 package killercreepr.crux;
 
+import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.tags.Tags;
 import killercreepr.crux.tags.format.Format;
 import killercreepr.crux.tags.minimessage.*;
@@ -36,6 +37,15 @@ public class Crux{
     );
     private static final Logger log = Logger.getLogger(Crux.class.getName());
 
+    public static @Nullable CruxPlugin mainPlugin;
+
+    public static @Nullable CruxPlugin getMainPlugin() {
+        return mainPlugin;
+    }
+
+    public static void setMainPlugin(@Nullable CruxPlugin mainPlugin) {
+        Crux.mainPlugin = mainPlugin;
+    }
     /*private final MenuRegistry MENU_REGISTRY = new MenuRegistry(FORMAT);
 
     public @NotNull MenuRegistry getMenuRegistry() {
@@ -75,10 +85,6 @@ public class Crux{
         });
     }*/
 
-    public void onDisable() {
-        HandlerList.unregisterAll((Plugin) this);
-    }
-
     public static void log(@NotNull Level level, @NotNull String msg){
         log.log(level, msg);
     }
@@ -89,25 +95,6 @@ public class Crux{
 
     public static @NotNull NamespacedKey key(@NotNull String[] key){
         return key.length > 1 ? new NamespacedKey(key[0], key[1]) : new NamespacedKey(NAMESPACE, key[0]);
-    }
-
-    public static @NotNull NamespacedKey minecraftKey(@NotNull String key){
-        return minecraftKey(key.split(":"));
-    }
-
-    public static @NotNull NamespacedKey minecraftKey(@NotNull String[] key){
-        return key.length > 1 ? new NamespacedKey(key[0], key[1]) : NamespacedKey.minecraft(key[0]);
-    }
-
-    public static @Nullable Player getPlayer(@NotNull String uuidOrName){
-        if(uuidOrName.isBlank()) return null;
-        Player p = Bukkit.getPlayer(uuidOrName);
-        if(p == null){
-            try{
-                return Bukkit.getPlayer(UUID.fromString(uuidOrName));
-            }catch (IllegalArgumentException ignored){}
-        }
-        return p;
     }
 
     public static @NotNull List<String> playerList(){

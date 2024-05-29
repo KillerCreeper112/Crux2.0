@@ -1,0 +1,45 @@
+package killercreepr.crux.data.entity;
+
+import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Entity;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+public abstract class EntityDataHolder implements DataHolder{
+    protected final NamespacedKey key;
+    protected final EntityMemory parent;
+    public EntityDataHolder(@NotNull NamespacedKey key, @NotNull EntityMemory parent) {
+        this.key = key;
+        this.parent = parent;
+    }
+
+    @Override
+    public boolean shouldRemoveFromMemory(@Nullable Entity e) {
+        return false;
+    }
+
+    protected void removingFromMemory(){}
+
+
+    @Override
+    public void tick(@NotNull Entity e) {}
+
+    @Override
+    public void removing() {
+         removingFromMemory();
+    }
+
+    @Override
+    public void parentRemoving() {
+        removingFromMemory();
+    }
+
+    @Override
+    public @NotNull NamespacedKey getKey() {
+        return key;
+    }
+
+    public @NotNull EntityMemory getParent() {
+        return parent;
+    }
+}

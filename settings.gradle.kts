@@ -5,6 +5,7 @@ include(
     "CruxMain",
     "CruxConfig",
     "CruxMenu",
+    "CruxPotion",
 
     "CruxTest"
 )

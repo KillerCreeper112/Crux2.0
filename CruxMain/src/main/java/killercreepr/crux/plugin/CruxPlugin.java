@@ -1,6 +1,7 @@
 package killercreepr.crux.plugin;
 
-import org.bukkit.NamespacedKey;
+import killercreepr.crux.module.CruxModule;
+import killercreepr.crux.registries.Registries;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
@@ -10,19 +11,32 @@ import org.jetbrains.annotations.NotNull;
 import java.util.logging.Level;
 
 //todo use better command framework
-public abstract class CruxPlugin extends JavaPlugin {
+public abstract class CruxPlugin extends JavaPlugin implements CruxModule {
     /**
      * Use enabled() for onEnable logic.
      */
     @Override
     public final void onEnable() {
         super.onEnable();
+
+        Registries.PLUGINS.register(this);
+
         enabled();
     }
 
     public void enabled(){
         reloadConfigs();
         //registerDefaultCmds();
+    }
+
+    @Override
+    public void register(@NotNull CruxPlugin plugin) {
+        enabled();
+    }
+
+    @Override
+    public @NotNull String name() {
+        return this.getName();
     }
 
     /**
@@ -32,6 +46,7 @@ public abstract class CruxPlugin extends JavaPlugin {
     public final void onDisable() {
         super.onDisable();
         HandlerList.unregisterAll((Plugin) this);
+        Registries.PLUGINS.unregister(this);
         disabled();
     }
 
@@ -84,7 +99,7 @@ public abstract class CruxPlugin extends JavaPlugin {
         return COMMANDS.get(cmd.getName());
     }*/
 
-    protected void registerListeners(@NotNull Listener... listeners){
+    public void registerListeners(@NotNull Listener... listeners){
         for(Listener l : listeners){
             getServer().getPluginManager().registerEvents(l, this);
         }
@@ -103,7 +118,7 @@ public abstract class CruxPlugin extends JavaPlugin {
         }
     }*/
 
-    public @NotNull NamespacedKey key(@NotNull String key){
+    /*public @NotNull NamespacedKey key(@NotNull String key){
         return key(key.split(":"));
     }
 
@@ -117,7 +132,7 @@ public abstract class CruxPlugin extends JavaPlugin {
 
     public boolean hasPluginNamespace(@NotNull NamespacedKey k){
         return k.getNamespace().equalsIgnoreCase(key("a").getNamespace());
-    }
+    }*/
 
     public CruxPlugin log(@NotNull Level level, @NotNull String text){
         getLogger().log(level, text);

@@ -1,7 +1,9 @@
 
 package killercreepr.cruxconfig.config.common.yaml.element;
 
-public abstract class YamlElement {
+import killercreepr.cruxconfig.config.common.element.FileElement;
+
+public abstract class YamlElement extends FileElement {
     public boolean isYamlObject() {
         return this instanceof YamlObject;
     }
@@ -35,7 +37,7 @@ public abstract class YamlElement {
         throw new IllegalStateException("Not a Yaml Primitive: " + this);
     }
 
-    public Object getAsObject(){
+/*    public Object getAsObject(){
         throw new UnsupportedOperationException(getClass().getSimpleName());
     }
 
@@ -73,5 +75,5 @@ public abstract class YamlElement {
 
     public short getAsShort() {
         throw new UnsupportedOperationException(getClass().getSimpleName());
-    }
+    }*/
 }

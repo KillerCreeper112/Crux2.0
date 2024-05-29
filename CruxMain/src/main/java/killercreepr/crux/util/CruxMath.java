@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import redempt.crunch.Crunch;
 import redempt.crunch.functional.EvaluationEnvironment;
 
+import java.text.DecimalFormat;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class CruxMath {
@@ -89,4 +90,48 @@ public class CruxMath {
             return false;
         }
     }
+
+    public static int unnumeral(@NotNull String number) {
+        if (number.startsWith("M")) return 1000 + unnumeral(number.replaceFirst("M", ""));
+        if (number.startsWith("CM")) return 900 + unnumeral(number.replaceFirst("CM", ""));
+        if (number.startsWith("D")) return 500 + unnumeral(number.replaceFirst("D", ""));
+        if (number.startsWith("CD")) return 400 + unnumeral(number.replaceFirst("CD", ""));
+        if (number.startsWith("C")) return 100 + unnumeral(number.replaceFirst("C", ""));
+        if (number.startsWith("XC")) return 90 + unnumeral(number.replaceFirst("XC", ""));
+        if (number.startsWith("L")) return 50 + unnumeral(number.replaceFirst("L", ""));
+        if (number.startsWith("XL")) return 40 + unnumeral(number.replaceFirst("XL", ""));
+        if (number.startsWith("X")) return 10 + unnumeral(number.replaceFirst("X", ""));
+        if (number.startsWith("IX")) return 9 + unnumeral(number.replaceFirst("IX", ""));
+        if (number.startsWith("V")) return 5 + unnumeral(number.replaceFirst("V", ""));
+        if (number.startsWith("IV")) return 4 + unnumeral(number.replaceFirst("IV", ""));
+        if (number.startsWith("I")) return 1 + unnumeral(number.replaceFirst("I", ""));
+        return 0;
+    }
+
+    private static @NotNull String numeralConvert(int number){
+        if(number<=0) return "";
+        if(number>=6000) return "";
+
+        if (number-1000>=0) return "M" + numeralConvert(number-1000);
+        if (number-900>=0) return "CM" + numeralConvert(number-900);
+        if (number-500>=0) return "D" + numeralConvert(number-500);
+        if (number-400>=0) return "CD" + numeralConvert(number-400);
+        if (number-100>=0) return "C" + numeralConvert(number-100);
+        if (number-90>=0) return "XC" + numeralConvert(number-90);
+        if (number-50>=0) return "L" + numeralConvert(number-50);
+        if (number-40>=0) return "XL" + numeralConvert(number-40);
+        if (number-10>=0) return "X" + numeralConvert(number-10);
+        if (number-9>=0) return "IX" + numeralConvert(0);
+        if (number-5>=0) return "V" + numeralConvert(number-5);
+        if (number-4>=0) return "IV" + numeralConvert(0);
+        return "I" + numeralConvert(number-1);
+    }
+
+    public static @NotNull String numeral(int number) {
+        if(number<=0) return String.valueOf(number);
+        if(number>=6000) return String.valueOf(number);
+        return numeralConvert(number);
+    }
+
+    public static @NotNull String padWithZeroIfSingleDigit(int x){ return (x < 10 ? "0" : "") + new DecimalFormat().format(x); }
 }

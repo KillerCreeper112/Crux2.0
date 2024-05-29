@@ -2,6 +2,7 @@ package killercreepr.crux.registry;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.stream.Stream;
 
 /**
@@ -12,5 +13,10 @@ public interface Registry<T> extends Iterable<T>{
     @NotNull T register(@NotNull T object);
     boolean unregister(@NotNull T object);
     void clear();
+    @NotNull
+    Collection<T> values();
+    default boolean isEmpty(){
+        return values().isEmpty();
+    }
 }
 

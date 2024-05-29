@@ -3,10 +3,7 @@ package killercreepr.crux.registry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
@@ -89,6 +86,11 @@ public class SimpleMappedRegistry<K, V> implements MappedRegistry<K, V> {
     @Override
     public void clear() {
         map.clear();
+    }
+
+    @Override
+    public @NotNull Collection<V> values() {
+        return map.values();
     }
 
     @NotNull
