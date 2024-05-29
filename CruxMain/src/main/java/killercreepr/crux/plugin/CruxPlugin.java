@@ -30,11 +30,6 @@ public abstract class CruxPlugin extends JavaPlugin implements CruxModule {
     }
 
     @Override
-    public void register(@NotNull CruxPlugin plugin) {
-        enabled();
-    }
-
-    @Override
     public @NotNull String name() {
         return this.getName();
     }

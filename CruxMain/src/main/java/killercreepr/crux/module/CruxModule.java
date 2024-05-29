@@ -6,7 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 public interface CruxModule {
     @NotNull String name();
-    void register(@NotNull CruxPlugin plugin);
+    default void onEnable(@NotNull CruxPlugin plugin){}
+    default void onDisable(@NotNull CruxPlugin plugin){}
     default void reload(){}
 
     default @NotNull NamespacedKey key(@NotNull String key){

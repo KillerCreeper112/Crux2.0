@@ -66,7 +66,7 @@ public class PotionListener implements Listener {
         if(!PotionCore.canApplyPotion(p)) return;
         PlayerMemory memory = PlayerMemory.get(p);
         if(memory == null || !(memory.getHolder(PotionHolder.KEY) instanceof PotionHolder data)) return;
-        Collection<CustomPotionHolder> potions = PotionPersistTags.STORED_POTIONS.get(event.getItem(), null);
+        Collection<CustomPotionHolder> potions = PotionPersistTags.STORED_CUSTOM_POTIONS.get(event.getItem(), null);
         if(potions == null || potions.isEmpty()) return;
         for(CustomPotionHolder h : potions){
             data.addPotion(h.create(p));
@@ -79,7 +79,7 @@ public class PotionListener implements Listener {
         if(!PotionCore.canApplyPotion(p)) return;
         EntityMemory memory = EntityMemory.getOrCreate(p);
         if(!(memory.getHolder(PotionHolder.KEY) instanceof PotionHolder data)) return;
-        Collection<CustomPotionHolder> potions = PotionPersistTags.STORED_POTIONS.get(event.getPotion(),null);
+        Collection<CustomPotionHolder> potions = PotionPersistTags.STORED_CUSTOM_POTIONS.get(event.getPotion(),null);
         if(potions == null || potions.isEmpty()) return;
         for(CustomPotionHolder h : potions){
             data.addPotion(h.create(p));

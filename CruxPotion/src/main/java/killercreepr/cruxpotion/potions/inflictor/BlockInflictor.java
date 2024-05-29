@@ -1,6 +1,6 @@
 package killercreepr.cruxpotion.potions.inflictor;
 
-import killercreepr.crux.data.Holder;
+import killercreepr.crux.data.NotNullHolder;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -9,8 +9,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class BlockInflictor implements PotionInflictor, Holder<Block> {
-    protected final Block block;
+public class BlockInflictor implements PotionInflictor, NotNullHolder<Block> {
+    protected final @NotNull Block block;
     public BlockInflictor(@NotNull World world, @NotNull Vector vector) {
         this.block = world.getBlockAt(vector.getBlockX(), vector.getBlockY(), vector.getBlockZ());
     }

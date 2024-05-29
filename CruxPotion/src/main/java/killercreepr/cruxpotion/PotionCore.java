@@ -130,9 +130,9 @@ public class PotionCore {
                         if(!(e instanceof LivingEntity lE) || lE.getEquipment() == null) continue;
                         ItemStack main = lE.getEquipment().getItemInMainHand();
                         if(CruxItem.isEmpty(main)) continue;
-                        Collection<CustomPotionHolder> holders = PotionPersistTags.STORED_POTIONS.get(main, new HashSet<>());
+                        Collection<CustomPotionHolder> holders = PotionPersistTags.STORED_CUSTOM_POTIONS.get(main, new HashSet<>());
                         holders.add(new CustomPotionHolder(potion.create(e, duration, amplifier)));
-                        PotionPersistTags.STORED_POTIONS.set(main, holders);
+                        PotionPersistTags.STORED_CUSTOM_POTIONS.set(main, holders);
                         lE.getEquipment().setItemInMainHand(main, true);
                         added++;
                         continue;
@@ -152,7 +152,7 @@ public class PotionCore {
                             if(!(d instanceof LivingEntity lE) || lE.getEquipment() == null) continue;
                             ItemStack main = lE.getEquipment().getItemInMainHand();
                             if(CruxItem.isEmpty(main)) continue;
-                            lE.getEquipment().setItemInMainHand(PotionPersistTags.STORED_POTIONS.remove(main), true);
+                            lE.getEquipment().setItemInMainHand(PotionPersistTags.STORED_CUSTOM_POTIONS.remove(main), true);
                             removed++;
                             continue;
                         }
@@ -169,10 +169,10 @@ public class PotionCore {
                             if(!(d instanceof LivingEntity lE) || lE.getEquipment() == null) continue;
                             ItemStack main = lE.getEquipment().getItemInMainHand();
                             if(CruxItem.isEmpty(main)) continue;
-                            Collection<CustomPotionHolder> holders = PotionPersistTags.STORED_POTIONS.get(main, new HashSet<>());
+                            Collection<CustomPotionHolder> holders = PotionPersistTags.STORED_CUSTOM_POTIONS.get(main, new HashSet<>());
                             holders.removeIf(x -> x.getPotion().getKey().equals(potion.getKey()));
-                            if(holders.isEmpty()) PotionPersistTags.STORED_POTIONS.remove(main);
-                            else PotionPersistTags.STORED_POTIONS.set(main, holders);
+                            if(holders.isEmpty()) PotionPersistTags.STORED_CUSTOM_POTIONS.remove(main);
+                            else PotionPersistTags.STORED_CUSTOM_POTIONS.set(main, holders);
                             lE.getEquipment().setItemInMainHand(main, true);
                             continue;
                         }

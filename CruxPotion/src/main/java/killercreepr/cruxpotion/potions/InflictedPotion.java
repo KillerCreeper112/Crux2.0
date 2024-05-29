@@ -1,6 +1,6 @@
 package killercreepr.cruxpotion.potions;
 
-import killerceepr.yarrin.plugins.potioncore.potions.inflictor.PotionInflictor;
+import killercreepr.cruxpotion.potions.inflictor.PotionInflictor;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

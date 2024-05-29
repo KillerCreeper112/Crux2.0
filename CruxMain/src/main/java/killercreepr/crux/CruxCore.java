@@ -1,0 +1,25 @@
+package killercreepr.crux;
+
+import killercreepr.crux.data.entity.EntityMemory;
+import killercreepr.crux.module.CruxModule;
+import killercreepr.crux.plugin.CruxPlugin;
+import org.jetbrains.annotations.NotNull;
+
+public class CruxCore implements CruxModule {
+    @Override
+    public @NotNull String name() {
+        return "CruxCore";
+    }
+
+    @Override
+    public void onDisable(@NotNull CruxPlugin plugin) {
+        for(EntityMemory data : EntityMemory.REGISTRY){
+            data.removeDataHolders(true);
+        }
+    }
+
+    @Override
+    public void onEnable(@NotNull CruxPlugin plugin) {
+        Crux.buildTickRunnable().runTaskTimer(plugin, 20L, 1L);
+    }
+}

@@ -1,7 +1,5 @@
 package killercreepr.cruxpotion.potions;
 
-import killercreepr.crux.registry.KeyedRegistry;
-import killercreepr.crux.registry.SimpleKeyedRegistry;
 import killercreepr.cruxpotion.potions.inflictor.PotionInflictor;
 import org.bukkit.Keyed;
 import org.bukkit.entity.Entity;
@@ -10,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface CustomPotion extends Keyed {
-    KeyedRegistry<CustomPotion> REGISTRY = new SimpleKeyedRegistry<>();
     /**
      * @return The formatted potion name.
      */

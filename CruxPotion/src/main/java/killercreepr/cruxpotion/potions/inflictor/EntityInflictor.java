@@ -11,8 +11,8 @@ import java.util.Map;
 import java.util.UUID;
 
 public class EntityInflictor implements PotionInflictor, Holder<Entity> {
-    protected final UUID uuid;
-    protected final EntityType type;
+    protected final @NotNull UUID uuid;
+    protected final @Nullable EntityType type;
     public EntityInflictor(@NotNull UUID uuid) {
         this.uuid = uuid;
         Entity e = value();
@@ -41,7 +41,7 @@ public class EntityInflictor implements PotionInflictor, Holder<Entity> {
     public @NotNull Map<String, Object> serialize() {
         return Map.of(
                 "uuid", uuid.toString(),
-                "type", type.toString()
+                "type", type + ""
         );
     }
 

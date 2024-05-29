@@ -26,7 +26,7 @@ public class CruxPotion implements CruxModule {
 
     protected Config config;
     @Override
-    public void register(@NotNull CruxPlugin plugin) {
+    public void onEnable(@NotNull CruxPlugin plugin) {
         config = new Config(plugin, "config");
         CONFIG = config;
 

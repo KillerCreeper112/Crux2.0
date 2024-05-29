@@ -1,6 +1,12 @@
 package killercreepr.crux;
 
+import killercreepr.crux.data.entity.EntityMemory;
+import killercreepr.crux.data.tick.CruxTick;
+import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.plugin.CruxPlugin;
+import killercreepr.crux.registries.Registries;
+import killercreepr.crux.registry.KeyedRegistry;
+import killercreepr.crux.registry.Registry;
 import killercreepr.crux.tags.Tags;
 import killercreepr.crux.tags.format.Format;
 import killercreepr.crux.tags.minimessage.*;
@@ -9,15 +15,17 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Crux{
+public class Crux {
     public static final String NAMESPACE = "crux";
     public static final Tags TAGS = new Tags();
     public static final Format FORMAT = new Format(
@@ -81,6 +89,26 @@ public class Crux{
             if(menu != null) menu.open(p);
         });
     }*/
+
+    public static @NotNull BukkitRunnable buildTickRunnable(){
+        return buildTickRunnable(Registries.TICKS);
+    }
+
+    public static @NotNull BukkitRunnable buildTickRunnable(@NotNull KeyedRegistry<CruxTick> registry){
+        return new BukkitRunnable(){
+            @Override
+            public void run() {
+                for(CruxTick t : new HashSet<>(registry.values())){
+                    if(t.markedForRemoval()){
+                        registry.remove(t.getKey());
+                        continue;
+                    }
+                    t.tick();
+                }
+                EntityMemory.REGISTRY.values().removeIf(EntityMemory::tick);
+            }
+        };
+    }
 
     public static void log(@NotNull Level level, @NotNull String msg){
         log.log(level, msg);

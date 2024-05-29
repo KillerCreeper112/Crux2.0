@@ -12,8 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 
 public abstract class GenericPotion implements CustomPotion {
-    protected final NamespacedKey key;
-
+    protected final @NotNull NamespacedKey key;
     public GenericPotion(@NotNull NamespacedKey key) {
         this.key = key;
     }

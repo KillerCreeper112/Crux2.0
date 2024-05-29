@@ -1,8 +1,11 @@
 package killercreepr.crux.registries;
 
+import killercreepr.crux.data.tick.CruxTick;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.plugin.CruxPlugin;
+import killercreepr.crux.registry.KeyedRegistry;
 import killercreepr.crux.registry.MappedRegistry;
+import killercreepr.crux.registry.SimpleKeyedRegistry;
 import killercreepr.crux.registry.SimpleMappedRegistry;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,7 +22,20 @@ public class Registries {
         }
     };
 
+    public static final MappedRegistry<String, CruxModule> MODULES = new SimpleMappedRegistry<>(){
+        @Override
+        public @NotNull CruxModule register(@NotNull CruxModule object) {
+            return register(object.name(), object);
+        }
+
+        @Override
+        public boolean unregister(@NotNull CruxModule object) {
+            return remove(object.name()) != null;
+        }
+    };
+
+    public static final KeyedRegistry<CruxTick> TICKS = new SimpleKeyedRegistry<>();
+
     public static final MappedRegistry<String, Boolean> BOOLEAN_MAPPED = SimpleMappedRegistry.fromHashMap();
-    public static final MappedRegistry<String, CruxModule> MODULES = SimpleMappedRegistry.fromHashMap();
     //public static final MappedRegistry<String, PlayerPlaceholder> PLAYER_PLACEHOLDERS = SimpleMappedRegistry.fromHashMap();
 }
