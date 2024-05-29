@@ -14,6 +14,7 @@ import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import killercreepr.cruxmenu.menu.bukkit.listener.MenuListener;
 import killercreepr.cruxmenu.menu.bukkit.registry.MenuRegistry;
 import killercreepr.sometests.Config;
+import killercreepr.sometests.PlayerConfig;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -55,6 +56,10 @@ public class TestPlugin extends CruxPlugin implements Listener {
         }catch (Exception d){
             d.printStackTrace();
         }
+
+        PlayerConfig cc = new PlayerConfig(this, "player");
+        cc.setup();
+        log(Level.WARNING, cc.POTION.value() + " ");
 
        /* log("test: " + parseAndTest("test==test"));
         log("test: " + parseAndTest("test== test && man==ma"));

@@ -130,6 +130,22 @@ public class FileObject extends FileElement implements Iterable<Map.Entry<String
         Object o = e.getAsObject();
         if(o==null) return defaultValue;
 
+        if(o instanceof Number n){
+            if(defaultValue instanceof Integer){
+                o = n.intValue();
+            }else if(defaultValue instanceof Float){
+                o = n.floatValue();
+            }else if(defaultValue instanceof Double){
+                o = n.doubleValue();
+            }else if(defaultValue instanceof Long){
+                o = n.longValue();
+            }else if(defaultValue instanceof Short){
+                o = n.shortValue();
+            }else if(defaultValue instanceof Byte){
+                o = n.byteValue();
+            }
+        }
+
         try{
             return (T) o;
         }catch (ClassCastException ignored){ return defaultValue; }
@@ -138,6 +154,7 @@ public class FileObject extends FileElement implements Iterable<Map.Entry<String
     public <T> T getOrDefaultObject(String memberName, T defaultValue){
         FileElement e = get(memberName);
         if(e==null) return defaultValue;
+
         return getOrDefault(e, defaultValue);
 
         /*todo maybe? if (defaultValue instanceof Number && o instanceof Number valueNumber) {

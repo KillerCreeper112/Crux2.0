@@ -23,7 +23,7 @@ public interface ICruxJson extends ICruxFile {
     @NotNull Gson parser();
 
     default void reloadIfNeeded(){
-        if(json() == null) reload();
+        if(json() == null || isClosed()) reload();
     }
 
     default JsonObject reloadIfExists(){
@@ -44,7 +44,11 @@ public interface ICruxJson extends ICruxFile {
                 pw.close();
             }
             FileReader reader = reader();
-            if(reader == null){
+            if(reader != null){
+                reader.close();
+                setClosed(true);
+            }
+            if(reader == null || isClosed()){
                 reader = new FileReader(file);
                 reader(reader);
             }
@@ -53,6 +57,9 @@ public interface ICruxJson extends ICruxFile {
             ex.printStackTrace();
         }
     }
+
+    boolean isClosed();
+    void setClosed(boolean value);
 
     default boolean createDefault(){
         return createDefault(false);
@@ -78,6 +85,7 @@ public interface ICruxJson extends ICruxFile {
         FileReader reader = reader();
         if(json.isEmpty()){
             try{ reader.close(); } catch (IOException | NullPointerException ignored){}
+            setClosed(true);
             return file().delete();
         }
         try {
@@ -88,6 +96,7 @@ public interface ICruxJson extends ICruxFile {
             fw.flush();
             fw.close();
             reader.close();
+            setClosed(true);
             return true;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -99,6 +108,7 @@ public interface ICruxJson extends ICruxFile {
         JsonObject json = json();
         if(json == null) return;
         try{ reader().close(); } catch (IOException ignored){}
+        setClosed(true);
     }
 
     default @Nullable Object get(@NotNull String memberName){

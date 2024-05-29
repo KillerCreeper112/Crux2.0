@@ -3,7 +3,6 @@ package killercreepr.cruxpotion.data;
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.entity.EntityDataHolder;
 import killercreepr.crux.data.entity.EntityMemory;
-import killercreepr.cruxpotion.PotionCore;
 import killercreepr.cruxpotion.potions.ActivePotion;
 import killercreepr.cruxpotion.potions.CustomPotion;
 import net.kyori.adventure.text.Component;

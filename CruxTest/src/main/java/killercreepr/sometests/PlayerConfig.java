@@ -1,26 +1,22 @@
-package killercreepr.cruxpotion.config;
+package killercreepr.sometests;
 
 import killercreepr.cruxconfig.config.bukkit.file.CruxJson;
 import killercreepr.cruxconfig.config.bukkit.file.JsonCfg;
 import killercreepr.cruxconfig.config.bukkit.value.CfgValue;
 import killercreepr.cruxconfig.config.bukkit.value.CommonValue;
 import killercreepr.cruxconfig.config.common.json.JsonRegistry;
-import killercreepr.cruxpotion.potions.ActivePotion;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.UUID;
 
 public class PlayerConfig extends JsonCfg {
     public final CfgValue<PotionEffect> POTION = new CommonValue<>(
             new PotionEffect(PotionEffectType.HEALTH_BOOST, 100, 1)
-    );
+    ){};
     public PlayerConfig(@NotNull Plugin plugin, @NotNull UUID uuid) {
         super(plugin, uuid.toString());
     }
@@ -59,18 +55,5 @@ public class PlayerConfig extends JsonCfg {
 
     public PlayerConfig(@NotNull Plugin plugin, @NotNull String path, boolean reloadIfExists) {
         super(plugin, path, reloadIfExists);
-    }
-
-    public @NotNull Collection<ActivePotion> getPotions(){
-        if(true) return null;
-        Collection<?> list = null;//cfg.getList("potions");
-        try{ return (Collection<ActivePotion>) list; }
-        catch (Exception ignored){ ignored.printStackTrace(); }
-        return new HashSet<>();
-    }
-
-    public PlayerConfig savePotions(@Nullable Collection<ActivePotion> potions){
-        //cfg.set("potions", potions == null ? null : new ArrayList<>(potions));
-        return this;
     }
 }

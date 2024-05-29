@@ -18,6 +18,7 @@ public class CruxJson extends CruxFolder implements ICruxJson {
     protected FileReader reader;
     protected final Gson parser = new Gson();
     protected final boolean existedBefore;
+    protected boolean isClosed = false;
 
     public CruxJson(@NotNull Plugin plugin, @NotNull String path){
         this(plugin, path, CfgRegistries.JSON);
@@ -83,6 +84,16 @@ public class CruxJson extends CruxFolder implements ICruxJson {
     @Override
     public @NotNull Gson parser() {
         return parser;
+    }
+
+    @Override
+    public boolean isClosed() {
+        return isClosed;
+    }
+
+    @Override
+    public void setClosed(boolean value) {
+        this.isClosed = value;
     }
 
     @Override

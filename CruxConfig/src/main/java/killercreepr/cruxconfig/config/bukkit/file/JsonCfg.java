@@ -145,7 +145,6 @@ public class JsonCfg extends CruxJson implements IJsonCfg<JsonObject, CfgValue<?
 
     @Override
     public boolean contains(@NotNull String path) {
-        reloadIfNeeded();
         return json().has(path);
     }
 

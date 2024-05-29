@@ -45,7 +45,7 @@ public class PotionListener implements Listener {
         Player p = event.getPlayer();
         PlayerMemory memory = PlayerMemory.getOrCreate(p);
         if(memory.getHolder(PotionHolder.KEY) instanceof PotionHolder data){
-            data.setPotions(new PlayerConfig(p.getUniqueId()).getPotions());
+            data.setPotions(new PlayerConfig(plugin, p.getUniqueId()).getPotions());
         }
     }
 
@@ -56,7 +56,7 @@ public class PotionListener implements Listener {
         PotionHolder data = PlayerMemory.getDataHolder(p, PotionHolder.class);
         if(data != null){
             data.stopPotions();
-            new PlayerConfig(p.getUniqueId()).savePotions(data.getActiveEffects()).save();
+            new PlayerConfig(plugin, p.getUniqueId()).savePotions(data.getActiveEffects()).save();
         }
     }
 

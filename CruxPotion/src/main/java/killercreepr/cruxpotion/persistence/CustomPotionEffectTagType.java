@@ -2,7 +2,6 @@ package killercreepr.cruxpotion.persistence;
 
 import killercreepr.crux.Crux;
 import killercreepr.cruxpotion.potions.CustomPotion;
-import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
