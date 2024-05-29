@@ -4,9 +4,12 @@ import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.data.EvaluationValue;
 import io.papermc.paper.event.player.ChatEvent;
 import killercreepr.crux.Crux;
+import killercreepr.crux.CruxCore;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.Holder;
 import killercreepr.crux.plugin.CruxPlugin;
+import killercreepr.crux.registries.CruxModuleRegistry;
+import killercreepr.crux.registries.Registries;
 import killercreepr.crux.tags.defaults.CClaimTags;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
@@ -28,10 +31,17 @@ import java.util.logging.Level;
 
 public class TestPlugin extends CruxPlugin implements Listener {
     protected final MenuRegistry menuRegistry = new MenuRegistry(Crux.FORMAT);
+    protected final CruxModuleRegistry MODULES = Registries.MODULES;
 
     @Override
     public void enabled() {
         super.enabled();
+
+        //register modules.
+        MODULES.register(this,
+                new CruxCore()
+        );
+
         BukkitCfgHandlers.initJson(CfgRegistries.JSON);
         BukkitCfgHandlers.initYaml(CfgRegistries.YAML);
 
@@ -44,28 +54,12 @@ public class TestPlugin extends CruxPlugin implements Listener {
         menuRegistry.loadConfiguration(new CruxFolder(this, "menus").file());
 
         new CClaimTags(Crux.TAGS);
+    }
 
-
-        // Define your expression
-        String expressionString = "\"test\"!=\"test\"";
-        // Create and evaluate the expression
-        Expression expression = new Expression(expressionString);
-        try{
-            EvaluationValue result = expression.evaluate();
-            log("test: === " + result.getBooleanValue());
-        }catch (Exception d){
-            d.printStackTrace();
-        }
-
-        PlayerConfig cc = new PlayerConfig(this, "player");
-        cc.setup();
-        log(Level.WARNING, cc.POTION.value() + " ");
-
-       /* log("test: " + parseAndTest("test==test"));
-        log("test: " + parseAndTest("test== test && man==ma"));
-        log("test: " + parseAndTest("test== test && man==man"));
-
-        log("test: " + parseAndTest("(test== test && man==ma) || (boy == bo || ee == ee)"));*/
+    @Override
+    public void disabled() {
+        super.disabled();
+        MODULES.unregisterAll(this);
     }
 
     protected Config cfg;
@@ -76,9 +70,6 @@ public class TestPlugin extends CruxPlugin implements Listener {
                 DataExchange.builder()
                         .put("test_ayo", Holder.direct(new CClaimTags.TestBois("test_bois")))
                         .build());
-        /*if(event.isSneaking()){
-            cfg.MSG_1.use(event.getPlayer());
-        }else cfg.MSG_2.use(event.getPlayer());*/
     }
 
     @EventHandler(ignoreCancelled = true)

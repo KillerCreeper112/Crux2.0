@@ -1,7 +1,6 @@
 package killercreepr.crux.registries;
 
 import killercreepr.crux.data.tick.CruxTick;
-import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registry.KeyedRegistry;
 import killercreepr.crux.registry.MappedRegistry;
@@ -22,17 +21,7 @@ public class Registries {
         }
     };
 
-    public static final MappedRegistry<String, CruxModule> MODULES = new SimpleMappedRegistry<>(){
-        @Override
-        public @NotNull CruxModule register(@NotNull CruxModule object) {
-            return register(object.name(), object);
-        }
-
-        @Override
-        public boolean unregister(@NotNull CruxModule object) {
-            return remove(object.name()) != null;
-        }
-    };
+    public static final CruxModuleRegistry MODULES = new CruxModuleRegistry();
 
     public static final KeyedRegistry<CruxTick> TICKS = new SimpleKeyedRegistry<>();
 
