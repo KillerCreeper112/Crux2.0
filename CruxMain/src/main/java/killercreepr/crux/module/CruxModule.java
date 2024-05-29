@@ -8,7 +8,7 @@ public interface CruxModule {
     @NotNull String name();
     default void onEnable(@NotNull CruxPlugin plugin){}
     default void onDisable(@NotNull CruxPlugin plugin){}
-    default void reload(){}
+    default void reload(@NotNull CruxPlugin plugin){}
 
     default @NotNull NamespacedKey key(@NotNull String key){
         return key(key.split(":"));

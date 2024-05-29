@@ -1,7 +1,5 @@
 package killercreepr;
 
-import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.data.EvaluationValue;
 import io.papermc.paper.event.player.ChatEvent;
 import killercreepr.crux.Crux;
 import killercreepr.crux.CruxCore;
@@ -14,10 +12,10 @@ import killercreepr.crux.tags.defaults.CClaimTags;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
-import killercreepr.cruxmenu.menu.bukkit.listener.MenuListener;
-import killercreepr.cruxmenu.menu.bukkit.registry.MenuRegistry;
+import killercreepr.cruxmenu.CruxMenu;
+import killercreepr.cruxpotion.CruxPotion;
 import killercreepr.sometests.Config;
-import killercreepr.sometests.PlayerConfig;
+import killercreepr.sometests.TestConfigs;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -30,30 +28,40 @@ import org.jetbrains.annotations.NotNull;
 import java.util.logging.Level;
 
 public class TestPlugin extends CruxPlugin implements Listener {
-    protected final MenuRegistry menuRegistry = new MenuRegistry(Crux.FORMAT);
     protected final CruxModuleRegistry MODULES = Registries.MODULES;
+    protected final CruxCore CRUX_CORE = new CruxCore();
+    protected final CruxMenu CRUX_MENU = new CruxMenu();
+    protected final CruxPotion CRUX_POTION = new CruxPotion();
 
+    protected TestConfigs CONFIGS;
     @Override
     public void enabled() {
         super.enabled();
 
         //register modules.
+        //they will automatically add in their listeners
         MODULES.register(this,
-                new CruxCore()
+                CRUX_CORE,
+                CRUX_MENU,
+                CRUX_POTION
         );
 
         BukkitCfgHandlers.initJson(CfgRegistries.JSON);
         BukkitCfgHandlers.initYaml(CfgRegistries.YAML);
 
-        cfg = new Config(this, "config");
-        cfg.setup();
-        registerListeners(new MenuListener(this));
-        getServer().getPluginManager().registerEvents(this, this);
+        CONFIGS = new TestConfigs(
+                new Config(this, "config")
+        );
+        reloadConfigs();
+        registerListeners(this);
 
-        menuRegistry.register(CfgRegistries.YAML);
-        menuRegistry.loadConfiguration(new CruxFolder(this, "menus").file());
+        CRUX_MENU.reload(this);
 
         new CClaimTags(Crux.TAGS);
+    }
+
+    public TestConfigs cfgs() {
+        return CONFIGS;
     }
 
     @Override
@@ -62,11 +70,16 @@ public class TestPlugin extends CruxPlugin implements Listener {
         MODULES.unregisterAll(this);
     }
 
-    protected Config cfg;
+    @Override
+    public void reloadConfigs() {
+        super.reloadConfigs();
+        CONFIGS.reload();
+        MODULES.reload(this);
+    }
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
-        menuRegistry.MENU_HOLDERS.get(Crux.key("testayo")).open(event.getPlayer(),
+        CRUX_MENU.menuRegistry().MENU_HOLDERS.get(Crux.key("testayo")).open(event.getPlayer(),
                 DataExchange.builder()
                         .put("test_ayo", Holder.direct(new CClaimTags.TestBois("test_bois")))
                         .build());
@@ -75,20 +88,19 @@ public class TestPlugin extends CruxPlugin implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
         Player p = event.getPlayer();
-        cfg.SWAP_HAND_EFFECTS.value().forEach(ee -> p.addPotionEffect(ee));
+        cfgs().CFG.SWAP_HAND_EFFECTS.value().forEach(ee -> p.addPotionEffect(ee));
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onChat(ChatEvent event) {
         getLogger().log(Level.WARNING, "Rleoading configs");
-        cfg.setup();
-        menuRegistry.loadConfiguration(new CruxFolder(this, "menus").file());
+        cfgs().CFG.setup();
+        CRUX_MENU.menuRegistry().loadConfiguration(new CruxFolder(this, "menus").file());
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        cfg.setup();
-        menuRegistry.loadConfiguration(new CruxFolder(this, "menus").file());
+        reloadConfigs();
         return super.onCommand(sender, command, label, args);
     }
 }

@@ -46,7 +46,7 @@ public class CruxPotion implements CruxModule {
     }
 
     @Override
-    public void reload() {
+    public void reload(@NotNull CruxPlugin plugin) {
         config.setup();
     }
 }

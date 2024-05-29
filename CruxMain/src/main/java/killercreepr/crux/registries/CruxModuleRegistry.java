@@ -31,4 +31,11 @@ public class CruxModuleRegistry extends SimpleMappedRegistry<String, CruxModule>
         clear();
         return this;
     }
+
+    public CruxModuleRegistry reload(@NotNull CruxPlugin plugin){
+        for(CruxModule m : this){
+            m.reload(plugin);
+        }
+        return this;
+    }
 }
