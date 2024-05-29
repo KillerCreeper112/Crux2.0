@@ -2,16 +2,18 @@ package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
 import killercreepr.crux.data.CreateSound;
 import killercreepr.cruxconfig.config.bukkit.handler.SimpleFileHandler;
+import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
+import killercreepr.cruxconfig.config.common.json.annotation.JsonSerializer;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Sound;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
+@JsonSerializer(id = "create_sound")
 public class FileCreateSound extends SimpleFileHandler<CreateSound> {
     @Override
-    public @NotNull FileElement serializeToFile(@NotNull CreateSound object) {
+    public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull CreateSound object) {
         return new FileObject()
                 .addProperty("sound", object.getSound().name().asString())
                 .addProperty( "volume", object.getSound().volume())
@@ -21,7 +23,7 @@ public class FileCreateSound extends SimpleFileHandler<CreateSound> {
     }
 
     @Override
-    public @Nullable CreateSound deserializeFromFile(@NotNull FileElement e) {
+    public @Nullable CreateSound deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;
         final String keyName = o.getObject("sound");
         if(keyName == null || keyName.isBlank()) return null;

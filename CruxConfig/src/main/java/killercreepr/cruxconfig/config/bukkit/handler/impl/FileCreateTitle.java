@@ -1,19 +1,21 @@
-package killercreepr.cruxconfig.config.bukkit.yaml.handler;
+package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
 import killercreepr.crux.data.CreateTitle;
 import killercreepr.cruxconfig.config.bukkit.handler.SimpleFileHandler;
+import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
+import killercreepr.cruxconfig.config.common.json.annotation.JsonSerializer;
 import net.kyori.adventure.title.Title;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
-
+@JsonSerializer(id = "create_title")
 public class FileCreateTitle extends SimpleFileHandler<CreateTitle> {
 
     @Override
-    public @NotNull FileElement serializeToFile(@NotNull CreateTitle title) {
+    public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull CreateTitle title) {
         return new FileObject()
                 .addProperty("upper", title.getTitle())
                 .addProperty("lower", title.getSubTitle())
@@ -24,7 +26,7 @@ public class FileCreateTitle extends SimpleFileHandler<CreateTitle> {
     }
 
     @Override
-    public @Nullable CreateTitle deserializeFromFile(@NotNull FileElement e) {
+    public @Nullable CreateTitle deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;
         String title = o.getObject("upper");
         String subTitle = o.getObject("lower");

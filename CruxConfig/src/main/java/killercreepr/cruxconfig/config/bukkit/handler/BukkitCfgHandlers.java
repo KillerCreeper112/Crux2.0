@@ -6,9 +6,7 @@ import killercreepr.crux.data.CreateTitle;
 import killercreepr.crux.data.MsgContainer;
 import killercreepr.crux.item.BukkitDynamicItem;
 import killercreepr.crux.valueproviders.number.NumberProvider;
-import killercreepr.cruxconfig.config.bukkit.handler.impl.FileComponent;
-import killercreepr.cruxconfig.config.bukkit.handler.impl.FileCreateSound;
-import killercreepr.cruxconfig.config.bukkit.handler.impl.FilePotionEffect;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.*;
 import killercreepr.cruxconfig.config.bukkit.yaml.handler.*;
 import killercreepr.cruxconfig.config.bukkit.yaml.handler.item.YamlDynamicItem;
 import killercreepr.cruxconfig.config.common.json.JsonRegistry;
@@ -35,13 +33,13 @@ import java.util.UUID;
 public class BukkitCfgHandlers {
     public static final FilePotionEffect POTION_EFFECT = new FilePotionEffect();
     public static final YamlNumberProvider NUMBER_PROVIDER = new YamlNumberProvider();
-    public static final YamlMsgContainer MSG_CONTAINER = new YamlMsgContainer();
+    public static final FileMsgContainer MSG_CONTAINER = new FileMsgContainer();
     public static final FileCreateSound CREATE_SOUND = new FileCreateSound();
     public static final FileCreateTitle CREATE_TITLE = new FileCreateTitle();
     public static final YamlPotionEffectType POTION_EFFECT_TYPE = new YamlPotionEffectType();
     public static final YamlMaterial MATERIAL = new YamlMaterial();
     public static final FileComponent COMPONENT = new FileComponent();
-    public static final YamlItemStack ITEM_STACK = new YamlItemStack();
+    public static final FileItemStack ITEM_STACK = new FileItemStack();
     public static final YamlDynamicItem DYNAMIC_ITEM = new YamlDynamicItem();
 
     public static void initJson(@NotNull JsonRegistry registry){
@@ -51,8 +49,11 @@ public class BukkitCfgHandlers {
                 new GenericJsonHandler<>("potion_effect", PotionEffect.class)
         );
         registry.registerContainerHandler(PotionEffect.class, POTION_EFFECT);
-        registry.registerContainerHandler(PotionEffect.class, COMPONENT);
-        registry.registerContainerHandler(PotionEffect.class, POTION_EFFECT);//todo
+        registry.registerContainerHandler(Component.class, COMPONENT);
+        registry.registerContainerHandler(MsgContainer.class, MSG_CONTAINER);
+        registry.registerContainerHandler(CreateSound.class, CREATE_SOUND);
+        registry.registerContainerHandler(CreateTitle.class, CREATE_TITLE);
+        registry.registerContainerHandler(ItemStack.class, ITEM_STACK);
     }
 
     public static void initYaml(@NotNull YamlRegistry registry){

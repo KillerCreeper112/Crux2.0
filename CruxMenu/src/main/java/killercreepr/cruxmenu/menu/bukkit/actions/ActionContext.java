@@ -1,10 +1,10 @@
 package killercreepr.cruxmenu.menu.bukkit.actions;
 
 import killercreepr.crux.data.DataExchange;
+import killercreepr.crux.tags.container.ObjectStringHookContainer;
 import killercreepr.cruxmenu.menu.bukkit.ConfigMenu;
 import killercreepr.cruxmenu.menu.bukkit.MenuContext;
 import killercreepr.cruxmenu.menu.bukkit.MenuItem;
-import killercreepr.crux.tags.container.ObjectStringHookContainer;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,17 +1,19 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
 import killercreepr.cruxconfig.config.bukkit.handler.SimpleFileHandler;
+import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
+import killercreepr.cruxconfig.config.common.json.annotation.JsonSerializer;
 import org.bukkit.NamespacedKey;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
+@JsonSerializer(id = "potion_effect")
 public class FilePotionEffect extends SimpleFileHandler<PotionEffect> {
     @Override
-    public @NotNull FileElement serializeToFile(@NotNull PotionEffect object) {
+    public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull PotionEffect object) {
         return new FileObject()
                 .addProperty("type", object.getType().getKey().asString())
                 .addProperty("duration", object.getDuration())
@@ -23,7 +25,7 @@ public class FilePotionEffect extends SimpleFileHandler<PotionEffect> {
     }
 
     @Override
-    public @Nullable PotionEffect deserializeFromFile(@NotNull FileElement e) {
+    public @Nullable PotionEffect deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;
         PotionEffectType type = PotionEffectType.getByKey(NamespacedKey.fromString(o.getOrDefaultObject("type", "a")));
         if(type==null) return null;

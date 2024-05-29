@@ -1,15 +1,11 @@
 package killercreepr.cruxconfig.config.common.yaml.context;
 
+import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
 import org.jetbrains.annotations.NotNull;
 
-public class YamlContext {
-    protected final @NotNull YamlRegistry registry;
+public class YamlContext extends FileContext<YamlRegistry> {
     public YamlContext(@NotNull YamlRegistry registry) {
-        this.registry = registry;
-    }
-
-    public @NotNull YamlRegistry getRegistry() {
-        return registry;
+        super(registry);
     }
 }

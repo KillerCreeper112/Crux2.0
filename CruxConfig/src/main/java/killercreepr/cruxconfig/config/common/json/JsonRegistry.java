@@ -7,6 +7,9 @@ import killercreepr.crux.valueproviders.number.ConstantNumber;
 import killercreepr.crux.valueproviders.number.EquationNumber;
 import killercreepr.crux.valueproviders.number.UniformNumber;
 import killercreepr.crux.valueproviders.number.UniformNumberArray;
+import killercreepr.cruxconfig.config.common.FileContext;
+import killercreepr.cruxconfig.config.common.FileRegistry;
+import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.json.annotation.JsonSerializer;
 import killercreepr.cruxconfig.config.common.json.annotation.JsonSerializerID;
 import killercreepr.cruxconfig.config.common.json.container.GenericJsonHandler;
@@ -23,7 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class JsonRegistry {
+public class JsonRegistry implements FileRegistry {
     public final String DESERIALIZE_METHOD_NAME = "deserializeFromJson";
     public final Map<String, Class<? extends JsonSerializable>> REGISTRY = new HashMap<>();
     public final JsonContainerHandlerRegistry CONTAINER_REGISTRY = new JsonContainerHandlerRegistry(this);
@@ -177,10 +180,25 @@ public class JsonRegistry {
         return null;
     }
 
-    public <T> @Nullable T deserialize(@Nullable JsonElement from, @NotNull Class<T> clazz){
+    public <T> @Nullable T deserialize(@NotNull Class<T> clazz, @Nullable JsonElement from){
         Object o = deserialize(from);
         if(o == null || !clazz.isAssignableFrom(o.getClass())) return null;
         return clazz.cast(o);
     }
 
+    @Override
+    public @NotNull FileElement serializeToFileElement(@NotNull Object object) {
+        return FileElement.fromJson(serializeObject(object));
+    }
+
+    @Override
+    public <T> @Nullable T deserialize(@NotNull Class<T> clazz, @Nullable FileElement o) {
+        if(o==null) return null;
+        return deserialize(clazz, o.toJson());
+    }
+
+    @Override
+    public <T> @Nullable T deserialize(@NotNull Class<T> clazz, @Nullable FileElement o, @NotNull FileContext<?> context) {
+        return deserialize(clazz, o);
+    }
 }

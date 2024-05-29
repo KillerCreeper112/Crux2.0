@@ -1,9 +1,9 @@
 package killercreepr.sometests.menu;
 
 import killercreepr.crux.data.DataExchange;
+import killercreepr.crux.tags.container.ObjectStringHookContainer;
 import killercreepr.cruxmenu.menu.bukkit.ConfigMenu;
 import killercreepr.cruxmenu.menu.bukkit.holder.MenuHolder;
-import killercreepr.crux.tags.container.ObjectStringHookContainer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

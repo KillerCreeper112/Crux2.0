@@ -122,7 +122,7 @@ public interface ICruxJson extends ICruxFile {
     }
 
     default <T> @Nullable T get(@Nullable JsonElement base, @NotNull Class<T> clazz){
-        return jsonRegistry().deserialize(base, clazz);
+        return jsonRegistry().deserialize(clazz, base);
     }
 
     default <T> @NotNull JsonObject add(@NotNull String property, @NotNull T object){

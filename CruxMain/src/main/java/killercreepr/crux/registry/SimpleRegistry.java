@@ -2,7 +2,10 @@ package killercreepr.crux.registry;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 

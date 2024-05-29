@@ -1,6 +1,9 @@
 package killercreepr.cruxconfig.config.common.yaml.registry;
 
 import killercreepr.crux.util.CruxReflect;
+import killercreepr.cruxconfig.config.common.FileContext;
+import killercreepr.cruxconfig.config.common.FileRegistry;
+import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.yaml.automatic.AutoYamlSerializer;
 import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
 import killercreepr.cruxconfig.config.common.yaml.element.*;
@@ -19,7 +22,7 @@ import java.util.*;
  * It was made primarily for saving and extracting config values. Therefor meaning that the
  * software knows exactly what classes it needs to serialize and what classes it needs to deserialize.
  */
-public class YamlRegistry {
+public class YamlRegistry implements FileRegistry {
     public final YamlObjectHandlerRegistry HANDLER_REGISTRY = new YamlObjectHandlerRegistry(this);
 
     public void registerHandler(@NotNull AutoYamlSerializer<?>... serializers){
@@ -228,6 +231,24 @@ public class YamlRegistry {
         YamlElement serialized = serialize(o);
         if(serialized != null) return serialized;
         return new YamlGeneric(o);
+    }
+
+    @Override
+    public @NotNull FileElement serializeToFileElement(@NotNull Object object) {
+        return FileElement.fromYaml(serializeObject(object));
+    }
+
+    @Override
+    public <T> @Nullable T deserialize(@NotNull Class<T> clazz, @Nullable FileElement o) {
+        if(o==null) return null;
+        return deserialize(clazz, o.toYaml());
+    }
+
+    @Override
+    public <T> @Nullable T deserialize(@NotNull Class<T> clazz, @Nullable FileElement o, @NotNull FileContext<?> context) {
+        if(o==null) return null;
+        if(!(context instanceof YamlContext c)) return deserialize(clazz, o);
+        return deserialize(clazz, o.toYaml(), c);
     }
 
     public @NotNull Collection<Object> deserializeCollection(@NotNull Collection<?> list){

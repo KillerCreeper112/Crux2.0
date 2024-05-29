@@ -2,14 +2,14 @@ package killercreepr.cruxmenu.menu.bukkit.config.handlers;
 
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.Holder;
-import killercreepr.cruxmenu.menu.bukkit.config.YamlDataProvider;
-import killercreepr.cruxmenu.menu.bukkit.holder.MenuItemHolder;
 import killercreepr.crux.registry.MappedRegistry;
 import killercreepr.crux.registry.SimpleMappedRegistry;
 import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlGeneric;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
+import killercreepr.cruxmenu.menu.bukkit.config.YamlDataProvider;
+import killercreepr.cruxmenu.menu.bukkit.holder.MenuItemHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

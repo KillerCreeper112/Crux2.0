@@ -1,12 +1,13 @@
-package killercreepr.cruxconfig.config.bukkit.yaml.handler;
+package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
 import killercreepr.crux.util.CruxItem;
-import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
-import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
-import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
-import killercreepr.cruxconfig.config.common.yaml.element.YamlPrimitive;
-import killercreepr.cruxconfig.config.common.yaml.handler.YamlObjectHandler;
-import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
+import killercreepr.cruxconfig.config.bukkit.handler.SimpleFileHandler;
+import killercreepr.cruxconfig.config.common.FileContext;
+import killercreepr.cruxconfig.config.common.FileRegistry;
+import killercreepr.cruxconfig.config.common.element.FileElement;
+import killercreepr.cruxconfig.config.common.element.FileObject;
+import killercreepr.cruxconfig.config.common.element.FilePrimitive;
+import killercreepr.cruxconfig.config.common.json.annotation.JsonSerializer;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemRarity;
@@ -20,46 +21,47 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 //todo enchants, attributes, color, food, item flags,
-public class YamlItemStack implements YamlObjectHandler<ItemStack> {
+@JsonSerializer(id = "itemstack")
+public class FileItemStack extends SimpleFileHandler<ItemStack> {
     @Override
-    public @NotNull YamlElement serializeToYaml(@NotNull YamlContext context, @NotNull ItemStack item) {
-        YamlRegistry registry = context.getRegistry();
-        YamlObject o = new YamlObject()
-                .add("material", registry.serializeObject(item.getType()))
-                .add("amount", registry.serializeObject(item.getAmount()))
+    public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull ItemStack item) {
+        FileRegistry registry = context.getRegistry();
+        FileObject o = new FileObject()
+                .add("material", registry.serializeToFileElement(item.getType()))
+                .add("amount", registry.serializeToFileElement(item.getAmount()))
                 ;
         ItemMeta meta = item.getItemMeta();
         if(meta != null){
             Component name = meta.displayName();
-            if(name != null) o.add("display_name", registry.serializeObject(name));
+            if(name != null) o.add("display_name", registry.serializeToFileElement(name));
             List<Component> lore = meta.lore();
-            if(lore != null) o.add("lore", registry.serializeObject(lore));
+            if(lore != null) o.add("lore", registry.serializeToFileElement(lore));
 
             if(meta.isUnbreakable()){
-                o.add("unbreakable", registry.serializeObject(meta.isUnbreakable()));
+                o.add("unbreakable", registry.serializeToFileElement(meta.isUnbreakable()));
             }
             if(meta.hasEnchantmentGlintOverride()){
-                o.add("enchant_glint_override", registry.serializeObject(meta.getEnchantmentGlintOverride()));
+                o.add("enchant_glint_override", registry.serializeToFileElement(meta.getEnchantmentGlintOverride()));
             }
 
             if(meta.hasMaxStackSize()){
-                o.add("max_stack_size", registry.serializeObject(meta.getMaxStackSize()));
+                o.add("max_stack_size", registry.serializeToFileElement(meta.getMaxStackSize()));
             }
             if(meta.hasCustomModelData()){
-                o.add("custom_model_data", registry.serializeObject(meta.getCustomModelData()));
+                o.add("custom_model_data", registry.serializeToFileElement(meta.getCustomModelData()));
             }
             if(meta.hasRarity()){
-                o.add("rarity", registry.serializeObject(meta.getRarity()));
+                o.add("rarity", registry.serializeToFileElement(meta.getRarity()));
             }
             if(meta.isFireResistant()){
-                o.add("fire_resistant", registry.serializeObject(meta.isFireResistant()));
+                o.add("fire_resistant", registry.serializeToFileElement(meta.isFireResistant()));
             }
             if(meta.isHideTooltip()){
-                o.add("hide_tooltip", registry.serializeObject(meta.isHideTooltip()));
+                o.add("hide_tooltip", registry.serializeToFileElement(meta.isHideTooltip()));
             }
             if(meta instanceof ArmorMeta m){
                 if(m.hasTrim()){
-                    o.add("armor_trim", registry.serializeObject(m.getTrim()));
+                    o.add("armor_trim", registry.serializeToFileElement(m.getTrim()));
                 }
             }
         }
@@ -67,33 +69,38 @@ public class YamlItemStack implements YamlObjectHandler<ItemStack> {
     }
 
     @Override
-    public @Nullable ItemStack deserializeFromYaml(@NotNull YamlContext context, @Nullable YamlElement e){
-        return deserializeFromYaml(context, e, null);
+    public @Nullable ItemStack deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
+        return deserializeFromFile(context, e, null);
     }
 
-    public @Nullable ItemStack buildItem(@NotNull YamlContext context, @Nullable YamlElement e){
-        YamlRegistry registry = context.getRegistry();
-        if(e instanceof YamlPrimitive s){
+    /*@Override
+    public @Nullable ItemStack deserializeFromYaml(@NotNull FileContext<?> context, @Nullable YamlElement e){
+        return deserializeFromYaml(context, e, null);
+    }*/
+
+    public @Nullable ItemStack buildItem(@NotNull FileContext<?> context, @Nullable FileElement e){
+        FileRegistry registry = context.getRegistry();
+        if(e instanceof FilePrimitive s){
             Material material = registry.deserialize(Material.class, s, context);
             if(material == null) return null;
             return new ItemStack(material);
         }
-        if(!(e instanceof YamlObject o)) return null;
+        if(!(e instanceof FileObject o)) return null;
         Material material = registry.deserialize(Material.class, o.get("material"));
         if(material == null) return null;
         return new ItemStack(material);
     }
 
-    public @Nullable ItemStack deserializeFromYaml(@NotNull YamlContext context, @Nullable YamlElement e, @Nullable ItemStack stack) {
+    public @Nullable ItemStack deserializeFromFile(@NotNull FileContext<?> context, @Nullable FileElement e, @Nullable ItemStack stack) {
         if(stack == null) stack = buildItem(context, e);
         if(stack == null) return null;
 
-        YamlRegistry registry = context.getRegistry();
-        if(e instanceof YamlPrimitive s){
+        FileRegistry registry = context.getRegistry();
+        if(e instanceof FilePrimitive s){
             Material material = registry.deserialize(Material.class, s, context);
             if(material != null) stack = stack.withType(material);
         }
-        if(!(e instanceof YamlObject o)) return stack;
+        if(!(e instanceof FileObject o)) return stack;
         Material material = registry.deserialize(Material.class, o.get("material"));
         if(material != null) stack = stack.withType(material);
         int amount = o.getObject(Number.class, "amount", 1).intValue();

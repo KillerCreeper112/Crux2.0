@@ -1,6 +1,7 @@
 package killercreepr.crux.persistence.impl;
 
 import killercreepr.crux.Crux;
+import killercreepr.crux.persistence.CruxPersistence;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -28,7 +29,7 @@ public class PotionEffectListTagType implements PersistentDataType<PersistentDat
         PersistentDataContainer c = context.newPersistentDataContainer();
         for(PotionEffect e : complex){
             index++;
-            c.set(Crux.key(String.valueOf(index)), PotionEffectTagType.POTION_EFFECT, e);
+            c.set(Crux.key(String.valueOf(index)), CruxPersistence.POTION_EFFECT, e);
         }
         return c;
     }
@@ -38,7 +39,7 @@ public class PotionEffectListTagType implements PersistentDataType<PersistentDat
         Collection<PotionEffect> list = new HashSet<>();
         for(NamespacedKey k : c.getKeys()){
             try{
-                list.add(c.get(k, PotionEffectTagType.POTION_EFFECT));
+                list.add(c.get(k, CruxPersistence.POTION_EFFECT));
             }catch (Exception ex){ ex.printStackTrace(); }
         }
         return list;

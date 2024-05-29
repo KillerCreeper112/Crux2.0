@@ -2,8 +2,6 @@ package killercreepr.cruxmenu.menu.bukkit.config.handlers;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.DataExchange;
-import killercreepr.cruxmenu.menu.bukkit.holder.MenuHolder;
-import killercreepr.cruxmenu.menu.bukkit.holder.MenuItems;
 import killercreepr.crux.valueproviders.number.ConstantNumber;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.bukkit.yaml.handler.item.YamlDynamicItem;
@@ -12,6 +10,8 @@ import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
 import killercreepr.cruxconfig.config.common.yaml.handler.YamlObjectHandler;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
+import killercreepr.cruxmenu.menu.bukkit.holder.MenuHolder;
+import killercreepr.cruxmenu.menu.bukkit.holder.MenuItems;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -1,10 +1,10 @@
 package killercreepr.cruxmenu.menu.bukkit.config.handlers;
 
-import killercreepr.cruxmenu.menu.bukkit.holder.MenuItemHolder;
-import killercreepr.cruxmenu.menu.bukkit.holder.MenuItems;
 import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
+import killercreepr.cruxmenu.menu.bukkit.holder.MenuItemHolder;
+import killercreepr.cruxmenu.menu.bukkit.holder.MenuItems;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

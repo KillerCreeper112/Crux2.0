@@ -1,10 +1,10 @@
 package killercreepr.cruxmenu.menu.bukkit.holder;
 
 import killercreepr.crux.data.DataExchange;
+import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxmenu.menu.bukkit.ConfigMenu;
 import killercreepr.cruxmenu.menu.bukkit.api.events.menu.MenuOpenEvent;
 import killercreepr.cruxmenu.menu.bukkit.registry.MenuRegistry;
-import killercreepr.crux.valueproviders.number.NumberProvider;
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;

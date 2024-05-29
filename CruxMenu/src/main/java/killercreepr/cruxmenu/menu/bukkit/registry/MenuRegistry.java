@@ -1,14 +1,6 @@
 package killercreepr.cruxmenu.menu.bukkit.registry;
 
 import killercreepr.crux.data.DataExchange;
-import killercreepr.cruxmenu.menu.bukkit.MenuItem;
-import killercreepr.cruxmenu.menu.bukkit.actions.MenuAction;
-import killercreepr.cruxmenu.menu.bukkit.actions.custom.CommandAction;
-import killercreepr.cruxmenu.menu.bukkit.config.YamlDataProvider;
-import killercreepr.crux.menu.bukkit.config.handlers.*;
-import killercreepr.cruxmenu.menu.bukkit.config.handlers.*;
-import killercreepr.cruxmenu.menu.bukkit.holder.MenuHolder;
-import killercreepr.cruxmenu.menu.bukkit.holder.MenuItems;
 import killercreepr.crux.registry.KeyedRegistry;
 import killercreepr.crux.registry.Registry;
 import killercreepr.crux.registry.SimpleKeyedRegistry;
@@ -18,6 +10,13 @@ import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
+import killercreepr.cruxmenu.menu.bukkit.MenuItem;
+import killercreepr.cruxmenu.menu.bukkit.actions.MenuAction;
+import killercreepr.cruxmenu.menu.bukkit.actions.custom.CommandAction;
+import killercreepr.cruxmenu.menu.bukkit.config.YamlDataProvider;
+import killercreepr.cruxmenu.menu.bukkit.config.handlers.*;
+import killercreepr.cruxmenu.menu.bukkit.holder.MenuHolder;
+import killercreepr.cruxmenu.menu.bukkit.holder.MenuItems;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
