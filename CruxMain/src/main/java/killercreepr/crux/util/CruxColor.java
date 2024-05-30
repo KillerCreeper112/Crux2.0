@@ -1,0 +1,32 @@
+package killercreepr.crux.util;
+
+import org.bukkit.Color;
+import org.jetbrains.annotations.NotNull;
+
+public class CruxColor {
+    public static @NotNull Color hexToColor(@NotNull String hex) {
+        // Check if the hex string starts with '#' and remove it
+        if (hex.startsWith("#")) {
+            hex = hex.substring(1);
+        }
+
+        // Parse the hex string into an integer
+        int rgbValue = Integer.parseInt(hex, 16);
+
+        // Extract individual RGB components
+        int red = (rgbValue >> 16) & 0xFF;
+        int green = (rgbValue >> 8) & 0xFF;
+        int blue = rgbValue & 0xFF;
+
+        // Create a Color object
+        return Color.fromRGB(red, green, blue);
+    }
+
+    public static @NotNull String colorToHex(@NotNull Color color) {
+        int r = color.getRed();
+        int g = color.getGreen();
+        int b = color.getBlue();
+
+        return String.format("#%02X%02X%02X", r, g, b);
+    }
+}
