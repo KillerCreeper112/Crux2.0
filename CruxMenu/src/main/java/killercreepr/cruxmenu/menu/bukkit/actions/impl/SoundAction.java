@@ -1,4 +1,4 @@
-package killercreepr.cruxmenu.menu.bukkit.actions.custom;
+package killercreepr.cruxmenu.menu.bukkit.actions.impl;
 
 import killercreepr.cruxmenu.menu.bukkit.actions.ActionContext;
 import killercreepr.cruxmenu.menu.bukkit.actions.SimpleMenuAction;

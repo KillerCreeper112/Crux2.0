@@ -12,7 +12,7 @@ import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
 import killercreepr.cruxmenu.menu.bukkit.MenuItem;
 import killercreepr.cruxmenu.menu.bukkit.actions.MenuAction;
-import killercreepr.cruxmenu.menu.bukkit.actions.custom.CommandAction;
+import killercreepr.cruxmenu.menu.bukkit.actions.impl.CommandAction;
 import killercreepr.cruxmenu.menu.bukkit.config.YamlDataProvider;
 import killercreepr.cruxmenu.menu.bukkit.config.handlers.*;
 import killercreepr.cruxmenu.menu.bukkit.holder.MenuHolder;
