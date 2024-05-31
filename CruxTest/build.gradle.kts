@@ -10,7 +10,6 @@ dependencies {
     paperweight.paperDevBundle(libs.versions.paper)
     implementation(project(":CruxMain"))
     implementation(project(":CruxConfig"))
-    implementation(project(":CruxMenu"))
     implementation(project(":CruxPotion"))
     implementation("com.ezylang:EvalEx:3.2.0")
 }

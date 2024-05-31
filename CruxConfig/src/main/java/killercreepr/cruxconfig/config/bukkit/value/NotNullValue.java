@@ -20,6 +20,7 @@ public class NotNullValue<T> extends CommonValue<T> implements NotNullHolder<T> 
 
     @Override
     public @NotNull T value() {
-        return Preconditions.checkNotNull(getOrDefaultValue());
+        T value = getValue();
+        return Preconditions.checkNotNull(value == null ? defaultValue : value);
     }
 }

@@ -1,6 +1,13 @@
 package killercreepr.cruxpotion;
 
+import com.mojang.brigadier.StringReader;
+import io.papermc.paper.command.brigadier.Commands;
+import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
+import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
+import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import killercreepr.crux.data.entity.EntityMemory;
+import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.util.CruxEntity;
 import killercreepr.crux.util.CruxItem;
 import killercreepr.crux.util.CruxTag;
@@ -14,6 +21,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,6 +31,27 @@ import java.util.HashSet;
 import java.util.List;
 //todo
 public class PotionCore {
+
+    public static void d(@NotNull CruxPlugin plugin){
+        LifecycleEventManager<Plugin> manager = plugin.getLifecycleManager();
+        manager.registerEventHandler(LifecycleEvents.COMMANDS, event -> {
+            final Commands commands = event.registrar();
+            commands.register(
+                    Commands.literal("new-command")
+                            .then(Commands.argument("player", ArgumentTypes.player())
+                                    .executes((ctx) ->{
+                                        PlayerSelectorArgumentResolver resolver = ctx.getArgument("player",
+                                                PlayerSelectorArgumentResolver.class);
+                                        Player selected = resolver.resolve(ctx.getSource()).get(0);
+                                        ctx.getSource().getSender().sendPlainMessage("some message " + selected);
+                                        return 0;
+                                    })
+                                    .build())
+                            .build(),
+                    List.of("an-alias")
+            );
+        });
+    }
 
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         final int startIndex = 0;

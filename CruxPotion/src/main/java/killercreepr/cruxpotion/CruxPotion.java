@@ -27,7 +27,7 @@ public class CruxPotion implements CruxModule {
     protected Config config;
     @Override
     public void onEnable(@NotNull CruxPlugin plugin) {
-        config = new Config(plugin, "config");
+        config = new Config(plugin, "module/potion");
         CONFIG = config;
 
         EntityMemory.registerFunction(plugin, e -> e.getHolders().register(new PotionHolder(e)));
@@ -37,7 +37,6 @@ public class CruxPotion implements CruxModule {
         ConfigurationSerialization.registerClass(PotionInflictor.class);
         ConfigurationSerialization.registerClass(InflictedPotion.class);
 
-        //reload configs
         plugin.registerListeners(
                 new PotionListener(plugin, config)
         );
