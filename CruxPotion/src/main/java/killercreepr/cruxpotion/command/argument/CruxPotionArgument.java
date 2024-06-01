@@ -1,6 +1,5 @@
-package killercreepr.cruxpotion.command.args;
+package killercreepr.cruxpotion.command.argument;
 
-import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -16,16 +15,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
-public class CruxPotionArgument implements CustomArgumentType<CruxPotion, Key> {
-    private static final CruxPotionArgument CRUX_POTION = new CruxPotionArgument();
-    public static CruxPotionArgument cruxPotion(){
-        return CRUX_POTION;
-    }
-
+public class CruxPotionArgument implements CustomArgumentType.Converted<CruxPotion, Key> {
     @Override
-    public @NotNull CruxPotion parse(@NotNull StringReader reader) throws CommandSyntaxException {
-        Key key = getNativeType().parse(reader);
-        return Objects.requireNonNull(CruxPotionRegistries.POTIONS.get(key));
+    public @NotNull CruxPotion convert(@NotNull Key nativeType) throws CommandSyntaxException {
+        return Objects.requireNonNull(CruxPotionRegistries.POTIONS.get(nativeType));
     }
 
     @Override

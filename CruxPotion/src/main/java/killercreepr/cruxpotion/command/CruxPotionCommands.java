@@ -11,7 +11,9 @@ import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.crux.plugin.CruxPlugin;
-import killercreepr.cruxpotion.command.args.CruxPotionArgument;
+import killercreepr.cruxpotion.command.argument.CruxPotionArguments;
+import killercreepr.cruxpotion.command.argument.resolver.BlockInflictorResolver;
+import killercreepr.cruxpotion.command.argument.resolver.EntityInflictorResolver;
 import killercreepr.cruxpotion.data.PotionHolder;
 import killercreepr.cruxpotion.potions.ActivePotion;
 import killercreepr.cruxpotion.potions.CruxPotion;
@@ -45,7 +47,7 @@ public class CruxPotionCommands {
                 .then(
                     Commands.argument("entity", ArgumentTypes.entities())
                         .then(
-                            Commands.argument("potion", CruxPotionArgument.cruxPotion())
+                            Commands.argument("potion", CruxPotionArguments.cruxPotion())
                                 .executes(ctx -> applyEffect(
                                     ctx.getSource(),
                                     ctx.getArgument("entity", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
@@ -68,6 +70,28 @@ public class CruxPotionCommands {
                                                     ctx.getArgument("duration", Integer.class),
                                                     ctx.getArgument("amplifier", Integer.class)
                                                 ))
+                                                .then(
+                                                    Commands.argument("entity_inflictor", CruxPotionArguments.entityInflictor())
+                                                        .executes(ctx -> applyEffect(
+                                                            ctx.getSource(),
+                                                            ctx.getArgument("entity", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
+                                                            ctx.getArgument("potion", CruxPotion.class),
+                                                            ctx.getArgument("duration", Integer.class),
+                                                            ctx.getArgument("amplifier", Integer.class),
+                                                            ctx.getArgument("entity_inflictor", EntityInflictorResolver.class).resolve(ctx.getSource())
+                                                        ))
+                                                )
+                                                .then(
+                                                    Commands.argument("block_inflictor", CruxPotionArguments.blockInflictor())
+                                                        .executes(ctx -> applyEffect(
+                                                            ctx.getSource(),
+                                                            ctx.getArgument("entity", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
+                                                            ctx.getArgument("potion", CruxPotion.class),
+                                                            ctx.getArgument("duration", Integer.class),
+                                                            ctx.getArgument("amplifier", Integer.class),
+                                                            ctx.getArgument("block_inflictor", BlockInflictorResolver.class).resolve(ctx.getSource())
+                                                        ))
+                                                )
                                             //todo sumthin idk .then()
                                         )
                                 )
@@ -81,7 +105,7 @@ public class CruxPotionCommands {
                         ctx.getArgument("entity", EntitySelectorArgumentResolver.class).resolve(ctx.getSource())
                     ))
                     .then(
-                        Commands.argument("potion", CruxPotionArgument.cruxPotion())
+                        Commands.argument("potion", CruxPotionArguments.cruxPotion())
                             .executes(ctx -> removeEffect(
                                 ctx.getSource(),
                                 ctx.getArgument("entity", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
@@ -107,8 +131,13 @@ public class CruxPotionCommands {
     public static int applyEffect(@NotNull CommandSourceStack source, @NotNull Collection<Entity> to,
                                   @NotNull CruxPotion potion,
                                   int duration, int amplifier){
+        return applyEffect(source, to, potion, duration, amplifier, parseInflictor(source));
+    }
+
+    public static int applyEffect(@NotNull CommandSourceStack source, @NotNull Collection<Entity> to,
+                                  @NotNull CruxPotion potion,
+                                  int duration, int amplifier, @Nullable PotionInflictor inflictor){
         int effected = 0;
-        PotionInflictor inflictor = parseInflictor(source);
         for(Entity e : to){
             PotionHolder holder = EntityMemory.getOrCreateDataHolder(e, PotionHolder.class);
             if(holder == null) continue;
