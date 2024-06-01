@@ -25,6 +25,7 @@ public class TestPlugin extends CruxPlugin implements Listener {
 
     @Override
     public void enabled() {
+        Crux.setMainPlugin(this);
         super.enabled();
 
         //register modules.

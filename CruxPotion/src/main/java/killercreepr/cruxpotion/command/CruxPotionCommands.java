@@ -1,6 +1,9 @@
 package killercreepr.cruxpotion.command;
 
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
@@ -18,6 +21,7 @@ import killercreepr.cruxpotion.potions.CruxPotion;
 import killercreepr.cruxpotion.potions.inflictor.BlockInflictor;
 import killercreepr.cruxpotion.potions.inflictor.EntityInflictor;
 import killercreepr.cruxpotion.potions.inflictor.PotionInflictor;
+import net.minecraft.server.commands.EffectCommands;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -46,56 +50,51 @@ public class CruxPotionCommands {
                                 Commands.argument("entity", ArgumentTypes.entities())
                                         .then(
                                                 Commands.argument("potion", CruxPotionArgument.cruxPotion())
-                                                        .executes(ctx ->{
-                                                            CruxPotion potion = ctx.getArgument("potion",
-                                                                    CruxPotion.class);
-                                                            return applyEffect(
-                                                                    ctx.getSource(),
-                                                                    ctx.getArgument("entity", EntitySelectorArgumentResolver.class)
-                                                                            .resolve(ctx.getSource()),
-                                                                    potion, 600, 0
-                                                            );
-                                                        })
+                                                        .executes(ctx -> applyEffect(
+                                                                ctx.getSource(),
+                                                                ctx.getArgument("entity", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
+                                                                ctx.getArgument("potion", CruxPotion.class), 600, 0
+                                                        ))
                                                         .then(
-                                                                Commands.argument("duration", ArgumentTypes.integerRange())
-                                                                        .executes(ctx ->{
-                                                                            CruxPotion potion = ctx.getArgument("potion",
-                                                                                    CruxPotion.class);
-                                                                            int duration = ctx.getArgument("duration",
-                                                                                    IntegerRangeProvider.class).range()
-                                                                                    .upperEndpoint();
-                                                                            return applyEffect(
-                                                                                    ctx.getSource(),
-                                                                                    ctx.getArgument("entity", EntitySelectorArgumentResolver.class)
-                                                                                            .resolve(ctx.getSource()),
-                                                                                    potion, duration, 0
-                                                                            );
-                                                                        })
+                                                                Commands.argument("duration", IntegerArgumentType.integer(1, Integer.MAX_VALUE))
+                                                                        .executes(ctx -> applyEffect(
+                                                                                ctx.getSource(),
+                                                                                ctx.getArgument("entity", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
+                                                                                ctx.getArgument("potion", CruxPotion.class),
+                                                                                ctx.getArgument("duration", Integer.class), 0
+                                                                        ))
                                                                         .then(
-                                                                                Commands.argument("amplifier", ArgumentTypes.integerRange())
-                                                                                        .executes(ctx ->{
-                                                                                            CruxPotion potion = ctx.getArgument("potion",
-                                                                                                    CruxPotion.class);
-                                                                                            int duration = ctx.getArgument("duration",
-                                                                                                            IntegerRangeProvider.class).range()
-                                                                                                    .upperEndpoint();
-                                                                                            int amplifier = ctx.getArgument("amplifier",
-                                                                                                            IntegerRangeProvider.class).range()
-                                                                                                    .upperEndpoint();
-                                                                                            return applyEffect(
-                                                                                                    ctx.getSource(),
-                                                                                                    ctx.getArgument("entity", EntitySelectorArgumentResolver.class)
-                                                                                                            .resolve(ctx.getSource()),
-                                                                                                    potion, duration, amplifier
-                                                                                            );
-                                                                                        })
-                                                                                        //.then()
+                                                                                Commands.argument("amplifier", IntegerArgumentType.integer())
+                                                                                        .executes(ctx -> applyEffect(
+                                                                                                ctx.getSource(),
+                                                                                                ctx.getArgument("entity", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
+                                                                                                ctx.getArgument("potion", CruxPotion.class),
+                                                                                                ctx.getArgument("duration", Integer.class),
+                                                                                                ctx.getArgument("amplifier", Integer.class)
+                                                                                        ))
+                                                                                        //todo sumthin idk .then()
                                                                         )
                                                         )
                                         )
                         )
-                        .build()
-        );
+        ).then(
+                Commands.literal("clear").then(
+                        Commands.argument("entity", ArgumentTypes.entities())
+                                .executes(ctx -> clearEffects(
+                                        ctx.getSource(),
+                                        ctx.getArgument("entity", EntitySelectorArgumentResolver.class).resolve(ctx.getSource())
+                                ))
+                                .then(
+                                        Commands.argument("potion", CruxPotionArgument.cruxPotion())
+                                                .executes(ctx -> removeEffect(
+                                                        ctx.getSource(),
+                                                        ctx.getArgument("entity", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
+                                                        ctx.getArgument("potion", CruxPotion.class)
+                                                ))
+                                )
+                )
+        )
+        ;
         return dispatcher.build();
     }
 
@@ -109,7 +108,6 @@ public class CruxPotionCommands {
     public static @NotNull CommandSender getExecutor(@NotNull CommandSourceStack source){
         return Objects.requireNonNullElse(source.getExecutor(), source.getSender());
     }
-
     public static int applyEffect(@NotNull CommandSourceStack source, @NotNull Collection<Entity> to,
                                   @NotNull CruxPotion potion,
                                   int duration, int amplifier){

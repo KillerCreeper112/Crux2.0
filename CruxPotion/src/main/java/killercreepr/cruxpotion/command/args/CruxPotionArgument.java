@@ -13,6 +13,7 @@ import killercreepr.cruxpotion.registries.CruxPotionRegistries;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 public class CruxPotionArgument implements CustomArgumentType<CruxPotion, Key> {
@@ -23,8 +24,8 @@ public class CruxPotionArgument implements CustomArgumentType<CruxPotion, Key> {
 
     @Override
     public @NotNull CruxPotion parse(@NotNull StringReader reader) throws CommandSyntaxException {
-        Key key = Key.key(reader.readString());
-        return CruxPotionRegistries.POTIONS.get(key);
+        Key key = getNativeType().parse(reader);
+        return Objects.requireNonNull(CruxPotionRegistries.POTIONS.get(key));
     }
 
     @Override

@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-
+//todo make this a file handler to fit with json and yaml
 public class AutoFileHandler<T> implements YamlObjectHandler<T> {
     public static <T> AutoFileHandler<T> notNull(@NotNull Class<T> type){
         return new AutoFileHandler<>(type, (name, value) -> value != null);
