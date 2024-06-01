@@ -27,14 +27,15 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 public class CruxPotionCommands {
     public static void register(@NotNull CruxPlugin plugin){
         plugin.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event ->{
             final Commands commands = event.registrar();
-            LiteralCommandNode<CommandSourceStack> cmd = build(Commands.literal("ayotest"), plugin.getLifecycleManager());
-            commands.register(cmd);
+            LiteralCommandNode<CommandSourceStack> cmd = build(Commands.literal("cruxpotion"), plugin.getLifecycleManager());
+            commands.register(cmd, List.of("cpotion", "cpot"));
         });
     }
 
