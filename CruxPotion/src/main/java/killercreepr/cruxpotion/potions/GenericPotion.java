@@ -1,9 +1,9 @@
 package killercreepr.cruxpotion.potions;
 
 import killercreepr.crux.util.CruxString;
-import killercreepr.cruxpotion.CruxPotion;
+import killercreepr.cruxpotion.CruxPotionModule;
 import killercreepr.cruxpotion.potions.inflictor.PotionInflictor;
-import org.bukkit.NamespacedKey;
+import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Entity;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -11,22 +11,22 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-public abstract class GenericPotion implements CustomPotion {
-    protected final @NotNull NamespacedKey key;
-    public GenericPotion(@NotNull NamespacedKey key) {
+public abstract class GenericPotion implements CruxPotion {
+    protected final @NotNull Key key;
+    public GenericPotion(@NotNull Key key) {
         this.key = key;
     }
 
     @Override
     public @NotNull String getName(){
-        return CruxString.toTitleCase(key.getKey());
+        return CruxString.toTitleCase(key.value());
     }
 
     protected @NotNull PotionEffectType.Category defaultCategory(){ return PotionEffectType.Category.NEUTRAL; }
 
     @Override
     public @NotNull PotionEffectType.Category getCategory(){
-        Map<NamespacedKey, PotionEffectType.Category> value = CruxPotion.cfg().POTION_CATEGORIES.value();
+        Map<Key, PotionEffectType.Category> value = CruxPotionModule.cfg().POTION_CATEGORIES.value();
         if(value == null) return defaultCategory();
         return value.getOrDefault(key, defaultCategory());
     }
@@ -34,7 +34,7 @@ public abstract class GenericPotion implements CustomPotion {
     public abstract @NotNull ActivePotion create(@NotNull Entity e, int duration, int amplifier, @Nullable PotionInflictor inflictor);
 
     @Override
-    public @NotNull NamespacedKey getKey() {
+    public @NotNull Key key() {
         return key;
     }
 }

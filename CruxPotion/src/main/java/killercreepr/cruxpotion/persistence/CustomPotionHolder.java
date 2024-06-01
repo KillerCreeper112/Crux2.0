@@ -1,18 +1,18 @@
 package killercreepr.cruxpotion.persistence;
 
 import killercreepr.cruxpotion.potions.ActivePotion;
-import killercreepr.cruxpotion.potions.CustomPotion;
+import killercreepr.cruxpotion.potions.CruxPotion;
 import killercreepr.cruxpotion.potions.inflictor.PotionInflictor;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class CustomPotionHolder {
-    private final CustomPotion potion;
+    private final CruxPotion potion;
     private final int duration;
     private final int amplifier;
 
-    public CustomPotionHolder(@NotNull CustomPotion potion, int duration, int amplifier) {
+    public CustomPotionHolder(@NotNull CruxPotion potion, int duration, int amplifier) {
         this.potion = potion;
         this.duration = duration;
         this.amplifier = amplifier;
@@ -32,7 +32,7 @@ public class CustomPotionHolder {
         return potion.create(e, duration, amplifier, inflictor);
     }
 
-    public @NotNull CustomPotion getPotion() {
+    public @NotNull CruxPotion getPotion() {
         return potion;
     }
 

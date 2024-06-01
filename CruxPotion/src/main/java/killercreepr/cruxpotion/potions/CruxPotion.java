@@ -1,13 +1,14 @@
 package killercreepr.cruxpotion.potions;
 
 import killercreepr.cruxpotion.potions.inflictor.PotionInflictor;
-import org.bukkit.Keyed;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import org.bukkit.entity.Entity;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface CustomPotion extends Keyed {
+public interface CruxPotion extends Keyed {
     /**
      * @return The formatted potion name.
      */
@@ -34,4 +35,11 @@ public interface CustomPotion extends Keyed {
      * @return The active potion effect that can then be properly applied to the entity.
      */
     @NotNull ActivePotion create(@NotNull Entity e, int duration, int amplifier, @Nullable PotionInflictor inflictor);
+    default boolean compare(@Nullable CruxPotion with){
+        if(with==null) return false;
+        return compare(with.key());
+    }
+    default boolean compare(@Nullable Key with){
+        return key().equals(with);
+    }
 }

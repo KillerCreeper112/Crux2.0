@@ -20,12 +20,12 @@ import java.util.Map;
 import java.util.UUID;
 
 public class ActivePotion implements Listener, ConfigurationSerializable {
-    protected final CustomPotion potion;
+    protected final CruxPotion potion;
     protected final Entity entity;
     protected int duration;
     protected int amplifier;
     protected boolean stop = true;
-    public ActivePotion(@NotNull CustomPotion potion, @NotNull Entity entity, int duration, int amplifier) {
+    public ActivePotion(@NotNull CruxPotion potion, @NotNull Entity entity, int duration, int amplifier) {
         this.potion = potion;
         this.entity = entity;
         this.duration = duration;
@@ -158,7 +158,7 @@ public class ActivePotion implements Listener, ConfigurationSerializable {
      */
     protected void stopped(){}
 
-    public @NotNull CustomPotion getPotion() {
+    public @NotNull CruxPotion getPotion() {
         return potion;
     }
 
@@ -178,14 +178,14 @@ public class ActivePotion implements Listener, ConfigurationSerializable {
     public @NotNull Map<String, Object> serialize() {
         final LinkedHashMap<String, Object> result = new LinkedHashMap<>();
         result.put("entity", entity.getUniqueId().toString());
-        result.put("type", potion.getKey().asString());
+        result.put("type", potion.key().asString());
         result.put("amplifier", amplifier);
         result.put("duration", duration);
         return result;
     }
     public static @NotNull ActivePotion deserialize(@NotNull Map<String, Object> args){
         final NamespacedKey key = Crux.key((String) args.getOrDefault("type", "a"));
-        final CustomPotion p = CruxPotionRegistries.POTIONS.get(key);
+        final CruxPotion p = CruxPotionRegistries.POTIONS.get(key);
         if(p == null){
             throw new RuntimeException("Custom potion of '" + key + "' cannot be found!");
         }

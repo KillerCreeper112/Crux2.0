@@ -5,7 +5,8 @@ import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxmenu.menu.bukkit.ConfigMenu;
 import killercreepr.cruxmenu.menu.bukkit.api.events.menu.MenuOpenEvent;
 import killercreepr.cruxmenu.menu.bukkit.registry.MenuRegistry;
-import org.bukkit.Keyed;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +22,7 @@ public class MenuHolder implements Keyed {
         return registry;
     }
 
-    protected final @NotNull NamespacedKey key;
+    protected final @NotNull Key key;
     protected final @Nullable String title;
     protected final @NotNull NumberProvider size;
     //priority => item
@@ -57,11 +58,6 @@ public class MenuHolder implements Keyed {
         return menu.open(p);
     }
 
-    @Override
-    public @NotNull NamespacedKey getKey() {
-        return key;
-    }
-
     public @Nullable String getTitle() {
         return title;
     }
@@ -72,5 +68,10 @@ public class MenuHolder implements Keyed {
 
     public @NotNull MenuItems getItems() {
         return items;
+    }
+
+    @Override
+    public @NotNull Key key() {
+        return key;
     }
 }

@@ -5,6 +5,7 @@ import killercreepr.crux.registry.KeyedRegistry;
 import killercreepr.crux.registry.MappedRegistry;
 import killercreepr.crux.registry.SimpleKeyedRegistry;
 import killercreepr.crux.registry.SimpleMappedRegistry;
+import net.kyori.adventure.key.Key;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -90,6 +91,11 @@ public class EntityMemory implements Holder<Entity> {
         return mem.getHolder(clazz);
     }
 
+    public static <T extends DataHolder> @Nullable T getOrCreateDataHolder(@NotNull Entity entity, @NotNull Class<T> clazz){
+        EntityMemory mem = getOrCreate(entity);
+        return mem.getHolder(clazz);
+    }
+
     protected final KeyedRegistry<DataHolder> holders = new SimpleKeyedRegistry<>();
     protected final UUID uuid;
     protected final Holder<? extends Entity> entity;
@@ -106,10 +112,10 @@ public class EntityMemory implements Holder<Entity> {
         return holders;
     }
     public boolean contains(@NotNull DataHolder holder){
-        return contains(holder.getKey());
+        return contains(holder.key());
     }
 
-    public boolean contains(@NotNull NamespacedKey holder){
+    public boolean contains(@NotNull Key holder){
         return holders.containsKey(holder);
     }
 

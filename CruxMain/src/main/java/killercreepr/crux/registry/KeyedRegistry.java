@@ -1,21 +1,21 @@
 package killercreepr.crux.registry;
 
-import org.bukkit.Keyed;
-import org.bukkit.NamespacedKey;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a registered collection of mapped keyed objects. NamespacedKey -> KEYED_OBJECT
  */
-public interface KeyedRegistry<T extends Keyed> extends MappedRegistry<NamespacedKey,T>{
+public interface KeyedRegistry<T extends Keyed> extends MappedRegistry<Key,T>{
     @Override
     default @NotNull T register(@NotNull T object){
-        return register(object.getKey(), object);
+        return register(object.key(), object);
     }
 
     @Override
     default boolean unregister(@NotNull T object) {
-        return remove(object.getKey()) != null;
+        return remove(object.key()) != null;
     }
 }
 

@@ -5,7 +5,7 @@ import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.bukkit.value.CfgValue;
 import killercreepr.cruxconfig.config.bukkit.value.CommonValue;
 import killercreepr.cruxconfig.config.bukkit.value.NotNullValue;
-import org.bukkit.NamespacedKey;
+import net.kyori.adventure.key.Key;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -22,8 +22,8 @@ public class Config extends Cfg {
             "Determines the format for each potion category.",
             "You can use: " + Arrays.toString(PotionEffectType.Category.values()));*/
 
-    public final CfgValue<Map<NamespacedKey, PotionEffectType.Category>> POTION_CATEGORIES = new CommonValue<>(new HashMap<>(){{
-        put(new NamespacedKey("namespace", "key"), PotionEffectType.Category.HARMFUL);
+    public final CfgValue<Map<Key, PotionEffectType.Category>> POTION_CATEGORIES = new CommonValue<>(new HashMap<>(){{
+        put(Key.key("namespace", "key"), PotionEffectType.Category.HARMFUL);
     }}){};
 
     public Config(@NotNull Plugin plugin, @NotNull String path) {

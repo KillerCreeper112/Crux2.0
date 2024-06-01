@@ -9,11 +9,11 @@ import java.util.Map;
 
 public abstract class InflictedPotion extends ActivePotion{
     protected PotionInflictor inflictor;
-    public InflictedPotion(@NotNull CustomPotion potion, @NotNull Entity entity, int duration, int amplifier) {
+    public InflictedPotion(@NotNull CruxPotion potion, @NotNull Entity entity, int duration, int amplifier) {
         super(potion, entity, duration, amplifier);
     }
 
-    public InflictedPotion(@NotNull CustomPotion potion, @NotNull Entity entity, int duration, int amplifier,
+    public InflictedPotion(@NotNull CruxPotion potion, @NotNull Entity entity, int duration, int amplifier,
                            @Nullable PotionInflictor inflictor) {
         super(potion, entity, duration, amplifier);
         this.inflictor = inflictor;

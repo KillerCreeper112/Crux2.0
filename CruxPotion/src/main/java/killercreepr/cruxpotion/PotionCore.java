@@ -1,11 +1,5 @@
 package killercreepr.cruxpotion;
 
-import com.mojang.brigadier.StringReader;
-import io.papermc.paper.command.brigadier.Commands;
-import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
-import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
-import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
-import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.util.CruxEntity;
@@ -14,14 +8,13 @@ import killercreepr.crux.util.CruxTag;
 import killercreepr.cruxpotion.data.PotionHolder;
 import killercreepr.cruxpotion.persistence.CustomPotionHolder;
 import killercreepr.cruxpotion.persistence.PotionPersistTags;
-import killercreepr.cruxpotion.potions.CustomPotion;
+import killercreepr.cruxpotion.potions.CruxPotion;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,24 +26,6 @@ import java.util.List;
 public class PotionCore {
 
     public static void d(@NotNull CruxPlugin plugin){
-        LifecycleEventManager<Plugin> manager = plugin.getLifecycleManager();
-        manager.registerEventHandler(LifecycleEvents.COMMANDS, event -> {
-            final Commands commands = event.registrar();
-            commands.register(
-                    Commands.literal("new-command")
-                            .then(Commands.argument("player", ArgumentTypes.player())
-                                    .executes((ctx) ->{
-                                        PlayerSelectorArgumentResolver resolver = ctx.getArgument("player",
-                                                PlayerSelectorArgumentResolver.class);
-                                        Player selected = resolver.resolve(ctx.getSource()).get(0);
-                                        ctx.getSource().getSender().sendPlainMessage("some message " + selected);
-                                        return 0;
-                                    })
-                                    .build())
-                            .build(),
-                    List.of("an-alias")
-            );
-        });
     }
 
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -123,7 +98,7 @@ public class PotionCore {
             return true;
         }
         String pValue = args.length > startIndex+2 ? args[startIndex+2].toLowerCase() : "";
-        CustomPotion potion = null;//todo CustomPotion.REGISTRY.get(key(pValue.isBlank() ? "a" : pValue));
+        CruxPotion potion = null;//todo CustomPotion.REGISTRY.get(key(pValue.isBlank() ? "a" : pValue));
         boolean item = args[args.length-1].equalsIgnoreCase("-item");
         switch (subAction){
             case "give" ->{
@@ -169,7 +144,7 @@ public class PotionCore {
                     if(!canApplyPotion(e)) continue;
                     EntityMemory memory = EntityMemory.getOrCreate(e);
                     if(!((memory.getHolder(PotionHolder.KEY)) instanceof  PotionHolder data)) continue;
-                    if(data.addPotion(potion.create(e, duration, amplifier))) added++;
+                    if(!data.addPotion(potion.create(e, duration, amplifier)).isCancelled()) added++;
                 }
                 sender.sendPlainMessage("Added potion from " + added + " entities with duration of " + duration + " ticks and amplifier of " + amplifier + ".");
             }
@@ -199,7 +174,7 @@ public class PotionCore {
                             ItemStack main = lE.getEquipment().getItemInMainHand();
                             if(CruxItem.isEmpty(main)) continue;
                             Collection<CustomPotionHolder> holders = PotionPersistTags.STORED_CUSTOM_POTIONS.get(main, new HashSet<>());
-                            holders.removeIf(x -> x.getPotion().getKey().equals(potion.getKey()));
+                            holders.removeIf(x -> x.getPotion().key().equals(potion.key()));
                             if(holders.isEmpty()) PotionPersistTags.STORED_CUSTOM_POTIONS.remove(main);
                             else PotionPersistTags.STORED_CUSTOM_POTIONS.set(main, holders);
                             lE.getEquipment().setItemInMainHand(main, true);
@@ -207,10 +182,10 @@ public class PotionCore {
                         }
                         EntityMemory memory = EntityMemory.get(d);
                         if(memory != null && memory.getHolder(PotionHolder.KEY) instanceof PotionHolder data){
-                            if(data.removePotion(potion)) removed++;
+                            if(data.removePotionCheck(potion)) removed++;
                         }
                     }
-                    sender.sendPlainMessage("Removed potion " + potion.getKey() + " from " + removed + " entities.");
+                    sender.sendPlainMessage("Removed potion " + potion.key() + " from " + removed + " entities.");
                 }
             }
             case "reload" ->{

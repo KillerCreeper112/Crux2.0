@@ -3,6 +3,7 @@ package killercreepr.cruxpotion;
 import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.plugin.CruxPlugin;
+import killercreepr.cruxpotion.command.CruxPotionCommands;
 import killercreepr.cruxpotion.config.Config;
 import killercreepr.cruxpotion.data.PotionHolder;
 import killercreepr.cruxpotion.listener.PotionListener;
@@ -15,7 +16,7 @@ import killercreepr.cruxpotion.potions.inflictor.PotionInflictor;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.jetbrains.annotations.NotNull;
 
-public class CruxPotion implements CruxModule {
+public class CruxPotionModule implements CruxModule {
     public static final String NAMESPACE = "CruxPotion";
     protected static Config CONFIG;
     public static Config cfg(){ return CONFIG; }
@@ -42,6 +43,7 @@ public class CruxPotion implements CruxModule {
         );
 
         PotionPersistTags.register();
+        CruxPotionCommands.register(plugin);
     }
 
     @Override

@@ -17,6 +17,7 @@ import killercreepr.cruxmenu.menu.bukkit.config.YamlDataProvider;
 import killercreepr.cruxmenu.menu.bukkit.config.handlers.*;
 import killercreepr.cruxmenu.menu.bukkit.holder.MenuHolder;
 import killercreepr.cruxmenu.menu.bukkit.holder.MenuItems;
+import net.kyori.adventure.key.Key;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +30,7 @@ import java.util.logging.Level;
 public class MenuRegistry {
     public final KeyedRegistry<MenuHolder> MENU_HOLDERS = new SimpleKeyedRegistry<>(new HashMap<>()){
         @Override
-        public @NotNull MenuHolder register(@NotNull NamespacedKey key, @NotNull MenuHolder value) {
+        public @NotNull MenuHolder register(@NotNull Key key, @NotNull MenuHolder value) {
             value.setRegistry(MenuRegistry.this);
             return super.register(key, value);
         }

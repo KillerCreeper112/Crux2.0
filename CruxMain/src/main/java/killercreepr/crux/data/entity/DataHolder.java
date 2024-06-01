@@ -1,6 +1,6 @@
 package killercreepr.crux.data.entity;
 
-import org.bukkit.Keyed;
+import net.kyori.adventure.key.Keyed;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

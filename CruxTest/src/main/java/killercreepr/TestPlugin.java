@@ -8,8 +8,10 @@ import killercreepr.crux.registries.Registries;
 import killercreepr.crux.tags.defaults.CClaimTags;
 import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
-import killercreepr.cruxpotion.CruxPotion;
+import killercreepr.cruxpotion.CruxPotionModule;
 import killercreepr.cruxpotion.PotionCore;
+import killercreepr.cruxpotion.registries.CruxPotionRegistries;
+import killercreepr.potion.TestPotion;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
@@ -19,7 +21,7 @@ public class TestPlugin extends CruxPlugin implements Listener {
     protected final CruxModuleRegistry MODULES = Registries.MODULES;
     protected final CruxCore CRUX_CORE = new CruxCore();
     //protected final CruxMenu CRUX_MENU = new CruxMenu();
-    protected final CruxPotion CRUX_POTION = new CruxPotion();
+    protected final CruxPotionModule CRUX_POTION = new CruxPotionModule();
 
     @Override
     public void enabled() {
@@ -43,6 +45,7 @@ public class TestPlugin extends CruxPlugin implements Listener {
 
         new CClaimTags(Crux.TAGS);
 
+        CruxPotionRegistries.POTIONS.register(new TestPotion());
         PotionCore.d(this);
     }
 

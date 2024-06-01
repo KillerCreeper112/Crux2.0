@@ -1,13 +1,13 @@
 package killercreepr.crux.registry;
 
-import org.bukkit.Keyed;
-import org.bukkit.NamespacedKey;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class SimpleKeyedRegistry<T extends Keyed> extends SimpleMappedRegistry<NamespacedKey, T> implements KeyedRegistry<T> {
-    public SimpleKeyedRegistry(@NotNull Map<NamespacedKey, T> map) {
+public class SimpleKeyedRegistry<T extends Keyed> extends SimpleMappedRegistry<Key, T> implements KeyedRegistry<T> {
+    public SimpleKeyedRegistry(@NotNull Map<Key, T> map) {
         super(map);
     }
     public SimpleKeyedRegistry() {
@@ -16,11 +16,11 @@ public class SimpleKeyedRegistry<T extends Keyed> extends SimpleMappedRegistry<N
 
     @Override
     public @NotNull T register(@NotNull T object){
-        return register(object.getKey(), object);
+        return register(object.key(), object);
     }
 
     @Override
     public boolean unregister(@NotNull T object) {
-        return remove(object.getKey()) != null;
+        return remove(object.key()) != null;
     }
 }

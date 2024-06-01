@@ -1,7 +1,7 @@
 package killercreepr.cruxpotion.persistence;
 
 import killercreepr.crux.Crux;
-import killercreepr.cruxpotion.potions.CustomPotion;
+import killercreepr.cruxpotion.potions.CruxPotion;
 import killercreepr.cruxpotion.registries.CruxPotionRegistries;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -22,7 +22,7 @@ public class CustomPotionEffectTagType implements PersistentDataType<PersistentD
     @Override
     public @NotNull PersistentDataContainer toPrimitive(@NotNull CustomPotionHolder complex, @NotNull PersistentDataAdapterContext context) {
         PersistentDataContainer c = context.newPersistentDataContainer();
-        c.set(Crux.key("type"), PersistentDataType.STRING, complex.getPotion().getKey().asString());
+        c.set(Crux.key("type"), PersistentDataType.STRING, complex.getPotion().key().asString());
         c.set(Crux.key("amplifier"), PersistentDataType.INTEGER, complex.getAmplifier());
         c.set(Crux.key("duration"), PersistentDataType.INTEGER, complex.getDuration());
         /*if(!complex.isAmbient()) c.set(k("ambient"), PersistentDataType.BOOLEAN, complex.isAmbient());
@@ -33,7 +33,7 @@ public class CustomPotionEffectTagType implements PersistentDataType<PersistentD
 
     @Override
     public @NotNull CustomPotionHolder fromPrimitive(@NotNull PersistentDataContainer c, @NotNull PersistentDataAdapterContext context) {
-        CustomPotion t = CruxPotionRegistries.POTIONS.get(Crux.key(c.getOrDefault(Crux.key("type"), PersistentDataType.STRING, "a")));
+        CruxPotion t = CruxPotionRegistries.POTIONS.get(Crux.key(c.getOrDefault(Crux.key("type"), PersistentDataType.STRING, "a")));
         if(t == null) throw new RuntimeException("Custom potion effect type cannot be NULL!");
         return new CustomPotionHolder(t,
                 c.getOrDefault(Crux.key("duration"), PersistentDataType.INTEGER, 0),
