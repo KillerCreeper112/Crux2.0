@@ -22,4 +22,9 @@ public class FileComponent extends SimpleFileHandler<Component> {
         if(!(e instanceof FilePrimitive s)) return null;
         return Crux.FORMAT.deserialize(s.getAsString());
     }
+
+    @Override
+    public @NotNull String jsonSerializerID() {
+        return "component";
+    }
 }

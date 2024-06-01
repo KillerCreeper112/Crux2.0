@@ -50,4 +50,9 @@ public class FileCreateSound extends SimpleFileHandler<CreateSound> {
                     ));
         }
     }
+
+    @Override
+    public @NotNull String jsonSerializerID() {
+        return "create_sound";
+    }
 }

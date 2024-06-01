@@ -8,12 +8,14 @@ import killercreepr.cruxconfig.config.common.element.FileArray;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileGeneric;
 import killercreepr.cruxconfig.config.common.element.FileObject;
+import killercreepr.cruxconfig.config.common.json.annotation.JsonSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonSerializer(id = "number_provider")
 public class FileNumberProvider extends SimpleFileHandler<NumberProvider> {
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull NumberProvider object) {
@@ -72,5 +74,10 @@ public class FileNumberProvider extends SimpleFileHandler<NumberProvider> {
             return new UniformNumberArray(list.toArray(new NumberProvider[0]));
         }
         return null;
+    }
+
+    @Override
+    public @NotNull String jsonSerializerID() {
+        return "number_provider";
     }
 }

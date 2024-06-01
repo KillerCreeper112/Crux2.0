@@ -58,4 +58,8 @@ public class FileMsgContainer extends SimpleFileHandler<MsgContainer> {
         container.setBroadcast(o.getOrDefaultObject("broadcast", false));
         return container.isEmpty() ? null : container;
     }
+    @Override
+    public @NotNull String jsonSerializerID() {
+        return "msg_container";
+    }
 }

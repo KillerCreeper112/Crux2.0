@@ -41,4 +41,9 @@ public class FilePotionEffect extends SimpleFileHandler<PotionEffect> {
                 o.getOrDefaultObject("icon", true)
         );
     }
+
+    @Override
+    public @NotNull String jsonSerializerID() {
+        return "potion_effect";
+    }
 }

@@ -7,6 +7,7 @@ import killercreepr.crux.valueproviders.number.ConstantNumber;
 import killercreepr.crux.valueproviders.number.EquationNumber;
 import killercreepr.crux.valueproviders.number.UniformNumber;
 import killercreepr.crux.valueproviders.number.UniformNumberArray;
+import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -32,9 +33,9 @@ public class JsonRegistry implements FileRegistry {
     public final JsonContainerHandlerRegistry CONTAINER_REGISTRY = new JsonContainerHandlerRegistry(this);
 
     public JsonRegistry() {
-        registerContainerHandler(List.class, new JsonListHandler());
-        registerContainerHandler(Map.class, new JsonMapHandler());
-        registerContainerHandler(
+        registerHandler(List.class, new JsonListHandler());
+        registerHandler(Map.class, new JsonMapHandler());
+        registerHandler(
                 new GenericJsonHandler<>("constant_number", ConstantNumber.class),
                 new GenericJsonHandler<>("equation_number", EquationNumber.class),
                 new GenericJsonHandler<>("uniform_number", UniformNumber.class),
@@ -46,14 +47,19 @@ public class JsonRegistry implements FileRegistry {
         REGISTRY.put(name, clazz);
     }
 
-    public <T extends JsonContainerHandler<?>> void registerContainerHandler(@NotNull Class<?> clazz, @NotNull T object){
+    @Override
+    public <T extends FileHandler<?>> void registerHandler(@NotNull Class<?> clazz, @NotNull T handler) {
+        registerHandler(clazz, (JsonContainerHandler<?>) handler);
+    }
+
+    public <T extends JsonContainerHandler<?>> void registerHandler(@NotNull Class<?> clazz, @NotNull T object){
         CONTAINER_REGISTRY.register(clazz, object);
     }
 
     @SafeVarargs
-    public final <T extends GenericJsonHandler<?>> void registerContainerHandler(@NotNull T... objects){
+    public final <T extends GenericJsonHandler<?>> void registerHandler(@NotNull T... objects){
         for(T object : objects){
-            registerContainerHandler(object.getType(), object);
+            registerHandler(object.getType(), object);
         }
     }
 

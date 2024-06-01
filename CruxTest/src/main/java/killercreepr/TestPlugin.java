@@ -35,6 +35,8 @@ public class TestPlugin extends CruxPlugin implements Listener {
                 CRUX_POTION
         );
 
+        BukkitCfgHandlers.init(CfgRegistries.JSON);
+        BukkitCfgHandlers.init(CfgRegistries.YAML);
         BukkitCfgHandlers.initJson(CfgRegistries.JSON);
         BukkitCfgHandlers.initYaml(CfgRegistries.YAML);
 

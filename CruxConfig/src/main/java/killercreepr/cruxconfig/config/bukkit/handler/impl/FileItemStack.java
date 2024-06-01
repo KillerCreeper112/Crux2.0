@@ -141,4 +141,8 @@ public class FileItemStack extends SimpleFileHandler<ItemStack> {
         });
         return item.item();
     }
+    @Override
+    public @NotNull String jsonSerializerID() {
+        return "itemstack";
+    }
 }

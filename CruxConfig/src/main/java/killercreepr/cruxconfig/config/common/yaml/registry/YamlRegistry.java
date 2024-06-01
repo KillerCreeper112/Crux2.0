@@ -1,6 +1,7 @@
 package killercreepr.cruxconfig.config.common.yaml.registry;
 
 import killercreepr.crux.util.CruxReflect;
+import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -29,6 +30,11 @@ public class YamlRegistry implements FileRegistry {
         for(AutoYamlSerializer<?> d : serializers){
             registerHandler(d.getType(), d);
         }
+    }
+
+    @Override
+    public <T extends FileHandler<?>> void registerHandler(@NotNull Class<?> clazz, @NotNull T handler) {
+        registerHandler(clazz, (YamlObjectHandler<?>) handler);
     }
 
     public <T extends YamlObjectHandler<?>> void registerHandler(@NotNull Class<?> clazz, @NotNull T object){

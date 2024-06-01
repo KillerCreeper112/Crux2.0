@@ -7,7 +7,7 @@ import killercreepr.cruxconfig.config.common.element.FilePrimitive;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FileGenericEnum<T extends Enum<T>> extends SimpleFileHandler<T> {
+public abstract class FileGenericEnum<T extends Enum<T>> extends SimpleFileHandler<T> {
     protected final Class<T> clazz;
     public FileGenericEnum(Class<T> clazz) {
         this.clazz = clazz;

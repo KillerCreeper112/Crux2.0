@@ -8,7 +8,7 @@ import org.bukkit.Keyed;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FileGenericKeyedRegistry<T extends Keyed, K extends RegistryKey<T>> extends FileGenericKeyed<T> {
+public abstract class FileGenericKeyedRegistry<T extends Keyed, K extends RegistryKey<T>> extends FileGenericKeyed<T> {
     protected final @NotNull RegistryKey<T> registryKey;
     public FileGenericKeyedRegistry(@NotNull RegistryKey<T> registryKey) {
         this.registryKey = registryKey;

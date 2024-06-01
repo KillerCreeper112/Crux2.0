@@ -8,6 +8,7 @@ import killercreepr.crux.item.BukkitDynamicItem;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.*;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.FileDynamicItem;
+import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.json.JsonRegistry;
 import killercreepr.cruxconfig.config.common.json.container.GenericJsonHandler;
 import killercreepr.cruxconfig.config.common.yaml.automatic.AutoYamlSerializer;
@@ -42,20 +43,14 @@ public class BukkitCfgHandlers {
     public static final FileDynamicItem DYNAMIC_ITEM = new FileDynamicItem();
 
     public static void initJson(@NotNull JsonRegistry registry){
-        registry.registerContainerHandler(
+        registry.registerHandler(
                 new GenericJsonHandler<>("vector", Vector.class),
                 new GenericJsonHandler<>("uuid", UUID.class),
                 new GenericJsonHandler<>("potion_effect", PotionEffect.class)
         );
-        registry.registerContainerHandler(PotionEffect.class, POTION_EFFECT);
-        registry.registerContainerHandler(Component.class, COMPONENT);
-        registry.registerContainerHandler(MsgContainer.class, MSG_CONTAINER);
-        registry.registerContainerHandler(CreateSound.class, CREATE_SOUND);
-        registry.registerContainerHandler(CreateTitle.class, CREATE_TITLE);
-        registry.registerContainerHandler(ItemStack.class, ITEM_STACK);
     }
 
-    public static void initYaml(@NotNull YamlRegistry registry){
+    public static void init(@NotNull FileRegistry registry){
         registry.registerHandler(PotionEffect.class, POTION_EFFECT);
         registry.registerHandler(NumberProvider.class, NUMBER_PROVIDER);
         registry.registerHandler(MsgContainer.class, MSG_CONTAINER);
@@ -68,9 +63,18 @@ public class BukkitCfgHandlers {
         registry.registerHandler(BukkitDynamicItem.class, DYNAMIC_ITEM);
         DYNAMIC_ITEM.registerComponents(registry);
 
-        registry.registerHandler(TrimMaterial.class, new FileGenericKeyedRegistry<>(RegistryKey.TRIM_MATERIAL));
-        registry.registerHandler(TrimPattern.class, new FileGenericKeyedRegistry<>(RegistryKey.TRIM_PATTERN));
-        registry.registerHandler(new AutoYamlSerializer<>(ArmorTrim.class));
+        registry.registerHandler(TrimMaterial.class, new FileGenericKeyedRegistry<>(RegistryKey.TRIM_MATERIAL){
+            @Override
+            public @NotNull String jsonSerializerID() {
+                return "trim_material";
+            }
+        });
+        registry.registerHandler(TrimPattern.class, new FileGenericKeyedRegistry<>(RegistryKey.TRIM_PATTERN){
+            @Override
+            public @NotNull String jsonSerializerID() {
+                return "trim_pattern";
+            }
+        });
 
         registerEnums(registry,
                 AttributeModifier.Operation.class,
@@ -81,10 +85,19 @@ public class BukkitCfgHandlers {
         );
     }
 
+    public static void initYaml(@NotNull YamlRegistry registry){
+        registry.registerHandler(new AutoYamlSerializer<>(ArmorTrim.class));
+    }
+
     @SafeVarargs
-    public static void registerEnums(@NotNull YamlRegistry registry, @NotNull Class<? extends Enum<?>>... enums){
+    public static void registerEnums(@NotNull FileRegistry registry, @NotNull Class<? extends Enum<?>>... enums){
         for(Class<? extends Enum<?>> e : enums){
-            registry.registerHandler(e, new FileGenericEnum(e));
+            registry.registerHandler(e, new FileGenericEnum(e){
+                @Override
+                public @NotNull String jsonSerializerID() {
+                    return e.getSimpleName().toLowerCase();
+                }
+            });
         }
     }
 }

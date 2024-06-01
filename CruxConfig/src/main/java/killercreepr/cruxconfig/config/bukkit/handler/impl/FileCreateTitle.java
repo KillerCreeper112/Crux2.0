@@ -42,4 +42,9 @@ public class FileCreateTitle extends SimpleFileHandler<CreateTitle> {
     public Duration parseTicks(@NotNull FileObject o, @NotNull String id){
         return Duration.ofMillis((long) o.getOrDefaultObject(id, 0)*50);
     }
+
+    @Override
+    public @NotNull String jsonSerializerID() {
+        return "create_title";
+    }
 }
