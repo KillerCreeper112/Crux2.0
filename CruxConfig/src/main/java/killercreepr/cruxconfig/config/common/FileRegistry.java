@@ -9,4 +9,5 @@ public interface FileRegistry {
     FileElement serializeToFileElement(@NotNull Object object);
     <T> @Nullable T deserialize(@NotNull Class<T> clazz, @Nullable FileElement o);
     <T> @Nullable T deserialize(@NotNull Class<T> clazz, @Nullable FileElement o, @NotNull FileContext<?> context);
+    @Nullable Object deserializeObject(@NotNull FileElement o);
 }

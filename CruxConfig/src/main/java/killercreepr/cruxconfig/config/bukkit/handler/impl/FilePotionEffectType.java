@@ -1,4 +1,4 @@
-package killercreepr.cruxconfig.config.bukkit.yaml.handler;
+package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
 import killercreepr.crux.util.CruxKey;
 import net.kyori.adventure.key.Key;
@@ -7,7 +7,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class YamlPotionEffectType extends YamlGenericKeyed<PotionEffectType> {
+public class FilePotionEffectType extends FileGenericKeyed<PotionEffectType> {
     @Override
     public @Nullable PotionEffectType deserializeFromKey(@NotNull Key key) {
         return Registry.POTION_EFFECT_TYPE.get(CruxKey.key(key));

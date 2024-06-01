@@ -9,7 +9,7 @@ import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class SimpleFileHandler<T> extends FileHandler<T>{
+public abstract class SimpleFileHandler<T> implements FileHandler<T>{
 
     @Override
     public @NotNull FileElement serializeToFileFromJson(@NotNull JsonContext context, @NotNull T object){

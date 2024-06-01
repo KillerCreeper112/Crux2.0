@@ -201,4 +201,9 @@ public class JsonRegistry implements FileRegistry {
     public <T> @Nullable T deserialize(@NotNull Class<T> clazz, @Nullable FileElement o, @NotNull FileContext<?> context) {
         return deserialize(clazz, o);
     }
+
+    @Override
+    public @Nullable Object deserializeObject(@NotNull FileElement o) {
+        return deserialize(o.toJson());
+    }
 }

@@ -9,18 +9,18 @@ import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
 import killercreepr.cruxconfig.config.common.yaml.handler.YamlObjectHandler;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class FileHandler<T> implements YamlObjectHandler<T>, JsonContainerHandler<T> {
+public interface FileHandler<T> extends YamlObjectHandler<T>, JsonContainerHandler<T> {
 
-    public abstract @NotNull FileElement serializeToFileFromJson(@NotNull JsonContext context, @NotNull T object);
-    public abstract @NotNull FileElement serializeToFileFromYaml(@NotNull YamlContext context, @NotNull T object);
+    @NotNull FileElement serializeToFileFromJson(@NotNull JsonContext context, @NotNull T object);
+    @NotNull FileElement serializeToFileFromYaml(@NotNull YamlContext context, @NotNull T object);
 
     @Override
-    public @NotNull JsonElement serializeToJson(@NotNull JsonContext context, @NotNull T object) {
+    default @NotNull JsonElement serializeToJson(@NotNull JsonContext context, @NotNull T object) {
         return serializeToFileFromJson(context, object).toJson();
     }
 
     @Override
-    public @NotNull YamlElement serializeToYaml(@NotNull YamlContext context, @NotNull T object) {
+    default @NotNull YamlElement serializeToYaml(@NotNull YamlContext context, @NotNull T object) {
         return serializeToFileFromYaml(context, object).toYaml();
     }
 }

@@ -251,6 +251,11 @@ public class YamlRegistry implements FileRegistry {
         return deserialize(clazz, o.toYaml(), c);
     }
 
+    @Override
+    public @NotNull Object deserializeObject(@NotNull FileElement o) {
+        return deserializeObject(o.toYaml());
+    }
+
     public @NotNull Collection<Object> deserializeCollection(@NotNull Collection<?> list){
         Collection<Object> array = new ArrayList<>(list.size());
         for(Object o : list){

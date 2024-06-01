@@ -1,4 +1,4 @@
-package killercreepr.cruxconfig.config.bukkit.yaml.handler;
+package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
@@ -8,9 +8,9 @@ import org.bukkit.Keyed;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class YamlGenericKeyedRegistry<T extends Keyed, K extends RegistryKey<T>> extends YamlGenericKeyed<T>{
+public class FileGenericKeyedRegistry<T extends Keyed, K extends RegistryKey<T>> extends FileGenericKeyed<T> {
     protected final @NotNull RegistryKey<T> registryKey;
-    public YamlGenericKeyedRegistry(@NotNull RegistryKey<T> registryKey) {
+    public FileGenericKeyedRegistry(@NotNull RegistryKey<T> registryKey) {
         this.registryKey = registryKey;
     }
 
