@@ -2,13 +2,10 @@ package killercreepr.cruxpotion.command;
 
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
-import io.papermc.paper.command.brigadier.argument.range.IntegerRangeProvider;
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.EntitySelectorArgumentResolver;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
@@ -21,7 +18,6 @@ import killercreepr.cruxpotion.potions.CruxPotion;
 import killercreepr.cruxpotion.potions.inflictor.BlockInflictor;
 import killercreepr.cruxpotion.potions.inflictor.EntityInflictor;
 import killercreepr.cruxpotion.potions.inflictor.PotionInflictor;
-import net.minecraft.server.commands.EffectCommands;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -45,54 +41,54 @@ public class CruxPotionCommands {
         ///effect give killercreepr minecraft:absorption 1 2 true
         //cruxpotion give <player> <potion> <duration> <amplifier> <hide_particles>
         dispatcher.then(
-                Commands.literal("give")
+            Commands.literal("give")
+                .then(
+                    Commands.argument("entity", ArgumentTypes.entities())
                         .then(
-                                Commands.argument("entity", ArgumentTypes.entities())
-                                        .then(
-                                                Commands.argument("potion", CruxPotionArgument.cruxPotion())
-                                                        .executes(ctx -> applyEffect(
-                                                                ctx.getSource(),
-                                                                ctx.getArgument("entity", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
-                                                                ctx.getArgument("potion", CruxPotion.class), 600, 0
-                                                        ))
-                                                        .then(
-                                                                Commands.argument("duration", IntegerArgumentType.integer(1, Integer.MAX_VALUE))
-                                                                        .executes(ctx -> applyEffect(
-                                                                                ctx.getSource(),
-                                                                                ctx.getArgument("entity", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
-                                                                                ctx.getArgument("potion", CruxPotion.class),
-                                                                                ctx.getArgument("duration", Integer.class), 0
-                                                                        ))
-                                                                        .then(
-                                                                                Commands.argument("amplifier", IntegerArgumentType.integer())
-                                                                                        .executes(ctx -> applyEffect(
-                                                                                                ctx.getSource(),
-                                                                                                ctx.getArgument("entity", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
-                                                                                                ctx.getArgument("potion", CruxPotion.class),
-                                                                                                ctx.getArgument("duration", Integer.class),
-                                                                                                ctx.getArgument("amplifier", Integer.class)
-                                                                                        ))
-                                                                                        //todo sumthin idk .then()
-                                                                        )
-                                                        )
-                                        )
-                        )
-        ).then(
-                Commands.literal("clear").then(
-                        Commands.argument("entity", ArgumentTypes.entities())
-                                .executes(ctx -> clearEffects(
-                                        ctx.getSource(),
-                                        ctx.getArgument("entity", EntitySelectorArgumentResolver.class).resolve(ctx.getSource())
+                            Commands.argument("potion", CruxPotionArgument.cruxPotion())
+                                .executes(ctx -> applyEffect(
+                                    ctx.getSource(),
+                                    ctx.getArgument("entity", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
+                                    ctx.getArgument("potion", CruxPotion.class), 600, 0
                                 ))
                                 .then(
-                                        Commands.argument("potion", CruxPotionArgument.cruxPotion())
-                                                .executes(ctx -> removeEffect(
-                                                        ctx.getSource(),
-                                                        ctx.getArgument("entity", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
-                                                        ctx.getArgument("potion", CruxPotion.class)
+                                    Commands.argument("duration", IntegerArgumentType.integer(1, Integer.MAX_VALUE))
+                                        .executes(ctx -> applyEffect(
+                                            ctx.getSource(),
+                                            ctx.getArgument("entity", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
+                                            ctx.getArgument("potion", CruxPotion.class),
+                                            ctx.getArgument("duration", Integer.class), 0
+                                        ))
+                                        .then(
+                                            Commands.argument("amplifier", IntegerArgumentType.integer())
+                                                .executes(ctx -> applyEffect(
+                                                    ctx.getSource(),
+                                                    ctx.getArgument("entity", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
+                                                    ctx.getArgument("potion", CruxPotion.class),
+                                                    ctx.getArgument("duration", Integer.class),
+                                                    ctx.getArgument("amplifier", Integer.class)
                                                 ))
+                                            //todo sumthin idk .then()
+                                        )
                                 )
+                        )
                 )
+        ).then(
+            Commands.literal("clear").then(
+                Commands.argument("entity", ArgumentTypes.entities())
+                    .executes(ctx -> clearEffects(
+                        ctx.getSource(),
+                        ctx.getArgument("entity", EntitySelectorArgumentResolver.class).resolve(ctx.getSource())
+                    ))
+                    .then(
+                        Commands.argument("potion", CruxPotionArgument.cruxPotion())
+                            .executes(ctx -> removeEffect(
+                                ctx.getSource(),
+                                ctx.getArgument("entity", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
+                                ctx.getArgument("potion", CruxPotion.class)
+                            ))
+                    )
+            )
         )
         ;
         return dispatcher.build();
@@ -120,7 +116,9 @@ public class CruxPotionCommands {
             ActivePotion pot = potion.create(e, duration, amplifier, inflictor);
             if(!holder.addPotion(pot).isCancelled()) effected++;
         }
-        return effected < 1 ? -1 : 1;
+        int value = effected < 1 ? -1 : 1;
+        getExecutor(source).sendMessage("Applied crux potion, " + potion.getName() + ", to " + effected + " entities for " + duration + " ticks with an amplifier of " + amplifier + ".");
+        return value;
     }
 
     public static int removeEffect(@NotNull CommandSourceStack source, @NotNull Collection<Entity> from,
@@ -132,7 +130,9 @@ public class CruxPotionCommands {
 
             if(holder.removePotionCheck(potion)) effected++;
         }
-        return effected < 1 ? -1 : 1;
+        int value = effected < 1 ? -1 : 1;
+        getExecutor(source).sendMessage("Removed " + potion.getName() + " from " + effected + " entities.");
+        return value;
     }
 
     public static int clearEffects(@NotNull CommandSourceStack source, @NotNull Collection<Entity> from){
@@ -143,6 +143,8 @@ public class CruxPotionCommands {
 
             if(holder.clearPotions() > 0) effected++;
         }
-        return effected < 1 ? -1 : 1;
+        int value = effected < 1 ? -1 : 1;
+        getExecutor(source).sendMessage("Cleared all potions from " + effected + " entities.");
+        return value;
     }
 }
