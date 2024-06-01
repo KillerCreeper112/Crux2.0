@@ -9,11 +9,7 @@ import killercreepr.cruxpotion.potions.CruxPotion;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.NamespacedKey;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,7 +20,7 @@ import java.util.HashSet;
  * Represents an object/entity that can have custom potion effects applied to it.
  */
 public class PotionHolder extends EntityDataHolder {
-    public static final NamespacedKey KEY = Crux.key("potions");
+    public static final Key KEY = Crux.key("potions");
     protected final Collection<ActivePotion> effects = new HashSet<>();
 
     public PotionHolder(@NotNull EntityMemory parent) {

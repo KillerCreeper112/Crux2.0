@@ -2,8 +2,9 @@ package killercreepr.cruxconfig.config.bukkit.yaml.handler;
 
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
+import killercreepr.crux.util.CruxKey;
+import net.kyori.adventure.key.Key;
 import org.bukkit.Keyed;
-import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,7 +15,7 @@ public class YamlGenericKeyedRegistry<T extends Keyed, K extends RegistryKey<T>>
     }
 
     @Override
-    public @Nullable T deserializeFromKey(@NotNull NamespacedKey key) {
-        return RegistryAccess.registryAccess().getRegistry(registryKey).get(key);
+    public @Nullable T deserializeFromKey(@NotNull Key key) {
+        return RegistryAccess.registryAccess().getRegistry(registryKey).get(CruxKey.key(key));
     }
 }

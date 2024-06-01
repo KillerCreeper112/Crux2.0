@@ -7,7 +7,6 @@ import killercreepr.cruxmenu.menu.bukkit.api.events.menu.MenuOpenEvent;
 import killercreepr.cruxmenu.menu.bukkit.registry.MenuRegistry;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,7 +28,7 @@ public class MenuHolder implements Keyed {
     protected final @NotNull MenuItems items;
     protected final @NotNull DataExchange info;
 
-    public MenuHolder(@NotNull NamespacedKey key,
+    public MenuHolder(@NotNull Key key,
                       @Nullable String title,
                       @NotNull NumberProvider size,
                       @NotNull MenuItems items,

@@ -19,7 +19,6 @@ import killercreepr.cruxmenu.menu.bukkit.holder.MenuHolder;
 import killercreepr.cruxmenu.menu.bukkit.holder.MenuItems;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -43,7 +42,7 @@ public class MenuRegistry {
         this.format = format;
         this.menuModule = menuModule;
 
-        MENU_ACTIONS.register(new CommandAction(new NamespacedKey("test", "command")));
+        MENU_ACTIONS.register(new CommandAction(Key.key("test", "command")));
     }
 
     public MenuRegistry(@NotNull Format format) {

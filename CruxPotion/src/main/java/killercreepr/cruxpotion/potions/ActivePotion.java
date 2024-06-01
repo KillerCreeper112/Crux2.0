@@ -3,11 +3,11 @@ package killercreepr.cruxpotion.potions;
 import killercreepr.crux.Crux;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.cruxpotion.registries.CruxPotionRegistries;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.HandlerList;
@@ -184,7 +184,7 @@ public class ActivePotion implements Listener, ConfigurationSerializable {
         return result;
     }
     public static @NotNull ActivePotion deserialize(@NotNull Map<String, Object> args){
-        final NamespacedKey key = Crux.key((String) args.getOrDefault("type", "a"));
+        final Key key = Crux.key((String) args.getOrDefault("type", "a"));
         final CruxPotion p = CruxPotionRegistries.POTIONS.get(key);
         if(p == null){
             throw new RuntimeException("Custom potion of '" + key + "' cannot be found!");

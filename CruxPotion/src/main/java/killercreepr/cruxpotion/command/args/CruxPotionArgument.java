@@ -4,8 +4,6 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.suggestion.Suggestion;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
@@ -13,11 +11,8 @@ import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
 import killercreepr.cruxpotion.potions.CruxPotion;
 import killercreepr.cruxpotion.registries.CruxPotionRegistries;
 import net.kyori.adventure.key.Key;
-import net.minecraft.commands.synchronization.SuggestionProviders;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 
 public class CruxPotionArgument implements CustomArgumentType<CruxPotion, Key> {

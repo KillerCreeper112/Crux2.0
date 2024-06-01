@@ -4,12 +4,12 @@ import killercreepr.crux.Crux;
 import killercreepr.cruxmenu.menu.bukkit.actions.ActionContext;
 import killercreepr.cruxmenu.menu.bukkit.actions.SimpleMenuAction;
 import killercreepr.cruxmenu.menu.bukkit.holder.MenuHolder;
-import org.bukkit.NamespacedKey;
+import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class OpenMenuAction extends SimpleMenuAction {
-    public OpenMenuAction(@NotNull NamespacedKey key) {
+    public OpenMenuAction(@NotNull Key key) {
         super(key);
     }
 

@@ -2,11 +2,9 @@ package killercreepr.crux;
 
 import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.crux.data.tick.CruxTick;
-import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registries.Registries;
 import killercreepr.crux.registry.KeyedRegistry;
-import killercreepr.crux.registry.Registry;
 import killercreepr.crux.tags.Tags;
 import killercreepr.crux.tags.format.Format;
 import killercreepr.crux.tags.minimessage.*;
@@ -100,7 +98,7 @@ public class Crux {
             public void run() {
                 for(CruxTick t : new HashSet<>(registry.values())){
                     if(t.markedForRemoval()){
-                        registry.remove(t.getKey());
+                        registry.remove(t.key());
                         continue;
                     }
                     t.tick();

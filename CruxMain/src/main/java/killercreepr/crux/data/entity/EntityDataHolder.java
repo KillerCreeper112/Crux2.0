@@ -1,7 +1,6 @@
 package killercreepr.crux.data.entity;
 
 import net.kyori.adventure.key.Key;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -9,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 public abstract class EntityDataHolder implements DataHolder{
     protected final Key key;
     protected final EntityMemory parent;
-    public EntityDataHolder(@NotNull NamespacedKey key, @NotNull EntityMemory parent) {
+    public EntityDataHolder(@NotNull Key key, @NotNull EntityMemory parent) {
         this.key = key;
         this.parent = parent;
     }

@@ -1,21 +1,21 @@
 package killercreepr.crux.data.tick;
 
-import org.bukkit.Keyed;
-import org.bukkit.NamespacedKey;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class CruxTick implements Keyed {
-    protected final NamespacedKey key;
+    protected final Key key;
     protected boolean remove = false;
 
-    public CruxTick(@NotNull NamespacedKey key) {
+    public CruxTick(@NotNull Key key) {
         this.key = key;
     }
 
     public abstract void tick();
 
     @Override
-    public @NotNull NamespacedKey getKey() {
+    public @NotNull Key key() {
         return key;
     }
 

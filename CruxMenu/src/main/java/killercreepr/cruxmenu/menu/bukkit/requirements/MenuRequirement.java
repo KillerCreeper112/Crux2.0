@@ -1,6 +1,6 @@
 package killercreepr.cruxmenu.menu.bukkit.requirements;
 
-import org.bukkit.Keyed;
+import net.kyori.adventure.key.Keyed;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 

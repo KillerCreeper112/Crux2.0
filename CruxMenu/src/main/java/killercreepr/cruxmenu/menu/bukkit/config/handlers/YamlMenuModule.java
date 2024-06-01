@@ -12,7 +12,7 @@ import killercreepr.cruxconfig.config.common.yaml.handler.YamlObjectHandler;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
 import killercreepr.cruxmenu.menu.bukkit.holder.MenuHolder;
 import killercreepr.cruxmenu.menu.bukkit.holder.MenuItems;
-import org.bukkit.NamespacedKey;
+import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,7 +46,7 @@ public class YamlMenuModule implements YamlObjectHandler<MenuHolder> {
         MenuItems menuItems = getYamlMenuItems().deserializeFromYaml(context, o.get("items"), o);
         if(menuItems == null) menuItems = new MenuItems(new TreeMap<>());
 
-        NamespacedKey key = Crux.key(id);
+        Key key = Crux.key(id);
         return new MenuHolder(key, title, size,
                 menuItems,
                 extraInfo == null ? DataExchange.empty(): extraInfo

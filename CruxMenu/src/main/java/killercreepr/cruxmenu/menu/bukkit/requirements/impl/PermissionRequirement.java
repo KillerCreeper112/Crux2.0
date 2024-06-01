@@ -2,12 +2,12 @@ package killercreepr.cruxmenu.menu.bukkit.requirements.impl;
 
 import killercreepr.cruxmenu.menu.bukkit.requirements.RequirementContext;
 import killercreepr.cruxmenu.menu.bukkit.requirements.SimpleMenuRequirement;
-import org.bukkit.NamespacedKey;
+import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 //todo
 public class PermissionRequirement extends SimpleMenuRequirement {
-    public PermissionRequirement(@NotNull NamespacedKey key) {
+    public PermissionRequirement(@NotNull Key key) {
         super(key);
     }
 

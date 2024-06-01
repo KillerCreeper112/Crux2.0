@@ -1,6 +1,7 @@
 package killercreepr.crux.util;
 
 import killercreepr.crux.Crux;
+import net.kyori.adventure.key.Key;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -13,11 +14,11 @@ import org.jetbrains.annotations.Nullable;
 public class CruxTag {
     public static @NotNull String defaultNamespace(){ return Crux.key("a").getNamespace(); }
 
-    public static @NotNull NamespacedKey defaultKey(@NotNull String name){
-        return new NamespacedKey(defaultNamespace(), name);
+    public static @NotNull Key defaultKey(@NotNull String name){
+        return Key.key(defaultNamespace(), name);
     }
 
-    public static <P extends PersistentDataHolder, T, Z> P set(@Nullable P e, @NotNull NamespacedKey key,
+    public static <P extends PersistentDataHolder, T, Z> P set(@Nullable P e, @NotNull Key key,
                                                                @NotNull PersistentDataType<T, Z> type, @Nullable Z value){
         set(e == null ? null : e.getPersistentDataContainer(), key, type, value);
         return e;
@@ -28,7 +29,7 @@ public class CruxTag {
         return set(e, defaultKey(name), type, value);
     }
 
-    public static <P extends PersistentDataHolder, T, Z> @Nullable Z get(@Nullable P e, @NotNull NamespacedKey key, @NotNull PersistentDataType<T, Z> type){
+    public static <P extends PersistentDataHolder, T, Z> @Nullable Z get(@Nullable P e, @NotNull Key key, @NotNull PersistentDataType<T, Z> type){
         return get(e == null ? null : e.getPersistentDataContainer(), key, type);
     }
 
@@ -36,7 +37,7 @@ public class CruxTag {
         return get(e, defaultKey(name), type);
     }
 
-    public static <P extends PersistentDataHolder, T, Z> @NotNull Z getOrDefault(@Nullable P e, @NotNull NamespacedKey key,
+    public static <P extends PersistentDataHolder, T, Z> @NotNull Z getOrDefault(@Nullable P e, @NotNull Key key,
                                                                         @NotNull PersistentDataType<T, Z> type, @NotNull Z defaultValue){
         return getOrDefault(e == null ? null : e.getPersistentDataContainer(), key, type, defaultValue);
     }
@@ -46,7 +47,7 @@ public class CruxTag {
         return getOrDefault(e, defaultKey(name), type, defaultValue);
     }
 
-    public static <P extends PersistentDataHolder, T, Z> Z get(@Nullable P e, @NotNull NamespacedKey key,
+    public static <P extends PersistentDataHolder, T, Z> Z get(@Nullable P e, @NotNull Key key,
                                                                                  @NotNull PersistentDataType<T, Z> type, @Nullable Z defaultValue){
         return get(e == null ? null : e.getPersistentDataContainer(), key, type, defaultValue);
     }
@@ -59,16 +60,16 @@ public class CruxTag {
         return remove(e, defaultKey(name));
     }
 
-    public static <P extends PersistentDataHolder> P remove(@Nullable P e, @NotNull NamespacedKey key){
+    public static <P extends PersistentDataHolder> P remove(@Nullable P e, @NotNull Key key){
         remove(e == null ? null : e.getPersistentDataContainer(), key);
         return e;
     }
 
-    public static <P extends PersistentDataHolder, T, Z> boolean has(@Nullable P e, @NotNull NamespacedKey key, @NotNull PersistentDataType<T, Z> type){
+    public static <P extends PersistentDataHolder, T, Z> boolean has(@Nullable P e, @NotNull Key key, @NotNull PersistentDataType<T, Z> type){
         return has(e == null ? null : e.getPersistentDataContainer(), key, type);
     }
 
-    public static <P extends PersistentDataHolder> boolean has(@Nullable P e, @NotNull NamespacedKey key){
+    public static <P extends PersistentDataHolder> boolean has(@Nullable P e, @NotNull Key key){
         return has(e == null ? null : e.getPersistentDataContainer(), key);
     }
 
@@ -99,7 +100,7 @@ public class CruxTag {
         return set(e, defaultKey(name), type, value);
     }
 
-    public static <T, Z> ItemStack set(@Nullable ItemStack e, @NotNull NamespacedKey key,
+    public static <T, Z> ItemStack set(@Nullable ItemStack e, @NotNull Key key,
                                        @NotNull PersistentDataType<T, Z> type, @Nullable Z value){
         if(e == null) return null;
         if(value == null) return remove(e, key);
@@ -109,7 +110,7 @@ public class CruxTag {
         return e;
     }
 
-    public static <T, Z> @Nullable Z get(@Nullable ItemStack e, @NotNull NamespacedKey key, @NotNull PersistentDataType<T, Z> type){
+    public static <T, Z> @Nullable Z get(@Nullable ItemStack e, @NotNull Key key, @NotNull PersistentDataType<T, Z> type){
         if(e == null) return null;
         ItemMeta meta = e.getItemMeta();
         if(meta == null) return null;
@@ -120,7 +121,7 @@ public class CruxTag {
         return get(e, defaultKey(name), type);
     }
 
-    public static <T, Z> Z get(@Nullable ItemStack e, @NotNull NamespacedKey key,
+    public static <T, Z> Z get(@Nullable ItemStack e, @NotNull Key key,
                                         @NotNull PersistentDataType<T, Z> type, @Nullable Z defaultValue){
         if(e == null) return defaultValue;
         ItemMeta meta = e.getItemMeta();
@@ -137,7 +138,7 @@ public class CruxTag {
         return remove(e, defaultKey(name));
     }
 
-    public static ItemStack remove(@Nullable ItemStack e, @NotNull NamespacedKey key){
+    public static ItemStack remove(@Nullable ItemStack e, @NotNull Key key){
         if(e == null) return null;
         ItemMeta meta = e.getItemMeta();
         if(meta == null) return e;
@@ -145,7 +146,7 @@ public class CruxTag {
         return e;
     }
 
-    public static <T, Z> boolean has(@Nullable ItemStack e, @NotNull NamespacedKey key, @NotNull PersistentDataType<T, Z> type){
+    public static <T, Z> boolean has(@Nullable ItemStack e, @NotNull Key key, @NotNull PersistentDataType<T, Z> type){
         return e != null && has(e.getItemMeta(), key, type);
     }
 
@@ -153,7 +154,7 @@ public class CruxTag {
         return has(e, defaultKey(name), type);
     }
 
-    public static boolean has(@Nullable ItemStack e, @NotNull NamespacedKey key){
+    public static boolean has(@Nullable ItemStack e, @NotNull Key key){
         return e != null && has(e.getItemMeta(), key);
     }
 
@@ -161,7 +162,7 @@ public class CruxTag {
         return has(e, defaultKey(name));
     }
 
-    public static <P extends PersistentDataHolder, T, Z> @NotNull Z getOrDefault(@Nullable ItemStack e, @NotNull NamespacedKey key,
+    public static <P extends PersistentDataHolder, T, Z> @NotNull Z getOrDefault(@Nullable ItemStack e, @NotNull Key key,
                                                                                  @NotNull PersistentDataType<T, Z> type, @NotNull Z defaultValue){
         if(e == null) return defaultValue;
         return getOrDefault(e.getItemMeta(), key, type, defaultValue);
@@ -174,11 +175,11 @@ public class CruxTag {
     }
 
     //CONTAINER
-    public static <P extends PersistentDataContainer, T, Z> P set(@Nullable P e, @NotNull NamespacedKey key,
+    public static <P extends PersistentDataContainer, T, Z> P set(@Nullable P e, @NotNull Key key,
                                                                   @NotNull PersistentDataType<T, Z> type, @Nullable Z value){
         if(e == null) return null;
         if(value == null) return remove(e, key);
-        e.set(key, type, value);
+        e.set(CruxKey.key(key), type, value);
         return e;
     }
 
@@ -187,19 +188,19 @@ public class CruxTag {
         return set(e, defaultKey(name), type, value);
     }
 
-    public static <P extends PersistentDataContainer, T, Z> @Nullable Z get(@Nullable P e, @NotNull NamespacedKey key, @NotNull PersistentDataType<T, Z> type){
+    public static <P extends PersistentDataContainer, T, Z> @Nullable Z get(@Nullable P e, @NotNull Key key, @NotNull PersistentDataType<T, Z> type){
         if(e == null) return null;
-        return e.get(key, type);
+        return e.get(CruxKey.key(key), type);
     }
 
     public static <P extends PersistentDataContainer, T, Z> @Nullable Z get(@Nullable P e, @NotNull String name, @NotNull PersistentDataType<T, Z> type){
         return get(e, defaultKey(name), type);
     }
 
-    public static <P extends PersistentDataContainer, T, Z> @NotNull Z getOrDefault(@Nullable P e, @NotNull NamespacedKey key,
+    public static <P extends PersistentDataContainer, T, Z> @NotNull Z getOrDefault(@Nullable P e, @NotNull Key key,
                                                                                  @NotNull PersistentDataType<T, Z> type, @NotNull Z defaultValue){
         if(e == null) return defaultValue;
-        return e.getOrDefault(key, type, defaultValue);
+        return e.getOrDefault(CruxKey.key(key), type, defaultValue);
     }
 
     public static <P extends PersistentDataContainer, T, Z> @NotNull Z getOrDefault(@Nullable P e, @NotNull String name,
@@ -207,11 +208,11 @@ public class CruxTag {
         return getOrDefault(e, defaultKey(name), type, defaultValue);
     }
 
-    public static <P extends PersistentDataContainer, T, Z> Z get(@Nullable P e, @NotNull NamespacedKey key,
+    public static <P extends PersistentDataContainer, T, Z> Z get(@Nullable P e, @NotNull Key key,
                                                                @NotNull PersistentDataType<T, Z> type, @Nullable Z defaultValue){
         if(e == null) return defaultValue;
         try{
-            Z x = e.get(key, type);
+            Z x = e.get(CruxKey.key(key), type);
             if(x == null) return defaultValue;
             return x;
         }catch (Exception x){ return defaultValue; }
@@ -225,18 +226,18 @@ public class CruxTag {
         return remove(e, defaultKey(name));
     }
 
-    public static <P extends PersistentDataContainer> P remove(@Nullable P e, @NotNull NamespacedKey key){
+    public static <P extends PersistentDataContainer> P remove(@Nullable P e, @NotNull Key key){
         if(e == null) return null;
-        e.remove(key);
+        e.remove(CruxKey.key(key));
         return e;
     }
 
-    public static <P extends PersistentDataContainer, T, Z> boolean has(@Nullable P e, @NotNull NamespacedKey key, @NotNull PersistentDataType<T, Z> type){
-        return e != null && e.has(key, type);
+    public static <P extends PersistentDataContainer, T, Z> boolean has(@Nullable P e, @NotNull Key key, @NotNull PersistentDataType<T, Z> type){
+        return e != null && e.has(CruxKey.key(key), type);
     }
 
-    public static <P extends PersistentDataContainer> boolean has(@Nullable P e, @NotNull NamespacedKey key){
-        return e != null && e.has(key);
+    public static <P extends PersistentDataContainer> boolean has(@Nullable P e, @NotNull Key key){
+        return e != null && e.has(CruxKey.key(key));
     }
 
     public static <P extends PersistentDataContainer, T, Z> boolean has(@Nullable P e, @NotNull String name, @NotNull PersistentDataType<T, Z> type){

@@ -6,7 +6,6 @@ import killercreepr.crux.registry.MappedRegistry;
 import killercreepr.crux.registry.SimpleKeyedRegistry;
 import killercreepr.crux.registry.SimpleMappedRegistry;
 import net.kyori.adventure.key.Key;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -119,14 +118,14 @@ public class EntityMemory implements Holder<Entity> {
         return holders.containsKey(holder);
     }
 
-    public @Nullable DataHolder getHolder(@NotNull NamespacedKey key){
+    public @Nullable DataHolder getHolder(@NotNull Key key){
         return holders.get(key);
     }
 
     public <T extends DataHolder> @Nullable T getHolder(@NotNull Class<T> clazz){
         try{
             Field staticKeyField = clazz.getDeclaredField("KEY");
-            NamespacedKey key = (NamespacedKey) staticKeyField.get(null);
+            Key key = (Key) staticKeyField.get(null);
             try{
                 return clazz.cast(getHolder(key));
             }catch (NullPointerException | ClassCastException ignored){ return null; }

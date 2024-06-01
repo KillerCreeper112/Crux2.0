@@ -4,19 +4,17 @@ import killercreepr.cruxmenu.menu.bukkit.actions.ActionContext;
 import killercreepr.cruxmenu.menu.bukkit.actions.SimpleMenuAction;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class SoundAction extends SimpleMenuAction {
-    public SoundAction(@NotNull NamespacedKey key) {
+    public SoundAction(@NotNull Key key) {
         super(key);
     }
 
     @Override
     public boolean execute(@NotNull Player p, @NotNull ActionContext actionInfo, @NotNull String[] args) {
-        String[] keyArgs = args[0].split(":");
-        Key key = keyArgs.length > 1 ? Key.key(keyArgs[0], keyArgs[1]) : Key.key("minecraft", keyArgs[0]);
+        Key key = Key.key(args[0]);
         float pitch = 1f;
         if(args.length > 1){
             try{ pitch = Float.parseFloat(args[1]); } catch (IllegalArgumentException ignored){}

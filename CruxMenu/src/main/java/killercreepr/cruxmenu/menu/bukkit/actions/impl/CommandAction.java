@@ -2,12 +2,12 @@ package killercreepr.cruxmenu.menu.bukkit.actions.impl;
 
 import killercreepr.cruxmenu.menu.bukkit.actions.ActionContext;
 import killercreepr.cruxmenu.menu.bukkit.actions.SimpleMenuAction;
-import org.bukkit.NamespacedKey;
+import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class CommandAction extends SimpleMenuAction {
-    public CommandAction(@NotNull NamespacedKey key) {
+    public CommandAction(@NotNull Key key) {
         super(key);
     }
 

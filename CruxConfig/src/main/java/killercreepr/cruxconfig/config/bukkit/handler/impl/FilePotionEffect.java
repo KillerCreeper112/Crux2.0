@@ -1,11 +1,13 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
+import killercreepr.crux.util.CruxKey;
 import killercreepr.cruxconfig.config.bukkit.handler.SimpleFileHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.json.annotation.JsonSerializer;
-import org.bukkit.NamespacedKey;
+import net.kyori.adventure.key.Key;
+import org.bukkit.Registry;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +29,8 @@ public class FilePotionEffect extends SimpleFileHandler<PotionEffect> {
     @Override
     public @Nullable PotionEffect deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;
-        PotionEffectType type = PotionEffectType.getByKey(NamespacedKey.fromString(o.getOrDefaultObject("type", "a")));
+        PotionEffectType type = Registry.POTION_EFFECT_TYPE.get(CruxKey.key(Key.key(o.getOrDefaultObject("type", "a"))));
+        //for backwards compatibility PotionEffectType type = PotionEffectType.getByKey(NamespacedKey.fromString(o.getOrDefaultObject("type", "a")));
         if(type==null) return null;
         return new PotionEffect(
                 type,
