@@ -1,8 +1,8 @@
 package killercreepr.potion;
 
-import killercreepr.cruxpotion.potions.ActivePotion;
-import killercreepr.cruxpotion.potions.GenericPotion;
-import killercreepr.cruxpotion.potions.inflictor.PotionInflictor;
+import killercreepr.cruxpotions.potions.ActivePotion;
+import killercreepr.cruxpotions.potions.GenericPotion;
+import killercreepr.cruxpotions.potions.inflictor.PotionInflictor;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
