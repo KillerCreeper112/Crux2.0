@@ -13,7 +13,7 @@ import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
 import killercreepr.cruxmenu.menu.bukkit.MenuItem;
 import killercreepr.cruxmenu.menu.bukkit.actions.MenuAction;
 import killercreepr.cruxmenu.menu.bukkit.actions.impl.CommandAction;
-import killercreepr.cruxmenu.menu.bukkit.config.YamlDataProvider;
+import killercreepr.cruxmenu.menu.bukkit.config.FileDataProvider;
 import killercreepr.cruxmenu.menu.bukkit.config.handlers.*;
 import killercreepr.cruxmenu.menu.bukkit.holder.MenuHolder;
 import killercreepr.cruxmenu.menu.bukkit.holder.MenuItems;
@@ -37,8 +37,8 @@ public class MenuRegistry {
     public final Registry<MenuAction> MENU_ACTIONS = new SimpleRegistry<>(new HashSet<>());
 
     protected final @NotNull Format format;
-    protected final @NotNull YamlMenuModule menuModule;
-    public MenuRegistry(@NotNull Format format, @NotNull YamlMenuModule menuModule) {
+    protected final @NotNull FileMenuModule menuModule;
+    public MenuRegistry(@NotNull Format format, @NotNull FileMenuModule menuModule) {
         this.format = format;
         this.menuModule = menuModule;
 
@@ -46,14 +46,14 @@ public class MenuRegistry {
     }
 
     public MenuRegistry(@NotNull Format format) {
-        this(format, new YamlMenuModule());
-        menuModule.setYamlMenuItem(new YamlMenuItem(menuModule));
-        menuModule.setYamlMenuActions(new YamlMenuActions(menuModule));
-        menuModule.setYamlMenuItems(new YamlMenuItems(menuModule));
-        menuModule.setYamlDataExchange(new YamlDataExchange(menuModule));
+        this(format, new FileMenuModule());
+        menuModule.setYamlMenuItem(new FileMenuItem(menuModule));
+        menuModule.setYamlMenuActions(new FileMenuActions(menuModule));
+        menuModule.setYamlMenuItems(new FileMenuItems(menuModule));
+        menuModule.setYamlDataExchange(new FileDataExchange(menuModule));
         menuModule.setYamlDynamicItem(BukkitCfgHandlers.DYNAMIC_ITEM);
 
-        menuModule.getYamlDataExchange().getDataTypes().register("slot", YamlDataProvider.generic(NumberProvider.class));
+        menuModule.getYamlDataExchange().getDataTypes().register("slot", FileDataProvider.generic(NumberProvider.class));
     }
 
     public @NotNull Format getFormat() {

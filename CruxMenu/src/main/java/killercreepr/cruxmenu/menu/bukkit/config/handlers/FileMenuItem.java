@@ -3,24 +3,24 @@ package killercreepr.cruxmenu.menu.bukkit.config.handlers;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.Holder;
 import killercreepr.crux.item.DynamicItem;
-import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
-import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
-import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
-import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
+import killercreepr.cruxconfig.config.common.FileContext;
+import killercreepr.cruxconfig.config.common.FileRegistry;
+import killercreepr.cruxconfig.config.common.element.FileElement;
+import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxmenu.menu.bukkit.holder.ClickActions;
 import killercreepr.cruxmenu.menu.bukkit.holder.MenuItemHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class YamlMenuItem extends YamlModuled<MenuItemHolder> {
-    public YamlMenuItem(@NotNull YamlMenuModule menuModule) {
+public class FileMenuItem extends FileModuled<MenuItemHolder> {
+    public FileMenuItem(@NotNull FileMenuModule menuModule) {
         super(menuModule);
     }
 
     @Override
-    public @Nullable MenuItemHolder deserializeFromYaml(@NotNull YamlContext context, @Nullable YamlElement e, @Nullable YamlObject menuContext) {
-        if(!(e instanceof YamlObject o)) return null;
-        YamlRegistry registry = context.getRegistry();
+    public @Nullable MenuItemHolder deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e, @Nullable FileObject menuContext) {
+        if(!(e instanceof FileObject o)) return null;
+        FileRegistry registry = context.getRegistry();
         MenuItemHolder base = null;
         if(menuContext != null){
             String baseID = menuContext.getObject(String.class, "base");
@@ -33,8 +33,8 @@ public class YamlMenuItem extends YamlModuled<MenuItemHolder> {
                             context, o.get(baseID), menuContext
                     );
                 }*/
-                base = menuModule.getYamlMenuItem().deserializeFromYaml(
-                        context, o.get(baseID), menuContext
+                base = menuModule.getYamlMenuItem().deserializeFromFile(
+                    context, o.get(baseID), menuContext
                 );
             }
         }
@@ -52,15 +52,20 @@ public class YamlMenuItem extends YamlModuled<MenuItemHolder> {
             i = menuModule.getYamlDynamicItem().deserializeFromYaml(context, o.get("item"), baseClone);
         }
 
-        ClickActions clickActions = menuModule.getYamlMenuActions().deserializeFromYaml(
-                context, o.get("actions"), base
+        ClickActions clickActions = menuModule.getYamlMenuActions().deserializeFromFile(
+            context, o.get("actions"), base
         );
 
         MenuItemHolder item = new MenuItemHolder(
-                Holder.direct(i),
-                extraInfo.build(),
-                clickActions
+            Holder.direct(i),
+            extraInfo.build(),
+            clickActions
         );
         return item;
+    }
+
+    @Override
+    public @NotNull String jsonSerializerID() {
+        return "menu_item";
     }
 }
