@@ -14,6 +14,16 @@ public class ActiveEntityPotion<T extends Entity> extends ActivePotion{
     }
 
     @Override
+    protected void updated(int oldDuration, int oldAmplifier) {
+        super.updated(oldDuration, oldAmplifier);
+        if(parsedEntity==null) return;
+        updated(parsedEntity, oldDuration, oldAmplifier);
+    }
+
+    protected void updated(@NotNull T e, int oldDuration, int oldAmplifier) {
+    }
+
+    @Override
     protected void t() {
         super.t();
         if(parsedEntity==null) return;
