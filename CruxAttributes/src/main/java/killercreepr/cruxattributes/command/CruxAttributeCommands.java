@@ -18,7 +18,11 @@ import killercreepr.cruxattributes.attribute.CruxAttribute;
 import killercreepr.cruxattributes.attribute.CruxAttributeModifier;
 import killercreepr.cruxattributes.attribute.CruxSlot;
 import killercreepr.cruxattributes.command.argument.CruxAttributeArguments;
+import killercreepr.cruxattributes.registries.CruxAttributeRegistries;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -125,6 +129,28 @@ public class CruxAttributeCommands {
                                     )
                             )
                 )
+        ).then(
+            Commands.literal("list").then(
+                Commands.argument("target", ArgumentTypes.entity())
+                    .then(
+                        Commands.argument("execute_operation", StringArgumentType.string())
+                            .suggests((context, builder) -> builder.suggest("self").suggest("hand").buildFuture())
+                            .executes(ctx -> listModifier(
+                                ctx.getSource(),
+                                ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()).getFirst(),
+                                ctx.getArgument("execute_operation", String.class)
+                            ))
+                            .then(
+                                Commands.argument("attribute", CruxAttributeArguments.cruxAttribute())
+                                    .executes(ctx -> listModifier(
+                                        ctx.getSource(),
+                                        ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()).getFirst(),
+                                        ctx.getArgument("execute_operation", String.class),
+                                        ctx.getArgument("attribute", CruxAttribute.class)
+                                    ))
+                            )
+                    )
+            )
         )
         ;
         return dispatcher.build();
@@ -132,6 +158,61 @@ public class CruxAttributeCommands {
 
     public static @NotNull CommandSender getExecutor(@NotNull CommandSourceStack source){
         return Objects.requireNonNullElse(source.getExecutor(), source.getSender());
+    }
+
+    public static int listModifier(
+        @NotNull CommandSourceStack source,
+        @NotNull Entity from,
+        @NotNull String executeOperation
+    ){
+        int highest = 0;
+        for(CruxAttribute a : CruxAttributeRegistries.ATTRIBUTES){
+            int x = listModifier(source, from, executeOperation, a);
+            if(x > highest) highest = x;
+        }
+        return highest;
+    }
+
+    public static int listModifier(
+        @NotNull CommandSourceStack source,
+        @NotNull Entity from,
+        @NotNull String executeOperation,
+        @NotNull CruxAttribute attribute
+    ){
+        if(!executeOperation.equalsIgnoreCase("hand")) return listModifier(source, from, attribute);
+        if(!(from instanceof LivingEntity e) || e.getEquipment() == null) return -1;
+        ItemStack item = e.getEquipment().getItemInMainHand();
+        if(CruxItem.isEmpty(item)) return -1;
+        ItemMeta meta = item.getItemMeta();
+        if(meta == null) return -1;
+        return listModifier(source, meta, attribute);
+    }
+
+    public static <T extends PersistentDataHolder> int listModifier(
+        @NotNull CommandSourceStack source,
+        @NotNull T from,
+        @NotNull CruxAttribute attribute
+    ){
+        CommandSender sender = getExecutor(source);
+        Collection<CruxAttributeModifier> list = CruxAttribute.getModifiers(from, attribute);
+        if(list.isEmpty()){
+            new MsgContainer("<red>There are no modifiers from " + attribute.getName() + ".").use(sender);
+        }else{
+            new MsgContainer("<yellow>" + attribute.getName() + ":").use(sender);
+            for(CruxAttributeModifier m : list){
+                if(m.getPath() != null){
+                    int i = 0;
+                    new MsgContainer("<gray>PATH:").use(sender);
+                    for(Key k : m.getPath()){
+                        i++;
+                        new MsgContainer(" ".repeat(i) + " -> " + k.asString()).use(sender);
+                    }
+                }
+                new MsgContainer(m.getKey().asString() + " -> " + m.getAmount() + " (" +
+                    m.getOperation().toString().toLowerCase() + ")").use(sender);
+            }
+        }
+        return 1;
     }
 
     public static <T extends PersistentDataHolder> int removeModifier(
