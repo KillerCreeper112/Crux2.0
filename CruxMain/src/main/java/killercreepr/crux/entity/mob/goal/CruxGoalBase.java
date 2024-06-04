@@ -59,7 +59,7 @@ public class CruxGoalBase {
         return key;
     }
     public @NotNull EnumSet<GoalType> getTypes() {
-        return EnumSet.of(GoalType.TARGET);
+        return EnumSet.of(GoalType.UNKNOWN_BEHAVIOR);
     }
 
     public @Nullable LivingEntity getTarget(){ return target; }
