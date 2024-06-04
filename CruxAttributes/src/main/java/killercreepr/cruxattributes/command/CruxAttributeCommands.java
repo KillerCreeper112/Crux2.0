@@ -168,6 +168,9 @@ public class CruxAttributeCommands {
         for(CruxAttribute a : CruxAttributeRegistries.ATTRIBUTES){
             int x = listModifier(source, from, executeOperation, a);
             if(x > highest) highest = x;
+            if(x==-1){
+                new MsgContainer("<red>There are no modifiers from " + a.getName() + ".").use(getExecutor(source));
+            }
         }
         return highest;
     }
@@ -195,7 +198,7 @@ public class CruxAttributeCommands {
         CommandSender sender = getExecutor(source);
         Collection<CruxAttributeModifier> list = CruxAttribute.getModifiers(from, attribute);
         if(list.isEmpty()){
-            new MsgContainer("<red>There are no modifiers from " + attribute.getName() + ".").use(sender);
+            return -1;
         }else{
             new MsgContainer("<yellow>" + attribute.getName() + ":").use(sender);
             for(CruxAttributeModifier m : list){
@@ -214,7 +217,7 @@ public class CruxAttributeCommands {
                         LocalTag.parsed("key", m.getKey().asString()),
                         LocalTag.parsed("amount", m.getAmount()+""),
                         LocalTag.parsed("operation", m.getOperation().name().toLowerCase()),
-                        LocalTag.parsed("slot", m.getSlot() == null ? "all" : m.getSlot().getName())
+                        LocalTag.parsed("slot", m.getSlot() == null ? "all" : m.getSlot().toString().toLowerCase())
                     )
                 );
             }
