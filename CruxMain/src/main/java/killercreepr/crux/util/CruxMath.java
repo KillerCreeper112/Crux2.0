@@ -12,9 +12,19 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class CruxMath {
+    public static final Random RANDOM = new Random();
+
+    /**
+     * @param chance The probability from 0-100.
+     */
+    public static boolean testChance(double chance) {
+        return RANDOM.nextDouble() * 100 < chance;
+    }
+
     public static <T> T getRandom(@NotNull List<T> list){
         if(list.isEmpty()) return null;
         return list.get(random(0, list.size()-1));
