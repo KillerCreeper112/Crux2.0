@@ -83,6 +83,7 @@ public class CruxGoalBase {
 
 
     protected boolean isValidTarget(@NotNull LivingEntity target){
+        if(mob.equals(target)) return false;
         if(!mob.getWorld().equals(target.getWorld()) ||
                 mob.getLocation().distanceSquared(target.getLocation()) > (getForgetTargetDistance()*getForgetTargetDistance()) /*||
                 TeamUtility.areMatchingOrAlly(mob, target)*/) return false;

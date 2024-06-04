@@ -11,9 +11,14 @@ import redempt.crunch.functional.EvaluationEnvironment;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class CruxMath {
+    public static <T> T getRandom(@NotNull List<T> list){
+        if(list.isEmpty()) return null;
+        return list.get(random(0, list.size()-1));
+    }
     public static double round(double value, int place, @NotNull RoundingMode roundingMode){
         if(place < 0) return value;
 
