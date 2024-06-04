@@ -3,7 +3,10 @@ package killercreepr.crux.entity.mob.goal;
 import com.destroystokyo.paper.entity.ai.GoalKey;
 import com.destroystokyo.paper.entity.ai.GoalType;
 import killercreepr.crux.Crux;
+import killercreepr.crux.attribute.CruxAttribute;
+import killercreepr.crux.combat.CruxEntityDamager;
 import killercreepr.crux.combat.EntityHit;
+import killercreepr.crux.event.CruxEntityDamageEvent;
 import killercreepr.crux.persistence.PersistTag;
 import killercreepr.crux.util.CruxEntity;
 import org.bukkit.GameMode;
@@ -166,7 +169,7 @@ public class CruxGoalBase {
             }
         }*/
         if(!targets.isEmpty()){
-            setTarget(targets.get(0));
+            setTarget(targets.getFirst());
             return true;
         }
         return false;
@@ -180,9 +183,9 @@ public class CruxGoalBase {
         if(!preAttemptAttack()) return null;
         float attackCooldown = 1f; //Could be used for something down the road.
 
-        double range = 0D;//todo GrimAttribute.get(mob, GrimAttribute.ATTACK_RANGE) * CruxMath.minClamp(attackCooldown, .25f);
-        double aoe = 0D; //todo GrimAttribute.get(mob, GrimAttribute.ATTACK_AOE) * CruxMath.minClamp(attackCooldown, .25f);
-        int pierce = 0;//todo (int) (GrimAttribute.get(mob, GrimAttribute.ATTACK_PIERCE) * CruxMath.minClamp(attackCooldown, .25f)) + 1;
+        double range = CruxAttribute.ATTACK_RANGE.get(mob) * Math.max(attackCooldown, .25f);
+        double aoe = CruxAttribute.ATTACK_AOE.get(mob) * Math.max(attackCooldown, .25f);
+        int pierce = (int) (CruxAttribute.ATTACK_PIERCE.get(mob) * Math.max(attackCooldown, .25f)) + 1;
 
         final Vector direction;
         if(lookAt && targets != null && targets.length > 0 && targets[0] != null){
@@ -212,9 +215,9 @@ public class CruxGoalBase {
         for(RayTraceResult r : result.getResults()){
             if(r.getHitEntity() != null){
                 dmg = trueDmg;
-                /*todo GrimEntityDamageEvent event = new GrimEntityDamager(r.getHitEntity(), mob).attack(dmg, trueKb, trueUpKb);
+                CruxEntityDamageEvent event = new CruxEntityDamager(r.getHitEntity(), mob).attack(dmg, trueKb, trueUpKb);
                 if(event != null) attacked(event);
-                if(event == null || event.isCancelled()) continue;*/
+                if(event == null || event.isCancelled()) continue;
                 dmgDropOff = Math.max(dmgDropOff - .1f, .1f);
                 kbDropOff = Math.max(kbDropOff - .1f, .1f);
             }
@@ -229,21 +232,21 @@ public class CruxGoalBase {
         return true;
     }
 
-    //todo protected void attacked(@NotNull GrimEntityDamageEvent event){}
+    protected void attacked(@NotNull CruxEntityDamageEvent event){}
 
     protected @Nullable EntityHit.Result attemptAttack(){
         EntityHit.Result result = hit(true);
-        //todo if(result != null) attackCooldown = (int) Math.ceil(GrimAttribute.get(mob, GrimAttribute.ATTACK_SPEED));
+        if(result != null) attackCooldown = (int) Math.ceil(CruxAttribute.ATTACK_SPEED.get(mob));
         return result;
     }
 
     protected @Nullable EntityHit.Result attemptAttack(@Nullable LivingEntity target, double distance){
         EntityHit.Result result = null;
-        /*todo if(distance <= GrimAttribute.get(mob, GrimAttribute.ATTACK_RANGE) && attackCooldown <= 0){
+        if(distance <= CruxAttribute.ATTACK_RANGE.get(mob) && attackCooldown <= 0){
             result = hit(true, target);
-            if(result != null) attackCooldown = (int) Math.ceil(GrimAttribute.get(mob, GrimAttribute.ATTACK_SPEED));
+            if(result != null) attackCooldown = (int) Math.ceil(CruxAttribute.ATTACK_SPEED.get(mob));
         }
-        if(attackCooldown > 0) attackCooldown--;*/
+        if(attackCooldown > 0) attackCooldown--;
         return result;
     }
 

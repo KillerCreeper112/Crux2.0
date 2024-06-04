@@ -2,10 +2,7 @@ package killercreepr.crux.attribute;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.registries.Registries;
-import killercreepr.crux.util.CruxItem;
-import killercreepr.crux.util.CruxKey;
-import killercreepr.crux.util.CruxMath;
-import killercreepr.crux.util.CruxTag;
+import killercreepr.crux.util.*;
 import net.kyori.adventure.key.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
@@ -27,13 +24,29 @@ public interface CruxAttribute extends Keyed {
     static NamespacedKey k(String s){
         return Crux.key(s);
     }
+
+    CruxAttribute ATTACK_DAMAGE = Registries.ATTRIBUTES.register(new GenericAttribute(k("attack_damage")));
+    CruxAttribute ATTACK_SPEED = Registries.ATTRIBUTES.register(new GenericAttribute(k("attack_speed")){
+        @Override
+        public double processValue(double value) {
+            return value * -1;
+        }
+    });
+    CruxAttribute ATTACK_RANGE = Registries.ATTRIBUTES.register(new GenericAttribute(k("attack_range")));
+    CruxAttribute ATTACK_AOE = Registries.ATTRIBUTES.register(new GenericAttribute(k("attack_aoe")));
+    CruxAttribute ATTACK_PIERCE = Registries.ATTRIBUTES.register(new GenericAttribute(k("attack_pierce")));
+
+    CruxAttribute ATTACK_KNOCKBACK = Registries.ATTRIBUTES.register(new GenericAttribute(k("attack_knockback")));
+    CruxAttribute ATTACK_KNOCKBACK_UP = Registries.ATTRIBUTES.register(new GenericAttribute(k("attack_upwards_knockback")));
+    CruxAttribute ARMOR = Registries.ATTRIBUTES.register(new GenericAttribute(k("armor")));
+    CruxAttribute ARMOR_TOUGHNESS = Registries.ATTRIBUTES.register(new GenericAttribute(k("armor_toughness")));
+    CruxAttribute KNOCKBACK_RESISTANCE = Registries.ATTRIBUTES.register(new GenericAttribute(k("knockback_resistance")));
+
     default double getDefaultValue(){
         return 0D;
     }
-    @NotNull String getName();
-
-    default @Nullable String getSymbol(){
-        return null;
+    default @NotNull String getName(){
+        return CruxString.toTitleCase(key().value());
     }
 
     default boolean isNegative(@NotNull CruxAttributeModifier modifier){
