@@ -16,18 +16,17 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
-public class CruxSlotArgument implements CustomArgumentType<CruxSlot, StringArgumentType> {
-    protected final ArgumentType<StringArgumentType> nativeType = reader -> StringArgumentType.string();
+public class CruxSlotArgument implements CustomArgumentType<CruxSlot, String> {
     @Override
     public @NotNull CruxSlot parse(@NotNull StringReader reader) throws CommandSyntaxException {
         return Objects.requireNonNull(
-            CruxSlot.match(getNativeType().parse(reader).parse(reader))
+            CruxSlot.match(getNativeType().parse(reader))
         );
     }
 
     @Override
-    public @NotNull ArgumentType<StringArgumentType> getNativeType() {
-        return nativeType;
+    public @NotNull ArgumentType<String> getNativeType() {
+        return StringArgumentType.string();
     }
 
     @Override

@@ -33,4 +33,5 @@ public class CruxAttributeArgument implements CustomArgumentType.Converted<CruxA
         }
         return builder.buildFuture();
     }
+
 }

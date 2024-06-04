@@ -15,18 +15,17 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
-public class CruxAttributeOperationArgument implements CustomArgumentType<CruxAttribute.Operation, StringArgumentType> {
-    protected final ArgumentType<StringArgumentType> nativeType = reader -> StringArgumentType.string();
+public class CruxAttributeOperationArgument implements CustomArgumentType<CruxAttribute.Operation, String> {
     @Override
     public @NotNull CruxAttribute.Operation parse(@NotNull StringReader reader) throws CommandSyntaxException {
         return Objects.requireNonNull(
-            CruxAttribute.Operation.match(getNativeType().parse(reader).parse(reader))
+            CruxAttribute.Operation.match(getNativeType().parse(reader))
         );
     }
 
     @Override
-    public @NotNull ArgumentType<StringArgumentType> getNativeType() {
-        return nativeType;
+    public @NotNull ArgumentType<String> getNativeType() {
+        return StringArgumentType.string();
     }
 
     @Override
