@@ -1,0 +1,301 @@
+package killercreepr.crux.util;
+
+import org.bukkit.Axis;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class CruxLoc {
+    public static List<Location> getAdjLocations(Location center, boolean includeCenter, boolean includeUpDown){
+        List<Location> list = new ArrayList<>();
+        if(includeCenter) list.add(center);
+        list.add(center.clone().add(1, 0, 0));
+        list.add(center.clone().add(-1, 0, 0));
+        list.add(center.clone().add(0, 0, 1));
+        list.add(center.clone().add(1, 0, -1));
+
+        if(includeUpDown){
+            list.add(center.clone().add(0, 1, 0));
+            list.add(center.clone().add(0, -1, 0));
+        }
+        return list;
+    }
+
+    public List<Location> getHollowCube(Location pos1, Location pos2, double distance) {
+        List<Location> result = new ArrayList<>();
+        World world = pos1.getWorld();
+        double minX = Math.min(pos1.getX(), pos2.getX());
+        double minY = Math.min(pos1.getY(), pos2.getY());
+        double minZ = Math.min(pos1.getZ(), pos2.getZ());
+        double maxX = Math.max(pos1.getX(), pos2.getX());
+        double maxY = Math.max(pos1.getY(), pos2.getY());
+        double maxZ = Math.max(pos1.getZ(), pos2.getZ());
+
+        for (double x = minX; x <= maxX; x+=distance) {
+            for (double y = minY; y <= maxY; y+=distance) {
+                for (double z = minZ; z <= maxZ; z+=distance) {
+                    int components = 0;
+                    if (x == minX || x == maxX) components++;
+                    if (y == minY || y == maxY) components++;
+                    if (z == minZ || z == maxZ) components++;
+                    if (components >= 2) {
+                        result.add(new Location(world, x, y, z));
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public static Set<Block> getNearbyBlocks(Block center, int radius){
+        Set<Block> list = new HashSet<>();
+        for (int x = radius; x >= -radius; x--) {
+            for (int y = radius; y >= -radius; y--) {
+                for (int z = radius; z >= -radius; z--) {
+                    list.add(center.getRelative(x, y, z));
+                }
+            }
+        }
+        return list;
+    }
+
+    public static Axis convertBlockFaceToAxis(BlockFace face) {
+        return switch (face) {
+            case NORTH, SOUTH -> Axis.Z;
+            case UP, DOWN -> Axis.Y;
+            default -> Axis.X;
+        };
+    }
+
+    public static @NotNull List<Block> getAdjBlocks(@NotNull Block center, boolean includeCenter, boolean includeUpDown){
+        List<Block> list = new ArrayList<>();
+        if(includeCenter) list.add(center);
+        list.add(center.getRelative(BlockFace.WEST));
+        list.add(center.getRelative(BlockFace.EAST));
+        list.add(center.getRelative(BlockFace.SOUTH));
+        list.add(center.getRelative(BlockFace.NORTH));
+
+        if(includeUpDown){
+            list.add(center.getRelative(BlockFace.UP));
+            list.add(center.getRelative(BlockFace.DOWN));
+        }
+        return list;
+    }
+
+    public static boolean inRegion(@NotNull Location checkLoc, @NotNull Location loc1, @NotNull Location loc2){
+        double x1 = Math.min(loc1.getX(), loc2.getX());
+        double y1 = Math.min(loc1.getY(), loc2.getY());
+        double z1 = Math.min(loc1.getZ(), loc2.getZ());
+
+        double x2 = Math.max(loc1.getX(), loc2.getX());
+        double y2 = Math.max(loc1.getY(), loc2.getY());
+        double z2 = Math.max(loc1.getZ(), loc2.getZ());
+
+        double x = checkLoc.getX();
+        double y = checkLoc.getY();
+        double z = checkLoc.getZ();
+
+        return x >= x1 && x <= x2 && y >= y1 && y <= y2 && z >= z1 && z <= z2;
+    }
+
+    private static final double EPSILON = Math.ulp(1.0d) * 2d;
+    private static boolean isSignificant(double value) {
+        return Math.abs(value) >= EPSILON;
+    }
+
+    public static @NotNull Location relative(@NotNull Location l, double forward, double up, double right) {
+        Vector direction = null;
+        if (isSignificant(forward)) {
+            direction = l.getDirection();
+            l.add(direction.clone().multiply(forward));
+        }
+        boolean hasUp = isSignificant(up);
+        if (hasUp && direction == null) direction = l.getDirection();
+        if (isSignificant(right) || hasUp) {
+            Vector rightDirection;
+            if (direction != null && isSignificant(Math.abs(direction.getY()) - 1)) {
+                rightDirection = direction.clone();
+                double factor = Math.sqrt(1 - Math.pow(rightDirection.getY(), 2)); // a shortcut that lets us not normalize which is slow
+                double nx = -rightDirection.getZ() / factor;
+                double nz = rightDirection.getX() / factor;
+                rightDirection.setX(nx);
+                rightDirection.setY(0d);
+                rightDirection.setZ(nz);
+            } else {
+                float yaw = l.getYaw() + 90f;
+                double yawRad = yaw * (Math.PI / 180d);
+                double z = Math.cos(yawRad);
+                double x = -Math.sin(yawRad);
+                rightDirection = new Vector(x, 0d, z);
+            }
+            l.add(rightDirection.clone().multiply(right));
+            if (hasUp) {
+                Vector upDirection = rightDirection.crossProduct(direction);
+                l.add(upDirection.clone().multiply(up));
+            }
+        }
+        return l;
+    }
+
+    public static @NotNull Location shift(@NotNull Location loc, @NotNull Vector dir, double forward, double up, double right){
+        Location locDirection = loc.clone().setDirection(dir);
+        //+ FORWARD - BACKWARD
+        if(forward != 0D) loc.add(locDirection.getDirection().multiply(forward));
+        //- LEFT + RIGHT
+        if(right != 0D){
+            locDirection.setYaw(90 - loc.getYaw());
+            locDirection.setPitch(0);
+            loc.add(locDirection.getDirection().multiply(right));
+        }
+        //+ UP - DOWN
+        if(up != 0D){
+            locDirection.setYaw(loc.getYaw());
+            locDirection.setPitch(loc.getPitch() - 90);
+            loc.add(locDirection.getDirection().multiply(up));
+        }
+        return loc;
+    }
+
+    public static @NotNull Location shift(@NotNull Location loc, double forward, double up, double right){
+        return shift(loc, loc.getDirection(), forward, up, right);
+    }
+
+    public static @NotNull Location shiftToward(@NotNull Location loc, @NotNull Location loc1, double amount){
+        return shiftToward(loc, loc1, amount, false);
+    }
+
+    public static @NotNull Location shiftToward(@NotNull Location loc, @NotNull Location loc1, double amount, boolean keepOldRotation){
+        return shiftToward(loc, loc1, amount, 0D, 0D, keepOldRotation);
+    }
+
+    public static @NotNull Location shiftToward(@NotNull Location loc, @NotNull Location loc1,
+                                                double forward, double right, double up){
+        return shiftToward(loc, loc1, forward, right, up, false);
+    }
+
+    public static @NotNull Location shiftToward(@NotNull Location loc, @NotNull Location loc1,
+                                                double forward, double right, double up,
+                                                boolean keepOldRotation){
+        final Vector oldDir = loc.getDirection();
+        loc.setDirection(loc1.toVector().subtract(loc.toVector()));
+        shift(loc, forward, right, up);
+        if(keepOldRotation) loc.setDirection(oldDir);
+        return loc;
+    }
+
+    public static List<Location> getCircle(Location loc, double r){
+        List<Location> locs = new ArrayList<>();
+        double t = 0;
+        while (t < Math.PI * 8) {
+            t = t + Math.PI / 16;
+            double x = r * Math.cos(t);
+            double z = r * Math.sin(t);
+            Vector v = new Vector(x, 0, z);
+            v.rotateAroundX(loc.getPitch());
+            v.rotateAroundY(loc.getYaw());
+            locs.add(loc.clone().add(v));
+        }
+        return locs;
+    }
+
+    public static List<Location> getCube(Location center, float r, boolean hollow, boolean wire) {
+        List<Location> locs = new ArrayList<>();
+
+        Location pos1 = shift(center.clone(), r, r, r);
+        Location pos2 = shift(center.clone(), -r, -r, -r);
+
+        Vector max = Vector.getMaximum(pos1.toVector(), pos2.toVector());
+        Vector min = Vector.getMinimum(pos1.toVector(), pos2.toVector());
+
+        for (int x = min.getBlockX(); x <= max.getBlockX(); x++) {
+            for (int y = min.getBlockY(); y <= max.getBlockY(); y++) {
+                for (int z = min.getBlockZ(); z <= max.getBlockZ(); z++) {
+                    if (wire) {
+                        if ((x == min.getBlockX() || x == max.getBlockX()) && (y == min.getBlockY() ||
+                                y == max.getBlockY()) || (x == min.getBlockX() || x == max.getBlockX()) && (z == min.getBlockZ() ||
+                                z == max.getBlockZ()) || (y == min.getBlockY() || y == max.getBlockY()) && (z == min.getBlockZ() || z == max.getBlockZ()))
+                            locs.add(center.getWorld().getBlockAt(x, y, z).getLocation());
+                        continue;
+                    }
+                    if (hollow) {
+                        if (x == min.getBlockX() || x == max.getBlockX() || y == min.getBlockY() || y == max.getBlockY() || z == min.getBlockZ() || z == max.getBlockZ())
+                            locs.add(center.getWorld().getBlockAt(x, y, z).getLocation());
+                        continue;
+                    }
+
+                    locs.add(center.getWorld().getBlockAt(x, y, z).getLocation());
+                }
+            }
+        }
+
+        return locs;
+    }
+
+    public static List<Location> getRegion(Location pos1, Location pos2) {
+        List<Location> locs = new ArrayList<>();
+
+        Vector max = Vector.getMaximum(pos1.toVector(), pos2.toVector());
+        Vector min = Vector.getMinimum(pos1.toVector(), pos2.toVector());
+
+        for (int x = min.getBlockX(); x <= max.getBlockX(); x++) {
+            for (int y = min.getBlockY(); y <= max.getBlockY(); y++) {
+                for (int z = min.getBlockZ(); z <= max.getBlockZ(); z++) {
+                    locs.add(pos1.getWorld().getBlockAt(x, y, z).getLocation());
+                }
+            }
+        }
+
+        return locs;
+    }
+
+    public static Location locLookAt(Location loc, Location target){
+        return loc.setDirection(target.toVector().subtract(loc.toVector()));
+    }
+
+    public List<Location> createCylinder(Location center, float radius, int height){
+        List<Location> list = new ArrayList<>();
+        for(int h = 0; h < height; h++){
+            for(float x = -radius; x < radius; x++){
+                for(float z = -radius; z < radius; z++){
+                    Location loc = center.clone().add(x, h, z);
+                    list.add(loc);
+                }
+            }
+        }
+        return list;
+    }
+
+    public static @NotNull List<Location> cluster(@NotNull Location center, int amount, double spacing){
+        return cluster(center, amount, spacing, spacing, spacing);
+    }
+
+    public static @NotNull List<Location> cluster(@NotNull Location center, int amount, double x, double y, double z){
+        List<Location> locs = new ArrayList<>();
+        for(; amount > 0; amount--){
+            locs.add(center.clone().add(CruxMath.random(-x, x), CruxMath.random(-y, y), CruxMath.random(-z, z)));
+        }
+        return locs;
+    }
+
+    public static Location getLocAroundCircle(Location center, double radius, double angleInRadian, boolean lookToward) {
+        double x = center.getX() + radius * Math.cos(angleInRadian);
+        double z = center.getZ() + radius * Math.sin(angleInRadian);
+        double y = center.getY();
+
+        Location loc = new Location(center.getWorld(), x, y, z);
+        if(lookToward){
+            Vector difference = center.toVector().clone().subtract(loc.toVector());
+            loc.setDirection(difference);
+        }
+        return loc;
+    }
+}
