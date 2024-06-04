@@ -1,6 +1,7 @@
 package killercreepr.crux.entity.mob.goal;
 
 import com.destroystokyo.paper.entity.ai.Goal;
+import com.destroystokyo.paper.entity.ai.GoalKey;
 import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
 import killercreepr.crux.Crux;
 import killercreepr.crux.entity.mob.goal.sound.CruxGoalSounds;
@@ -24,6 +25,9 @@ public class CruxMobGoal extends CruxGoalBase implements Goal<Mob>, Listener {
     protected CruxGoalSounds sounds;
     public CruxMobGoal(@NotNull Mob mob) {
         super(mob);
+    }
+    public CruxMobGoal(@NotNull GoalKey<Mob> key, @NotNull Mob mob){
+        super(key, mob);
     }
 
     private boolean isValid(){ return true; }

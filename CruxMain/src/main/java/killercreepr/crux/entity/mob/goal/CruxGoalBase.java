@@ -47,15 +47,19 @@ public class CruxGoalBase {
     protected int findCooldown;
     protected int lostTarget;
 
-    public static @NotNull GoalKey<Mob> defaultKey(){ return GoalKey.of(Mob.class, Crux.key("target_entity")); }
+    public static @NotNull GoalKey<Mob> defaultKey(){ return GoalKey.of(Mob.class, Crux.key("crux_goal")); }
 
     public CruxGoalBase(@NotNull Mob mob){
-        this.key = defaultKey();
+        this(defaultKey(), mob);
+    }
+
+    public CruxGoalBase(@NotNull GoalKey<Mob> key, @NotNull Mob mob){
+        this.key = key;
         this.mob = mob;
     }
 
 
-    public final @NotNull GoalKey<Mob> getKey() {
+    public @NotNull GoalKey<Mob> getKey() {
         return key;
     }
     public @NotNull EnumSet<GoalType> getTypes() {
