@@ -1,7 +1,7 @@
 package killercreepr.crux.plugin;
 
 import killercreepr.crux.module.CruxModule;
-import killercreepr.crux.registries.Registries;
+import killercreepr.crux.registries.CruxRegistries;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
@@ -18,7 +18,7 @@ public abstract class CruxPlugin extends JavaPlugin implements CruxModule {
     public final void onEnable() {
         super.onEnable();
 
-        Registries.PLUGINS.register(this);
+        CruxRegistries.PLUGINS.register(this);
 
         enabled();
     }
@@ -39,7 +39,7 @@ public abstract class CruxPlugin extends JavaPlugin implements CruxModule {
     public final void onDisable() {
         super.onDisable();
         HandlerList.unregisterAll((Plugin) this);
-        Registries.PLUGINS.unregister(this);
+        CruxRegistries.PLUGINS.unregister(this);
         disabled();
     }
 

@@ -8,7 +8,7 @@ import killercreepr.crux.registry.SimpleKeyedRegistry;
 import killercreepr.crux.registry.SimpleMappedRegistry;
 import org.jetbrains.annotations.NotNull;
 
-public class Registries {
+public class CruxRegistries {
     public static final MappedRegistry<String, CruxPlugin> PLUGINS = new SimpleMappedRegistry<>(){
         @Override
         public @NotNull CruxPlugin register(@NotNull CruxPlugin object) {

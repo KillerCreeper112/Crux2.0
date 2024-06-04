@@ -3,7 +3,7 @@ package killercreepr.crux;
 import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.crux.data.tick.CruxTick;
 import killercreepr.crux.plugin.CruxPlugin;
-import killercreepr.crux.registries.Registries;
+import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.crux.registry.KeyedRegistry;
 import killercreepr.crux.tags.Tags;
 import killercreepr.crux.tags.format.Format;
@@ -89,7 +89,7 @@ public class Crux {
     }*/
 
     public static @NotNull BukkitRunnable buildTickRunnable(){
-        return buildTickRunnable(Registries.TICKS);
+        return buildTickRunnable(CruxRegistries.TICKS);
     }
 
     public static @NotNull BukkitRunnable buildTickRunnable(@NotNull KeyedRegistry<CruxTick> registry){

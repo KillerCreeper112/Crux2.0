@@ -4,7 +4,7 @@ import killercreepr.crux.Crux;
 import killercreepr.crux.CruxCore;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registries.CruxModuleRegistry;
-import killercreepr.crux.registries.Registries;
+import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.crux.tags.defaults.CClaimTags;
 import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
@@ -17,7 +17,7 @@ import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
 public class TestPlugin extends CruxPlugin implements Listener {
-    protected final CruxModuleRegistry MODULES = Registries.MODULES;
+    protected final CruxModuleRegistry MODULES = CruxRegistries.MODULES;
     protected final CruxCore CRUX_CORE = new CruxCore();
     //protected final CruxMenu CRUX_MENU = new CruxMenu();
     protected final CruxPotionsModule CRUX_POTION = new CruxPotionsModule();

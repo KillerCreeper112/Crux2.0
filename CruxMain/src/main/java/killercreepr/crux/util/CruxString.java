@@ -1,6 +1,6 @@
 package killercreepr.crux.util;
 
-import killercreepr.crux.registries.Registries;
+import killercreepr.crux.registries.CruxRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 
 public class CruxString {
     public static boolean parseBoolean(@NotNull String s){
-        for(Map.Entry<String, Boolean> entry : Registries.BOOLEAN_MAPPED.entrySet()){
+        for(Map.Entry<String, Boolean> entry : CruxRegistries.BOOLEAN_MAPPED.entrySet()){
             if(s.equalsIgnoreCase(entry.getKey())) return entry.getValue();
         }
         return Boolean.parseBoolean(s);

@@ -1,7 +1,6 @@
 package killercreepr.cruxenchants.enchant;
 
 import killercreepr.crux.Crux;
-import killercreepr.crux.registries.Registries;
 import killercreepr.crux.util.CruxItem;
 import killercreepr.crux.util.CruxKey;
 import killercreepr.crux.util.CruxString;
