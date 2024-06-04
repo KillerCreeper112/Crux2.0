@@ -160,7 +160,7 @@ public class CruxGoalBase {
             e -> isValidNaturalTarget(e) && (targetCheck == null || targetCheck.test(e))
         ), mob.getLocation(), -1, false);
 
-        /*List<Mob> teammates = new GetNearbyEntities(mob, followRange).get(Mob.class, null, TeamType.TEAMMATE);
+        /*todo List<Mob> teammates = new GetNearbyEntities(mob, followRange).get(Mob.class, null, TeamType.TEAMMATE);
         for(LivingEntity e : targets){
             for(Mob m : teammates){
                 if(Bukkit.getMobGoals().getGoal(m, getKey()) instanceof CruxGoalBase path && e.equals(path.getTarget())) continue;
@@ -204,10 +204,12 @@ public class CruxGoalBase {
             result.getResults().add(new RayTraceResult(mob.getEyeLocation().toVector(), e, null));
         }
         if(result.getHit().isEmpty()) return result;
-        double trueDmg = ((mob.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) == null ? 0D : mob.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue())
-                /*todo GrimAttribute.get(mob, GrimAttribute.ATTACK_DAMAGE)*/) * Math.max(attackCooldown, .75f);
-        double trueKb = 0D;//GrimAttribute.get(mob, GrimAttribute.ATTACK_KNOCKBACK) * CruxMath.minClamp(attackCooldown, .75f);
-        double trueUpKb = 0D;//GrimAttribute.get(mob, GrimAttribute.ATTACK_KNOCKBACK_UP) * CruxMath.minClamp(attackCooldown, .75f);
+        double trueDmg = (
+            (mob.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) == null ? 0D : mob.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue())
+                + CruxAttribute.ATTACK_DAMAGE.get(mob)
+        ) * Math.max(attackCooldown, .75f);
+        double trueKb = CruxAttribute.ATTACK_KNOCKBACK.get(mob) * Math.max(attackCooldown, .75f);
+        double trueUpKb = CruxAttribute.ATTACK_KNOCKBACK_UP.get(mob) * Math.max(attackCooldown, .75f);
 
         double dmg;
         double dmgDropOff = 1D;
