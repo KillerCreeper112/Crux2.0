@@ -8,34 +8,34 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class CruxAttributeModifier implements Keyed {
-    private final NamespacedKey key;
+    private final Key key;
     private double amount;
     private final CruxAttribute.Operation operation;
     private final CruxSlot slot;
-    private NamespacedKey[] path;
+    private Key[] path;
 
-    public CruxAttributeModifier(@NotNull NamespacedKey key, @NotNull CruxAttributeModData data) {
+    public CruxAttributeModifier(@NotNull Key key, @NotNull CruxAttributeModData data) {
         this.key = key;
         this.amount = data.getAmount();
         this.operation = data.getOperation();
         this.slot = data.getSlot();
     }
 
-    public CruxAttributeModifier(@NotNull NamespacedKey key, double amount) {
+    public CruxAttributeModifier(@NotNull Key key, double amount) {
         this.key = key;
         this.amount = amount;
         this.operation = CruxAttribute.Operation.ADD;
         this.slot = null;
     }
 
-    public CruxAttributeModifier(@NotNull NamespacedKey key, double amount, @NotNull CruxAttribute.Operation operation) {
+    public CruxAttributeModifier(@NotNull Key key, double amount, @NotNull CruxAttribute.Operation operation) {
         this.key = key;
         this.amount = amount;
         this.operation = operation;
         this.slot = null;
     }
 
-    public CruxAttributeModifier(@NotNull NamespacedKey key, double amount, @NotNull CruxAttribute.Operation operation,
+    public CruxAttributeModifier(@NotNull Key key, double amount, @NotNull CruxAttribute.Operation operation,
                                  @Nullable CruxSlot slot) {
         this.key = key;
         this.amount = amount;
@@ -43,7 +43,7 @@ public class CruxAttributeModifier implements Keyed {
         this.slot = slot;
     }
 
-    public CruxAttributeModifier(@NotNull NamespacedKey key, double amount,
+    public CruxAttributeModifier(@NotNull Key key, double amount,
                                  @Nullable CruxSlot slot) {
         this.key = key;
         this.amount = amount;
@@ -51,15 +51,15 @@ public class CruxAttributeModifier implements Keyed {
         this.slot = slot;
     }
 
-    public CruxAttributeModifier withKey(@NotNull NamespacedKey newKey){
+    public CruxAttributeModifier withKey(@NotNull Key newKey){
         return new CruxAttributeModifier(newKey, amount, operation, slot);
     }
 
-    public @NotNull NamespacedKey@Nullable[] getPath() {
+    public @NotNull Key@Nullable[] getPath() {
         return path;
     }
 
-    public CruxAttributeModifier setPath(@NotNull NamespacedKey @Nullable... path){
+    public CruxAttributeModifier setPath(@NotNull Key @Nullable... path){
         this.path = path;
         return this;
     }
@@ -101,7 +101,7 @@ public class CruxAttributeModifier implements Keyed {
         return key;
     }
 
-    public @NotNull NamespacedKey getKey() {
+    public @NotNull Key getKey() {
         return key;
     }
 

@@ -334,7 +334,7 @@ public interface CruxAttribute extends Keyed {
 
         //no path provided
         if(path == null || path.length < 1){
-            attributeContainer.set(modifier.getKey(), PersistentDataType.TAG_CONTAINER, modProvider);
+            attributeContainer.set(CruxKey.key(modifier.getKey()), PersistentDataType.TAG_CONTAINER, modProvider);
         }else{
             List<PersistentDataContainer> list = new ArrayList<>();
             int index = 0;
@@ -352,7 +352,7 @@ public interface CruxAttribute extends Keyed {
                     }
                 }
                 if(found == null) found = i.getPersistentDataContainer().getAdapterContext().newPersistentDataContainer();
-                if(index == path.length) found.set(modifier.getKey(), PersistentDataType.TAG_CONTAINER, modProvider);
+                if(index == path.length) found.set(CruxKey.key(modifier.getKey()), PersistentDataType.TAG_CONTAINER, modProvider);
                 list.add(found);
                 current = found;
             }
@@ -564,6 +564,12 @@ public interface CruxAttribute extends Keyed {
     enum Operation{
         ADD,
         MULTIPLY,
-        SET
+        SET;
+
+        public static @Nullable Operation match(@NotNull String id){
+            try{
+                return Operation.valueOf(id.toUpperCase());
+            }catch (IllegalArgumentException ignored){ return null; }
+        }
     }
 }

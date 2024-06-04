@@ -19,6 +19,14 @@ public enum CruxSlot {
     FEET(36),
     ;
 
+    public static @Nullable CruxSlot match(@NotNull String id){
+        try{
+            return CruxSlot.valueOf(id.toUpperCase());
+        }catch (IllegalArgumentException ignored){
+            return null;
+        }
+    }
+
     public static final EquipmentSlot[] NORMAL_ARMOR = new EquipmentSlot[]{
             EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET
     };

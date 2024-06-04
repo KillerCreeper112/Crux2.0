@@ -48,6 +48,19 @@ public class MsgContainer {
         this(chat == null ? null : List.of(chat), null);
     }
 
+    public MsgContainer use(@NotNull Audience a){
+        return use(a, (StringHookContainer) null);
+    }
+
+    public MsgContainer use(@NotNull Audience a, @Nullable StringHookContainer tags){
+        OfflinePlayer placeholders = null;
+        if(a instanceof OfflinePlayer d) placeholders = d;
+        return use(a, placeholders, tags);
+    }
+
+    public MsgContainer use(@NotNull Audience a, @Nullable OfflinePlayer placeholders){
+        return use(a, placeholders, null);
+    }
 
     public MsgContainer use(@NotNull Audience a, @Nullable OfflinePlayer placeholders, @Nullable StringHookContainer tags){
         if(isBroadcast()) return broadcast(tags);

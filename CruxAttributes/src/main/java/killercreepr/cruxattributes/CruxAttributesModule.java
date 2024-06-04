@@ -2,6 +2,7 @@ package killercreepr.cruxattributes;
 
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.plugin.CruxPlugin;
+import killercreepr.cruxattributes.command.CruxAttributeCommands;
 import killercreepr.cruxattributes.listener.CruxAttributeListener;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,5 +18,6 @@ public class CruxAttributesModule implements CruxModule {
         plugin.registerListeners(
                 new CruxAttributeListener()
         );
+        CruxAttributeCommands.register(plugin);
     }
 }

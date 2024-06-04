@@ -1,5 +1,6 @@
 package killercreepr.cruxattributes.attribute;
 
+import net.kyori.adventure.key.Key;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -31,7 +32,7 @@ public class CruxAttributeInstance {
         double x = 0D;
         double multiply = 0D;
         Collection<CruxAttributeModifier> ADD = new ArrayList<>();
-        Set<NamespacedKey> SET = new HashSet<>();
+        Set<Key> SET = new HashSet<>();
         for(CruxAttributeModifier m : modifiers){
             switch (m.getOperation()){
                 case CruxAttribute.Operation.MULTIPLY -> multiply += m.getAmount();
