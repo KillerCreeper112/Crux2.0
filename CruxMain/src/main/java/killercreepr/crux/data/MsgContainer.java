@@ -75,7 +75,7 @@ public class MsgContainer {
         }
         if(actionBar != null) p.sendActionBar(deserialize(placeholders, actionBar, tags));
         if(title != null) p.showTitle(title.build(p, tags));
-        if(sound != null) sound.play(p, false);
+        if(sound != null) sound.playFor(p);
         return this;
     }
 
