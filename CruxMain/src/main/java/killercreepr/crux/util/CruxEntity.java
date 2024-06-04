@@ -56,6 +56,18 @@ public class CruxEntity {
         }
         return playerList;
     }
+
+    public static <T extends Entity> @NotNull List<T> getEntitiesNear(@NotNull Class<T> type, @NotNull Location location, double radius, @Nullable Predicate<T> filter){
+        List<T> list = new ArrayList<>();
+        for(Entity e : getEntitiesNear(location, radius, null)){
+            if(!type.isAssignableFrom(e.getClass())) continue;
+            T parsed = type.cast(e);
+            if(filter != null && !filter.test(parsed)) continue;
+            list.add(parsed);
+        }
+        return list;
+    }
+
     public static @NotNull List<Entity> getEntitiesNear(@NotNull Location location, double radius, @Nullable Predicate<Entity> filter) {
         List<Entity> entities = new ArrayList<>();
         World world = location.getWorld();

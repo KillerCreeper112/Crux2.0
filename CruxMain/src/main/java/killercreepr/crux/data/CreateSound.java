@@ -31,19 +31,23 @@ public class CreateSound {
 
     public @NotNull Sound getSound() { return sound; }
 
-    public CreateSound play(@NotNull Location l){
+    public CreateSound playAt(@NotNull Location l){
         l.getWorld().playSound(sound, l.getX(), l.getY(), l.getZ());
         return this;
     }
 
-    public CreateSound play(@NotNull Entity l){
+    public CreateSound playAt(@NotNull Entity l){
         l.getWorld().playSound(sound, l.getLocation().getX(), l.getLocation().getY(), l.getLocation().getZ());
         return this;
     }
 
-    public CreateSound play(@NotNull Player l, boolean global){
-        if(global) l.getWorld().playSound(sound, l.getLocation().getX(), l.getLocation().getY(), l.getLocation().getZ());
-        else l.playSound(sound);
+    public CreateSound playFor(@NotNull Player p){
+        p.playSound(sound, Sound.Emitter.self());
+        return this;
+    }
+
+    public CreateSound playFrom(@NotNull Entity l){
+        l.getWorld().playSound(sound, l);
         return this;
     }
 }

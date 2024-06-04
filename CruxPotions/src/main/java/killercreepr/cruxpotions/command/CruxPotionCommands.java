@@ -35,7 +35,9 @@ public class CruxPotionCommands {
     public static void register(@NotNull CruxPlugin plugin){
         plugin.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event ->{
             final Commands commands = event.registrar();
-            LiteralCommandNode<CommandSourceStack> cmd = build(Commands.literal("cruxpotion"), plugin.getLifecycleManager());
+            LiteralCommandNode<CommandSourceStack> cmd = build(Commands.literal("cruxpotion")
+                .requires(source -> source.getSender().hasPermission("cruxpotions.cmds.cruxpotion.use")),
+                plugin.getLifecycleManager());
             commands.register(cmd, List.of("cpotion", "cpot"));
         });
     }

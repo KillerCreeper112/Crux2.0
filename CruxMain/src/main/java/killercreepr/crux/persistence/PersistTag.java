@@ -21,6 +21,9 @@ public class PersistTag<T> {
         REGISTRY.register(e);
         return e;
     }
+
+    public static final PersistTag<Boolean> IGNORED_MOB_TARGET = register(new PersistTag<>(PersistentDataType.BOOLEAN, "ignored_mob_target"));
+
     protected final PersistentDataType<?, T> tagType;
     protected final String tagName;
     protected final T defaultValue;

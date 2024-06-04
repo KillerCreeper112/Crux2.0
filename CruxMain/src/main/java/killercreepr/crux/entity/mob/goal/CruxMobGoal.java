@@ -1,0 +1,168 @@
+package killercreepr.crux.entity.mob.goal;
+
+import com.destroystokyo.paper.entity.ai.Goal;
+import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
+import killercreepr.crux.Crux;
+import killercreepr.crux.entity.mob.goal.sound.CruxGoalSounds;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Mob;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Predicate;
+
+public class CruxMobGoal extends CruxGoalBase implements Goal<Mob>, Listener {
+    protected Predicate<Entity> targetCheck;
+    protected CruxGoalSounds sounds;
+    public CruxMobGoal(@NotNull Mob mob) {
+        super(mob);
+    }
+
+    private boolean isValid(){ return true; }
+    @Override
+    public boolean shouldActivate() {
+        return isValid();
+    }
+
+    @Override
+    public boolean shouldStayActive() {
+        return shouldActivate();
+    }
+    public @NotNull CruxMobGoal sounds(@Nullable CruxGoalSounds sounds){ this.sounds = sounds; return this; }
+
+    public @Nullable CruxGoalSounds getSounds() {
+        return sounds;
+    }
+
+    public boolean isInAttackRange(double range){
+        return range <= 5D;
+    }
+
+    @Override
+    public void start() {
+        Bukkit.getPluginManager().registerEvents(this, Crux.getMainPlugin());
+    }
+
+    @EventHandler
+    public void entityDamageMob(EntityDamageByEntityEvent event) {
+        if (event.getEntity().equals(this.mob)) {
+            if (event.getDamager() instanceof LivingEntity damager) {
+                if (!damager.getWorld().equals(this.mob.getWorld()) || !this.isValidAttackerTarget(damager)) {
+                    return;
+                }
+                if (this.target == null) {
+                    this.setTarget(damager);
+                } else {
+                    double targetDistance = this.mob.getLocation().distance(this.target.getLocation());
+                    if (this.isInAttackRange(targetDistance)) return;
+
+                    double damagerDistance = this.mob.getLocation().distance(damager.getLocation());
+                    if(damagerDistance < targetDistance) this.setTarget(damager);
+                }
+            }
+        }
+    }
+
+    private boolean hasBeenRemovedOrDied = false;
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    public void onEntityDeath(EntityDeathEvent event) {
+        if(event.getEntity().equals(mob) && !hasBeenRemovedOrDied){
+            hasBeenRemovedOrDied = true;
+            removedOrDeath();
+        }
+    }
+
+    protected void removedOrDeath(){}
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public final void entityRemove(EntityRemoveFromWorldEvent event) {
+        if(event.getEntity().equals(this.mob)){
+            HandlerList.unregisterAll(this);
+            if(!hasBeenRemovedOrDied) removedOrDeath();
+            hasBeenRemovedOrDied = true;
+        }
+    }
+
+    @Override
+    public void stop() {
+        mob.getPathfinder().stopPathfinding();
+        mob.setTarget(null);
+    }
+
+    protected double getSquaredDistance(){
+        if(target != null && target.getWorld().equals(mob.getWorld())) return mob.getLocation().distanceSquared(target.getLocation());
+        return 0D;
+    }
+
+    protected double getDistance(){
+        if(target != null && target.getWorld().equals(mob.getWorld())) return mob.getLocation().distance(target.getLocation());
+        return 0D;
+    }
+
+    protected boolean isWithinSquared(double distance, double range){
+        return distance <= (range*range);
+    }
+
+    protected boolean isWithinSquared(double range){
+        return getSquaredDistance() <= (range*range);
+    }
+
+    @Override
+    public void tick() {
+        pathFind();
+        targetLogic();
+        sound();
+    }
+
+    @Override
+    protected void targetLogic(){
+        super.targetLogic();
+        if(target == null) return;
+        double distance = getDistance();
+        if(distance > getForgetTargetDistance()){
+            setTarget(null);
+            return;
+        }
+        mob.setTarget(target);
+        moveTo();
+        targetAttackLogic(distance);
+    }
+
+    protected void targetAttackLogic(double distance){
+        attemptAttack(target, distance);
+    }
+
+    protected void pathFind(){
+        if(!mob.isValid()){
+            stop();
+            return;
+        }
+        if(updateTarget()){
+            if(findCooldown > 0){
+                findCooldown--;
+                return;
+            }
+            if(!findTarget(targetCheck)){
+                findCooldown = 25;
+                target = null;
+                mob.setTarget(null);
+            }
+        }
+    }
+
+    protected void sound(){
+        if(sounds == null) return;
+        sounds.tick();
+    }
+
+
+}
