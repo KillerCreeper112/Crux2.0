@@ -1,4 +1,4 @@
-package killercreepr.crux.attribute;
+package killercreepr.cruxattributes.attribute;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

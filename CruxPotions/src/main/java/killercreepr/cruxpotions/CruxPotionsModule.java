@@ -1,6 +1,5 @@
 package killercreepr.cruxpotions;
 
-import killercreepr.crux.Crux;
 import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.plugin.CruxPlugin;
@@ -17,8 +16,8 @@ import killercreepr.cruxpotions.potions.inflictor.PotionInflictor;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.jetbrains.annotations.NotNull;
 
-public class CruxPotionModule implements CruxModule {
-    public static final String NAMESPACE = "CruxPotion";
+public class CruxPotionsModule implements CruxModule {
+    public static final String NAMESPACE = "CruxPotions";
     protected static Config CONFIG;
     public static Config cfg(){ return CONFIG; }
     @Override

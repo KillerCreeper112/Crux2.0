@@ -7,6 +7,8 @@ include(
     "CruxMenu",
     "CruxPotions",
 
+    "CruxAttributes",
+
     "CruxTest"
 )
 

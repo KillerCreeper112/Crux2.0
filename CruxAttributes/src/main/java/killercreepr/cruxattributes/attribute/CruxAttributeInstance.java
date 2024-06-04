@@ -1,4 +1,4 @@
-package killercreepr.crux.attribute;
+package killercreepr.cruxattributes.attribute;
 
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
@@ -34,12 +34,12 @@ public class CruxAttributeInstance {
         Set<NamespacedKey> SET = new HashSet<>();
         for(CruxAttributeModifier m : modifiers){
             switch (m.getOperation()){
-                case MULTIPLY -> multiply += m.getAmount();
-                case SET ->{
+                case CruxAttribute.Operation.MULTIPLY -> multiply += m.getAmount();
+                case CruxAttribute.Operation.SET ->{
                     SET.add(m.getKey());
                     x = m.getAmount();
                 }
-                case ADD -> ADD.add(m);
+                case CruxAttribute.Operation.ADD -> ADD.add(m);
             }
         }
         for(CruxAttributeModifier m : ADD){

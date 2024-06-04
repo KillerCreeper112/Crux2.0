@@ -1,7 +1,7 @@
-package killercreepr.crux.attribute;
+package killercreepr.cruxattributes.attribute;
 
 import killercreepr.crux.util.CruxString;
-import org.bukkit.NamespacedKey;
+import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -29,14 +29,22 @@ public enum CruxSlot {
 
     public static @Nullable CruxSlot adapt(@NotNull EquipmentSlot slot){
         return switch (slot){
-            case FEET -> FEET;
-            case LEGS -> LEGS;
-            case CHEST -> CHEST;
-            case HEAD -> HEAD;
-            case HAND -> HAND;
-            case OFF_HAND -> OFF_HAND;
-            case BODY -> null;
+            case EquipmentSlot.FEET -> FEET;
+            case EquipmentSlot.LEGS -> LEGS;
+            case EquipmentSlot.CHEST -> CHEST;
+            case EquipmentSlot.HEAD -> HEAD;
+            case EquipmentSlot.HAND -> HAND;
+            case EquipmentSlot.OFF_HAND -> OFF_HAND;
+            case EquipmentSlot.BODY -> null;
         };
+    }
+
+    public @Nullable EquipmentSlot toBukkit(){
+        try{
+            return EquipmentSlot.valueOf(this.name().toUpperCase());
+        }catch (IllegalArgumentException ignored){
+            return null;
+        }
     }
 
     public @NotNull String getName(){
@@ -105,7 +113,7 @@ public enum CruxSlot {
         };
     }
 
-    public @NotNull NamespacedKey key(){
+    public @NotNull Key key(){
         return CruxAttribute.k("slot." + this.toString().toLowerCase());
     }
 

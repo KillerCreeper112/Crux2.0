@@ -1,7 +1,7 @@
 package killercreepr.cruxpotions.potions;
 
 import killercreepr.crux.util.CruxString;
-import killercreepr.cruxpotions.CruxPotionModule;
+import killercreepr.cruxpotions.CruxPotionsModule;
 import killercreepr.cruxpotions.potions.inflictor.PotionInflictor;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Entity;
@@ -26,7 +26,7 @@ public abstract class GenericPotion implements CruxPotion {
 
     @Override
     public @NotNull PotionEffectType.Category getCategory(){
-        Map<Key, PotionEffectType.Category> value = CruxPotionModule.cfg().POTION_CATEGORIES.value();
+        Map<Key, PotionEffectType.Category> value = CruxPotionsModule.cfg().POTION_CATEGORIES.value();
         if(value == null) return defaultCategory();
         return value.getOrDefault(key, defaultCategory());
     }

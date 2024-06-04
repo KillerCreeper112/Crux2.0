@@ -1,8 +1,8 @@
-package killercreepr.crux.attribute.container;
+package killercreepr.cruxattributes.attribute.container;
 
-import killercreepr.crux.attribute.CruxAttribute;
-import killercreepr.crux.attribute.CruxAttributeModifier;
-import killercreepr.crux.attribute.CruxSlot;
+import killercreepr.cruxattributes.attribute.CruxAttribute;
+import killercreepr.cruxattributes.attribute.CruxAttributeModifier;
+import killercreepr.cruxattributes.attribute.CruxSlot;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -1,6 +1,6 @@
-package killercreepr.crux.attribute;
+package killercreepr.cruxattributes.attribute;
 
-import killercreepr.crux.attribute.container.CruxAttributeModData;
+import killercreepr.cruxattributes.attribute.container.CruxAttributeModData;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import org.bukkit.NamespacedKey;

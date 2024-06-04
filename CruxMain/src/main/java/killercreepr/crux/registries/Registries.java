@@ -1,6 +1,5 @@
 package killercreepr.crux.registries;
 
-import killercreepr.crux.attribute.CruxAttribute;
 import killercreepr.crux.data.tick.CruxTick;
 import killercreepr.crux.enchant.CruxEnchant;
 import killercreepr.crux.plugin.CruxPlugin;
@@ -26,8 +25,6 @@ public class Registries {
     public static final CruxModuleRegistry MODULES = new CruxModuleRegistry();
 
     public static final KeyedRegistry<CruxTick> TICKS = new SimpleKeyedRegistry<>();
-
-    public static final KeyedRegistry<CruxAttribute> ATTRIBUTES = new SimpleKeyedRegistry<>();
     public static final KeyedRegistry<CruxEnchant> ENCHANTS = new SimpleKeyedRegistry<>();
 
     public static final MappedRegistry<String, Boolean> BOOLEAN_MAPPED = SimpleMappedRegistry.fromHashMap();
