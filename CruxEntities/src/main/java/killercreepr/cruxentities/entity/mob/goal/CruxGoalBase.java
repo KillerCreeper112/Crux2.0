@@ -1,14 +1,14 @@
-package killercreepr.crux.entity.mob.goal;
+package killercreepr.cruxentities.entity.mob.goal;
 
 import com.destroystokyo.paper.entity.ai.GoalKey;
 import com.destroystokyo.paper.entity.ai.GoalType;
 import killercreepr.crux.Crux;
-import killercreepr.crux.attribute.CruxAttribute;
-import killercreepr.crux.combat.CruxEntityDamager;
-import killercreepr.crux.combat.EntityHit;
 import killercreepr.crux.event.CruxEntityDamageEvent;
 import killercreepr.crux.persistence.PersistTag;
 import killercreepr.crux.util.CruxEntity;
+import killercreepr.cruxattributes.attribute.CruxAttribute;
+import killercreepr.cruxentities.combat.CruxEntityDamager;
+import killercreepr.cruxentities.combat.EntityHit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;

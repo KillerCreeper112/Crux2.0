@@ -7,8 +7,4 @@ public class CruxPersistence {
     public static final PotionEffectTagType POTION_EFFECT = new PotionEffectTagType();
     public static final PotionEffectListTagType POTION_EFFECT_LIST = new PotionEffectListTagType();
 
-    public static final CruxAttributeContainerDataType ATTRIBUTE_CONTAINER = new CruxAttributeContainerDataType();
-    public static final CruxAttributeInstanceDataType ATTRIBUTE_INSTANCE = new CruxAttributeInstanceDataType();
-    public static final CruxAttributeModifierDataType ATTRIBUTE_MODIFIER = new CruxAttributeModifierDataType();
-
 }

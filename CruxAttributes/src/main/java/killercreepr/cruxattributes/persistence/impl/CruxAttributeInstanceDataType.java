@@ -1,9 +1,9 @@
-package killercreepr.crux.persistence.impl;
+package killercreepr.cruxattributes.persistence.impl;
 
-import killercreepr.crux.attribute.CruxAttributeModifier;
-import killercreepr.crux.attribute.container.CruxAttributeModData;
-import killercreepr.crux.persistence.CruxPersistence;
 import killercreepr.crux.util.CruxKey;
+import killercreepr.cruxattributes.attribute.CruxAttributeModifier;
+import killercreepr.cruxattributes.attribute.container.CruxAttributeModData;
+import killercreepr.cruxattributes.persistence.CruxAttributesPersistence;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -28,7 +28,7 @@ public class CruxAttributeInstanceDataType implements PersistentDataType<Persist
     public @NotNull PersistentDataContainer toPrimitive(@NotNull Collection<CruxAttributeModifier> complex, @NotNull PersistentDataAdapterContext context) {
         PersistentDataContainer c = context.newPersistentDataContainer();
         for(CruxAttributeModifier m : complex){
-            c.set(CruxKey.key(m.key()), CruxPersistence.ATTRIBUTE_MODIFIER, new CruxAttributeModData(m));
+            c.set(CruxKey.key(m.key()), CruxAttributesPersistence.ATTRIBUTE_MODIFIER, new CruxAttributeModData(m));
         }
         return c;
     }
@@ -38,7 +38,7 @@ public class CruxAttributeInstanceDataType implements PersistentDataType<Persist
         Collection<CruxAttributeModifier> list = new ArrayList<>();
         for(NamespacedKey k : c.getKeys()){
             try{
-                CruxAttributeModData data = c.get(k, CruxPersistence.ATTRIBUTE_MODIFIER);
+                CruxAttributeModData data = c.get(k, CruxAttributesPersistence.ATTRIBUTE_MODIFIER);
                 if(data != null) list.add(new CruxAttributeModifier(k, data));
             }catch (Exception ignored){}
         }

@@ -1,9 +1,9 @@
-package killercreepr.crux.combat;
+package killercreepr.cruxentities.combat;
 
 import killercreepr.crux.Crux;
-import killercreepr.crux.attribute.CruxAttribute;
 import killercreepr.crux.event.CruxEntityDamageEvent;
 import killercreepr.crux.event.CruxEntityDeathEvent;
+import killercreepr.cruxattributes.attribute.CruxAttribute;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;

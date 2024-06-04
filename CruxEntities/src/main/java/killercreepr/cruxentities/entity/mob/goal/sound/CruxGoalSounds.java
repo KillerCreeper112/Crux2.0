@@ -1,4 +1,4 @@
-package killercreepr.crux.entity.mob.goal.sound;
+package killercreepr.cruxentities.entity.mob.goal.sound;
 
 import killercreepr.crux.data.CreateSound;
 import killercreepr.crux.util.CruxMath;

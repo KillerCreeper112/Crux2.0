@@ -1,4 +1,4 @@
-package killercreepr.crux.combat;
+package killercreepr.cruxentities.combat;
 
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;

@@ -1,7 +1,6 @@
 package killercreepr.crux.registries;
 
 import killercreepr.crux.data.tick.CruxTick;
-import killercreepr.crux.enchant.CruxEnchant;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registry.KeyedRegistry;
 import killercreepr.crux.registry.MappedRegistry;

@@ -1,8 +1,8 @@
-package killercreepr.crux.persistence.impl;
+package killercreepr.cruxattributes.persistence.impl;
 
-import killercreepr.crux.attribute.CruxAttribute;
-import killercreepr.crux.attribute.CruxSlot;
-import killercreepr.crux.attribute.container.CruxAttributeModData;
+import killercreepr.cruxattributes.attribute.CruxAttribute;
+import killercreepr.cruxattributes.attribute.CruxSlot;
+import killercreepr.cruxattributes.attribute.container.CruxAttributeModData;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
