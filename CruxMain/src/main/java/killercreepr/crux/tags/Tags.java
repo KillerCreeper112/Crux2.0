@@ -8,7 +8,7 @@ import killercreepr.crux.tags.container.ObjectHookContainer;
 import killercreepr.crux.tags.container.StringHookContainer;
 import killercreepr.crux.tags.format.FormatPrefix;
 import killercreepr.crux.tags.hook.LoreHook;
-import killercreepr.crux.tags.hook.StringHook;
+import killercreepr.crux.tags.hook.string.StringHook;
 import killercreepr.crux.tags.tag.LoreResolver;
 import killercreepr.crux.tags.tag.ObjectTag;
 import org.jetbrains.annotations.NotNull;

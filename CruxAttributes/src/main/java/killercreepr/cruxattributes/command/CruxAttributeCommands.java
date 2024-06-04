@@ -13,6 +13,8 @@ import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import killercreepr.crux.command.argument.CruxCmdArguments;
 import killercreepr.crux.data.MsgContainer;
 import killercreepr.crux.plugin.CruxPlugin;
+import killercreepr.crux.tags.container.StringHookContainer;
+import killercreepr.crux.tags.placeholder.LocalTag;
 import killercreepr.crux.util.CruxItem;
 import killercreepr.cruxattributes.attribute.CruxAttribute;
 import killercreepr.cruxattributes.attribute.CruxAttributeModifier;
@@ -20,9 +22,6 @@ import killercreepr.cruxattributes.attribute.CruxSlot;
 import killercreepr.cruxattributes.command.argument.CruxAttributeArguments;
 import killercreepr.cruxattributes.registries.CruxAttributeRegistries;
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -137,14 +136,14 @@ public class CruxAttributeCommands {
                             .suggests((context, builder) -> builder.suggest("self").suggest("hand").buildFuture())
                             .executes(ctx -> listModifier(
                                 ctx.getSource(),
-                                ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()).getFirst(),
+                                ctx.getArgument("target", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()).getFirst(),
                                 ctx.getArgument("execute_operation", String.class)
                             ))
                             .then(
                                 Commands.argument("attribute", CruxAttributeArguments.cruxAttribute())
                                     .executes(ctx -> listModifier(
                                         ctx.getSource(),
-                                        ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()).getFirst(),
+                                        ctx.getArgument("target", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()).getFirst(),
                                         ctx.getArgument("execute_operation", String.class),
                                         ctx.getArgument("attribute", CruxAttribute.class)
                                     ))
@@ -208,8 +207,16 @@ public class CruxAttributeCommands {
                         new MsgContainer(" ".repeat(i) + " -> " + k.asString()).use(sender);
                     }
                 }
-                new MsgContainer(m.getKey().asString() + " -> " + m.getAmount() + " (" +
-                    m.getOperation().toString().toLowerCase() + ")").use(sender);
+
+                String format = "<gold><key> <dark_gray>-> <red>{amount=<amount>, slot=<slot>, operation=<operation>}";
+                new MsgContainer(format).use(sender,
+                    StringHookContainer.simple(
+                        LocalTag.parsed("key", m.getKey().asString()),
+                        LocalTag.parsed("amount", m.getAmount()+""),
+                        LocalTag.parsed("operation", m.getOperation().name().toLowerCase()),
+                        LocalTag.parsed("slot", m.getSlot() == null ? "all" : m.getSlot().getName())
+                    )
+                );
             }
         }
         return 1;

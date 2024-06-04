@@ -7,6 +7,8 @@ import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+
 public class CruxAttributeModifier implements Keyed {
     private final Key key;
     private double amount;
@@ -116,5 +118,10 @@ public class CruxAttributeModifier implements Keyed {
     @Nullable
     public CruxSlot getSlot() {
         return slot;
+    }
+
+    @Override
+    public String toString() {
+        return "CruxAttributeModifier{key=" + key + ", amount=" + amount + ", operation=" + operation + ", slot=" + slot + ", path=" + Arrays.toString(path) + "}";
     }
 }

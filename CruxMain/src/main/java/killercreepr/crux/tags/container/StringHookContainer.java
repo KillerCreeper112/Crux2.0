@@ -1,7 +1,8 @@
 package killercreepr.crux.tags.container;
 
+import killercreepr.crux.Crux;
 import killercreepr.crux.context.TextParserContext;
-import killercreepr.crux.tags.hook.StringHookedObject;
+import killercreepr.crux.tags.hook.string.StringHookedObject;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,6 +13,14 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class StringHookContainer implements TagsContainer<StringHookedObject<?>> {
+    public static @NotNull StringHookContainer simple(){
+        return new StringHookContainer(Crux.FORMAT.simpleContext());
+    }
+
+    public static @NotNull StringHookContainer simple(@NotNull StringHookedObject<?>... tags){
+        return new StringHookContainer(Crux.FORMAT.simpleContext()).putAll(tags);
+    }
+
     protected final @NotNull TextParserContext context;
     private final Map<String, StringHookedObject<?>> tags = new HashMap<>();
     public StringHookContainer(@NotNull TextParserContext context, @Nullable StringHookContainer container){
@@ -56,6 +65,13 @@ public class StringHookContainer implements TagsContainer<StringHookedObject<?>>
 
     public StringHookContainer putAll(@Nullable StringHookContainer container){
         if(container != null) tags.putAll(container.get());
+        return this;
+    }
+
+    public StringHookContainer putAll(@NotNull StringHookedObject<?>... tags){
+        for(StringHookedObject<?> hook : tags){
+            put(hook);
+        }
         return this;
     }
 

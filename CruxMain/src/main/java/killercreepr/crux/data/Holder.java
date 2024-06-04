@@ -22,6 +22,9 @@ public interface Holder <T>{
             }
         };
     }
+    static @NotNull Holder<Object> empty(){
+        return direct(null);
+    }
     @Nullable T value();
 
     record Direct<T>(T value) implements Holder<T> {

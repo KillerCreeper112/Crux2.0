@@ -4,7 +4,7 @@ import killercreepr.crux.tags.Tags;
 import killercreepr.crux.tags.container.ObjectHookContainer;
 import killercreepr.crux.tags.format.FormatPrefix;
 import killercreepr.crux.tags.hook.LoreHook;
-import killercreepr.crux.tags.hook.StringHook;
+import killercreepr.crux.tags.hook.string.StringHook;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

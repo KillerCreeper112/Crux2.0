@@ -4,7 +4,7 @@ import killercreepr.crux.context.FormatParserContext;
 import killercreepr.crux.tags.FormatArgs;
 import killercreepr.crux.tags.container.ObjectHookContainer;
 import killercreepr.crux.tags.format.Format;
-import killercreepr.crux.tags.hook.StringHook;
+import killercreepr.crux.tags.hook.string.StringHook;
 import killercreepr.crux.tags.tag.ObjectTag;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;

@@ -8,14 +8,13 @@ import killercreepr.crux.tags.FormatArgs;
 import killercreepr.crux.tags.Tags;
 import killercreepr.crux.tags.container.LoreHookContainer;
 import killercreepr.crux.tags.container.StringHookContainer;
-import killercreepr.crux.tags.hook.StringHookedObject;
+import killercreepr.crux.tags.hook.string.StringHookedObject;
 import killercreepr.crux.tags.tag.LoreResolver;
 import killercreepr.crux.util.CruxMath;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,6 +36,10 @@ public class Format {
     public Format(@NotNull MiniMessage FORMAT, @NotNull Tags TAGS) {
         this.FORMAT = FORMAT;
         this.TAGS = TAGS;
+    }
+
+    public @NotNull FormatParserContext simpleContext(){
+        return new FormatParserContext.Builder(this).build();
     }
 
     public @NotNull MiniMessage getFormat() {
@@ -70,9 +73,9 @@ public class Format {
 
     public @NotNull Component deserialize(@NotNull String text, @Nullable StringHookContainer resolvers){
         text = setPlaceholders(text, resolvers);
-        TextParserContext context = new FormatParserContext.Builder(this)
+        /*TextParserContext context = new FormatParserContext.Builder(this)
                 .stringTags(resolvers)
-                .build();
+                .build();*/
         Collection<TagResolver> tags = new HashSet<>();
         if(resolvers != null) tags.addAll(Arrays.stream(resolvers.buildTagResolvers()).toList());
         return tags.isEmpty() ? FORMAT.deserialize(text) : FORMAT.deserialize(text, tags.toArray(new TagResolver[0]));
@@ -147,7 +150,7 @@ public class Format {
 
     public @NotNull String setPlaceholders(@NotNull String text, @Nullable StringHookContainer resolvers){
         if(resolvers == null) return text;
-        Bukkit.broadcastMessage("before: " + text);
+        //Bukkit.broadcastMessage("before: " + text);
         return processEquations(processPlaceholders(text, resolvers));
     }
 
@@ -180,7 +183,7 @@ public class Format {
     }
 
     public @NotNull String processPlaceholders(@NotNull String text, @NotNull StringHookContainer resolvers) {
-        Bukkit.broadcastMessage("before(p): " + text);
+        //Bukkit.broadcastMessage("before(p): " + text);
         Matcher matcher = STRING_PATTERN.matcher(text);
         StringBuilder result = new StringBuilder(text.length());
         TextParserContext context = new FormatParserContext.Builder(this)
@@ -194,12 +197,12 @@ public class Format {
             String[] arguments = new String[parts.length - 1];
             System.arraycopy(parts, 1, arguments, 0, parts.length - 1);
 
-            Bukkit.broadcastMessage(placeholder + " placeholder");
+            //Bukkit.broadcastMessage(placeholder + " placeholder");
             String replacement = resolvePlaceholder(placeholder, new FormatArgs(arguments), context, resolvers);
             matcher.appendReplacement(result, replacement);
         }
         matcher.appendTail(result);
-        Bukkit.broadcastMessage("after: " + result);
+        //Bukkit.broadcastMessage("after: " + result);
         return result.toString();
     }
 

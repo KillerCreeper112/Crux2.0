@@ -1,9 +1,10 @@
-package killercreepr.crux.tags.hook;
+package killercreepr.crux.tags.hook.string;
 
 import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.data.Holder;
 import killercreepr.crux.tags.FormatArgs;
 import killercreepr.crux.tags.Tags;
+import killercreepr.crux.tags.hook.ObjectHook;
 import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.ParsingException;
 import net.kyori.adventure.text.minimessage.tag.Tag;
@@ -14,7 +15,21 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public abstract class StringHook<T> extends ObjectHook<T>{
+public abstract class StringHook<T> extends ObjectHook<T> {
+    public static @NotNull StringHook<Object> parsed(@NotNull String identifier, @NotNull String value){
+        return new StringHook<>(Object.class) {
+            @Override
+            public @NotNull String parse(@Nullable Object object, @NotNull FormatArgs args, @NotNull TextParserContext context) {
+                return value;
+            }
+
+            @Override
+            public @NotNull String identifier() {
+                return identifier;
+            }
+        };
+    }
+
     public StringHook(@NotNull Class<T> object) {
         super(object);
     }
