@@ -9,15 +9,14 @@ import killercreepr.crux.Crux;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 
-public class CruxKeyArgument implements CustomArgumentType<Key, StringArgumentType> {
-    protected final ArgumentType<StringArgumentType> nativeType = reader -> StringArgumentType.string();
+public class CruxKeyArgument implements CustomArgumentType<Key, String> {
     @Override
     public @NotNull Key parse(@NotNull StringReader reader) throws CommandSyntaxException {
-        return Crux.key(getNativeType().parse(reader).parse(reader));
+        return Crux.key(getNativeType().parse(reader));
     }
 
     @Override
-    public @NotNull ArgumentType<StringArgumentType> getNativeType() {
-        return nativeType;
+    public @NotNull ArgumentType<String> getNativeType() {
+        return StringArgumentType.string();
     }
 }
