@@ -8,6 +8,7 @@ include(
     "CruxPotions",
 
     "CruxAttributes",
+    "CruxEnchants",
 
     "CruxTest"
 )

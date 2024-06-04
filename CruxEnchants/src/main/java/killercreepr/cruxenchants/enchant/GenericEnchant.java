@@ -1,4 +1,4 @@
-package killercreepr.crux.enchant;
+package killercreepr.cruxenchants.enchant;
 
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;

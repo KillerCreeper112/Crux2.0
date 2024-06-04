@@ -25,7 +25,6 @@ public class Registries {
     public static final CruxModuleRegistry MODULES = new CruxModuleRegistry();
 
     public static final KeyedRegistry<CruxTick> TICKS = new SimpleKeyedRegistry<>();
-    public static final KeyedRegistry<CruxEnchant> ENCHANTS = new SimpleKeyedRegistry<>();
 
     public static final MappedRegistry<String, Boolean> BOOLEAN_MAPPED = SimpleMappedRegistry.fromHashMap();
     //public static final MappedRegistry<String, PlayerPlaceholder> PLAYER_PLACEHOLDERS = SimpleMappedRegistry.fromHashMap();

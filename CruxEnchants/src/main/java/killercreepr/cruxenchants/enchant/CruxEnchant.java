@@ -1,4 +1,4 @@
-package killercreepr.crux.enchant;
+package killercreepr.cruxenchants.enchant;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.registries.Registries;
@@ -6,6 +6,7 @@ import killercreepr.crux.util.CruxItem;
 import killercreepr.crux.util.CruxKey;
 import killercreepr.crux.util.CruxString;
 import killercreepr.crux.util.CruxTag;
+import killercreepr.cruxenchants.registries.CruxEnchantRegistries;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import org.bukkit.NamespacedKey;
@@ -23,7 +24,7 @@ public interface CruxEnchant extends Keyed {
     static @NotNull NamespacedKey k(@NotNull String name){ return Crux.key(name); }
 
     static boolean canBeEnchanted(@NotNull ItemStack item){
-        for(CruxEnchant e : Registries.ENCHANTS){
+        for(CruxEnchant e : CruxEnchantRegistries.ENCHANTS){
             if(e.canEnchant(item)) return true;
         }
         return false;
@@ -219,7 +220,7 @@ public interface CruxEnchant extends Keyed {
         Map<CruxEnchant, Integer> e = new HashMap<>();
         if(c == null) return e;
         for(NamespacedKey s : c.getKeys()){
-            CruxEnchant custom = Registries.ENCHANTS.get(s);
+            CruxEnchant custom = CruxEnchantRegistries.ENCHANTS.get(s);
             if(custom == null) continue;
             e.put(custom, getLevel(c, custom.key()));
         }
