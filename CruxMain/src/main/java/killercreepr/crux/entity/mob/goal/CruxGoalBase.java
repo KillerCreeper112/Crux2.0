@@ -6,8 +6,6 @@ import killercreepr.crux.Crux;
 import killercreepr.crux.combat.EntityHit;
 import killercreepr.crux.persistence.PersistTag;
 import killercreepr.crux.util.CruxEntity;
-import killercreepr.crux.util.CruxMath;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;

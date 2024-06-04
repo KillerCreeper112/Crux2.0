@@ -1,0 +1,51 @@
+package killercreepr.crux.persistence.impl;
+
+import killercreepr.crux.attribute.CruxAttribute;
+import killercreepr.crux.attribute.CruxAttributeInstance;
+import killercreepr.crux.attribute.CruxAttributeModifier;
+import killercreepr.crux.persistence.CruxPersistence;
+import killercreepr.crux.registries.Registries;
+import killercreepr.crux.util.CruxKey;
+import org.bukkit.NamespacedKey;
+import org.bukkit.persistence.PersistentDataAdapterContext;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class CruxAttributeContainerDataType implements PersistentDataType<PersistentDataContainer, Collection<CruxAttributeInstance>> {
+    @Override
+    public @NotNull Class<PersistentDataContainer> getPrimitiveType() {
+        return PersistentDataContainer.class;
+    }
+
+    @Override
+    public @NotNull Class<Collection<CruxAttributeInstance>> getComplexType() {
+        return (Class<Collection<CruxAttributeInstance>>) (Class<?>) Collection.class;
+    }
+
+    @Override
+    public @NotNull PersistentDataContainer toPrimitive(@NotNull Collection<CruxAttributeInstance> complex, @NotNull PersistentDataAdapterContext context) {
+        PersistentDataContainer c = context.newPersistentDataContainer();
+        for(CruxAttributeInstance m : complex){
+            c.set(CruxKey.key(m.getAttribute().key()), CruxPersistence.ATTRIBUTE_INSTANCE, m.getModifiers());
+        }
+        return c;
+    }
+
+    @Override
+    public @NotNull Collection<CruxAttributeInstance> fromPrimitive(@NotNull PersistentDataContainer c, @NotNull PersistentDataAdapterContext context) {
+        Collection<CruxAttributeInstance> list = new ArrayList<>();
+        for(NamespacedKey k : c.getKeys()){
+            try{
+                CruxAttribute attribute = Registries.ATTRIBUTES.get(k);
+                if(attribute == null) continue;
+                Collection<CruxAttributeModifier> modifiers = c.get(k, CruxPersistence.ATTRIBUTE_INSTANCE);
+                if(modifiers != null) list.add(new CruxAttributeInstance(attribute, modifiers));
+            }catch (Exception ignored){}
+        }
+        return list;
+    }
+}

@@ -8,10 +8,28 @@ import org.jetbrains.annotations.Nullable;
 import redempt.crunch.Crunch;
 import redempt.crunch.functional.EvaluationEnvironment;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class CruxMath {
+    public static double round(double value, int place, @NotNull RoundingMode roundingMode){
+        if(place < 0) return value;
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(place, roundingMode);
+        return bd.doubleValue();
+    }
+
+    public static double round(double value, int place){
+        return round(value, place, RoundingMode.HALF_UP);
+    }
+
+    public static double round(double value){
+        return round(value, 1);
+    }
+
     public static int wrap(int value, int min, int max){
         if(value < min) value = max;
         else if (value > max) value = min;

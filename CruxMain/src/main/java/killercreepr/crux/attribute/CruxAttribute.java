@@ -1,0 +1,554 @@
+package killercreepr.crux.attribute;
+
+import killercreepr.crux.Crux;
+import killercreepr.crux.registries.Registries;
+import killercreepr.crux.util.CruxItem;
+import killercreepr.crux.util.CruxKey;
+import killercreepr.crux.util.CruxMath;
+import killercreepr.crux.util.CruxTag;
+import net.kyori.adventure.key.Keyed;
+import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataHolder;
+import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.math.RoundingMode;
+import java.util.*;
+
+public interface CruxAttribute extends Keyed {
+    static NamespacedKey k(String s){
+        return Crux.key(s);
+    }
+    default double getDefaultValue(){
+        return 0D;
+    }
+    @NotNull String getName();
+
+    default @Nullable String getSymbol(){
+        return null;
+    }
+
+    default boolean isNegative(@NotNull CruxAttributeModifier modifier){
+        return isNegative(modifier.getAmount());
+    }
+
+    default boolean isNegative(double value){
+        return value < 0D;
+    }
+    default int getRoundMultiple(){ return 1; }
+
+    /**
+     * attribute.equals(CruxAttribute.ATTACK_SPEED) ? value*-1D : value;
+     */
+    default double processValue(double value){
+        return value;
+    }
+
+    default double round(double value){ return CruxMath.round(value, getRoundMultiple()); }
+    default double round(double value, @NotNull RoundingMode roundingMode){ return CruxMath.round(value, getRoundMultiple(), roundingMode); }
+
+    static ItemStack updateItem(@Nullable ItemStack i){
+        if(CruxItem.isEmpty(i)) return i;
+        ItemMeta meta = i.getItemMeta();
+        if(meta != null) i.setItemMeta(updateMeta(meta));
+        return i;
+    }
+
+    static ItemMeta updateMeta(@Nullable ItemMeta meta){
+        if(meta == null) return null;
+        if(hasAttributeData(meta)){
+            boolean add = true;
+            for(Map.Entry<Attribute, AttributeModifier> m : meta.getAttributeModifiers(EquipmentSlot.OFF_HAND).entries()){
+                if(m.getValue().getName().equalsIgnoreCase("crux.disable_vanilla")){
+                    add = false;
+                    break;
+                }
+            }
+            if(add){
+                meta.addAttributeModifier(Attribute.GENERIC_LUCK, new AttributeModifier(UUID.randomUUID(),
+                        "crux.disable_vanilla", 0D,
+                        AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.OFF_HAND));
+                meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            }
+        }else{
+            for(Map.Entry<Attribute, AttributeModifier> m : meta.getAttributeModifiers(EquipmentSlot.OFF_HAND).entries()){
+                if(m.getValue().getName().equalsIgnoreCase("crux.disable_vanilla")){
+                    meta.removeAttributeModifier(m.getKey(), m.getValue());
+                }
+            }
+            meta.removeItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        }
+        return meta;
+    }
+
+    /**
+     * Convenience method for GrimAttribute#get(PersistentDataHolder, GrimAttribute)
+     */
+    default <P extends PersistentDataHolder> double get(@Nullable P e){
+        return get(e, this);
+    }
+
+    static @NotNull Collection<CruxAttributeInstance>
+    getInstances(@Nullable ItemStack i){
+        if(CruxItem.isEmpty(i)) return new ArrayList<>();
+        return getInstances(i.getItemMeta(), (CruxSlot[]) null);
+    }
+
+    static @NotNull Collection<CruxAttributeInstance>
+    getInstances(@Nullable ItemStack i, @Nullable CruxSlot @Nullable... slots){
+        if(CruxItem.isEmpty(i)) return new ArrayList<>();
+        return getInstances(i.getItemMeta(), slots);
+    }
+
+    static
+    double get(@Nullable ItemStack i, @NotNull CruxAttribute attribute, @Nullable CruxSlot @Nullable... slots){
+        return get(i, attribute, 0D, slots);
+    }
+
+    static
+    double get(@Nullable ItemStack i, @NotNull CruxAttribute attribute){
+        return get(i, attribute, 0D, (CruxSlot[]) null);
+    }
+
+    static
+    double get(@Nullable ItemStack i, @NotNull CruxAttribute attribute, double defaultValue){
+        return get(i, attribute, defaultValue, (CruxSlot[]) null);
+    }
+
+    static
+    double get(@Nullable ItemStack i, @NotNull CruxAttribute attribute, double defaultValue, @Nullable CruxSlot @Nullable... slots){
+        if(CruxItem.isEmpty(i)) return defaultValue;
+        return get(i.getItemMeta(), attribute, defaultValue, slots);
+    }
+
+    static <P extends PersistentDataHolder>
+    double get(@Nullable P i, @NotNull CruxAttribute attribute){
+        return get(i, attribute, 0D, (CruxSlot[]) null);
+    }
+
+    static <P extends PersistentDataHolder>
+    double get(@Nullable P i, @NotNull CruxAttribute attribute, @Nullable CruxSlot @Nullable... slots){
+        return get(i, attribute, 0D, slots);
+    }
+
+    static <P extends PersistentDataHolder>
+    double get(@Nullable P i, @NotNull CruxAttribute attribute, double defaultValue){
+        return get(i, attribute, defaultValue, (CruxSlot[]) null);
+    }
+
+    static <P extends PersistentDataHolder>
+    double get(@Nullable P i, @NotNull CruxAttribute attribute, double defaultValue, @Nullable CruxSlot @Nullable... slots){
+        CruxAttributeInstance x = getInstance(i, attribute, slots);
+        if(x == null) return defaultValue;
+        return x.getValue();
+    }
+
+    static <P extends PersistentDataHolder>
+    double get(@Nullable P i, @NotNull CruxAttribute attribute, @NotNull Operation@Nullable... operations){
+        return get(i, attribute, 0D, operations);
+    }
+
+    static <P extends PersistentDataHolder>
+    double get(@Nullable P i, @NotNull CruxAttribute attribute, double defaultValue, @NotNull Operation@Nullable... operations){
+        CruxAttributeInstance x = getInstance(i, attribute, null, operations == null ? null : Set.of(operations));
+        if(x == null) return defaultValue;
+        return x.getValue();
+    }
+
+    static <P extends PersistentDataHolder> boolean hasAttributeData(@Nullable P i){
+        PersistentDataContainer container = getContainer(i);
+        return container != null && !container.isEmpty();
+    }
+
+    static <P extends PersistentDataHolder> P clearAttributes(@Nullable P i){
+        if(i == null) return null;
+        i.getPersistentDataContainer().remove(k("attributes"));
+        return i;
+    }
+
+    static <P extends PersistentDataHolder> P clearModifiers(@Nullable P i, @NotNull CruxAttribute attribute){
+        PersistentDataContainer container = getContainer(i);
+        if(container == null) return i;
+        container.remove(CruxKey.key(attribute.key()));
+        if(container.isEmpty()) i.getPersistentDataContainer().remove(k("attributes"));
+        else i.getPersistentDataContainer().set(k("attributes"), PersistentDataType.TAG_CONTAINER, container);
+        return i;
+    }
+
+    static ItemStack removeModifiers(@Nullable ItemStack i, @NotNull NamespacedKey @NotNull... path){
+        if(CruxItem.isEmpty(i)) return i;
+        ItemMeta meta = i.getItemMeta();
+        removeModifiers(meta, path);
+        i.setItemMeta(meta);
+        return i;
+    }
+
+    /**
+     * Removes any modifiers in all attributes from the path specified.
+     */
+    static <P extends PersistentDataHolder> P removeModifiers(@Nullable P i,
+                                                                     @NotNull NamespacedKey @NotNull... path){
+        if(i == null || path.length < 1) return i;
+        PersistentDataContainer container = getContainer(i);
+        if(container == null) container = i.getPersistentDataContainer().getAdapterContext().newPersistentDataContainer();
+
+        for(NamespacedKey k : container.getKeys()){
+            CruxAttribute a = Registries.ATTRIBUTES.get(k);
+            if(a != null) removeModifier(i, a, path);
+        }
+        return i;
+    }
+
+    static ItemStack removeModifier(@Nullable ItemStack i, @NotNull CruxAttribute attribute,
+                                                                    @NotNull NamespacedKey @NotNull... path){
+        if(CruxItem.isEmpty(i)) return i;
+        ItemMeta meta = i.getItemMeta();
+        removeModifier(meta, attribute, path);
+        i.setItemMeta(meta);
+        return i;
+    }
+
+    /**
+     * Removes an attribute modifier from the path specified.
+     */
+    static <P extends PersistentDataHolder> P removeModifier(@Nullable P i, @NotNull CruxAttribute attribute,
+                                                                    @NotNull NamespacedKey @NotNull... path){
+        if(i == null || path.length < 1) return i;
+        PersistentDataContainer container = getContainer(i);
+        if(container == null) container = i.getPersistentDataContainer().getAdapterContext().newPersistentDataContainer();
+
+        PersistentDataContainer attributeContainer = getAttributeContainer(i, attribute);
+        if(attributeContainer == null) attributeContainer = i.getPersistentDataContainer().getAdapterContext().newPersistentDataContainer();
+
+        List<PersistentDataContainer> list = new ArrayList<>();
+        int index = 0;
+        PersistentDataContainer current = attributeContainer;
+        //Get the existing path.
+        for(NamespacedKey pathKey : path){
+            index++;
+            if(index == path.length){
+                current.remove(pathKey);
+                break;
+            }
+            PersistentDataContainer found = null;
+            for(NamespacedKey k : current.getKeys()){
+                if(k.equals(pathKey)){
+                    try{
+                        found = current.get(k, PersistentDataType.TAG_CONTAINER);
+                        break;
+                    }catch (Exception ignored){}
+                }
+            }
+            if(found == null) return i;
+            list.add(found);
+            current = found;
+        }
+        if(!list.isEmpty()){
+            //enchants -> nothing_here
+            index = list.size()-1;
+            PersistentDataContainer last = null;
+            //Set the path data back into each other. 4 into 3, 3 into 2, 2 into 1.
+            for(; index >= 0; index--) {
+                PersistentDataContainer c = list.get(index);
+                if (last == null) {
+                    last = c;
+                    continue;
+                }
+                if(last.isEmpty()) c.remove(path[index+1]);
+                else c.set(path[index+1], PersistentDataType.TAG_CONTAINER, last);
+                last = c;
+            }
+            //Finally, set the whole path into the attribute container.
+            if(list.get(0).isEmpty()) attributeContainer.remove(path[0]);
+            else attributeContainer.set(path[0], PersistentDataType.TAG_CONTAINER, list.get(0));
+        }
+
+        if(attributeContainer.isEmpty()) container.remove(CruxKey.key(attribute.key()));
+        else container.set(CruxKey.key(attribute.key()), PersistentDataType.TAG_CONTAINER, attributeContainer);
+
+        if(container.isEmpty()) i.getPersistentDataContainer().remove(k("attributes"));
+        else i.getPersistentDataContainer().set(k("attributes"), PersistentDataType.TAG_CONTAINER, container);
+        return i;
+    }
+
+    static ItemStack addModifier(@Nullable ItemStack i, @NotNull CruxAttribute attribute,
+                                        @NotNull CruxAttributeModifier modifier, @NotNull NamespacedKey... path){
+        if(CruxItem.isEmpty(i)) return i;
+        ItemMeta meta = i.getItemMeta();
+        addModifier(meta, attribute, modifier, path);
+        i.setItemMeta(meta);
+        return i;
+    }
+
+    static <P extends PersistentDataHolder> P copy(@Nullable P to, @Nullable P from, @NotNull CruxAttribute @Nullable... filter){
+        for(CruxAttributeInstance a : getInstances(from)){
+            if(filter != null && Arrays.stream(filter).noneMatch(x -> x.equals(a.getAttribute()))) continue;
+            for(CruxAttributeModifier m : a.getModifiers()){
+                addModifier(to, a.getAttribute(), m);
+            }
+        }
+        return to;
+    }
+
+
+    /**
+     * Adds an attribute modifier or overwrites it, if using the same key.
+     * If a path is provided, it will nest the attribute modifier.
+     */
+    static <P extends PersistentDataHolder> P addModifier(@Nullable P i, @NotNull CruxAttribute attribute,
+                                                                 @NotNull CruxAttributeModifier modifier, @NotNull NamespacedKey... path){
+        if(i == null) return null;
+        PersistentDataContainer container = getContainer(i);
+        if(container == null) container = i.getPersistentDataContainer().getAdapterContext().newPersistentDataContainer();
+
+        PersistentDataContainer attributeContainer = getAttributeContainer(i, attribute);
+        if(attributeContainer == null) attributeContainer = i.getPersistentDataContainer().getAdapterContext().newPersistentDataContainer();
+
+        PersistentDataContainer modProvider = path == null || path.length < 1 ? getAttributeContainer(i, attribute) : getModifierProvider(i, path);
+        if(modProvider == null) modProvider = i.getPersistentDataContainer().getAdapterContext().newPersistentDataContainer();
+        modProvider.set(k("value"), PersistentDataType.DOUBLE, modifier.getAmount());
+        modProvider.set(k("operation"), PersistentDataType.STRING, modifier.getOperation().toString().toLowerCase());
+        if(modifier.getSlot() != null) modProvider.set(k("slot"), PersistentDataType.STRING, modifier.getSlot().toString().toLowerCase());
+
+        //no path provided
+        if(path == null || path.length < 1){
+            attributeContainer.set(modifier.getKey(), PersistentDataType.TAG_CONTAINER, modProvider);
+        }else{
+            List<PersistentDataContainer> list = new ArrayList<>();
+            int index = 0;
+            PersistentDataContainer current = attributeContainer;
+            //Get the existing path or create a new one.
+            for(NamespacedKey pathKey : path){
+                index++;
+                PersistentDataContainer found = null;
+                for(NamespacedKey k : current.getKeys()){
+                    if(k.equals(pathKey)){
+                        try{
+                            found = current.get(k, PersistentDataType.TAG_CONTAINER);
+                            break;
+                        }catch (Exception ignored){}
+                    }
+                }
+                if(found == null) found = i.getPersistentDataContainer().getAdapterContext().newPersistentDataContainer();
+                if(index == path.length) found.set(modifier.getKey(), PersistentDataType.TAG_CONTAINER, modProvider);
+                list.add(found);
+                current = found;
+            }
+            index = path.length-1;
+            PersistentDataContainer last = null;
+            //Set the path data back into each other. 4 into 3, 3 into 2, 2 into 1.
+            for(; index >= 0; index--) {
+                PersistentDataContainer c = list.get(index);
+                if (last == null) {
+                    last = c;
+                    continue;
+                }
+                c.set(path[index+1], PersistentDataType.TAG_CONTAINER, last);
+                last = c;
+            }
+            //Finally, set the whole path into the attribute container.
+            attributeContainer.set(path[0], PersistentDataType.TAG_CONTAINER, list.get(0));
+        }
+
+        container.set(CruxKey.key(attribute.key()), PersistentDataType.TAG_CONTAINER, attributeContainer);
+        i.getPersistentDataContainer().set(k("attributes"), PersistentDataType.TAG_CONTAINER, container);
+        return i;
+    }
+
+    static  @NotNull Collection<CruxAttributeModifier>
+    getModifiers(@Nullable ItemStack i, @NotNull CruxAttribute attribute){
+        return getModifiers(i, attribute, (CruxSlot[]) null);
+    }
+
+    static  @NotNull Collection<CruxAttributeModifier>
+    getModifiers(@Nullable ItemStack i, @NotNull CruxAttribute attribute, @Nullable CruxSlot @Nullable... slots){
+        if(CruxItem.isEmpty(i)) return new ArrayList<>();
+        return getModifiers(i.getItemMeta(), attribute, slots);
+    }
+
+    static <P extends PersistentDataHolder> @NotNull Collection<CruxAttributeModifier>
+    getModifiers(@Nullable P i, @NotNull CruxAttribute attribute){
+        return getModifiers(i, attribute, (CruxSlot[]) null);
+    }
+
+    static @NotNull Collection<CruxAttributeModifier>
+    getModifiers(@Nullable ItemStack i, @NotNull CruxAttribute attribute, @NotNull NamespacedKey@NotNull... path){
+        Collection<CruxAttributeModifier> list = getModifiers(i, attribute);
+        list.removeIf(x -> Arrays.equals(x.getPath(), path));
+        return list;
+    }
+
+    static <P extends PersistentDataHolder> @NotNull Collection<CruxAttributeModifier>
+    getModifiers(@Nullable P i, @NotNull CruxAttribute attribute, @NotNull NamespacedKey@NotNull... path){
+        Collection<CruxAttributeModifier> list = getModifiers(i, attribute);
+        list.removeIf(x -> Arrays.equals(x.getPath(), path));
+        return list;
+    }
+
+    static <P extends PersistentDataHolder> @NotNull Collection<CruxAttributeModifier>
+    getModifiers(@Nullable P i, @NotNull CruxAttribute attribute, @Nullable CruxSlot @Nullable... slots){
+        Collection<CruxAttributeModifier> list = new ArrayList<>();
+        PersistentDataContainer attributeContainer = getAttributeContainer(i, attribute);
+        if(attributeContainer == null || i == null) return list;
+        list.addAll(convertToModifiers(attributeContainer));
+        if(slots != null){
+            list.removeIf(e -> Arrays.stream(slots).noneMatch(x -> x == e.getSlot()));
+        }
+        return list;
+    }
+
+    static <P extends PersistentDataHolder> @NotNull Collection<CruxAttributeInstance>
+    getInstances(@Nullable P i){
+        return getInstances(i, (CruxSlot[]) null);
+    }
+
+    static <P extends PersistentDataHolder> @NotNull Collection<CruxAttributeInstance>
+    getInstances(@Nullable P i, @Nullable CruxSlot @Nullable... slots){
+        Collection<CruxAttributeInstance> list = new HashSet<>();
+        PersistentDataContainer attributeContainer = getContainer(i);
+        if(attributeContainer == null) return list;
+        for(NamespacedKey k : attributeContainer.getKeys()){
+            CruxAttribute attribute = Registries.ATTRIBUTES.get(k);
+            if(attribute == null) continue;
+            CruxAttributeInstance instance = getInstance(i, attribute, slots);
+            if(instance != null) list.add(instance);
+        }
+        return list;
+    }
+
+    static <P extends PersistentDataHolder>
+    @Nullable CruxAttributeInstance getInstance(@Nullable P i, @NotNull CruxAttribute attribute){
+        return getInstance(i, attribute, (CruxSlot[]) null);
+    }
+
+    static <P extends PersistentDataHolder>
+    @Nullable CruxAttributeInstance getInstance(@Nullable P i, @NotNull CruxAttribute attribute, @Nullable CruxSlot @Nullable... slots){
+        PersistentDataContainer modifierProvider = getAttributeContainer(i, attribute);
+        if(modifierProvider == null) return null;
+        Collection<CruxAttributeModifier> list = convertToModifiers(modifierProvider);
+        if(slots != null){
+            list.removeIf(e -> Arrays.stream(slots).noneMatch(x -> x == e.getSlot()));
+        }
+        return new CruxAttributeInstance(attribute, list);
+    }
+
+    static <P extends PersistentDataHolder>
+    @Nullable CruxAttributeInstance getInstance(@Nullable P i, @NotNull CruxAttribute attribute, @Nullable Collection<@Nullable CruxSlot> slots,
+                                                @Nullable Collection<@NotNull Operation> operations){
+        PersistentDataContainer modifierProvider = getAttributeContainer(i, attribute);
+        if(modifierProvider == null) return null;
+        Collection<CruxAttributeModifier> list = convertToModifiers(modifierProvider);
+        if(slots != null){
+            list.removeIf(e -> !slots.contains(e.getSlot()));
+        }
+        if(operations != null){
+            list.removeIf(e -> !operations.contains(e.getOperation()));
+        }
+        return new CruxAttributeInstance(attribute, list);
+    }
+
+    static <P extends PersistentDataHolder>
+    @Nullable PersistentDataContainer getContainer(@Nullable P i){
+        return CruxTag.get(i, "attributes", PersistentDataType.TAG_CONTAINER, null);
+    }
+
+    static <P extends PersistentDataHolder>
+    @Nullable PersistentDataContainer  getAttributeContainer(@Nullable P i, @NotNull CruxAttribute attribute){
+        PersistentDataContainer container = getContainer(i);
+        if(container == null) return null;
+        try{ return container.get(CruxKey.key(attribute.key()), PersistentDataType.TAG_CONTAINER); }
+        catch (Exception ex){ return null; }
+    }
+
+    static <P extends PersistentDataHolder>
+    @Nullable PersistentDataContainer getModifierProvider(@Nullable P i, @NotNull NamespacedKey @NotNull... path){
+        return getModifierProvider(i, 0, path);
+    }
+
+    static <P extends PersistentDataHolder>
+    @Nullable PersistentDataContainer getModifierProvider(@Nullable P i, int index, @NotNull NamespacedKey @NotNull... path){
+        if(i == null || index < 0 || index >= path.length) return null;
+        NamespacedKey key = path[index];
+        for(NamespacedKey k : path){
+            if(k.equals(key) && i.getPersistentDataContainer().has(k, PersistentDataType.TAG_CONTAINER)){
+                PersistentDataContainer c = i.getPersistentDataContainer().get(k, PersistentDataType.TAG_CONTAINER);
+                if(c == null) return null;
+                return getModifierProvider(i, index+1, path);
+            }
+        }
+        return null;
+    }
+
+    static <P extends PersistentDataHolder>
+    @Nullable PersistentDataContainer getModifierContainer(@Nullable P i, @NotNull CruxAttribute attribute, @NotNull NamespacedKey key){
+        PersistentDataContainer attributeContainer = getAttributeContainer(i, attribute);
+        if(attributeContainer == null) return null;
+        try{ return attributeContainer.get(key, PersistentDataType.TAG_CONTAINER); }
+        catch (Exception ex){ return null; }
+    }
+
+    static @NotNull List<CruxAttributeModifier> convertToModifiers(@Nullable PersistentDataContainer modProvider){
+        return convertToModifiers(modProvider, null);
+    }
+
+    static @NotNull List<CruxAttributeModifier> convertToModifiers(@Nullable PersistentDataContainer modProvider, @Nullable List<NamespacedKey> path){
+        List<CruxAttributeModifier> list = new ArrayList<>();
+        if(modProvider == null) return list;
+        for(NamespacedKey k : modProvider.getKeys()){
+            if(!modProvider.has(k, PersistentDataType.TAG_CONTAINER)) continue;
+            PersistentDataContainer provider = modProvider.get(k, PersistentDataType.TAG_CONTAINER);
+            if(provider == null) continue;
+            CruxAttributeModifier mod = convertToModifier(provider, k);
+            //provider nested in provider
+            if(mod == null){
+                List<NamespacedKey> newPath = path == null ? new ArrayList<>() : new ArrayList<>(path);
+                newPath.add(k);
+                list.addAll(convertToModifiers(provider, newPath));
+            } else{
+                list.add(mod);
+                if(path != null) mod.setPath(path.toArray(new NamespacedKey[0]));
+            }
+        }
+        return list;
+    }
+
+    static @Nullable CruxAttributeModifier convertToModifier(@Nullable PersistentDataContainer modContainer,
+                                                                    @NotNull NamespacedKey key){
+        if(modContainer == null || !modContainer.has(k("value"), PersistentDataType.DOUBLE)) return null;
+        Operation o;
+        try{
+            o = Operation.valueOf(modContainer.getOrDefault(k("operation"), PersistentDataType.STRING, "ADD").toUpperCase());
+        }catch (IllegalArgumentException e) { o = Operation.ADD; }
+        CruxSlot slot;
+        try{
+            slot = CruxSlot.valueOf(modContainer.getOrDefault(k("slot"), PersistentDataType.STRING, "").toUpperCase());
+        }catch (IllegalArgumentException e) { slot = null; }
+        return new CruxAttributeModifier(key, modContainer.getOrDefault(k("value"), PersistentDataType.DOUBLE, 0D), o, slot);
+    }
+
+    static @NotNull List<PersistentDataContainer> getModifierProviders(@Nullable PersistentDataContainer attributeOrModContainer){
+        List<PersistentDataContainer> list = new ArrayList<>();
+        if(attributeOrModContainer == null) return list;
+        for(NamespacedKey k : attributeOrModContainer.getKeys()){
+            if(attributeOrModContainer.has(k, PersistentDataType.TAG_CONTAINER)){
+                PersistentDataContainer provider = attributeOrModContainer.get(k, PersistentDataType.TAG_CONTAINER);
+                if(provider != null && convertToModifier(provider, k) == null) list.add(provider);
+            }
+        }
+        return list;
+    }
+
+    enum Operation{
+        ADD,
+        MULTIPLY,
+        SET
+    }
+}
