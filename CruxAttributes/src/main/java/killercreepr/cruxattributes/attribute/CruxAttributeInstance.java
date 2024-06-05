@@ -37,14 +37,14 @@ public class CruxAttributeInstance {
             switch (m.getOperation()){
                 case CruxAttribute.Operation.MULTIPLY -> multiply += m.getAmount();
                 case CruxAttribute.Operation.SET ->{
-                    SET.add(m.getKey());
+                    SET.add(m.key());
                     x = m.getAmount();
                 }
                 case CruxAttribute.Operation.ADD -> ADD.add(m);
             }
         }
         for(CruxAttributeModifier m : ADD){
-            if(SET.contains(m.getKey())) continue;
+            if(SET.contains(m.key())) continue;
             x += m.getAmount();
         }
         if(multiply != 0D) x *= (1D + multiply);
@@ -64,7 +64,7 @@ public class CruxAttributeInstance {
 
     public @Nullable CruxAttributeModifier getModifier(@NotNull NamespacedKey key){
         for(CruxAttributeModifier m : modifiers){
-            if(m.getKey().equals(key)) return m;
+            if(m.key().equals(key)) return m;
         }
         return null;
     }

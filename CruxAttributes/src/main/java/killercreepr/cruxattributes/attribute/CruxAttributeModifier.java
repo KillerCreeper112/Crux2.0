@@ -95,9 +95,6 @@ public class CruxAttributeModifier implements Keyed {
         return key;
     }
 
-    public @NotNull Key getKey() {
-        return key;
-    }
 
     public double getAmount() {
         return amount;

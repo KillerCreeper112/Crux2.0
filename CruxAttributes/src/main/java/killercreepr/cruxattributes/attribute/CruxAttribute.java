@@ -336,7 +336,7 @@ public interface CruxAttribute extends Keyed {
 
         //no path provided
         if(path == null || path.length < 1){
-            attributeContainer.set(CruxKey.key(modifier.getKey()), PersistentDataType.TAG_CONTAINER, modProvider);
+            attributeContainer.set(CruxKey.key(modifier.key()), PersistentDataType.TAG_CONTAINER, modProvider);
         }else{
             List<PersistentDataContainer> list = new ArrayList<>();
             int index = 0;
@@ -354,7 +354,7 @@ public interface CruxAttribute extends Keyed {
                     }
                 }
                 if(found == null) found = i.getPersistentDataContainer().getAdapterContext().newPersistentDataContainer();
-                if(index == path.length) found.set(CruxKey.key(modifier.getKey()), PersistentDataType.TAG_CONTAINER, modProvider);
+                if(index == path.length) found.set(CruxKey.key(modifier.key()), PersistentDataType.TAG_CONTAINER, modProvider);
                 list.add(found);
                 current = found;
             }
@@ -398,15 +398,31 @@ public interface CruxAttribute extends Keyed {
     static @NotNull Collection<CruxAttributeModifier>
     getModifiers(@Nullable ItemStack i, @NotNull CruxAttribute attribute, @NotNull Key@NotNull... path){
         Collection<CruxAttributeModifier> list = getModifiers(i, attribute);
-        list.removeIf(x -> Arrays.equals(x.getPath(), path));
+        list.removeIf(x -> !Arrays.equals(x.getPath(), path));
         return list;
     }
 
     static <P extends PersistentDataHolder> @NotNull Collection<CruxAttributeModifier>
     getModifiers(@Nullable P i, @NotNull CruxAttribute attribute, @NotNull Key@NotNull... path){
         Collection<CruxAttributeModifier> list = getModifiers(i, attribute);
-        list.removeIf(x -> Arrays.equals(x.getPath(), path));
+        list.removeIf(x -> !Arrays.equals(x.getPath(), path));
         return list;
+    }
+
+    static <P extends PersistentDataHolder> @Nullable CruxAttributeModifier
+    getModifier(@Nullable P i, @NotNull CruxAttribute attribute, @NotNull Key modKey){
+        return getModifier(i, attribute, modKey, (Key[]) null);
+    }
+
+    static <P extends PersistentDataHolder> @Nullable CruxAttributeModifier
+    getModifier(@Nullable P i, @NotNull CruxAttribute attribute, @NotNull Key modKey, @NotNull Key@Nullable... path){
+        Collection<CruxAttributeModifier> list = getModifiers(i, attribute);
+        for(CruxAttributeModifier m :list){
+            if(m.key().equals(modKey)){
+                if(Arrays.equals(m.getPath(), path)) return m;
+            }
+        }
+        return null;
     }
 
     static <P extends PersistentDataHolder> @NotNull Collection<CruxAttributeModifier>

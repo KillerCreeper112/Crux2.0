@@ -214,7 +214,7 @@ public class CruxAttributeCommands {
                 String format = "<gold><key> <dark_gray>-> <red>{amount=<amount>, slot=<slot>, operation=<operation>}";
                 new MsgContainer(format).use(sender,
                     StringHookContainer.simple(
-                        LocalTag.parsed("key", m.getKey().asString()),
+                        LocalTag.parsed("key", m.key().asString()),
                         LocalTag.parsed("amount", m.getAmount()+""),
                         LocalTag.parsed("operation", m.getOperation().name().toLowerCase()),
                         LocalTag.parsed("slot", m.getSlot() == null ? "all" : m.getSlot().toString().toLowerCase())
