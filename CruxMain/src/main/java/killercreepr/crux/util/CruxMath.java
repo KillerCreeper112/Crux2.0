@@ -18,6 +18,9 @@ import java.util.concurrent.ThreadLocalRandom;
 public class CruxMath {
     public static final Random RANDOM = new Random();
 
+    public static boolean hasOccurredWithin(long value, int ticks){
+        return (System.currentTimeMillis() - (50L * ticks)) <= value;
+    }
     /**
      * @param chance The probability from 0-100.
      */
