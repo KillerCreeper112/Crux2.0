@@ -1,6 +1,9 @@
 package killercreepr.crux.persistence;
 
-import killercreepr.crux.persistence.impl.*;
+import killercreepr.crux.persistence.impl.CruxKeyTagType;
+import killercreepr.crux.persistence.impl.PotionEffectListTagType;
+import killercreepr.crux.persistence.impl.PotionEffectTagType;
+import killercreepr.crux.persistence.impl.UUIDTagType;
 
 public class CruxPersistence {
     public static final UUIDTagType UUID = new UUIDTagType();

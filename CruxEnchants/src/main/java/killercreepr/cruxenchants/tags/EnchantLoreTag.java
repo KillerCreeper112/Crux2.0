@@ -28,7 +28,7 @@ public class EnchantLoreTag extends ObjectTag<ItemStack> {
 
     @Override
     public @NotNull FormatPrefix defaultPrefix() {
-        return FormatPrefix.generic("crux_item_");
+        return FormatPrefix.generic("cruxitem_");
     }
 
     @Override

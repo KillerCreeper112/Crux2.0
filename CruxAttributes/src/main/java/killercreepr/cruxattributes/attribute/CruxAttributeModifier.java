@@ -3,7 +3,6 @@ package killercreepr.cruxattributes.attribute;
 import killercreepr.cruxattributes.attribute.container.CruxAttributeModData;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
-import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

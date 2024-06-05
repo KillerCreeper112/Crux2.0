@@ -9,7 +9,6 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
 import killercreepr.cruxattributes.attribute.CruxAttribute;
-import killercreepr.cruxattributes.attribute.CruxSlot;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;

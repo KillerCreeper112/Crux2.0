@@ -6,7 +6,10 @@ import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Consumer;
 
 public class CruxedItemUpdaterRegistry extends SimpleKeyedRegistry<CruxedItemUpdater> {

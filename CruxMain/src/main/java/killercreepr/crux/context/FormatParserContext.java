@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class FormatParserContext implements TextParserContext{
@@ -38,7 +39,7 @@ public class FormatParserContext implements TextParserContext{
     }
 
     @Override
-    public @NotNull List<String> parseStringLore(@NotNull List<String> lore) {
+    public @NotNull List<String> parseStringLore(@NotNull Collection<String> lore) {
         List<String> add = new ArrayList<>();
         for(String s : lore){
             List<String> list = format.deserializeLore(viewer, null, s, loreTags);
@@ -59,7 +60,7 @@ public class FormatParserContext implements TextParserContext{
     }
 
     @Override
-    public @NotNull List<Component> parseComponentLore(@NotNull List<String> lore) {
+    public @NotNull List<Component> parseComponentLore(@NotNull Collection<String> lore) {
         List<Component> add = new ArrayList<>();
         for(String s : lore){
             List<String> list = format.deserializeLore(viewer, null, s, loreTags);

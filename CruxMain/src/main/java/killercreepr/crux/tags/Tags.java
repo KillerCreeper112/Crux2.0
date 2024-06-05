@@ -34,17 +34,6 @@ public class Tags {
         return tags;
     }
 
-    /*public <T> @NotNull Collection<ObjectHookContainer<T>> getStringHooksFromObject(@NotNull T object){
-        Collection<ObjectHookContainer<T>> tags = new HashSet<>();
-        for(ObjectTag<T> tag : getTagsFromObject(object)){
-            Collection<StringHook<T>> request = tag.requestStrings(object, this);
-            if(request != null){
-                tags.add(new ObjectHookContainer<Object>(Holder.direct(object), tag, request));
-            }
-        }
-        return tags;
-    }*/
-
     public <T>  @NotNull Collection<LoreHook<T>> getLoreHooksFromObject(@NotNull T object){
         Collection<LoreHook<T>> tags = new HashSet<>();
         for(ObjectTag<T> tag : getTagsFromObject(object)){
@@ -61,23 +50,6 @@ public class Tags {
         });
         return tags;
     }
-
-    /**
-     * @return Requests the base TagResolvers from this object.
-     */
-    /*public @NotNull StringHookContainer requestTagResolvers(@NotNull Object object, @Nullable FormatPrefix prefix){
-        StringHookContainer container = new StringHookContainer();
-        for(ObjectTag<Object> tag : getTagsFromObject(object)){
-            String pre = prefix == null ? tag.defaultPrefix().prefix(tag, object) : prefix.prefix(tag, object);
-            Collection<StringHook<Object>> requested = tag.requestStrings(object);
-            if(requested != null){
-                for(StringHook<Object> hook : requested){
-                    container.put(pre + hook.identifier(), hook.tagResolver(object, pre));
-                }
-            }
-        }
-        return container;
-    }*/
 
     public @NotNull StringHookContainer hookAllTagResolvers(@NotNull TextParserContext context, @NotNull DataExchange info){
         return hookAllTagResolvers(context, info, null);

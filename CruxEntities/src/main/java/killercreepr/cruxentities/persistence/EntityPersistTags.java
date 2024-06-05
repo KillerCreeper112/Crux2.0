@@ -3,9 +3,6 @@ package killercreepr.cruxentities.persistence;
 import killercreepr.crux.persistence.CruxPersistence;
 import killercreepr.crux.persistence.PersistTag;
 import net.kyori.adventure.key.Key;
-import org.bukkit.persistence.PersistentDataType;
-
-import java.util.Collection;
 
 public class EntityPersistTags {
     public static void register(){}
