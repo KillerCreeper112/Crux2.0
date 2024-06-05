@@ -16,24 +16,15 @@ public class CruxAttributeModifier implements Keyed {
     private Key[] path;
 
     public CruxAttributeModifier(@NotNull Key key, @NotNull CruxAttributeModData data) {
-        this.key = key;
-        this.amount = data.getAmount();
-        this.operation = data.getOperation();
-        this.slot = data.getSlot();
+        this(key, data.getAmount(), data.getOperation(), data.getSlot());
     }
 
     public CruxAttributeModifier(@NotNull Key key, double amount) {
-        this.key = key;
-        this.amount = amount;
-        this.operation = CruxAttribute.Operation.ADD;
-        this.slot = null;
+        this(key, amount, CruxAttribute.Operation.ADD, null);
     }
 
     public CruxAttributeModifier(@NotNull Key key, double amount, @NotNull CruxAttribute.Operation operation) {
-        this.key = key;
-        this.amount = amount;
-        this.operation = operation;
-        this.slot = null;
+        this(key, amount, operation, null);
     }
 
     public CruxAttributeModifier(@NotNull Key key, double amount, @NotNull CruxAttribute.Operation operation,
@@ -46,10 +37,12 @@ public class CruxAttributeModifier implements Keyed {
 
     public CruxAttributeModifier(@NotNull Key key, double amount,
                                  @Nullable CruxSlot slot) {
-        this.key = key;
-        this.amount = amount;
-        this.operation = CruxAttribute.Operation.ADD;
-        this.slot = slot;
+        this(key, amount, CruxAttribute.Operation.ADD, slot);
+    }
+
+    public CruxAttributeModifier(double amount,
+                                 @NotNull CruxAttribute.Operation operation) {
+        this(amount, operation, null);
     }
 
     public CruxAttributeModifier withKey(@NotNull Key newKey){
