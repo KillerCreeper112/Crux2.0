@@ -1,6 +1,6 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.item.component;
 
-import killercreepr.crux.item.DynamicItemComponent;
+import killercreepr.crux.item.dynamic.DynamicItemComponent;
 import killercreepr.cruxconfig.config.bukkit.handler.SimpleFileHandler;
 import org.jetbrains.annotations.NotNull;
 

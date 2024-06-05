@@ -1,9 +1,9 @@
-package killercreepr.crux.item.components;
+package killercreepr.crux.item.dynamic.components;
 
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import killercreepr.crux.context.TextParserContext;
-import killercreepr.crux.item.DynamicItemComponent;
+import killercreepr.crux.item.dynamic.DynamicItemComponent;
 import killercreepr.crux.util.CruxItem;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.meta.ArmorMeta;

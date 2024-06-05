@@ -1,7 +1,7 @@
 package killercreepr.cruxmenu.menu.bukkit;
 
 import killercreepr.crux.context.FormatParserContext;
-import killercreepr.crux.item.DynamicItem;
+import killercreepr.crux.item.dynamic.DynamicItem;
 import killercreepr.crux.registry.Registry;
 import killercreepr.crux.tags.container.ObjectLoreHookContainer;
 import killercreepr.crux.tags.container.ObjectStringHookContainer;

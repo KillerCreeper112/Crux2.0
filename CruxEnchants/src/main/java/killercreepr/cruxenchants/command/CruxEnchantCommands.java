@@ -10,6 +10,7 @@ import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.EntitySelectorArgumentResolver;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import killercreepr.crux.Crux;
 import killercreepr.crux.data.MsgContainer;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.util.CruxItem;
@@ -18,6 +19,7 @@ import killercreepr.cruxenchants.enchant.CruxEnchant;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.jetbrains.annotations.NotNull;
@@ -109,7 +111,9 @@ public class CruxEnchantCommands {
             ItemStack item = le.getEquipment().getItemInMainHand();
             if(CruxItem.isEmpty(item)) return -1;
             int x = removeEnchant(item, enchant, store);
+            Crux.itemUpdater().update(item, e);
             if(x > 0) changed++;
+            if(!(e instanceof Player)) le.getEquipment().setItemInMainHand(item);
         }
         new MsgContainer("Removed enchant, " + enchant.getName() + " on " + changed + " entities.")
             .use(getExecutor(source));
@@ -123,7 +127,9 @@ public class CruxEnchantCommands {
             ItemStack item = le.getEquipment().getItemInMainHand();
             if(CruxItem.isEmpty(item)) return -1;
             int x = setEnchant(item, enchant, level, store);
+            Crux.itemUpdater().update(item, e);
             if(x > 0) changed++;
+            if(!(e instanceof Player)) le.getEquipment().setItemInMainHand(item);
         }
         new MsgContainer("Set enchant, " + enchant.getName() + " to level " + level + " on " + changed + " entities.")
             .use(getExecutor(source));

@@ -1,21 +1,21 @@
-package killercreepr.crux.item.components;
+package killercreepr.crux.item.dynamic.components;
 
 import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.util.CruxItem;
 import org.jetbrains.annotations.NotNull;
 
-public class DynamicItemLore extends DynamicSingleValueComponent {
-    public DynamicItemLore(@NotNull Object value) {
+public class DynamicItemCustomModelData extends DynamicSingleValueComponent{
+    public DynamicItemCustomModelData(@NotNull Object value) {
         super(value);
     }
 
     @Override
     public @NotNull String name() {
-        return "lore";
+        return "custom_model_data";
     }
 
     @Override
     public void apply(@NotNull CruxItem item, @NotNull TextParserContext context) {
-        item.lore(parseComponentList(context));
+        item.editMeta(meta -> meta.setCustomModelData(parseInt(context)));
     }
 }

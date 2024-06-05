@@ -22,7 +22,11 @@ public interface Holder <T>{
             }
         };
     }
-    static @NotNull Holder<Object> empty(){
+    static @NotNull Holder<Object> emptyObject(){
+        return direct(null);
+    }
+
+    static <E> @NotNull Holder<E> empty(){
         return direct(null);
     }
     @Nullable T value();

@@ -2,7 +2,7 @@ package killercreepr.cruxmenu.menu.bukkit.config.handlers;
 
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.Holder;
-import killercreepr.crux.item.DynamicItem;
+import killercreepr.crux.item.dynamic.DynamicItem;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;

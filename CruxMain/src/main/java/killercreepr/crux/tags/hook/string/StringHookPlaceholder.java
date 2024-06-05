@@ -15,7 +15,7 @@ public class StringHookPlaceholder extends StringHookedObject<Object>{
     }
 
     public StringHookPlaceholder(@NotNull Tags tags, @NotNull String prefix, @NotNull StringHook<Object> hook) {
-        super(tags, prefix, Holder.empty(), hook);
+        super(tags, prefix, Holder.emptyObject(), hook);
     }
 
     @Override

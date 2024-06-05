@@ -1,4 +1,4 @@
-package killercreepr.crux.item.components;
+package killercreepr.crux.item.dynamic.components;
 
 import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.util.CruxItem;

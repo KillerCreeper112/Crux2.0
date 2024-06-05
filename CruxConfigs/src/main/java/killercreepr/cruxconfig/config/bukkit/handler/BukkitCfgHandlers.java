@@ -4,7 +4,7 @@ import io.papermc.paper.registry.RegistryKey;
 import killercreepr.crux.data.CreateSound;
 import killercreepr.crux.data.CreateTitle;
 import killercreepr.crux.data.MsgContainer;
-import killercreepr.crux.item.BukkitDynamicItem;
+import killercreepr.crux.item.dynamic.BukkitDynamicItem;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.*;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.FileDynamicItem;

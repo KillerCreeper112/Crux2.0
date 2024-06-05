@@ -2,7 +2,7 @@ package killercreepr.cruxmenu.menu.bukkit.holder;
 
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.Holder;
-import killercreepr.crux.item.DynamicItem;
+import killercreepr.crux.item.dynamic.DynamicItem;
 import killercreepr.crux.tags.container.ObjectStringHookContainer;
 import killercreepr.crux.tags.container.StringHookContainer;
 import killercreepr.crux.tags.defaults.CClaimTags;

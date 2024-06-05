@@ -1,6 +1,6 @@
-package killercreepr.crux.item.components;
+package killercreepr.crux.item.dynamic.components;
 
-import killercreepr.crux.item.DynamicItemComponent;
+import killercreepr.crux.item.dynamic.DynamicItemComponent;
 import org.jetbrains.annotations.NotNull;
 
 public interface DynamicItemComponentCreator {
