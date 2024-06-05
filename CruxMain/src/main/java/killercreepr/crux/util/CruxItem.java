@@ -230,4 +230,8 @@ public class CruxItem implements Cloneable {
             throw new Error(e);
         }
     }
+
+    public @NotNull Format getFormat() {
+        return format;
+    }
 }

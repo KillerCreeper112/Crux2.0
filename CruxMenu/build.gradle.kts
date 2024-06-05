@@ -7,6 +7,6 @@ plugins{
 
 dependencies {
     compileOnly(project(":CruxMain"))
-    compileOnly(project(":CruxConfig"))
+    compileOnly(project(":CruxConfigs"))
     paperweight.paperDevBundle(libs.versions.paper)
 }

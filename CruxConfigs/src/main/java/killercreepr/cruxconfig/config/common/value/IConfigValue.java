@@ -1,5 +1,6 @@
 package killercreepr.cruxconfig.config.common.value;
 
+import killercreepr.crux.data.Holder;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.common.file.ICruxConfig;
 import org.jetbrains.annotations.NotNull;
@@ -7,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Type;
 
-public interface IConfigValue<T, C extends ICruxConfig<?>> {
+public interface IConfigValue<T, C extends ICruxConfig<?>> extends Holder<T> {
     @NotNull Type getParameterType();
     @Nullable T getDefaultValue();
 

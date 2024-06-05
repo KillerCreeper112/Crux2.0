@@ -5,6 +5,10 @@ import killercreepr.crux.tags.tag.ObjectTag;
 import org.jetbrains.annotations.NotNull;
 
 public interface FormatPrefix {
+    static @NotNull FormatPrefix empty(){
+        return generic("");
+    }
+
     static @NotNull FormatPrefix generic(@NotNull String prefix) {
         return new FormatPrefix() {
             @Override

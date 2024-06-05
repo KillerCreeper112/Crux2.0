@@ -16,9 +16,28 @@ public class CruxModuleRegistry extends SimpleMappedRegistry<String, CruxModule>
         return remove(object.name()) != null;
     }
 
-    public CruxModuleRegistry register(@NotNull CruxPlugin plugin, @NotNull CruxModule... modules){
+    /**
+     * Registers and enabled only the provided modules.
+     */
+    public CruxModuleRegistry registerAndEnable(@NotNull CruxPlugin plugin, @NotNull CruxModule... modules){
         for(CruxModule m : modules){
             register(m);
+        }
+        for(CruxModule m : modules){
+            m.onEnable(plugin);
+        }
+        return this;
+    }
+
+    public CruxModuleRegistry register(@NotNull CruxModule... modules){
+        for(CruxModule m : modules){
+            register(m);
+        }
+        return this;
+    }
+
+    public CruxModuleRegistry enable(@NotNull CruxPlugin plugin){
+        for(CruxModule m : this){
             m.onEnable(plugin);
         }
         return this;

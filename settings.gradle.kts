@@ -3,13 +3,15 @@ rootProject.name = "Crux"
 
 include(
     "CruxMain",
-    "CruxConfig",
+    "CruxConfigs",
     "CruxMenu",
     "CruxPotions",
 
     "CruxAttributes",
     "CruxEnchants",
     "CruxEntities",
+
+    "CruxItems",
 
     "CruxTest"
 )

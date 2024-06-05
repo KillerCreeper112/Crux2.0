@@ -9,7 +9,7 @@ plugins {
 dependencies {
     paperweight.paperDevBundle(libs.versions.paper)
     implementation(project(":CruxMain"))
-    implementation(project(":CruxConfig"))
+    implementation(project(":CruxConfigs"))
     implementation(project(":CruxPotions"))
     implementation("com.ezylang:EvalEx:3.2.0")
 }
