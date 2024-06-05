@@ -43,6 +43,8 @@ public interface CruxAttribute extends Keyed {
     CruxAttribute ARMOR_TOUGHNESS = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("armor_toughness")));
     CruxAttribute KNOCKBACK_RESISTANCE = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("knockback_resistance")));
 
+    CruxAttribute MOVEMENT_SPEED = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("movement_speed")));
+
     default double getDefaultValue(){
         return 0D;
     }
