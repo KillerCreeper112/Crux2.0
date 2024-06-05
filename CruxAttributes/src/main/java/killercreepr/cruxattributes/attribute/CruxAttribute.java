@@ -396,14 +396,14 @@ public interface CruxAttribute extends Keyed {
     }
 
     static @NotNull Collection<CruxAttributeModifier>
-    getModifiers(@Nullable ItemStack i, @NotNull CruxAttribute attribute, @NotNull NamespacedKey@NotNull... path){
+    getModifiers(@Nullable ItemStack i, @NotNull CruxAttribute attribute, @NotNull Key@NotNull... path){
         Collection<CruxAttributeModifier> list = getModifiers(i, attribute);
         list.removeIf(x -> Arrays.equals(x.getPath(), path));
         return list;
     }
 
     static <P extends PersistentDataHolder> @NotNull Collection<CruxAttributeModifier>
-    getModifiers(@Nullable P i, @NotNull CruxAttribute attribute, @NotNull NamespacedKey@NotNull... path){
+    getModifiers(@Nullable P i, @NotNull CruxAttribute attribute, @NotNull Key@NotNull... path){
         Collection<CruxAttributeModifier> list = getModifiers(i, attribute);
         list.removeIf(x -> Arrays.equals(x.getPath(), path));
         return list;
