@@ -1,18 +1,20 @@
 package killercreepr.cruxentities.entity.mob.goal.sound;
 
 import killercreepr.crux.data.CreateSound;
+import killercreepr.crux.data.tick.Ticked;
 import killercreepr.crux.util.CruxMath;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class CruxGoalSounds {
+public abstract class CruxGoalSounds implements Ticked {
     protected final Entity e;
-    private int ambient;
+    protected int ambient;
     public CruxGoalSounds(@NotNull Entity e){
         this.e = e;
     }
 
+    @Override
     public final void tick(){
         if(ambient() ==  null) return;
         if(ambient > 0){

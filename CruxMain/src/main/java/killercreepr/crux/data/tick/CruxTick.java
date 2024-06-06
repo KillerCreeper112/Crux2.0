@@ -4,15 +4,13 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class CruxTick implements Keyed {
+public abstract class CruxTick implements Keyed, Ticked {
     protected final Key key;
     protected boolean remove = false;
 
     public CruxTick(@NotNull Key key) {
         this.key = key;
     }
-
-    public abstract void tick();
 
     @Override
     public @NotNull Key key() {
