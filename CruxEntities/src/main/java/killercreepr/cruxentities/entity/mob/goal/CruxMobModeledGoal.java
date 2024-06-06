@@ -5,14 +5,14 @@ import com.ticxo.modelengine.api.model.ActiveModel;
 import org.bukkit.entity.Mob;
 import org.jetbrains.annotations.NotNull;
 
-public class ModeledGoal extends CruxMobGoal {
+public class CruxMobModeledGoal extends CruxMobGoal {
     protected ActiveModel model;
-    public ModeledGoal(@NotNull Mob mob, ActiveModel model) {
+    public CruxMobModeledGoal(@NotNull Mob mob, ActiveModel model) {
         super(mob);
         this.model = model;
     }
 
-    public ModeledGoal(@NotNull GoalKey<Mob> key, @NotNull Mob mob, ActiveModel model) {
+    public CruxMobModeledGoal(@NotNull GoalKey<Mob> key, @NotNull Mob mob, ActiveModel model) {
         super(key, mob);
         this.model = model;
     }
@@ -51,5 +51,9 @@ public class ModeledGoal extends CruxMobGoal {
 
     public ActiveModel getModel() {
         return model;
+    }
+
+    public void setModel(ActiveModel model) {
+        this.model = model;
     }
 }
