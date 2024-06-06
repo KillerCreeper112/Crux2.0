@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
 
-public class CruxMobGoal extends CruxGoalBase implements Goal<Mob>, Listener {
+public class CruxMobGoal extends CruxGoalBase implements Goal<Mob>, ICruxMobGoal, Listener {
     protected Predicate<Entity> targetCheck;
     protected CruxGoalSounds sounds;
     public CruxMobGoal(@NotNull Mob mob) {
@@ -30,7 +30,7 @@ public class CruxMobGoal extends CruxGoalBase implements Goal<Mob>, Listener {
         super(key, mob);
     }
 
-    private boolean isValid(){ return true; }
+    protected boolean isValid(){ return true; }
     @Override
     public boolean shouldActivate() {
         return isValid();
@@ -46,8 +46,9 @@ public class CruxMobGoal extends CruxGoalBase implements Goal<Mob>, Listener {
         return sounds;
     }
 
-    public boolean isInAttackRange(double range){
-        return range <= 5D;
+    @Override
+    public boolean isInAttackRange(double distance){
+        return distance <= 5D;
     }
 
     @Override
@@ -75,7 +76,7 @@ public class CruxMobGoal extends CruxGoalBase implements Goal<Mob>, Listener {
         }
     }
 
-    private boolean hasBeenRemovedOrDied = false;
+    protected boolean hasBeenRemovedOrDied = false;
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onEntityDeath(EntityDeathEvent event) {
@@ -150,7 +151,7 @@ public class CruxMobGoal extends CruxGoalBase implements Goal<Mob>, Listener {
             stop();
             return;
         }
-        if(updateTarget()){
+        if(shouldUpdateTarget()){
             if(findCooldown > 0){
                 findCooldown--;
                 return;

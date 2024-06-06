@@ -24,7 +24,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class CruxGoalBase {
+public class CruxGoalBase implements ICruxGoal {
     public final static @NotNull Predicate<Entity> UNDESIRED_BEHAVIOR = e ->{
         if(e.getType() == EntityType.UNKNOWN) return false;
         if(e instanceof Player p){
@@ -65,24 +65,25 @@ public class CruxGoalBase {
     public @NotNull EnumSet<GoalType> getTypes() {
         return EnumSet.of(GoalType.UNKNOWN_BEHAVIOR);
     }
-
+    @Override
     public @Nullable LivingEntity getTarget(){ return target; }
     public final @NotNull Mob getMob(){ return mob; }
-
+    @Override
     public void setTarget(@Nullable LivingEntity newTarget){ this.target = newTarget; }
 
-    protected boolean updateTarget(){ return target == null || !isValidTarget(target); }
-
+    @Override
+    public boolean shouldUpdateTarget(){ return target == null || !isValidTarget(target); }
+    @Override
     public boolean isValidAttackerTarget(@NotNull LivingEntity target){
         return isValidTarget(target);
     }
-
+    @Override
     public boolean isValidNaturalTarget(@NotNull LivingEntity target){
         return isValidTarget(target) && (hasLineOfSight(target));
     }
 
-
-    protected boolean isValidTarget(@NotNull LivingEntity target){
+    @Override
+    public boolean isValidTarget(@NotNull LivingEntity target){
         if(mob.equals(target)) return false;
         if(!mob.getWorld().equals(target.getWorld()) ||
                 mob.getLocation().distanceSquared(target.getLocation()) > (getForgetTargetDistance()*getForgetTargetDistance()) /*||
@@ -110,13 +111,13 @@ public class CruxGoalBase {
     protected int followLostTargetTicks(){
         return 100;
     }
-
+    @Override
     public void forgetTarget(){
         setTarget(null);
         lastKnownTargetLocation = null;
         lostTarget = 0;
     }
-
+    @Override
     public boolean knowsWhereTargetIs(){
         return lastKnownTargetLocation == null && target != null;
     }
@@ -131,12 +132,18 @@ public class CruxGoalBase {
             }
         }
     }
-
-    protected boolean hasLineOfSight(@NotNull LivingEntity target){
+    @Override
+    public boolean hasLineOfSight(@NotNull Entity target){
         if(!target.getWorld().equals(mob.getWorld())) return false;
-        if(target.hasPotionEffect(PotionEffectType.GLOWING)) return true;
+        LivingEntity le;
+        if(target instanceof LivingEntity d) le = d;
+        else le = null;
+
+        if(le != null){
+            if(le.hasPotionEffect(PotionEffectType.GLOWING)) return true;
+        }
         if(!mob.hasLineOfSight(target)) return false;
-        return !target.hasPotionEffect(PotionEffectType.INVISIBILITY) || target.getLocation().distanceSquared(mob.getLocation()) < (4*4);
+        return (le != null && !le.hasPotionEffect(PotionEffectType.INVISIBILITY)) || target.getLocation().distanceSquared(mob.getLocation()) < (4*4);
     }
 
     protected void targetLogic(){
@@ -256,7 +263,7 @@ public class CruxGoalBase {
         if(attackCooldown > 0) attackCooldown--;
         return result;
     }
-
+    @Override
     public boolean canAttack(){
         return attackCooldown < 1;
     }
