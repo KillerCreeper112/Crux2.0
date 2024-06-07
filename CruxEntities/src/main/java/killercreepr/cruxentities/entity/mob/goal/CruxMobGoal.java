@@ -3,7 +3,6 @@ package killercreepr.cruxentities.entity.mob.goal;
 import com.destroystokyo.paper.entity.ai.Goal;
 import com.destroystokyo.paper.entity.ai.GoalKey;
 import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
-import com.mojang.datafixers.util.Pair;
 import killercreepr.crux.Crux;
 import killercreepr.cruxentities.entity.mob.goal.sound.CruxGoalSounds;
 import org.bukkit.Bukkit;
@@ -31,7 +30,7 @@ public class CruxMobGoal extends CruxGoalBase implements Goal<Mob>, ICruxMobGoal
         super(key, mob);
     }
 
-    protected boolean isValid(){ return true; }
+    protected boolean isValid(){ return mob.isValid(); }
     @Override
     public boolean shouldActivate() {
         return isValid();
@@ -128,7 +127,7 @@ public class CruxMobGoal extends CruxGoalBase implements Goal<Mob>, ICruxMobGoal
 
     @Override
     public void tick() {
-        pathFind();
+        checkTargetLogic();
         targetLogic();
         sound();
     }
@@ -151,22 +150,20 @@ public class CruxMobGoal extends CruxGoalBase implements Goal<Mob>, ICruxMobGoal
         attemptAttack(target, distance);
     }
 
-    protected void pathFind(){
-        if(!mob.isValid()){
-            stop();
+    protected int getFindCooldownMax(){
+        return 25;
+    }
+
+    protected void checkTargetLogic(){
+        if(!shouldUpdateTarget()) return;
+        if(findCooldown > 0){
+            findCooldown--;
             return;
         }
-        if(shouldUpdateTarget()){
-            if(findCooldown > 0){
-                findCooldown--;
-                return;
-            }
-            if(!findTarget(targetCheck)){
-                findCooldown = 25;
-                target = null;
-                mob.setTarget(null);
-            }
-        }
+        if(findTarget(targetCheck)) return;
+        findCooldown = getFindCooldownMax();
+        target = null;
+        mob.setTarget(null);
     }
 
     protected void sound(){
@@ -174,5 +171,19 @@ public class CruxMobGoal extends CruxGoalBase implements Goal<Mob>, ICruxMobGoal
         sounds.tick();
     }
 
+    public boolean hasBeenRemovedOrDied() {
+        return hasBeenRemovedOrDied;
+    }
 
+    public Predicate<Entity> getTargetCheck() {
+        return targetCheck;
+    }
+
+    public void setTargetCheck(Predicate<Entity> targetCheck) {
+        this.targetCheck = targetCheck;
+    }
+
+    public void setSounds(CruxGoalSounds sounds) {
+        this.sounds = sounds;
+    }
 }
