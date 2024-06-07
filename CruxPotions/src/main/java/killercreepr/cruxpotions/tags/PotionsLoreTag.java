@@ -41,7 +41,7 @@ public class PotionsLoreTag extends ObjectTag<ItemStack> {
                 if(format==null) return null;
 
                 Collection<StoredPotion> storedPotions = PotionPersistTags.STORED_CUSTOM_POTIONS.get(item, null);
-                if(storedPotions==null) return null;
+                if(storedPotions==null) return List.of();
                 List<String> list = new ArrayList<>();
                 storedPotions.forEach(potion ->{
                     CruxPotion crux = potion.getPotion();
