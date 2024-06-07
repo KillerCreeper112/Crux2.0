@@ -2,3 +2,9 @@
 /.gradle/
 /CruxMain/build/
 /CruxMain/build/classes/java/main/
+/CruxEntities/build/
+/CruxAttributes/build/
+/CruxConfigs/build/
+/CruxTest/build/
+/CruxMenu/build/
+/CruxItems/build/
