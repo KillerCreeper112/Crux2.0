@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,6 +13,16 @@ import java.util.*;
 import java.util.function.Predicate;
 
 public class CruxEntity {
+    private static final @NotNull EquipmentSlot[] GENERAL_SLOTS = new EquipmentSlot[]{
+        EquipmentSlot.HEAD,
+        EquipmentSlot.CHEST,
+        EquipmentSlot.LEGS,
+        EquipmentSlot.FEET
+    };
+    public static @NotNull EquipmentSlot[] getGeneralEntitySlots(){
+        return GENERAL_SLOTS;
+    }
+
     public static @Nullable Player getPlayer(@NotNull String uuidOrName){
         if(uuidOrName.isBlank()) return null;
         Player p = Bukkit.getPlayer(uuidOrName);
