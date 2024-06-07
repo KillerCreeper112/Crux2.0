@@ -7,6 +7,7 @@ import killercreepr.crux.event.CruxEntityDamageEvent;
 import killercreepr.crux.persistence.PersistTag;
 import killercreepr.crux.util.CruxEntity;
 import killercreepr.cruxattributes.attribute.CruxAttribute;
+import killercreepr.cruxattributes.attribute.CruxAttributeInstance;
 import killercreepr.cruxentities.combat.CruxEntityDamager;
 import killercreepr.cruxentities.combat.EntityHit;
 import org.bukkit.GameMode;
@@ -275,8 +276,12 @@ public class CruxGoalBase implements ICruxGoal {
     }
 
     protected @Nullable EntityHit.Result attemptAttack(@Nullable LivingEntity target, double distance){
+        CruxAttributeInstance instance = CruxAttribute.getInstance(mob, CruxAttribute.ATTACK_RANGE);
+        if(instance == null) return null;
+
+        double range = instance.getValue();
         EntityHit.Result result = null;
-        if(distance <= CruxAttribute.ATTACK_RANGE.get(mob) && attackCooldown <= 0){
+        if(distance <= range && attackCooldown <= 0){
             result = hit(true, target);
             if(result != null) attackCooldown = (int) Math.ceil(CruxAttribute.ATTACK_SPEED.get(mob));
         }
