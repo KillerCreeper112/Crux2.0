@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class GeneralCruxedItemDisplayUpdater implements CruxedItemUpdater{
+    public static final Key KEY = Crux.key("general_item_display");
     protected final @NotNull ItemDisplayFormatter formatter;
     public GeneralCruxedItemDisplayUpdater(@NotNull ItemDisplayFormatter formatter) {
         this.formatter = formatter;
@@ -29,6 +30,6 @@ public class GeneralCruxedItemDisplayUpdater implements CruxedItemUpdater{
 
     @Override
     public @NotNull Key key() {
-        return Crux.key("general_item_display");
+        return KEY;
     }
 }

@@ -9,4 +9,5 @@ dependencies {
     paperweight.paperDevBundle(libs.versions.paper)
     compileOnly(project(":CruxMain"))
     compileOnly(project(":CruxConfigs"))
+    compileOnly(project(":CruxItems"))
 }

@@ -5,9 +5,11 @@ import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registries.CruxRegistries;
+import killercreepr.cruxitems.registries.CruxItemRegistries;
 import killercreepr.cruxpotions.command.CruxPotionCommands;
 import killercreepr.cruxpotions.config.Config;
 import killercreepr.cruxpotions.data.PotionHolder;
+import killercreepr.cruxpotions.item.PotionItemUpdater;
 import killercreepr.cruxpotions.listener.PlayerDataListener;
 import killercreepr.cruxpotions.listener.PotionListener;
 import killercreepr.cruxpotions.persistence.PotionPersistTags;
@@ -60,6 +62,10 @@ public class CruxPotionsModule implements CruxModule {
         PotionPersistTags.register();
         CruxPotionCommands.register(plugin);
         Crux.TAGS.register(new PotionsLoreTag(values.potionsFormat()));
+
+        if(CruxRegistries.MODULES.containsKey("CruxItems")){
+            CruxItemRegistries.ITEM_UPDATERS.register(3, new PotionItemUpdater());
+        }
     }
 
     @Override

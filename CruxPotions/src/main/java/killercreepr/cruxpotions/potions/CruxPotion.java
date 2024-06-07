@@ -2,6 +2,7 @@ package killercreepr.cruxpotions.potions;
 
 import killercreepr.crux.data.CruxKeyed;
 import killercreepr.cruxpotions.potions.inflictor.PotionInflictor;
+import org.bukkit.Color;
 import org.bukkit.entity.Entity;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -13,6 +14,14 @@ public interface CruxPotion extends CruxKeyed {
      */
     @NotNull String getName();
     @NotNull PotionEffectType.Category getCategory();
+
+    /**
+     * A null value signifies that this potion will not have any effect
+     * on a potion's color.
+     */
+    default @Nullable Color getColor(){
+        return null;
+    }
 
     /**
      *
