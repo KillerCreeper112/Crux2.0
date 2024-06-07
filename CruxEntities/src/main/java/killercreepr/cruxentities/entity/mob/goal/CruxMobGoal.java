@@ -82,17 +82,21 @@ public class CruxMobGoal extends CruxGoalBase implements Goal<Mob>, ICruxMobGoal
     public void onEntityDeath(EntityDeathEvent event) {
         if(event.getEntity().equals(mob) && !hasBeenRemovedOrDied){
             hasBeenRemovedOrDied = true;
-            removedOrDeath();
+            onRemovalOrDeath(true);
         }
     }
 
-    protected void removedOrDeath(){}
+    /**
+     * Called when the mob dies or gets removed from the world.
+     * @param died If true, the mob died. Otherwise, the mob was removed.
+     */
+    protected void onRemovalOrDeath(boolean died){}
 
     @EventHandler(priority = EventPriority.MONITOR)
     public final void entityRemove(EntityRemoveFromWorldEvent event) {
         if(event.getEntity().equals(this.mob)){
             HandlerList.unregisterAll(this);
-            if(!hasBeenRemovedOrDied) removedOrDeath();
+            if(!hasBeenRemovedOrDied) onRemovalOrDeath(false);
             hasBeenRemovedOrDied = true;
         }
     }
