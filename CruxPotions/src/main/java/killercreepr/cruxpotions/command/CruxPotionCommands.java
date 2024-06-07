@@ -10,6 +10,7 @@ import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.EntitySelectorArgumentResolver;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import killercreepr.crux.Crux;
 import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.util.CruxItem;
@@ -214,6 +215,7 @@ public class CruxPotionCommands {
             Collection<StoredPotion> storedPotions = PotionPersistTags.STORED_CUSTOM_POTIONS.get(item, new HashSet<>());
             storedPotions.add(stored);
             PotionPersistTags.STORED_CUSTOM_POTIONS.set(item, storedPotions);
+            Crux.itemUpdater().update(item, e);
             if(!(e instanceof Player)){
                 le.getEquipment().setItemInMainHand(item, true);
             }
@@ -305,6 +307,7 @@ public class CruxPotionCommands {
             if(CruxItem.isEmpty(item)) continue;
 
             PotionPersistTags.STORED_CUSTOM_POTIONS.set(item, null);
+            Crux.itemUpdater().update(item, e);
             if(!(e instanceof Player)){
                 le.getEquipment().setItemInMainHand(item, true);
             }
@@ -328,6 +331,7 @@ public class CruxPotionCommands {
             if(storedPotions==null) continue;
             storedPotions.removeIf(stored -> stored.getPotion().compare(potion));
             PotionPersistTags.STORED_CUSTOM_POTIONS.set(item, storedPotions);
+            Crux.itemUpdater().update(item, e);
             if(!(e instanceof Player)){
                 le.getEquipment().setItemInMainHand(item, true);
             }
