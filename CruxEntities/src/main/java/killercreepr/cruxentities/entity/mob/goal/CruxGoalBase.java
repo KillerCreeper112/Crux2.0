@@ -44,7 +44,7 @@ public class CruxGoalBase implements ICruxGoal {
         return this;
     }
 
-    protected int findCooldown;
+    protected int findTargetCooldown;
     protected int lostTarget;
 
     public static @NotNull GoalKey<Mob> defaultKey(){ return GoalKey.of(Mob.class, Crux.key("crux_goal")); }
