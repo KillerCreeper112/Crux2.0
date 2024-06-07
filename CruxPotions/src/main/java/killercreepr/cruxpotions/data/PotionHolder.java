@@ -203,7 +203,7 @@ public class PotionHolder extends EntityDataHolder {
         Component c = Component.empty();
         for(ActivePotion a : getActiveEffects()){
             index++;
-            Component pot = a.buildTab();
+            Component pot = a.format();
             if(pot == null) continue;
             c = c.append(pot);
             if(index < getActiveEffects().size()){

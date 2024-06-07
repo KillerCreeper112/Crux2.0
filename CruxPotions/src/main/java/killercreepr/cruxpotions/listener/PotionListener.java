@@ -5,8 +5,8 @@ import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.crux.data.entity.PlayerMemory;
 import killercreepr.cruxpotions.CruxPotions;
 import killercreepr.cruxpotions.data.PotionHolder;
-import killercreepr.cruxpotions.persistence.CustomPotionHolder;
 import killercreepr.cruxpotions.persistence.PotionPersistTags;
+import killercreepr.cruxpotions.persistence.StoredPotion;
 import killercreepr.cruxpotions.values.ValuesProvider;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -42,9 +42,9 @@ public class PotionListener implements Listener {
         if(!CruxPotions.canApplyPotion(p)) return;
         PlayerMemory memory = PlayerMemory.get(p);
         if(memory == null || !(memory.getHolder(PotionHolder.KEY) instanceof PotionHolder data)) return;
-        Collection<CustomPotionHolder> potions = PotionPersistTags.STORED_CUSTOM_POTIONS.get(event.getItem(), null);
+        Collection<StoredPotion> potions = PotionPersistTags.STORED_CUSTOM_POTIONS.get(event.getItem(), null);
         if(potions == null || potions.isEmpty()) return;
-        for(CustomPotionHolder h : potions){
+        for(StoredPotion h : potions){
             data.addPotion(h.create(p));
         }
     }
@@ -55,9 +55,9 @@ public class PotionListener implements Listener {
         if(!CruxPotions.canApplyPotion(p)) return;
         EntityMemory memory = EntityMemory.getOrCreate(p);
         if(!(memory.getHolder(PotionHolder.KEY) instanceof PotionHolder data)) return;
-        Collection<CustomPotionHolder> potions = PotionPersistTags.STORED_CUSTOM_POTIONS.get(event.getPotion(),null);
+        Collection<StoredPotion> potions = PotionPersistTags.STORED_CUSTOM_POTIONS.get(event.getPotion(),null);
         if(potions == null || potions.isEmpty()) return;
-        for(CustomPotionHolder h : potions){
+        for(StoredPotion h : potions){
             data.addPotion(h.create(p));
         }
     }

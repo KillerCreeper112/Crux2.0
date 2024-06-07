@@ -1,5 +1,6 @@
 package killercreepr.cruxpotions;
 
+import killercreepr.crux.Crux;
 import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.plugin.CruxPlugin;
@@ -15,6 +16,7 @@ import killercreepr.cruxpotions.potions.InflictedPotion;
 import killercreepr.cruxpotions.potions.inflictor.BlockInflictor;
 import killercreepr.cruxpotions.potions.inflictor.EntityInflictor;
 import killercreepr.cruxpotions.potions.inflictor.PotionInflictor;
+import killercreepr.cruxpotions.tags.PotionsLoreTag;
 import killercreepr.cruxpotions.values.DefaultValues;
 import killercreepr.cruxpotions.values.ValuesProvider;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -57,6 +59,7 @@ public class CruxPotionsModule implements CruxModule {
 
         PotionPersistTags.register();
         CruxPotionCommands.register(plugin);
+        Crux.TAGS.register(new PotionsLoreTag(values.potionsFormat()));
     }
 
     @Override

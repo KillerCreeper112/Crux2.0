@@ -15,9 +15,11 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 public class Config extends Cfg implements ValuesProvider {
+    public final CfgValue<List<String>> POTIONS_FORMAT = new CommonValue<>(DefaultValues.POTIONS_FORMAT.value()){};
     public final NotNullValue<Boolean> REMOVE_POTIONS_UPON_DEATH = new NotNullValue<>(DefaultValues.REMOVE_POTIONS_UPON_DEATH.value()){};
     public final NotNullValue<Boolean> SAVE_POTIONS_UPON_QUIT = new NotNullValue<>(DefaultValues.SAVE_POTIONS_UPON_QUIT.value()){};
     /*public final NumCfgValue ITEM_POTION_LORE_PRIORITY = new NumCfgValue(1);
@@ -37,6 +39,11 @@ public class Config extends Cfg implements ValuesProvider {
 
     public Config(@NotNull CruxConfig cfg) {
         super(cfg);
+    }
+
+    @Override
+    public @NotNull Holder<List<String>> potionsFormat() {
+        return POTIONS_FORMAT;
     }
 
     @Override

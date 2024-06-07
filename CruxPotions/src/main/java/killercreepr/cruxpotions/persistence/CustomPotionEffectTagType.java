@@ -8,19 +8,19 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
-public class CustomPotionEffectTagType implements PersistentDataType<PersistentDataContainer, CustomPotionHolder> {
+public class CustomPotionEffectTagType implements PersistentDataType<PersistentDataContainer, StoredPotion> {
     @Override
     public @NotNull Class<PersistentDataContainer> getPrimitiveType() {
         return PersistentDataContainer.class;
     }
 
     @Override
-    public @NotNull Class<CustomPotionHolder> getComplexType() {
-        return CustomPotionHolder.class;
+    public @NotNull Class<StoredPotion> getComplexType() {
+        return StoredPotion.class;
     }
 
     @Override
-    public @NotNull PersistentDataContainer toPrimitive(@NotNull CustomPotionHolder complex, @NotNull PersistentDataAdapterContext context) {
+    public @NotNull PersistentDataContainer toPrimitive(@NotNull StoredPotion complex, @NotNull PersistentDataAdapterContext context) {
         PersistentDataContainer c = context.newPersistentDataContainer();
         c.set(Crux.key("type"), PersistentDataType.STRING, complex.getPotion().key().asString());
         c.set(Crux.key("amplifier"), PersistentDataType.INTEGER, complex.getAmplifier());
@@ -32,10 +32,10 @@ public class CustomPotionEffectTagType implements PersistentDataType<PersistentD
     }
 
     @Override
-    public @NotNull CustomPotionHolder fromPrimitive(@NotNull PersistentDataContainer c, @NotNull PersistentDataAdapterContext context) {
+    public @NotNull StoredPotion fromPrimitive(@NotNull PersistentDataContainer c, @NotNull PersistentDataAdapterContext context) {
         CruxPotion t = CruxPotionRegistries.POTIONS.get(Crux.key(c.getOrDefault(Crux.key("type"), PersistentDataType.STRING, "a")));
         if(t == null) throw new RuntimeException("Custom potion effect type cannot be NULL!");
-        return new CustomPotionHolder(t,
+        return new StoredPotionImpl(t,
                 c.getOrDefault(Crux.key("duration"), PersistentDataType.INTEGER, 0),
                 c.getOrDefault(Crux.key("amplifier"), PersistentDataType.INTEGER, 0));
         /*return new PotionEffect(t, c.getOrDefault(k("duration"), PersistentDataType.INTEGER, 0),

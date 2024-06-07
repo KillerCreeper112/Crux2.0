@@ -1,11 +1,12 @@
 package killercreepr.cruxpotions.potions;
 
+import io.netty.util.internal.UnstableApi;
 import killercreepr.crux.Crux;
 import killercreepr.crux.util.CruxMath;
+import killercreepr.cruxpotions.persistence.StoredPotion;
 import killercreepr.cruxpotions.registries.CruxPotionRegistries;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -20,6 +21,33 @@ import java.util.Map;
 import java.util.UUID;
 
 public class ActivePotion implements Listener, ConfigurationSerializable {
+    public static @NotNull String formatPotion(@NotNull StoredPotion stored){
+        return formatPotion(stored.getPotion(), stored.getAmplifier(), stored.getDuration());
+    }
+
+    public static @NotNull String formatPotion(@NotNull CruxPotion pot, int amplifier, int duration){
+        return formatPotion(pot.getName(), amplifier, duration);
+    }
+
+    @UnstableApi
+    public static @NotNull String formatPotion(@NotNull String name, int amplifier, int duration){
+        StringBuilder builder = new StringBuilder(name).append(" ");
+        if(amplifier > 0){
+            builder.append(CruxMath.numeral(amplifier+1)).append(" ");
+        }
+        builder.append(formatDuration(duration));
+        return builder.toString();
+    }
+
+    public static @NotNull String formatDuration(int duration){
+        if(duration == -1) return "∞";
+
+        int seconds = duration / 20;
+        int minutes = seconds / 60;
+        seconds -= minutes * 60;
+        return minutes + ":" + CruxMath.padWithZeroIfSingleDigit(seconds);
+    }
+
     protected final CruxPotion potion;
     protected final Entity entity;
     protected int duration;
@@ -49,17 +77,8 @@ public class ActivePotion implements Listener, ConfigurationSerializable {
      */
     public final boolean infiniteDuration(){ return duration == -1; }
 
-    public @Nullable Component buildTab(){
-        Component c = Component.text(potion.getName()).append(Component.space());
-        if(amplifier > 0) c = c.append(Component.text(CruxMath.numeral(amplifier+1))).append(Component.space());
-        if(duration == -1) c = c.append(Component.text("∞"));
-        else{
-            int seconds = duration / 20;
-            int minutes = seconds / 60;
-            seconds -= minutes * 60;
-            c = c.append(Component.text(minutes + ":" + CruxMath.padWithZeroIfSingleDigit(seconds), NamedTextColor.GRAY));
-        }
-        return c;
+    public @Nullable Component format(){
+        return Crux.FORMAT.deserialize("<gray>" + formatPotion(potion, amplifier, duration));
     }
 
     public double evaluate(@Nullable String eq) {

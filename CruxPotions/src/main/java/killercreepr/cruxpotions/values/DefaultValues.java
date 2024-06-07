@@ -10,14 +10,19 @@ import java.util.List;
 import java.util.Map;
 
 public class DefaultValues implements ValuesProvider{
-    public static final Holder<List<String>> ENCHANTS_TAG_FORMAT = Holder.direct(List.of(
-        "<gray><enchant_name> <enchant_level>"
+    public static final Holder<List<String>> POTIONS_FORMAT = Holder.direct(List.of(
+        "<potion_formatted>"
     ));
     public static final Holder<Boolean> REMOVE_POTIONS_UPON_DEATH = Holder.direct(true);
     public static final Holder<Boolean> SAVE_POTIONS_UPON_QUIT = Holder.direct(true);
     public static final Holder<Map<Key, PotionEffectType.Category>> POTION_CATEGORIES = Holder.direct(new HashMap<>(){{
         put(Key.key("namespace", "key"), PotionEffectType.Category.HARMFUL);
     }});
+
+    @Override
+    public @NotNull Holder<List<String>> potionsFormat() {
+        return POTIONS_FORMAT;
+    }
 
     @Override
     public @NotNull Holder<Boolean> removePotionsUponDeath() {
