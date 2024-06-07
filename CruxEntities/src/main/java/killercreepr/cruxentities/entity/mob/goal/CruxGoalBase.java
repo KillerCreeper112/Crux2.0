@@ -122,14 +122,30 @@ public class CruxGoalBase implements ICruxGoal {
         return lastKnownTargetLocation == null && target != null;
     }
 
-    protected void moveTo(){
-        if(target != null){
-            if(lastKnownTargetLocation == null || lostTarget < followLostTargetTicks()){
-                mob.getPathfinder().moveTo(target);
-            }else{
-                if(lostTarget < searchLostTargetTicks()) mob.getPathfinder().moveTo(target);
-                else if(lostTarget >= searchLostTargetTicks() && lostTarget <= searchLostTargetTicks()+5) mob.getPathfinder().moveTo(mob.getLocation());
-            }
+    public void moveTo(@Nullable LivingEntity target){
+        if(target==null){
+            mob.getPathfinder().stopPathfinding();
+            return;
+        }
+        mob.getPathfinder().moveTo(target);
+    }
+
+    public void moveTo(@Nullable Location target){
+        if(target==null){
+            mob.getPathfinder().stopPathfinding();
+            return;
+        }
+        mob.getPathfinder().moveTo(target);
+    }
+
+    public void moveTo(){
+        if(target==null) return;
+
+        if(lastKnownTargetLocation == null || lostTarget < followLostTargetTicks()){
+            moveTo(target);
+        }else{
+            if(lostTarget < searchLostTargetTicks()) moveTo(target);
+            else if(lostTarget >= searchLostTargetTicks() && lostTarget <= searchLostTargetTicks()+5) moveTo(mob.getLocation());
         }
     }
     @Override
