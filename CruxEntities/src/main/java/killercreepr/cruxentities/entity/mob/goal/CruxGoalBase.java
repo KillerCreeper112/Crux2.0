@@ -178,7 +178,7 @@ public class CruxGoalBase implements ICruxGoal {
         }
     }
 
-    protected boolean findTarget(@Nullable Predicate<Entity> targetCheck){
+    public @Nullable Entity findTarget(@Nullable Predicate<Entity> targetCheck){
         double followRange = getFollowDistance();
 
         final List<LivingEntity> targets = CruxEntity.filterEntityDistance(CruxEntity.getEntitiesNear(
@@ -196,11 +196,15 @@ public class CruxGoalBase implements ICruxGoal {
                 return true;
             }
         }*/
-        if(!targets.isEmpty()){
-            setTarget(targets.getFirst());
-            return true;
-        }
-        return false;
+        if(!targets.isEmpty()) return targets.getFirst();
+        return null;
+    }
+
+    protected boolean findAndSetTarget(@Nullable Predicate<Entity> targetCheck){
+        Entity target = findTarget(targetCheck);
+        if(!(target instanceof LivingEntity e)) return false;
+        setTarget(e);
+        return true;
     }
 
     private @Nullable EntityHit.Result hit(){

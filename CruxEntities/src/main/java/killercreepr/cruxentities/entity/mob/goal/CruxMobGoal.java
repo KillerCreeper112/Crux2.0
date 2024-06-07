@@ -160,7 +160,7 @@ public class CruxMobGoal extends CruxGoalBase implements Goal<Mob>, ICruxMobGoal
             findCooldown--;
             return;
         }
-        if(findTarget(targetCheck)) return;
+        if(findAndSetTarget(targetCheck)) return;
         findCooldown = getFindCooldownMax();
         target = null;
         mob.setTarget(null);
