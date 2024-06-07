@@ -17,47 +17,47 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.UUID;
 
-public class PlayerConfig extends JsonCfg {
+public class PlayerDataFile extends JsonCfg {
     public final CfgValue<PotionEffect> POTION = new CommonValue<>(
             new PotionEffect(PotionEffectType.HEALTH_BOOST, 100, 1)
     );
-    public PlayerConfig(@NotNull Plugin plugin, @NotNull UUID uuid) {
+    public PlayerDataFile(@NotNull Plugin plugin, @NotNull UUID uuid) {
         super(plugin, uuid.toString());
     }
 
-    public PlayerConfig(@NotNull Plugin plugin, @NotNull String path) {
+    public PlayerDataFile(@NotNull Plugin plugin, @NotNull String path) {
         super(plugin, path);
     }
 
-    public PlayerConfig(@NotNull File file) {
+    public PlayerDataFile(@NotNull File file) {
         super(file);
     }
 
-    public PlayerConfig(@NotNull CruxJson cfg) {
+    public PlayerDataFile(@NotNull CruxJson cfg) {
         super(cfg);
     }
 
-    public PlayerConfig(@NotNull File file, @NotNull JsonRegistry jsonRegistry, boolean reloadIfExists) {
+    public PlayerDataFile(@NotNull File file, @NotNull JsonRegistry jsonRegistry, boolean reloadIfExists) {
         super(file, jsonRegistry, reloadIfExists);
     }
 
-    public PlayerConfig(@NotNull Plugin plugin, @NotNull String path, @NotNull JsonRegistry jsonRegistry, boolean reloadIfExists) {
+    public PlayerDataFile(@NotNull Plugin plugin, @NotNull String path, @NotNull JsonRegistry jsonRegistry, boolean reloadIfExists) {
         super(plugin, path, jsonRegistry, reloadIfExists);
     }
 
-    public PlayerConfig(@NotNull File file, @NotNull JsonRegistry jsonRegistry) {
+    public PlayerDataFile(@NotNull File file, @NotNull JsonRegistry jsonRegistry) {
         super(file, jsonRegistry);
     }
 
-    public PlayerConfig(@NotNull Plugin plugin, @NotNull String path, @NotNull JsonRegistry jsonRegistry) {
+    public PlayerDataFile(@NotNull Plugin plugin, @NotNull String path, @NotNull JsonRegistry jsonRegistry) {
         super(plugin, path, jsonRegistry);
     }
 
-    public PlayerConfig(@NotNull File file, boolean reloadIfExists) {
+    public PlayerDataFile(@NotNull File file, boolean reloadIfExists) {
         super(file, reloadIfExists);
     }
 
-    public PlayerConfig(@NotNull Plugin plugin, @NotNull String path, boolean reloadIfExists) {
+    public PlayerDataFile(@NotNull Plugin plugin, @NotNull String path, boolean reloadIfExists) {
         super(plugin, path, reloadIfExists);
     }
 
@@ -69,7 +69,7 @@ public class PlayerConfig extends JsonCfg {
         return new HashSet<>();
     }
 
-    public PlayerConfig savePotions(@Nullable Collection<ActivePotion> potions){
+    public PlayerDataFile savePotions(@Nullable Collection<ActivePotion> potions){
         //cfg.set("potions", potions == null ? null : new ArrayList<>(potions));
         return this;
     }

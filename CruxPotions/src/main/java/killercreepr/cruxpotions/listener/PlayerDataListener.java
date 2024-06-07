@@ -1,7 +1,7 @@
 package killercreepr.cruxpotions.listener;
 
 import killercreepr.crux.data.entity.PlayerMemory;
-import killercreepr.cruxpotions.config.PlayerConfig;
+import killercreepr.cruxpotions.config.PlayerDataFile;
 import killercreepr.cruxpotions.data.PotionHolder;
 import killercreepr.cruxpotions.values.ValuesProvider;
 import org.bukkit.entity.Player;
@@ -26,7 +26,7 @@ public class PlayerDataListener implements Listener {
         Player p = event.getPlayer();
         PlayerMemory memory = PlayerMemory.getOrCreate(p);
         if(memory.getHolder(PotionHolder.KEY) instanceof PotionHolder data){
-            data.setPotions(new PlayerConfig(plugin, p.getUniqueId()).getPotions());
+            data.setPotions(new PlayerDataFile(plugin, p.getUniqueId()).getPotions());
         }
     }
 
@@ -37,7 +37,7 @@ public class PlayerDataListener implements Listener {
         PotionHolder data = PlayerMemory.getDataHolder(p, PotionHolder.class);
         if(data != null){
             data.stopPotions();
-            new PlayerConfig(plugin, p.getUniqueId()).savePotions(data.getActiveEffects()).save();
+            new PlayerDataFile(plugin, p.getUniqueId()).savePotions(data.getActiveEffects()).save();
         }
     }
 }
