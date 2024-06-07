@@ -4,11 +4,11 @@ import com.destroystokyo.paper.event.entity.WitchConsumePotionEvent;
 import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.crux.data.entity.PlayerMemory;
 import killercreepr.cruxpotions.CruxPotions;
-import killercreepr.cruxpotions.config.Config;
 import killercreepr.cruxpotions.config.PlayerConfig;
 import killercreepr.cruxpotions.data.PotionHolder;
 import killercreepr.cruxpotions.persistence.CustomPotionHolder;
 import killercreepr.cruxpotions.persistence.PotionPersistTags;
+import killercreepr.cruxpotions.values.ValuesProvider;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,8 +25,8 @@ import java.util.Collection;
 
 public class PotionListener implements Listener {
     protected final Plugin plugin;
-    protected final Config cfg;
-    public PotionListener(@NotNull Plugin plugin, @NotNull Config cfg) {
+    protected final ValuesProvider cfg;
+    public PotionListener(@NotNull Plugin plugin, @NotNull ValuesProvider cfg) {
         this.plugin = plugin;
         this.cfg = cfg;
     }
@@ -34,14 +34,14 @@ public class PotionListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityDeath(EntityDeathEvent event) {
         PotionHolder data = EntityMemory.getDataHolder(event.getEntity(), PotionHolder.class);
-        if(data != null && cfg.REMOVE_POTIONS_UPON_DEATH.value()){
+        if(data != null && cfg.removePotionsUponDeath().value()){
             data.clearPotions();
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        if(!cfg.SAVE_POTIONS_UPON_QUIT.value()) return;
+        if(!cfg.savePotionsUponQuit().value()) return;
         Player p = event.getPlayer();
         PlayerMemory memory = PlayerMemory.getOrCreate(p);
         if(memory.getHolder(PotionHolder.KEY) instanceof PotionHolder data){
@@ -51,7 +51,7 @@ public class PotionListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerQuit(PlayerQuitEvent event) {
-        if(!cfg.SAVE_POTIONS_UPON_QUIT.value()) return;
+        if(!cfg.savePotionsUponQuit().value()) return;
         Player p = event.getPlayer();
         PotionHolder data = PlayerMemory.getDataHolder(p, PotionHolder.class);
         if(data != null){

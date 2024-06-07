@@ -3,6 +3,7 @@ package killercreepr.cruxpotions;
 import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.plugin.CruxPlugin;
+import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.cruxpotions.command.CruxPotionCommands;
 import killercreepr.cruxpotions.config.Config;
 import killercreepr.cruxpotions.data.PotionHolder;
@@ -13,23 +14,32 @@ import killercreepr.cruxpotions.potions.InflictedPotion;
 import killercreepr.cruxpotions.potions.inflictor.BlockInflictor;
 import killercreepr.cruxpotions.potions.inflictor.EntityInflictor;
 import killercreepr.cruxpotions.potions.inflictor.PotionInflictor;
+import killercreepr.cruxpotions.values.DefaultValues;
+import killercreepr.cruxpotions.values.ValuesProvider;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.jetbrains.annotations.NotNull;
 
 public class CruxPotionsModule implements CruxModule {
     public static final String NAMESPACE = "CruxPotions";
-    protected static Config CONFIG;
-    public static Config cfg(){ return CONFIG; }
     @Override
     public @NotNull String name() {
         return NAMESPACE;
     }
 
-    protected Config config;
+    protected ValuesProvider values;
+
+    public ValuesProvider values() {
+        return values;
+    }
+
+    public void values(@NotNull ValuesProvider values) {
+        this.values = values;
+    }
     @Override
     public void onEnable(@NotNull CruxPlugin plugin) {
-        config = new Config(plugin, "module/potion");
-        CONFIG = config;
+        if(CruxRegistries.MODULES.containsKey("CruxConfigs")){
+            values(new Config(plugin, "module/enchant"));
+        }else values(new DefaultValues());
 
         EntityMemory.registerFunction(plugin, e -> e.getHolders().register(new PotionHolder(e)));
         ConfigurationSerialization.registerClass(BlockInflictor.class);
@@ -39,7 +49,7 @@ public class CruxPotionsModule implements CruxModule {
         ConfigurationSerialization.registerClass(InflictedPotion.class);
 
         plugin.registerListeners(
-                new PotionListener(plugin, config)
+                new PotionListener(plugin, values)
         );
 
         PotionPersistTags.register();
@@ -48,6 +58,6 @@ public class CruxPotionsModule implements CruxModule {
 
     @Override
     public void reload(@NotNull CruxPlugin plugin) {
-        config.setup();
+        values.reload(plugin);
     }
 }

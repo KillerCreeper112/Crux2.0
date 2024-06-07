@@ -7,7 +7,7 @@ import java.util.List;
 
 public class DefaultValues implements ValuesProvider{
     public static final Holder<List<String>> GENERAL_ITEM_LORE_FORMAT = Holder.direct(List.of(
-        "{cruxitem_enchants}"
+        "{cruxenchants_enchants}"
     ));
 
     public static final Holder<String> GENERAL_ITEM_NAME_FORMAT = Holder.empty();

@@ -18,5 +18,12 @@ public interface MappedRegistry<K, V> extends Registry<V>{
     boolean containsKey(@NotNull K key);
     boolean containsValue(@NotNull V value);
     @NotNull Set<Map.Entry<K, V>> entrySet();
+
+    default <T extends V> @Nullable T get(@NotNull Class<T> type, @NotNull K key){
+        V object = get(key);
+        if(object == null) return null;
+        if(type.isAssignableFrom(object.getClass())) return type.cast(object);
+        return null;
+    }
 }
 
