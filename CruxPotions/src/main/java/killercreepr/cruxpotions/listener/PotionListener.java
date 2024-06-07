@@ -40,8 +40,8 @@ public class PotionListener implements Listener {
     public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
         Player p = event.getPlayer();
         if(!CruxPotions.canApplyPotion(p)) return;
-        PlayerMemory memory = PlayerMemory.get(p);
-        if(memory == null || !(memory.getHolder(PotionHolder.KEY) instanceof PotionHolder data)) return;
+        PlayerMemory memory = PlayerMemory.getOrCreate(p);
+        if(!(memory.getHolder(PotionHolder.KEY) instanceof PotionHolder data)) return;
         Collection<StoredPotion> potions = PotionPersistTags.STORED_CUSTOM_POTIONS.get(event.getItem(), null);
         if(potions == null || potions.isEmpty()) return;
         for(StoredPotion h : potions){
