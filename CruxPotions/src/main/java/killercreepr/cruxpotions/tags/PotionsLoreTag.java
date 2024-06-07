@@ -40,9 +40,9 @@ public class PotionsLoreTag extends ObjectTag<ItemStack> {
                 List<String> format = potionsFormat.value();
                 if(format==null) return null;
 
-                List<String> list = new ArrayList<>();
                 Collection<StoredPotion> storedPotions = PotionPersistTags.STORED_CUSTOM_POTIONS.get(item, null);
-                if(storedPotions==null) return List.of();
+                if(storedPotions==null) return null;
+                List<String> list = new ArrayList<>();
                 storedPotions.forEach(potion ->{
                     CruxPotion crux = potion.getPotion();
                     String formatted = ActivePotion.formatPotion(potion);
