@@ -31,11 +31,11 @@ public class ActivePotion implements Listener, ConfigurationSerializable {
 
     @UnstableApi
     public static @NotNull String formatPotion(@NotNull String name, int amplifier, int duration){
-        StringBuilder builder = new StringBuilder(name).append(" ");
+        StringBuilder builder = new StringBuilder(name).append(" (");
         if(amplifier > 0){
             builder.append(CruxMath.numeral(amplifier+1)).append(" ");
         }
-        builder.append(formatDuration(duration));
+        builder.append(formatDuration(duration)).append(")");
         return builder.toString();
     }
 
