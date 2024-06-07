@@ -213,6 +213,7 @@ public class CruxPotionCommands {
             if(CruxItem.isEmpty(item)) continue;
 
             Collection<StoredPotion> storedPotions = PotionPersistTags.STORED_CUSTOM_POTIONS.get(item, new HashSet<>());
+            storedPotions.removeIf(s -> s.getPotion().compare(potion));
             storedPotions.add(stored);
             PotionPersistTags.STORED_CUSTOM_POTIONS.set(item, storedPotions);
             Crux.itemUpdater().update(item, e);
@@ -230,7 +231,7 @@ public class CruxPotionCommands {
 
     public static RequiredArgumentBuilder<CommandSourceStack, ?> buildDurationAfterItem(@Nullable Integer duration){
         return Commands.argument("amplifier", IntegerArgumentType.integer())
-            .executes(ctx -> applyEffect(
+            .executes(ctx -> applyEffectItem(
                 ctx.getSource(),
                 ctx.getArgument("entity", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
                 ctx.getArgument("potion", CruxPotion.class),
