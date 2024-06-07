@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class DefaultValues implements ValuesProvider{
     public static final Holder<List<String>> POTIONS_FORMAT = Holder.direct(List.of(
-        "<potion_formatted>"
+        "<potion_category_color><potion_formatted>"
     ));
     public static final Holder<Boolean> REMOVE_POTIONS_UPON_DEATH = Holder.direct(true);
     public static final Holder<Boolean> SAVE_POTIONS_UPON_QUIT = Holder.direct(true);

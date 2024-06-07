@@ -46,6 +46,12 @@ public class PotionsLoreTag extends ObjectTag<ItemStack> {
                 storedPotions.forEach(potion ->{
                     CruxPotion crux = potion.getPotion();
                     String formatted = ActivePotion.formatPotion(potion);
+
+                    String color = switch (crux.getCategory()){
+                        case HARMFUL -> "<red>";
+                        default -> "<blue>";
+                    };
+
                     for(String s : format){
                         list.add(
                             s.replace("<potion_name>", crux.getName())
@@ -54,6 +60,7 @@ public class PotionsLoreTag extends ObjectTag<ItemStack> {
                                 .replace("<potion_amplifier>", potion.getAmplifier() + "")
                                 .replace("<potion_formatted>", formatted)
                                 .replace("<potion_duration_formatted>", ActivePotion.formatDuration(potion.getDuration()))
+                                .replace("<potion_category_color>", color)
                         );
                     }
                 });
