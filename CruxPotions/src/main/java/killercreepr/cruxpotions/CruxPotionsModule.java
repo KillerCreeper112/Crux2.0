@@ -7,6 +7,7 @@ import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.cruxpotions.command.CruxPotionCommands;
 import killercreepr.cruxpotions.config.Config;
 import killercreepr.cruxpotions.data.PotionHolder;
+import killercreepr.cruxpotions.listener.PlayerDataListener;
 import killercreepr.cruxpotions.listener.PotionListener;
 import killercreepr.cruxpotions.persistence.PotionPersistTags;
 import killercreepr.cruxpotions.potions.ActivePotion;
@@ -37,7 +38,8 @@ public class CruxPotionsModule implements CruxModule {
     }
     @Override
     public void onEnable(@NotNull CruxPlugin plugin) {
-        if(CruxRegistries.MODULES.containsKey("CruxConfigs")){
+        boolean cruxConfigs = CruxRegistries.MODULES.containsKey("CruxConfigs");
+        if(cruxConfigs){
             values(new Config(plugin, "module/enchant"));
         }else values(new DefaultValues());
 
@@ -51,6 +53,7 @@ public class CruxPotionsModule implements CruxModule {
         plugin.registerListeners(
                 new PotionListener(plugin, values)
         );
+        if(cruxConfigs) plugin.registerListeners(new PlayerDataListener(plugin, values));
 
         PotionPersistTags.register();
         CruxPotionCommands.register(plugin);

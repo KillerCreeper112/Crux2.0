@@ -4,7 +4,6 @@ import com.destroystokyo.paper.event.entity.WitchConsumePotionEvent;
 import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.crux.data.entity.PlayerMemory;
 import killercreepr.cruxpotions.CruxPotions;
-import killercreepr.cruxpotions.config.PlayerConfig;
 import killercreepr.cruxpotions.data.PotionHolder;
 import killercreepr.cruxpotions.persistence.CustomPotionHolder;
 import killercreepr.cruxpotions.persistence.PotionPersistTags;
@@ -16,8 +15,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,27 +33,6 @@ public class PotionListener implements Listener {
         PotionHolder data = EntityMemory.getDataHolder(event.getEntity(), PotionHolder.class);
         if(data != null && cfg.removePotionsUponDeath().value()){
             data.clearPotions();
-        }
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        if(!cfg.savePotionsUponQuit().value()) return;
-        Player p = event.getPlayer();
-        PlayerMemory memory = PlayerMemory.getOrCreate(p);
-        if(memory.getHolder(PotionHolder.KEY) instanceof PotionHolder data){
-            data.setPotions(new PlayerConfig(plugin, p.getUniqueId()).getPotions());
-        }
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerQuit(PlayerQuitEvent event) {
-        if(!cfg.savePotionsUponQuit().value()) return;
-        Player p = event.getPlayer();
-        PotionHolder data = PlayerMemory.getDataHolder(p, PotionHolder.class);
-        if(data != null){
-            data.stopPotions();
-            new PlayerConfig(plugin, p.getUniqueId()).savePotions(data.getActiveEffects()).save();
         }
     }
 
