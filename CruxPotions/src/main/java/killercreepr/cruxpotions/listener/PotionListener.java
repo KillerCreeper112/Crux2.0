@@ -68,6 +68,7 @@ public class PotionListener implements Listener {
         applyPotion(p, event.getPotion());
     }
 
+    //todo make duration based on distance of the entity.
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onPotionSplash(PotionSplashEvent event) {
         if(event.getAffectedEntities().isEmpty()) return;
