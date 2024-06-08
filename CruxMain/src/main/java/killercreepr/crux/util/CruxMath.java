@@ -11,12 +11,17 @@ import redempt.crunch.functional.EvaluationEnvironment;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class CruxMath {
     public static final Random RANDOM = new Random();
+    public static final NumberFormat DECIMAL_FORMAT = new DecimalFormat("#,###.#");
+    public static @NotNull String format(@NotNull Number number){
+        return DECIMAL_FORMAT.format(number);
+    }
 
     public static boolean hasOccurredWithin(long value, int ticks){
         return (System.currentTimeMillis() - (50L * ticks)) <= value;

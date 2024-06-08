@@ -5,6 +5,7 @@ import killercreepr.crux.item.ItemUpdater;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registries.CruxRegistries;
+import killercreepr.cruxitems.command.CruxItemsCommands;
 import killercreepr.cruxitems.config.Config;
 import killercreepr.cruxitems.item.CruxedItem;
 import killercreepr.cruxitems.item.GeneralCruxedItemDisplayUpdater;
@@ -50,6 +51,8 @@ public class CruxItemsModule implements CruxModule, ItemUpdater {
         }else values(new DefaultValues());
 
         Crux.setItemUpdater(this);
+
+        CruxItemsCommands.register(plugin);
     }
 
     @Override
