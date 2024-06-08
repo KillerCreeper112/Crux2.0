@@ -17,10 +17,10 @@ public abstract class GenericPluginItem implements PluginItem{
 
     @Override
     public @NotNull ItemStack buildItem(@Nullable Entity holder, @Nullable StringHookContainer tags) {
-        return new CruxItem(buildGeneric(holder, tags)).displayName(CruxString.toTitleCase(key.value())).item();
+        return buildGeneric(holder, tags).displayName(CruxString.toTitleCase(key.value())).item();
     }
 
-    public abstract @NotNull ItemStack buildGeneric(@Nullable Entity holder, @Nullable StringHookContainer stringHookContainer);
+    public abstract @NotNull CruxItem buildGeneric(@Nullable Entity holder, @Nullable StringHookContainer stringHookContainer);
 
     @Override
     public @NotNull Key key() {

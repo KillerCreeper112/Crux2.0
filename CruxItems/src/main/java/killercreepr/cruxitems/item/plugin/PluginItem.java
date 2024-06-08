@@ -17,6 +17,6 @@ public interface PluginItem extends Keyed, ItemBuilder {
         return build(holder, null);
     }
     default @NotNull CruxedItem build(){
-        return build(null, null);
+        return build(null);
     }
 }
