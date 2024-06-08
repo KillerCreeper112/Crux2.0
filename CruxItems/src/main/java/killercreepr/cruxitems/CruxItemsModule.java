@@ -18,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+//todo make plugin items not count in vanilla recipes
 public class CruxItemsModule implements CruxModule, ItemUpdater {
     public static final String NAMESPACE = "CruxItems";
     @Override
