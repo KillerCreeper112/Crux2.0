@@ -8,6 +8,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class StaticLocation extends DynamicLocation{
+    public static @NotNull StaticLocation from(@NotNull Location location){
+        return new StaticLocation(location, null);
+    }
     public StaticLocation(@NotNull Block block, @Nullable DynamicInfo info) {
         super(block.getLocation(), info);
     }
@@ -16,6 +19,9 @@ public class StaticLocation extends DynamicLocation{
         super(entity.getLocation(), info);
     }
 
+    public StaticLocation(Location loc){
+        this(loc, null);
+    }
     public StaticLocation(Location loc, @Nullable DynamicInfo info) {
         super(loc, info);
     }

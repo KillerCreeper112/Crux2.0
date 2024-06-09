@@ -7,6 +7,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class EntityLocation extends DynamicLocation{
+    public static @NotNull EntityLocation from(@NotNull Entity e){
+        return new EntityLocation(e);
+    }
+
     protected final @NotNull Holder<Entity> entity;
     public EntityLocation(@NotNull Entity e, @Nullable DynamicInfo info){
         super(e.getLocation(), info);
