@@ -8,7 +8,8 @@ public class ModelEntity extends DesignEntity implements IModelEntity{
     protected @NotNull ActiveModel model;
     public ModelEntity(@NotNull Entity entity, @NotNull String modelID) {
         super(entity);
-        model = getModelOrThrow(modelID);
+        model = attemptAddModel(modelID, true).orElseThrow(()->
+            new RuntimeException("Model of " + modelID + " could not be added to " + entity.getName() + "!"));
     }
     public ModelEntity(@NotNull Entity entity, @NotNull ActiveModel model) {
         super(entity);
