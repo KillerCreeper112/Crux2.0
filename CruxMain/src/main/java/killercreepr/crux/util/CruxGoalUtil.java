@@ -1,9 +1,15 @@
 package killercreepr.crux.util;
 
+import com.destroystokyo.paper.entity.ai.Goal;
+import com.destroystokyo.paper.entity.ai.GoalKey;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Mob;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
+import java.util.function.Function;
 
 public class CruxGoalUtil {
     public static @NotNull Location findRandomAwayLocation(@NotNull Location center, @NotNull Location current, double range, double maxAngleDegrees) {
@@ -98,5 +104,28 @@ public class CruxGoalUtil {
         double newZ = current.getZ() + dz;
 
         return new Location(center.getWorld(), newX, newY, newZ);
+    }
+
+    public static <T extends Goal<Mob>> @NotNull T getOrAddGoal(@NotNull Mob mob, @NotNull Class<T> clazz, @NotNull GoalKey<Mob> key, int priority,
+                                                                   @NotNull Function<Mob, Goal<Mob>> notFoundFunction){
+        Goal<Mob> goal = Bukkit.getMobGoals().getGoal(mob, key);
+        if(goal == null){
+            goal = notFoundFunction.apply(mob);
+            Bukkit.getMobGoals().addGoal(mob, priority, goal);
+        }
+        return clazz.cast(goal);
+    }
+
+    /**
+     * @param clazz This class must have a public constructor that takes in a single mob argument.
+     */
+    public static <T extends Goal<Mob>> @NotNull T getOrAddGoal(@NotNull Mob mob, @NotNull Class<T> clazz, @NotNull GoalKey<Mob> key, int priority){
+        return getOrAddGoal(mob, clazz, key, priority, (m) ->{
+            try{
+                return clazz.getConstructor(Mob.class).newInstance(mob);
+            }catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ignored){
+                throw new RuntimeException(clazz.getSimpleName() + " does not have a constructor that takes in 1 single mob argument!");
+            }
+        });
     }
 }
