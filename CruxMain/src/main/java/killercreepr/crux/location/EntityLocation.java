@@ -18,7 +18,7 @@ public class EntityLocation extends DynamicLocation{
     }
 
     @Override
-    public @Nullable Location value() {
+    public @NotNull Location value() {
         Entity entity = this.entity.value();
         Location l = entity != null ? entity.getLocation() : this.clone();
         if(info != null) return info.apply(l);

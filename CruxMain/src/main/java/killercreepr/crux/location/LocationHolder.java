@@ -1,7 +1,7 @@
 package killercreepr.crux.location;
 
-import killercreepr.crux.data.Holder;
+import killercreepr.crux.data.NotNullHolder;
 import org.bukkit.Location;
 
-public interface LocationHolder extends Holder<Location> {
+public interface LocationHolder extends NotNullHolder<Location> {
 }

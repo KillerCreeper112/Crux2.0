@@ -29,7 +29,7 @@ public class StaticLocation extends DynamicLocation{
     }
 
     @Override
-    public @Nullable Location value() {
+    public @NotNull Location value() {
         return info == null ? this : info.apply(this.clone());
     }
 }
