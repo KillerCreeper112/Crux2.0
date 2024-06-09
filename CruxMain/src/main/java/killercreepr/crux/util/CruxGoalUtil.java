@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Mob;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 import java.util.function.Function;
@@ -124,8 +125,20 @@ public class CruxGoalUtil {
             try{
                 return clazz.getConstructor(Mob.class).newInstance(mob);
             }catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ignored){
-                throw new RuntimeException(clazz.getSimpleName() + " does not have a constructor that takes in 1 single mob argument!");
+                throw new UnsupportedOperationException(clazz.getSimpleName() + " does not have a constructor that takes in 1 single mob argument!");
             }
         });
+    }
+    /**
+     * @param clazz This class must have a public constructor that takes in a single mob argument AND
+     *              a public static GoalKey KEY variable.
+     */
+    public static <T extends Goal<Mob>> @NotNull T getOrAddGoal(@NotNull Mob mob, @NotNull Class<T> clazz, int priority){
+        try{
+            Field field = clazz.getDeclaredField("KEY");
+            return getOrAddGoal(mob, clazz, (GoalKey<Mob>) field.get(null), priority);
+        }catch (NoSuchFieldException | IllegalAccessException ignored){
+            throw new UnsupportedOperationException(clazz.getSimpleName() + " does not have a static GoalKey<Mob> KEY variable!");
+        }
     }
 }
