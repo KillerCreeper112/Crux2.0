@@ -4,6 +4,7 @@ import com.destroystokyo.paper.entity.ai.GoalKey;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import killercreepr.cruxentities.entity.mob.goal.CruxMobGoal;
 import killercreepr.cruxentities.modelengine.wrapper.IModelEntity;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Mob;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,5 +30,10 @@ public class CruxMobModeledGoal extends CruxMobGoal implements IModelEntity {
     public CruxMobModeledGoal setModel(@Nullable ActiveModel model) {
         this.model = model;
         return this;
+    }
+
+    @Override
+    public @NotNull Entity entity() {
+        return mob;
     }
 }
