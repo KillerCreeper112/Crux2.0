@@ -1,5 +1,6 @@
 package killercreepr.cruxentities.command;
 
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -52,6 +53,15 @@ public class CruxEntitiesCommands {
                                     ctx.getArgument("location", BlockPositionResolver.class).resolve(ctx.getSource()),
                                     1
                                 ))
+                                .then(
+                                    Commands.argument("amount", IntegerArgumentType.integer(1))
+                                        .executes(ctx -> spawn(
+                                            ctx.getSource(),
+                                            ctx.getArgument("entity", CruxMob.class),
+                                            ctx.getArgument("location", BlockPositionResolver.class).resolve(ctx.getSource()),
+                                            ctx.getArgument("amount", Integer.class)
+                                        ))
+                                )
                         )
                 )
         )
@@ -70,7 +80,7 @@ public class CruxEntitiesCommands {
 
     public static int spawn(@NotNull CommandSourceStack source, @NotNull CruxMob mob, @NotNull Location spawn, int amount){
         for(int i = amount; i > 0; i--){
-            amount--;
+            i--;
             mob.spawn(spawn);
         }
         new MsgContainer("Spawned " + amount + " " + mob.getName() + "'s at " +
