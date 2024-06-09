@@ -8,9 +8,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class StaticLocation extends DynamicLocation{
-    public static @NotNull StaticLocation from(@NotNull Location location){
-        return new StaticLocation(location, null);
-    }
     public StaticLocation(@NotNull Block block, @Nullable DynamicInfo info) {
         super(block.getLocation(), info);
     }
