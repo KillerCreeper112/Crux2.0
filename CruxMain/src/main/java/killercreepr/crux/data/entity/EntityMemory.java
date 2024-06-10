@@ -150,23 +150,23 @@ public class EntityMemory implements Holder<Entity> {
         Entity e = value();
         holders.values().removeIf(x ->{
             if(x.shouldRemoveFromMemory(e)){
-                x.removing();
+                x.removing(e);
                 return true;
             }
             if(e != null) x.tick(e);
             return false;
         });
         if(shouldRemoveFromMemory(e)){
-            removeDataHolders(true);
+            removeDataHolders(e, true);
             return true;
         }
         return false;
     }
 
-    public void removeDataHolders(boolean parent){
+    public void removeDataHolders(@Nullable Entity e, boolean parent){
         for(DataHolder h : holders.values()){
-            if(parent) h.parentRemoving();
-            else h.removing();
+            if(parent) h.parentRemoving(e);
+            else h.removing(e);
         }
     }
 

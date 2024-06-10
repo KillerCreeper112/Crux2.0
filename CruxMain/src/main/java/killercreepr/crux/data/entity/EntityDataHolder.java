@@ -18,20 +18,20 @@ public abstract class EntityDataHolder implements DataHolder{
         return false;
     }
 
-    protected void removingFromMemory(){}
+    protected void removingFromMemory(@Nullable Entity e){}
 
 
     @Override
     public void tick(@NotNull Entity e) {}
 
     @Override
-    public void removing() {
-         removingFromMemory();
+    public void removing(@Nullable Entity e) {
+         removingFromMemory(e);
     }
 
     @Override
-    public void parentRemoving() {
-        removingFromMemory();
+    public void parentRemoving(@Nullable Entity e) {
+        removingFromMemory(e);
     }
 
     @Override

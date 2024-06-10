@@ -66,7 +66,7 @@ public class PlayerMemory extends EntityMemory {
         Player e = value();
         holders.values().removeIf(x ->{
             if(x.shouldRemoveFromMemory(e)){
-                x.removing();
+                x.removing(e);
                 return true;
             }
             if(e != null) x.tick(e);
@@ -74,15 +74,15 @@ public class PlayerMemory extends EntityMemory {
         });
         playerSpecificHolders.values().removeIf(x ->{
             if(x.shouldRemoveFromMemory(e)){
-                x.removing();
+                x.removing(e);
                 return true;
             }
             if(e != null) x.tick(e);
             return false;
         });
         if(shouldRemoveFromMemory(e)){
-            holders.values().forEach(DataHolder::parentRemoving);
-            playerSpecificHolders.values().forEach(DataHolder::parentRemoving);
+            holders.values().forEach(data -> data.parentRemoving(e));
+            playerSpecificHolders.values().forEach(data -> data.parentRemoving(e));
             return true;
         }
         return false;

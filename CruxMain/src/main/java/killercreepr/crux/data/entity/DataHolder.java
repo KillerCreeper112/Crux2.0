@@ -12,10 +12,10 @@ public interface DataHolder extends Keyed {
     /**
      * Called when the DataHolder is removed due to shouldRemovedFromMemory being true.
      */
-    void removing();
+    void removing(@Nullable Entity e);
 
     /**
      * Called when the parent (the object holding the DataHolder) is getting removed from memory.
      */
-    void parentRemoving();
+    void parentRemoving(@Nullable Entity e);
 }

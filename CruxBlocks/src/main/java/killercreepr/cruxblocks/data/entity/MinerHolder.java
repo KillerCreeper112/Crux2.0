@@ -7,9 +7,9 @@ import killercreepr.crux.util.CruxMath;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.manager.CruxBlockManager;
 import net.kyori.adventure.key.Key;
-import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,6 +34,13 @@ public class MinerHolder extends PlayerDataHolder {
         if(hasMinedWithin(5)) return;
         lastMine = null;
         resetBreakSpeed(e);
+    }
+
+    @Override
+    protected void removingFromMemory(@Nullable Entity e) {
+        super.removingFromMemory(e);
+        if(!(e instanceof Player p)) return;
+        resetBreakSpeed(p);
     }
 
     public void resetBreakSpeed(@NotNull Player p){
@@ -73,10 +80,12 @@ public class MinerHolder extends PlayerDataHolder {
         if(lastBreakSpeed == null){
             lastBreakSpeed = p.getAttribute(Attribute.PLAYER_BLOCK_BREAK_SPEED).getBaseValue();
         }
-        setMineSpeed(p, 1D - mineSpeed);
+        setMineSpeed(p, mineSpeed);
     }
 
     public void setMineSpeed(@NotNull Player p, double mineSpeed){
+        mineSpeed = 1D - mineSpeed;
+        if(mineSpeed < 0D) mineSpeed = Double.MAX_VALUE;
         p.getAttribute(Attribute.PLAYER_BLOCK_BREAK_SPEED).setBaseValue(mineSpeed);
     }
 

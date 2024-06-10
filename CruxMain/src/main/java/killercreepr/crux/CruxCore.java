@@ -14,7 +14,7 @@ public class CruxCore implements CruxModule {
     @Override
     public void onDisable(@NotNull CruxPlugin plugin) {
         for(EntityMemory data : EntityMemory.REGISTRY){
-            data.removeDataHolders(true);
+            data.removeDataHolders(data.value(),true);
         }
     }
 

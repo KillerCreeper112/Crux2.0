@@ -215,12 +215,12 @@ public class PotionHolder extends EntityDataHolder {
     }
 
     @Override
-    public void removing() {
+    public void removing(@Nullable Entity e) {
         clearPotions();
     }
 
     @Override
-    public void parentRemoving() {
+    public void parentRemoving(@Nullable Entity e) {
         clearPotions();
     }
 }
