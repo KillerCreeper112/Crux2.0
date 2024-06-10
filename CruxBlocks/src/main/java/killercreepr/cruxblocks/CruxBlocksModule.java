@@ -1,9 +1,8 @@
 package killercreepr.cruxblocks;
 
-import killercreepr.crux.Crux;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.plugin.CruxPlugin;
-import killercreepr.crux.registries.CruxRegistries;
+import killercreepr.cruxblocks.listener.CustomBlocksListener;
 import org.jetbrains.annotations.NotNull;
 
 public class CruxBlocksModule implements CruxModule {
@@ -15,6 +14,8 @@ public class CruxBlocksModule implements CruxModule {
 
     @Override
     public void onEnable(@NotNull CruxPlugin plugin) {
-
+        plugin.registerListeners(
+            new CustomBlocksListener()
+        );
     }
 }

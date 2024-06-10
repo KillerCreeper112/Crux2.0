@@ -1,5 +1,6 @@
 package killercreepr.cruxblocks.block.texture;
 
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
@@ -7,7 +8,10 @@ import org.bukkit.block.data.type.Tripwire;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Objects;
 
 public class WireTextureData implements TextureData {
     public static @NotNull Builder builder(){
@@ -98,6 +102,12 @@ public class WireTextureData implements TextureData {
         wire.setDisarmed(isDisarmed());
         wire.setPowered(isPowered());
         return data;
+    }
+
+    @Override
+    public void setBlock(@NotNull Block block, boolean applyPhysics) {
+        block.setType(Material.TRIPWIRE, false);
+        applyToBlock(block, applyPhysics);
     }
 
     public static final class Builder {

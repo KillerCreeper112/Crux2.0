@@ -22,4 +22,5 @@ public interface TextureData {
         return data;
     }
 
+    void setBlock(@NotNull Block block, boolean applyPhysics);
 }

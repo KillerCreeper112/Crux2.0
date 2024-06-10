@@ -13,6 +13,11 @@ public abstract class GenericBlock implements CruxBlock {
     }
 
     @Override
+    public @NotNull TextureData getTextureData() {
+        return textureData;
+    }
+
+    @Override
     public @NotNull Key key() {
         return key;
     }

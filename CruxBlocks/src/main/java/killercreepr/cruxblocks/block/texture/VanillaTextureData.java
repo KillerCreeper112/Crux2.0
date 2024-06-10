@@ -56,6 +56,12 @@ public class VanillaTextureData implements TextureData {
         return data;
     }
 
+    @Override
+    public void setBlock(@NotNull Block block, boolean applyPhysics) {
+        block.setType(material, applyPhysics);
+        applyToBlock(block, applyPhysics);
+    }
+
     public static final class Builder {
         private Material material;
 
