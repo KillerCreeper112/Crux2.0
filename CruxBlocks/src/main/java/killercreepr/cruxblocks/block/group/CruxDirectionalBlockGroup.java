@@ -1,29 +1,64 @@
 package killercreepr.cruxblocks.block.group;
 
+import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.CruxBlockDirectional;
-import net.kyori.adventure.key.Key;
+import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
+import killercreepr.cruxblocks.block.context.PlaceBlockContext;
 import org.bukkit.Axis;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public interface CruxDirectionalBlockGroup extends CruxBlockGroup{
-    @Nullable CruxBlockDirectional get(@NotNull BlockFace direction);
-    default@Nullable CruxBlockDirectional get(@NotNull Axis direction){
+    default@Nullable CruxBlockDirectional getBlock(@NotNull Axis direction){
         return switch (direction){
-            case X -> get(BlockFace.EAST);
-            case Y -> get(BlockFace.UP);
-            case Z -> get(BlockFace.NORTH);
+            case X -> getBlock(BlockFace.EAST);
+            case Y -> getBlock(BlockFace.UP);
+            case Z -> getBlock(BlockFace.NORTH);
         };
     }
 
-    boolean isOrientable();
-    @Nullable CruxBlockDirectional getBlock(BlockFace direction);
+    default @NotNull Set<BlockFace> getFaces() {
+        Set<BlockFace> faces = new HashSet<>();
+        for(CruxBlock block : this){
+            CruxBlockDirectional directional = (CruxBlockDirectional) block;
+            faces.add(directional.getDirection());
+        }
+        return faces;
+    }
 
-    @Nullable CruxBlockDirectional getBlock(@NotNull Key key);
-    @Nullable CruxBlockDirectional getBlock(@NotNull BlockData data);
-    @Nullable CruxBlockDirectional getBlock(@NotNull Block block);
-    @NotNull CruxBlockDirectional getBaseBlock();
+    default @NotNull BlockFace getFace(float pitch, @NotNull BlockFace face){
+        Set<BlockFace> faces = getFaces();
+        if(isOrientable()){
+            return switch (face){
+                case DOWN, UP -> BlockFace.UP;
+                case WEST, EAST -> BlockFace.EAST;
+                default -> BlockFace.NORTH;
+            };
+        }
+        if(faces.contains(BlockFace.UP) && pitch <= -45) face = BlockFace.DOWN;
+        if(faces.contains(BlockFace.DOWN) && pitch >= 45) face = BlockFace.UP;
+        return faces.contains(face) ? face : face.getOppositeFace();
+    }
+
+    @Override
+    default @Nullable ActiveCruxBlock placeBlock(@NotNull PlaceBlockContext ctx) {
+        CruxBlock base = getBaseBlock();
+        if(!(ctx.getUser() instanceof LivingEntity p)) return base.placeBlock(ctx);
+        BlockFace blockFace = ctx.getBlockFace();
+        float pitch = p.getLocation().getPitch();
+        BlockFace face = isOrientable() ? blockFace.getOppositeFace() : p.getFacing().getOppositeFace();
+        face = getFace(pitch, face);
+
+        CruxBlockDirectional toPlace = getBlock(face);
+        if(toPlace==null) return null;
+        return toPlace.placeBlock(ctx);
+    }
+
+    boolean isOrientable();
+    @Nullable CruxBlockDirectional getBlock(@NotNull BlockFace direction);
 }

@@ -1,6 +1,8 @@
 package killercreepr.cruxblocks.block.group;
 
 import killercreepr.cruxblocks.block.CruxBlock;
+import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
+import killercreepr.cruxblocks.block.context.PlaceBlockContext;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import org.bukkit.block.Block;
@@ -20,10 +22,12 @@ public interface CruxBlockGroup extends Keyed, Iterable<CruxBlock> {
     @Nullable CruxBlock getBlock(@NotNull Block block);
     @NotNull CruxBlock getBaseBlock();
     @NotNull Collection<CruxBlock> getBlocks();
-
     @NotNull
     @Override
     default Iterator<CruxBlock> iterator(){
         return getBlocks().iterator();
     }
+
+    @Nullable
+    ActiveCruxBlock placeBlock(@NotNull PlaceBlockContext context);
 }

@@ -2,10 +2,7 @@ package killercreepr.cruxblocks.block.active;
 
 import killercreepr.cruxblocks.block.CruxBlock;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class ActiveCruxBlockImpl implements ActiveCruxBlock{
     protected final @NotNull Block block;

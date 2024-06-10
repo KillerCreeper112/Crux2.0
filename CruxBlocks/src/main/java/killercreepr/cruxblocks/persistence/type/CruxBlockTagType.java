@@ -1,4 +1,4 @@
-package killercreepr.cruxblocks.persistence;
+package killercreepr.cruxblocks.persistence.type;
 
 import killercreepr.crux.Crux;
 import killercreepr.cruxblocks.block.CruxBlock;

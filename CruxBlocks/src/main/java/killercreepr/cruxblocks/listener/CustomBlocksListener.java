@@ -2,8 +2,9 @@ package killercreepr.cruxblocks.listener;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.util.CruxLoc;
-import killercreepr.cruxblocks.block.CruxBlock;
-import killercreepr.cruxblocks.block.context.GenericBlockContext;
+import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
+import killercreepr.cruxblocks.block.context.PlaceBlockContextImpl;
+import killercreepr.cruxblocks.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.persistence.CruxBlocksPersistTags;
 import killercreepr.cruxblocks.util.CruxBlockUtil;
 import org.bukkit.GameMode;
@@ -101,6 +102,7 @@ public class CustomBlocksListener implements Listener {
         if((clickedBlock.getType() == Material.NOTE_BLOCK)){
             if(!p.isSneaking() || (p.isSneaking() && item == null)) event.setCancelled(true);
         }
+        BlockFace blockFace = event.getBlockFace();
 
         /*ActiveBlock customClicked = CustomBlock.getActiveBlock(clickedBlock);
         if(customClicked instanceof ActiveInteract i){
@@ -114,7 +116,7 @@ public class CustomBlocksListener implements Listener {
         }*/
         if((clickedBlock.getType() == Material.NOTE_BLOCK)){
             if(item != null && item.getType().isBlock() && event.useInteractedBlock() == Event.Result.DENY){
-                Block placeBlock = getPlaceBlock(clickedBlock, event.getBlockFace());
+                Block placeBlock = getPlaceBlock(clickedBlock, blockFace);
                 if(item.getType().isSolid()){
                     for(Entity e : clickedBlock.getWorld().getNearbyEntities(CruxBlockUtil.getBlockBox(placeBlock))){
                         if(e instanceof LivingEntity) return;
@@ -130,7 +132,7 @@ public class CustomBlocksListener implements Listener {
                     dir.setFacing(face);
                     placeBlock.setBlockData(dir);
                 }else if(placeBlock.getBlockData() instanceof Orientable o) {
-                    BlockFace face = event.getBlockFace().getOppositeFace();
+                    BlockFace face = blockFace.getOppositeFace();
                     o.setAxis(CruxLoc.convertBlockFaceToAxis(face));
                     placeBlock.setBlockData(o);
                 }else if(placeBlock.getBlockData() instanceof Rotatable r) {
@@ -153,10 +155,9 @@ public class CustomBlocksListener implements Listener {
         /*todo if(CruxBlocks.isInteractable(clickedBlock.getType()) && clickedBlock.getType() != Material.NOTE_BLOCK){
             if(!p.isSneaking() || (p.isSneaking() && item == null)) return;
         }*/
-        CruxBlock block = CruxBlocksPersistTags.CRUX_BLOCK.get(item);
-        if(block == null) return;
-        CruxBlock defaultBlock = block;
-        Block placeBlock = getPlaceBlock(clickedBlock, event.getBlockFace());
+        CruxBlockGroup group = CruxBlocksPersistTags.CRUX_BLOCK_GROUP.get(item);
+        if(group == null) return;
+        Block placeBlock = getPlaceBlock(clickedBlock, blockFace);
         if(!placeBlock.isEmpty() && !placeBlock.isReplaceable()) return;
         //Check for entities in block.
         for(Entity e : clickedBlock.getWorld().getNearbyEntities(CruxBlockUtil.getBlockBox(placeBlock))){
@@ -165,9 +166,8 @@ public class CustomBlocksListener implements Listener {
         new BukkitRunnable(){
             @Override
             public void run() {
-                defaultBlock.placeBlock(new GenericBlockContext(placeBlock, p));
-                //ActiveBlock placed = defaultBlock.placeBlock(p, placeBlock);
-                //todo if(placed == null) return;
+                ActiveCruxBlock placed = group.placeBlock(new PlaceBlockContextImpl(placeBlock, p, blockFace));
+                if(placed == null) return;
 
                 if(p.getGameMode() != GameMode.CREATIVE) item.setAmount(item.getAmount() - 1);
                 p.swingMainHand();

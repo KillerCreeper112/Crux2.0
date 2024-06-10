@@ -1,6 +1,8 @@
 package killercreepr.cruxblocks.block.group;
 
 import killercreepr.cruxblocks.block.CruxBlock;
+import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
+import killercreepr.cruxblocks.block.context.PlaceBlockContext;
 import net.kyori.adventure.key.Key;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -45,6 +47,11 @@ public class SingularBlockGroup implements CruxBlockGroup{
     @Override
     public @NotNull Collection<CruxBlock> getBlocks() {
         return List.of(block);
+    }
+
+    @Override
+    public @Nullable ActiveCruxBlock placeBlock(@NotNull PlaceBlockContext context) {
+        return block.placeBlock(context);
     }
 
     @Override

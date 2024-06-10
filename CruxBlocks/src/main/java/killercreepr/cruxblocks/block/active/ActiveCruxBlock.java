@@ -1,17 +1,14 @@
 package killercreepr.cruxblocks.block.active;
 
-import killercreepr.crux.location.DynamicLocation;
 import killercreepr.cruxblocks.block.CruxBlock;
-import killercreepr.cruxblocks.block.context.GenericBlockContext;
+import killercreepr.cruxblocks.block.context.BlockContextImpl;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -70,7 +67,7 @@ public interface ActiveCruxBlock {
     boolean isValid();
 
     default void update(){
-        if(getCruxBlock().canPlace(new GenericBlockContext(getBlock(), null))) return;
+        if(getCruxBlock().canPlace(new BlockContextImpl(getBlock(), null))) return;
         breakBlock(null);
     }
 

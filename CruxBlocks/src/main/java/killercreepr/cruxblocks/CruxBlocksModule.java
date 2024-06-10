@@ -1,6 +1,5 @@
 package killercreepr.cruxblocks;
 
-import killercreepr.crux.Crux;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.util.CruxEntity;
@@ -37,7 +36,7 @@ public class CruxBlocksModule implements CruxModule {
     public @Nullable ActiveCruxBlock getActiveBlock(@NotNull Block at){
         if(activeBlocks.containsKey(at)) return activeBlocks.get(at);
 
-        
+
     }
 
     public @NotNull BukkitRunnable blockTick(){

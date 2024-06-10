@@ -8,20 +8,20 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public class VanillaTextureData implements TextureData {
+public class MaterialTextureData implements TextureData {
     public static @NotNull Builder builder(){
         return new Builder();
     }
 
     protected final @NotNull Material material;
-    public VanillaTextureData(@NotNull Material material) {
+    public MaterialTextureData(@NotNull Material material) {
         this.material = material;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if(!(o instanceof VanillaTextureData that)) return false;
+        if(!(o instanceof MaterialTextureData that)) return false;
         // Compare the data members and return accordingly
         return that.getMaterial() == material;
     }
@@ -48,7 +48,7 @@ public class VanillaTextureData implements TextureData {
 
     @Override
     public boolean compareTexture(@Nullable TextureData data) {
-        return data instanceof VanillaTextureData t && t.getMaterial() == material;
+        return data instanceof MaterialTextureData t && t.getMaterial() == material;
     }
 
     @Override
@@ -77,8 +77,8 @@ public class VanillaTextureData implements TextureData {
             return this;
         }
 
-        public VanillaTextureData build() {
-            return new VanillaTextureData(material);
+        public MaterialTextureData build() {
+            return new MaterialTextureData(material);
         }
     }
 }

@@ -5,10 +5,10 @@ import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class GenericBlockContext implements BlockContext{
+public class BlockContextImpl implements BlockContext{
     protected final @NotNull Block block;
     protected final @Nullable Entity user;
-    public GenericBlockContext(@NotNull Block block, @Nullable Entity user) {
+    public BlockContextImpl(@NotNull Block block, @Nullable Entity user) {
         this.block = block;
         this.user = user;
     }
