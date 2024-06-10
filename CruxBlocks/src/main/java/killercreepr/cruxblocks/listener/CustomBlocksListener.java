@@ -213,7 +213,7 @@ public class CustomBlocksListener implements Listener {
                 if(placed == null) return;
 
                 if(p.getGameMode() != GameMode.CREATIVE) item.setAmount(item.getAmount() - 1);
-                p.swingMainHand();
+                p.swingHand(event.getHand());
             }
         }.runTaskLater(Crux.getMainPlugin(), 1L);
     }

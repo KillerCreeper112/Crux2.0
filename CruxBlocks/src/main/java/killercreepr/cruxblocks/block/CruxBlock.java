@@ -1,5 +1,7 @@
 package killercreepr.cruxblocks.block;
 
+import killercreepr.crux.registries.CruxRegistries;
+import killercreepr.cruxblocks.CruxBlocksModule;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.block.context.BlockContext;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
@@ -44,19 +46,20 @@ public interface CruxBlock extends Keyed {
         if(!canPlace(ctx)) return null;
         CruxBlockPlaceEvent event = new CruxBlockPlaceEvent(this, ctx);
         if(!event.callEvent()) return null;
+        Block b = ctx.getBlock();
 
         TextureData data = getTextureData();
-        data.setBlock(ctx.getBlock(), applyPhysics);
-        //todo get active block and all that
-        /*ActiveBlock active = getActiveBlock(b);
+        data.setBlock(b, applyPhysics);
+        ActiveCruxBlock active = CruxRegistries.MODULES.getModuleOrThrow(CruxBlocksModule.class)
+            .getActiveBlock(ctx.getBlock());
         if(active != null){
             if(getSoundGroup() != null){
-                b.getWorld().playSound(b.getLocation(), getSoundGroup().getPlaceSound(), getSoundGroup().getVolume(), getSoundGroup().getPitch());
+                b.getWorld().playSound(b.getLocation().toCenterLocation(), getSoundGroup().getPlaceSound(), getSoundGroup().getVolume(), getSoundGroup().getPitch());
             }
-            active.placed(e);
+            active.placed(ctx);
             //if(active instanceof ActiveTickable) DP.blocks().addTickedBlock(active);
-        }*/
-        return null;
+        }
+        return active;
     }
 
     static @NotNull SoundGroup defaultSoundGroup(){

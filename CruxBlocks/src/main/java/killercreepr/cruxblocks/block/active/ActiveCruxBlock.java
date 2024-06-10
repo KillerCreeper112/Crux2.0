@@ -1,6 +1,7 @@
 package killercreepr.cruxblocks.block.active;
 
 import killercreepr.cruxblocks.block.CruxBlock;
+import killercreepr.cruxblocks.block.context.BlockContext;
 import killercreepr.cruxblocks.block.context.BlockContextImpl;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -20,8 +21,8 @@ import java.util.Collection;
  * Represents a crux block that is placed into the world.
  */
 public interface ActiveCruxBlock {
-    default void placed(@Nullable Entity e){}
-    default void broken(@Nullable Entity e){}
+    default void placed(@NotNull BlockContext ctx){}
+    default void broken(@NotNull BlockContext ctx){}
     @NotNull Block getBlock();
     @NotNull
     CruxBlock getCruxBlock();
