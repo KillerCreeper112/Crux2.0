@@ -31,7 +31,7 @@ public class MinerHolder extends PlayerDataHolder {
     @Override
     public void tick(@NotNull Player e) {
         if(lastMine == null) return;
-        if(hasMinedWithin(5)) return;
+        if(hasMinedWithin(2)) return;
         lastMine = null;
         resetBreakSpeed(e);
     }
@@ -60,17 +60,11 @@ public class MinerHolder extends PlayerDataHolder {
     }
 
     public void onMine(@NotNull Player p, @Nullable Block block){
-        if(block == null){
-            lastMine = null;
-            resetBreakSpeed(p);
-            return;
-        }
+        lastMine = null;
+        resetBreakSpeed(p);
+        if(block == null) return;
         ActiveCruxBlock active = blockManager.getActiveBlock(block);
-        if(active== null){
-            lastMine = null;
-            resetBreakSpeed(p);
-            return;
-        }
+        if(active== null) return;
         onMine(p, active);
     }
 
@@ -98,7 +92,19 @@ public class MinerHolder extends PlayerDataHolder {
         return lastMine;
     }
 
-    public void setLastMine(long lastMine) {
+    public @NotNull CruxBlockManager getBlockManager() {
+        return blockManager;
+    }
+
+    public @Nullable Double getLastBreakSpeed() {
+        return lastBreakSpeed;
+    }
+
+    public void setLastBreakSpeed(@Nullable Double lastBreakSpeed) {
+        this.lastBreakSpeed = lastBreakSpeed;
+    }
+
+    public void setLastMine(@Nullable Long lastMine) {
         this.lastMine = lastMine;
     }
 }

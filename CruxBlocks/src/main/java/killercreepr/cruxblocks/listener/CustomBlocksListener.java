@@ -27,9 +27,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockDropItemEvent;
-import org.bukkit.event.block.NotePlayEvent;
+import org.bukkit.event.block.*;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerAnimationType;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -40,6 +38,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+//todo the block breaking speed is wack
 public class CustomBlocksListener implements Listener {
     protected final @NotNull CruxBlockManager manager;
     public CustomBlocksListener(@NotNull CruxBlockManager manager) {
@@ -97,6 +96,23 @@ public class CustomBlocksListener implements Listener {
         data.onMine(p);
     }
 
+    @EventHandler(ignoreCancelled = true)
+    public void onBlockDamage(BlockDamageEvent event) {
+        Player p = event.getPlayer();
+        MinerHolder data = PlayerMemory.getOrCreateDataHolder(p, MinerHolder.class);
+        if(data==null) return;
+        data.onMine(p, event.getBlock());
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onBlockDamageAbort(BlockDamageAbortEvent event) {
+        Player p = event.getPlayer();
+        MinerHolder data = PlayerMemory.getOrCreateDataHolder(p, MinerHolder.class);
+        if(data==null) return;
+        data.setLastMine(null);
+        data.resetBreakSpeed(p);
+    }
+
     private Block getPlaceBlock(Block clicked, BlockFace blockFace){
         if (REPLACE.contains(clicked.getType()) ||
                 (clicked.getType().equals(Material.SNOW) && ((Snow) clicked.getBlockData()).getLayers() == 1)) return clicked;
@@ -117,6 +133,9 @@ public class CustomBlocksListener implements Listener {
         Block clickedBlock = event.getClickedBlock();
         if(event.getAction().isLeftClick() && clickedBlock != null){
             if(p.getGameMode() == GameMode.CREATIVE) return;
+            MinerHolder data = PlayerMemory.getOrCreateDataHolder(p, MinerHolder.class);
+            if(data==null) return;
+            data.onMine(p, clickedBlock);
             /*ActiveBlock data = CustomBlock.getActiveBlock(clickedBlock);
             if(data != null) event.setCancelled(true);*/
             return;
