@@ -7,6 +7,7 @@ import killercreepr.crux.util.CruxMath;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.manager.CruxBlockManager;
 import net.kyori.adventure.key.Key;
+import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -72,7 +73,7 @@ public class MinerHolder extends PlayerDataHolder {
         if(lastBreakSpeed == null){
             lastBreakSpeed = p.getAttribute(Attribute.PLAYER_BLOCK_BREAK_SPEED).getBaseValue();
         }
-        setMineSpeed(p, mineSpeed);
+        setMineSpeed(p, 1D - mineSpeed);
     }
 
     public void setMineSpeed(@NotNull Player p, double mineSpeed){

@@ -2,6 +2,7 @@ package killercreepr.cruxblocks.block.active;
 
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.context.BlockContextImpl;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -99,9 +100,9 @@ public interface ActiveCruxBlock {
             if(lE.hasPotionEffect(PotionEffectType.HASTE)){
                 speedMultiplier *= 0.2f * (lE.getPotionEffect(PotionEffectType.HASTE).getAmplifier() + 1f);
             }
-            /*if(lE.hasPotionEffect(PotionEffectType.SLOW_DIGGING)){
-                speedMultiplier *= Math.pow(.3f, Math.min(lE.getPotionEffect(PotionEffectType.SLOW_DIGGING).getAmplifier(), 4));
-            }*/
+            if(lE.hasPotionEffect(PotionEffectType.MINING_FATIGUE)){
+                speedMultiplier *= Math.pow(.3f, Math.min(lE.getPotionEffect(PotionEffectType.MINING_FATIGUE).getAmplifier(), 4));
+            }
             if(lE.getEyeLocation().getBlock().getType() == Material.WATER /*&& doesNotHaveAquaAffinity*/){
                 speedMultiplier /= 5f;
             }
