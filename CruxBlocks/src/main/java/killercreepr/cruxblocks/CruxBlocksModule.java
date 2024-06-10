@@ -1,9 +1,12 @@
 package killercreepr.cruxblocks;
 
+import killercreepr.crux.data.entity.EntityMemory;
+import killercreepr.crux.data.entity.PlayerMemory;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
+import killercreepr.cruxblocks.data.entity.MinerHolder;
 import killercreepr.cruxblocks.listener.CustomBlocksListener;
 import killercreepr.cruxblocks.manager.CruxBlockManager;
 import killercreepr.cruxblocks.registeries.CruxBlocksRegistries;
@@ -29,6 +32,11 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager {
         plugin.registerListeners(
             new CustomBlocksListener(this)
         );
+
+        EntityMemory.registerFunction(plugin, e ->{
+            if(!(e instanceof PlayerMemory p)) return;
+            p.getHolders().register(new MinerHolder(p, this));
+        });
     }
 
     @Override

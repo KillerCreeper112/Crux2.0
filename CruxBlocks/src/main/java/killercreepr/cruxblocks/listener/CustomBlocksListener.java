@@ -1,12 +1,14 @@
 package killercreepr.cruxblocks.listener;
 
 import killercreepr.crux.Crux;
+import killercreepr.crux.data.entity.PlayerMemory;
 import killercreepr.crux.util.CruxLoc;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxInteractable;
 import killercreepr.cruxblocks.block.context.PlaceBlockContextImpl;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
+import killercreepr.cruxblocks.data.entity.MinerHolder;
 import killercreepr.cruxblocks.manager.CruxBlockManager;
 import killercreepr.cruxblocks.persistence.CruxBlocksPersistTags;
 import killercreepr.cruxblocks.util.CruxBlockUtil;
@@ -28,6 +30,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.NotePlayEvent;
+import org.bukkit.event.player.PlayerAnimationEvent;
+import org.bukkit.event.player.PlayerAnimationType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -83,6 +87,16 @@ public class CustomBlocksListener implements Listener {
         }
     }
 
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerAnimation(PlayerAnimationEvent event) {
+        Player p = event.getPlayer();
+        if(event.getAnimationType() != PlayerAnimationType.ARM_SWING) return;
+
+        MinerHolder data = PlayerMemory.getOrCreateDataHolder(p, MinerHolder.class);
+        if(data==null) return;
+        data.onMine(p);
+    }
+
     private Block getPlaceBlock(Block clicked, BlockFace blockFace){
         if (REPLACE.contains(clicked.getType()) ||
                 (clicked.getType().equals(Material.SNOW) && ((Snow) clicked.getBlockData()).getLayers() == 1)) return clicked;
@@ -99,13 +113,7 @@ public class CustomBlocksListener implements Listener {
             return;
         }
         Player p = event.getPlayer();
-        if(interactCooldowns.getOrDefault(p.getUniqueId(), 0L) > System.currentTimeMillis()){
-            Block clickedBlock = event.getClickedBlock();
-            if(clickedBlock == null) return;
-            if(clickedBlock.getType() == Material.NOTE_BLOCK || clickedBlock.getType() == Material.TRIPWIRE) event.setCancelled(true);
-            return;
-        }
-        interactCooldowns.put(p.getUniqueId(), System.currentTimeMillis() + (50L));
+
         Block clickedBlock = event.getClickedBlock();
         if(event.getAction().isLeftClick() && clickedBlock != null){
             if(p.getGameMode() == GameMode.CREATIVE) return;
