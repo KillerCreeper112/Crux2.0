@@ -1,10 +1,17 @@
 package killercreepr.cruxblocks.block.active;
 
+import killercreepr.crux.location.DynamicLocation;
 import killercreepr.cruxblocks.block.CruxBlock;
+import killercreepr.cruxblocks.block.context.GenericBlockContext;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +29,36 @@ public interface ActiveCruxBlock {
     @NotNull
     CruxBlock getCruxBlock();
 
-    void breakBlock(@Nullable Entity e, @Nullable ItemStack tool);
+    default void breakBlock(@Nullable Entity e, @Nullable ItemStack tool){
+        Block block = getBlock();
+        Collection<ItemStack> drops = getDrops(e, tool);
+        /*CustomBlockBreakEvent event = new CustomBlockBreakEvent(this, e, tool, drops);
+        if(!event.callEvent()) return;*/
+        BlockData data = block.getBlockData();
+        //todo custom settype
+        getBlock().setType(Material.AIR);
+        CruxBlock custom = getCruxBlock();
+        if(custom.getSoundGroup() == null){
+            block.getWorld().playSound(block.getLocation().toCenterLocation(), Sound.BLOCK_WOOD_BREAK, 1f, 1f);
+        }else{
+            block.getWorld().playSound(block.getLocation().toCenterLocation(), custom.getSoundGroup().getBreakSound(),
+                custom.getSoundGroup().getVolume(), custom.getSoundGroup().getPitch());
+        }
+
+        /*todo new CreateWorldParticle(new CreateBlockData(Particle.BLOCK_CRACK, 20, data)
+            .values(.5, .5, .5, .1), new DynamicLocation(block.getLocation().toCenterLocation()))
+            .play();*/
+
+        if(drops != null){
+            Location x = block.getLocation().toCenterLocation().subtract(0, .5, 0);
+            for(ItemStack i : drops){
+                block.getWorld().dropItem(x, i);
+            }
+        }
+        /*todo if(e != null) GrimItem.damage(e, tool, 1, EquipmentSlot.HAND);
+        else GrimItem.damage(tool, 1);*/
+        return;
+    }
 
     default void breakBlock(@Nullable ItemStack tool){
         breakBlock(null, tool);
@@ -33,7 +69,10 @@ public interface ActiveCruxBlock {
      */
     boolean isValid();
 
-    void update();
+    default void update(){
+        if(getCruxBlock().canPlace(new GenericBlockContext(getBlock(), null))) return;
+        breakBlock(null);
+    }
 
     default boolean canHarvest(@Nullable Entity e, @Nullable ItemStack tool){
         return true;

@@ -2,6 +2,7 @@ package killercreepr.cruxblocks.block;
 
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.block.context.BlockContext;
+import killercreepr.cruxblocks.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.block.texture.TextureData;
 import killercreepr.cruxblocks.event.CruxBlockPlaceEvent;
 import net.kyori.adventure.key.Keyed;
@@ -16,6 +17,7 @@ public interface CruxBlock extends Keyed {
     @NotNull ActiveCruxBlock createActive(@NotNull Block block);
     float getHardness();
     @NotNull TextureData getTextureData();
+    @Nullable CruxBlockGroup getGroup();
 
     default @Nullable ActiveCruxBlock placeBlock(@NotNull BlockContext ctx){
         return placeBlock(ctx, true);
@@ -44,7 +46,7 @@ public interface CruxBlock extends Keyed {
         if(!event.callEvent()) return null;
 
         TextureData data = getTextureData();
-        data.applyToBlock(ctx.getBlock(), applyPhysics);
+        data.setBlock(ctx.getBlock(), applyPhysics);
         //todo get active block and all that
         /*ActiveBlock active = getActiveBlock(b);
         if(active != null){

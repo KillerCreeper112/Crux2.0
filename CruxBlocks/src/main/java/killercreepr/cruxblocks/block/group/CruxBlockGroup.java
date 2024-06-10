@@ -1,6 +1,8 @@
-package killercreepr.cruxblocks.block;
+package killercreepr.cruxblocks.block.group;
 
+import killercreepr.cruxblocks.block.CruxBlock;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.jetbrains.annotations.NotNull;
@@ -9,7 +11,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.Iterator;
 
-public interface CruxBlockGroup extends Iterable<CruxBlock> {
+/**
+ * Represents a group of blocks to pretty much fit everything together.
+ */
+public interface CruxBlockGroup extends Keyed, Iterable<CruxBlock> {
     @Nullable CruxBlock getBlock(@NotNull Key key);
     @Nullable CruxBlock getBlock(@NotNull BlockData data);
     @Nullable CruxBlock getBlock(@NotNull Block block);
