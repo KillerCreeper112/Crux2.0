@@ -2,12 +2,16 @@ package killercreepr.cruxblocks.listener;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.util.CruxLoc;
+import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
+import killercreepr.cruxblocks.block.active.ActiveCruxInteractable;
 import killercreepr.cruxblocks.block.context.PlaceBlockContextImpl;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
+import killercreepr.cruxblocks.manager.CruxBlockManager;
 import killercreepr.cruxblocks.persistence.CruxBlocksPersistTags;
 import killercreepr.cruxblocks.util.CruxBlockUtil;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -22,22 +26,29 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.NotePlayEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class CustomBlocksListener implements Listener {
-    private static final List<Material> REPLACE = List.of(Material.AIR, Material.CAVE_AIR, Material.VOID_AIR,
+    protected final @NotNull CruxBlockManager manager;
+    public CustomBlocksListener(@NotNull CruxBlockManager manager) {
+        this.manager = manager;
+    }
+
+    public @NotNull CruxBlockManager getManager() {
+        return manager;
+    }
+
+    private static final Collection<Material> REPLACE = Set.of(Material.AIR, Material.CAVE_AIR, Material.VOID_AIR,
             Material.SHORT_GRASS, Material.SEAGRASS, Material.WATER, Material.LAVA, Material.TALL_GRASS);
     private final static Map<UUID, Long> interactCooldowns = new HashMap<>();
-
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
@@ -49,23 +60,28 @@ public class CustomBlocksListener implements Listener {
         event.setCancelled(true);
     }
 
-    /*todo @EventHandler
+    @EventHandler
     private void blockDrop(BlockDropItemEvent event){
         Player p = event.getPlayer();
-        ActiveBlock active = CustomBlock.getActiveBlock(event.getBlock(), event.getBlockState().getBlockData());
+        Block block = event.getBlock();
+        ActiveCruxBlock active = manager.getActiveBlock(event.getBlock(), event.getBlockState().getBlockData());
         if(active == null) return;
+
         event.getItems().clear();
+        if(p.getGameMode() == GameMode.CREATIVE) return;
+
+        CruxBlock crux = active.getCruxBlock();
         Collection<ItemStack> drops = active.getDrops(p, p.getInventory().getItemInMainHand());
-        if(active.getCustom().getSoundGroup() != null){
-            event.getBlock().getWorld().playSound(event.getBlock().getLocation(), active.getCustom().getSoundGroup().getBreakSound(),
-                    active.getCustom().getSoundGroup().getVolume(), active.getCustom().getSoundGroup().getPitch());
+        if(crux.getSoundGroup() != null){
+            block.getWorld().playSound(block.getLocation().toCenterLocation(), crux.getSoundGroup().getBreakSound(),
+                crux.getSoundGroup().getVolume(), crux.getSoundGroup().getPitch());
         }
-        if(drops == null || p.getGameMode() == GameMode.CREATIVE) return;
-        Location l = event.getBlock().getLocation().add(.5, .1, .5);
+        if(drops == null) return;
+        Location l = event.getBlock().getLocation().toCenterLocation().subtract(0, .4, 0);
         for(ItemStack i : drops){
             p.getWorld().dropItemNaturally(l, i);
         }
-    }*/
+    }
 
     private Block getPlaceBlock(Block clicked, BlockFace blockFace){
         if (REPLACE.contains(clicked.getType()) ||
@@ -104,8 +120,8 @@ public class CustomBlocksListener implements Listener {
         }
         BlockFace blockFace = event.getBlockFace();
 
-        /*ActiveBlock customClicked = CustomBlock.getActiveBlock(clickedBlock);
-        if(customClicked instanceof ActiveInteract i){
+        ActiveCruxBlock customClicked = manager.getActiveBlock(clickedBlock);
+        if(customClicked instanceof ActiveCruxInteractable i){
             if((p.isSneaking() && item == null) || !(p.isSneaking())){
                 event.setCancelled(true);
                 if(i.interact(event) == Event.Result.ALLOW){
@@ -113,7 +129,7 @@ public class CustomBlocksListener implements Listener {
                     return;
                 }
             }
-        }*/
+        }
         if((clickedBlock.getType() == Material.NOTE_BLOCK)){
             if(item != null && item.getType().isBlock() && event.useInteractedBlock() == Event.Result.DENY){
                 Block placeBlock = getPlaceBlock(clickedBlock, blockFace);

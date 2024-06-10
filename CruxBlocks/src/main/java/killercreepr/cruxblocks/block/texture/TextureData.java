@@ -11,7 +11,10 @@ import org.jetbrains.annotations.Nullable;
 public interface TextureData {
     //todo open this up
     static @Nullable TextureData buildFromBlock(@NotNull Block block){
-        BlockData data = block.getBlockData();
+        return buildFromBlockData(block.getBlockData());
+    }
+
+    static @Nullable TextureData buildFromBlockData(@NotNull BlockData data){
         if(data instanceof NoteBlock note){
             return new NoteTextureData(note.getNote(), note.getInstrument(), note.isPowered());
         }
@@ -23,7 +26,7 @@ public interface TextureData {
                 .powered(wire.isPowered())
                 .build();
         }
-        return new MaterialTextureData(block.getType());
+        return new MaterialTextureData(data.getMaterial());
     }
 
     boolean compareTexture(@Nullable Block b);
