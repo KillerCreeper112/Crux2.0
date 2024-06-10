@@ -3,7 +3,7 @@ package killercreepr.cruxitems.item;
 import killercreepr.crux.tags.format.Format;
 import killercreepr.crux.util.CruxItem;
 import killercreepr.cruxitems.item.plugin.PluginItem;
-import killercreepr.cruxitems.persistence.CruxItemsPersistence;
+import killercreepr.cruxitems.persistence.CruxItemsPersistTags;
 import killercreepr.cruxitems.registries.CruxItemRegistries;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Material;
@@ -47,12 +47,12 @@ public class CruxedItem extends CruxItem {
     }
 
     public CruxedItem setPluginItem(@Nullable Key key){
-        CruxItemsPersistence.ITEM.set(item, key);
+        CruxItemsPersistTags.ITEM.set(item, key);
         return this;
     }
 
     public @Nullable Key getPluginItemKey(){
-        return CruxItemsPersistence.ITEM.get(item, null);
+        return CruxItemsPersistTags.ITEM.get(item, null);
     }
 
     public @Nullable PluginItem getPluginItem(){

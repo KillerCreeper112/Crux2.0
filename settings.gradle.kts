@@ -12,6 +12,7 @@ include(
     "CruxEntities",
 
     "CruxItems",
+    "CruxBlocks",
 
     "CruxTest"
 )

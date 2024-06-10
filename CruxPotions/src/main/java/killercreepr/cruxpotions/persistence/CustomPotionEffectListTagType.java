@@ -27,7 +27,7 @@ public class CustomPotionEffectListTagType implements PersistentDataType<Persist
         PersistentDataContainer c = context.newPersistentDataContainer();
         for(StoredPotion e : complex){
             index++;
-            c.set(Crux.key(String.valueOf(index)), CruxPotionPersistence.CUSTOM_POTION_EFFECT, e);
+            c.set(Crux.key(String.valueOf(index)), CruxPotionsPersistence.CUSTOM_POTION_EFFECT, e);
         }
         return c;
     }
@@ -37,7 +37,7 @@ public class CustomPotionEffectListTagType implements PersistentDataType<Persist
         Collection<StoredPotion> list = new HashSet<>();
         for(NamespacedKey k : c.getKeys()){
             try{
-                list.add(c.get(k, CruxPotionPersistence.CUSTOM_POTION_EFFECT));
+                list.add(c.get(k, CruxPotionsPersistence.CUSTOM_POTION_EFFECT));
             }catch (Exception ex){ ex.printStackTrace(); }
         }
         return list;

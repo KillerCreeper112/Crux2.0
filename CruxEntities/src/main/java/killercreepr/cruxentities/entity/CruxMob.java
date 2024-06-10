@@ -1,7 +1,7 @@
 package killercreepr.cruxentities.entity;
 
 import killercreepr.crux.util.CruxString;
-import killercreepr.cruxentities.persistence.EntityPersistTags;
+import killercreepr.cruxentities.persistence.CruxEntitiesPersistTags;
 import killercreepr.cruxentities.registries.CruxEntityRegistries;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
@@ -20,15 +20,15 @@ public interface CruxMob extends Keyed {
     }
 
     static boolean is(@NotNull Entity e){
-        return EntityPersistTags.ENTITY.has(e);
+        return CruxEntitiesPersistTags.ENTITY.has(e);
     }
 
     static boolean is(@NotNull Entity e, @NotNull CruxMob grim){
-        return grim.key().equals(EntityPersistTags.ENTITY.get(e, null));
+        return grim.key().equals(CruxEntitiesPersistTags.ENTITY.get(e, null));
     }
 
     static <T extends PersistentDataHolder> @Nullable Key getKey(@NotNull T e){
-        return EntityPersistTags.ENTITY.get(e);
+        return CruxEntitiesPersistTags.ENTITY.get(e);
     }
 
     static <T extends PersistentDataHolder> @Nullable CruxMob get(@NotNull T e){

@@ -4,7 +4,7 @@ import killercreepr.crux.persistence.CruxPersistence;
 import killercreepr.crux.persistence.PersistTag;
 import net.kyori.adventure.key.Key;
 
-public class EntityPersistTags {
+public class CruxEntitiesPersistTags {
     public static void register(){}
 
     public static final PersistTag<Key> ENTITY =
