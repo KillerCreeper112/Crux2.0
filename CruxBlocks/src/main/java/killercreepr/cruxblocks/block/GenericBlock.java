@@ -9,7 +9,7 @@ import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class GenericBlock implements CruxBlock {
+public class GenericBlock implements CruxBlock {
     protected final @NotNull Key key;
     protected final @NotNull TextureData textureData;
     protected @Nullable CruxBlockGroup group;
