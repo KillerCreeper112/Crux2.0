@@ -18,6 +18,7 @@ public abstract class SingularBlockGroup implements CruxBlockGroup{
     public SingularBlockGroup(@NotNull Key key, @NotNull CruxBlock block) {
         this.key = key;
         this.block = block;
+        block.setGroup(this);
     }
 
     public SingularBlockGroup(@NotNull CruxBlock block) {

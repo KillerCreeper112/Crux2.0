@@ -28,9 +28,9 @@ public class GenericBlock implements CruxBlock {
         return group;
     }
 
-    protected GenericBlock setGroup(@Nullable CruxBlockGroup group) {
+    @Override
+    public void setGroup(@Nullable CruxBlockGroup group) {
         this.group = group;
-        return this;
     }
 
     @Override

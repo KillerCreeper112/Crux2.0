@@ -20,6 +20,7 @@ public abstract class GenericBlockGroup implements CruxBlockGroup{
     public GenericBlockGroup(@NotNull Key key, @NotNull CruxBlock... blocks) {
         this.key = key;
         for(CruxBlock b : blocks){
+            b.setGroup(this);
             group.register(b);
         }
     }

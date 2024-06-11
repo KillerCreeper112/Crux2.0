@@ -20,11 +20,12 @@ public interface CruxBlock extends Keyed {
     @NotNull ActiveCruxBlock createActive(@NotNull Block block);
     default float getHardness(){
         CruxBlockGroup group = getGroup();
-        Objects.requireNonNull(group);
+        Objects.requireNonNull(group, "CruxBlock getHardness method has not been overridden and does not have a group set!");
         return group.getHardness();
     }
     @NotNull TextureData getTextureData();
     @Nullable CruxBlockGroup getGroup();
+    void setGroup(@Nullable CruxBlockGroup group);
 
     default @Nullable ActiveCruxBlock placeBlock(@NotNull BlockContext ctx){
         return placeBlock(ctx, true);
@@ -32,7 +33,7 @@ public interface CruxBlock extends Keyed {
 
     default boolean canPlace(@NotNull BlockContext ctx){
         CruxBlockGroup group = getGroup();
-        Objects.requireNonNull(group);
+        Objects.requireNonNull(group, "CruxBlock canPlace method has not been overridden and does not have a group set!");
         return group.canPlace(ctx);
     }
 
