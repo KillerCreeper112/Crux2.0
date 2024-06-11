@@ -1,13 +1,21 @@
 package killercreepr.cruxblocks.block;
 
+import killercreepr.crux.registries.CruxRegistries;
+import killercreepr.cruxblocks.CruxBlocksModule;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlockImpl;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.block.texture.TextureData;
+import killercreepr.cruxblocks.item.KeyedItemProvider;
 import net.kyori.adventure.key.Key;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
+import java.util.Set;
 
 public class GenericBlock implements CruxBlock {
     protected final @NotNull Key key;
@@ -20,7 +28,17 @@ public class GenericBlock implements CruxBlock {
 
     @Override
     public @NotNull ActiveCruxBlock createActive(@NotNull Block block) {
-        return new ActiveCruxBlockImpl(block, this);
+        return new ActiveCruxBlockImpl(block, this){
+            @Override
+            public @Nullable Collection<ItemStack> getDrops(@Nullable Entity e, @Nullable ItemStack tool) {
+                CruxBlocksModule module = CruxRegistries.MODULES.getModuleOrThrow(CruxBlocksModule.class);
+                KeyedItemProvider provider = module.getKeyedItemProvider();
+                if(provider==null) return super.getDrops(e, tool);
+                ItemStack item = provider.get(key, e);
+                if(item == null) return super.getDrops(e, tool);
+                return Set.of(item);
+            }
+        };
     }
 
     @Override
