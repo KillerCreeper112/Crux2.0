@@ -14,10 +14,15 @@ import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 
 public interface CruxBlock extends Keyed {
     @NotNull ActiveCruxBlock createActive(@NotNull Block block);
-    float getHardness();
+    default float getHardness(){
+        CruxBlockGroup group = getGroup();
+        Objects.requireNonNull(group);
+        return group.getHardness();
+    }
     @NotNull TextureData getTextureData();
     @Nullable CruxBlockGroup getGroup();
 
@@ -26,7 +31,9 @@ public interface CruxBlock extends Keyed {
     }
 
     default boolean canPlace(@NotNull BlockContext ctx){
-        return true;
+        CruxBlockGroup group = getGroup();
+        Objects.requireNonNull(group);
+        return group.canPlace(ctx);
     }
 
     /**
@@ -39,7 +46,9 @@ public interface CruxBlock extends Keyed {
 
     @Nullable
     default SoundGroup getSoundGroup(){
-        return defaultSoundGroup();
+        CruxBlockGroup group = getGroup();
+        Objects.requireNonNull(group);
+        return group.getSoundGroup();
     }
 
     default @Nullable ActiveCruxBlock placeBlock(@NotNull BlockContext ctx, boolean applyPhysics){
@@ -60,44 +69,5 @@ public interface CruxBlock extends Keyed {
             //if(active instanceof ActiveTickable) DP.blocks().addTickedBlock(active);
         }
         return active;
-    }
-
-    static @NotNull SoundGroup defaultSoundGroup(){
-        return new SoundGroup() {
-            @Override
-            public float getVolume() {
-                return 1f;
-            }
-
-            @Override
-            public float getPitch() {
-                return 1f;
-            }
-
-            @Override
-            public @NotNull Sound getBreakSound() {
-                return Sound.BLOCK_STONE_BREAK;
-            }
-
-            @Override
-            public @NotNull Sound getStepSound() {
-                return Sound.BLOCK_STONE_STEP;
-            }
-
-            @Override
-            public @NotNull Sound getPlaceSound() {
-                return Sound.BLOCK_STONE_PLACE;
-            }
-
-            @Override
-            public @NotNull Sound getHitSound() {
-                return Sound.BLOCK_STONE_HIT;
-            }
-
-            @Override
-            public @NotNull Sound getFallSound() {
-                return Sound.BLOCK_STONE_FALL;
-            }
-        };
     }
 }

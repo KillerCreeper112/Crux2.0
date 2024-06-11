@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 
-public class GenericBlockGroup implements CruxBlockGroup{
+public abstract class GenericBlockGroup implements CruxBlockGroup{
     protected final @NotNull Key key;
     protected final @NotNull KeyedRegistry<CruxBlock> group = new SimpleKeyedRegistry<>(new LinkedHashMap<>());
     public GenericBlockGroup(@NotNull Key key, @NotNull CruxBlock... blocks) {

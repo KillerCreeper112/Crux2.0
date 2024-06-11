@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GenericDirectionalBlockGroup extends GenericBlockGroup implements CruxDirectionalBlockGroup{
+public abstract class GenericDirectionalBlockGroup extends GenericBlockGroup implements CruxDirectionalBlockGroup{
     protected final Map<BlockFace, CruxBlockDirectional> blockFaceToBlock = new HashMap<>();
     protected final boolean orientable;
     public GenericDirectionalBlockGroup(@NotNull Key key, boolean orientable, @NotNull CruxBlock... blocks) {

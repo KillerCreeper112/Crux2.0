@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.List;
 
-public class SingularBlockGroup implements CruxBlockGroup{
+public abstract class SingularBlockGroup implements CruxBlockGroup{
     protected final @NotNull Key key;
     protected final @NotNull CruxBlock block;
     public SingularBlockGroup(@NotNull Key key, @NotNull CruxBlock block) {
