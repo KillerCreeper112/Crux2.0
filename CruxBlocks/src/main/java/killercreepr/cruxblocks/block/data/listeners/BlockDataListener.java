@@ -22,7 +22,7 @@
 
 package killercreepr.cruxblocks.block.data.listeners;
 
-import killercreepr.cruxblocks.block.data.CruxBlockData;
+import killercreepr.cruxblocks.block.data.CustomBlockData;
 import killercreepr.cruxblocks.block.data.events.CustomBlockDataMoveEvent;
 import killercreepr.cruxblocks.block.data.events.CustomBlockDataRemoveEvent;
 import org.bukkit.Bukkit;
@@ -50,15 +50,15 @@ public final class BlockDataListener implements Listener {
 
     public BlockDataListener(Plugin plugin) {
         this.plugin = plugin;
-        this.customDataPredicate = block -> CruxBlockData.hasCustomBlockData(block, plugin);
+        this.customDataPredicate = block -> CustomBlockData.hasCustomBlockData(block, plugin);
     }
 
-    private CruxBlockData getCbd(BlockEvent event) {
+    private CustomBlockData getCbd(BlockEvent event) {
         return getCbd(event.getBlock());
     }
 
-    private CruxBlockData getCbd(Block block) {
-        return new CruxBlockData(block, plugin);
+    private CustomBlockData getCbd(Block block) {
+        return new CustomBlockData(block, plugin);
     }
 
     private void callAndRemove(BlockEvent blockEvent) {
@@ -72,7 +72,7 @@ public final class BlockDataListener implements Listener {
     }
 
     public boolean callEvent(Block block, Event bukkitEvent) {
-        if(!CruxBlockData.hasCustomBlockData(block, plugin) || CruxBlockData.isProtected(block, plugin)) {
+        if(!CustomBlockData.hasCustomBlockData(block, plugin) || CustomBlockData.isProtected(block, plugin)) {
             return false;
         }
 
@@ -108,7 +108,7 @@ public final class BlockDataListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlace(BlockPlaceEvent event) {
-        if(!CruxBlockData.isDirty(event.getBlock())) {
+        if(!CustomBlockData.isDirty(event.getBlock())) {
             callAndRemove(event);
         }
     }
@@ -163,10 +163,10 @@ public final class BlockDataListener implements Listener {
     }
 
     private void onPiston(List<Block> blocks, BlockPistonEvent bukkitEvent) {
-        Map<Block, CruxBlockData> map = new LinkedHashMap<>();
+        Map<Block, CustomBlockData> map = new LinkedHashMap<>();
         BlockFace direction = bukkitEvent.getDirection();
         blocks.stream().filter(customDataPredicate).forEach(block -> {
-            CruxBlockData cbd = new CruxBlockData(block, plugin);
+            CustomBlockData cbd = new CustomBlockData(block, plugin);
             if(cbd.isEmpty() || cbd.isProtected()) return;
             Block destinationBlock = block.getRelative(direction);
             CustomBlockDataMoveEvent moveEvent = new CustomBlockDataMoveEvent(plugin, block, destinationBlock, bukkitEvent);

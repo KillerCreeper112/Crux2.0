@@ -60,8 +60,8 @@ public abstract class GenericBlockGroup implements CruxBlockGroup{
     }
 
     @Override
-    public @Nullable ActiveCruxBlock placeBlock(@NotNull PlaceBlockContext ctx) {
-        return getBaseBlock().placeBlock(ctx);
+    public @Nullable ActiveCruxBlock placeBlock(@NotNull PlaceBlockContext ctx, boolean applyPhysics) {
+        return getBaseBlock().placeBlock(ctx, applyPhysics);
     }
 
     @Override

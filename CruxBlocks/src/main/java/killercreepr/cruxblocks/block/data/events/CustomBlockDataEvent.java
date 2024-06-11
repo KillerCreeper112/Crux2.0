@@ -22,7 +22,7 @@
 
 package killercreepr.cruxblocks.block.data.events;
 
-import killercreepr.cruxblocks.block.data.CruxBlockData;
+import killercreepr.cruxblocks.block.data.CustomBlockData;
 import org.bukkit.block.Block;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -51,7 +51,7 @@ public class CustomBlockDataEvent extends Event implements Cancellable {
 
     final @NotNull Plugin plugin;
     final @NotNull Block block;
-    final @NotNull CruxBlockData cbd;
+    final @NotNull CustomBlockData cbd;
     final @NotNull Event bukkitEvent;
     boolean isCancelled = false;
 
@@ -59,7 +59,7 @@ public class CustomBlockDataEvent extends Event implements Cancellable {
         this.plugin = plugin;
         this.block = block;
         this.bukkitEvent = bukkitEvent;
-        this.cbd = new CruxBlockData(block, plugin);
+        this.cbd = new CustomBlockData(block, plugin);
     }
 
     /**
@@ -80,7 +80,7 @@ public class CustomBlockDataEvent extends Event implements Cancellable {
     /**
      * Gets the CustomBlockData involved in this event.
      */
-    public @NotNull CruxBlockData getCustomBlockData() {
+    public @NotNull CustomBlockData getCustomBlockData() {
         return cbd;
     }
 

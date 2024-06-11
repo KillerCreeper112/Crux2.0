@@ -58,7 +58,7 @@ import java.util.stream.Collectors;
  * so that CustomBlockData will always be updated on certain Bukkit Events like BlockBreakEvent, EntityExplodeEvent, etc.
  * For more information about this please see {@link #registerListener(Plugin)}.
  */
-public class CruxBlockData implements PersistentDataContainer {
+public class CustomBlockData implements PersistentDataContainer {
     /**
      * Set of "dirty block positions", that is blocks that have been modified and need to be saved to the chunk
      */
@@ -80,6 +80,7 @@ public class CruxBlockData implements PersistentDataContainer {
             PersistentDataType.LONG_ARRAY,
             PersistentDataType.LIST.dataContainers(),
             PersistentDataType.TAG_CONTAINER,
+
             CruxPersistence.UUID
     };
 
@@ -134,7 +135,7 @@ public class CruxBlockData implements PersistentDataContainer {
      * @param block  Block
      * @param plugin Plugin
      */
-    public CruxBlockData(final @NotNull Block block, final @NotNull Plugin plugin) {
+    public CustomBlockData(final @NotNull Block block, final @NotNull Plugin plugin) {
         this.chunk = block.getChunk();
         this.key = getKey(plugin, block);
         this.pdc = getPersistentDataContainer();
@@ -142,7 +143,7 @@ public class CruxBlockData implements PersistentDataContainer {
         this.plugin = plugin;
     }
 
-    public CruxBlockData(final @NotNull Block block) {
+    public CustomBlockData(final @NotNull Block block) {
         this(block, Crux.getMainPlugin());
     }
 
@@ -151,14 +152,14 @@ public class CruxBlockData implements PersistentDataContainer {
      *
      * @param block     Block
      * @param namespace Namespace
-     * @deprecated Use {@link #CruxBlockData(Block, Plugin)} instead.
+     * @deprecated Use {@link #CustomBlockData(Block, Plugin)} instead.
      */
     @Deprecated
-    public CruxBlockData(final @NotNull Block block, final @NotNull String namespace) {
+    public CustomBlockData(final @NotNull Block block, final @NotNull String namespace) {
         this.chunk = block.getChunk();
         this.key = new NamespacedKey(namespace, getKey(block));
         this.pdc = getPersistentDataContainer();
-        this.plugin = JavaPlugin.getProvidingPlugin(CruxBlockData.class);
+        this.plugin = JavaPlugin.getProvidingPlugin(CustomBlockData.class);
         this.blockEntry = getBlockEntry(block);
     }
 
@@ -252,7 +253,7 @@ public class CruxBlockData implements PersistentDataContainer {
      * @see #registerListener(Plugin)
      */
     public static boolean isProtected(Block block, Plugin plugin) {
-        return new CruxBlockData(block, plugin).isProtected();
+        return new CustomBlockData(block, plugin).isProtected();
     }
 
     /**
@@ -403,7 +404,7 @@ public class CruxBlockData implements PersistentDataContainer {
      */
     @SuppressWarnings({"unchecked", "rawtypes", "ConstantConditions"})
     public void copyTo(Block block, Plugin plugin) {
-        CruxBlockData newCbd = new CruxBlockData(block, plugin);
+        CustomBlockData newCbd = new CustomBlockData(block, plugin);
         getKeys().forEach(key -> {
             PersistentDataType dataType = getDataType(this, key);
             if (dataType == null) return;

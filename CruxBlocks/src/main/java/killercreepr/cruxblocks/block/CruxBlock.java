@@ -4,11 +4,11 @@ import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.cruxblocks.CruxBlocksModule;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.block.context.BlockContext;
+import killercreepr.cruxblocks.block.context.PlaceBlockContext;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.block.texture.TextureData;
 import killercreepr.cruxblocks.event.CruxBlockPlaceEvent;
 import net.kyori.adventure.key.Keyed;
-import org.bukkit.Sound;
 import org.bukkit.SoundGroup;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -16,8 +16,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public interface CruxBlock extends Keyed {
+public interface CruxBlock extends Keyed, CruxBlockData {
     @NotNull ActiveCruxBlock createActive(@NotNull Block block);
+    @Override
     default float getHardness(){
         CruxBlockGroup group = getGroup();
         Objects.requireNonNull(group, "CruxBlock getHardness method has not been overridden and does not have a group set!");
@@ -27,10 +28,7 @@ public interface CruxBlock extends Keyed {
     @Nullable CruxBlockGroup getGroup();
     void setGroup(@Nullable CruxBlockGroup group);
 
-    default @Nullable ActiveCruxBlock placeBlock(@NotNull BlockContext ctx){
-        return placeBlock(ctx, true);
-    }
-
+    @Override
     default boolean canPlace(@NotNull BlockContext ctx){
         CruxBlockGroup group = getGroup();
         Objects.requireNonNull(group, "CruxBlock canPlace method has not been overridden and does not have a group set!");
@@ -45,6 +43,7 @@ public interface CruxBlock extends Keyed {
         data.applyToBlock(ctx.getBlock(), applyPhysics);
     }
 
+    @Override
     @Nullable
     default SoundGroup getSoundGroup(){
         CruxBlockGroup group = getGroup();
@@ -52,7 +51,9 @@ public interface CruxBlock extends Keyed {
         return group.getSoundGroup();
     }
 
-    default @Nullable ActiveCruxBlock placeBlock(@NotNull BlockContext ctx, boolean applyPhysics){
+
+    @Override
+    default @Nullable ActiveCruxBlock placeBlock(@NotNull PlaceBlockContext ctx, boolean applyPhysics){
         if(!canPlace(ctx)) return null;
         CruxBlockPlaceEvent event = new CruxBlockPlaceEvent(this, ctx);
         if(!event.callEvent()) return null;

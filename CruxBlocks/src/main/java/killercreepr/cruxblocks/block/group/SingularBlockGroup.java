@@ -51,8 +51,8 @@ public abstract class SingularBlockGroup implements CruxBlockGroup{
     }
 
     @Override
-    public @Nullable ActiveCruxBlock placeBlock(@NotNull PlaceBlockContext context) {
-        return block.placeBlock(context);
+    public @Nullable ActiveCruxBlock placeBlock(@NotNull PlaceBlockContext context, boolean applyPhysics) {
+        return block.placeBlock(context, applyPhysics);
     }
 
     @Override

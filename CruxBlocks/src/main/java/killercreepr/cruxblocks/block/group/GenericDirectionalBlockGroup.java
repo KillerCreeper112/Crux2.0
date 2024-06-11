@@ -2,8 +2,6 @@ package killercreepr.cruxblocks.block.group;
 
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.CruxBlockDirectional;
-import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
-import killercreepr.cruxblocks.block.context.PlaceBlockContext;
 import net.kyori.adventure.key.Key;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
@@ -27,11 +25,6 @@ public abstract class GenericDirectionalBlockGroup extends GenericBlockGroup imp
     @Override
     public @Nullable CruxBlockDirectional getBlock(@NotNull BlockFace direction) {
         return blockFaceToBlock.get(direction);
-    }
-
-    @Override
-    public @Nullable ActiveCruxBlock placeBlock(@NotNull PlaceBlockContext ctx) {
-        return CruxDirectionalBlockGroup.super.placeBlock(ctx);
     }
 
     @Override

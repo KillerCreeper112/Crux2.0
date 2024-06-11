@@ -1,9 +1,8 @@
 package killercreepr.cruxblocks.block.group;
 
 import killercreepr.cruxblocks.block.CruxBlock;
-import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
+import killercreepr.cruxblocks.block.CruxBlockData;
 import killercreepr.cruxblocks.block.context.BlockContext;
-import killercreepr.cruxblocks.block.context.PlaceBlockContext;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import org.bukkit.Sound;
@@ -19,7 +18,7 @@ import java.util.Iterator;
 /**
  * Represents a group of blocks to pretty much fit everything together.
  */
-public interface CruxBlockGroup extends Keyed, Iterable<CruxBlock> {
+public interface CruxBlockGroup extends Keyed, CruxBlockData, Iterable<CruxBlock> {
     @Nullable CruxBlock getBlock(@NotNull Key key);
     @Nullable CruxBlock getBlock(@NotNull BlockData data);
     @Nullable CruxBlock getBlock(@NotNull Block block);
@@ -31,16 +30,12 @@ public interface CruxBlockGroup extends Keyed, Iterable<CruxBlock> {
         return getBlocks().iterator();
     }
 
-    @Nullable
-    ActiveCruxBlock placeBlock(@NotNull PlaceBlockContext context);
-
-
-    float getHardness();
-
+    @Override
     default SoundGroup getSoundGroup(){
         return defaultSoundGroup();
     }
 
+    @Override
     default boolean canPlace(@NotNull BlockContext ctx){
         return true;
     }
