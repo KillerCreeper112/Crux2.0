@@ -34,6 +34,7 @@ public class GenericBlock implements CruxBlock {
                 CruxBlocksModule module = CruxRegistries.MODULES.getModuleOrThrow(CruxBlocksModule.class);
                 KeyedItemProvider provider = module.getKeyedItemProvider();
                 if(provider==null) return super.getDrops(e, tool);
+                Key key = group == null ? key() : group.key();
                 ItemStack item = provider.get(key, e);
                 if(item == null) return super.getDrops(e, tool);
                 return Set.of(item);
