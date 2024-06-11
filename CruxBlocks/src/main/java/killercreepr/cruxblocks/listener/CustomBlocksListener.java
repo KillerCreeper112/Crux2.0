@@ -67,7 +67,7 @@ public class CustomBlocksListener implements Listener {
     private void blockDrop(BlockDropItemEvent event){
         Player p = event.getPlayer();
         Block block = event.getBlock();
-        ActiveCruxBlock active = manager.getActiveBlock(event.getBlock(), event.getBlockState().getBlockData());
+        ActiveCruxBlock active = manager.getActiveBlock(block, event.getBlockState().getBlockData());
         if(active == null) return;
 
         event.getItems().clear();
@@ -80,9 +80,9 @@ public class CustomBlocksListener implements Listener {
                 crux.getSoundGroup().getVolume(), crux.getSoundGroup().getPitch());
         }
         if(drops == null) return;
-        Location l = event.getBlock().getLocation().toCenterLocation().subtract(0, .4, 0);
+        Location l = block.getLocation().toCenterLocation().subtract(0, .4, 0);
         for(ItemStack i : drops){
-            p.getWorld().dropItemNaturally(l, i);
+            l.getWorld().dropItemNaturally(l, i);
         }
     }
 
