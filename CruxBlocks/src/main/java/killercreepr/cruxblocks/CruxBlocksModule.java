@@ -6,6 +6,7 @@ import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
+import killercreepr.cruxblocks.command.CruxBlocksCommands;
 import killercreepr.cruxblocks.data.entity.MinerHolder;
 import killercreepr.cruxblocks.listener.CustomBlocksListener;
 import killercreepr.cruxblocks.manager.CruxBlockManager;
@@ -37,6 +38,8 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager {
             if(!(e instanceof PlayerMemory p)) return;
             p.getHolders().register(new MinerHolder(p, this));
         });
+
+        CruxBlocksCommands.register(plugin);
     }
 
     @Override

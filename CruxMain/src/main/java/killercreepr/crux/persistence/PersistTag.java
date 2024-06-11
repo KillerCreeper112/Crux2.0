@@ -10,9 +10,8 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.function.Supplier;
 
 public class PersistTag<T> {
     public static final Registry<PersistTag<?>> REGISTRY = SimpleRegistry.fromSet();
@@ -27,30 +26,25 @@ public class PersistTag<T> {
     protected final PersistentDataType<?, T> tagType;
     protected final String tagName;
     protected final T defaultValue;
-    protected final Collection<String> values;
+    protected final @Nullable Supplier<Collection<String>> values;
     public PersistTag(@NotNull PersistentDataType<?, T> tagType, @NotNull String tagName){
         this(tagType, tagName, null);
     }
 
     public PersistTag(@NotNull PersistentDataType<?, T> tagType, @NotNull String tagName, @Nullable T defaultValue){
+        this(tagType, tagName, defaultValue, null);
+    }
+
+    public PersistTag(@NotNull PersistentDataType<?, T> tagType, @NotNull String tagName, @Nullable T defaultValue, @Nullable Supplier<Collection<String>> values) {
         this.tagType = tagType;
         this.tagName = tagName;
         this.defaultValue = defaultValue;
-        this.values = null;
+        this.values = values;
     }
 
-    public @Nullable Collection<String> getValues() {
+    public @Nullable Supplier<Collection<String>> getValues() {
         return values;
     }
-
-    public PersistTag(@NotNull PersistentDataType<?, T> tagType, @NotNull String tagName, @Nullable T defaultValue, @NotNull String@NotNull ... values) {
-        this.tagType = tagType;
-        this.tagName = tagName;
-        this.defaultValue = defaultValue;
-        this.values = new HashSet<>();
-        this.values.addAll(Arrays.stream(values).toList());
-    }
-
     public @NotNull String tagName(){ return tagName; }
     public @NotNull PersistentDataType<?, T> tagType(){ return tagType; }
 
