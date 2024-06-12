@@ -1,8 +1,12 @@
 package killercreepr.crux.util;
 
+import killercreepr.crux.location.EntityLocation;
 import killercreepr.crux.location.LocationHolder;
+import killercreepr.crux.location.StaticLocation;
 import killercreepr.crux.valueproviders.number.ConstantNumber;
 import killercreepr.crux.valueproviders.number.NumberHolder;
+import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,8 +39,16 @@ public abstract class GetNear<T> {
         return center;
     }
 
-    public GetNear<T>  center(LocationHolder center) {
+    public GetNear<T> center(LocationHolder center) {
         this.center = center; return this;
+    }
+
+    public GetNear<T> center(Entity center) {
+        return center((LocationHolder)  (center==null?null:new EntityLocation(center)));
+    }
+
+    public GetNear<T> center(Location center) {
+        return center((LocationHolder) (center==null?null:new StaticLocation(center)));
     }
 
     public NumberHolder range() {
