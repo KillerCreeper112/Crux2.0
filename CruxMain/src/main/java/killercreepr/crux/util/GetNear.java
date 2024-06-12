@@ -33,40 +33,40 @@ public abstract class GetNear<T> {
         return center;
     }
 
-    public void center(LocationHolder center) {
-        this.center = center;
+    public GetNear<T>  center(LocationHolder center) {
+        this.center = center; return this;
     }
 
     public double range() {
         return range;
     }
 
-    public void range(double range) {
-        this.range = range;
+    public GetNear<T> range(double range) {
+        this.range = range; return this;
     }
 
     public Predicate<T> filter() {
         return filter;
     }
 
-    public void filter(Predicate<T> filter) {
-        this.filter = filter;
+    public GetNear<T> filter(Predicate<T> filter) {
+        this.filter = filter; return this;
     }
 
     public int amount() {
         return amount;
     }
 
-    public void amount(Integer getAmount) {
-        this.amount = getAmount;
+    public GetNear<T> amount(Integer getAmount) {
+        this.amount = getAmount; return this;
     }
 
     public Type type() {
         return type;
     }
 
-    public void type(Type type) {
-        this.type = type;
+    public GetNear<T> type(Type type) {
+        this.type = type; return this;
     }
 
     public enum Type{
