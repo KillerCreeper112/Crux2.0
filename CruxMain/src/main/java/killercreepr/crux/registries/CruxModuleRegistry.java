@@ -3,7 +3,6 @@ package killercreepr.crux.registries;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registry.SimpleMappedRegistry;
-import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
