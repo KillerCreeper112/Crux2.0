@@ -49,7 +49,7 @@ public class CruxEntity {
         return filterEntityDistance(list, loc, -1, farthest);
     }
 
-    public static @NotNull <T extends Entity> List<T> filterEntityDistance(@NotNull List<T> list, @NotNull Location loc, int amount, boolean farthest){
+    public static @NotNull <T extends Entity> List<T> filterEntityDistance(@NotNull List<T> list, @NotNull Location loc, @Nullable Integer amount, boolean farthest){
         HashMap<T, Float> closest = new HashMap<>();
         for(T p : list){
             closest.put(p, (float) p.getLocation().distance(loc));
@@ -59,7 +59,7 @@ public class CruxEntity {
         int index = farthest ? sortedList.size() : -1;
 
         List<T> playerList = new ArrayList<>();
-        if(amount < 0) amount = list.size();
+        if(amount == null || amount < 0) amount = list.size();
         for(; amount > 0; amount--){
             index += farthest ? -1 : 1;
             if(index >= sortedList.size() || index < 0) break;
