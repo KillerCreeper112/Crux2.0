@@ -22,10 +22,10 @@ public class GetEntityNear<T extends Entity> extends GetNear<T> {
     @Override
     public @NotNull Collection<T> find() {
         Location center = this.center.value();
-        List<T> found = CruxEntity.getEntitiesNear(clazz, center, range, filter);
+        List<T> found = CruxEntity.getEntitiesNear(clazz, center, range.value().doubleValue(), filter);
         switch (operation){
             case NEAREST, FARTHEST ->{
-                found = CruxEntity.filterEntityDistance(found, center, amount, operation == Operation.FARTHEST);
+                found = CruxEntity.filterEntityDistance(found, center, amount==null?null:amount.value().intValue(), operation == Operation.FARTHEST);
             }
         }
         return found;
