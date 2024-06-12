@@ -21,9 +21,9 @@ public abstract class GetNear<T> {
     public GetNear() {
     }
 
-    public abstract @NotNull Collection<T> get();
-    public @Nullable T getFirst(){
-        for(T t : get()){
+    public abstract @NotNull Collection<T> find();
+    public @Nullable T findFirst(){
+        for(T t : find()){
             return t;
         }
         return null;
