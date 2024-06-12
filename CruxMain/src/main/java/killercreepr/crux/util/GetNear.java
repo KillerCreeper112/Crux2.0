@@ -11,7 +11,7 @@ public abstract class GetNear<T> {
     protected LocationHolder center;
     protected double range;
     protected Integer amount;
-    protected Type type;
+    protected Operation operation;
     protected Predicate<T> filter;
 
     public GetNear(LocationHolder center) {
@@ -61,15 +61,15 @@ public abstract class GetNear<T> {
         this.amount = getAmount; return this;
     }
 
-    public Type type() {
-        return type;
+    public Operation operation() {
+        return operation;
     }
 
-    public GetNear<T> type(Type type) {
-        this.type = type; return this;
+    public GetNear<T> operation(Operation operation) {
+        this.operation = operation; return this;
     }
 
-    public enum Type{
+    public enum Operation {
         FARTHEST,
         NEAREST,
         DEFAULT
