@@ -178,21 +178,43 @@ public class CruxLoc {
     }
 
     public static @NotNull Location shiftToward(@NotNull Location loc, @NotNull Location loc1,
-                                                double forward, double right, double up){
+                                                double forward, double up, double right){
         return shiftToward(loc, loc1, forward, right, up, false);
     }
 
-    public static @NotNull Location shiftToward(@NotNull Location loc, @NotNull Location loc1,
-                                                double forward, double right, double up,
+    public static @NotNull Location shiftToward(@NotNull Location loc, @NotNull Location toward,
+                                                double forward, double up, double right,
                                                 boolean keepOldRotation){
-        final Vector oldDir = loc.getDirection();
-        loc.setDirection(loc1.toVector().subtract(loc.toVector()));
-        shift(loc, forward, right, up);
-        if(keepOldRotation) loc.setDirection(oldDir);
-        return loc;
+        // Calculate direction vector from loc to toward
+        Vector direction = toward.toVector().subtract(loc.toVector()).normalize();
+
+        // Calculate the right vector (perpendicular to the direction vector)
+        Vector rightVector = direction.clone().crossProduct(new Vector(0, 1, 0)).normalize();
+
+        // Calculate the up vector
+        Vector upVector = rightVector.clone().crossProduct(direction).normalize();
+
+        // Calculate the new location by shifting
+        Vector shiftVector = direction.multiply(forward)
+            .add(upVector.multiply(up))
+            .add(rightVector.multiply(right));
+        Location newLocation = loc.clone().add(shiftVector);
+
+        // Set the rotation
+        if (keepOldRotation) {
+            newLocation.setYaw(loc.getYaw());
+            newLocation.setPitch(loc.getPitch());
+        } else {
+            float newYaw = (float) Math.toDegrees(Math.atan2(-direction.getX(), direction.getZ()));
+            float newPitch = (float) Math.toDegrees(Math.asin(direction.getY()));
+            newLocation.setYaw(newYaw);
+            newLocation.setPitch(newPitch);
+        }
+
+        return newLocation;
     }
 
-    public static List<Location> getCircle(Location loc, double r){
+    public static @NotNull List<Location> getCircle(@NotNull Location loc, double r){
         List<Location> locs = new ArrayList<>();
         double t = 0;
         while (t < Math.PI * 8) {
@@ -207,7 +229,7 @@ public class CruxLoc {
         return locs;
     }
 
-    public static List<Location> getCube(Location center, float r, boolean hollow, boolean wire) {
+    public static @NotNull List<Location> getCube(@NotNull Location center, float r, boolean hollow, boolean wire) {
         List<Location> locs = new ArrayList<>();
 
         Location pos1 = shift(center.clone(), r, r, r);
@@ -240,7 +262,7 @@ public class CruxLoc {
         return locs;
     }
 
-    public static List<Location> getRegion(Location pos1, Location pos2) {
+    public static @NotNull List<Location> getRegion(@NotNull Location pos1, @NotNull Location pos2) {
         List<Location> locs = new ArrayList<>();
 
         Vector max = Vector.getMaximum(pos1.toVector(), pos2.toVector());
@@ -257,11 +279,11 @@ public class CruxLoc {
         return locs;
     }
 
-    public static Location locLookAt(Location loc, Location target){
+    public static @NotNull Location lookAt(@NotNull Location loc, @NotNull Location target){
         return loc.setDirection(target.toVector().subtract(loc.toVector()));
     }
 
-    public List<Location> createCylinder(Location center, float radius, int height){
+    public @NotNull List<Location> createCylinder(@NotNull Location center, float radius, int height){
         List<Location> list = new ArrayList<>();
         for(int h = 0; h < height; h++){
             for(float x = -radius; x < radius; x++){

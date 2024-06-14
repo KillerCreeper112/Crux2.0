@@ -3,6 +3,7 @@ package killercreepr.crux.util;
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.parser.ParseException;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redempt.crunch.Crunch;
@@ -22,6 +23,56 @@ public class CruxMath {
     public static @NotNull String format(@NotNull Number number){
         return DECIMAL_FORMAT.format(number);
     }
+
+    /**
+     * @param dir The direction the object was moving in.
+     * @param hit Must be a normalized!
+     * @return A reflected vector.
+     */
+    public static @NotNull Vector reflect(@NotNull Vector dir, @NotNull Vector hit){
+        double velocityDotProduct = hit.dot(dir);
+        return new Vector(dir.getX() - 2 * velocityDotProduct * hit.getX(),
+            dir.getY() - 2 * velocityDotProduct * hit.getY(),
+            dir.getZ() - 2 * velocityDotProduct * hit.getZ());
+    }
+
+    /**
+     * Gravity of a potion = .115
+     */
+    public static @NotNull Vector parabolicMotion(@NotNull Vector from, @NotNull Vector to, int heightGain, double gravity) {
+        // Block locations
+        int endGain = to.getBlockY() - from.getBlockY();
+        double horizDist = Math.sqrt(from.distanceSquared(to));
+
+        // Height gain
+        double maxGain = Math.max(heightGain, (endGain + heightGain));
+
+        // Solve quadratic equation for velocity
+        double a = -horizDist * horizDist / (4 * maxGain);
+        double c = -endGain;
+
+        double slope = -horizDist / (2 * a) - Math.sqrt(horizDist * horizDist - 4 * a * c) / (2 * a);
+
+        // Vertical velocity
+        double vy = Math.sqrt(maxGain * gravity);
+
+        // Horizontal velocity
+        double vh = vy / slope;
+
+        // Calculate horizontal direction
+        int dx = to.getBlockX() - from.getBlockX();
+        int dz = to.getBlockZ() - from.getBlockZ();
+        double mag = Math.sqrt(dx * dx + dz * dz);
+        double dirx = dx / mag;
+        double dirz = dz / mag;
+
+        // Horizontal velocity components
+        double vx = vh * dirx;
+        double vz = vh * dirz;
+
+        return new Vector(vx, vy, vz);
+    }
+
 
     public static boolean hasOccurredWithin(long value, int ticks){
         return (System.currentTimeMillis() - (50L * ticks)) <= value;
