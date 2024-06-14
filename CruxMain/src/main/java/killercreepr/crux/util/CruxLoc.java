@@ -229,6 +229,72 @@ public class CruxLoc {
         return locs;
     }
 
+    public static @NotNull List<Location> getCircle(@NotNull Location loc, double r, double spacing) {
+        List<Location> locs = new ArrayList<>();
+        double t = 0;
+
+        // Calculate the increment based on the spacing
+        double increment = Math.PI * 2 / (r / spacing);
+
+        while (t < Math.PI * 2) {
+            t += increment;
+            double x = r * Math.cos(t);
+            double z = r * Math.sin(t);
+            Vector v = new Vector(x, 0, z);
+            v.rotateAroundX(Math.toRadians(loc.getPitch()));
+            v.rotateAroundY(Math.toRadians(-loc.getYaw()));
+            locs.add(loc.clone().add(v));
+        }
+
+        return locs;
+    }
+
+    public static @NotNull List<Location> getCircleRelative(@NotNull Location loc, double r, double spacing) {
+        List<Location> locs = new ArrayList<>();
+
+        // Calculate the circumference of the circle
+        double circumference = 2 * Math.PI * r;
+
+        // Calculate the number of points needed based on the spacing
+        int numPoints = (int) Math.ceil(circumference / spacing);
+
+        // Calculate the angle increment
+        double angleIncrement = 2 * Math.PI / numPoints;
+
+        for (int i = 0; i < numPoints; i++) {
+            double t = i * angleIncrement;
+            double x = r * Math.cos(t);
+            double z = r * Math.sin(t);
+            Vector v = new Vector(x, 0, z);
+
+            // Rotate the vector around the X and Y axes based on pitch and yaw
+            v.rotateAroundX(Math.toRadians(loc.getPitch()));
+            v.rotateAroundY(Math.toRadians(-loc.getYaw()));
+
+            locs.add(loc.clone().add(v));
+        }
+
+        return locs;
+    }
+
+    // Helper method to rotate a vector around the X axis
+    private static Vector rotateAroundX(Vector v, double angle) {
+        double cos = Math.cos(angle);
+        double sin = Math.sin(angle);
+        double y = v.getY() * cos - v.getZ() * sin;
+        double z = v.getY() * sin + v.getZ() * cos;
+        return new Vector(v.getX(), y, z);
+    }
+
+    // Helper method to rotate a vector around the Y axis
+    private static Vector rotateAroundY(Vector v, double angle) {
+        double cos = Math.cos(angle);
+        double sin = Math.sin(angle);
+        double x = v.getX() * cos + v.getZ() * sin;
+        double z = v.getZ() * cos - v.getX() * sin;
+        return new Vector(x, v.getY(), z);
+    }
+
     public static @NotNull List<Location> getCube(@NotNull Location center, float r, boolean hollow, boolean wire) {
         List<Location> locs = new ArrayList<>();
 
