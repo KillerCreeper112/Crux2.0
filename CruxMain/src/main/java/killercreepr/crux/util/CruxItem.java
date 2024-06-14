@@ -7,6 +7,7 @@ import killercreepr.crux.data.Holder;
 import killercreepr.crux.tags.format.Format;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -15,6 +16,9 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.MapMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -80,6 +84,10 @@ public class CruxItem implements Cloneable {
 
     public CruxItem addFlags(@NotNull ItemFlag @NotNull... flags){
         return editMeta(meta -> meta.addItemFlags(flags));
+    }
+
+    public CruxItem removeFlags(@NotNull ItemFlag @NotNull... flags){
+        return editMeta(meta -> meta.removeItemFlags(flags));
     }
 
     public CruxItem addLoreFromString(@Nullable Collection<String> lore){
@@ -207,6 +215,23 @@ public class CruxItem implements Cloneable {
     public CruxItem addAttribute(@NotNull Attribute attribute, @NotNull String name, double amount, @NotNull AttributeModifier.Operation operation,
                                  @Nullable EquipmentSlot slot){
         return addAttribute(attribute, new AttributeModifier(UUID.randomUUID(), name, amount, operation, slot));
+    }
+
+    public CruxItem color(@Nullable Color color){
+        return editMeta(meta ->{
+           if(meta instanceof LeatherArmorMeta m) m.setColor(color);
+           else if(meta instanceof PotionMeta m) m.setColor(color);
+           else if(meta instanceof MapMeta m) m.setColor(color);
+        });
+    }
+
+    public @Nullable Color color(){
+        ItemMeta meta = meta();
+        if(meta==null) return null;
+        if(meta instanceof LeatherArmorMeta m) m.getColor();
+        if(meta instanceof PotionMeta m) m.getColor();
+        if(meta instanceof MapMeta m) m.getColor();
+        return null;
     }
 
     public CruxItem editMeta(@NotNull Consumer<ItemMeta> consumer){
