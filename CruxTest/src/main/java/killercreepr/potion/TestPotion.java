@@ -1,6 +1,7 @@
 package killercreepr.potion;
 
 import killercreepr.cruxpotions.potions.ActivePotion;
+import killercreepr.cruxpotions.potions.ActivePotionImpl;
 import killercreepr.cruxpotions.potions.GenericPotion;
 import killercreepr.cruxpotions.potions.inflictor.PotionInflictor;
 import net.kyori.adventure.key.Key;
@@ -15,6 +16,6 @@ public class TestPotion extends GenericPotion {
 
     @Override
     public @NotNull ActivePotion create(@NotNull Entity e, int duration, int amplifier, @Nullable PotionInflictor inflictor) {
-        return new ActivePotion(this, e, duration, amplifier);
+        return new ActivePotionImpl(this, e, duration, amplifier);
     }
 }

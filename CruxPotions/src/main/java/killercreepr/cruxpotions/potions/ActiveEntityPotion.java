@@ -4,7 +4,7 @@ import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ActiveEntityPotion<T extends Entity> extends ActivePotion{
+public class ActiveEntityPotion<T extends Entity> extends ActivePotionImpl{
     protected final @Nullable T parsedEntity;
     public ActiveEntityPotion(@NotNull Class<T> type, @NotNull CruxPotion potion, @NotNull Entity entity, int duration, int amplifier) {
         super(potion, entity, duration, amplifier);
@@ -14,43 +14,43 @@ public class ActiveEntityPotion<T extends Entity> extends ActivePotion{
     }
 
     @Override
-    protected void updated(int oldDuration, int oldAmplifier) {
-        super.updated(oldDuration, oldAmplifier);
+    protected void onUpdate(int oldDuration, int oldAmplifier) {
+        super.onUpdate(oldDuration, oldAmplifier);
         if(parsedEntity==null) return;
-        updated(parsedEntity, oldDuration, oldAmplifier);
+        onUpdate(parsedEntity, oldDuration, oldAmplifier);
     }
 
-    protected void updated(@NotNull T e, int oldDuration, int oldAmplifier) {
+    protected void onUpdate(@NotNull T e, int oldDuration, int oldAmplifier) {
     }
 
     @Override
-    protected void t() {
-        super.t();
+    protected void onTick() {
+        super.onTick();
         if(parsedEntity==null) return;
-        tick(parsedEntity);
+        onTick(parsedEntity);
     }
 
     @Override
-    protected void started() {
-        super.started();
+    protected void onStart() {
+        super.onStart();
         if(parsedEntity==null) return;
-        started(parsedEntity);
+        onStart(parsedEntity);
     }
 
     @Override
-    protected void stopped() {
-        super.stopped();
+    protected void onStop() {
+        super.onStop();
         if(parsedEntity==null) return;
-        stopped(parsedEntity);
+        onStop(parsedEntity);
     }
 
-    protected void tick(@NotNull T e){
+    protected void onTick(@NotNull T e){
     }
 
-    protected void started(@NotNull T e){
+    protected void onStart(@NotNull T e){
 
     }
-    protected void stopped(@NotNull T e){
+    protected void onStop(@NotNull T e){
 
     }
 

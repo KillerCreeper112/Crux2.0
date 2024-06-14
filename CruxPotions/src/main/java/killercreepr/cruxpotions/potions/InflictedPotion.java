@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-public abstract class InflictedPotion extends ActivePotion{
+public abstract class InflictedPotion extends ActivePotionImpl{
     protected PotionInflictor inflictor;
     public InflictedPotion(@NotNull CruxPotion potion, @NotNull Entity entity, int duration, int amplifier) {
         super(potion, entity, duration, amplifier);
@@ -35,7 +35,7 @@ public abstract class InflictedPotion extends ActivePotion{
         return result;
     }
     public static @NotNull ActivePotion deserialize(@NotNull Map<String, Object> args){
-        ActivePotion potion = ActivePotion.deserialize(args);
+        ActivePotion potion = ActivePotionImpl.deserialize(args);
         if(potion instanceof InflictedPotion a){
             a.setInflictor((PotionInflictor) args.getOrDefault("inflictor", null));
             return a;

@@ -13,7 +13,7 @@ import killercreepr.cruxpotions.item.PotionItemUpdater;
 import killercreepr.cruxpotions.listener.PlayerDataListener;
 import killercreepr.cruxpotions.listener.PotionListener;
 import killercreepr.cruxpotions.persistence.PotionPersistTags;
-import killercreepr.cruxpotions.potions.ActivePotion;
+import killercreepr.cruxpotions.potions.ActivePotionImpl;
 import killercreepr.cruxpotions.potions.InflictedPotion;
 import killercreepr.cruxpotions.potions.inflictor.BlockInflictor;
 import killercreepr.cruxpotions.potions.inflictor.EntityInflictor;
@@ -50,7 +50,7 @@ public class CruxPotionsModule implements CruxModule {
         EntityMemory.registerFunction(plugin, e -> e.getHolders().register(new PotionHolder(e)));
         ConfigurationSerialization.registerClass(BlockInflictor.class);
         ConfigurationSerialization.registerClass(EntityInflictor.class);
-        ConfigurationSerialization.registerClass(ActivePotion.class);
+        ConfigurationSerialization.registerClass(ActivePotionImpl.class);
         ConfigurationSerialization.registerClass(PotionInflictor.class);
         ConfigurationSerialization.registerClass(InflictedPotion.class);
 
