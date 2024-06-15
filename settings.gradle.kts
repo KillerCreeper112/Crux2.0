@@ -13,6 +13,7 @@ include(
 
     "CruxItems",
     "CruxBlocks",
+    "CruxBrewery",
 
     "CruxTest"
 )
