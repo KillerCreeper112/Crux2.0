@@ -21,7 +21,7 @@ public class BrewingStandListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {
         if(!(event.getView().getTopInventory() instanceof BrewerInventory inv)) return;
-        ItemStack item = event.getCurrentItem();
+        ItemStack item = event.getCursor();
         if(CruxItem.isEmpty(item)) return;
 
         if(event.getClickedInventory() instanceof BrewerInventory clickedIn){
@@ -32,7 +32,7 @@ public class BrewingStandListener implements Listener {
         plugin.getServer().getScheduler().runTask(plugin, task ->{
             BrewRecipe recipe = CruxBreweryRegistries.getBrewRecipe(inv);
             if(recipe != null){
-                new BrewClock(recipe, inv, 400);
+                new BrewClock(recipe, inv, recipe.getBrewTime());
             }
         });
     }

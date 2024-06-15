@@ -24,7 +24,7 @@ public class BrewClock extends BukkitRunnable {
         this.recipe = recipe;
         this.inventory = inventory;
         this.stand = inventory.getHolder();
-        this.before = inventory.getContents();
+        this.before = inventory.getContents().clone();
         this.current = time;
         runTaskTimer(Crux.getMainPlugin(), 0L, 1L);
     }

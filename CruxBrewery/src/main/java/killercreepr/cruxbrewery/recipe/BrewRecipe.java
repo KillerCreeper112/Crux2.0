@@ -8,4 +8,5 @@ import org.jetbrains.annotations.NotNull;
 public interface BrewRecipe extends Keyed {
     boolean canBrew(@NotNull BrewerInventory inventory);
     void brew(@NotNull BrewerInventory inventory, @NotNull ItemStack item, @NotNull ItemStack ingredient);
+    int getBrewTime();
 }
