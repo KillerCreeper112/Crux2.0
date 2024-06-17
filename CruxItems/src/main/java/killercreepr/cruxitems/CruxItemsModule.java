@@ -53,7 +53,7 @@ public class CruxItemsModule implements CruxModule, ItemUpdater {
 
         Crux.setItemUpdater(this);
 
-        CruxItemsCommands.register(plugin);
+        //todo CruxItemsCommands.register(plugin);
     }
 
     @Override

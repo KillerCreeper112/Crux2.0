@@ -60,7 +60,7 @@ public class CruxPotionsModule implements CruxModule {
         if(cruxConfigs) plugin.registerListeners(new PlayerDataListener(plugin, values));
 
         PotionPersistTags.register();
-        CruxPotionCommands.register(plugin);
+        //CruxPotionCommands.register(plugin);
         Crux.TAGS.register(new PotionsLoreTag(values.potionsFormat()));
 
         if(CruxRegistries.MODULES.containsKey("CruxItems")){

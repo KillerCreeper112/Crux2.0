@@ -2,6 +2,7 @@
 version = "1.0"
 plugins {
     alias(libs.plugins.paperweight)
+    alias(libs.plugins.shadow)
 }
 
 dependencies {
@@ -15,5 +16,11 @@ dependencies {
 }
 
 tasks{
+    assemble{
+        dependsOn(shadowJar)
+    }
+    shadowJar{
+        archiveClassifier = null
+    }
     paperweight.reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.MOJANG_PRODUCTION
 }
