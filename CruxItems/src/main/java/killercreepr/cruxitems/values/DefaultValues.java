@@ -5,9 +5,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+//todo "{cruxenchants_enchants}",
 public class DefaultValues implements ValuesProvider{
     public static final Holder<List<String>> GENERAL_ITEM_LORE_FORMAT = Holder.direct(List.of(
-        "{cruxenchants_enchants}",
         "{cruxpotions_potions}"
     ));
 

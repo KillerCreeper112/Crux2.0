@@ -2,7 +2,6 @@ package killercreepr.crux;
 
 import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.crux.data.tick.CruxTick;
-import killercreepr.crux.item.ItemUpdater;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.crux.registry.KeyedRegistry;
@@ -49,16 +48,8 @@ public final class Crux {
         Crux.mainPlugin = mainPlugin;
     }
 
-    private static @NotNull ItemUpdater itemUpdater = new ItemUpdater.Dummy();
-
-    public static @NotNull ItemUpdater itemUpdater() {
-        return itemUpdater;
-    }
-
-    public static void setItemUpdater(@NotNull ItemUpdater itemUpdater) {
-        Crux.itemUpdater = itemUpdater;
-    }
-
+    private static final @NotNull CruxHandlers handlers = new CruxHandlers.Generic();
+    public static @NotNull CruxHandlers handlers(){ return handlers; }
     /*private final MenuRegistry MENU_REGISTRY = new MenuRegistry(FORMAT);
 
     public @NotNull MenuRegistry getMenuRegistry() {
@@ -113,6 +104,7 @@ public final class Crux {
                     }
                     t.tick();
                 }
+                //todo change this
                 EntityMemory.REGISTRY.values().removeIf(EntityMemory::tick);
             }
         };

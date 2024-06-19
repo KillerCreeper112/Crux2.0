@@ -27,9 +27,4 @@ public class ActiveCruxBlockImpl implements ActiveCruxBlock{
     public boolean isValid() {
         return cruxBlock.getTextureData().compareTexture(block);
     }
-
-    @Override
-    public void update() {
-
-    }
 }

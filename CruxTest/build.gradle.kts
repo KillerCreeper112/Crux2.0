@@ -11,7 +11,6 @@ dependencies {
     implementation(project(":CruxMain"))
     implementation(project(":CruxConfigs"))
     implementation(project(":CruxPotions"))
-    implementation("com.ezylang:EvalEx:3.2.0")
 }
 
 tasks{

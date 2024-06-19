@@ -113,7 +113,7 @@ public class CruxEnchantCommands {
             ItemStack item = le.getEquipment().getItemInMainHand();
             if(CruxItem.isEmpty(item)) return -1;
             int x = removeEnchant(item, enchant, store);
-            Crux.itemUpdater().update(item, e);
+            Crux.handlers().item().update(item, e);
             if(x > 0) changed++;
             if(!(e instanceof Player)) le.getEquipment().setItemInMainHand(item);
         }
@@ -129,7 +129,7 @@ public class CruxEnchantCommands {
             ItemStack item = le.getEquipment().getItemInMainHand();
             if(CruxItem.isEmpty(item)) return -1;
             int x = setEnchant(item, enchant, level, store);
-            Crux.itemUpdater().update(item, e);
+            Crux.handlers().item().update(item, e);
             if(x > 0) changed++;
             if(!(e instanceof Player)) le.getEquipment().setItemInMainHand(item);
         }

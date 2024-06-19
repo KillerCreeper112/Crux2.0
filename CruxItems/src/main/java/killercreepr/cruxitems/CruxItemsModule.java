@@ -1,11 +1,10 @@
 package killercreepr.cruxitems;
 
 import killercreepr.crux.Crux;
-import killercreepr.crux.item.ItemUpdater;
+import killercreepr.crux.handler.ItemHandler;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registries.CruxRegistries;
-import killercreepr.cruxitems.command.CruxItemsCommands;
 import killercreepr.cruxitems.config.Config;
 import killercreepr.cruxitems.item.CruxedItem;
 import killercreepr.cruxitems.item.GeneralCruxedItemDisplayUpdater;
@@ -19,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 //todo make plugin items not count in vanilla recipes
-public class CruxItemsModule implements CruxModule, ItemUpdater {
+public class CruxItemsModule implements CruxModule, ItemHandler {
     public static final String NAMESPACE = "CruxItems";
     @Override
     public @NotNull String name() {
@@ -51,7 +50,7 @@ public class CruxItemsModule implements CruxModule, ItemUpdater {
             values(new Config(plugin, "module/item"));
         }else values(new DefaultValues());
 
-        Crux.setItemUpdater(this);
+        Crux.handlers().setItem(this);
 
         //todo CruxItemsCommands.register(plugin);
     }

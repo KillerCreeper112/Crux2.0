@@ -1,8 +1,10 @@
 package killercreepr.cruxblocks;
 
+import killercreepr.crux.Crux;
 import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.crux.data.entity.PlayerMemory;
 import killercreepr.crux.data.tick.ManagedTicked;
+import killercreepr.crux.handler.BlockHandler;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registries.CruxRegistries;
@@ -10,6 +12,8 @@ import killercreepr.crux.util.CruxEntity;
 import killercreepr.crux.util.CruxLoc;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
+import killercreepr.cruxblocks.block.data.CustomBlockData;
+import killercreepr.cruxblocks.block.data.events.CustomBlockDataRemoveEvent;
 import killercreepr.cruxblocks.command.CruxBlocksCommands;
 import killercreepr.cruxblocks.data.entity.MinerHolder;
 import killercreepr.cruxblocks.item.CruxItemsItemProvider;
@@ -18,9 +22,11 @@ import killercreepr.cruxblocks.listener.CustomBlocksListener;
 import killercreepr.cruxblocks.manager.CruxBlockManager;
 import killercreepr.cruxblocks.registeries.CruxBlocksRegistries;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,7 +35,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-public class CruxBlocksModule implements CruxModule, CruxBlockManager {
+public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHandler {
     public static final String NAMESPACE = "CruxBlocks";
     @Override
     public @NotNull String name() {
@@ -53,6 +59,7 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager {
 
     @Override
     public void onEnable(@NotNull CruxPlugin plugin) {
+        Crux.handlers().setBlock(this);
         plugin.registerListeners(
             new CustomBlocksListener(this)
         );
@@ -137,5 +144,23 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager {
                 }
             }
         };
+    }
+
+    @Override
+    public @NotNull Block setType(@NotNull Block b, @NotNull Material m, boolean applyPhysics, boolean removeTags) {
+        b.setType(m, applyPhysics);
+        if(removeTags){
+            if(callRemoveBlockDataEvent(b, null)){
+                new CustomBlockData(b, Crux.getMainPlugin()).clear();
+            }
+        }
+        return b;
+    }
+
+    public static boolean callRemoveBlockDataEvent(@NotNull Block block, @Nullable Event bukkitEvent) {
+        if(!CustomBlockData.hasCustomBlockData(block, Crux.getMainPlugin()) || CustomBlockData.isProtected(block, Crux.getMainPlugin())) {
+            return false;
+        }
+        return new CustomBlockDataRemoveEvent(Crux.getMainPlugin(), block, bukkitEvent).callEvent();
     }
 }

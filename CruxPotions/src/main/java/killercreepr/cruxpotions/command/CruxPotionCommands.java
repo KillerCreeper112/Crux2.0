@@ -216,7 +216,7 @@ public class CruxPotionCommands {
             storedPotions.removeIf(s -> s.getPotion().compare(potion));
             storedPotions.add(stored);
             PotionPersistTags.STORED_CUSTOM_POTIONS.set(item, storedPotions);
-            Crux.itemUpdater().update(item, e);
+            Crux.handlers().item().update(item, e);
             if(!(e instanceof Player)){
                 le.getEquipment().setItemInMainHand(item, true);
             }
@@ -308,7 +308,7 @@ public class CruxPotionCommands {
             if(CruxItem.isEmpty(item)) continue;
 
             PotionPersistTags.STORED_CUSTOM_POTIONS.set(item, null);
-            Crux.itemUpdater().update(item, e);
+            Crux.handlers().item().update(item, e);
             if(!(e instanceof Player)){
                 le.getEquipment().setItemInMainHand(item, true);
             }
@@ -332,7 +332,7 @@ public class CruxPotionCommands {
             if(storedPotions==null) continue;
             storedPotions.removeIf(stored -> stored.getPotion().compare(potion));
             PotionPersistTags.STORED_CUSTOM_POTIONS.set(item, storedPotions);
-            Crux.itemUpdater().update(item, e);
+            Crux.handlers().item().update(item, e);
             if(!(e instanceof Player)){
                 le.getEquipment().setItemInMainHand(item, true);
             }

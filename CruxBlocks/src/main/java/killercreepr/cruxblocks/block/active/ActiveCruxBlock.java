@@ -1,10 +1,14 @@
 package killercreepr.cruxblocks.block.active;
 
+import com.destroystokyo.paper.ParticleBuilder;
+import killercreepr.crux.Crux;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.context.BlockContext;
 import killercreepr.cruxblocks.block.context.BlockContextImpl;
+import killercreepr.cruxblocks.event.CruxBlockBreakEvent;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -27,14 +31,15 @@ public interface ActiveCruxBlock {
     @NotNull
     CruxBlock getCruxBlock();
 
-    default void breakBlock(@Nullable Entity e, @Nullable ItemStack tool){
+    default @NotNull CruxBlockBreakEvent breakBlock(@Nullable Entity e, @Nullable ItemStack tool){
         Block block = getBlock();
         Collection<ItemStack> drops = getDrops(e, tool);
-        /*CustomBlockBreakEvent event = new CustomBlockBreakEvent(this, e, tool, drops);
-        if(!event.callEvent()) return;*/
+        CruxBlockBreakEvent event = new CruxBlockBreakEvent(this, new BlockContextImpl(block, e),
+            drops, tool);
+        if(!event.callEvent()) return event;
+        drops = event.getDrops();
         BlockData data = block.getBlockData();
-        //todo custom settype
-        getBlock().setType(Material.AIR);
+        Crux.handlers().block().setType(getBlock(), Material.AIR);
         CruxBlock custom = getCruxBlock();
         if(custom.getSoundGroup() == null){
             block.getWorld().playSound(block.getLocation().toCenterLocation(), Sound.BLOCK_WOOD_BREAK, 1f, 1f);
@@ -43,9 +48,13 @@ public interface ActiveCruxBlock {
                 custom.getSoundGroup().getVolume(), custom.getSoundGroup().getPitch());
         }
 
-        /*todo new CreateWorldParticle(new CreateBlockData(Particle.BLOCK_CRACK, 20, data)
-            .values(.5, .5, .5, .1), new DynamicLocation(block.getLocation().toCenterLocation()))
-            .play();*/
+        new ParticleBuilder(Particle.BLOCK)
+            .count(20)
+            .offset(.5, .5, .5)
+            .extra(.1)
+            .data(data)
+            .spawn()
+        ;
 
         if(drops != null){
             Location x = block.getLocation().toCenterLocation().subtract(0, .5, 0);
@@ -55,11 +64,11 @@ public interface ActiveCruxBlock {
         }
         /*todo if(e != null) GrimItem.damage(e, tool, 1, EquipmentSlot.HAND);
         else GrimItem.damage(tool, 1);*/
-        return;
+        return event;
     }
 
-    default void breakBlock(@Nullable ItemStack tool){
-        breakBlock(null, tool);
+    default @NotNull CruxBlockBreakEvent breakBlock(@Nullable ItemStack tool){
+        return breakBlock(null, tool);
     }
 
     /**
@@ -67,6 +76,10 @@ public interface ActiveCruxBlock {
      */
     boolean isValid();
 
+    /**
+     * Called to basically break the block if it's no longer in a valid location.
+     * For example, a flower would probably want to break if it's no longer on a solid block.
+     */
     default void update(){
         if(getCruxBlock().canPlace(new BlockContextImpl(getBlock(), null))) return;
         breakBlock(null);
