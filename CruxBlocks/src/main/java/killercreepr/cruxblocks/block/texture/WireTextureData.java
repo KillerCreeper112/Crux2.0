@@ -82,7 +82,7 @@ public class WireTextureData implements TextureData {
     public boolean compareTexture(@Nullable TextureData data) {
         if(!(data instanceof WireTextureData n)) return false;
         if(n.isPowered() == powered && n.isDisarmed() == disarmed && n.isAttached() == attached){
-            if(faces != null){//todo
+            if(faces != null){
                 for(BlockFace f : faces){
                     if(n.hasFace(f) != hasFace(f)) return false;
                 }
