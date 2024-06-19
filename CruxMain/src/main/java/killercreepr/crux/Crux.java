@@ -90,10 +90,24 @@ public final class Crux {
     }*/
 
     public static @NotNull BukkitRunnable buildTickRunnable(){
-        return buildTickRunnable(CruxRegistries.TICKS);
+        return buildTickRunnable(CruxRegistries.TICKS, true);
     }
 
-    public static @NotNull BukkitRunnable buildTickRunnable(@NotNull KeyedRegistry<CruxTick> registry){
+    public static @NotNull BukkitRunnable buildTickRunnable(@NotNull KeyedRegistry<CruxTick> registry, boolean includeEntityMemory){
+        if(!includeEntityMemory){
+            return new BukkitRunnable(){
+                @Override
+                public void run() {
+                    for(CruxTick t : new HashSet<>(registry.values())){
+                        if(t.markedForRemoval()){
+                            registry.remove(t.key());
+                            continue;
+                        }
+                        t.tick();
+                    }
+                }
+            };
+        }
         return new BukkitRunnable(){
             @Override
             public void run() {
@@ -104,7 +118,6 @@ public final class Crux {
                     }
                     t.tick();
                 }
-                //todo change this
                 EntityMemory.REGISTRY.values().removeIf(EntityMemory::tick);
             }
         };
