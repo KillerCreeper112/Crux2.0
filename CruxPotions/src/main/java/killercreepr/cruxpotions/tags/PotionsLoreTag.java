@@ -3,7 +3,7 @@ package killercreepr.cruxpotions.tags;
 import killercreepr.crux.data.Holder;
 import killercreepr.crux.tags.Tags;
 import killercreepr.crux.tags.format.FormatPrefix;
-import killercreepr.crux.tags.hook.LoreHook;
+import killercreepr.crux.tags.hook.lore.LoreHook;
 import killercreepr.crux.tags.tag.ObjectTag;
 import killercreepr.cruxpotions.persistence.PotionPersistTags;
 import killercreepr.cruxpotions.persistence.StoredPotion;

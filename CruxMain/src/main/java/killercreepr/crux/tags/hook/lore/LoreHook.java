@@ -1,14 +1,30 @@
-package killercreepr.crux.tags.hook;
+package killercreepr.crux.tags.hook.lore;
 
 import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.tags.FormatArgs;
+import killercreepr.crux.tags.hook.ObjectHook;
+import killercreepr.crux.tags.hook.string.StringHook;
 import killercreepr.crux.tags.tag.LoreResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public abstract class LoreHook <T> extends ObjectHook<T>{
+public abstract class LoreHook <T> extends ObjectHook<T> {
+    public static @NotNull LoreHook<Object> parsed(@NotNull String identifier, @NotNull List<String> value){
+        return new LoreHook<>(Object.class) {
+            @Override
+            public @NotNull List<String> parse(@Nullable Object object, @NotNull FormatArgs args, @NotNull TextParserContext context) {
+                return value;
+            }
+
+            @Override
+            public @NotNull String identifier() {
+                return identifier;
+            }
+        };
+    }
+
     public LoreHook(@NotNull Class<T> object) {
         super(object);
     }

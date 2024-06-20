@@ -3,7 +3,7 @@ package killercreepr.crux.tags.tag;
 import killercreepr.crux.tags.Tags;
 import killercreepr.crux.tags.container.ObjectHookContainer;
 import killercreepr.crux.tags.format.FormatPrefix;
-import killercreepr.crux.tags.hook.LoreHook;
+import killercreepr.crux.tags.hook.lore.LoreHook;
 import killercreepr.crux.tags.hook.string.StringHook;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,9 +12,8 @@ import java.util.Collection;
 import java.util.Map;
 
 public abstract class ObjectTag<T> {
-    private final @NotNull Class<T> object;
-
-    public Class<T> getObject() {
+    protected final @NotNull Class<T> object;
+    public @NotNull Class<T> getObject() {
         return object;
     }
 

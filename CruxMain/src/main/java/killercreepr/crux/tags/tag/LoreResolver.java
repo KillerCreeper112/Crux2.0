@@ -2,13 +2,14 @@ package killercreepr.crux.tags.tag;
 
 import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.tags.FormatArgs;
-import killercreepr.crux.tags.hook.LoreHook;
+import killercreepr.crux.tags.ab.resolver.TagResolver;
+import killercreepr.crux.tags.hook.lore.LoreHook;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public interface LoreResolver {
+public interface LoreResolver extends TagResolver<List<String>> {
     static @NotNull LoreResolver generic(@NotNull String identifier, @Nullable List<String> result){
         return new LoreResolver() {
             @Override
@@ -37,6 +38,6 @@ public interface LoreResolver {
         };
     }
 
-    boolean has(final @NotNull String name);
-    @Nullable List<String> resolve(@NotNull FormatArgs args, @NotNull TextParserContext context);
+    /*boolean has(final @NotNull String name);
+    @Nullable List<String> resolve(@NotNull FormatArgs args, @NotNull TextParserContext context);*/
 }

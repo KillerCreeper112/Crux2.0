@@ -7,7 +7,7 @@ import killercreepr.crux.tags.container.LoreHookContainer;
 import killercreepr.crux.tags.container.ObjectHookContainer;
 import killercreepr.crux.tags.container.StringHookContainer;
 import killercreepr.crux.tags.format.FormatPrefix;
-import killercreepr.crux.tags.hook.LoreHook;
+import killercreepr.crux.tags.hook.lore.LoreHook;
 import killercreepr.crux.tags.hook.string.StringHook;
 import killercreepr.crux.tags.tag.LoreResolver;
 import killercreepr.crux.tags.tag.ObjectTag;
@@ -20,6 +20,17 @@ import java.util.Map;
 
 public class Tags {
     private final Collection<ObjectTag<?>> tags = new HashSet<>();
+
+    //new
+    public <T> @NotNull Collection<StringHook<T>> getTagsFrom(@NotNull T object){
+        Collection<StringHook<T>> tags = new HashSet<>();
+        this.tags.forEach(t ->{
+            if(t.canResolve(object)) tags.add((StringHook<T>) t);
+        });
+        return tags;
+    }
+    //new end
+
     public <T extends ObjectTag<?>> @NotNull T register(@NotNull T tag){
         tags.add(tag);
         return tag;

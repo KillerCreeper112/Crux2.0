@@ -4,12 +4,9 @@ import com.google.common.collect.Maps;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
-public class DataExchange {
+public class DataExchange implements Iterable<Holder<Object>> {
     public static @NotNull DataExchange.Builder builder(){
         return new DataExchange.Builder();
     }
@@ -117,6 +114,12 @@ public class DataExchange {
      */
     public @NotNull Map<String, Holder<Object>> getData() {
         return data;
+    }
+
+    @NotNull
+    @Override
+    public Iterator<Holder<Object>> iterator() {
+        return data.values().iterator();
     }
 
     public interface Predicate<T>{
