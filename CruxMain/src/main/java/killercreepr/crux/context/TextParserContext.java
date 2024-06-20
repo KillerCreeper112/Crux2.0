@@ -1,5 +1,8 @@
 package killercreepr.crux.context;
 
+import killercreepr.crux.tags.ab.context.FormatParserContext;
+import killercreepr.crux.tags.ab.context.FormatPrefix;
+import killercreepr.crux.tags.ab.resolver.TagResolver;
 import killercreepr.crux.tags.format.Format;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
@@ -19,4 +22,7 @@ public interface TextParserContext {
     @Nullable List<String> deserializeLore(@NotNull String input);
     @NotNull
     Format getFormat();
+
+    @Nullable
+    FormatPrefix getPrefix();
 }

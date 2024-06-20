@@ -26,8 +26,8 @@ public abstract class HookedStringTag<T> implements StringResolver, HookedObject
         return prefix;
     }
 
-    @Override
+    /*@Override
     public boolean has(@NotNull String name) {
         return name.equalsIgnoreCase(prefix + hook.identifier());
-    }
+    }*/
 }

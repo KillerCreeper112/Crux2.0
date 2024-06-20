@@ -25,7 +25,7 @@ public class Tags {
     public <T> @NotNull Collection<StringHook<T>> getTagsFrom(@NotNull T object){
         Collection<StringHook<T>> tags = new HashSet<>();
         this.tags.forEach(t ->{
-            if(t.canResolve(object)) tags.add((StringHook<T>) t);
+            //todo if(t.canResolve(object)) tags.add((StringHook<T>) t);
         });
         return tags;
     }

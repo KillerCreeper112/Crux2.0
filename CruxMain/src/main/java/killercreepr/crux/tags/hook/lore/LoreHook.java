@@ -3,7 +3,6 @@ package killercreepr.crux.tags.hook.lore;
 import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.tags.FormatArgs;
 import killercreepr.crux.tags.hook.ObjectHook;
-import killercreepr.crux.tags.hook.string.StringHook;
 import killercreepr.crux.tags.tag.LoreResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
