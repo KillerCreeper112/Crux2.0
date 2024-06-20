@@ -24,19 +24,19 @@ public class StringListTagContainer extends SimpleTagContainer<StringListResolve
     }
 
     @Override
-    public SimpleTagContainer<StringListResolver> add(@NotNull StringListResolver resolver, @Nullable FormatPrefix prefix) {
+    public StringListTagContainer add(@NotNull StringListResolver resolver, @Nullable FormatPrefix prefix) {
         super.add(resolver, prefix);
         return this;
     }
 
     @Override
-    public SimpleTagContainer<StringListResolver> addAll(@Nullable TagContainer<StringListResolver> tags) {
+    public StringListTagContainer addAll(@Nullable TagContainer<StringListResolver> tags) {
         super.addAll(tags);
         return this;
     }
 
     @Override
-    public SimpleTagContainer<StringListResolver> addAll(@Nullable TagContainer<StringListResolver> tags, @Nullable FormatPrefix prefix) {
+    public StringListTagContainer addAll(@Nullable TagContainer<StringListResolver> tags, @Nullable FormatPrefix prefix) {
         super.addAll(tags, prefix);
         return this;
     }

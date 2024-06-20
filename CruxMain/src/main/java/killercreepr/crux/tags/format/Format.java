@@ -1,7 +1,6 @@
 package killercreepr.crux.tags.format;
 
 import killercreepr.crux.context.TextParserContext;
-import killercreepr.crux.registry.SimpleRegistry;
 import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.crux.tags.provider.StringListTagProvider;
@@ -11,7 +10,6 @@ import killercreepr.crux.tags.container.StringTagContainer;
 import killercreepr.crux.tags.resolver.StringListResolver;
 import killercreepr.crux.tags.resolver.StringResolver;
 import killercreepr.crux.tags.context.FormatParserContext;
-import killercreepr.crux.util.CruxItem;
 import killercreepr.crux.util.CruxMath;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -82,12 +80,26 @@ public class Format implements FormatSerializer{
     }
 
     @Override
-    public @NotNull List<String> deserialize(@NotNull Collection<String> list) {
-        return new ArrayList<>(list);//todo allow global tags to be registered
+    public @NotNull List<Component> deserializeList(@NotNull Collection<String> list) {
+        return deserializeList(list, null);
     }
 
     @Override
-    public @NotNull List<String> deserialize(@NotNull Collection<String> list, @Nullable StringListTagProvider tagProvider) {
+    public @NotNull List<Component> deserializeList(@NotNull Collection<String> list, @Nullable MergedTagContainer tagProvider) {
+        List<Component> formatted = new ArrayList<>();
+        for(String s : deserializeStringList(list, tagProvider)){
+            formatted.add(deserialize(s, tagProvider));
+        }
+        return formatted;
+    }
+
+    @Override
+    public @NotNull List<String> deserializeStringList(@NotNull Collection<String> list) {
+        return deserializeStringList(list, null);
+    }
+
+    @Override
+    public @NotNull List<String> deserializeStringList(@NotNull Collection<String> list, @Nullable StringListTagProvider tagProvider) {
         List<String> formated = new ArrayList<>();
         if(tagProvider==null){
             //todo add global tags
@@ -107,17 +119,13 @@ public class Format implements FormatSerializer{
     }
 
     @Override
-    public @NotNull List<Component> deserializeToComponents(@NotNull Collection<String> list) {
-        return deserializeToComponents(list, null);
+    public @Nullable List<String> parseStringList(@NotNull String text) {
+        return parseStringList(text, null);
     }
 
     @Override
-    public @NotNull List<Component> deserializeToComponents(@NotNull Collection<String> list, @Nullable MergedTagContainer provider) {
-        List<Component> add = new ArrayList<>();
-        for(String s : deserialize(list, provider)){
-            add.add(CruxItem.NO_ITALICS.append(deserialize(s, provider)));
-        }
-        return add;
+    public @Nullable List<String> parseStringList(@NotNull String text, @Nullable MergedTagContainer tagProvider) {
+        return matchStringList(text, new StringListTagContainer(tags).addAll(tagProvider==null?null:tagProvider.getStringListTags()));
     }
 
     public @Nullable List<String> matchStringList(@NotNull String text, @NotNull StringListTagContainer container){

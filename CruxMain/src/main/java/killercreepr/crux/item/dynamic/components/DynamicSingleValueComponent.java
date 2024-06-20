@@ -21,7 +21,7 @@ public abstract class DynamicSingleValueComponent implements DynamicItemComponen
     }
 
     public @NotNull String parseString(@NotNull TextParserContext context){
-        return context.parseString(value.toString());
+        return context.deserialize(value.toString());
     }
 
     public @NotNull Component parseComponent(@NotNull TextParserContext context){
@@ -40,14 +40,14 @@ public abstract class DynamicSingleValueComponent implements DynamicItemComponen
         for(Object s : unparsed){
             list.add(s.toString());
         }
-        return context.parseComponentLore(list);
+        return context.deserializeToComponents(list);
     }
 
     public @NotNull List<String> parseStringList(@NotNull TextParserContext context){
         if(!(value instanceof List<?> l)) return List.of();
         List<String> list = new ArrayList<>();
         for(Object s : l){
-            list.add(context.parseString(s.toString()));
+            list.add(context.deserialize(s.toString()));
         }
         return list;
     }

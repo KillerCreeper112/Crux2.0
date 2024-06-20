@@ -18,9 +18,12 @@ public interface FormatSerializer {
     @NotNull String deserializeString(@NotNull String text);
     @NotNull String deserializeString(@NotNull String text, @Nullable StringTagProvider tagProvider);
 
-    @NotNull List<String> deserialize(@NotNull Collection<String> list);
-    @NotNull List<String> deserialize(@NotNull Collection<String> list, @Nullable StringListTagProvider tagProvider);
+    @NotNull List<Component> deserializeList(@NotNull Collection<String> list);
+    @NotNull List<Component> deserializeList(@NotNull Collection<String> list, @Nullable MergedTagContainer tagProvider);
 
-    @NotNull List<Component> deserializeToComponents(@NotNull Collection<String> list);
-    @NotNull List<Component> deserializeToComponents(@NotNull Collection<String> list, @Nullable MergedTagContainer tagProvider);
+    @NotNull List<String> deserializeStringList(@NotNull Collection<String> list);
+    @NotNull List<String> deserializeStringList(@NotNull Collection<String> list, @Nullable StringListTagProvider tagProvider);
+
+    @Nullable List<String> parseStringList(@NotNull String text);
+    @Nullable List<String> parseStringList(@NotNull String text, @Nullable MergedTagContainer tagProvider);
 }

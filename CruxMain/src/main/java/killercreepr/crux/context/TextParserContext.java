@@ -10,17 +10,15 @@ import java.util.Collection;
 import java.util.List;
 
 public interface TextParserContext {
-    @NotNull String parseString(@NotNull String text);
-    @NotNull List<String> parseStringLore(@NotNull Collection<String> lore);
+    @NotNull String serialize(@NotNull Component component);
+    @NotNull Component deserialize(@NotNull String text);
 
-    @NotNull
-    Component parseComponent(@NotNull String text);
-    @NotNull List<Component> parseComponentLore(@NotNull Collection<String> lore);
+    @NotNull String deserializeString(@NotNull String text);
 
-    @Nullable List<String> deserializeLore(@NotNull String input);
-    @NotNull
-    Format getFormat();
+    @NotNull List<Component> deserializeList(@NotNull Collection<String> list);
 
-    @Nullable
-    FormatPrefix getPrefix();
+    @NotNull List<String> deserializeStringList(@NotNull Collection<String> list);
+
+    @NotNull Format getFormat();
+    @Nullable FormatPrefix getPrefix();
 }

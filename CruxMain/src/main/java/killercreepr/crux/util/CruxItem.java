@@ -1,10 +1,11 @@
 package killercreepr.crux.util;
 
 import killercreepr.crux.Crux;
-import killercreepr.crux.context.FormatParserContext;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.Holder;
+import killercreepr.crux.tags.context.FormatParserContext;
 import killercreepr.crux.tags.format.Format;
+import killercreepr.crux.tags.provider.StringTagProvider;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Color;
@@ -52,7 +53,8 @@ public class CruxItem implements Cloneable {
 
     private Component c(@Nullable String s){
         if(s==null) return null;
-        return c(format.deserialize(DataExchange.builder().put("item", item()).build(), null, s));
+        /*DataExchange.builder().put("item", item()).build(), null, s*/
+        return c(format.deserialize(s, StringTagProvider.build(format.tags().buildStringTags(item))));
     }
 
     private Component c(@Nullable Component s){
@@ -93,13 +95,14 @@ public class CruxItem implements Cloneable {
     public CruxItem addLoreFromString(@Nullable Collection<String> lore){
         if(lore==null) return this;
         FormatParserContext context = buildFormatContext();
-        return addLore(context.parseComponentLore(lore));
+        return addLore(context.deserializeList(lore));
     }
 
     public @NotNull FormatParserContext buildFormatContext(){
         return new FormatParserContext(format, null, null,
-            format.getTags().hookStringResolvers(new FormatParserContext.Builder(format).build(), Holder.direct(item()), null),
-            format.getTags().hookLoreTags(item(), null));
+            format.tags().buildTags(item())
+            /*format.tags().hookStringResolvers(new FormatParserContext.Builder(format).build(), Holder.direct(item()), null),
+            format.tags().hookLoreTags(item(), null)*/);
     }
 
     public CruxItem addLoreFromString(@NotNull String @Nullable... lore){
@@ -152,7 +155,7 @@ public class CruxItem implements Cloneable {
     public CruxItem loreFromString(@Nullable List<String> lore) {
         if(lore==null) return this;
         FormatParserContext context = buildFormatContext();
-        return lore(context.parseComponentLore(lore));
+        return lore(context.deserializeList(lore));
     }
 
     public CruxItem lore(@Nullable List<Component> lore) {
