@@ -2,8 +2,8 @@ package killercreepr.crux.tags.ab.tags;
 
 import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.tags.FormatArgs;
+import killercreepr.crux.tags.ab.container.MergedTagContainer;
 import killercreepr.crux.tags.ab.container.MultiTagContainer;
-import killercreepr.crux.tags.ab.container.MultipleTagContainer;
 import killercreepr.crux.tags.ab.container.StringListTagContainer;
 import killercreepr.crux.tags.ab.container.StringTagContainer;
 import killercreepr.crux.tags.ab.context.FormatPrefix;
@@ -79,8 +79,8 @@ public class Tags {
         return tag;
     }
 
-    public <T> @Nullable MultiTagContainer buildTags(@NotNull T object){
-        MultipleTagContainer tag = new MultipleTagContainer(this);
+    public <T> @Nullable MergedTagContainer buildTags(@NotNull T object){
+        MultiTagContainer tag = new MultiTagContainer(this);
         locateTags(object).forEach(objectTag ->{
             tag.getStringTags().addAll(buildStringTags(object));
             tag.getStringListTags().addAll(buildStringListTags(object));

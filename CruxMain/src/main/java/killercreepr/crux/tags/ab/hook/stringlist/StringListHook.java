@@ -1,4 +1,4 @@
-package killercreepr.crux.tags.ab.hook.string;
+package killercreepr.crux.tags.ab.hook.stringlist;
 
 import killercreepr.crux.tags.ab.hook.HookTag;
 import org.jetbrains.annotations.NotNull;

@@ -1,9 +1,8 @@
 package killercreepr.crux.tags.ab.context;
 
 import killercreepr.crux.context.TextParserContext;
-import killercreepr.crux.tags.ab.container.MultiTagContainer;
-import killercreepr.crux.tags.ab.tags.FormatTest;
-import killercreepr.crux.tags.format.Format;
+import killercreepr.crux.tags.ab.container.MergedTagContainer;
+import killercreepr.crux.tags.ab.tags.Format;
 import killercreepr.crux.util.CruxItem;
 import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
@@ -15,15 +14,15 @@ import java.util.Collection;
 import java.util.List;
 
 public class FormatParserContext implements TextParserContext {
-    protected final @NotNull FormatTest format;
+    protected final @NotNull Format format;
     protected final @Nullable OfflinePlayer viewer;
     protected final @Nullable FormatPrefix tagsPrefix;
-    protected final @Nullable MultiTagContainer tags;
+    protected final @Nullable MergedTagContainer tags;
 
-    public FormatParserContext(@NotNull FormatTest format,
+    public FormatParserContext(@NotNull Format format,
                                @Nullable OfflinePlayer viewer,
                                @Nullable FormatPrefix tagsPrefix,
-                               @Nullable MultiTagContainer tags) {
+                               @Nullable MergedTagContainer tags) {
         this.format = format;
         this.viewer = viewer;
         this.tagsPrefix = tagsPrefix;
@@ -82,7 +81,7 @@ public class FormatParserContext implements TextParserContext {
     }
 
     @Override
-    public @NotNull Format getFormat() {
+    public @NotNull killercreepr.crux.tags.format.Format getFormat() {
         return null;//todo
     }
 
@@ -100,10 +99,10 @@ public class FormatParserContext implements TextParserContext {
     }
 
     public static final class Builder {
-        private @NotNull FormatTest format;
+        private @NotNull Format format;
         private @Nullable OfflinePlayer viewer;
         private @Nullable FormatPrefix tagsPrefix;
-        public Builder(@NotNull FormatTest format) {
+        public Builder(@NotNull Format format) {
             this.format = format;
         }
 
@@ -112,7 +111,7 @@ public class FormatParserContext implements TextParserContext {
             tagsPrefix(context.getTagsPrefix());
         }
 
-        public Builder format(@NotNull FormatTest format) {
+        public Builder format(@NotNull Format format) {
             this.format = format;
             return this;
         }

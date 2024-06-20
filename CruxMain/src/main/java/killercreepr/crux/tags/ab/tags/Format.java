@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class FormatTest implements FormatSerializer{
+public class Format implements FormatSerializer{
     protected final @NotNull MiniMessage miniMessage;
     protected final @NotNull Tags tags;
     protected final Registry<RawTextFormat> rawTextFormats = SimpleRegistry.fromSet();
@@ -34,7 +34,7 @@ public class FormatTest implements FormatSerializer{
     protected final Pattern EQUATION_PATTERN = Pattern.compile("\\{\\{(.+?)\\}\\}");
     protected final Pattern B_EQUATION_PATTERN = Pattern.compile("\\{b\\{(.+?)\\}\\}");
 
-    public FormatTest(@NotNull MiniMessage miniMessage, @NotNull Tags tags) {
+    public Format(@NotNull MiniMessage miniMessage, @NotNull Tags tags) {
         this.miniMessage = miniMessage;
         this.tags = tags;
     }
