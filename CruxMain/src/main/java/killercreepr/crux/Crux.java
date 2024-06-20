@@ -5,9 +5,10 @@ import killercreepr.crux.data.tick.CruxTick;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.crux.registry.KeyedRegistry;
-import killercreepr.crux.tags.Tags;
+import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.format.Format;
 import killercreepr.crux.tags.minimessage.*;
+import killercreepr.crux.tags.standard.minimessage.*;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Bukkit;
@@ -25,7 +26,7 @@ import java.util.logging.Logger;
 
 public final class Crux {
     public static final String NAMESPACE = "crux";
-    public static final Tags TAGS = new Tags();
+    public static final TagParser TAGS = new TagParser();
     public static final Format FORMAT = new Format(
             MiniMessage.builder()
                     .tags(TagResolver.builder()

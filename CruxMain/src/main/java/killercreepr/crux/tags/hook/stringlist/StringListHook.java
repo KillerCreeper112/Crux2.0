@@ -1,11 +1,13 @@
-package killercreepr.crux.tags.hook.string;
+package killercreepr.crux.tags.hook.stringlist;
 
 import killercreepr.crux.tags.hook.HookTag;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class StringHook<T> implements HookTag<T, String> {
+import java.util.List;
+
+public abstract class StringListHook<T> implements HookTag<T, List<String>> {
     protected final @NotNull Class<T> type;
-    public StringHook(@NotNull Class<T> type) {
+    public StringListHook(@NotNull Class<T> type) {
         this.type = type;
     }
 
