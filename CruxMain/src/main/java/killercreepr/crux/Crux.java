@@ -31,16 +31,17 @@ public final class Crux {
         .addTags(CruxStandardTags.build())
         .build();
     public static final Format FORMAT = new Format(
-            MiniMessage.builder()
-                    .tags(TagResolver.builder()
-                            .resolvers(TagResolver.standard(),
-                                    new CheckBoolTag(),
-                                    new StringFormatTag(),
-                                    new DateFormatTag(),
-                                    new DurationTag(),
-                                    new ConvertBoolTag())
-                            .build()
-                    ).build(), TAGS
+        MiniMessage.builder()
+            .tags(TagResolver.builder()
+                    .resolvers(TagResolver.standard(),
+                        new CheckBoolTag(),
+                        new StringFormatTag(),
+                        new DateFormatTag(),
+                        new DurationTag(),
+                        new ConvertBoolTag(),
+                        new UnicodeSpacingTag())
+                    .build()
+            ).build(), TAGS
     );
     private static final Logger log = Logger.getLogger(Crux.class.getName());
 
