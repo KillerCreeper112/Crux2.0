@@ -1,5 +1,6 @@
 package killercreepr.cruxmenus.menu.bukkit.registry;
 
+import killercreepr.crux.Crux;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.registry.KeyedRegistry;
 import killercreepr.crux.registry.Registry;
@@ -77,8 +78,8 @@ public class MenuRegistry {
 
     public void loadConfiguration(@NotNull CruxConfig cfg){
         MenuHolder holder = cfg.deserialize(MenuHolder.class, "");
-        Bukkit.getLogger().log(Level.WARNING, "Menu Holder: " + holder);
         if(holder == null) return;
+        Crux.log(Level.INFO, "Registered crux menu: " + holder.key());
         MENU_HOLDERS.register(holder);
     }
 }
