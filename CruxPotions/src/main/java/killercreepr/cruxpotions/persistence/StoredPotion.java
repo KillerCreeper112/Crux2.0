@@ -13,4 +13,7 @@ public interface StoredPotion {
     @NotNull CruxPotion getPotion();
     int getDuration();
     int getAmplifier();
+    @NotNull StoredPotion withDuration(int duration);
+    @NotNull StoredPotion withAmplifier(int amplifier);
+    @NotNull StoredPotion withPotion(@NotNull CruxPotion potion);
 }

@@ -11,10 +11,10 @@ import java.util.Iterator;
 import java.util.Map;
 
 public abstract class SimpleTagContainer<T extends TagResolver<?>> implements TagContainer<T> {
-    protected final @NotNull TagParser format;
+    protected final @NotNull TagParser tagParser;
     protected final Map<String, T> tags = new HashMap<>();
-    public SimpleTagContainer(@NotNull TagParser format) {
-        this.format = format;
+    public SimpleTagContainer(@NotNull TagParser tagParser) {
+        this.tagParser = tagParser;
     }
     @Override
     public SimpleTagContainer<T>  add(@NotNull T resolver) {
@@ -60,5 +60,9 @@ public abstract class SimpleTagContainer<T extends TagResolver<?>> implements Ta
     @Override
     public Iterator<T> iterator() {
         return tags.values().iterator();
+    }
+
+    public @NotNull TagParser getTagParser() {
+        return tagParser;
     }
 }

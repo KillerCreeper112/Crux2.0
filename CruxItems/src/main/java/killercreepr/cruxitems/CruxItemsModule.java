@@ -9,6 +9,7 @@ import killercreepr.cruxitems.config.Config;
 import killercreepr.cruxitems.item.CruxedItem;
 import killercreepr.cruxitems.item.GeneralCruxedItemDisplayUpdater;
 import killercreepr.cruxitems.item.ItemDisplayFormatter;
+import killercreepr.cruxitems.listener.DisableRecipesListener;
 import killercreepr.cruxitems.registries.CruxItemRegistries;
 import killercreepr.cruxitems.values.DefaultValues;
 import killercreepr.cruxitems.values.ValuesProvider;
@@ -17,7 +18,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-//todo make plugin items not count in vanilla recipes
 public class CruxItemsModule implements CruxModule, ItemHandler {
     public static final String NAMESPACE = "CruxItems";
     @Override
@@ -51,6 +51,10 @@ public class CruxItemsModule implements CruxModule, ItemHandler {
         }else values(new DefaultValues());
 
         Crux.handlers().setItem(this);
+
+        plugin.registerListeners(
+            new DisableRecipesListener()
+        );
 
         //todo CruxItemsCommands.register(plugin);
     }

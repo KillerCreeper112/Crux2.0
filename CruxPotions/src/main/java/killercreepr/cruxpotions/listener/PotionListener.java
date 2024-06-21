@@ -10,6 +10,7 @@ import killercreepr.cruxpotions.potions.inflictor.EntityInflictor;
 import killercreepr.cruxpotions.potions.inflictor.PotionInflictor;
 import killercreepr.cruxpotions.values.ValuesProvider;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.ThrownPotion;
 import org.bukkit.event.EventHandler;
@@ -68,7 +69,6 @@ public class PotionListener implements Listener {
         applyPotion(p, event.getPotion());
     }
 
-    //todo make duration based on distance of the entity.
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onPotionSplash(PotionSplashEvent event) {
         if(event.getAffectedEntities().isEmpty()) return;
@@ -77,11 +77,13 @@ public class PotionListener implements Listener {
         Collection<StoredPotion> potions = PotionPersistTags.STORED_CUSTOM_POTIONS.get(item, null);
         if(potions == null || potions.isEmpty()) return;
         PotionInflictor inflictor = new EntityInflictor(potion);
-        for(Entity e : event.getAffectedEntities()){
+        for(LivingEntity e : event.getAffectedEntities()){
             PotionHolder data = EntityMemory.getOrCreateDataHolder(e, PotionHolder.class);
             if(data==null) continue;
+            double intensity = event.getIntensity(e);
             for(StoredPotion h : potions){
-                data.addPotion(h.create(e, inflictor));
+                int duration = (int) (intensity * (double) h.getDuration() + 0.5D);
+                data.addPotion(h.withDuration(duration).create(e, inflictor));
             }
         }
     }

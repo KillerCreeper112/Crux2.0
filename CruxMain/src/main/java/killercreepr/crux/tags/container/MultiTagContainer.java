@@ -17,13 +17,13 @@ public class MultiTagContainer implements MergedTagContainer {
         return standard().addAll(resolvers);
     }
 
-    protected final TagParser tags;
+    protected final @NotNull TagParser tags;
     protected final @NotNull StringTagContainer strings;
     protected final @NotNull StringListTagContainer stringLists;
-    public MultiTagContainer(TagParser tags){
+    public MultiTagContainer(@NotNull TagParser tags){
         this(tags, new StringTagContainer(tags), new StringListTagContainer(tags));
     }
-    public MultiTagContainer(TagParser tags, @NotNull StringTagContainer strings, @NotNull StringListTagContainer stringLists) {
+    public MultiTagContainer(@NotNull TagParser tags, @NotNull StringTagContainer strings, @NotNull StringListTagContainer stringLists) {
         this.tags = tags;
         this.strings = strings;
         this.stringLists = stringLists;
@@ -39,17 +39,18 @@ public class MultiTagContainer implements MergedTagContainer {
         return strings;
     }
 
+    @Override
     public MultiTagContainer hook(@Nullable Object info) {
         strings.hook(info);
         stringLists.hook(info);
         return this;
     }
 
-    //convenience methods
-    //strings
+    @Override
     public MultiTagContainer add(@NotNull TagResolver<?> resolver){
         return add(resolver, null);
     }
+    @Override
     public MultiTagContainer add(@NotNull TagResolver<?> resolver, @Nullable FormatPrefix prefix) {
         if(resolver instanceof StringResolver r){
             strings.add(r, prefix);
@@ -58,7 +59,7 @@ public class MultiTagContainer implements MergedTagContainer {
         }
         return this;
     }
-
+    @Override
     public MultiTagContainer addAll(@Nullable TagResolver<?>... resolvers){
         if(resolvers==null) return this;
         for(TagResolver<?> t : resolvers){
@@ -67,11 +68,11 @@ public class MultiTagContainer implements MergedTagContainer {
         }
         return this;
     }
-
+    @Override
     public MultiTagContainer addAll(@Nullable TagContainer<?> tags) {
         return addAll(tags, null);
     }
-
+    @Override
     public MultiTagContainer addAll(@Nullable TagContainer<?> tags, @Nullable FormatPrefix prefix) {
         try{
             strings.addAll((TagContainer<StringResolver>) tags, prefix);
@@ -84,9 +85,14 @@ public class MultiTagContainer implements MergedTagContainer {
         return this;
     }
 
-    public MultiTagContainer add(@NotNull MultiTagContainer container){
+    @Override
+    public MultiTagContainer add(@NotNull MergedTagContainer container){
         strings.addAll(container.getStringTags());
         stringLists.addAll(container.getStringListTags());
         return this;
+    }
+
+    public @NotNull TagParser getTags() {
+        return tags;
     }
 }

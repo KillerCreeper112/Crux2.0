@@ -18,6 +18,7 @@ import killercreepr.cruxconfig.config.common.json.annotation.JsonSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.Map;
 
 //todo enchants, attributes, color, food, item flags,
@@ -33,7 +34,7 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
         COMPONENT_REGISTRY.register("name", new FileGenericSingleDynamicComponent<>(DynamicItemName.class) {
             @Override
             public @NotNull String jsonSerializerID() {
-                return "dyanmic_item_name";
+                return "dynamic_item_name";
             }
 
             @Override
@@ -45,7 +46,7 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
         COMPONENT_REGISTRY.register("lore", new FileGenericSingleDynamicComponent<>(DynamicItemLore.class) {
             @Override
             public @NotNull String jsonSerializerID() {
-                return "dyanmic_item_lore";
+                return "dynamic_item_lore";
             }
 
             @Override
@@ -57,7 +58,7 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
         COMPONENT_REGISTRY.register("custom_model_data", new FileGenericSingleDynamicComponent<>(DynamicItemCustomModelData.class) {
             @Override
             public @NotNull String jsonSerializerID() {
-                return "dyanmic_item_custom_model_data";
+                return "dynamic_item_custom_model_data";
             }
 
             @Override
@@ -69,7 +70,7 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
         COMPONENT_REGISTRY.register("unbreakable", new FileGenericSingleDynamicComponent<>(DynamicItemUnbreakable.class) {
             @Override
             public @NotNull String jsonSerializerID() {
-                return "dyanmic_item_unbreakable";
+                return "dynamic_item_unbreakable";
             }
 
             @Override
@@ -81,7 +82,7 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
         COMPONENT_REGISTRY.register("enchant_glint_override", new FileGenericSingleDynamicComponent<>(DynamicItemEnchantGlintOverride.class) {
             @Override
             public @NotNull String jsonSerializerID() {
-                return "dyanmic_item_enchant_glint_override";
+                return "dynamic_item_enchant_glint_override";
             }
 
             @Override
@@ -93,7 +94,7 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
         COMPONENT_REGISTRY.register("max_stack_size", new FileGenericSingleDynamicComponent<>(DynamicItemMaxStackSize.class) {
             @Override
             public @NotNull String jsonSerializerID() {
-                return "dyanmic_item_max_stack_size";
+                return "dynamic_item_max_stack_size";
             }
 
             @Override
@@ -105,7 +106,7 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
         COMPONENT_REGISTRY.register("fire_resistant", new FileGenericSingleDynamicComponent<>(DynamicItemFireResistant.class) {
             @Override
             public @NotNull String jsonSerializerID() {
-                return "dyanmic_item_fire_resistant";
+                return "dynamic_item_fire_resistant";
             }
 
             @Override
@@ -117,7 +118,7 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
         COMPONENT_REGISTRY.register("armor_trim", new FileDynamicItemComponent<>(DynamicItemArmorTrim.class) {
             @Override
             public @NotNull String jsonSerializerID() {
-                return "dyanmic_item_armor_trim";
+                return "dynamic_item_armor_trim";
             }
 
 
@@ -163,6 +164,36 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
             @Override
             public @NotNull DynamicItemRarity deserialize(@NotNull Object object) {
                 return new DynamicItemRarity(object);
+            }
+        });
+
+        COMPONENT_REGISTRY.register("enchants", new FileDynamicItemComponent<>(DynamicItemEnchants.class) {
+            @Override
+            public @NotNull String jsonSerializerID() {
+                return "dynamic_item_enchants";
+            }
+
+
+            @Override
+            public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull DynamicItemEnchants object) {
+                FileRegistry registry = context.getRegistry();
+                FileObject o = new FileObject();
+                object.getEnchants().forEach((key, value) -> o.add(key.toString(), registry.serializeToFileElement(value)));
+                return o;
+            }
+
+            @Override
+            public @Nullable DynamicItemEnchants deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
+                if(!(e instanceof FileObject o)) return null;
+                FileRegistry registry = context.getRegistry();
+                Map<Object, Object> enchants = new HashMap<>();
+                o.forEach((key, value) ->{
+                    Object level = registry.deserialize(String.class, value);
+                    if(level==null) return;
+                    enchants.put(key, level);
+                });
+                if(enchants.isEmpty()) return null;
+                return new DynamicItemEnchants(enchants);
             }
         });
     }

@@ -46,9 +46,6 @@ public class TestPlugin extends CruxPlugin implements Listener {
         CruxPotionRegistries.POTIONS.register(new TestPotion());
     }
 
-    record TestBoi(String name, int x){
-    }
-
     @Override
     public void disabled() {
         super.disabled();

@@ -32,8 +32,8 @@ public class CreateTitle {
     }
 
     protected @NotNull Component deserialize(@Nullable OfflinePlayer viewer, @Nullable String input, @Nullable StringTagProvider tags){
-        if(input == null) return Component.empty();//todo include viewer
-        return Crux.FORMAT.deserialize(input, tags);
+        if(input == null) return Component.empty();
+        return Crux.FORMAT.deserialize(input, StringTagProvider.mergeHook(tags, viewer));
     }
 
     public @Nullable String getTitle() {

@@ -1,11 +1,11 @@
 package killercreepr.cruxconfig.config.common.handler;
 
 import killercreepr.crux.util.CruxReflect;
-import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
-import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
-import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
-import killercreepr.cruxconfig.config.common.yaml.handler.YamlObjectHandler;
-import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
+import killercreepr.cruxconfig.config.bukkit.handler.SimpleFileHandler;
+import killercreepr.cruxconfig.config.common.FileContext;
+import killercreepr.cruxconfig.config.common.FileRegistry;
+import killercreepr.cruxconfig.config.common.element.FileElement;
+import killercreepr.cruxconfig.config.common.element.FileObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,8 +16,8 @@ import java.util.Map;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-//todo make this a file handler to fit with json and yaml
-public class AutoFileHandler<T> implements YamlObjectHandler<T> {
+
+public class AutoFileHandler<T> extends SimpleFileHandler<T> {
     public static <T> AutoFileHandler<T> notNull(@NotNull Class<T> type){
         return new AutoFileHandler<>(type, (name, value) -> value != null);
     }
@@ -67,9 +67,9 @@ public class AutoFileHandler<T> implements YamlObjectHandler<T> {
     }
 
     @Override
-    public @NotNull YamlElement serializeToYaml(@NotNull YamlContext context, @NotNull T object) {
-        YamlObject map = new YamlObject();
-        YamlRegistry registry = context.getRegistry();
+    public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull T object) {
+        FileObject map = new FileObject();
+        FileRegistry registry = context.getRegistry();
         for(Field field : CruxReflect.getNonStaticDeclaredFields(object.getClass())){
             if(disabledFields != null && disabledFields.test(field)) continue;
             try{
@@ -78,7 +78,7 @@ public class AutoFileHandler<T> implements YamlObjectHandler<T> {
                 Object obj = field.get(object);
                 field.setAccessible(x);
                 if(obj == null) continue;
-                YamlElement serialized = registry.serializeObject(obj);
+                FileElement serialized = registry.serializeToFileElement(obj);
                 map.add(field.getName(), serialized);
             }catch (IllegalAccessException ignored){}
         }
@@ -86,11 +86,11 @@ public class AutoFileHandler<T> implements YamlObjectHandler<T> {
     }
 
     @Override
-    public @Nullable T deserializeFromYaml(@NotNull YamlContext context, @Nullable YamlElement e) {
-        if(!(e instanceof YamlObject o)) return null;
-        YamlRegistry registry = context.getRegistry();
+    public @Nullable T deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
+        if(!(e instanceof FileObject o)) return null;
+        FileRegistry registry = context.getRegistry();
         Map<String, Object> fields = new LinkedHashMap<>();
-        Map<String, YamlElement> yamlMap = o.asMap();
+        Map<String, FileElement> yamlMap = o.asMap();
         for(Field field : CruxReflect.getNonStaticDeclaredFields(type)){
             if(disabledFields != null && disabledFields.test(field)) continue;
             Object found  = registry.deserialize(field.getType(), yamlMap.get(field.getName()));
@@ -100,4 +100,8 @@ public class AutoFileHandler<T> implements YamlObjectHandler<T> {
         return CruxReflect.attemptCreation(type, fields);
     }
 
+    @Override
+    public @NotNull String jsonSerializerID() {
+        return type.getSimpleName().toLowerCase();
+    }
 }

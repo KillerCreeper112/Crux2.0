@@ -14,7 +14,7 @@ public class StringListTagContainer extends SimpleTagContainer<StringListResolve
     @Override
     public SimpleTagContainer<StringListResolver> hook(@Nullable Object info) {
         if(info==null) return this;
-        return addAll(format.buildStringListTags(info));
+        return addAll(tagParser.buildStringListTags(info));
     }
 
     @Override

@@ -5,6 +5,7 @@ import killercreepr.crux.tags.provider.StringTagProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+//todo change this to simple or something
 public class EquationContext implements InputContext {
     protected final @NotNull Format format;
     protected final @Nullable StringTagProvider tags;

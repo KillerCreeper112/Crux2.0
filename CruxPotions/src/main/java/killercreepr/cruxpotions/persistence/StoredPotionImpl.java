@@ -44,4 +44,19 @@ public class StoredPotionImpl implements StoredPotion {
     public int getAmplifier() {
         return amplifier;
     }
+
+    @Override
+    public @NotNull StoredPotion withDuration(int duration) {
+        return new StoredPotionImpl(potion, duration, amplifier);
+    }
+
+    @Override
+    public @NotNull StoredPotion withAmplifier(int amplifier) {
+        return new StoredPotionImpl(potion, duration, amplifier);
+    }
+
+    @Override
+    public @NotNull StoredPotion withPotion(@NotNull CruxPotion potion) {
+        return new StoredPotionImpl(potion, duration, amplifier);
+    }
 }

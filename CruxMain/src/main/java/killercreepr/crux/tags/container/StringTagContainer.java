@@ -14,7 +14,7 @@ public class StringTagContainer extends SimpleTagContainer<StringResolver> {
     @Override
     public StringTagContainer hook(@Nullable Object info) {
         if(info==null) return this;
-        addAll(format.buildStringTags(info));
+        addAll(tagParser.buildStringTags(info));
         return this;
     }
 

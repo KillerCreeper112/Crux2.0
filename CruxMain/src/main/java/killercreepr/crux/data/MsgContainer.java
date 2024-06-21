@@ -101,7 +101,7 @@ public class MsgContainer {
 
     protected @NotNull Component deserialize(@Nullable OfflinePlayer viewer, @Nullable String input, @Nullable MergedTagContainer tags){
         if(input == null) return Component.empty();
-        return Crux.FORMAT.deserialize(input, tags);//todo make viewer count in placeholders
+        return Crux.FORMAT.deserialize(input, MergedTagContainer.mergeHook(tags, viewer));
     }
 
     public @Nullable List<String> getChat() {
