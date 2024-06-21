@@ -4,7 +4,7 @@ rootProject.name = "Crux"
 include(
     "CruxMain",
     "CruxConfigs",
-    "CruxMenu",
+    "CruxMenus",
     "CruxPotions",
 
     "CruxAttributes",

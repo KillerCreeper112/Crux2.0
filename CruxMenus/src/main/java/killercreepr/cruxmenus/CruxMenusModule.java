@@ -1,0 +1,44 @@
+package killercreepr.cruxmenus;
+
+import killercreepr.crux.Crux;
+import killercreepr.crux.module.CruxModule;
+import killercreepr.crux.plugin.CruxPlugin;
+import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
+import killercreepr.cruxconfig.config.registry.CfgRegistries;
+import killercreepr.cruxmenus.menu.bukkit.listener.MenuListener;
+import killercreepr.cruxmenus.menu.bukkit.registry.MenuRegistry;
+import org.jetbrains.annotations.NotNull;
+
+public class CruxMenusModule implements CruxModule {
+    public static final String NAMESPACE = "CruxMenus";
+    protected final @NotNull MenuRegistry menuRegistry;
+    public CruxMenusModule(@NotNull MenuRegistry registry){
+        this.menuRegistry = registry;
+    }
+
+    public CruxMenusModule() {
+        this(new MenuRegistry(Crux.FORMAT));
+    }
+
+    public @NotNull MenuRegistry menuRegistry() {
+        return menuRegistry;
+    }
+
+    @Override
+    public @NotNull String name() {
+        return NAMESPACE;
+    }
+
+    @Override
+    public void onEnable(@NotNull CruxPlugin plugin) {
+        plugin.registerListeners(
+                new MenuListener(plugin)
+        );
+    }
+
+    @Override
+    public void reload(@NotNull CruxPlugin plugin) {
+        menuRegistry.register(CfgRegistries.YAML);
+        menuRegistry.loadConfiguration(new CruxFolder(plugin, "menus").file());
+    }
+}
