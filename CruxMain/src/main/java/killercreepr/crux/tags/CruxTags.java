@@ -1,14 +1,11 @@
 package killercreepr.crux.tags;
 
-import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.crux.tags.container.MultiTagContainer;
 import killercreepr.crux.tags.container.StringListTagContainer;
 import killercreepr.crux.tags.container.StringTagContainer;
 import killercreepr.crux.tags.context.FormatPrefix;
-import killercreepr.crux.tags.format.FormatArgs;
 import killercreepr.crux.tags.hook.ObjectTag;
-import killercreepr.crux.tags.resolver.StringResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,20 +13,6 @@ import java.util.Collection;
 import java.util.HashSet;
 
 public class CruxTags implements TagParser {
-    public static @NotNull StringResolver parsed(@NotNull String id, @NotNull String value){
-        return new StringResolver() {
-            @Override
-            public @NotNull String identifier() {
-                return id;
-            }
-
-            @Override
-            public @NotNull String resolve(@NotNull FormatArgs args, @NotNull TextParserContext context) {
-                return value;
-            }
-        };
-    }
-
     protected final Collection<ObjectTag<?>> tags = new HashSet<>();
 
     @Override
@@ -91,5 +74,24 @@ public class CruxTags implements TagParser {
             tag.getStringListTags().addAll(buildStringListTags(object));
         });
         return tag;
+    }
+
+    public static class Builder{
+        protected final Collection<ObjectTag<?>> tags = new HashSet<>();
+        public Builder addTag(@NotNull ObjectTag<?> tag) {
+            tags.add(tag);
+            return this;
+        }
+
+        public Builder addTags(@NotNull Collection<ObjectTag<?>> tags){
+            this.tags.addAll(tags);
+            return this;
+        }
+
+        public @NotNull CruxTags build(){
+            CruxTags tags = new CruxTags();
+            this.tags.forEach(tags::register);
+            return tags;
+        }
     }
 }

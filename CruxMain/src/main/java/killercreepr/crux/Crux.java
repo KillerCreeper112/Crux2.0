@@ -8,6 +8,7 @@ import killercreepr.crux.registry.KeyedRegistry;
 import killercreepr.crux.tags.CruxTags;
 import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.format.Format;
+import killercreepr.crux.tags.standard.CruxStandardTags;
 import killercreepr.crux.tags.standard.minimessage.*;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -26,7 +27,9 @@ import java.util.logging.Logger;
 
 public final class Crux {
     public static final String NAMESPACE = "crux";
-    public static final TagParser TAGS = new CruxTags();
+    public static final TagParser TAGS = new CruxTags.Builder()
+        .addTags(CruxStandardTags.build())
+        .build();
     public static final Format FORMAT = new Format(
             MiniMessage.builder()
                     .tags(TagResolver.builder()
