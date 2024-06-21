@@ -56,6 +56,10 @@ public class CruxString {
         return result.toArray(new String[0]);
     }
 
+    public static @NotNull String unicodeSpacingFont(int number){
+        return "<font:\"crux:spacing\">" + unicodeSpacing(number) + "</font>";
+    }
+
     public static @NotNull String unicodeSpacing(int number){
         if(number == 0) return "";
         return unicodeSpacingConvert(Math.abs(number), number < 0);
