@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public interface CruxEnchant extends Keyed {
-    static @NotNull NamespacedKey k(@NotNull String name){ return Crux.key(name); }
+    private static @NotNull NamespacedKey k(@NotNull String name){ return Crux.key(name); }
 
     static boolean canBeEnchanted(@NotNull ItemStack item){
         for(CruxEnchant e : CruxEnchantRegistries.ENCHANTS){

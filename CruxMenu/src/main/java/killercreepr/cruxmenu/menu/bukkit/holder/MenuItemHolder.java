@@ -3,20 +3,14 @@ package killercreepr.cruxmenu.menu.bukkit.holder;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.Holder;
 import killercreepr.crux.item.dynamic.DynamicItem;
-import killercreepr.crux.tags.container.ObjectStringHookContainer;
-import killercreepr.crux.tags.container.StringHookContainer;
-import killercreepr.crux.tags.defaults.CClaimTags;
-import killercreepr.crux.tags.format.FormatPrefix;
-import killercreepr.crux.util.CruxMath;
+import killercreepr.crux.tags.container.MergedTagContainer;
+import killercreepr.crux.tags.container.MultiTagContainer;
 import killercreepr.cruxmenu.menu.bukkit.MenuContext;
 import killercreepr.cruxmenu.menu.bukkit.MenuItem;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MenuItemHolder {
     protected final @NotNull Holder<DynamicItem> item;
@@ -48,7 +42,7 @@ public class MenuItemHolder {
     }
 
     public abstract static class DisplayConsumer{
-        public abstract @NotNull ItemStack accept(@NotNull Player viewer, @NotNull MenuItemHolder menuItem, @NotNull ItemStack item, @NotNull StringHookContainer resolvers);
+        public abstract @NotNull ItemStack accept(@NotNull Player viewer, @NotNull MenuItemHolder menuItem, @NotNull ItemStack item, @NotNull MergedTagContainer resolvers);
     }
 
     public static class Evaluation{
@@ -62,29 +56,9 @@ public class MenuItemHolder {
             this.info = info;
         }
 
-        //todo remofe test;
-        private final List<CClaimTags.TestBois> ayo = new ArrayList<>(){{
-            add(new CClaimTags.TestBois("1 boi"));
-            add(new CClaimTags.TestBois("2 boi"));
-            add(new CClaimTags.TestBois("3 boi"));
-            add(new CClaimTags.TestBois("4 boi"));
-        }};
         public @NotNull MenuContext evaluateInfo(){
-            DataExchange info = this.info.getInfo().append(item.info());
             DataExchange.Builder extraInfo = new DataExchange.Builder();
-            ObjectStringHookContainer resolvers = new ObjectStringHookContainer(this.info.getResolvers());
-
-            info.getObject("outpost_id", String.class).ifPresent(eq ->{
-                int outpostID = (int) CruxMath.evaluate(this.info.getMenu().getHolder().getRegistry().getFormat().deserializeString(eq, resolvers));
-                extraInfo.put("outpost", Holder.direct(ayo.get(outpostID)));
-            });
-
-            /*info.get("outpost_id", String.class).ifPresent(eq ->{
-                int outpostID = (int) CruxMath.evaluate(CClaim.FORMAT.deserializeString(eq, resolvers));
-                Outpost post = CClaim.inst().getPlayerManager().getClaimPlayer(p).getOutposts().getOrDefault(outpostID, null);
-                extraInfo.set("outpost", post);
-            });*/
-            resolvers.setPrefixBuilder("member",(data, id, object) -> FormatPrefix.addonPlusHook(""));
+            MergedTagContainer resolvers = new MultiTagContainer(this.info.getResolvers().getTagParser());
             return new MenuContext(this.info.getMenu(), extraInfo.build(), resolvers);
         }
     }

@@ -1,10 +1,10 @@
 package killercreepr.cruxmenu.menu.bukkit;
 
-import killercreepr.crux.context.FormatParserContext;
 import killercreepr.crux.item.dynamic.DynamicItem;
 import killercreepr.crux.registry.Registry;
-import killercreepr.crux.tags.container.ObjectLoreHookContainer;
-import killercreepr.crux.tags.container.ObjectStringHookContainer;
+import killercreepr.crux.tags.container.MergedTagContainer;
+import killercreepr.crux.tags.container.MultiTagContainer;
+import killercreepr.crux.tags.context.FormatParserContext;
 import killercreepr.crux.tags.format.Format;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.crux.util.CruxString;
@@ -43,11 +43,6 @@ public class MenuItem {
                 provider.value(this::setPlaceholders).intValue()
         );
         return Optional.empty();
-        /*Number x = base.info().getObject("slot", Number.class).orElse(null);
-        if(x != null) return Optional.of(x.intValue());
-        String eq = base.info().getObject("slot", String.class).orElse(null);
-        if(eq == null) return Optional.empty();
-        return Optional.of((int) CruxMath.evaluate(setPlaceholders(eq)));*/
     }
 
     public boolean canDisplay(){
@@ -57,13 +52,14 @@ public class MenuItem {
     }
 
     public @NotNull String setPlaceholders(@NotNull String text){
-        return info.getMenu().getHolder().getRegistry().getFormat().setPlaceholders(text, buildTags());
+        return info.getMenu().getHolder().getRegistry().getFormat().deserializeString(text, buildTags());//todo may need to check this
     }
 
-    public @NotNull ObjectStringHookContainer buildTags(){
-        ObjectStringHookContainer resolvers = new ObjectStringHookContainer(info.getResolvers().getContext());
+    public @NotNull MergedTagContainer buildTags(){
+        MergedTagContainer resolvers = new MultiTagContainer(info.getResolvers().getTagParser());
         resolvers.hookAll(info.getMenu().getHolder().info());
-        resolvers.putAll(info.getMenu().buildTags());
+        resolvers.addAll(info.getMenu().buildTags());
+        resolvers.addAll(info.getMenu().buildTags());
         resolvers.hookAll(base.info());
         resolvers.hookAll(info.getInfo());
         return resolvers;
@@ -73,15 +69,13 @@ public class MenuItem {
         DynamicItem item = base.getItem().value();
         if(item == null) return null;
         item = item.clone();
-        ObjectStringHookContainer tags = buildTags();
-        ObjectLoreHookContainer loreTags = new ObjectLoreHookContainer(info.getResolvers().getContext(), tags);
-        loreTags.hookAll(info.getInfo());
+        MergedTagContainer tags = buildTags();
+        tags.hookAll(info.getInfo());
 
         FormatParserContext context = new FormatParserContext.Builder(getFormat())
-                .viewer(p)
-                .stringTags(tags)
-                .loreTags(loreTags)
-                .build();
+            .viewer(p)
+            .tags(tags)
+            .build();
         return item.buildItem(context);
     }
 
@@ -115,7 +109,7 @@ public class MenuItem {
                                  @NotNull ActionContext actionInfo, @NotNull Registry<MenuAction> actions){
         String actionName = extractAction(action);
         if(actionName == null) return false;
-        String result = getFormat().setPlaceholders(action.replaceFirst("\\[.*?]\\s*", ""),
+        String result = getFormat().deserializeString(action.replaceFirst("\\[.*?]\\s*", ""),
                 actionInfo.getResolvers());
         for(MenuAction a : actions){
             if(!a.has(actionName)) continue;

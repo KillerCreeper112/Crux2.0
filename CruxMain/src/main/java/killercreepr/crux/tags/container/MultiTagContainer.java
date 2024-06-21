@@ -1,6 +1,7 @@
 package killercreepr.crux.tags.container;
 
 import killercreepr.crux.Crux;
+import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.context.FormatPrefix;
 import killercreepr.crux.tags.resolver.StringListResolver;
@@ -23,6 +24,10 @@ public class MultiTagContainer implements MergedTagContainer {
     public MultiTagContainer(@NotNull TagParser tags){
         this(tags, new StringTagContainer(tags), new StringListTagContainer(tags));
     }
+    public MultiTagContainer(@NotNull MultiTagContainer tags){
+        this(tags.getTagParser());
+        addAll(tags);
+    }
     public MultiTagContainer(@NotNull TagParser tags, @NotNull StringTagContainer strings, @NotNull StringListTagContainer stringLists) {
         this.tags = tags;
         this.strings = strings;
@@ -43,6 +48,15 @@ public class MultiTagContainer implements MergedTagContainer {
     public MultiTagContainer hook(@Nullable Object info) {
         strings.hook(info);
         stringLists.hook(info);
+        return this;
+    }
+
+    @Override
+    public MergedTagContainer hookAll(@Nullable DataExchange info) {
+        if(info==null) return this;
+        for(Object o : info){
+            hook(o);
+        }
         return this;
     }
 
@@ -86,13 +100,15 @@ public class MultiTagContainer implements MergedTagContainer {
     }
 
     @Override
-    public MultiTagContainer add(@NotNull MergedTagContainer container){
+    public MultiTagContainer addAll(@Nullable MergedTagContainer container){
+        if(container==null) return this;
         strings.addAll(container.getStringTags());
         stringLists.addAll(container.getStringListTags());
         return this;
     }
 
-    public @NotNull TagParser getTags() {
+    @Override
+    public @NotNull TagParser getTagParser() {
         return tags;
     }
 }

@@ -1,9 +1,9 @@
 package killercreepr.cruxmenu.menu.bukkit;
 
-import killercreepr.crux.context.EquationContext;
-import killercreepr.crux.context.FormatParserContext;
+import killercreepr.crux.context.SimpleInputContext;
 import killercreepr.crux.data.DataExchange;
-import killercreepr.crux.tags.container.ObjectStringHookContainer;
+import killercreepr.crux.tags.container.MergedTagContainer;
+import killercreepr.crux.tags.container.MultiTagContainer;
 import killercreepr.cruxmenu.menu.bukkit.api.events.menu.MenuRefreshEvent;
 import killercreepr.cruxmenu.menu.bukkit.holder.MenuHolder;
 import net.kyori.adventure.text.Component;
@@ -20,39 +20,36 @@ import java.util.Optional;
 public class ConfigMenu extends Menu{
     protected final @NotNull MenuHolder holder;
     protected final @NotNull DataExchange info;
-    protected final @NotNull ObjectStringHookContainer tags;
+    protected final @NotNull MergedTagContainer tags;
 
     protected final Map<Integer, MenuItem> items = new HashMap<>();
     public ConfigMenu(@NotNull MenuHolder holder, @NotNull DataExchange info){
         this(holder, info, null);
     }
 
-    public ConfigMenu(@NotNull MenuHolder holder, @NotNull DataExchange info, @Nullable ObjectStringHookContainer tags){
+    public ConfigMenu(@NotNull MenuHolder holder, @NotNull DataExchange info, @Nullable MergedTagContainer tags){
         this.holder = holder;
         this.info = info;
-        this.tags = new ObjectStringHookContainer(new FormatParserContext.Builder(holder.getRegistry().getFormat())
-                .stringTags(tags).build());
-        if(tags != null) this.tags.putAll(tags);
+        this.tags = new MultiTagContainer(holder.getRegistry().getFormat().tags());
+        if(tags != null) this.tags.addAll(tags);
         reconstruct(Bukkit.createInventory(null, getInventorySize(buildSize()), buildTitle()));
     }
 
     public @NotNull Component buildTitle(){
         if(holder.getTitle() == null) return Component.empty();
-        return holder.getRegistry().getFormat().deserialize(info, null, holder.getTitle(), buildTags());
+        return holder.getRegistry().getFormat().deserialize(holder.getTitle(), MergedTagContainer.mergeHook(
+            buildTags(), info
+        ));
     }
 
     public int buildSize(){
-        return holder.getSize().value(new EquationContext(holder.getRegistry().getFormat(), buildTags())).intValue();
-        /*return (int) Double.parseDouble(holder.getRegistry().getFormat().setPlaceholders(
-                holder.getSize(), buildTags()
-        ));*/
+        return holder.getSize().value(new SimpleInputContext(holder.getRegistry().getFormat(), buildTags())).intValue();
     }
 
-    public @NotNull ObjectStringHookContainer buildTags(){
-        ObjectStringHookContainer tags = new ObjectStringHookContainer(new FormatParserContext.Builder(holder.getRegistry().getFormat())
-                .build());
+    public @NotNull MergedTagContainer buildTags(){
+        MergedTagContainer tags = new MultiTagContainer(holder.getRegistry().getFormat().tags());
         tags.hookAll(info());
-        tags.putAll(getTags());
+        tags.addAll(getTags());
         return tags;
     }
     public @NotNull DataExchange info(){
@@ -119,7 +116,7 @@ public class ConfigMenu extends Menu{
         return holder;
     }
 
-    public @NotNull ObjectStringHookContainer getTags() {
+    public @NotNull MergedTagContainer getTags() {
         return tags;
     }
 }

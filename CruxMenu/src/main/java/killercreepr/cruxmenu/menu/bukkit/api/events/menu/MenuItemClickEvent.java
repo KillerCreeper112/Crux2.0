@@ -9,6 +9,9 @@ import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Called when a MenuItem in a menu is clicked on.
+ */
 public class MenuItemClickEvent extends MenuPlayerCancellableEvent{
     private static final HandlerList HANDLER_LIST = new HandlerList();
 

@@ -75,6 +75,7 @@ public class FormatParserContext implements TextParserContext {
         private @NotNull Format format;
         private @Nullable OfflinePlayer viewer;
         private @Nullable FormatPrefix tagsPrefix;
+        private @Nullable MergedTagContainer tags;
         public Builder(@NotNull Format format) {
             this.format = format;
         }
@@ -100,8 +101,13 @@ public class FormatParserContext implements TextParserContext {
             return this;
         }
 
+        public Builder tags(@Nullable MergedTagContainer tags) {
+            this.tags = tags;
+            return this;
+        }
+
         public @NotNull FormatParserContext build() {
-            return new FormatParserContext(format, viewer, tagsPrefix, null);
+            return new FormatParserContext(format, viewer, tagsPrefix, tags);
         }
     }
 }

@@ -37,6 +37,10 @@ public class Format implements FormatSerializer{
         this.tags = tags;
     }
 
+    /*public Registry<RawTextFormat> getRawTextFormats() {
+        return rawTextFormats;
+    }*/
+
     public @NotNull TagParser tags() {
         return tags;
     }

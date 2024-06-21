@@ -1,7 +1,7 @@
 package killercreepr.cruxmenu.menu.bukkit.actions;
 
 import killercreepr.crux.data.DataExchange;
-import killercreepr.crux.tags.container.ObjectStringHookContainer;
+import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.cruxmenu.menu.bukkit.ConfigMenu;
 import killercreepr.cruxmenu.menu.bukkit.MenuContext;
 import killercreepr.cruxmenu.menu.bukkit.MenuItem;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public class ActionContext extends MenuContext {
     protected final @NotNull MenuItem item;
     protected final @NotNull InventoryClickEvent event;
-    public ActionContext(@NotNull ConfigMenu menu, @NotNull DataExchange info, @NotNull ObjectStringHookContainer resolvers,
+    public ActionContext(@NotNull ConfigMenu menu, @NotNull DataExchange info, @NotNull MergedTagContainer resolvers,
                          @NotNull MenuItem item, @NotNull InventoryClickEvent event) {
         super(menu, info, resolvers);
         this.item = item;
