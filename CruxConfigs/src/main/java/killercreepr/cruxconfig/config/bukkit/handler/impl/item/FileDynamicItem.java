@@ -11,6 +11,7 @@ import killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.FileDyn
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.FileGenericSingleDynamicComponent;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
+import killercreepr.cruxconfig.config.common.element.FileArray;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileGeneric;
 import killercreepr.cruxconfig.config.common.element.FileObject;
@@ -18,10 +19,12 @@ import killercreepr.cruxconfig.config.common.json.annotation.JsonSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
-//todo enchants, attributes, color, food, item flags,
+//todo attributes, food,
 @JsonSerializer(id = "dynamic_item")
 public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
     protected final MappedRegistry<String, FileDynamicItemComponent<?>> COMPONENT_REGISTRY = new SimpleMappedRegistry<>();
@@ -194,6 +197,48 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
                 });
                 if(enchants.isEmpty()) return null;
                 return new DynamicItemEnchants(enchants);
+            }
+        });
+
+        COMPONENT_REGISTRY.register("color", new FileGenericSingleDynamicComponent<>(DynamicItemColor.class) {
+            @Override
+            public @NotNull String jsonSerializerID() {
+                return "dynamic_item_color";
+            }
+
+            @Override
+            public @NotNull DynamicItemColor deserialize(@NotNull Object object) {
+                return new DynamicItemColor(object);
+            }
+        });
+
+        COMPONENT_REGISTRY.register("flags", new FileDynamicItemComponent<>(DynamicItemFlags.class) {
+            @Override
+            public @NotNull String jsonSerializerID() {
+                return "dynamic_item_flags";
+            }
+
+
+            @Override
+            public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull DynamicItemFlags object) {
+                FileRegistry registry = context.getRegistry();
+                FileArray o = new FileArray();
+                object.getFlags().forEach(registry::serializeToFileElement);
+                return o;
+            }
+
+            @Override
+            public @Nullable DynamicItemFlags deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
+                if(!(e instanceof FileArray o)) return null;
+                FileRegistry registry = context.getRegistry();
+                Collection<Object> flags = new HashSet<>();
+                o.forEach((value) ->{
+                    Object flag = registry.deserialize(String.class, value);
+                    if(flag==null) return;
+                    flags.add(flag);
+                });
+                if(flags.isEmpty()) return null;
+                return new DynamicItemFlags(flags);
             }
         });
     }
