@@ -13,8 +13,8 @@ import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import killercreepr.crux.command.argument.CruxCmdArguments;
 import killercreepr.crux.data.MsgContainer;
 import killercreepr.crux.plugin.CruxPlugin;
-import killercreepr.crux.tags.container.StringHookContainer;
-import killercreepr.crux.tags.placeholder.LocalTag;
+import killercreepr.crux.tags.container.MultiTagContainer;
+import killercreepr.crux.tags.resolver.Tag;
 import killercreepr.crux.util.CruxItem;
 import killercreepr.cruxattributes.attribute.CruxAttribute;
 import killercreepr.cruxattributes.attribute.CruxAttributeModifier;
@@ -213,11 +213,11 @@ public class CruxAttributeCommands {
 
                 String format = "<gold><key> <dark_gray>-> <red>{amount=<amount>, slot=<slot>, operation=<operation>}";
                 new MsgContainer(format).use(sender,
-                    StringHookContainer.simple(
-                        LocalTag.parsed("key", m.key().asString()),
-                        LocalTag.parsed("amount", m.getAmount()+""),
-                        LocalTag.parsed("operation", m.getOperation().name().toLowerCase()),
-                        LocalTag.parsed("slot", m.getSlot() == null ? "all" : m.getSlot().toString().toLowerCase())
+                    MultiTagContainer.standard(
+                        Tag.parsed("key", m.key().asString()),
+                        Tag.parsed("amount", m.getAmount()+""),
+                        Tag.parsed("operation", m.getOperation().name().toLowerCase()),
+                        Tag.parsed("slot", m.getSlot() == null ? "all" : m.getSlot().toString().toLowerCase())
                     )
                 );
             }

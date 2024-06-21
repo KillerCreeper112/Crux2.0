@@ -43,8 +43,6 @@ public class TestPlugin extends CruxPlugin implements Listener {
 
         //CRUX_MENU.reload(this);
 
-        new CClaimTags(Crux.TAGS);
-
         CruxPotionRegistries.POTIONS.register(new TestPotion());
     }
 

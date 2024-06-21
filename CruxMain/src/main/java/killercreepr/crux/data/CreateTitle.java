@@ -1,7 +1,7 @@
 package killercreepr.crux.data;
 
 import killercreepr.crux.Crux;
-import killercreepr.crux.tags.container.StringHookContainer;
+import killercreepr.crux.tags.provider.StringTagProvider;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import org.bukkit.OfflinePlayer;
@@ -19,7 +19,7 @@ public class CreateTitle {
         this.times = times;
     }
 
-    public @NotNull Title build(@Nullable OfflinePlayer placeholders, @Nullable StringHookContainer tags){
+    public @NotNull Title build(@Nullable OfflinePlayer placeholders, @Nullable StringTagProvider tags){
         return Title.title(
                 deserialize(placeholders, title, tags),
                 deserialize(placeholders, subTitle, tags),
@@ -27,13 +27,13 @@ public class CreateTitle {
         );
     }
 
-    public @NotNull Title build(@Nullable StringHookContainer tags){
+    public @NotNull Title build(@Nullable StringTagProvider tags){
         return build(null, tags);
     }
 
-    protected @NotNull Component deserialize(@Nullable OfflinePlayer viewer, @Nullable String input, @Nullable StringHookContainer tags){
-        if(input == null) return Component.empty();
-        return Crux.FORMAT.deserialize(viewer, null, input, tags);
+    protected @NotNull Component deserialize(@Nullable OfflinePlayer viewer, @Nullable String input, @Nullable StringTagProvider tags){
+        if(input == null) return Component.empty();//todo include viewer
+        return Crux.FORMAT.deserialize(input, tags);
     }
 
     public @Nullable String getTitle() {

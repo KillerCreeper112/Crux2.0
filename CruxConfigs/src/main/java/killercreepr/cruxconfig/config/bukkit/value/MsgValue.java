@@ -1,7 +1,7 @@
 package killercreepr.cruxconfig.config.bukkit.value;
 
 import killercreepr.crux.data.MsgContainer;
-import killercreepr.crux.tags.container.StringHookContainer;
+import killercreepr.crux.tags.container.MergedTagContainer;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
@@ -40,7 +40,7 @@ public class MsgValue extends CommonValue<MsgContainer> {
         return use(a, placeholders, null);
     }
 
-    public @Nullable MsgContainer use(@NotNull Audience a, @Nullable OfflinePlayer placeholders, @Nullable StringHookContainer tags){
+    public @Nullable MsgContainer use(@NotNull Audience a, @Nullable OfflinePlayer placeholders, @Nullable MergedTagContainer tags){
         MsgContainer msg = value();
         if(msg == null) return null;
         msg.use(a, placeholders, tags);

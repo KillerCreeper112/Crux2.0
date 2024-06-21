@@ -1,6 +1,6 @@
 package killercreepr.cruxblocks.item;
 
-import killercreepr.crux.tags.container.StringHookContainer;
+import killercreepr.crux.tags.container.MergedTagContainer;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
@@ -14,5 +14,5 @@ public interface KeyedItemProvider {
     default @Nullable ItemStack get(@NotNull Key key, @Nullable Entity holder){
         return get(key, holder, null);
     }
-    @Nullable ItemStack get(@NotNull Key key, @Nullable Entity holder, @Nullable StringHookContainer tags);
+    @Nullable ItemStack get(@NotNull Key key, @Nullable Entity holder, @Nullable MergedTagContainer tags);
 }

@@ -40,11 +40,11 @@ public class DynamicItemArmorTrim implements DynamicItemComponent {
     }
 
     public @Nullable ArmorTrim parseObject(@NotNull TextParserContext context){
-        NamespacedKey key = NamespacedKey.fromString(context.parseString(trimMaterial.toString()));
+        NamespacedKey key = NamespacedKey.fromString(context.deserializeString(trimMaterial.toString()));
         if(key==null) return null;
         TrimMaterial m = RegistryAccess.registryAccess().getRegistry(RegistryKey.TRIM_MATERIAL).get(key);
         if(m==null) return null;
-        key = NamespacedKey.fromString(context.parseString(trimPattern.toString()));
+        key = NamespacedKey.fromString(context.deserializeString(trimPattern.toString()));
         if(key==null) return null;
         TrimPattern p = RegistryAccess.registryAccess().getRegistry(RegistryKey.TRIM_PATTERN).get(key);
         if(p==null) return null;

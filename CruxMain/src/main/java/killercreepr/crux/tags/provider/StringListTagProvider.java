@@ -1,7 +1,6 @@
 package killercreepr.crux.tags.provider;
 
 import killercreepr.crux.tags.container.StringListTagContainer;
-import killercreepr.crux.tags.container.StringTagContainer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

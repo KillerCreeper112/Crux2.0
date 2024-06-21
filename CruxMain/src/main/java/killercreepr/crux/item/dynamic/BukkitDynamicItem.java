@@ -60,7 +60,7 @@ public class BukkitDynamicItem implements DynamicItem{
 
     @Override
     public @Nullable CruxItem build(@NotNull TextParserContext context) {
-        String parsed = context.parseString(material());
+        String parsed = context.deserializeString(material());
         Material material = Material.matchMaterial(parsed);
         ItemStack built;
         if(material == null){
@@ -69,7 +69,7 @@ public class BukkitDynamicItem implements DynamicItem{
             }catch (IllegalArgumentException ignored){ return null; }
         }else built = new ItemStack(material);
         CruxItem item = new CruxItem(built);
-        item.amount(amount==null?1:(int) Double.parseDouble(context.parseString(amount)));
+        item.amount(amount==null?1:(int) Double.parseDouble(context.deserializeString(amount)));
         if(components == null) return item;
         for(DynamicItemComponent component : components.values()){
             component.apply(item, context);

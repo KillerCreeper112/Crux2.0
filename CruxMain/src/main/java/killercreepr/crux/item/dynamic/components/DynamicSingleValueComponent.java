@@ -21,11 +21,11 @@ public abstract class DynamicSingleValueComponent implements DynamicItemComponen
     }
 
     public @NotNull String parseString(@NotNull TextParserContext context){
-        return context.deserialize(value.toString());
+        return context.deserializeString(value.toString());
     }
 
     public @NotNull Component parseComponent(@NotNull TextParserContext context){
-        return context.parseComponent(value.toString());
+        return context.deserialize(value.toString());
     }
 
     public @NotNull List<Component> parseComponentList(@NotNull TextParserContext context){
@@ -40,14 +40,14 @@ public abstract class DynamicSingleValueComponent implements DynamicItemComponen
         for(Object s : unparsed){
             list.add(s.toString());
         }
-        return context.deserializeToComponents(list);
+        return context.deserializeList(list);
     }
 
     public @NotNull List<String> parseStringList(@NotNull TextParserContext context){
         if(!(value instanceof List<?> l)) return List.of();
         List<String> list = new ArrayList<>();
         for(Object s : l){
-            list.add(context.deserialize(s.toString()));
+            list.add(context.deserializeString(s.toString()));
         }
         return list;
     }

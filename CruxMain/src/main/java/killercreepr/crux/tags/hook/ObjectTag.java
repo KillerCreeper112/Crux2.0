@@ -1,9 +1,9 @@
 package killercreepr.crux.tags.hook;
 
+import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.container.StringListTagContainer;
 import killercreepr.crux.tags.container.StringTagContainer;
 import killercreepr.crux.tags.context.FormatPrefix;
-import killercreepr.crux.tags.TagParser;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

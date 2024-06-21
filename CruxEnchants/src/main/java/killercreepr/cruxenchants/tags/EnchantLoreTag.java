@@ -1,9 +1,11 @@
 package killercreepr.cruxenchants.tags;
 
 import killercreepr.crux.data.Holder;
-import killercreepr.crux.tags.format.FormatPrefix;
-import killercreepr.crux.tags.hook.lore.LoreHook;
-import killercreepr.crux.tags.tag.ObjectTag;
+import killercreepr.crux.tags.TagParser;
+import killercreepr.crux.tags.container.StringListTagContainer;
+import killercreepr.crux.tags.context.FormatPrefix;
+import killercreepr.crux.tags.hook.ObjectTag;
+import killercreepr.crux.tags.resolver.Tag;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.cruxenchants.enchant.CruxEnchant;
 import org.bukkit.inventory.ItemStack;
@@ -11,13 +13,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-public class EnchantLoreTag extends ObjectTag<ItemStack> {
+public class EnchantLoreTag implements ObjectTag<ItemStack> {
     protected final @NotNull Holder<List<String>> enchantsFormat;
     public EnchantLoreTag(@NotNull Holder<List<String>> enchantsFormat) {
-        super(ItemStack.class);
         this.enchantsFormat = enchantsFormat;
     }
 
@@ -26,14 +26,19 @@ public class EnchantLoreTag extends ObjectTag<ItemStack> {
     }
 
     @Override
-    public @NotNull FormatPrefix defaultPrefix() {
-        return FormatPrefix.generic("cruxenchants_");
+    public @NotNull Class<ItemStack> getObjectType() {
+        return ItemStack.class;
     }
 
     @Override
-    public @Nullable Collection<LoreHook<ItemStack>> requestLore(@NotNull ItemStack object, @NotNull Tags tags) {
-        return new LoreHook.Builder<>(ItemStack.class)
-            .generic("enchants", (item, args, context) ->{
+    public @NotNull FormatPrefix defaultPrefix() {
+        return FormatPrefix.simple("cruxenchants_");
+    }
+
+    @Override
+    public @Nullable StringListTagContainer requestStringLists(@NotNull ItemStack item, @NotNull TagParser tags) {
+        return new StringListTagContainer(tags)
+            .add(Tag.stringList("enchants", (args, context) ->{
                 List<String> format = enchantsFormat.value();
                 if(format==null) return null;
 
@@ -49,7 +54,7 @@ public class EnchantLoreTag extends ObjectTag<ItemStack> {
                     }
                 });
                 return list;
-            })
-            .build();
+            }))
+            ;
     }
 }

@@ -1,6 +1,6 @@
 package killercreepr.cruxitems.item.plugin;
 
-import killercreepr.crux.tags.container.StringHookContainer;
+import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.crux.util.CruxItem;
 import killercreepr.crux.util.CruxString;
 import net.kyori.adventure.key.Key;
@@ -16,11 +16,11 @@ public abstract class GenericPluginItem implements PluginItem{
     }
 
     @Override
-    public @NotNull ItemStack buildItem(@Nullable Entity holder, @Nullable StringHookContainer tags) {
+    public @NotNull ItemStack buildItem(@Nullable Entity holder, @Nullable MergedTagContainer tags) {
         return buildGeneric(holder, tags).displayName(CruxString.toTitleCase(key.value())).item();
     }
 
-    public abstract @NotNull CruxItem buildGeneric(@Nullable Entity holder, @Nullable StringHookContainer tags);
+    public abstract @NotNull CruxItem buildGeneric(@Nullable Entity holder, @Nullable MergedTagContainer tags);
 
     @Override
     public @NotNull Key key() {

@@ -1,13 +1,22 @@
 package killercreepr.crux.tags.container;
 
+import killercreepr.crux.Crux;
+import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.context.FormatPrefix;
 import killercreepr.crux.tags.resolver.StringListResolver;
 import killercreepr.crux.tags.resolver.StringResolver;
-import killercreepr.crux.tags.TagParser;
+import killercreepr.crux.tags.resolver.TagResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class MultiTagContainer implements MergedTagContainer {
+    public static @NotNull MultiTagContainer standard(){
+        return new MultiTagContainer(Crux.TAGS);
+    }
+    public static @NotNull MultiTagContainer standard(@Nullable TagResolver<?>... resolvers){
+        return standard().addAll(resolvers);
+    }
+
     protected final TagParser tags;
     protected final @NotNull StringTagContainer strings;
     protected final @NotNull StringListTagContainer stringLists;
@@ -38,14 +47,24 @@ public class MultiTagContainer implements MergedTagContainer {
 
     //convenience methods
     //strings
-    public MultiTagContainer add(@NotNull StringResolver resolver) {
-        strings.hook(resolver);
-        stringLists.hook(resolver);
+    public MultiTagContainer add(@NotNull TagResolver<?> resolver){
+        return add(resolver, null);
+    }
+    public MultiTagContainer add(@NotNull TagResolver<?> resolver, @Nullable FormatPrefix prefix) {
+        if(resolver instanceof StringResolver r){
+            strings.add(r, prefix);
+        }else if(resolver instanceof StringListResolver r){
+            stringLists.add(r, prefix);
+        }
         return this;
     }
 
-    public MultiTagContainer add(@NotNull StringResolver resolver, @Nullable FormatPrefix prefix) {
-        strings.add(resolver, prefix);
+    public MultiTagContainer addAll(@Nullable TagResolver<?>... resolvers){
+        if(resolvers==null) return this;
+        for(TagResolver<?> t : resolvers){
+            if(t==null) continue;
+            add(t);
+        }
         return this;
     }
 
@@ -62,18 +81,6 @@ public class MultiTagContainer implements MergedTagContainer {
             }catch (ClassCastException ignored1){
             }
         }
-        return this;
-    }
-
-    //string lists
-    public MultiTagContainer add(@NotNull StringListResolver resolver) {
-        strings.hook(resolver);
-        stringLists.hook(resolver);
-        return this;
-    }
-
-    public MultiTagContainer add(@NotNull StringListResolver resolver, @Nullable FormatPrefix prefix) {
-        stringLists.add(resolver, prefix);
         return this;
     }
 

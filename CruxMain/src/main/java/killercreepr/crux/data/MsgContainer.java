@@ -1,7 +1,7 @@
 package killercreepr.crux.data;
 
 import killercreepr.crux.Crux;
-import killercreepr.crux.tags.container.StringHookContainer;
+import killercreepr.crux.tags.container.MergedTagContainer;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -49,10 +49,10 @@ public class MsgContainer {
     }
 
     public MsgContainer use(@NotNull Audience a){
-        return use(a, (StringHookContainer) null);
+        return use(a, (MergedTagContainer) null);
     }
 
-    public MsgContainer use(@NotNull Audience a, @Nullable StringHookContainer tags){
+    public MsgContainer use(@NotNull Audience a, @Nullable MergedTagContainer tags){
         OfflinePlayer placeholders = null;
         if(a instanceof OfflinePlayer d) placeholders = d;
         return use(a, placeholders, tags);
@@ -62,7 +62,7 @@ public class MsgContainer {
         return use(a, placeholders, null);
     }
 
-    public MsgContainer use(@NotNull Audience a, @Nullable OfflinePlayer placeholders, @Nullable StringHookContainer tags){
+    public MsgContainer use(@NotNull Audience a, @Nullable OfflinePlayer placeholders, @Nullable MergedTagContainer tags){
         if(isBroadcast()) return broadcast(tags);
         if(a instanceof Player p) return use(p, placeholders, tags);
         if(chat != null){
@@ -73,11 +73,11 @@ public class MsgContainer {
         return this;
     }
 
-    public MsgContainer use(@NotNull Player p, @Nullable OfflinePlayer placeholders, @Nullable StringHookContainer tags){
+    public MsgContainer use(@NotNull Player p, @Nullable OfflinePlayer placeholders, @Nullable MergedTagContainer tags){
         return use(p, placeholders, true, tags);
     }
 
-    public MsgContainer use(@NotNull Player p, @Nullable OfflinePlayer placeholders, boolean broadcastCheck, @Nullable StringHookContainer tags){
+    public MsgContainer use(@NotNull Player p, @Nullable OfflinePlayer placeholders, boolean broadcastCheck, @Nullable MergedTagContainer tags){
         if(broadcastCheck && broadcast){
             return broadcast(tags);
         }
@@ -92,16 +92,16 @@ public class MsgContainer {
         return this;
     }
 
-    public MsgContainer broadcast(@Nullable StringHookContainer tags){
+    public MsgContainer broadcast(@Nullable MergedTagContainer tags){
         for(Player p : Bukkit.getOnlinePlayers()){
             use(p, null, false, tags);
         }
         return this;
     }
 
-    protected @NotNull Component deserialize(@Nullable OfflinePlayer viewer, @Nullable String input, @Nullable StringHookContainer tags){
+    protected @NotNull Component deserialize(@Nullable OfflinePlayer viewer, @Nullable String input, @Nullable MergedTagContainer tags){
         if(input == null) return Component.empty();
-        return Crux.FORMAT.deserialize(viewer, null, input, tags);
+        return Crux.FORMAT.deserialize(input, tags);//todo make viewer count in placeholders
     }
 
     public @Nullable List<String> getChat() {

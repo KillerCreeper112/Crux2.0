@@ -1,8 +1,6 @@
 package killercreepr.crux.util;
 
 import killercreepr.crux.Crux;
-import killercreepr.crux.data.DataExchange;
-import killercreepr.crux.data.Holder;
 import killercreepr.crux.tags.context.FormatParserContext;
 import killercreepr.crux.tags.format.Format;
 import killercreepr.crux.tags.provider.StringTagProvider;
