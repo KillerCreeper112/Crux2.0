@@ -52,9 +52,13 @@ public class MenuHolder implements Keyed {
         DataExchange.Builder builder = new DataExchange.Builder().putAll(data);
         builder.put("viewer", p);
 
-        ConfigMenu menu = new ConfigMenu(this, builder.build());
+        ConfigMenu menu = createMenu(builder.build());
         menu.load();
         return menu.open(p);
+    }
+
+    public @NotNull ConfigMenu createMenu(@NotNull DataExchange data){
+        return new ConfigMenu(this, data);
     }
 
     public @Nullable String getTitle() {
