@@ -4,6 +4,8 @@ import killercreepr.crux.Crux;
 import killercreepr.crux.util.CruxItem;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.MenuCloseEvent;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.MenuOpenEvent;
+import killercreepr.cruxmenus.menu.bukkit.api.events.menu.slot.MenuSlotGiveEvent;
+import killercreepr.cruxmenus.menu.bukkit.api.events.menu.slot.MenuSlotTakeEvent;
 import killercreepr.cruxmenus.menu.bukkit.listener.MenuListener;
 import killercreepr.cruxmenus.menu.bukkit.slot.Slot;
 import killercreepr.cruxmenus.menu.bukkit.slot.SlotContext;
@@ -11,7 +13,10 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.*;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +37,7 @@ public class Menu {
     }
 
     protected final Map<Integer, MenuClick> clickActions = new HashMap<>();
-    protected final Map<Integer, Slot> slots = new HashMap<>();
+    protected final LinkedHashMap<Integer, Slot> slots = new LinkedHashMap<>();
 
     protected @Nullable MenuClick generalClickAction;
     protected @Nullable MenuClick generalInvClickAction;
@@ -69,6 +74,7 @@ public class Menu {
         p.openInventory(inventory);
         OPEN_MENUS.put(p.getUniqueId(), this);
         if(openAction != null) openAction.open(p);
+        slots.values().forEach(slot -> slot.onMenuOpen(p));
         return event;
     }
 
@@ -86,6 +92,7 @@ public class Menu {
         if(!event.callEvent()) return event;
         OPEN_MENUS.remove(p.getUniqueId());
         if(closeAction != null) closeAction.close(p);
+        slots.values().forEach(slot -> slot.onMenuClose(p));
         return event;
     }
 
@@ -108,27 +115,27 @@ public class Menu {
         return clickActions;
     }
 
-    public MenuClick getGeneralClickAction() {
+    public @Nullable MenuClick getGeneralClickAction() {
         return generalClickAction;
     }
 
-    public MenuClick getGeneralInvClickAction() {
+    public @Nullable MenuClick getGeneralInvClickAction() {
         return generalInvClickAction;
     }
 
-    public MenuDrag getGeneralDragAction() {
+    public @Nullable MenuDrag getGeneralDragAction() {
         return generalDragAction;
     }
 
-    public MenuOpen getOpenAction() {
+    public @Nullable MenuOpen getOpenAction() {
         return openAction;
     }
 
-    public MenuClose getCloseAction() {
+    public @Nullable MenuClose getCloseAction() {
         return closeAction;
     }
 
-    public UUID getUuid() {
+    public @NotNull UUID getUuid() {
         return uuid;
     }
 
@@ -148,10 +155,15 @@ public class Menu {
     public interface MenuClose{void close(@NotNull Player p); }
 
 
-    public Menu setItem(int index, @Nullable ItemStack item){ inventory.setItem(index, item); return this; }
+    public Menu setItem(int index, @Nullable ItemStack item){
+        inventory.setItem(index, item);
+        onUpdate();
+        return this;
+    }
     public Menu setItem(int index, @Nullable ItemStack item, @Nullable MenuClick action){
         inventory.setItem(index, item);
         setAction(index, action);
+        onUpdate();
         return this;
     }
 
@@ -171,6 +183,15 @@ public class Menu {
     }
 
     public @NotNull Inventory getInventory(){ return inventory; }
+
+    protected Menu addSlot(@NotNull Slot slot){
+        slots.put(slot.getIndex(), slot);
+        return this;
+    }
+
+    protected @Nullable Slot removeSlot(int index){
+        return slots.remove(index);
+    }
 
     protected @NotNull MenuDrag defaultMenuDrag(){
         return (p, event) -> {
@@ -193,14 +214,23 @@ public class Menu {
         };
     }
 
+    public void onUpdate(){
+        updateSlots();
+    }
+
+    public void updateSlots(){
+        slots.values().forEach(Slot::onMenuUpdate);
+    }
+
     public void onInvClick(@NotNull InventoryClickEvent event){
         if(!event.isShiftClick()) return;
         event.setCancelled(true);
         ItemStack item = event.getCurrentItem();
         if(CruxItem.isEmpty(item)) return;
+        HumanEntity p = event.getWhoClicked();
         for(Slot slot : slots.values()){
-            if(!slot.mayPlace(item)) continue;
-            giveSlot(slot, item, item.getAmount());
+            if(!slot.mayPlace(p, item)) continue;
+            giveSlot(p, slot, item, item.getAmount());
         }
     }
 
@@ -214,8 +244,9 @@ public class Menu {
             Slot slot = getSlot(i);
             if(slot==null) return;
             Crux.getServer().getScheduler().runTask(Crux.getMainPlugin(), task ->{
-                event.getWhoClicked().setItemOnCursor(
-                    giveSlot(slot, event.getOldCursor(), event.getOldCursor().getAmount())
+                HumanEntity p = event.getWhoClicked();
+                p.setItemOnCursor(
+                    giveSlot(p, slot, event.getOldCursor(), event.getOldCursor().getAmount())
                 );
             });
             return;
@@ -226,38 +257,92 @@ public class Menu {
         event.setCancelled(false);
     }
 
-    public @Nullable ItemStack takeFromSlot(@NotNull Slot slot, int amount, int max){
+    public @Nullable ItemStack takeFromSlot(@NotNull HumanEntity p, @NotNull Slot slot, int amount, int max){
         ItemStack slotItem = getInventory().getItem(slot.getIndex());
         if(CruxItem.isEmpty(slotItem)) return null;
+        if(!slot.mayTake(p, slotItem)) return null;
+
+        MenuSlotTakeEvent event = new MenuSlotTakeEvent(p, slot, amount);
+        if(!event.callEvent() || event.getAmount() < 1){
+            return null;
+        }
+        amount = event.getAmount();
+
         ItemStack clone = slotItem.clone();
 
         int amountToTake = Math.min(amount, max);
+
+        final ItemStack newItemClone = slotItem.clone();
+        newItemClone.setAmount(newItemClone.getAmount()-amountToTake);
+        final ItemStack oldItemClone = slotItem.clone();
+
+        SlotContext ctx = new SlotContext(newItemClone, oldItemClone);
+        slot.onChanged(ctx);
+        if(ctx.isCancelled()) return null;
+
         clone.setAmount(amountToTake);
         slotItem.setAmount(slotItem.getAmount()-amountToTake);
+        onUpdate();
         return clone;
     }
 
-    public ItemStack giveSlot(@NotNull Slot slot, @NotNull ItemStack item, int amount){
+    public ItemStack swapSlot(@NotNull HumanEntity p, @NotNull Slot slot, @NotNull ItemStack item){
+        ItemStack slotItem = getInventory().getItem(slot.getIndex());
+        if(CruxItem.isEmpty(slotItem)) return item;
+        if(!slot.mayPlace(p, item) || !slot.mayTake(p, slotItem)) return item;
+
+        if(item.getAmount() > slot.getMaxStackSize(item)) return item;
+        setItem(slot.getIndex(), item);
+        onUpdate();
+        return slotItem;
+    }
+
+    public ItemStack giveSlot(@NotNull HumanEntity p, @NotNull Slot slot, @NotNull ItemStack item, int amount){
         int maxStack = slot.getMaxStackSize(item);
         ItemStack slotItem = getInventory().getItem(slot.getIndex());
         if(!CruxItem.isEmpty(slotItem)){
             if(slotItem.getAmount() >= maxStack) return item;
         }
+        if(!slot.mayPlace(p, item)) return item;
+
+        MenuSlotGiveEvent event = new MenuSlotGiveEvent(p, slot, amount);
+        if(!event.callEvent() || event.getAmount() < 1){
+            return item;
+        }
+        amount = event.getAmount();
 
         //how much more can this item hold
         int maxGiveAmount = CruxItem.isEmpty(slotItem) ? maxStack : (maxStack-slotItem.getAmount());
 
         //how much to actually give the item
         int amountToGive = Math.min(amount, maxGiveAmount);
+        ItemStack newItemClone;
+        final ItemStack oldItemClone = slotItem == null ? null : slotItem.clone();
         if(CruxItem.isEmpty(slotItem)){
             ItemStack set = item.clone();
             set.setAmount(amountToGive);
+
+            newItemClone = set;
+
+            SlotContext ctx = new SlotContext(newItemClone, oldItemClone);
+            slot.onChanged(ctx);
+            if(ctx.isCancelled()) return item;
+
             setItem(slot.getIndex(), set);
             item.setAmount(item.getAmount()-amountToGive);
+            onUpdate();
             return item;
         }
+
+        newItemClone = slotItem.clone();
+        newItemClone.setAmount(newItemClone.getAmount()+amountToGive);
+        SlotContext ctx = new SlotContext(newItemClone, oldItemClone);
+        slot.onChanged(ctx);
+        if(ctx.isCancelled()) return item;
+
         slotItem.setAmount(slotItem.getAmount()+amountToGive);
         item.setAmount(item.getAmount()-amountToGive);
+        onUpdate();
         return item;
     }
 
@@ -268,17 +353,22 @@ public class Menu {
 
         ItemStack clicked = getInventory().getItem(slot.getIndex());
         ItemStack cursor = event.getCursor();
-        if(!slot.mayPlace(cursor)) return;
 
         ClickType clickType = event.getClick();
 
         if(CruxItem.isEmpty(cursor)){
             if(CruxItem.isEmpty(clicked)) return;
             int takeAmount = clickType.isRightClick() ? clicked.getAmount()/2 : clicked.getAmount();
-            p.setItemOnCursor(takeFromSlot(slot, takeAmount, takeAmount));
+            p.setItemOnCursor(takeFromSlot(p, slot, takeAmount, takeAmount));
             return;
         }
+
+        if(clicked != null && !clicked.isSimilar(cursor)){
+            p.setItemOnCursor(swapSlot(p, slot, cursor));
+            return;
+        }
+
         int giveAmount = clickType.isRightClick() ? 1 : cursor.getAmount();
-        giveSlot(slot, cursor, giveAmount);
+        giveSlot(p, slot, cursor, giveAmount);
     }
 }

@@ -6,6 +6,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,6 +22,12 @@ public class CruxEntity {
     };
     public static @NotNull EquipmentSlot[] getGeneralEntitySlots(){
         return GENERAL_SLOTS;
+    }
+
+    public static void giveOrDrop(@NotNull Player p, @NotNull ItemStack... items){
+        for(ItemStack drop : p.getInventory().addItem(items).values()){
+            p.getWorld().dropItem(p.getLocation(), drop);
+        }
     }
 
     public static @Nullable Player getPlayer(@NotNull String uuidOrName){
