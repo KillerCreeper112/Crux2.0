@@ -2,12 +2,14 @@ package killercreepr.cruxmenus.menu.bukkit.listener;
 
 import killercreepr.cruxmenus.menu.bukkit.Menu;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.MenuCloseEvent;
+import killercreepr.cruxmenus.menu.bukkit.slot.Slot;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 public class MenuListener implements Listener {
@@ -24,6 +26,7 @@ public class MenuListener implements Listener {
         if(menu==null) return;
         event.setCancelled(true);
         if(menu.getGeneralDragAction() != null) menu.getGeneralDragAction().drag(p, event);
+        menu.onDrag(event);
     }
 
     @EventHandler
@@ -36,8 +39,10 @@ public class MenuListener implements Listener {
             //Click in our own inventory.
             if(event.getRawSlot() >= p.getOpenInventory().getTopInventory().getSize()){
                 if(menu.getGeneralInvClickAction() != null) menu.getGeneralInvClickAction().click(p, event);
-            }else if(menu.getGeneralClickAction() != null){ //Click in the open menu.
-                menu.getGeneralClickAction().click(p, event);
+                menu.onInvClick(event);
+            }else{ //Click in the open menu.
+                if(menu.getGeneralClickAction() != null) menu.getGeneralClickAction().click(p, event);
+                menu.onMenuClick(event);
             }
         }
 
