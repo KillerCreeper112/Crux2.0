@@ -10,6 +10,7 @@ import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
 import killercreepr.cruxconfig.config.common.yaml.element.*;
 import killercreepr.cruxconfig.config.common.yaml.handler.YamlObjectHandler;
 import org.bukkit.Bukkit;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,6 +26,7 @@ import java.util.*;
  */
 public class YamlRegistry implements FileRegistry {
     public final YamlObjectHandlerRegistry HANDLER_REGISTRY = new YamlObjectHandlerRegistry(this);
+    public final CfgParsedObjectRegistry PARSED_OBJECT_HANDLERS = new CfgParsedObjectRegistry();
 
     public void registerHandler(@NotNull AutoYamlSerializer<?>... serializers){
         for(AutoYamlSerializer<?> d : serializers){
@@ -102,10 +104,13 @@ public class YamlRegistry implements FileRegistry {
         return false;
     }
 
-    /**
-     * This should be used
-     */
-    public @Nullable Object deserializeObject(@NotNull Type type, @NotNull YamlElement from, @NotNull YamlContext context){
+    @Contract("_, _, null -> null")
+    public @Nullable Object parseObjectFromHandlers(@NotNull YamlElement from, @NotNull YamlContext context, @Nullable Object object){
+        if(object==null) return null;
+        return PARSED_OBJECT_HANDLERS.parse(from, context, object);
+    }
+
+    public @Nullable Object deserializeObjectRaw(@NotNull Type type, @NotNull YamlElement from, @NotNull YamlContext context){
         Bukkit.getLogger().severe("DESERLIAIING OBJECT: " + type + " FROM " + from);
         /*if(from != null){
             if(isSubtypeOfCollection(type) && from.isYamlArray()){
@@ -144,6 +149,14 @@ public class YamlRegistry implements FileRegistry {
         }
         Object object = deserializeObject(from.getAsObject());
         return formatObject(clazz, object);
+    }
+
+    /**
+     * This should be used
+     */
+    public @Nullable Object deserializeObject(@NotNull Type type, @NotNull YamlElement from, @NotNull YamlContext context){
+        Object object = deserializeObjectRaw(type, from, context);
+        return parseObjectFromHandlers(from, context, object);
     }
 
     public @Nullable Object deserializeObject(@NotNull Type type, @Nullable YamlElement from){

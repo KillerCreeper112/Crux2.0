@@ -19,7 +19,6 @@ import killercreepr.cruxmenus.menu.bukkit.config.handlers.*;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuHolder;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuItems;
 import net.kyori.adventure.key.Key;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -77,6 +76,7 @@ public class MenuRegistry {
     }
 
     public void loadConfiguration(@NotNull CruxConfig cfg){
+        MENU_HOLDERS.clear();
         MenuHolder holder = cfg.deserialize(MenuHolder.class, "");
         if(holder == null) return;
         Crux.log(Level.INFO, "Registered crux menu: " + holder.key());
