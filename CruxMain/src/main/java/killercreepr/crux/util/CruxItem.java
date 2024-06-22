@@ -10,6 +10,7 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
@@ -30,6 +31,11 @@ public class CruxItem implements Cloneable {
         //return i == null || i.getType().isEmpty();
         //post 1.20.5
         return i == null || i.isEmpty();
+    }
+    public static int getMaxStackSize(@NotNull ItemStack i){
+        ItemMeta meta = i.getItemMeta();
+        if(meta==null) return i.getType().getMaxStackSize();
+        return meta.hasMaxStackSize() ? meta.getMaxStackSize() : i.getType().getMaxStackSize();
     }
     public static final @NotNull Component NO_ITALICS = Component.empty().decoration(TextDecoration.ITALIC, false);
     protected @NotNull ItemStack item;
