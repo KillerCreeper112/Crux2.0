@@ -24,8 +24,6 @@ public class CfgParsedObjectRegistry extends SimpleKeyedRegistry<CfgParsedObject
     }
 
     protected final @NotNull Map<Class<?>, TreeMap<Integer, Collection<CfgParsedObjectHandler<?>>>> SORTED = new HashMap<>();
-    //protected final @NotNull TreeMap<Integer, Collection<CfgParsedObjectHandler<?>>> SORTED = new TreeMap<>();
-
     public <T> @Nullable TreeMap<Integer, Collection<CfgParsedObjectHandler<T>>> findFor(@NotNull Class<?> type){
         TreeMap<Integer, Collection<CfgParsedObjectHandler<?>>> found = SORTED.get(type);
         if(found==null){
