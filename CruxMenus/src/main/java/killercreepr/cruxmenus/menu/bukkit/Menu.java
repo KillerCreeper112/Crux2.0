@@ -192,7 +192,12 @@ public class Menu {
     public @NotNull Inventory getInventory(){ return inventory; }
 
     protected Menu addSlot(@NotNull Slot slot){
+        return addSlot(slot, true);
+    }
+
+    protected Menu addSlot(@NotNull Slot slot, boolean setBlank){
         slots.put(slot.getIndex(), slot);
+        if(setBlank) setItem(slot.getIndex(), slot.getSlottedItemReplacement(), true);
         return this;
     }
 
