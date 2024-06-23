@@ -13,6 +13,14 @@ public interface Slot {
     default @Nullable ItemStack getItem(){
         return getMenu().getInventory().getItem(getIndex());
     }
+
+    default Slot setItem(@Nullable ItemStack item){
+        return setItem(item, false);
+    }
+    default Slot setItem(@Nullable ItemStack item, boolean silent){
+        getMenu().setItem(getIndex(), item, silent);
+        return this;
+    }
     default void onMenuUpdate(){
     }
     int getIndex();
