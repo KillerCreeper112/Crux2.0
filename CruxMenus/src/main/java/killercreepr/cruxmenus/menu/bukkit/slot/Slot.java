@@ -46,6 +46,14 @@ public interface Slot {
         return Math.min(maxStack, item==null?0:CruxItem.getMaxStackSize(item));
     }
 
+    default boolean isSlottedItem(@Nullable ItemStack item){
+        return false;
+    }
+
+    default @Nullable ItemStack getSlottedItemReplacement(){
+        return null;
+    }
+
     default boolean mayPlace(@NotNull HumanEntity p, @Nullable ItemStack item){
         return true;
     }

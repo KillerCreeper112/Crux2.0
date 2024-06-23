@@ -237,7 +237,7 @@ public class Menu {
         if(CruxItem.isEmpty(item)) return;
         HumanEntity p = event.getWhoClicked();
         for(Slot slot : slots.values()){
-            if(!slot.mayPlace(p, item)) continue;
+            if(!slot.isSlottedItem(slot.getItem()) && !slot.mayPlace(p, item)) continue;
             giveSlot(p, slot, item, item.getAmount());
         }
     }
@@ -268,7 +268,7 @@ public class Menu {
 
     public @Nullable ItemStack takeFromSlot(@NotNull HumanEntity p, @NotNull Slot slot, int amount, int max){
         ItemStack slotItem = getInventory().getItem(slot.getIndex());
-        if(CruxItem.isEmpty(slotItem)) return null;
+        if(CruxItem.isEmpty(slotItem) || slot.isSlottedItem(slotItem)) return null;
         if(!slot.mayTake(p, slotItem)) return null;
 
         MenuSlotTakeEvent event = new MenuSlotTakeEvent(p, slot, amount);
@@ -281,8 +281,9 @@ public class Menu {
 
         int amountToTake = Math.min(amount, max);
 
-        final ItemStack newItemClone = slotItem.clone();
+        ItemStack newItemClone = slotItem.clone();
         newItemClone.setAmount(newItemClone.getAmount()-amountToTake);
+        if(newItemClone.getAmount() < 1) newItemClone = slot.getSlottedItemReplacement();
         final ItemStack oldItemClone = slotItem.clone();
 
         SlotContext ctx = new SlotContext(newItemClone, oldItemClone);
@@ -291,25 +292,27 @@ public class Menu {
 
         clone.setAmount(amountToTake);
         slotItem.setAmount(slotItem.getAmount()-amountToTake);
+        if(slotItem.getAmount() < 1) slot.setItem(slot.getSlottedItemReplacement(), true);
         onUpdate();
         return clone;
     }
 
     public ItemStack swapSlot(@NotNull HumanEntity p, @NotNull Slot slot, @NotNull ItemStack item){
         ItemStack slotItem = getInventory().getItem(slot.getIndex());
-        if(CruxItem.isEmpty(slotItem)) return item;
-        if(!slot.mayPlace(p, item) || !slot.mayTake(p, slotItem)) return item;
+        boolean isSlotted = slot.isSlottedItem(slotItem);
+        if(!slot.mayPlace(p, item) || (!isSlotted && !slot.mayTake(p, slotItem))) return item;
 
         if(item.getAmount() > slot.getMaxStackSize(item)) return item;
         setItem(slot.getIndex(), item);
         onUpdate();
-        return slotItem;
+        return isSlotted ? null : slotItem;
     }
 
     public ItemStack giveSlot(@NotNull HumanEntity p, @NotNull Slot slot, @NotNull ItemStack item, int amount){
         int maxStack = slot.getMaxStackSize(item);
         ItemStack slotItem = getInventory().getItem(slot.getIndex());
-        if(!CruxItem.isEmpty(slotItem)){
+        boolean isEmptyOrSlotted = CruxItem.isEmpty(slotItem) || slot.isSlottedItem(slotItem);
+        if(!isEmptyOrSlotted){
             if(slotItem.getAmount() >= maxStack) return item;
         }
         if(!slot.mayPlace(p, item)) return item;
@@ -321,13 +324,13 @@ public class Menu {
         amount = event.getAmount();
 
         //how much more can this item hold
-        int maxGiveAmount = CruxItem.isEmpty(slotItem) ? maxStack : (maxStack-slotItem.getAmount());
+        int maxGiveAmount = isEmptyOrSlotted ? maxStack : (maxStack-slotItem.getAmount());
 
         //how much to actually give the item
         int amountToGive = Math.min(amount, maxGiveAmount);
         ItemStack newItemClone;
         final ItemStack oldItemClone = slotItem == null ? null : slotItem.clone();
-        if(CruxItem.isEmpty(slotItem)){
+        if(isEmptyOrSlotted){
             ItemStack set = item.clone();
             set.setAmount(amountToGive);
 
