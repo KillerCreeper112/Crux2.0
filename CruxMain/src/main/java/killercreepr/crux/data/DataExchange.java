@@ -97,6 +97,12 @@ public class DataExchange implements Iterable<Holder<Object>> {
     }
 
     //Convenience methods.
+    public <T> @NotNull T getOrThrow(@NotNull Class<T> find){
+        T object = get(find);
+        if(object==null) throw new IllegalArgumentException("Class, " + find.getSimpleName() + " is not present!");
+        return object;
+    }
+
     public @NotNull Object getOrThrow(@NotNull String id){
         Object object = get(id);
         if(object==null) throw new IllegalArgumentException(id + " is not present!");
