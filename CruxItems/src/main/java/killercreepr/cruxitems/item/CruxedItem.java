@@ -12,6 +12,8 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 public class CruxedItem extends CruxItem {
     public CruxedItem(@NotNull Material material) {
         super(material);
@@ -49,6 +51,10 @@ public class CruxedItem extends CruxItem {
     public CruxedItem setPluginItem(@Nullable Key key){
         CruxItemsPersistTags.ITEM.set(item, key);
         return this;
+    }
+
+    public boolean isPluginItem(@NotNull Key key){
+        return Objects.equals(getPluginItemKey(), key);
     }
 
     public @Nullable Key getPluginItemKey(){
