@@ -10,7 +10,7 @@ public interface TempStoredSlot extends Slot{
     @Override
     default void onMenuClose(@NotNull Player p) {
         ItemStack item = getItem();
-        if(CruxItem.isEmpty(item)) return;
+        if(CruxItem.isEmpty(item) || isSlottedItem(item)) return;
         CruxEntity.giveOrDrop(p, item);
     }
 }
