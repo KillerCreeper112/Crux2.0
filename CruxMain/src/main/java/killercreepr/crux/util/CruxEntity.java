@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -24,7 +25,7 @@ public class CruxEntity {
         return GENERAL_SLOTS;
     }
 
-    public static void giveOrDrop(@NotNull Player p, @NotNull ItemStack... items){
+    public static void giveOrDrop(@NotNull HumanEntity p, @NotNull ItemStack... items){
         for(ItemStack drop : p.getInventory().addItem(items).values()){
             p.getWorld().dropItem(p.getLocation(), drop);
         }

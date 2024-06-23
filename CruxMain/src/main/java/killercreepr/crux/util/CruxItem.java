@@ -178,6 +178,10 @@ public class CruxItem implements Cloneable {
         });
     }
 
+    public CruxItem customModelData(@Nullable Integer data){
+        return editMeta(meta -> meta.setCustomModelData(data));
+    }
+
     public boolean unbreakable() {
         ItemMeta meta = meta();
         return meta != null && meta.isUnbreakable();

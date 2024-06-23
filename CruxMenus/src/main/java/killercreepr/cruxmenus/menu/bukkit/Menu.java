@@ -154,16 +154,23 @@ public class Menu {
     public interface MenuOpen{void open(@NotNull Player p); }
     public interface MenuClose{void close(@NotNull Player p); }
 
-
     public Menu setItem(int index, @Nullable ItemStack item){
+        return setItem(index, item, false);
+    }
+
+    public Menu setItem(int index, @Nullable ItemStack item, boolean silent){
         inventory.setItem(index, item);
-        onUpdate();
+        if(!silent) onUpdate();
         return this;
     }
     public Menu setItem(int index, @Nullable ItemStack item, @Nullable MenuClick action){
+        return setItem(index, item, action, false);
+    }
+
+    public Menu setItem(int index, @Nullable ItemStack item, @Nullable MenuClick action, boolean silent){
         inventory.setItem(index, item);
         setAction(index, action);
-        onUpdate();
+        if(!silent) onUpdate();
         return this;
     }
 
@@ -223,6 +230,7 @@ public class Menu {
     }
 
     public void onInvClick(@NotNull InventoryClickEvent event){
+        event.setCancelled(false);
         if(!event.isShiftClick()) return;
         event.setCancelled(true);
         ItemStack item = event.getCurrentItem();
@@ -235,21 +243,22 @@ public class Menu {
     }
 
     public void onDrag(@NotNull InventoryDragEvent event){
-        if(event.getRawSlots().size() > 1) return;
-        for(int i : event.getRawSlots()){
-            if(i >= event.getView().getTopInventory().getSize()){
-                event.setCancelled(false);
+        if(event.getRawSlots().size() < 2){
+            for(int i : event.getRawSlots()){
+                if(i >= event.getView().getTopInventory().getSize()){
+                    event.setCancelled(false);
+                    return;
+                }
+                Slot slot = getSlot(i);
+                if(slot==null) return;
+                Crux.getServer().getScheduler().runTask(Crux.getMainPlugin(), task ->{
+                    HumanEntity p = event.getWhoClicked();
+                    p.setItemOnCursor(
+                        giveSlot(p, slot, event.getOldCursor(), event.getOldCursor().getAmount())
+                    );
+                });
                 return;
             }
-            Slot slot = getSlot(i);
-            if(slot==null) return;
-            Crux.getServer().getScheduler().runTask(Crux.getMainPlugin(), task ->{
-                HumanEntity p = event.getWhoClicked();
-                p.setItemOnCursor(
-                    giveSlot(p, slot, event.getOldCursor(), event.getOldCursor().getAmount())
-                );
-            });
-            return;
         }
         for(int s : event.getRawSlots()){
             if(s < event.getView().getTopInventory().getSize()) return;
