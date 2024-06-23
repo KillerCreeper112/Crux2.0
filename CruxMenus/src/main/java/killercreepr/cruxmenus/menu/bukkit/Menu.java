@@ -268,7 +268,7 @@ public class Menu {
 
     public @Nullable ItemStack takeFromSlot(@NotNull HumanEntity p, @NotNull Slot slot, int amount, int max){
         ItemStack slotItem = getInventory().getItem(slot.getIndex());
-        if(CruxItem.isEmpty(slotItem) || slot.isSlottedItem(slotItem)) return null;
+        if(slotItem == null || slot.isBlank(slotItem)) return null;
         if(!slot.mayTake(p, slotItem)) return null;
 
         MenuSlotTakeEvent event = new MenuSlotTakeEvent(p, slot, amount);
@@ -311,7 +311,7 @@ public class Menu {
     public ItemStack giveSlot(@NotNull HumanEntity p, @NotNull Slot slot, @NotNull ItemStack item, int amount){
         int maxStack = slot.getMaxStackSize(item);
         ItemStack slotItem = getInventory().getItem(slot.getIndex());
-        boolean isEmptyOrSlotted = CruxItem.isEmpty(slotItem) || slot.isSlottedItem(slotItem);
+        boolean isEmptyOrSlotted = slot.isBlank(slotItem);
         if(!isEmptyOrSlotted){
             if(slotItem.getAmount() >= maxStack) return item;
         }

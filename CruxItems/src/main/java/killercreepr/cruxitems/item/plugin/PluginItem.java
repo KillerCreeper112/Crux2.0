@@ -26,9 +26,7 @@ public interface PluginItem extends Keyed, ItemBuilder {
         return isPluginItem(item, keyed.key());
     }
     @NotNull
-    default CruxedItem build(@Nullable Entity holder, @Nullable MergedTagContainer tags){
-        return new CruxedItem(buildItem(holder, tags)).setPluginItem(key());
-    }
+    CruxedItem build(@Nullable Entity holder, @Nullable MergedTagContainer tags);
     default @NotNull CruxedItem build(@Nullable Entity holder){
         return build(holder, null);
     }

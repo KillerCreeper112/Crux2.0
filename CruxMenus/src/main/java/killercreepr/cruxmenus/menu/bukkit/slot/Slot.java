@@ -40,6 +40,9 @@ public interface Slot {
     default @Nullable Integer getMaxStackSize(){
         return null;
     }
+    default boolean isBlank(@Nullable ItemStack item){
+        return CruxItem.isEmpty(item) || isSlottedItem(item);
+    }
     default int getMaxStackSize(@Nullable ItemStack item) {
         Integer maxStack = this.getMaxStackSize();
         if(maxStack==null) return item==null?0:CruxItem.getMaxStackSize(item);
@@ -47,7 +50,8 @@ public interface Slot {
     }
 
     default boolean isSlottedItem(@Nullable ItemStack item){
-        return false;
+        ItemStack replacement = getSlottedItemReplacement();
+        return replacement != null && replacement.isSimilar(item);
     }
 
     default @Nullable ItemStack getSlottedItemReplacement(){
