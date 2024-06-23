@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
+//todo make this interface
 public class DataExchange implements Iterable<Holder<Object>> {
     public static @NotNull DataExchange.Builder builder(){
         return new DataExchange.Builder();
@@ -137,6 +138,9 @@ public class DataExchange implements Iterable<Holder<Object>> {
 
         public Builder put(@NotNull String id, @NotNull Object direct){
             return put(id, Holder.direct(direct));
+        }
+        public Builder put(@NotNull Object direct){
+            return put(direct.getClass().getSimpleName().toLowerCase(), Holder.direct(direct));
         }
 
         public Builder put(@NotNull String id, @NotNull Holder<Object> holder){
