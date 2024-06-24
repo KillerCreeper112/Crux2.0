@@ -2,6 +2,7 @@ package killercreepr.cruxblocks.listener;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.entity.PlayerMemory;
+import killercreepr.crux.util.CruxBlockUtil;
 import killercreepr.crux.util.CruxLoc;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
@@ -11,7 +12,6 @@ import killercreepr.cruxblocks.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.data.entity.MinerHolder;
 import killercreepr.cruxblocks.manager.CruxBlockManager;
 import killercreepr.cruxblocks.persistence.CruxBlocksPersistTags;
-import killercreepr.cruxblocks.util.CruxBlockUtil;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
