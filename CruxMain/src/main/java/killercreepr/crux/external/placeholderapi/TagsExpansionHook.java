@@ -6,7 +6,7 @@ import killercreepr.crux.tags.format.Format;
 import killercreepr.crux.tags.format.FormatArgs;
 import killercreepr.crux.tags.hook.ObjectTag;
 import killercreepr.crux.tags.resolver.StringResolver;
-import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+//import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //todo test this out
-public class TagsExpansionHook extends PlaceholderExpansion {
+public class TagsExpansionHook /*extends PlaceholderExpansion */{
     protected final @NotNull String identifier;
     protected final @NotNull Format format;
 
@@ -24,17 +24,17 @@ public class TagsExpansionHook extends PlaceholderExpansion {
         this.format = format;
     }
 
-    @Override
+    //@Override
     public @NotNull String getIdentifier() {
         return identifier;
     }
 
-    @Override
+    //@Override
     public @NotNull String getAuthor() {
         return "killercreepr";
     }
 
-    @Override
+    //@Override
     public @NotNull String getVersion() {
         return "1.0";
     }
@@ -51,7 +51,7 @@ public class TagsExpansionHook extends PlaceholderExpansion {
         return null;
     }
 
-    @Override
+    //@Override
     public @Nullable String onRequest(OfflinePlayer player, @NotNull String params) {
         //<player_name> = %crux_player_name%
         //<player_max_health>
@@ -107,7 +107,8 @@ public class TagsExpansionHook extends PlaceholderExpansion {
                 }
             }*/
         }
-        return super.onRequest(player, params);
+        return null;
+        //return super.onRequest(player, params);
     }
 
     private @NotNull String noUnderscore(@NotNull String text){
