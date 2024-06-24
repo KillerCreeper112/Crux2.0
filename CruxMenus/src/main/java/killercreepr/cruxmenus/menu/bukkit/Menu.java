@@ -234,43 +234,6 @@ public class Menu {
         slots.values().forEach(Slot::onMenuUpdate);
     }
 
-    public void onInvClick(@NotNull InventoryClickEvent event){
-        event.setCancelled(false);
-        if(!event.isShiftClick()) return;
-        event.setCancelled(true);
-        ItemStack item = event.getCurrentItem();
-        if(CruxItem.isEmpty(item)) return;
-        HumanEntity p = event.getWhoClicked();
-        for(Slot slot : slots.values()){
-            if(!slot.isSlottedItem(slot.getItem()) && !slot.mayPlace(p, item)) continue;
-            giveSlot(p, slot, item, item.getAmount());
-        }
-    }
-
-    public void onDrag(@NotNull InventoryDragEvent event){
-        if(event.getRawSlots().size() < 2){
-            for(int i : event.getRawSlots()){
-                if(i >= event.getView().getTopInventory().getSize()){
-                    event.setCancelled(false);
-                    return;
-                }
-                Slot slot = getSlot(i);
-                if(slot==null) return;
-                Crux.getServer().getScheduler().runTask(Crux.getMainPlugin(), task ->{
-                    HumanEntity p = event.getWhoClicked();
-                    p.setItemOnCursor(
-                        giveSlot(p, slot, event.getOldCursor(), event.getOldCursor().getAmount())
-                    );
-                });
-                return;
-            }
-        }
-        for(int s : event.getRawSlots()){
-            if(s < event.getView().getTopInventory().getSize()) return;
-        }
-        event.setCancelled(false);
-    }
-
     public @Nullable ItemStack takeFromSlot(@NotNull HumanEntity p, @NotNull Slot slot, int amount, int max){
         ItemStack slotItem = getInventory().getItem(slot.getIndex());
         if(slotItem == null || slot.isBlank(slotItem)) return null;
@@ -319,6 +282,7 @@ public class Menu {
         boolean isEmptyOrSlotted = slot.isBlank(slotItem);
         if(!isEmptyOrSlotted){
             if(slotItem.getAmount() >= maxStack) return item;
+            if(!slotItem.isSimilar(item)) return item;
         }
         if(!slot.mayPlace(p, item)) return item;
 
@@ -363,6 +327,43 @@ public class Menu {
         return item;
     }
 
+    public void onInvClick(@NotNull InventoryClickEvent event){
+        event.setCancelled(false);
+        if(!event.isShiftClick()) return;
+        event.setCancelled(true);
+        ItemStack item = event.getCurrentItem();
+        if(CruxItem.isEmpty(item)) return;
+        HumanEntity p = event.getWhoClicked();
+        for(Slot slot : slots.values()){
+            if(!slot.isSlottedItem(slot.getItem()) && !slot.mayPlace(p, item)) continue;
+            giveSlot(p, slot, item, item.getAmount());
+        }
+    }
+
+    public void onDrag(@NotNull InventoryDragEvent event){
+        if(event.getRawSlots().size() < 2){
+            for(int i : event.getRawSlots()){
+                if(i >= event.getView().getTopInventory().getSize()){
+                    event.setCancelled(false);
+                    return;
+                }
+                Slot slot = getSlot(i);
+                if(slot==null) return;
+                Crux.getServer().getScheduler().runTask(Crux.getMainPlugin(), task ->{
+                    HumanEntity p = event.getWhoClicked();
+                    p.setItemOnCursor(
+                        giveSlot(p, slot, event.getOldCursor(), event.getOldCursor().getAmount())
+                    );
+                });
+                return;
+            }
+        }
+        for(int s : event.getRawSlots()){
+            if(s < event.getView().getTopInventory().getSize()) return;
+        }
+        event.setCancelled(false);
+    }
+
     public void onMenuClick(@NotNull InventoryClickEvent event){
         Slot slot = getSlot(event.getSlot());
         if(slot==null) return;
@@ -380,7 +381,7 @@ public class Menu {
             return;
         }
 
-        if(clicked != null && !clicked.isSimilar(cursor)){
+        if(clicked != null && !clicked.isSimilar(cursor) && !slot.isBlank(clicked)){
             p.setItemOnCursor(swapSlot(p, slot, cursor));
             return;
         }

@@ -68,6 +68,7 @@ public class MenuRegistry {
     }
 
     public void loadConfiguration(@NotNull File folder){
+        MENU_HOLDERS.clear();
         File[] list = folder.listFiles();
         if(list==null) return;
         for(File f : list){
@@ -76,7 +77,6 @@ public class MenuRegistry {
     }
 
     public void loadConfiguration(@NotNull CruxConfig cfg){
-        MENU_HOLDERS.clear();
         MenuHolder holder = cfg.deserialize(MenuHolder.class, "");
         if(holder == null) return;
         Crux.log(Level.INFO, "Registered crux menu: " + holder.key());
