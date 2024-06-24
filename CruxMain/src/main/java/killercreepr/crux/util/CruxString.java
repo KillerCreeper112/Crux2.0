@@ -1,5 +1,6 @@
 package killercreepr.crux.util;
 
+import com.google.common.collect.ImmutableMap;
 import killercreepr.crux.registries.CruxRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -100,5 +101,48 @@ public class CruxString {
         if (number-3>=0) return unicodeSpacingValue(3, isNegative);
         if (number-2>=0) return unicodeSpacingValue(2, isNegative);
         return unicodeSpacingValue(1, isNegative);
+    }
+
+    public final static Map<Character, Character> LATIN_FONT = ImmutableMap.<Character, Character>builder()
+        .put('a', 'ᴀ')
+        .put('b', 'ʙ')
+        .put('c', 'ᴄ')
+        .put('d', 'ᴅ')
+        .put('e', 'ᴇ')
+        .put('f', 'ꜰ')
+        .put('g', 'ɢ')
+        .put('h', 'ʜ')
+        .put('i', 'ɪ')
+        .put('j', 'ᴊ')
+        .put('k', 'ᴋ')
+        .put('l', 'ʟ')
+        .put('m', 'ᴍ')
+        .put('n', 'ɴ')
+        .put('o', 'ᴏ')
+        .put('p', 'ᴘ')
+        .put('q', 'ꞯ')
+        .put('r', 'ʀ')
+        .put('s', 'ꜱ')
+        .put('t', 'ᴛ')
+        .put('u', 'ᴜ')
+        .put('v', 'ᴠ')
+        .put('w', 'ᴡ')
+        .put('y', 'ʏ')
+        .put('z', 'ᴢ')
+        .build();
+
+    public static char latinFont(char c){
+        return LATIN_FONT.getOrDefault(Character.toLowerCase(c), c);
+    }
+
+    public static @NotNull String latinFont(@NotNull String s){
+        char[] array = s.toCharArray();
+        int index = -1;
+        for(char c : array){
+            index++;
+            Character l = LATIN_FONT.get(Character.toLowerCase(c));
+            if(l != null) array[index] = l;
+        }
+        return String.valueOf(array);
     }
 }
