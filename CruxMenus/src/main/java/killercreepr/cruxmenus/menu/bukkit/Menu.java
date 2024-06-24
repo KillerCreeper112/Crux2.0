@@ -368,6 +368,7 @@ public class Menu {
         Slot slot = getSlot(event.getSlot());
         if(slot==null) return;
         HumanEntity p = event.getWhoClicked();
+        slot.onClick(p, event);
 
         ItemStack clicked = getInventory().getItem(slot.getIndex());
         ItemStack cursor = event.getCursor();

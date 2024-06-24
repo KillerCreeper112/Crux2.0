@@ -4,6 +4,7 @@ import killercreepr.crux.util.CruxItem;
 import killercreepr.cruxmenus.menu.bukkit.Menu;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -56,6 +57,9 @@ public interface Slot {
 
     default @Nullable ItemStack getSlottedItemReplacement(){
         return null;
+    }
+
+    default void onClick(@NotNull HumanEntity p, @NotNull InventoryClickEvent event){
     }
 
     default boolean mayPlace(@NotNull HumanEntity p, @Nullable ItemStack item){
