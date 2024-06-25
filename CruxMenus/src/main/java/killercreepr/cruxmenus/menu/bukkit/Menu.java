@@ -102,7 +102,7 @@ public class Menu implements InventoryHolder {
      * Closes all viewer's inventories.
      */
     public Menu close(){
-        for(HumanEntity viewer : getInventory().getViewers()){
+        for(HumanEntity viewer : new ArrayList<>(getInventory().getViewers())){
             viewer.closeInventory();
         }
         return this;
