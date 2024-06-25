@@ -4,6 +4,7 @@ import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.CruxBlockDirectional;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.block.context.PlaceBlockContext;
+import killercreepr.cruxblocks.user.EntityMiner;
 import org.bukkit.Axis;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.LivingEntity;
@@ -48,7 +49,7 @@ public interface CruxDirectionalBlockGroup extends CruxBlockGroup{
     @Override
     default @Nullable ActiveCruxBlock placeBlock(@NotNull PlaceBlockContext ctx) {
         CruxBlock base = getBaseBlock();
-        if(!(ctx.getUser() instanceof LivingEntity p)) return base.placeBlock(ctx);
+        if(!(ctx.getMiner() instanceof EntityMiner m) || !(m.getEntity() instanceof LivingEntity p)) return base.placeBlock(ctx);
         BlockFace blockFace = ctx.getBlockFace();
         float pitch = p.getLocation().getPitch();
         BlockFace face = isOrientable() ? blockFace.getOppositeFace() : p.getFacing().getOppositeFace();

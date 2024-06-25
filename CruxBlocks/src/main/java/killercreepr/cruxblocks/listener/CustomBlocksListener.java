@@ -228,7 +228,7 @@ public class CustomBlocksListener implements Listener {
         new BukkitRunnable(){
             @Override
             public void run() {
-                ActiveCruxBlock placed = group.placeBlock(new PlaceBlockContextImpl(placeBlock, p, blockFace));
+                ActiveCruxBlock placed = group.placeBlock(new PlaceBlockContextImpl(placeBlock, EntityMiner.from(p), blockFace));
                 if(placed == null) return;
 
                 if(p.getGameMode() != GameMode.CREATIVE) item.setAmount(item.getAmount() - 1);
