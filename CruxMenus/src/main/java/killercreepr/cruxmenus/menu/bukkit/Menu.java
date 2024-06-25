@@ -27,6 +27,7 @@ import java.util.*;
 public class Menu {
     //player uuid -> menu
     private static final Map<UUID, Menu> OPEN_MENUS = new HashMap<>();
+    public static @NotNull Map<UUID, Menu> getOpenedMenus(){ return OPEN_MENUS; }
     public static @NotNull Optional<Menu> getMenu(@NotNull Player p){ return Optional.ofNullable(menu(p)); }
     public static @Nullable Menu menu(@NotNull Player p){
         return OPEN_MENUS.get(p.getUniqueId());
