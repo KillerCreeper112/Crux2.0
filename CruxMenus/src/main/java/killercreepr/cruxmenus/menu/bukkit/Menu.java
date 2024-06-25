@@ -278,7 +278,7 @@ public class Menu {
         if(!slot.mayPlace(p, item) || (!isSlotted && !slot.mayTake(p, slotItem))) return new SlotResult(item, false);
 
         if(item != null && item.getAmount() > slot.getMaxStackSize(item)) return new SlotResult(item, false);
-        setItem(slot.getIndex(), CruxItem.isEmpty(item)?slot.getSlottedItemReplacement():item);
+        setItem(slot.getIndex(), CruxItem.isEmpty(item)?slot.getSlottedItemReplacement():item, true);
         if(!skipUpdate) onUpdate();
         return new SlotResult(isSlotted ? null : slotItem, true);
     }
