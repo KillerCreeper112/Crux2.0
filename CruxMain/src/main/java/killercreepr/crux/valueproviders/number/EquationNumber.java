@@ -18,11 +18,6 @@ public class EquationNumber implements NumberProvider{
     }
 
     @Override
-    public @NotNull Number sample(@NotNull Random random) {
-        return CruxMath.evaluate(equation);
-    }
-
-    @Override
     public @NotNull Number getMinValue() {
         return value();
     }
@@ -33,7 +28,7 @@ public class EquationNumber implements NumberProvider{
     }
 
     @Override
-    public @NotNull Number value(@Nullable InputContext context) {
+    public @NotNull Number sample(@NotNull Random random, @Nullable InputContext context) {
         if(context == null) return CruxMath.evaluate(equation);
         return CruxMath.evaluate(context.input(equation));
     }

@@ -34,18 +34,13 @@ public class UniformNumberArray implements NumberProvider {
     }
 
     @Override
-    public @NotNull Number value(@Nullable InputContext ev) {
-        return sampleProvider(new Random()).value(ev);
+    public @NotNull Number sample(@NotNull Random random, @Nullable InputContext ev) {
+        return sampleProvider(random).sample(random, ev);
     }
 
     public @NotNull NumberProvider sampleProvider(@NotNull Random random){
         int randomIndex = random.nextInt(numbers.length);
         return numbers[randomIndex];
-    }
-
-    @Override
-    public @NotNull Number sample(@NotNull Random random) {
-        return sampleProvider(random).sample(random);
     }
 
     @Override

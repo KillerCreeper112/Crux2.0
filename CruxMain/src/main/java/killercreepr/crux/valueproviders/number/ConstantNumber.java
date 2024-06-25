@@ -1,6 +1,8 @@
 package killercreepr.crux.valueproviders.number;
 
+import killercreepr.crux.context.InputContext;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
@@ -15,17 +17,17 @@ public class ConstantNumber implements NumberProvider{
     }
 
     @Override
-    public @NotNull Number sample(@NotNull Random random) {
-        return constant;
-    }
-
-    @Override
     public @NotNull Number getMinValue() {
         return constant;
     }
 
     @Override
     public @NotNull Number getMaxValue() {
+        return constant;
+    }
+
+    @Override
+    public @NotNull Number sample(@NotNull Random random, @Nullable InputContext ev) {
         return constant;
     }
 

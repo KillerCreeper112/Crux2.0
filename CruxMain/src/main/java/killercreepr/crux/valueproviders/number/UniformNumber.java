@@ -18,11 +18,6 @@ public class UniformNumber implements NumberProvider {
         this.maxInclusive = max;
     }
 
-    @Override
-    public @NotNull Number sample(@NotNull Random random) {
-        return sample(random, minInclusive.value(), maxInclusive.value());
-    }
-
     public @NotNull Number sample(@NotNull Random random, @NotNull Number minInclusive, @NotNull Number maxInclusive) {
         if (maxInclusive instanceof Integer) return random.nextInt((int) maxInclusive - (int) minInclusive + 1) + (int) minInclusive;
         if (maxInclusive instanceof Double) return random.nextDouble() * ((double) maxInclusive - (double) minInclusive) + (double) minInclusive;
@@ -33,8 +28,8 @@ public class UniformNumber implements NumberProvider {
     }
 
     @Override
-    public @NotNull Number value(@Nullable InputContext ev) {
-        return sample(new Random(), minInclusive.value(ev), maxInclusive.value(ev));
+    public @NotNull Number sample(@NotNull Random random, @Nullable InputContext ev) {
+        return sample(random, minInclusive.sample(random, ev), maxInclusive.sample(random, ev));
     }
 
     public @NotNull NumberProvider getMinInclusive() {

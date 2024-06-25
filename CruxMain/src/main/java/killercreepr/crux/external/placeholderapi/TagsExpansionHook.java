@@ -6,7 +6,6 @@ import killercreepr.crux.tags.format.Format;
 import killercreepr.crux.tags.format.FormatArgs;
 import killercreepr.crux.tags.hook.ObjectTag;
 import killercreepr.crux.tags.resolver.StringResolver;
-//import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
