@@ -182,6 +182,12 @@ public class Menu implements InventoryHolder {
         return this;
     }
 
+    public Menu clearItems(boolean silent){
+        inventory.clear();
+        if(!silent) onUpdate();
+        return this;
+    }
+
     public @Nullable Slot getSlot(int index){
         return slots.get(index);
     }
