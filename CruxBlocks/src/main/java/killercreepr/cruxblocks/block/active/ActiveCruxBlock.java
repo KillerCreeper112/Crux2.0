@@ -64,6 +64,7 @@ public interface ActiveCruxBlock {
         }
         /*todo if(e != null) GrimItem.damage(e, tool, 1, EquipmentSlot.HAND);
         else GrimItem.damage(tool, 1);*/
+        broken(event.getContext());
         return event;
     }
 

@@ -7,9 +7,11 @@ import killercreepr.crux.util.CruxLoc;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxInteractable;
+import killercreepr.cruxblocks.block.context.BlockContextImpl;
 import killercreepr.cruxblocks.block.context.PlaceBlockContextImpl;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.data.entity.MinerHolder;
+import killercreepr.cruxblocks.event.CruxBlockBreakEvent;
 import killercreepr.cruxblocks.manager.CruxBlockManager;
 import killercreepr.cruxblocks.persistence.CruxBlocksPersistTags;
 import org.bukkit.GameMode;
@@ -102,6 +104,16 @@ public class CustomBlocksListener implements Listener {
         MinerHolder data = PlayerMemory.getOrCreateDataHolder(p, MinerHolder.class);
         if(data==null) return;
         data.onMine(p, event.getBlock());
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onBlockBreak(BlockBreakEvent event) {
+        Block b = event.getBlock();
+        ActiveCruxBlock active = manager.getActiveBlock(b);
+        if(active==null) return;
+        Player p = event.getPlayer();
+        ItemStack tool = p.getInventory().getItemInMainHand();
+        active.breakBlock(p, tool);
     }
 
     @EventHandler(ignoreCancelled = true)

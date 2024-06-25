@@ -99,14 +99,8 @@ public class Menu {
 
     public @NotNull Collection<MenuCloseEvent> close(){
         Collection<MenuCloseEvent> list = new HashSet<>();
-        for(Map.Entry<UUID, Menu> entry : new HashSet<>(OPEN_MENUS.entrySet())){
-            Menu m = entry.getValue();
-            if(!uuid.equals(m.getUuid())) continue;
-            Player p = Bukkit.getPlayer(entry.getKey());
-            if(p==null){
-                OPEN_MENUS.remove(entry.getKey());
-                continue;
-            }
+        for(HumanEntity viewer : getInventory().getViewers()){
+            if(!(viewer instanceof Player p )) continue;
             list.add(close(p));
         }
         return list;
