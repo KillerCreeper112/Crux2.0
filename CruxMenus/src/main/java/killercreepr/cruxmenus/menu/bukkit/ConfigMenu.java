@@ -32,7 +32,7 @@ public class ConfigMenu extends Menu{
         this.info = info;
         this.tags = new MultiTagContainer(holder.getRegistry().getFormat().tags());
         if(tags != null) this.tags.addAll(tags);
-        reconstruct(Bukkit.createInventory(null, getInventorySize(buildSize()), buildTitle()));
+        reconstruct(Bukkit.createInventory(this, getInventorySize(buildSize()), buildTitle()));
     }
 
     public @NotNull Component buildTitle(){

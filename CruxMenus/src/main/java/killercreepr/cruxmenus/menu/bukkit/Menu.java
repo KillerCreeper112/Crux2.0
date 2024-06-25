@@ -18,13 +18,14 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class Menu {
+public class Menu implements InventoryHolder {
     //player uuid -> menu
     private static final Map<UUID, Menu> OPEN_MENUS = new HashMap<>();
     public static @NotNull Map<UUID, Menu> getOpenedMenus(){ return OPEN_MENUS; }
@@ -59,7 +60,7 @@ public class Menu {
     public Menu(){}
 
     protected Menu reconstruct(int size, @NotNull Component name){
-        inventory = Bukkit.createInventory(null, size, name);
+        inventory = Bukkit.createInventory(this, size, name);
         return this;
     }
 
@@ -185,6 +186,7 @@ public class Menu {
         return slots.get(index);
     }
 
+    @Override
     public @NotNull Inventory getInventory(){ return inventory; }
 
     protected Menu addSlot(@NotNull Slot slot){
