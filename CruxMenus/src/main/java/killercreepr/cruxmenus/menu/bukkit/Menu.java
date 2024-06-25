@@ -97,13 +97,14 @@ public class Menu {
         return event;
     }
 
-    public @NotNull Collection<MenuCloseEvent> close(){
-        Collection<MenuCloseEvent> list = new HashSet<>();
+    /**
+     * Closes all viewer's inventories.
+     */
+    public Menu close(){
         for(HumanEntity viewer : getInventory().getViewers()){
-            if(!(viewer instanceof Player p )) continue;
-            list.add(close(p));
+            viewer.closeInventory();
         }
-        return list;
+        return this;
     }
 
     public Map<Integer, MenuClick> getClickActions() {
