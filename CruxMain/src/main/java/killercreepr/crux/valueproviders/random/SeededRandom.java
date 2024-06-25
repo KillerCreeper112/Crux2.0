@@ -12,6 +12,12 @@ public class SeededRandom extends Random{
     public SeededRandom(){
     }
 
+    @Override
+    public synchronized void setSeed(long seed) {
+        super.setSeed(seed);
+        this.seed = seed;
+    }
+
     public long getSeed() {
         return seed;
     }
