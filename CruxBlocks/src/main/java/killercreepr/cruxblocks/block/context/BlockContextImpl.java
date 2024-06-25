@@ -1,16 +1,16 @@
 package killercreepr.cruxblocks.block.context;
 
+import killercreepr.cruxblocks.user.Miner;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class BlockContextImpl implements BlockContext{
     protected final @NotNull Block block;
-    protected final @Nullable Entity user;
-    public BlockContextImpl(@NotNull Block block, @Nullable Entity user) {
+    protected final @Nullable Miner miner;
+    public BlockContextImpl(@NotNull Block block, @Nullable Miner miner) {
         this.block = block;
-        this.user = user;
+        this.miner = miner;
     }
 
     @Override
@@ -19,7 +19,7 @@ public class BlockContextImpl implements BlockContext{
     }
 
     @Override
-    public @Nullable Entity getUser() {
-        return user;
+    public @Nullable Miner getMiner() {
+        return miner;
     }
 }

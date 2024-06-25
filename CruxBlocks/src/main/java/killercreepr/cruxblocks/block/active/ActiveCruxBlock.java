@@ -6,13 +6,16 @@ import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.context.BlockContext;
 import killercreepr.cruxblocks.block.context.BlockContextImpl;
 import killercreepr.cruxblocks.event.CruxBlockBreakEvent;
+import killercreepr.cruxblocks.user.EntityMiner;
+import killercreepr.cruxblocks.user.ItemMiner;
+import killercreepr.cruxblocks.user.Miner;
+import killercreepr.cruxblocks.user.Tooled;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
@@ -31,30 +34,37 @@ public interface ActiveCruxBlock {
     @NotNull
     CruxBlock getCruxBlock();
 
-    default @NotNull CruxBlockBreakEvent breakBlock(@Nullable Entity e, @Nullable ItemStack tool){
+    default @NotNull CruxBlockBreakEvent breakBlock(@Nullable Miner miner){
+        return breakBlock(miner, true);
+    }
+
+    default @NotNull CruxBlockBreakEvent breakBlock(@Nullable Miner miner, boolean displayEffects){
         Block block = getBlock();
-        Collection<ItemStack> drops = getDrops(e, tool);
-        CruxBlockBreakEvent event = new CruxBlockBreakEvent(this, new BlockContextImpl(block, e),
-            drops, tool);
+        Collection<ItemStack> drops = getDrops(miner);
+        CruxBlockBreakEvent event = new CruxBlockBreakEvent(this, new BlockContextImpl(block, miner), drops);
         if(!event.callEvent()) return event;
         drops = event.getDrops();
         BlockData data = block.getBlockData();
         Crux.handlers().block().setType(getBlock(), Material.AIR);
-        CruxBlock custom = getCruxBlock();
-        if(custom.getSoundGroup() == null){
-            block.getWorld().playSound(block.getLocation().toCenterLocation(), Sound.BLOCK_WOOD_BREAK, 1f, 1f);
-        }else{
-            block.getWorld().playSound(block.getLocation().toCenterLocation(), custom.getSoundGroup().getBreakSound(),
-                custom.getSoundGroup().getVolume(), custom.getSoundGroup().getPitch());
-        }
 
-        new ParticleBuilder(Particle.BLOCK)
-            .count(20)
-            .offset(.5, .5, .5)
-            .extra(.1)
-            .data(data)
-            .spawn()
-        ;
+        if(displayEffects){
+            CruxBlock custom = getCruxBlock();
+            if(custom.getSoundGroup() == null){
+                block.getWorld().playSound(block.getLocation().toCenterLocation(), Sound.BLOCK_WOOD_BREAK, 1f, 1f);
+            }else{
+                block.getWorld().playSound(block.getLocation().toCenterLocation(), custom.getSoundGroup().getBreakSound(),
+                    custom.getSoundGroup().getVolume(), custom.getSoundGroup().getPitch());
+            }
+
+            new ParticleBuilder(Particle.BLOCK)
+                .count(20)
+                .offset(.5, .5, .5)
+                .extra(.1)
+                .data(data)
+                .location(block.getLocation().toCenterLocation().subtract(0, .5, 0))
+                .spawn()
+            ;
+        }
 
         if(drops != null){
             Location x = block.getLocation().toCenterLocation().subtract(0, .5, 0);
@@ -69,7 +79,7 @@ public interface ActiveCruxBlock {
     }
 
     default @NotNull CruxBlockBreakEvent breakBlock(@Nullable ItemStack tool){
-        return breakBlock(null, tool);
+        return breakBlock(new ItemMiner(tool), true);
     }
 
     /**
@@ -83,26 +93,29 @@ public interface ActiveCruxBlock {
      */
     default void update(){
         if(getCruxBlock().canPlace(new BlockContextImpl(getBlock(), null))) return;
-        breakBlock(null);
+        breakBlock((Miner) null);
     }
 
-    default boolean canHarvest(@Nullable Entity e, @Nullable ItemStack tool){
+    default boolean canHarvest(@Nullable Miner miner){
         return true;
     }
 
     @Nullable
-    default Collection<ItemStack> getDrops(@Nullable Entity e, @Nullable ItemStack tool){
+    default Collection<ItemStack> getDrops(@Nullable Miner miner){
         return null;
     }
 
     default boolean isPreferredTool(@Nullable ItemStack item){ return false; }
 
     @Nullable
-    default Collection<ItemStack> getDrops(){ return getDrops(null, null); }
+    default Collection<ItemStack> getDrops(){ return getDrops(null); }
 
-    default float getMineSpeed(@Nullable Entity e, @Nullable ItemStack tool, boolean includeEnchants){
-        boolean preferredTool = isPreferredTool(tool);
-        boolean canHarvest = canHarvest(e, tool);
+    default float getMineSpeed(@Nullable Miner miner, boolean includeEnchants){
+        Tooled tooled;
+        if(miner instanceof Tooled m) tooled = m;
+        else tooled = null;
+        boolean preferredTool = isPreferredTool(tooled==null?null:tooled.getTool());
+        boolean canHarvest = canHarvest(miner);
 
         float speedMultiplier = 1f;
         if(canHarvest && includeEnchants) {
@@ -110,7 +123,11 @@ public interface ActiveCruxBlock {
         }
         //if(preferredTool) speedMultiplier = (float) GrimAttribute.get(e, GrimAttribute.MINING_SPEED);
 
-        if(e instanceof LivingEntity lE){
+        EntityMiner entityMiner;
+        if(miner instanceof EntityMiner m) entityMiner = m;
+        else entityMiner = null;
+
+        if(entityMiner != null && entityMiner.getEntity() instanceof LivingEntity lE){
             if(lE.hasPotionEffect(PotionEffectType.HASTE)){
                 speedMultiplier *= 0.2f * (lE.getPotionEffect(PotionEffectType.HASTE).getAmplifier() + 1f);
             }
@@ -121,7 +138,7 @@ public interface ActiveCruxBlock {
                 speedMultiplier /= 5f;
             }
         }
-        if(e != null && e.getFallDistance() > 0f) speedMultiplier /= 5f;
+        if(entityMiner != null && entityMiner.getEntity().getFallDistance() > 0f) speedMultiplier /= 5f;
         float damage = speedMultiplier / getCruxBlock().getHardness();
         if(canHarvest) damage /= 30f;
         else damage /= 100f;

@@ -1,5 +1,6 @@
 package killercreepr.cruxblocks.listener;
 
+import io.papermc.paper.event.block.BlockBreakBlockEvent;
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.entity.PlayerMemory;
 import killercreepr.crux.util.CruxBlockUtil;
@@ -7,13 +8,13 @@ import killercreepr.crux.util.CruxLoc;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxInteractable;
-import killercreepr.cruxblocks.block.context.BlockContextImpl;
 import killercreepr.cruxblocks.block.context.PlaceBlockContextImpl;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.data.entity.MinerHolder;
-import killercreepr.cruxblocks.event.CruxBlockBreakEvent;
 import killercreepr.cruxblocks.manager.CruxBlockManager;
 import killercreepr.cruxblocks.persistence.CruxBlocksPersistTags;
+import killercreepr.cruxblocks.user.BlockMiner;
+import killercreepr.cruxblocks.user.EntityMiner;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -76,7 +77,7 @@ public class CustomBlocksListener implements Listener {
         if(p.getGameMode() == GameMode.CREATIVE) return;
 
         CruxBlock crux = active.getCruxBlock();
-        Collection<ItemStack> drops = active.getDrops(p, p.getInventory().getItemInMainHand());
+        Collection<ItemStack> drops = active.getDrops(EntityMiner.from(p));
         if(crux.getSoundGroup() != null){
             block.getWorld().playSound(block.getLocation().toCenterLocation(), crux.getSoundGroup().getBreakSound(),
                 crux.getSoundGroup().getVolume(), crux.getSoundGroup().getPitch());
@@ -111,9 +112,15 @@ public class CustomBlocksListener implements Listener {
         Block b = event.getBlock();
         ActiveCruxBlock active = manager.getActiveBlock(b);
         if(active==null) return;
-        Player p = event.getPlayer();
-        ItemStack tool = p.getInventory().getItemInMainHand();
-        active.breakBlock(p, tool);
+        active.breakBlock(EntityMiner.from(event.getPlayer()), false);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onBlockBreakBlock(BlockBreakBlockEvent event) {
+        Block b = event.getBlock();
+        ActiveCruxBlock active = manager.getActiveBlock(b);
+        if(active==null) return;
+        active.breakBlock(new BlockMiner(event.getSource()), false);
     }
 
     @EventHandler(ignoreCancelled = true)
