@@ -16,4 +16,19 @@ public class CruxMap {
         entries.sort(COMPARATOR);
         return entries;
     }
+
+    public static <K, V> @NotNull Map<V, K> reverse(@NotNull Map<K, V> map){
+        return reverse(map, new HashMap<>());
+    }
+
+    public static <K, V> @NotNull Map<V, K> reverse(@NotNull Map<K, V> map, @NotNull Map<V, K> reversedMap) {
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            V value = entry.getValue();
+            K key = entry.getKey();
+
+            reversedMap.put(value, key);
+        }
+
+        return reversedMap;
+    }
 }
