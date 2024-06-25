@@ -43,7 +43,7 @@ public class ConfigMenu extends Menu{
     }
 
     public int buildSize(){
-        return holder.getSize().value(new SimpleInputContext(holder.getRegistry().getFormat(), buildTags())).intValue();
+        return holder.getSize().sample(new SimpleInputContext(holder.getRegistry().getFormat(), buildTags())).intValue();
     }
 
     public @NotNull MergedTagContainer buildTags(){

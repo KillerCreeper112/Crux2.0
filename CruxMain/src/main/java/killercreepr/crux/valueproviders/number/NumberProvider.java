@@ -8,11 +8,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Random;
 
 public interface NumberProvider extends NumberHolder {
-    default @NotNull Number sample(@NotNull Random random){
-        return sample(random, null);
-    }
-    default @NotNull Number sample(){ return sample(CruxMath.RANDOM); }
-
     @NotNull Number getMinValue();
     @NotNull Number getMaxValue();
     @Override
@@ -24,7 +19,10 @@ public interface NumberProvider extends NumberHolder {
     @NotNull Number sample(@NotNull Random random, @Nullable InputContext ev);
 
     default @NotNull Number sample(@Nullable InputContext ev){
-        return sample(CruxMath.RANDOM);
+        return sample(CruxMath.RANDOM, ev);
     }
-
+    default @NotNull Number sample(@NotNull Random random){
+        return sample(random, null);
+    }
+    default @NotNull Number sample(){ return sample(CruxMath.RANDOM); }
 }

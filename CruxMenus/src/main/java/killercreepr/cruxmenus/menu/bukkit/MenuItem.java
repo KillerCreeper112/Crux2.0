@@ -40,7 +40,7 @@ public class MenuItem {
     public @NotNull Optional<Integer> getSlot(){
         NumberProvider provider = base.info().getObject("slot", NumberProvider.class).orElse(null);
         if(provider != null) return Optional.of(
-                provider.value(this::setPlaceholders).intValue()
+                provider.sample(this::setPlaceholders).intValue()
         );
         return Optional.empty();
     }
