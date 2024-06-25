@@ -77,11 +77,15 @@ public class CruxMath {
     public static boolean hasOccurredWithin(long value, int ticks){
         return (System.currentTimeMillis() - (50L * ticks)) <= value;
     }
+
+    public static boolean testChance(double chance){
+        return testChance(RANDOM, chance);
+    }
     /**
      * @param chance The probability from 0-100.
      */
-    public static boolean testChance(double chance) {
-        return RANDOM.nextDouble() * 100 < chance;
+    public static boolean testChance(@NotNull Random random, double chance) {
+        return random.nextDouble() * 100 < chance;
     }
 
     public static <T> T getRandom(@NotNull List<T> list){
