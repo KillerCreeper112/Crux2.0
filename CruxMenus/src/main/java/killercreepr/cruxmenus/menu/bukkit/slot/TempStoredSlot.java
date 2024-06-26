@@ -1,11 +1,12 @@
 package killercreepr.cruxmenus.menu.bukkit.slot;
 
 import killercreepr.crux.util.CruxEntity;
+import killercreepr.cruxmenus.menu.bukkit.TempSlotted;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public interface TempStoredSlot extends Slot{
+public interface TempStoredSlot extends Slot, TempSlotted {
     @Override
     default void onMenuClose(@NotNull Player p) {
         if(!giveItemUponClose()) return;
@@ -14,7 +15,9 @@ public interface TempStoredSlot extends Slot{
         CruxEntity.giveOrDrop(p, item);
     }
 
+    @Override
     default boolean giveItemUponClose(){
+        if(getMenu() instanceof TempSlotted s) return s.giveItemUponClose();
         return true;
     }
 }
