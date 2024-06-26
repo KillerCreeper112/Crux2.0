@@ -42,7 +42,10 @@ public class MenuContainer {
      * Calls the onClose(Player) method on all menus except for
      * the current menu.
      */
+    protected boolean closed = false;
     public MenuContainer closed(@NotNull Player p){
+        if(closed) return this;
+        closed = true;
         int index = -1;
         for(Menu m : openedMenus){
             index++;
@@ -50,6 +53,14 @@ public class MenuContainer {
             m.onClose(p);
         }
         return this;
+    }
+
+    public boolean isClosed() {
+        return closed;
+    }
+
+    public void setClosed(boolean closed) {
+        this.closed = closed;
     }
 
     public MenuContainer closeAll(@NotNull Player p){
