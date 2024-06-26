@@ -468,6 +468,16 @@ public class Menu implements InventoryHolder {
         int hotBar = event.getHotbarButton();
         if(hotBar > -1){
             cursor = p.getInventory().getItem(hotBar);
+
+            ItemStack slotItem = slot.getItem();
+            if(slot.isBlank(slotItem) && !CruxItem.isEmpty(cursor)){
+                SlotResult result = giveSlot(p, slot, cursor, 1);
+                if(!result.getResult()) return;
+                p.getInventory().setItem(hotBar, result.getItem());
+                onUpdate();
+                return;
+            }
+
             SlotResult result = swapSlot(p, slot, cursor, true);
             if(!result.getResult()) return;
             p.getInventory().setItem(hotBar, result.getItem());

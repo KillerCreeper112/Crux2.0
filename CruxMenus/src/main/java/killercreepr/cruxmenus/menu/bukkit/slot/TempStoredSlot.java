@@ -8,8 +8,13 @@ import org.jetbrains.annotations.NotNull;
 public interface TempStoredSlot extends Slot{
     @Override
     default void onMenuClose(@NotNull Player p) {
+        if(!giveItemUponClose()) return;
         ItemStack item = getItem();
         if(isBlank(item) || item == null) return;
         CruxEntity.giveOrDrop(p, item);
+    }
+
+    default boolean giveItemUponClose(){
+        return true;
     }
 }
