@@ -96,11 +96,11 @@ public class Menu implements InventoryHolder {
 
         MenuCloseEvent event = new MenuCloseEvent(p, this);
         if(!event.callEvent()) return event;
-        onClosed(p);
+        onClose(p);
         return event;
     }
 
-    public void onClosed(@NotNull Player p){
+    public void onClose(@NotNull Player p){
         OPEN_MENUS.remove(p.getUniqueId());
         if(closeAction != null) closeAction.close(p);
         slots.values().forEach(slot -> slot.onMenuClose(p));
