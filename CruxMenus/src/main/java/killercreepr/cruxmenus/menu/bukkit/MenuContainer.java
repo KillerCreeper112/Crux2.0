@@ -22,7 +22,7 @@ public class MenuContainer {
         this.opening = opening; return this;
     }
 
-    public MenuOpenEvent open(@NotNull Supplier<Menu> menu, @NotNull Player p){
+    public MenuOpenEvent next(@NotNull Supplier<Menu> menu, @NotNull Player p){
         setOpening(true);
         MenuOpenEvent event = menu.get().open(p);
         addOpenedMenu(event);
@@ -30,10 +30,28 @@ public class MenuContainer {
         return event;
     }
 
-    public MenuOpenEvent open(@NotNull Supplier<MenuOpenEvent> open){
+    public MenuOpenEvent next(@NotNull Supplier<MenuOpenEvent> open){
         setOpening(true);
         MenuOpenEvent event = open.get();
         addOpenedMenu(event);
+        setOpening(false);
+        return event;
+    }
+
+    public MenuOpenEvent back(@NotNull Supplier<Menu> menu, @NotNull Player p){
+        setOpening(true);
+        MenuOpenEvent event = menu.get().open(p);
+        addOpenedMenu(event);
+        if(!event.isCancelled()) removeCurrent();
+        setOpening(false);
+        return event;
+    }
+
+    public MenuOpenEvent back(@NotNull Supplier<MenuOpenEvent> open){
+        setOpening(true);
+        MenuOpenEvent event = open.get();
+        addOpenedMenu(event);
+        if(!event.isCancelled()) removeCurrent();
         setOpening(false);
         return event;
     }
@@ -46,10 +64,11 @@ public class MenuContainer {
     public MenuContainer closed(@NotNull Player p){
         if(closed) return this;
         closed = true;
-        int index = -1;
+        int index = 0;
+        int size = openedMenus.size();
         for(Menu m : openedMenus){
             index++;
-            if(index==0) continue;
+            if(index==size) continue;
             m.onClose(p);
         }
         return this;
@@ -67,20 +86,21 @@ public class MenuContainer {
         Menu opened = getCurrent();
         if(opened==null) return this;
         opened.close(p);
-        int index = -1;
+        int index = 0;
+        int size = openedMenus.size();
         for(Menu m : openedMenus){
             index++;
-            if(index==0) continue;
+            if(index==size) continue;
             m.onClose(p);
         }
         return this;
     }
 
     public MenuContainer back(@NotNull Player p){
-        int index = openedMenus.size()-1;
+        int index = openedMenus.size()-2;
         Menu menu = getOpenedMenu(index);
         if(menu==null) return this;
-        menu.open(p);
+        back(() -> menu, p);
         return this;
     }
 
@@ -101,13 +121,17 @@ public class MenuContainer {
         return this;
     }
 
+    public @Nullable Menu removeCurrent(){
+        return removeOpenedMenu(openedMenus.size()-1);
+    }
+
     public @Nullable Menu getOpenedMenu(int index){
-        if(index >= openedMenus.size()) return null;
+        if(index < 0 || index >= openedMenus.size()) return null;
         return openedMenus.get(index);
     }
 
     public @Nullable Menu removeOpenedMenu(int index){
-        if(index >= openedMenus.size()) return null;
+        if(index < 0 || index >= openedMenus.size()) return null;
         return openedMenus.remove(index);
     }
 
@@ -116,6 +140,6 @@ public class MenuContainer {
     }
 
     public @Nullable Menu getCurrent() {
-        return openedMenus.isEmpty()? null : openedMenus.getFirst();
+        return openedMenus.isEmpty()? null : openedMenus.getLast();
     }
 }
