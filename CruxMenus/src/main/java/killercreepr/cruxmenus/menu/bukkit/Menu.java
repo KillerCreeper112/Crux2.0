@@ -4,6 +4,7 @@ import killercreepr.crux.Crux;
 import killercreepr.crux.util.CruxItem;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.MenuCloseEvent;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.MenuOpenEvent;
+import killercreepr.cruxmenus.menu.bukkit.api.events.menu.MenuRefreshEvent;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.slot.MenuSlotGiveEvent;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.slot.MenuSlotTakeEvent;
 import killercreepr.cruxmenus.menu.bukkit.listener.MenuListener;
@@ -95,6 +96,13 @@ public class Menu implements InventoryHolder {
         OPEN_MENUS.remove(p.getUniqueId());
         if(closeAction != null) closeAction.close(p);
         slots.values().forEach(slot -> slot.onMenuClose(p));
+        return event;
+    }
+
+    public MenuRefreshEvent refresh(){
+        MenuRefreshEvent event = new MenuRefreshEvent(this);
+        if(!event.callEvent()) return event;
+        clearActions();
         return event;
     }
 

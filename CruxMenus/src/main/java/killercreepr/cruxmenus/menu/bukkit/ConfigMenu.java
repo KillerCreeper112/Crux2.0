@@ -89,26 +89,30 @@ public class ConfigMenu extends Menu{
         return this;
     }
 
-    public MenuRefreshEvent refresh(){
-        MenuRefreshEvent event = new MenuRefreshEvent(this);
-        if(!event.callEvent()) return event;
-        clearActions();
+    @Override
+    public MenuRefreshEvent refresh() {
+        MenuRefreshEvent event = super.refresh();
+        if(event.isCancelled()) return event;
         setItems(holder);
         return event;
     }
 
     public ConfigMenu setItem(int slot, @Nullable MenuItem item, @NotNull Player viewer){
-        return setItem(slot, item, item==null?null:item.buildItem(viewer));
+        return setItem(slot, item, viewer, false);
     }
 
-    public ConfigMenu setItem(int slot, @Nullable MenuItem item, @Nullable ItemStack display){
+    public ConfigMenu setItem(int slot, @Nullable MenuItem item, @NotNull Player viewer, boolean silent){
+        return setItem(slot, item, item==null?null:item.buildItem(viewer), silent);
+    }
+
+    public ConfigMenu setItem(int slot, @Nullable MenuItem item, @Nullable ItemStack display, boolean silent){
         if(item == null){
             items.remove(slot);
-            setItem(slot, null, (MenuClick) null);
+            setItem(slot, null, (MenuClick) null, silent);
             return this;
         }
         items.put(slot, item);
-        setItem(slot, display, item::click);
+        setItem(slot, display, item::click, silent);
         return this;
     }
 
