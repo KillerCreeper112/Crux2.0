@@ -116,7 +116,6 @@ public class MenuContainer {
     }
 
     public @Nullable Menu removeOpenedMenu(int index){
-        Bukkit.broadcastMessage("removing at " + index + " - " + getOpenedMenu(index));
         if(index < 0 || index >= openedMenus.size()) return null;
         return openedMenus.remove(index);
     }
