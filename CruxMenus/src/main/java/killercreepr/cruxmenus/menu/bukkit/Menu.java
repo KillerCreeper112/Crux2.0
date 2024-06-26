@@ -73,12 +73,15 @@ public class Menu implements InventoryHolder {
     public @NotNull MenuOpenEvent open(@NotNull Player p){
         MenuOpenEvent event = new MenuOpenEvent(p, this);
         if(!event.callEvent()) return event;
+        onOpen(p);
+        return event;
+    }
 
+    public void onOpen(@NotNull Player p){
         p.openInventory(inventory);
         OPEN_MENUS.put(p.getUniqueId(), this);
         if(openAction != null) openAction.open(p);
         slots.values().forEach(slot -> slot.onMenuOpen(p));
-        return event;
     }
 
     /**
