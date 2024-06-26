@@ -1,6 +1,7 @@
 package killercreepr.cruxmenus.menu.bukkit;
 
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.MenuOpenEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,11 +24,7 @@ public class MenuContainer {
     }
 
     public MenuOpenEvent next(@NotNull Supplier<Menu> menu, @NotNull Player p){
-        setOpening(true);
-        MenuOpenEvent event = menu.get().open(p);
-        addOpenedMenu(event);
-        setOpening(false);
-        return event;
+        return next(() -> menu.get().open(p));
     }
 
     public MenuOpenEvent next(@NotNull Supplier<MenuOpenEvent> open){
@@ -39,21 +36,26 @@ public class MenuContainer {
     }
 
     public MenuOpenEvent back(@NotNull Supplier<Menu> menu, @NotNull Player p){
-        setOpening(true);
-        MenuOpenEvent event = menu.get().open(p);
-        addOpenedMenu(event);
-        if(!event.isCancelled()) removeCurrent();
-        setOpening(false);
-        return event;
+        return back(() ->{
+            Menu m = menu.get();
+            m.refresh();
+            return m.open(p);
+        });
     }
 
     public MenuOpenEvent back(@NotNull Supplier<MenuOpenEvent> open){
         setOpening(true);
         MenuOpenEvent event = open.get();
-        addOpenedMenu(event);
         if(!event.isCancelled()) removeCurrent();
         setOpening(false);
         return event;
+    }
+
+    public MenuContainer back(@NotNull Player p){
+        Menu menu = getPrevious();
+        if(menu==null) return this;
+        back(() -> menu, p);
+        return this;
     }
 
     /**
@@ -61,16 +63,14 @@ public class MenuContainer {
      * the current menu.
      */
     protected boolean closed = false;
-    public MenuContainer closed(@NotNull Player p){
-        if(closed) return this;
+    public MenuContainer onClosed(@NotNull Player p, @NotNull Menu menu){
+        if(isClosed() || isOpening()) return this;
         closed = true;
-        int index = 0;
-        int size = openedMenus.size();
         for(Menu m : openedMenus){
-            index++;
-            if(index==size) continue;
+            if(m.equals(menu)) continue;
             m.onClose(p);
         }
+        removeCurrent();
         return this;
     }
 
@@ -96,21 +96,6 @@ public class MenuContainer {
         return this;
     }
 
-    public MenuContainer back(@NotNull Player p){
-        int index = openedMenus.size()-2;
-        Menu menu = getOpenedMenu(index);
-        if(menu==null) return this;
-        back(() -> menu, p);
-        return this;
-    }
-
-    public MenuContainer next(@NotNull Player p, @NotNull Menu menu){
-        MenuOpenEvent event = menu.open(p);
-        if(event.isCancelled()) return this;
-        addOpenedMenu(menu);
-        return this;
-    }
-
     public MenuContainer addOpenedMenu(@NotNull MenuOpenEvent menu){
         if(menu.isCancelled()) return this;
         return addOpenedMenu(menu.getMenu());
@@ -131,6 +116,7 @@ public class MenuContainer {
     }
 
     public @Nullable Menu removeOpenedMenu(int index){
+        Bukkit.broadcastMessage("removing at " + index + " - " + getOpenedMenu(index));
         if(index < 0 || index >= openedMenus.size()) return null;
         return openedMenus.remove(index);
     }
@@ -141,5 +127,9 @@ public class MenuContainer {
 
     public @Nullable Menu getCurrent() {
         return openedMenus.isEmpty()? null : openedMenus.getLast();
+    }
+
+    public @Nullable Menu getPrevious(){
+        return getOpenedMenu(openedMenus.size()-2);
     }
 }
