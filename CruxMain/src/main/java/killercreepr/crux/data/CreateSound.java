@@ -4,6 +4,7 @@ package killercreepr.crux.data;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,7 +42,7 @@ public class CreateSound {
         return this;
     }
 
-    public CreateSound playFor(@NotNull Player p){
+    public CreateSound playFor(@NotNull Entity p){
         p.playSound(sound, Sound.Emitter.self());
         return this;
     }
