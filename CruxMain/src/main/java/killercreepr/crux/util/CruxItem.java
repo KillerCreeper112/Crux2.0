@@ -14,10 +14,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.inventory.meta.MapMeta;
-import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.inventory.meta.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,6 +33,13 @@ public class CruxItem implements Cloneable {
         if(meta==null) return i.getType().getMaxStackSize();
         return meta.hasMaxStackSize() ? meta.getMaxStackSize() : i.getType().getMaxStackSize();
     }
+
+    public static int getMaxDurability(@NotNull ItemStack i){
+        if(!(i.getItemMeta() instanceof Damageable d)) return 0;
+        if(d.hasMaxDamage()) return d.getMaxDamage();
+        return i.getType().getMaxDurability();
+    }
+
     public static final @NotNull Component NO_ITALICS = Component.empty().decoration(TextDecoration.ITALIC, false);
     protected @NotNull ItemStack item;
     protected @NotNull Format format;
