@@ -506,6 +506,7 @@ public class Menu implements InventoryHolder {
             SlotResult result = swapSlot(p, slot, cursor, true);
             if(!result.getResult()) return;
             p.setItemOnCursor(result.getItem());
+            onUpdate();
             return;
         }
 
