@@ -1,6 +1,7 @@
 package killercreepr.crux.data;
 
 import org.bukkit.Chunk;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,22 +14,49 @@ public class StoredChunk extends StoredWorld {
         return new StoredChunk(chunk.getWorld().getUID(), chunk.getX(), chunk.getZ());
     }
 
-    protected final int x;
-    protected final int z;
-    public StoredChunk(@NotNull UUID uuid, int x, int z) {
+    protected final int chunkX;
+    protected final int chunkZ;
+    public StoredChunk(@NotNull UUID uuid, int chunkX, int chunkZ) {
         super(uuid);
-        this.x = x;
-        this.z = z;
+        this.chunkX = chunkX;
+        this.chunkZ = chunkZ;
+    }
+
+    public boolean isLoaded(){
+        World world = toBukkitWorld();
+        return world != null && isLoaded(world);
+    }
+
+    public boolean isLoaded(@NotNull World world){
+        return world.isChunkLoaded(chunkX, chunkZ);
+    }
+
+    public @NotNull Location toBukkitCenter(double y){
+        return toBukkitCenter(toBukkitWorld(), y);
+    }
+
+    public @NotNull Location toBukkitCenter(@Nullable World world, double y) {
+        int x = this.chunkX << 4;
+        int z = this.chunkZ << 4;
+        return new Location(world, x + 7, y, z + 7);
+    }
+
+    public int chunkX() {
+        return chunkX;
+    }
+
+    public int chunkZ() {
+        return chunkZ;
     }
 
     public long getChunkKey() {
-        return Chunk.getChunkKey(x, z);
+        return Chunk.getChunkKey(chunkX, chunkZ);
     }
 
     public @Nullable Chunk toBukkitChunk(){
         World world = toBukkitWorld();
         if(world==null) return null;
-        return world.getChunkAt(x, z);
+        return world.getChunkAt(chunkX, chunkZ);
     }
 
     @Override
@@ -40,11 +68,11 @@ public class StoredChunk extends StoredWorld {
             return false;
         }
         StoredChunk chunkPos = (StoredChunk) obj;
-        return x == chunkPos.x && z == chunkPos.z && worldUUID.equals(chunkPos.worldUUID);
+        return chunkX == chunkPos.chunkX && chunkZ == chunkPos.chunkZ && worldUUID.equals(chunkPos.worldUUID);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(worldUUID, x, z);
+        return Objects.hash(worldUUID, chunkX, chunkZ);
     }
 }
