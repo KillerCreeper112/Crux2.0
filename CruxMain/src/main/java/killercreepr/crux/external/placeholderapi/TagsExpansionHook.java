@@ -5,6 +5,7 @@ import killercreepr.crux.tags.context.FormatParserContext;
 import killercreepr.crux.tags.format.Format;
 import killercreepr.crux.tags.format.FormatArgs;
 import killercreepr.crux.tags.hook.ObjectTag;
+import killercreepr.crux.tags.hook.impl.StringHookedObjectContainer;
 import killercreepr.crux.tags.resolver.StringResolver;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
@@ -70,13 +71,11 @@ public class TagsExpansionHook /*extends PlaceholderExpansion */{
                 if(resolver != null) return resolver.resolve(hookArgs, new FormatParserContext.Builder(format).viewer(player).build());
             }
 
-            container = tag.hookStrings(player, format.tags());
-            if(container != null){
-                StringResolver resolver = findResolver(container, tag, objectIdentifier, hookIdentifier);
+            StringHookedObjectContainer hookedContainer = tag.hookStrings(player, format.tags());
+            if(hookedContainer != null){
+                StringResolver resolver = findResolver(hookedContainer.toTags(format.tags()), tag, objectIdentifier, hookIdentifier);
                 if(resolver != null) return resolver.resolve(hookArgs, new FormatParserContext.Builder(format).viewer(player).build());
             }
-
-
 
             /*if(noUnderscore(tag.defaultPrefix().prefix(tag, player)).equalsIgnoreCase(objectIdentifier)){
                 Collection<StringHook<OfflinePlayer>> tagHooks = tag.requestStrings(player, format.getTags());

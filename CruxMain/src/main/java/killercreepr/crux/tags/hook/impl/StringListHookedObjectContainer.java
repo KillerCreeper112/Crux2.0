@@ -2,10 +2,8 @@ package killercreepr.crux.tags.hook.impl;
 
 import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.container.StringListTagContainer;
-import killercreepr.crux.tags.container.TagContainer;
 import killercreepr.crux.tags.hook.HookedObjectContainer;
 import killercreepr.crux.tags.hook.ObjectTag;
-import killercreepr.crux.tags.resolver.StringListResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,8 +40,8 @@ public class StringListHookedObjectContainer implements HookedObjectContainer<St
     }
 
     @Override
-    public @NotNull TagContainer<StringListResolver> toTags(@NotNull TagParser parser) {
-        TagContainer<StringListResolver> tags = new StringListTagContainer(parser);
+    public @NotNull StringListTagContainer toTags(@NotNull TagParser parser) {
+        StringListTagContainer tags = new StringListTagContainer(parser);
         getHookedObjects().forEach(hooked -> tags.addAll(hooked.getTags()));
         return tags;
     }
