@@ -1,6 +1,8 @@
 package killercreepr.crux.data.entity;
 
 import net.kyori.adventure.key.Key;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -35,5 +37,13 @@ public abstract class PlayerDataHolder extends EntityDataHolder {
     @Override
     public @NotNull PlayerMemory getParent() {
         return parent;
+    }
+
+    public @Nullable Player getPlayer(){
+        return Bukkit.getPlayer(parent.getUUID());
+    }
+
+    public @Nullable OfflinePlayer getOfflinePlayer(){
+        return Bukkit.getOfflinePlayer(parent.getUUID());
     }
 }
