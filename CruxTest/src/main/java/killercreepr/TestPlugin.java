@@ -38,7 +38,7 @@ public class TestPlugin extends CruxPlugin implements Listener {
         BukkitCfgHandlers.initJson(CfgRegistries.JSON);
         BukkitCfgHandlers.initYaml(CfgRegistries.YAML);
 
-        reloadConfigs();
+        reload();
         registerListeners(this);
 
         //CRUX_MENU.reload(this);
@@ -53,15 +53,15 @@ public class TestPlugin extends CruxPlugin implements Listener {
     }
 
     @Override
-    public void reloadConfigs() {
-        super.reloadConfigs();
+    public void reload() {
+        super.reload();
         //CONFIGS.reload();
         MODULES.reload(this);
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        reloadConfigs();
+        reload();
         return super.onCommand(sender, command, label, args);
     }
 }

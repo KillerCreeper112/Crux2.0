@@ -24,7 +24,7 @@ public abstract class CruxPlugin extends JavaPlugin implements CruxModule {
     }
 
     public void enabled(){
-        reloadConfigs();
+        reload();
     }
 
     @Override
@@ -50,7 +50,13 @@ public abstract class CruxPlugin extends JavaPlugin implements CruxModule {
             getServer().getPluginManager().registerEvents(l, this);
         }
     }
-    public void reloadConfigs(){}
+    public void reload(){}
+
+    @Override
+    public void reload(@NotNull CruxPlugin plugin) {
+        CruxModule.super.reload(plugin);
+        reload();
+    }
 
     public CruxPlugin log(@NotNull Level level, @NotNull String text){
         getLogger().log(level, text);

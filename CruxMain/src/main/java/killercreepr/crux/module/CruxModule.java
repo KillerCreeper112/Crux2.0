@@ -1,14 +1,14 @@
 package killercreepr.crux.module;
 
+import killercreepr.crux.data.Reloadable;
 import killercreepr.crux.plugin.CruxPlugin;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 
-public interface CruxModule {
+public interface CruxModule extends Reloadable {
     @NotNull String name();
     default void onEnable(@NotNull CruxPlugin plugin){}
     default void onDisable(@NotNull CruxPlugin plugin){}
-    default void reload(@NotNull CruxPlugin plugin){}
 
     default @NotNull NamespacedKey key(@NotNull String key){
         return key(key.split(":"));
