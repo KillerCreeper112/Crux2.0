@@ -4,6 +4,8 @@ import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.container.StringListTagContainer;
 import killercreepr.crux.tags.container.StringTagContainer;
 import killercreepr.crux.tags.context.FormatPrefix;
+import killercreepr.crux.tags.hook.impl.StringHookedObjectContainer;
+import killercreepr.crux.tags.hook.impl.StringListHookedObjectContainer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,14 +20,14 @@ public interface ObjectTag<T> {
     /**
      * @return Generates other StringHooks that may be tied to this one object.
      */
-    default @Nullable StringTagContainer hookStrings(@NotNull T object, @NotNull TagParser tags){
+    default @Nullable StringHookedObjectContainer hookStrings(@NotNull T object, @NotNull TagParser tags){
         return null;
     }
 
     /**
      * @return Generates other LoreHooks that may be tied to this one object.
      */
-    default @Nullable StringListTagContainer hookStringLists(@NotNull T object, @NotNull TagParser tags){
+    default @Nullable StringListHookedObjectContainer hookStringLists(@NotNull T object, @NotNull TagParser tags){
         return null;
     }
 

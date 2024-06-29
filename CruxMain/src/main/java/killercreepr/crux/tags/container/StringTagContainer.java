@@ -1,6 +1,7 @@
 package killercreepr.crux.tags.container;
 
 import killercreepr.crux.tags.TagParser;
+import killercreepr.crux.tags.TagsPrefixBuilder;
 import killercreepr.crux.tags.context.FormatPrefix;
 import killercreepr.crux.tags.resolver.StringResolver;
 import org.jetbrains.annotations.NotNull;
@@ -15,6 +16,13 @@ public class StringTagContainer extends SimpleTagContainer<StringResolver> {
     public StringTagContainer hook(@Nullable Object info) {
         if(info==null) return this;
         addAll(tagParser.buildStringTags(info));
+        return this;
+    }
+
+    @Override
+    public StringTagContainer hook(@Nullable Object info, @Nullable TagsPrefixBuilder prefix) {
+        if(info==null) return this;
+        addAll(tagParser.buildStringTags(info, prefix));
         return this;
     }
 

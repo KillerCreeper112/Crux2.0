@@ -1,0 +1,50 @@
+package killercreepr.crux.tags.hook.impl;
+
+import killercreepr.crux.tags.TagParser;
+import killercreepr.crux.tags.container.StringTagContainer;
+import killercreepr.crux.tags.container.TagContainer;
+import killercreepr.crux.tags.hook.HookedObjectContainer;
+import killercreepr.crux.tags.hook.ObjectTag;
+import killercreepr.crux.tags.resolver.StringResolver;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
+public class StringHookedObjectContainer implements HookedObjectContainer<StringHookedObjectTag<?>> {
+    protected final Map<ObjectTag<?>, StringHookedObjectTag<?>> hookedObjects = new HashMap<>();
+
+    @Override
+    public @NotNull Collection<StringHookedObjectTag<?>> getHookedObjects() {
+        return hookedObjects.values();
+    }
+
+    @Override
+    public StringHookedObjectContainer addAll(@Nullable HookedObjectContainer<StringHookedObjectTag<?>> hooked) {
+        if(hooked==null) return this;
+        return addAll(hooked.getHookedObjects());
+    }
+
+    @Override
+    public StringHookedObjectContainer addAll(@Nullable Collection<StringHookedObjectTag<?>> hooked) {
+        if(hooked==null) return this;
+        hooked.forEach(this::add);
+        return this;
+    }
+
+    @Override
+    public StringHookedObjectContainer add(@Nullable StringHookedObjectTag<?> hooked) {
+        if(hooked==null) return this;
+        hookedObjects.put(hooked.getObjectTag(), hooked);
+        return this;
+    }
+
+    @Override
+    public @NotNull TagContainer<StringResolver> toTags(@NotNull TagParser parser) {
+        TagContainer<StringResolver> tags = new StringTagContainer(parser);
+        getHookedObjects().forEach(hooked -> tags.addAll(hooked.getTags()));
+        return tags;
+    }
+}

@@ -4,6 +4,8 @@ import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.crux.tags.container.StringListTagContainer;
 import killercreepr.crux.tags.container.StringTagContainer;
 import killercreepr.crux.tags.hook.ObjectTag;
+import killercreepr.crux.tags.hook.impl.StringHookedObjectContainer;
+import killercreepr.crux.tags.hook.impl.StringListHookedObjectContainer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,4 +22,7 @@ public interface TagParser {
     <T> @Nullable StringListTagContainer buildStringListTags(@NotNull T object, @Nullable TagsPrefixBuilder prefixBuilder);
 
     <T> @Nullable MergedTagContainer buildTags(@NotNull T object);
+
+    <T> @NotNull StringHookedObjectContainer hookStrings(@NotNull T object);
+    <T> @NotNull StringListHookedObjectContainer hookStringLists(@NotNull T object);
 }

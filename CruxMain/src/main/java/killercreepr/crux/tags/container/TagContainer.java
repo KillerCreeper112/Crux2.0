@@ -1,6 +1,7 @@
 package killercreepr.crux.tags.container;
 
 import killercreepr.crux.data.DataExchange;
+import killercreepr.crux.tags.TagsPrefixBuilder;
 import killercreepr.crux.tags.context.FormatPrefix;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,6 +14,7 @@ public interface TagContainer<T> extends Iterable<T> {
         return this;
     }
     TagContainer<T> hook(@Nullable Object info);
+    TagContainer<T> hook(@Nullable Object info, @Nullable TagsPrefixBuilder prefix);
     TagContainer<T> add(@NotNull T resolver);
     TagContainer<T> add(@NotNull T resolver, @Nullable FormatPrefix prefix);
     TagContainer<T> addAll(@Nullable TagContainer<T> tags);

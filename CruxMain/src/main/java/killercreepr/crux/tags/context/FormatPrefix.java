@@ -12,5 +12,6 @@ public interface FormatPrefix {
             }
         };
     }
+
     @NotNull String buildPrefix(@NotNull TagResolver<?> resolver);
 }

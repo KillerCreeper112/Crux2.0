@@ -5,7 +5,12 @@ import killercreepr.crux.tags.container.MultiTagContainer;
 import killercreepr.crux.tags.container.StringListTagContainer;
 import killercreepr.crux.tags.container.StringTagContainer;
 import killercreepr.crux.tags.context.FormatPrefix;
+import killercreepr.crux.tags.hook.HookedObjectContainer;
 import killercreepr.crux.tags.hook.ObjectTag;
+import killercreepr.crux.tags.hook.impl.StringHookedObjectContainer;
+import killercreepr.crux.tags.hook.impl.StringHookedObjectTag;
+import killercreepr.crux.tags.hook.impl.StringListHookedObjectContainer;
+import killercreepr.crux.tags.hook.impl.StringListHookedObjectTag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,12 +47,37 @@ public class CruxTags implements TagParser {
             FormatPrefix prefix = prefixBuilder == null ? objectTag.defaultPrefix() : prefixBuilder.buildPrefix(objectTag, object, tags);
             tag.addAll(tags, prefix);
 
-            tags = objectTag.hookStrings(object, this);
-            prefix = prefixBuilder == null ? objectTag.defaultPrefix() : prefixBuilder.buildHookedPrefix(objectTag, object, tags);
-            tag.addAll(tags, prefix);
+            StringHookedObjectContainer hookedTags = objectTag.hookStrings(object, this);
+            if(hookedTags != null){
+                hookedTags.getHookedObjects().forEach(hooked ->{
+                    FormatPrefix pre = prefixBuilder == null ? objectTag.defaultPrefix() : prefixBuilder.buildHookedPrefix(
+                        objectTag, object, hooked
+                    );
+                    tag.addAll(hooked.getTags(), pre);
+                });
+            }
         });
         return tag;
     }
+
+    @Override
+    public <T> @NotNull StringHookedObjectContainer hookStrings(@NotNull T object){
+        StringHookedObjectContainer container = HookedObjectContainer.string();
+        locateTags(object).forEach(objectTag ->{
+            StringTagContainer tags = objectTag.requestStrings(object, this);
+            if(tags != null){
+                container.add(new StringHookedObjectTag<>(object, objectTag, tags));
+            }
+
+            StringHookedObjectContainer hookedTags = objectTag.hookStrings(object, this);
+            if(hookedTags != null){
+                hookedTags.addAll(container);
+                hookedTags.getHookedObjects().forEach(container::add);
+            }
+        });
+        return container;
+    }
+
     @Override
     public <T> @Nullable StringListTagContainer buildStringListTags(@NotNull T object){
         return buildStringListTags(object, null);
@@ -60,12 +90,37 @@ public class CruxTags implements TagParser {
             FormatPrefix prefix = prefixBuilder == null ? objectTag.defaultPrefix() : prefixBuilder.buildPrefix(objectTag, object, tags);
             tag.addAll(tags, prefix);
 
-            tags = objectTag.hookStringLists(object, this);
-            prefix = prefixBuilder == null ? objectTag.defaultPrefix() : prefixBuilder.buildHookedPrefix(objectTag, object, tags);
-            tag.addAll(tags, prefix);
+            StringListHookedObjectContainer hookedTags = objectTag.hookStringLists(object, this);
+            if(hookedTags != null){
+                hookedTags.getHookedObjects().forEach(hooked ->{
+                    FormatPrefix pre = prefixBuilder == null ? objectTag.defaultPrefix() : prefixBuilder.buildHookedPrefix(
+                        objectTag, object, hooked
+                    );
+                    tag.addAll(hooked.getTags(), pre);
+                });
+            }
         });
         return tag;
     }
+
+    @Override
+    public <T> @NotNull StringListHookedObjectContainer hookStringLists(@NotNull T object){
+        StringListHookedObjectContainer container = HookedObjectContainer.stringList();
+        locateTags(object).forEach(objectTag ->{
+            StringListTagContainer tags = objectTag.requestStringLists(object, this);
+            if(tags != null){
+                container.add(new StringListHookedObjectTag<>(object, objectTag, tags));
+            }
+
+            StringListHookedObjectContainer hookedTags = objectTag.hookStringLists(object, this);
+            if(hookedTags != null){
+                hookedTags.addAll(container);
+                hookedTags.getHookedObjects().forEach(container::add);
+            }
+        });
+        return container;
+    }
+
     @Override
     public <T> @Nullable MergedTagContainer buildTags(@NotNull T object){
         MultiTagContainer tag = new MultiTagContainer(this);

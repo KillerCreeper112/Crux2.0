@@ -3,6 +3,7 @@ package killercreepr.crux.tags.container;
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.tags.TagParser;
+import killercreepr.crux.tags.TagsPrefixBuilder;
 import killercreepr.crux.tags.context.FormatPrefix;
 import killercreepr.crux.tags.resolver.StringListResolver;
 import killercreepr.crux.tags.resolver.StringResolver;
@@ -48,6 +49,13 @@ public class MultiTagContainer implements MergedTagContainer {
     public MultiTagContainer hook(@Nullable Object info) {
         strings.hook(info);
         stringLists.hook(info);
+        return this;
+    }
+
+    @Override
+    public MergedTagContainer hook(@Nullable Object info, @Nullable TagsPrefixBuilder prefix) {
+        strings.hook(info, prefix);
+        stringLists.hook(info, prefix);
         return this;
     }
 
