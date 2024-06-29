@@ -1,7 +1,7 @@
 package killercreepr;
 
 import killercreepr.crux.Crux;
-import killercreepr.crux.CruxCore;
+import killercreepr.crux.CruxMainModule;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registries.CruxModuleRegistry;
 import killercreepr.crux.registries.CruxRegistries;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class TestPlugin extends CruxPlugin implements Listener {
     protected final CruxModuleRegistry MODULES = CruxRegistries.MODULES;
-    protected final CruxCore CRUX_CORE = new CruxCore();
+    protected final CruxMainModule CRUX_CORE = new CruxMainModule();
     //protected final CruxMenu CRUX_MENU = new CruxMenu();
     //protected final CruxPotionsModule CRUX_POTION = new CruxPotionsModule();
 

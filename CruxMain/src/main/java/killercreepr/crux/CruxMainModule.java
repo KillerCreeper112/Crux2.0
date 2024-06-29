@@ -5,10 +5,10 @@ import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.plugin.CruxPlugin;
 import org.jetbrains.annotations.NotNull;
 
-public class CruxCore implements CruxModule {
+public class CruxMainModule implements CruxModule {
     @Override
     public @NotNull String name() {
-        return "CruxCore";
+        return "CruxMain";
     }
 
     @Override
