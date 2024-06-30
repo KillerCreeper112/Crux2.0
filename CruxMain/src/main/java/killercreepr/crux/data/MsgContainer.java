@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class MsgContainer {
+public class MsgContainer implements Communicator {
     protected final List<String> chat;
     protected final String actionBar;
     protected final CreateTitle title;
@@ -48,20 +48,7 @@ public class MsgContainer {
         this(chat == null ? null : List.of(chat), null);
     }
 
-    public MsgContainer use(@NotNull Audience a){
-        return use(a, (MergedTagContainer) null);
-    }
-
-    public MsgContainer use(@NotNull Audience a, @Nullable MergedTagContainer tags){
-        OfflinePlayer placeholders = null;
-        if(a instanceof OfflinePlayer d) placeholders = d;
-        return use(a, placeholders, tags);
-    }
-
-    public MsgContainer use(@NotNull Audience a, @Nullable OfflinePlayer placeholders){
-        return use(a, placeholders, null);
-    }
-
+    @Override
     public MsgContainer use(@NotNull Audience a, @Nullable OfflinePlayer placeholders, @Nullable MergedTagContainer tags){
         if(isBroadcast()) return broadcast(tags);
         if(a instanceof Player p) return use(p, placeholders, tags);
@@ -92,6 +79,7 @@ public class MsgContainer {
         return this;
     }
 
+    @Override
     public MsgContainer broadcast(@Nullable MergedTagContainer tags){
         for(Player p : Bukkit.getOnlinePlayers()){
             use(p, null, false, tags);

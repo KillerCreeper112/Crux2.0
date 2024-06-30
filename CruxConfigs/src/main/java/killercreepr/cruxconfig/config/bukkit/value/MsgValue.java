@@ -1,5 +1,6 @@
 package killercreepr.cruxconfig.config.bukkit.value;
 
+import killercreepr.crux.data.Communicator;
 import killercreepr.crux.data.MsgContainer;
 import killercreepr.crux.tags.container.MergedTagContainer;
 import net.kyori.adventure.audience.Audience;
@@ -7,7 +8,7 @@ import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class MsgValue extends CommonValue<MsgContainer> {
+public class MsgValue extends CommonValue<MsgContainer> implements Communicator {
     public MsgValue() {
     }
 
@@ -29,21 +30,17 @@ public class MsgValue extends CommonValue<MsgContainer> {
         this(new MsgContainer(chatMessage), comments);
     }
 
-    public @Nullable MsgContainer use(@NotNull Audience a){
-        OfflinePlayer placeholders;
-        if(a instanceof OfflinePlayer d) placeholders = d;
-        else placeholders = null;
-        return use(a, placeholders);
-    }
-
-    public @Nullable MsgContainer use(@NotNull Audience a, @Nullable OfflinePlayer placeholders){
-        return use(a, placeholders, null);
-    }
-
+    @Override
     public @Nullable MsgContainer use(@NotNull Audience a, @Nullable OfflinePlayer placeholders, @Nullable MergedTagContainer tags){
         MsgContainer msg = value();
         if(msg == null) return null;
-        msg.use(a, placeholders, tags);
-        return msg;
+        return msg.use(a, placeholders, tags);
+    }
+
+    @Override
+    public @Nullable MsgContainer broadcast(@Nullable MergedTagContainer tags) {
+        MsgContainer msg = value();
+        if(msg == null) return null;
+        return msg.broadcast(tags);
     }
 }
