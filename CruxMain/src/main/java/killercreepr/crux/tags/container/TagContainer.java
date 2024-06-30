@@ -6,6 +6,7 @@ import killercreepr.crux.tags.context.FormatPrefix;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.Map;
 
 public interface TagContainer<T> extends Iterable<T> {
@@ -18,6 +19,8 @@ public interface TagContainer<T> extends Iterable<T> {
     TagContainer<T> add(@NotNull T resolver);
     TagContainer<T> add(@NotNull T resolver, @Nullable FormatPrefix prefix);
     TagContainer<T> addAll(@Nullable TagContainer<T> tags);
+    TagContainer<T> addAll(@Nullable Collection<T> tags);
+    TagContainer<T> addAll(@Nullable Collection<T> tags, @Nullable FormatPrefix prefix);
     TagContainer<T> addExact(@NotNull T resolver, @NotNull String id);
 
     TagContainer<T> addAll(@Nullable TagContainer<T> tags, @Nullable FormatPrefix prefix);

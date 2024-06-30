@@ -1,6 +1,8 @@
 package killercreepr.crux.tags.format;
 
 import killercreepr.crux.context.TextParserContext;
+import killercreepr.crux.registry.Registry;
+import killercreepr.crux.registry.SimpleRegistry;
 import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.crux.tags.container.StringListTagContainer;
@@ -31,6 +33,9 @@ public class Format implements FormatSerializer{
     protected final Pattern LORE_PATTERN = Pattern.compile("\\{(\\w+)(?::([^{}]+))?}");
     protected final Pattern EQUATION_PATTERN = Pattern.compile("\\{\\{(.+?)\\}\\}");
     protected final Pattern B_EQUATION_PATTERN = Pattern.compile("\\{b\\{(.+?)\\}\\}");
+
+    protected final Registry<StringResolver> STRING_RESOLVERS = SimpleRegistry.fromSet();
+    protected final Registry<StringListResolver> STRING_LIST_RESOLVERS = SimpleRegistry.fromSet();
 
     public Format(@NotNull MiniMessage miniMessage, @NotNull TagParser tags) {
         this.miniMessage = miniMessage;
@@ -79,8 +84,7 @@ public class Format implements FormatSerializer{
 
     @Override
     public @NotNull String deserializeString(@NotNull String text, @Nullable StringTagProvider tagProvider) {
-        if(tagProvider==null) return text;
-        return processEquations(processPlaceholders(text, tagProvider.getStringTags()));
+        return processEquations(processPlaceholders(text, tagProvider == null ? new StringTagContainer(tags) : tagProvider.getStringTags()));
     }
 
     @Override
@@ -105,12 +109,14 @@ public class Format implements FormatSerializer{
     @Override
     public @NotNull List<String> deserializeStringList(@NotNull Collection<String> list, @Nullable StringListTagProvider tagProvider) {
         List<String> formated = new ArrayList<>();
-        if(tagProvider==null){
-            //todo add global tags
+        StringListTagContainer container = new StringListTagContainer(tags);
+        container.addAll(STRING_LIST_RESOLVERS.values());
+        container.addAll(tagProvider==null?null:tagProvider.getStringListTags());
+        /*if(tagProvider==null){
+            //add global tags
             formated.addAll(list);
             return formated;
-        }
-        StringListTagContainer container = tagProvider.getStringListTags();
+        }*/
         for(String s : list){
             List<String> found = matchStringList(s, container);
             if(found==null){
@@ -130,6 +136,16 @@ public class Format implements FormatSerializer{
     @Override
     public @Nullable List<String> parseStringList(@NotNull String text, @Nullable MergedTagContainer tagProvider) {
         return matchStringList(text, new StringListTagContainer(tags).addAll(tagProvider==null?null:tagProvider.getStringListTags()));
+    }
+
+    @Override
+    public @NotNull Registry<StringResolver> globalStringResolvers() {
+        return STRING_RESOLVERS;
+    }
+
+    @Override
+    public @NotNull Registry<StringListResolver> globalStringListResolvers() {
+        return STRING_LIST_RESOLVERS;
     }
 
     public @Nullable List<String> matchStringList(@NotNull String text, @NotNull StringListTagContainer container){
@@ -160,7 +176,11 @@ public class Format implements FormatSerializer{
         return resolver.resolve(args, context);
     }
 
-    public @NotNull String processPlaceholders(@NotNull String text, @NotNull StringTagContainer resolvers) {
+    public @NotNull String processPlaceholders(@NotNull String text, @NotNull StringTagContainer tags) {
+        StringTagContainer resolvers = new StringTagContainer(this.tags);
+        resolvers.addAll(STRING_RESOLVERS.values());
+        resolvers.addAll(tags);
+
         //Bukkit.broadcastMessage("before(p): " + text);
         Matcher matcher = STRING_PATTERN.matcher(text);
         StringBuilder result = new StringBuilder(text.length());

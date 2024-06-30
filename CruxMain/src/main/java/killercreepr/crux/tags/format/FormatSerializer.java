@@ -1,8 +1,11 @@
 package killercreepr.crux.tags.format;
 
+import killercreepr.crux.registry.Registry;
 import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.crux.tags.provider.StringListTagProvider;
 import killercreepr.crux.tags.provider.StringTagProvider;
+import killercreepr.crux.tags.resolver.StringListResolver;
+import killercreepr.crux.tags.resolver.StringResolver;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,4 +29,9 @@ public interface FormatSerializer {
 
     @Nullable List<String> parseStringList(@NotNull String text);
     @Nullable List<String> parseStringList(@NotNull String text, @Nullable MergedTagContainer tagProvider);
+
+    @NotNull
+    Registry<StringResolver> globalStringResolvers();
+    @NotNull
+    Registry<StringListResolver> globalStringListResolvers();
 }
