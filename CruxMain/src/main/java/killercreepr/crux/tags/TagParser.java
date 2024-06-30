@@ -18,6 +18,12 @@ public interface TagParser {
         }
         return this;
     }
+    default TagParser register(@NotNull Collection<ObjectTag<?>> tags){
+        for(ObjectTag<?> t : tags){
+            register(t);
+        }
+        return this;
+    }
     CruxTags register(@NotNull ObjectTag<?> tag);
     <T> @NotNull Collection<ObjectTag<T>> locateTags(@NotNull T object);
 
