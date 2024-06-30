@@ -5,6 +5,7 @@ import killercreepr.crux.tags.context.FormatPrefix;
 import killercreepr.crux.tags.hook.HookedObjectTag;
 import killercreepr.crux.tags.hook.ObjectTag;
 import killercreepr.crux.tags.resolver.TagResolver;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

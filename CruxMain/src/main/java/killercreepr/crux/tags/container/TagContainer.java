@@ -18,6 +18,7 @@ public interface TagContainer<T> extends Iterable<T> {
     TagContainer<T> add(@NotNull T resolver);
     TagContainer<T> add(@NotNull T resolver, @Nullable FormatPrefix prefix);
     TagContainer<T> addAll(@Nullable TagContainer<T> tags);
+    TagContainer<T> addExact(@NotNull T resolver, @NotNull String id);
 
     TagContainer<T> addAll(@Nullable TagContainer<T> tags, @Nullable FormatPrefix prefix);
     @Nullable T get(@NotNull String id);

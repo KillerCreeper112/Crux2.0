@@ -3,6 +3,7 @@ package killercreepr.crux.tags.container;
 import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.context.FormatPrefix;
 import killercreepr.crux.tags.resolver.TagResolver;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,14 +36,21 @@ public abstract class SimpleTagContainer<T extends TagResolver<?>> implements Ta
     @Override
     public SimpleTagContainer<T>  addAll(@Nullable TagContainer<T> tags) {
         if(tags==null) return this;
-        tags.forEach(this::add);
+        tags.asMap().forEach((id, tag) -> addExact(tag, id));
         return this;
     }
 
     @Override
     public SimpleTagContainer<T> addAll(@Nullable TagContainer<T> tags, @Nullable FormatPrefix prefix) {
         if(tags==null) return this;
+        //TODO ADD SEPARATE OPTIONS ONE FOR OVERWRITING PREFIX AND ONE FOR ADDING
         tags.forEach(x -> add(x, prefix));
+        return this;
+    }
+
+    @Override
+    public SimpleTagContainer<T> addExact(@NotNull T resolver, @NotNull String id) {
+        tags.put(id, resolver);
         return this;
     }
 
