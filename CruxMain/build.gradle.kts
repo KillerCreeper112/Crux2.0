@@ -23,8 +23,8 @@ tasks{
     shadowJar{
         archiveClassifier = null
     }
-    paperweight.reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.MOJANG_PRODUCTION
 }
+paperweight.reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.MOJANG_PRODUCTION
 
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
