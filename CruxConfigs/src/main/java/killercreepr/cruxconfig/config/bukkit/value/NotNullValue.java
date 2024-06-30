@@ -5,6 +5,8 @@ import killercreepr.crux.data.NotNullHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Type;
+
 public class NotNullValue<T> extends CommonValue<T> implements NotNullHolder<T> {
     public NotNullValue(@NotNull T defaultValue) {
         super(Preconditions.checkNotNull(defaultValue));
@@ -16,6 +18,10 @@ public class NotNullValue<T> extends CommonValue<T> implements NotNullHolder<T> 
 
     public NotNullValue(@NotNull T defaultValue, @Nullable String path, @NotNull String @Nullable ... comments) {
         super(Preconditions.checkNotNull(defaultValue), path, comments);
+    }
+
+    public NotNullValue(@NotNull T defaultValue, @Nullable String path, @NotNull Type parameterType, @NotNull String @Nullable ... comments) {
+        super(Preconditions.checkNotNull(defaultValue), path, parameterType, comments);
     }
 
     @Override

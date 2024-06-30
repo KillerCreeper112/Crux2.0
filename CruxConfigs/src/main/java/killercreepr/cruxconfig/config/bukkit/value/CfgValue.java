@@ -59,8 +59,15 @@ public abstract class CfgValue<T> implements IConfigValue<T, CruxConfig> {
         this.path = path;
         this.comments = comments;
         this.parameterType = resolveParameterType();
-        Bukkit.getLogger().severe("Resolved: " + parameterType);
     }
+
+    public CfgValue(@Nullable T defaultValue, @Nullable String path, @NotNull Type parameterType, @NotNull String @Nullable ... comments) {
+        this.defaultValue = defaultValue;
+        this.path = path;
+        this.comments = comments;
+        this.parameterType = parameterType;
+    }
+
 
     protected Type resolveParameterType() {
         ParameterizedType parameterizedType = (ParameterizedType) getClass().getGenericSuperclass();
