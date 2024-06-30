@@ -29,21 +29,30 @@ import java.util.logging.Logger;
 public final class Crux {
     public static final String NAMESPACE = "crux";
     public static final TagParser TAGS = new CruxTags.Builder()
-        .addTags(CruxStandardTags.build())
+        .addTags(CruxStandardTags.buildObjectTags())
         .build();
-    public static final Format FORMAT = new Format(
-        MiniMessage.builder()
+    public static final Format FORMAT = new Format.Builder()
+        .miniMessage(MiniMessage.builder()
             .tags(TagResolver.builder()
-                    .resolvers(TagResolver.standard(),
-                        new CheckBoolTag(),
-                        new StringFormatTag(),
-                        new DateFormatTag(),
-                        new DurationTag(),
-                        new ConvertBoolTag(),
-                        new UnicodeSpacingTag())
-                    .build()
-            ).build(), TAGS
-    );
+                .resolvers(TagResolver.standard(),
+                    new CheckBoolTag(),
+                    new StringFormatTag(),
+                    new DateFormatTag(),
+                    new DurationTag(),
+                    new ConvertBoolTag(),
+                    new UnicodeSpacingTag())
+                .build()
+            ).build())
+        .tagParser(TAGS)
+
+        .stringPattern(CruxStandardTags.buildStringPattern())
+        .lorePattern(CruxStandardTags.buildLorePattern())
+        .equationPattern(CruxStandardTags.buildEquationPattern())
+        .bEquationPattern(CruxStandardTags.buildBEquationPattern())
+
+        .addGlobalStringTags(CruxStandardTags.buildGlobalStringTags())
+        .addGlobalStringListTags(CruxStandardTags.buildGlobalStringListTags())
+        .build();
     private static final Logger log = Logger.getLogger(Crux.class.getName());
 
     private static @Nullable CruxPlugin mainPlugin;

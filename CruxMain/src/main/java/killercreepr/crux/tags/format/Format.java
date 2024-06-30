@@ -18,10 +18,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,17 +26,28 @@ public class Format implements FormatSerializer{
     protected final @NotNull MiniMessage miniMessage;
     protected final @NotNull TagParser tags;
     //todo protected final Registry<RawTextFormat> rawTextFormats = SimpleRegistry.fromSet();
-    protected final Pattern STRING_PATTERN = Pattern.compile("<([^<>]+?)>");
-    protected final Pattern LORE_PATTERN = Pattern.compile("\\{(\\w+)(?::([^{}]+))?}");
-    protected final Pattern EQUATION_PATTERN = Pattern.compile("\\{\\{(.+?)\\}\\}");
-    protected final Pattern B_EQUATION_PATTERN = Pattern.compile("\\{b\\{(.+?)\\}\\}");
+    protected final Pattern STRING_PATTERN;
+    protected final Pattern LORE_PATTERN;
+    protected final Pattern EQUATION_PATTERN;
+    protected final Pattern B_EQUATION_PATTERN;
 
     protected final Registry<StringResolver> STRING_RESOLVERS = SimpleRegistry.fromSet();
     protected final Registry<StringListResolver> STRING_LIST_RESOLVERS = SimpleRegistry.fromSet();
 
-    public Format(@NotNull MiniMessage miniMessage, @NotNull TagParser tags) {
+    public Format(
+        @NotNull MiniMessage miniMessage,
+        @NotNull TagParser tags,
+        @NotNull Pattern stringPattern,
+        @NotNull Pattern lorePattern,
+        @NotNull Pattern equationPattern,
+        @NotNull Pattern bEquationPattern
+    ) {
         this.miniMessage = miniMessage;
         this.tags = tags;
+        this.STRING_PATTERN = stringPattern;
+        this.LORE_PATTERN = lorePattern;
+        this.EQUATION_PATTERN = equationPattern;
+        this.B_EQUATION_PATTERN = bEquationPattern;
     }
 
     /*public Registry<RawTextFormat> getRawTextFormats() {
@@ -263,5 +271,108 @@ public class Format implements FormatSerializer{
         }
         matcher.appendTail(result);
         return result.toString();
+    }
+
+    public static class Builder{
+        protected MiniMessage miniMessage;
+        protected TagParser tagParser;
+        protected Pattern stringPattern;
+        protected Pattern lorePattern;
+        protected Pattern equationPattern;
+        protected Pattern bEquationPattern;
+        protected final Collection<StringResolver> globalStringTags = new HashSet<>();
+        protected final Collection<StringListResolver> globalStringListTags = new HashSet<>();
+
+        public Builder addGlobalStringTag(@NotNull StringResolver tag){
+            this.globalStringTags.add(tag);
+            return this;
+        }
+
+        public Builder addGlobalStringTags(@NotNull Collection<StringResolver> tags){
+            this.globalStringTags.addAll(tags);
+            return this;
+        }
+
+        public Builder addGlobalStringListTag(@NotNull StringListResolver tag){
+            this.globalStringListTags.add(tag);
+            return this;
+        }
+
+        public Builder addGlobalStringListTags(@NotNull Collection<StringListResolver> tags){
+            this.globalStringListTags.addAll(tags);
+            return this;
+        }
+
+        public MiniMessage miniMessage() {
+            return miniMessage;
+        }
+
+        public Builder miniMessage(MiniMessage miniMessage) {
+            this.miniMessage = miniMessage;
+            return this;
+        }
+
+        public TagParser tagParser() {
+            return tagParser;
+        }
+
+        public Builder tagParser(TagParser tagParser) {
+            this.tagParser = tagParser;
+            return this;
+        }
+
+        public Collection<StringResolver> globalStringTags() {
+            return globalStringTags;
+        }
+
+        public Collection<StringListResolver> globalStringListTags() {
+            return globalStringListTags;
+        }
+
+        public Pattern stringPattern() {
+            return stringPattern;
+        }
+
+        public Builder stringPattern(Pattern stringPattern) {
+            this.stringPattern = stringPattern; return this;
+        }
+
+        public Pattern lorePattern() {
+            return lorePattern;
+        }
+
+        public Builder lorePattern(Pattern lorePattern) {
+            this.lorePattern = lorePattern; return this;
+        }
+
+        public Pattern equationPattern() {
+            return equationPattern;
+        }
+
+        public Builder equationPattern(Pattern equationPattern) {
+            this.equationPattern = equationPattern; return this;
+        }
+
+        public Pattern bEquationPattern() {
+            return bEquationPattern;
+        }
+
+        public Builder bEquationPattern(Pattern bEquationPattern) {
+            this.bEquationPattern = bEquationPattern; return this;
+        }
+
+        public @NotNull Format build(){
+            Objects.requireNonNull(miniMessage);
+            Objects.requireNonNull(tagParser);
+            Objects.requireNonNull(stringPattern);
+            Objects.requireNonNull(lorePattern);
+            Objects.requireNonNull(equationPattern);
+            Objects.requireNonNull(bEquationPattern);
+
+            Format format = new Format(miniMessage, tagParser, stringPattern, lorePattern, equationPattern, bEquationPattern);
+            globalStringTags.forEach(r -> format.globalStringResolvers().register(r));
+            globalStringListTags.forEach(r -> format.globalStringListResolvers().register(r));
+            return format;
+        }
     }
 }
