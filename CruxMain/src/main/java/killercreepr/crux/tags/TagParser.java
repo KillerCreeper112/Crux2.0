@@ -12,6 +12,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 public interface TagParser {
+    default TagParser register(@NotNull ObjectTag<?>... tags){
+        for(ObjectTag<?> t : tags){
+            register(t);
+        }
+        return this;
+    }
     CruxTags register(@NotNull ObjectTag<?> tag);
     <T> @NotNull Collection<ObjectTag<T>> locateTags(@NotNull T object);
 
