@@ -86,7 +86,7 @@ public class MenuItem {
         if(actions == null) return clickEvent;
 
         ActionContext context = clickEvent.getContext();
-        actions.getOrDefault(event.getClick(), List.of()).forEach(s -> performAction(p, s, context));
+        actions.clickOrDefault(event, List.of()).forEach(s -> performAction(p, s, context));
         return clickEvent;
     }
 

@@ -35,12 +35,14 @@ public class FileMenuActions extends FileModuled<ClickActions> {
             new HashMap<>() : new HashMap<>(base.getClickActions().getActions());
         o.forEach((key, value) -> {
             ClickType type;
-            try {
-                type = ClickType.valueOf(key.toUpperCase());
-            } catch (IllegalArgumentException ignored) {
-                Crux.log(Level.WARNING, "Click type of '" + key + "' not found!");
-                return;
-            }
+            if(!key.equalsIgnoreCase("any")){
+                try {
+                    type = ClickType.valueOf(key.toUpperCase());
+                } catch (IllegalArgumentException ignored) {
+                    Crux.log(Level.WARNING, "Click type of '" + key + "' not found!");
+                    return;
+                }
+            }else type = null;
             Collection<String> actions = registry.deserialize((Class<Collection<String>>) (Class<?>) Collection.class, o.get(key));
             if (actions == null || !actions.isEmpty()) map.put(type, actions);
         });
