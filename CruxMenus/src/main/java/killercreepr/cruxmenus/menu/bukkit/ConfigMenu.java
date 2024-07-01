@@ -50,10 +50,6 @@ public class ConfigMenu extends Menu{
         MergedTagContainer tags = new MultiTagContainer(holder.getRegistry().getFormat().tags());
         tags.hookAll(info());
         tags.addAll(getTags());
-
-        Bukkit.broadcastMessage(tags.getStringTags().asMap().keySet() + " ---- item tags");
-        Bukkit.broadcastMessage(info().asMap().keySet() + " ---- item object sobjects");
-
         return tags;
     }
     public @NotNull DataExchange info(){
