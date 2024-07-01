@@ -3,14 +3,14 @@ package killercreepr.crux.registry;
 import killercreepr.crux.data.Identifiable;
 import org.jetbrains.annotations.NotNull;
 
-public interface IdentifiableRegistry<T> extends MappedRegistry<T, Identifiable<T>>{
+public interface IdentifiableRegistry<I, T extends Identifiable<I>> extends MappedRegistry<I, T>{
     @Override
-    default @NotNull Identifiable<T> register(@NotNull Identifiable<T> object){
+    default @NotNull T register(@NotNull T object){
         return register(object.id(), object);
     }
 
     @Override
-    default boolean unregister(@NotNull Identifiable<T> object) {
+    default boolean unregister(@NotNull T object) {
         return remove(object.id()) != null;
     }
 }

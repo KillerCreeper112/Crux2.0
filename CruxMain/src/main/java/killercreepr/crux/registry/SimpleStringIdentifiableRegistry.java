@@ -14,12 +14,12 @@ public class SimpleStringIdentifiableRegistry<T extends StringIdentifiable> exte
     }
 
     @Override
-    public @NotNull T register(@NotNull T object){
-        return register(object.id(), object);
+    public @NotNull T register(@NotNull T object) {
+        return StringIdentifiableRegistry.super.register(object);
     }
 
     @Override
     public boolean unregister(@NotNull T object) {
-        return remove(object.id()) != null;
+        return StringIdentifiableRegistry.super.unregister(object);
     }
 }
