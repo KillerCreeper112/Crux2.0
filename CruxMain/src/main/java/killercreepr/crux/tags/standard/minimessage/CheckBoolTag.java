@@ -23,7 +23,6 @@ public class CheckBoolTag implements TagResolver {
         int amountTrue = 0;
         for(String s : args){
             //s = context.parseString(s);
-            Bukkit.broadcastMessage(s + " checking bool");
             if(CruxString.parseBoolean(s)) amountTrue++;
         }
         boolean value = amountTrue >= args.length;
