@@ -48,7 +48,9 @@ public class MenuItem {
     public boolean canDisplay(){
         String viewRequirement = base.info().getObject("view_requirement", String.class).orElse(null);
         if(viewRequirement == null) return true;
-        return CruxMath.evaluateEvalEx(setPlaceholders(viewRequirement)).equalsIgnoreCase("true");//todo
+        return CruxString.parseBoolean(
+            CruxMath.evaluateEvalEx(setPlaceholders(viewRequirement))
+        );
     }
 
     public @NotNull String setPlaceholders(@NotNull String text){
