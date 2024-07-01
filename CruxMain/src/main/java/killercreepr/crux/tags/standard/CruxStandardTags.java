@@ -40,6 +40,6 @@ public class CruxStandardTags {
     }
 
     public static @NotNull Pattern buildBEquationPattern(){
-        return Pattern.compile("\\{b\\{(.+?)\\}\\}");
+        return Pattern.compile("\\{e\\{(.+?)\\}\\}");
     }
 }

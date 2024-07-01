@@ -177,13 +177,13 @@ public class CruxMath {
         return Crunch.compileExpression(eq, ev).evaluate();
     }
 
-    public static boolean evaluateEvalEx(@Nullable String eq){
-        if(eq==null || eq.isBlank()) return false;
+    public static String evaluateEvalEx(@Nullable String eq){
+        if(eq==null || eq.isBlank()) return "false";
         try{
-            return new Expression(eq).evaluate().getBooleanValue();
+            return new Expression(eq).evaluate().getStringValue();
         }catch (EvaluationException | ParseException e) {
             e.printStackTrace();
-            return false;
+            return "false";
         }
     }
 

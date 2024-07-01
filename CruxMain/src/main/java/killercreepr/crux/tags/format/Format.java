@@ -29,7 +29,7 @@ public class Format implements FormatSerializer{
     protected final Pattern STRING_PATTERN;
     protected final Pattern LORE_PATTERN;
     protected final Pattern EQUATION_PATTERN;
-    protected final Pattern B_EQUATION_PATTERN;
+    protected final Pattern EVAL_EQUATION_PATTERN;
 
     protected final Registry<StringResolver> STRING_RESOLVERS = SimpleRegistry.fromSet();
     protected final Registry<StringListResolver> STRING_LIST_RESOLVERS = SimpleRegistry.fromSet();
@@ -40,14 +40,14 @@ public class Format implements FormatSerializer{
         @NotNull Pattern stringPattern,
         @NotNull Pattern lorePattern,
         @NotNull Pattern equationPattern,
-        @NotNull Pattern bEquationPattern
+        @NotNull Pattern evalEquationPattern
     ) {
         this.miniMessage = miniMessage;
         this.tags = tags;
         this.STRING_PATTERN = stringPattern;
         this.LORE_PATTERN = lorePattern;
         this.EQUATION_PATTERN = equationPattern;
-        this.B_EQUATION_PATTERN = bEquationPattern;
+        this.EVAL_EQUATION_PATTERN = evalEquationPattern;
     }
 
     /*public Registry<RawTextFormat> getRawTextFormats() {
@@ -260,7 +260,7 @@ public class Format implements FormatSerializer{
     }
 
     public @NotNull String processEvalExBool(@NotNull String text) {
-        Matcher matcher = B_EQUATION_PATTERN.matcher(text);
+        Matcher matcher = EVAL_EQUATION_PATTERN.matcher(text);
         StringBuilder result = new StringBuilder();
         while (matcher.find()) {
             String expression = matcher.group(1);
