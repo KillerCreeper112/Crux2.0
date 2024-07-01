@@ -48,18 +48,23 @@ public class MenuItemHolder {
     public static class Evaluation{
         private final @NotNull MenuItemHolder item;
         private final @NotNull Player p;
-        private final @NotNull MenuContext info;
+        private final @NotNull MenuContext context;
 
-        public Evaluation(@NotNull MenuItemHolder item, @NotNull Player p, @NotNull MenuContext info) {
+        public Evaluation(@NotNull MenuItemHolder item, @NotNull Player p, @NotNull MenuContext context) {
             this.item = item;
             this.p = p;
-            this.info = info;
+            this.context = context;
         }
 
         public @NotNull MenuContext evaluateInfo(){
-            DataExchange.Builder extraInfo = new DataExchange.Builder();
-            MergedTagContainer resolvers = new MultiTagContainer(this.info.getResolvers().getTagParser());
-            return new MenuContext(this.info.getMenu(), extraInfo.build(), resolvers);
+            DataExchange.Builder parsedInfo = new DataExchange.Builder();
+            MergedTagContainer resolvers = new MultiTagContainer(this.context.getResolvers().getTagParser());
+            context.getMenu().getHolder().getRegistry().ITEM_DATA_PARSERS.forEachSorted(parser ->{
+                parsedInfo.putAll(parser.parse(p, context, item));
+            });
+            DataExchange totalParsed = parsedInfo.build();
+            resolvers.hookAll(totalParsed);
+            return new MenuContext(this.context.getMenu(), totalParsed, resolvers);
         }
     }
 }

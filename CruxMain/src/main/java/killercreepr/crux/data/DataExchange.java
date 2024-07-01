@@ -23,6 +23,10 @@ public class DataExchange implements Iterable<Holder<Object>> {
         this(Map.of(id, holder));
     }
 
+    public boolean isEmpty(){
+        return data.isEmpty();
+    }
+
     /**
      * @return A new DataExchange with the appended info.
      */

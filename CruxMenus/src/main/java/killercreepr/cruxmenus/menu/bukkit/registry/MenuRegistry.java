@@ -2,10 +2,7 @@ package killercreepr.cruxmenus.menu.bukkit.registry;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.DataExchange;
-import killercreepr.crux.registry.KeyedRegistry;
-import killercreepr.crux.registry.Registry;
-import killercreepr.crux.registry.SimpleKeyedRegistry;
-import killercreepr.crux.registry.SimpleRegistry;
+import killercreepr.crux.registry.*;
 import killercreepr.crux.tags.format.Format;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
@@ -13,9 +10,9 @@ import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
 import killercreepr.cruxmenus.menu.bukkit.MenuItem;
 import killercreepr.cruxmenus.menu.bukkit.actions.MenuAction;
-import killercreepr.cruxmenus.menu.bukkit.actions.impl.CommandAction;
 import killercreepr.cruxmenus.menu.bukkit.config.FileDataProvider;
 import killercreepr.cruxmenus.menu.bukkit.config.handlers.*;
+import killercreepr.cruxmenus.menu.bukkit.data.ItemDataParser;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuHolder;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuItems;
 import net.kyori.adventure.key.Key;
@@ -35,14 +32,13 @@ public class MenuRegistry {
         }
     };
     public final Registry<MenuAction> MENU_ACTIONS = new SimpleRegistry<>(new HashSet<>());
+    public final KeyedPriorityRegistry<ItemDataParser> ITEM_DATA_PARSERS = new KeyedPriorityRegistry<>();
 
     protected final @NotNull Format format;
     protected final @NotNull FileMenuModule menuModule;
     public MenuRegistry(@NotNull Format format, @NotNull FileMenuModule menuModule) {
         this.format = format;
         this.menuModule = menuModule;
-
-        MENU_ACTIONS.register(new CommandAction(Key.key("test", "command")));
     }
 
     public MenuRegistry(@NotNull Format format) {

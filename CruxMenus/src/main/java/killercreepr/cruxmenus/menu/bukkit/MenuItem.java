@@ -27,14 +27,14 @@ import java.util.regex.Pattern;
 
 public class MenuItem {
     protected final @NotNull MenuItemHolder base;
-    protected final @NotNull MenuContext info;
-    public MenuItem(@NotNull MenuItemHolder base, @NotNull MenuContext info) {
+    protected final @NotNull MenuContext context;
+    public MenuItem(@NotNull MenuItemHolder base, @NotNull MenuContext context) {
         this.base = base;
-        this.info = info;
+        this.context = context;
     }
 
     public @NotNull Format getFormat(){
-        return info.getMenu().getHolder().getRegistry().getFormat();
+        return context.getMenu().getHolder().getRegistry().getFormat();
     }
 
     public @NotNull Optional<Integer> getSlot(){
@@ -52,15 +52,15 @@ public class MenuItem {
     }
 
     public @NotNull String setPlaceholders(@NotNull String text){
-        return info.getMenu().getHolder().getRegistry().getFormat().deserializeString(text, buildTags());//todo may need to check this
+        return context.getMenu().getHolder().getRegistry().getFormat().deserializeString(text, buildTags());//todo may need to check this
     }
 
     public @NotNull MergedTagContainer buildTags(){
-        MergedTagContainer resolvers = new MultiTagContainer(info.getResolvers().getTagParser());
-        resolvers.hookAll(info.getMenu().getHolder().info());
-        resolvers.addAll(info.getMenu().buildTags());
+        MergedTagContainer resolvers = new MultiTagContainer(context.getResolvers().getTagParser());
+        resolvers.hookAll(context.getMenu().getHolder().info());
+        resolvers.addAll(context.getMenu().buildTags());
         resolvers.hookAll(base.info());
-        resolvers.hookAll(info.getInfo());
+        resolvers.hookAll(context.getInfo());
         return resolvers;
     }
 
@@ -78,7 +78,7 @@ public class MenuItem {
     }
 
     public @NotNull MenuItemClickEvent click(@NotNull Player p, @NotNull InventoryClickEvent event){
-        ActionContext actionInfo = new ActionContext(info.getMenu(), info.getInfo(), info.getResolvers(), this, event);
+        ActionContext actionInfo = new ActionContext(context.getMenu(), context.getInfo(), context.getResolvers(), this, event);
         MenuItemClickEvent clickEvent = new MenuItemClickEvent(p, actionInfo.getMenu(), this, actionInfo, base.getClickActions());
         if(!clickEvent.callEvent()) return clickEvent;
 
@@ -100,7 +100,7 @@ public class MenuItem {
     }
 
     public boolean performAction(@NotNull Player p, @NotNull String action, @NotNull ActionContext actionInfo){
-        return performAction(p, action, actionInfo, info.getMenu().getHolder().getRegistry().MENU_ACTIONS);
+        return performAction(p, action, actionInfo, context.getMenu().getHolder().getRegistry().MENU_ACTIONS);
     }
 
     public boolean performAction(@NotNull Player p, @NotNull String action,
@@ -121,8 +121,8 @@ public class MenuItem {
         return base;
     }
 
-    public @NotNull MenuContext info() {
-        return info;
+    public @NotNull MenuContext context() {
+        return context;
     }
 
 }
