@@ -11,7 +11,7 @@ import java.util.Map;
 
 public interface TagContainer<T> extends Iterable<T> {
     default TagContainer<T> hookAll(@NotNull DataExchange info){
-        info.forEach(this::hook);
+        info.forEach(e -> hook(e.value()));
         return this;
     }
     TagContainer<T> hook(@Nullable Object info);

@@ -2,6 +2,7 @@ package killercreepr.crux.tags.container;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.DataExchange;
+import killercreepr.crux.data.Holder;
 import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.TagsPrefixBuilder;
 import killercreepr.crux.tags.context.FormatPrefix;
@@ -62,8 +63,8 @@ public class MultiTagContainer implements MergedTagContainer {
     @Override
     public MergedTagContainer hookAll(@Nullable DataExchange info) {
         if(info==null) return this;
-        for(Object o : info){
-            hook(o);
+        for(Holder<?> o : info){
+            hook(o.value());
         }
         return this;
     }

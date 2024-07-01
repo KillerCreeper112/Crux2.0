@@ -20,8 +20,7 @@ public class DataExchange implements Iterable<Holder<Object>> {
     }
 
     public DataExchange(@NotNull String id, @NotNull Holder<Object> holder){
-        this.data = new HashMap<>();
-        data.put(id, holder);
+        this(Map.of(id, holder));
     }
 
     /**
@@ -29,7 +28,7 @@ public class DataExchange implements Iterable<Holder<Object>> {
      */
     public @NotNull DataExchange append(@NotNull DataExchange info){
         Map<String, Holder<Object>> data = new HashMap<>(this.data);
-        data.putAll(info.getData());
+        data.putAll(info.asMap());
         return new DataExchange(data);
     }
 
@@ -119,7 +118,7 @@ public class DataExchange implements Iterable<Holder<Object>> {
     /**
      * @return An immutable map containing this DataExchange's data.
      */
-    public @NotNull Map<String, Holder<Object>> getData() {
+    public @NotNull Map<String, Holder<Object>> asMap() {
         return data;
     }
 
@@ -149,7 +148,7 @@ public class DataExchange implements Iterable<Holder<Object>> {
         }
 
         public Builder putAll(@Nullable DataExchange info){
-            return info == null ? this : putAll(info.getData());
+            return info == null ? this : putAll(info.asMap());
         }
 
         public Builder putAll(@NotNull Map<String, Holder<Object>> map){

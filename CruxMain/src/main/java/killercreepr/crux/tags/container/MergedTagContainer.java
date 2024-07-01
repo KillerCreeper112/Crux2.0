@@ -2,6 +2,7 @@ package killercreepr.crux.tags.container;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.DataExchange;
+import killercreepr.crux.data.Holder;
 import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.TagsPrefixBuilder;
 import killercreepr.crux.tags.context.FormatPrefix;
@@ -35,9 +36,9 @@ public interface MergedTagContainer extends StringTagProvider, StringListTagProv
         if(data==null) return container;
         MultiTagContainer merged = new MultiTagContainer(container==null?Crux.TAGS:container.getStringTags().getTagParser());
         merged.addAll(container);
-        for(Object o : data){
+        for(Holder<?> o : data){
             if(o==null) continue;
-            merged.hook(o);
+            merged.hook(o.value());
         }
         return merged;
     }
