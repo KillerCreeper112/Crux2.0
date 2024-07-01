@@ -26,4 +26,11 @@ public class MenuContext {
     public @NotNull MergedTagContainer getResolvers() {
         return resolvers;
     }
+
+    public @NotNull DataExchange getAllMergedInfo(){
+        return menu.getHolder().info()
+            .append(menu.info())
+            .append(info)
+            ;
+    }
 }

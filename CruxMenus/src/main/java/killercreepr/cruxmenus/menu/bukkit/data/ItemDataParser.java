@@ -2,7 +2,6 @@ package killercreepr.cruxmenus.menu.bukkit.data;
 
 import killercreepr.crux.data.DataExchange;
 import killercreepr.cruxmenus.menu.bukkit.MenuContext;
-import killercreepr.cruxmenus.menu.bukkit.MenuItem;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuItemHolder;
 import net.kyori.adventure.key.Keyed;
 import org.bukkit.entity.Player;
