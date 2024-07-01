@@ -9,6 +9,7 @@ import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxmenus.menu.bukkit.holder.ClickActions;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuItemHolder;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,7 +24,7 @@ public class FileMenuItem extends FileModuled<MenuItemHolder> {
         FileRegistry registry = context.getRegistry();
         MenuItemHolder base = null;
         if(menuContext != null){
-            String baseID = menuContext.getObject(String.class, "base");
+            String baseID = o.getObject(String.class, "base");
             if(baseID != null){
                 /*String[] checkBase = path.split("\\.");
                 if(checkBase.length > 0 && checkBase[checkBase.length-1].contains(baseID)){
@@ -33,8 +34,9 @@ public class FileMenuItem extends FileModuled<MenuItemHolder> {
                             context, o.get(baseID), menuContext
                     );
                 }*/
+                Bukkit.getLogger().info("HOLDER HAS BASE: " + baseID + " ////   " + menuContext.get("items").getAsFileObject().get(baseID));
                 base = menuModule.getYamlMenuItem().deserializeFromFile(
-                    context, o.get(baseID), menuContext
+                    context, menuContext.get("items").getAsFileObject().get(baseID), menuContext
                 );
             }
         }
@@ -55,6 +57,8 @@ public class FileMenuItem extends FileModuled<MenuItemHolder> {
         ClickActions clickActions = menuModule.getYamlMenuActions().deserializeFromFile(
             context, o.get("actions"), base
         );
+
+        if(clickActions == null && base != null) clickActions = base.getClickActions();
 
         MenuItemHolder item = new MenuItemHolder(
             Holder.direct(i),
