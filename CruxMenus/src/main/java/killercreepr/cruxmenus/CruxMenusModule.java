@@ -11,6 +11,7 @@ import killercreepr.cruxmenus.command.argument.CruxMenusArguments;
 import killercreepr.cruxmenus.menu.bukkit.actions.standard.StandardMenuActions;
 import killercreepr.cruxmenus.menu.bukkit.listener.MenuListener;
 import killercreepr.cruxmenus.menu.bukkit.registry.MenuRegistry;
+import killercreepr.cruxmenus.tags.MenuItemHolderHook;
 import org.jetbrains.annotations.NotNull;
 
 public class CruxMenusModule implements CruxModule {
@@ -41,6 +42,8 @@ public class CruxMenusModule implements CruxModule {
         plugin.registerListeners(
                 new MenuListener(plugin)
         );
+
+        menuRegistry.getFormat().tags().register(new MenuItemHolderHook());
     }
 
     @Override

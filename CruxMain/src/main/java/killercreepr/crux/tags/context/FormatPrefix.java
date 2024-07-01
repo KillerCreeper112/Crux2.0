@@ -12,6 +12,9 @@ public interface FormatPrefix {
             }
         };
     }
+    static @NotNull FormatPrefix empty(){
+        return simple("");
+    }
 
     @NotNull String buildPrefix(@NotNull TagResolver<?> resolver);
 }

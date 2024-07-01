@@ -13,6 +13,7 @@ import killercreepr.cruxmenus.menu.bukkit.actions.ActionContext;
 import killercreepr.cruxmenus.menu.bukkit.actions.MenuAction;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.MenuItemClickEvent;
 import killercreepr.cruxmenus.menu.bukkit.holder.ClickActions;
+import killercreepr.cruxmenus.menu.bukkit.holder.MenuHolder;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuItemHolder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -61,6 +62,10 @@ public class MenuItem {
         MergedTagContainer resolvers = new MultiTagContainer(context.getResolvers().getTagParser());
         resolvers.hookAll(context.getMenu().getHolder().info());
         resolvers.addAll(context.getMenu().buildTags());
+
+        resolvers.hook(base);
+        resolvers.hook(MenuItem.this);
+
         resolvers.hookAll(base.info());
         resolvers.hookAll(context.getInfo());
         return resolvers;
