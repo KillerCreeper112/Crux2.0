@@ -115,7 +115,7 @@ public class MenuItem {
         String actionName = extractAction(action);
         if(actionName == null) return false;
         String result = getFormat().deserializeString(action.replaceFirst("\\[.*?]\\s*", ""),
-                actionInfo.getResolvers());
+                actionInfo.getAllMergedResolvers());
         for(MenuAction a : actions){
             if(!a.has(actionName)) continue;
             String[] args = CruxString.quoteSplit(result, " ");

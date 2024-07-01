@@ -2,6 +2,7 @@ package killercreepr.cruxmenus.menu.bukkit;
 
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.tags.container.MergedTagContainer;
+import killercreepr.crux.tags.container.MultiTagContainer;
 import org.jetbrains.annotations.NotNull;
 
 public class MenuContext {
@@ -32,5 +33,11 @@ public class MenuContext {
             .append(menu.info())
             .append(info)
             ;
+    }
+
+    public @NotNull MergedTagContainer getAllMergedResolvers(){
+        MergedTagContainer tags = new MultiTagContainer(menu.getHolder().getRegistry().getFormat().tags());
+        tags.hookAll(getAllMergedInfo());
+        return tags;
     }
 }

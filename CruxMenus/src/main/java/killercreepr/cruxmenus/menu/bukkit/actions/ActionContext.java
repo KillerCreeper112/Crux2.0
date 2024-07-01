@@ -25,4 +25,9 @@ public class ActionContext extends MenuContext {
     public @NotNull MenuItem getItem() {
         return item;
     }
+
+    @Override
+    public @NotNull MergedTagContainer getAllMergedResolvers() {
+        return super.getAllMergedResolvers().addAll(item.buildTags());
+    }
 }

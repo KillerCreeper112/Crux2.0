@@ -15,6 +15,7 @@ import killercreepr.crux.tags.resolver.StringResolver;
 import killercreepr.crux.util.CruxMath;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -164,7 +165,7 @@ public class Format implements FormatSerializer{
             String placeholder = matcher.group(1);
             String optionalParameter = matcher.group(2);
 
-            List<String> addons = processPlaceholder(container,
+            List<String> addons = processListPlaceholder(container,
                 placeholder, new FormatArgs(optionalParameter == null ? new String[0] : optionalParameter.split(":")));
             if(addons != null){
                 addon.addAll(addons);
@@ -174,9 +175,9 @@ public class Format implements FormatSerializer{
         return found ? addon : null;
     }
 
-    private @Nullable List<String> processPlaceholder(@NotNull StringListTagContainer container,
-                                                      @NotNull String placeholder,
-                                                      @NotNull FormatArgs args) {
+    private @Nullable List<String> processListPlaceholder(@NotNull StringListTagContainer container,
+                                                          @NotNull String placeholder,
+                                                          @NotNull FormatArgs args) {
         StringListResolver resolver = container.get(placeholder);
         if(resolver == null) return null;
         TextParserContext context = new FormatParserContext.Builder(this)
@@ -184,42 +185,70 @@ public class Format implements FormatSerializer{
         return resolver.resolve(args, context);
     }
 
+    //todo possibly:
+    //So I fixed nested placeholders like:
+    //<claim_setting:<itemholder_setting>>
+    //
+    //However, if you input a placeholder that is not able to be parsed like this:
+    //<claim_setting:<itemholder_setting>:<test>>
+    //The entire <claim_setting> won't be parsed.
+    //
+    //IDK maybe it's fine. We will see!
     public @NotNull String processPlaceholders(@NotNull String text, @NotNull StringTagContainer tags) {
         StringTagContainer resolvers = new StringTagContainer(this.tags);
         resolvers.addAll(STRING_RESOLVERS.values());
         resolvers.addAll(tags);
 
         //Bukkit.broadcastMessage("before(p): " + text);
-        Matcher matcher = STRING_PATTERN.matcher(text);
-        StringBuilder result = new StringBuilder(text.length());
         TextParserContext context = new FormatParserContext.Builder(this)
             .build();
-        while (matcher.find()) {
-            String placeholder = matcher.group(1);
-            String[] parts = placeholder.split(":");
-            placeholder = parts[0];
+        //Bukkit.broadcastMessage("text to process: " + text);
+        boolean found;
+        Collection<String> already = new HashSet<>();
+        do{
+            Matcher matcher = STRING_PATTERN.matcher(text);
+            StringBuilder result = new StringBuilder(text.length());
+            found = false;
 
-            String[] arguments = new String[parts.length - 1];
-            System.arraycopy(parts, 1, arguments, 0, parts.length - 1);
+            while (matcher.find()) {
+                String placeholder = matcher.group(1);
+                String[] parts = placeholder.split(":");
+                placeholder = parts[0];
 
-            //Bukkit.broadcastMessage(placeholder + " placeholder");
-            String replacement = resolvePlaceholder(placeholder, new FormatArgs(arguments), context, resolvers);
-            matcher.appendReplacement(result, replacement);
-        }
-        matcher.appendTail(result);
+                if(already.contains(placeholder)) continue;
+
+                found = true;
+
+                String[] arguments = new String[parts.length - 1];
+                System.arraycopy(parts, 1, arguments, 0, parts.length - 1);
+
+                for(int i = 0; i < arguments.length; i++){
+                    arguments[i] = processPlaceholders(arguments[i], tags);
+                }
+
+                //Bukkit.broadcastMessage("placeholder: " + placeholder + " - " + Arrays.toString(arguments));
+
+                FormatArgs args = new FormatArgs(arguments);
+                String replacement = resolvePlaceholder(placeholder, args, context, resolvers);
+                if(replacement == null){
+                    already.add(placeholder);
+                    replacement = "<" + placeholder + (args.isEmpty() ? "" : ":" + processPlaceholders(String.join(":", args.getArgs()), resolvers)) + ">";
+                }
+                matcher.appendReplacement(result, replacement);
+            }
+            matcher.appendTail(result);
+            text = result.toString();
+        }while(found);
         //Bukkit.broadcastMessage("after: " + result);
-        return result.toString();
+        return text;
     }
 
-    private String resolvePlaceholder(String placeholderID, FormatArgs args, TextParserContext context, StringTagContainer resolvers) {
+    private @Nullable String resolvePlaceholder(String placeholderID, FormatArgs args, TextParserContext context, StringTagContainer resolvers) {
         List<String> replacementList = new ArrayList<>();
-        boolean found = false; // Flag to indicate if any resolution was successful
-
-        StringResolver hooked = resolvers.get(placeholderID);
-        if(hooked != null){
-            String request = hooked.resolve(args, context);
+        StringResolver resolver = resolvers.get(placeholderID);
+        if(resolver != null){
+            String request = resolver.resolve(args, context);
             if (request != null) {
-                found = true; // Resolution was successful
                 // Recursively process nested placeholders
                 request = processPlaceholders(request, resolvers);
                 replacementList.add(request);
@@ -235,14 +264,15 @@ public class Format implements FormatSerializer{
                 replacementList.add(request);
             }
         }*/
-        if (!found) {
+        if (replacementList.isEmpty()) {
             // If no resolution was successful, return the original placeholder
-            return "<" + placeholderID + (args.isEmpty() ? "" : ":" + processPlaceholders(String.join(":", args.getArgs()), resolvers)) + ">";
+            return null;
+            //return "<" + placeholderID + (args.isEmpty() ? "" : ":" + processPlaceholders(String.join(":", args.getArgs()), resolvers)) + ">";
         }
         // Return the longest replacement
         return replacementList.stream()
             .max(Comparator.comparingInt(String::length))
-            .orElse("<" + placeholderID + (args.isEmpty() ? "" : ":" + processPlaceholders(String.join(":", args.getArgs()), resolvers))+ ">");
+            .orElse(null/*"<" + placeholderID + (args.isEmpty() ? "" : ":" + processPlaceholders(String.join(":", args.getArgs()), resolvers))+ ">"*/);
     }
 
     public @NotNull String processEquations(@NotNull String text) {
