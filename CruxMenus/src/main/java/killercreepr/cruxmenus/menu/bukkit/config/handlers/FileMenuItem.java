@@ -41,8 +41,8 @@ public class FileMenuItem extends FileModuled<MenuItemHolder> {
 
         DataExchange.Builder extraInfo = new DataExchange.Builder();
         if(base != null) extraInfo.putAll(base.info());
-        extraInfo.putAll(registry.deserialize(DataExchange.class, o.get("data")));
         extraInfo.putAll(registry.deserialize(DataExchange.class, o));
+        extraInfo.putAll(registry.deserialize(DataExchange.class, o.get("data")));
 
         DynamicItem i;
         if(base == null) i = registry.deserialize(DynamicItem.class, o.get("item"));

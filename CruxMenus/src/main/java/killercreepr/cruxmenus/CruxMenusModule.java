@@ -5,6 +5,10 @@ import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
+import killercreepr.cruxmenus.command.CruxMenusCommands;
+import killercreepr.cruxmenus.command.argument.CruxMenuHolderArgument;
+import killercreepr.cruxmenus.command.argument.CruxMenusArguments;
+import killercreepr.cruxmenus.menu.bukkit.actions.standard.StandardMenuActions;
 import killercreepr.cruxmenus.menu.bukkit.listener.MenuListener;
 import killercreepr.cruxmenus.menu.bukkit.registry.MenuRegistry;
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +22,7 @@ public class CruxMenusModule implements CruxModule {
 
     public CruxMenusModule() {
         this(new MenuRegistry(Crux.FORMAT));
+        StandardMenuActions.buildActions().forEach(menuRegistry.MENU_ACTIONS::register);
     }
 
     public @NotNull MenuRegistry menuRegistry() {
@@ -31,6 +36,8 @@ public class CruxMenusModule implements CruxModule {
 
     @Override
     public void onEnable(@NotNull CruxPlugin plugin) {
+        CruxMenusArguments.setMenuHolder(new CruxMenuHolderArgument(this));
+        CruxMenusCommands.register(plugin);
         plugin.registerListeners(
                 new MenuListener(plugin)
         );

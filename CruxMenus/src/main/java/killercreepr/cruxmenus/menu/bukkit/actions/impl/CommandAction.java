@@ -12,6 +12,11 @@ public class CommandAction extends SimpleMenuAction {
     }
 
     @Override
+    public boolean has(@NotNull String x) {
+        return x.equalsIgnoreCase("pcmd") || super.has(x);
+    }
+
+    @Override
     public boolean execute(@NotNull Player p, @NotNull ActionContext actionInfo, @NotNull String[] args) {
         p.performCommand(args[0]);
         return true;
