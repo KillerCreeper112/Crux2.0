@@ -61,6 +61,9 @@ public class DataExchange implements Iterable<Holder<Object>> {
     }
 
     public <T> @Nullable T get(@NotNull Class<T> findFirst){
+        T attempt = get(findFirst.getSimpleName().toLowerCase(), findFirst);
+        if(attempt != null) return attempt;
+
         for(Holder<?> o : data.values()){
             if(o == null) continue;
             Object value = o.value();
