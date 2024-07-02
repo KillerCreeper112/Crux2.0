@@ -3,7 +3,8 @@ package killercreepr.cruxmenus.menu.bukkit;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.MenuCloseEvent;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.MenuOpenEvent;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.MenuRefreshEvent;
-import killercreepr.cruxmenus.menu.bukkit.module.MenuModule;
+import killercreepr.cruxmenus.menu.bukkit.module.MenuModuleRegistry;
+import killercreepr.cruxmenus.menu.bukkit.module.MenuModuleRegistryImpl;
 import killercreepr.cruxmenus.menu.bukkit.slot.Slot;
 import killercreepr.cruxmenus.registries.Menus;
 import net.kyori.adventure.text.Component;
@@ -21,7 +22,7 @@ public class BukkitMenu implements Menu{
     protected final @NotNull UUID uuid;
     protected @NotNull Inventory inventory;
 
-    protected final Collection<MenuModule> modules = new HashSet<>();
+    protected final MenuModuleRegistry modules = new MenuModuleRegistryImpl(this);
 
     public BukkitMenu(){
         this(UUID.randomUUID());
@@ -89,7 +90,7 @@ public class BukkitMenu implements Menu{
         MenuRefreshEvent event = new MenuRefreshEvent(this);
         if(!event.callEvent()) return event;
 
-        modules.forEach(m -> m.onRefresh(this));
+        modules.refresh();
         return event;
     }
 
@@ -141,6 +142,11 @@ public class BukkitMenu implements Menu{
     @Override
     public @NotNull Component buildTitle() {
         return null;//todo abstract
+    }
+
+    @Override
+    public @NotNull MenuModuleRegistry getModules() {
+        return modules;
     }
 
     @Override

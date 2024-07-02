@@ -1,13 +1,17 @@
 package killercreepr.cruxmenus.menu.bukkit;
 
 import killercreepr.crux.Crux;
+import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.container.MergedTagContainer;
+import killercreepr.crux.tags.container.MultiTagContainer;
+import killercreepr.crux.tags.format.Format;
 import killercreepr.crux.util.CruxItem;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.MenuCloseEvent;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.MenuOpenEvent;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.MenuRefreshEvent;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.slot.MenuSlotGiveEvent;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.slot.MenuSlotTakeEvent;
+import killercreepr.cruxmenus.menu.bukkit.module.MenuModuleRegistry;
 import killercreepr.cruxmenus.menu.bukkit.module.MenuModuleRegistryImpl;
 import killercreepr.cruxmenus.menu.bukkit.slot.Slot;
 import killercreepr.cruxmenus.menu.bukkit.slot.SlotContext;
@@ -77,6 +81,7 @@ public interface Menu extends CommonMenu, InventoryHolder {
      * Called after creation.
      */
     default void load(){
+        getModules().load();
         refresh();
     }
 
@@ -84,12 +89,14 @@ public interface Menu extends CommonMenu, InventoryHolder {
     @NotNull Map<Integer, Slot> getSlots();
 
     int buildSize();
-    default @Nullable MergedTagContainer buildTags(){
-        return null;
+    default @Nullable MergedTagContainer buildTags(@NotNull TagParser tagParser){
+        MergedTagContainer tags = new MultiTagContainer(tagParser);
+        getModules().buildTags(tagParser);
+        return tags;
     }
     @NotNull Component buildTitle();
     @NotNull
-    MenuModuleRegistryImpl getModules();
+    MenuModuleRegistry getModules();
     /**
      * Resets the inventory. More namely, clears the items.
      */

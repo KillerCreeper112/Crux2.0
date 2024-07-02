@@ -1,23 +1,18 @@
 package killercreepr.cruxmenus.menu.bukkit.module;
 
+import killercreepr.cruxmenus.menu.bukkit.Menu;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class SimpleMenuModule implements MenuModule{
     protected final @NotNull Key key;
-    protected final @NotNull String id;
-    public SimpleMenuModule(@NotNull Key key, @NotNull String id) {
+    public SimpleMenuModule(@NotNull Key key) {
         this.key = key;
-        this.id = id;
     }
 
     @Override
     public @NotNull Key key() {
         return key;
-    }
-
-    @Override
-    public @NotNull String id() {
-        return id;
     }
 }

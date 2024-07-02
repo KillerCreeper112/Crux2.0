@@ -2,6 +2,7 @@ package killercreepr.cruxmenus.menu.bukkit;
 
 import killercreepr.crux.context.SimpleInputContext;
 import killercreepr.crux.data.DataExchange;
+import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.crux.tags.container.MultiTagContainer;
 import killercreepr.crux.util.InvUtil;
@@ -53,8 +54,9 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
     }
 
     @Override
-    public @Nullable MergedTagContainer buildTags(){
-        MergedTagContainer tags = new MultiTagContainer(holder.getRegistry().getFormat().tags());
+    public @Nullable MergedTagContainer buildTags(@NotNull TagParser tagParser){
+        MergedTagContainer tags = new MultiTagContainer(tagParser);
+        tags.addAll(super.buildTags(tagParser));
         tags.hookAll(info());
         tags.addAll(getTags());
         return tags;
@@ -63,6 +65,11 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
     @Override
     public @NotNull DataExchange info(){
         return info;
+    }
+
+    @Override
+    public @Nullable MergedTagContainer buildTags() {
+        return buildTags(holder.getRegistry().getFormat().tags());
     }
 
     /**

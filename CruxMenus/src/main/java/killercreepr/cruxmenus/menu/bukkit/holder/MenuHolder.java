@@ -1,10 +1,12 @@
 package killercreepr.cruxmenus.menu.bukkit.holder;
 
 import killercreepr.crux.data.DataExchange;
+import killercreepr.crux.data.DataInfoHolder;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxmenus.menu.bukkit.CfgMenu;
 import killercreepr.cruxmenus.menu.bukkit.ConfigMenu;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.MenuOpenEvent;
+import killercreepr.cruxmenus.menu.bukkit.module.MenuModule;
 import killercreepr.cruxmenus.menu.bukkit.registry.MenuRegistry;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
@@ -12,7 +14,9 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class MenuHolder implements Keyed {
+import java.util.Collection;
+
+public class MenuHolder implements Keyed, DataInfoHolder {
     protected MenuRegistry registry;
     public MenuHolder setRegistry(@NotNull MenuRegistry registry) {
         this.registry = registry; return this;
@@ -28,19 +32,23 @@ public class MenuHolder implements Keyed {
     //priority => item
     protected final @NotNull MenuItems items;
     protected final @NotNull DataExchange info;
+    protected final @NotNull Collection<MenuModule> modules;
 
     public MenuHolder(@NotNull Key key,
                       @Nullable String title,
                       @NotNull NumberProvider size,
                       @NotNull MenuItems items,
-                      @NotNull DataExchange info) {
+                      @NotNull DataExchange info,
+                      @NotNull Collection<MenuModule> modules) {
         this.key = key;
         this.title = title;
         this.size = size;
         this.items = items;
         this.info = info;
+        this.modules = modules;
     }
 
+    @Override
     public @NotNull DataExchange info() {
         return info;
     }
@@ -72,6 +80,10 @@ public class MenuHolder implements Keyed {
 
     public @NotNull MenuItems getItems() {
         return items;
+    }
+
+    public @NotNull Collection<MenuModule> getModules() {
+        return modules;
     }
 
     @Override
