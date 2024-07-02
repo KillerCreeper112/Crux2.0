@@ -2,6 +2,7 @@ package killercreepr.cruxmenus.menu.bukkit.holder;
 
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.cruxmenus.menu.bukkit.CfgMenu;
 import killercreepr.cruxmenus.menu.bukkit.ConfigMenu;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.MenuOpenEvent;
 import killercreepr.cruxmenus.menu.bukkit.registry.MenuRegistry;
@@ -52,12 +53,12 @@ public class MenuHolder implements Keyed {
         DataExchange.Builder builder = new DataExchange.Builder().putAll(data);
         builder.put("viewer", p);
 
-        ConfigMenu menu = createMenu(builder.build());
+        CfgMenu menu = createMenu(builder.build());
         menu.load();
         return menu.open(p);
     }
 
-    public @NotNull ConfigMenu createMenu(@NotNull DataExchange data){
+    public @NotNull CfgMenu createMenu(@NotNull DataExchange data){
         return new ConfigMenu(this, data);
     }
 
