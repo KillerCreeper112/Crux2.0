@@ -80,4 +80,20 @@ public class MenuRegistry {
         Crux.log(Level.INFO, "Registered crux menu: " + holder.key());
         MENU_HOLDERS.register(holder);
     }
+
+    public KeyedRegistry<MenuHolder> menuHolders() {
+        return MENU_HOLDERS;
+    }
+
+    public Registry<MenuAction> menuActions() {
+        return MENU_ACTIONS;
+    }
+
+    public KeyedPriorityRegistry<ItemDataParser> itemDataParsers() {
+        return ITEM_DATA_PARSERS;
+    }
+
+    public @NotNull FileMenuModule menuModule() {
+        return menuModule;
+    }
 }

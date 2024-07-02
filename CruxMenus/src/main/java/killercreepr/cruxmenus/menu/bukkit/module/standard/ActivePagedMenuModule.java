@@ -1,6 +1,10 @@
 package killercreepr.cruxmenus.menu.bukkit.module.standard;
 
 import killercreepr.crux.data.NotNullHolder;
+import killercreepr.crux.tags.TagParser;
+import killercreepr.crux.tags.container.MergedTagContainer;
+import killercreepr.crux.tags.container.MultiTagContainer;
+import killercreepr.crux.tags.resolver.Tag;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.cruxmenus.menu.bukkit.Menu;
 import killercreepr.cruxmenus.menu.bukkit.module.MenuModule;
@@ -33,6 +37,13 @@ public abstract class ActivePagedMenuModule<T> extends SimpleActiveMenuModule {
         return this;
     }
 
+    @Override
+    public @Nullable MergedTagContainer buildTags(@NotNull Menu menu, @NotNull TagParser tagParser) {
+        MergedTagContainer tags = new MultiTagContainer(tagParser);
+        tags.addAll(super.buildTags(menu, tagParser));
+        tags.add(Tag.parsed("module_" + id() + "_page", page+""));
+        return tags;
+    }
 
     public void openPage(@NotNull Menu menu, int page){
         page = CruxMath.clamp(page, 0, calculateMaxPages());
