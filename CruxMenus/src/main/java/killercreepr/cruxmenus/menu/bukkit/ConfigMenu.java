@@ -7,6 +7,7 @@ import killercreepr.crux.tags.container.MultiTagContainer;
 import killercreepr.crux.util.InvUtil;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.MenuRefreshEvent;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuHolder;
+import killercreepr.cruxmenus.menu.bukkit.holder.MenuItemHolder;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -15,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -76,6 +78,28 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
             if(slot.isEmpty() || !i.canDisplay()) return;
             setItem(slot.get(), i, viewer);
         });
+    }
+
+    @Override
+    public @Nullable MenuItem setItem(@NotNull MenuHolder holder, int index){
+        Player viewer = info.getOrThrow("viewer", Player.class);
+        MenuContext menuContext = new MenuContext(this, info, tags);
+        return setItem(holder, index, viewer, menuContext);
+    }
+
+    public @Nullable MenuItem setItem(@NotNull MenuHolder holder, int index, @NotNull Player viewer, @NotNull MenuContext menuContext){
+        Collection<MenuItemHolder> potentialItems = holder.getItems().getItems().get(index);
+        if(potentialItems == null || potentialItems.isEmpty()) return null;
+
+        MenuItem last = null;
+        for(MenuItemHolder menuItem : potentialItems){
+            MenuItem i = menuItem.getDisplayItem(viewer, menuContext);
+            Optional<Integer> slot = i.getSlot();
+            if(slot.isEmpty() || !i.canDisplay()) continue;
+            setItem(slot.get(), i, viewer);
+            last = i;
+        }
+        return last;
     }
 
     @Override

@@ -18,6 +18,7 @@ public class StandardMenuActions {
             add(new OpenMenuAction(Crux.key("open")));
             add(new SoundAction(Crux.key("sound")));
             add(new UpdateMenuAction(Crux.key("update")));
+            add(new UpdateItemAction(Crux.key("update_item")));
         }};
     }
 }

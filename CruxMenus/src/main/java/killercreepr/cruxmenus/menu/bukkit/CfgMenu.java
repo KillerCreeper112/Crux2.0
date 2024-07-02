@@ -23,5 +23,11 @@ public interface CfgMenu extends Menu, DataInfoHolder {
 
     @NotNull MenuHolder getHolder();
     @NotNull Map<Integer, MenuItem> getMenuItems();
+    default @Nullable MenuItem getMenuItem(int index){
+        return getMenuItems().get(index);
+    }
     void clearMenuItems(boolean silent);
+
+    @Nullable MenuItem setItem(@NotNull MenuHolder holder, int index);
+    @Nullable MenuItem setItem(@NotNull MenuHolder holder, int index, @NotNull Player viewer, @NotNull MenuContext menuContext);
 }
