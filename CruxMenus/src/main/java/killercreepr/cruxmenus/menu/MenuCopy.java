@@ -1,19 +1,22 @@
-package killercreepr.cruxmenus.menu.bukkit;
+package killercreepr.cruxmenus.menu;
 
 import killercreepr.crux.Crux;
-import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.crux.util.CruxItem;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.MenuCloseEvent;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.MenuOpenEvent;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.MenuRefreshEvent;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.slot.MenuSlotGiveEvent;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.slot.MenuSlotTakeEvent;
+import killercreepr.cruxmenus.menu.bukkit.listener.MenuListener;
+import killercreepr.cruxmenus.menu.bukkit.module.MenuModule;
 import killercreepr.cruxmenus.menu.bukkit.slot.Slot;
 import killercreepr.cruxmenus.menu.bukkit.slot.SlotContext;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
@@ -24,91 +27,251 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public interface Menu extends InventoryHolder {
-    Menu reconstruct(int size, @NotNull Component name);
-    Menu reconstruct(@NotNull Inventory inv);
+public class MenuCopy implements InventoryHolder {
+    //player uuid -> menu
+    private static final Map<UUID, MenuCopy> OPEN_MENUS = new HashMap<>();
+    public static @NotNull Map<UUID, MenuCopy> getOpenedMenus(){ return OPEN_MENUS; }
+    public static @NotNull Optional<MenuCopy> getMenu(@NotNull Player p){ return Optional.ofNullable(menu(p)); }
+    public static @Nullable MenuCopy menu(@NotNull Player p){
+        return OPEN_MENUS.get(p.getUniqueId());
+    }
+    public static int getInventorySize(int length){
+        int quotient = (int) Math.ceil(length / 9f);
+        return quotient > 5 ? 54 : quotient * 9;
+    }
 
-    @NotNull
-    MenuOpenEvent open(@NotNull Player p);
-    void onOpen(@NotNull Player p);
+    protected final Map<Integer, MenuClick> clickActions = new HashMap<>();
+    protected final LinkedHashMap<Integer, Slot> slots = new LinkedHashMap<>();
+
+    protected @Nullable MenuClick generalClickAction;
+    protected @Nullable MenuClick generalInvClickAction;
+    protected @Nullable MenuDrag generalDragAction;
+
+    protected @Nullable MenuOpen openAction;
+    protected @Nullable MenuClose closeAction;
+    protected final @NotNull UUID uuid = UUID.randomUUID();
+    protected @NotNull Inventory inventory;
+
+    protected final Collection<MenuModule> modules = new HashSet<>();
+    public MenuCopy(@NotNull Inventory inventory){
+        this.inventory = inventory;
+    }
+
+    /**
+     * WARNING! This will cause errors if you do not set an inventory!
+     */
+    public MenuCopy(){}
+
+    protected MenuCopy reconstruct(int size, @NotNull Component name){
+        inventory = Bukkit.createInventory(this, size, name);
+        return this;
+    }
+
+    protected MenuCopy reconstruct(@NotNull Inventory inv){
+        inventory = inv;
+        return this;
+    }
+
+    public @NotNull MenuOpenEvent open(@NotNull Player p){
+        MenuOpenEvent event = new MenuOpenEvent(p, this);
+        if(!event.callEvent()) return event;
+        onOpen(p);
+        return event;
+    }
+
+    public void onOpen(@NotNull Player p){
+        p.openInventory(inventory);
+        OPEN_MENUS.put(p.getUniqueId(), this);
+        if(openAction != null) openAction.open(p);
+        slots.values().forEach(slot -> slot.onMenuOpen(p));
+        modules.forEach(m -> m.onOpen(p, this));
+    }
 
     /**
      * This does not actually close the player's inventory.
      * Use {@link Player#closeInventory()} instead and this method will automatically
-     * be called. See {@link killercreepr.cruxmenus.menu.bukkit.listener.MenuListener}
+     * be called. See {@link MenuListener}
      */
-    @NotNull
-    MenuCloseEvent close(@NotNull Player p);
+    public @NotNull MenuCloseEvent close(@NotNull Player p){
+        MenuCopy menu = menu(p);
+        if(menu == null || !menu.getUuid().equals(uuid))
+            throw new UnsupportedOperationException("Menu, " + this + " has not been opened by " + p.getName());
 
-    void onClose(@NotNull Player p);
+        MenuCloseEvent event = new MenuCloseEvent(p, this);
+        if(!event.callEvent()) return event;
+        onClose(p);
+        return event;
+    }
 
-    MenuRefreshEvent refresh();
+    public void onClose(@NotNull Player p){
+        OPEN_MENUS.remove(p.getUniqueId());
+        if(closeAction != null) closeAction.close(p);
+        slots.values().forEach(slot -> slot.onMenuClose(p));
+        modules.forEach(m -> m.onClose(p, this));
+    }
+
+    public MenuRefreshEvent refresh(){
+        MenuRefreshEvent event = new MenuRefreshEvent(this);
+        if(!event.callEvent()) return event;
+        clearActions();
+        modules.forEach(m -> m.onRefresh(this));
+        return event;
+    }
 
     /**
      * Closes all viewer's inventories.
      */
-    default int close(){
-        int x = getViewers().size();
-        getViewers().forEach(HumanEntity::closeInventory);
-        return x;
+    public MenuCopy close(){
+        for(HumanEntity viewer : new ArrayList<>(getInventory().getViewers())){
+            viewer.closeInventory();
+        }
+        return this;
     }
 
-    @NotNull UUID uuid();
-
-    default void setItem(int index, @Nullable ItemStack item){
-        setItem(index, item, false);
+    public Map<Integer, MenuClick> getClickActions() {
+        return clickActions;
     }
 
-    void setItem(int index, @Nullable ItemStack item, boolean silent);
-    default void setItem(int index, @Nullable ItemStack item, @Nullable Slot slot){
-        setItem(index, item, slot, false);
+    public @Nullable MenuClick getGeneralClickAction() {
+        return generalClickAction;
     }
 
-    default void setItem(int index, @Nullable ItemStack item, @Nullable Slot slot, boolean silent){
-        putSlot(index, slot);
-        setItem(index, item, silent);
+    public @Nullable MenuClick getGeneralInvClickAction() {
+        return generalInvClickAction;
     }
 
-    void putSlot(int index, @Nullable Slot slot);
+    public @Nullable MenuDrag getGeneralDragAction() {
+        return generalDragAction;
+    }
 
-    default void clearItems(boolean silent){
-        getInventory().clear();
+    public @Nullable MenuOpen getOpenAction() {
+        return openAction;
+    }
+
+    public @Nullable MenuClose getCloseAction() {
+        return closeAction;
+    }
+
+    public @NotNull UUID getUuid() {
+        return uuid;
+    }
+
+    public MenuClick getAction(int index){ return clickActions.getOrDefault(index, null); }
+
+    protected MenuCopy setGeneralClickAction(@Nullable MenuClick generalClickAction) { this.generalClickAction = generalClickAction; return this; }
+
+    protected MenuCopy setGeneralInvClickAction(@Nullable MenuClick generalInvClickAction) { this.generalInvClickAction = generalInvClickAction; return this; }
+
+    protected MenuCopy setGeneralDragAction(@Nullable MenuDrag generalDragAction) { this.generalDragAction = generalDragAction; return this; }
+    protected MenuCopy setOpenAction(@Nullable MenuOpen openAction) { this.openAction = openAction; return this; }
+    protected MenuCopy setCloseAction(@Nullable MenuClose closeAction) { this.closeAction = closeAction; return this; }
+
+    public interface MenuClick{ void click(@NotNull Player p, @NotNull InventoryClickEvent event); }
+    public interface MenuDrag{ void drag(@NotNull Player p, @NotNull InventoryDragEvent event); }
+    public interface MenuOpen{void open(@NotNull Player p); }
+    public interface MenuClose{void close(@NotNull Player p); }
+
+    public MenuCopy setItem(int index, @Nullable ItemStack item){
+        return setItem(index, item, false);
+    }
+
+    public MenuCopy setItem(int index, @Nullable ItemStack item, boolean silent){
+        inventory.setItem(index, item);
         if(!silent) onUpdate();
+        return this;
+    }
+    public MenuCopy setItem(int index, @Nullable ItemStack item, @Nullable MenuClick action){
+        return setItem(index, item, action, false);
+    }
+
+    public MenuCopy setItem(int index, @Nullable ItemStack item, @Nullable MenuClick action, boolean silent){
+        inventory.setItem(index, item);
+        setAction(index, action);
+        if(!silent) onUpdate();
+        return this;
+    }
+
+    public MenuCopy setAction(int index, @Nullable MenuClick action){
+        if(action == null) clickActions.remove(index);
+        else clickActions.put(index, action);
+        return this;
+    }
+
+    public MenuCopy clearActions(){
+        clickActions.clear();
+        return this;
+    }
+
+    public MenuCopy clearItems(boolean silent){
+        inventory.clear();
+        if(!silent) onUpdate();
+        return this;
     }
 
     /**
      * Called after creation.
      */
-    default void load(){
+    public MenuCopy load(){
         refresh();
+        return this;
     }
 
-    @Nullable Slot getSlot(int index);
-    @NotNull Map<Integer, Slot> getSlots();
-
-    void onUpdate();
-
-    int buildSize();
-    default @Nullable MergedTagContainer buildTags(){
-        return null;
-    }
-    @NotNull Component buildTitle();
-    /**
-     * Resets the inventory. More namely, clears the items.
-     */
-    default void reset(){
-        clearItems(false);
+    public @Nullable Slot getSlot(int index){
+        return slots.get(index);
     }
 
-    default @NotNull List<HumanEntity> getViewers(){
-        return getInventory().getViewers();
+    @Override
+    public @NotNull Inventory getInventory(){ return inventory; }
+
+    protected MenuCopy addSlot(@NotNull Slot slot){
+        return addSlot(slot, true);
     }
 
-    default @NotNull SlotResult takeFromSlot(@NotNull HumanEntity p, @NotNull Slot slot, int amountToTake){
+    protected MenuCopy addSlot(@NotNull Slot slot, boolean setBlank){
+        slots.put(slot.getIndex(), slot);
+        if(setBlank) setItem(slot.getIndex(), slot.getSlottedItemReplacement(), true);
+        return this;
+    }
+
+    protected @Nullable Slot removeSlot(int index){
+        return slots.remove(index);
+    }
+
+    protected @NotNull MenuDrag defaultMenuDrag(){
+        return (p, event) -> {
+            if(event.getRawSlots().size() == 1){
+                for(int i : event.getRawSlots()){
+                    if(clickActions.containsKey(i)){
+                        MenuClick c = clickActions.getOrDefault(i, null);
+                        if(c == null) continue;
+                        c.click(p,
+                                new InventoryClickEvent(event.getView(), event.getView().getSlotType(i),
+                                        i, ClickType.LEFT, InventoryAction.PLACE_ALL));
+                        return;
+                    }
+                }
+            }
+            for(int s : event.getRawSlots()){
+                if(s < event.getView().getTopInventory().getSize()) return;
+            }
+            event.setCancelled(false);
+        };
+    }
+
+    public void onUpdate(){
+        updateSlots();
+        modules.forEach(m -> m.onUpdate(this));
+    }
+
+    public void updateSlots(){
+        slots.values().forEach(Slot::onMenuUpdate);
+    }
+
+    public @NotNull SlotResult takeFromSlot(@NotNull HumanEntity p, @NotNull Slot slot, int amountToTake){
         return takeFromSlot(p, slot, amountToTake, false);
     }
 
-    default @NotNull SlotResult takeFromSlot(@NotNull HumanEntity p, @NotNull Slot slot, int amountToTake, boolean skipUpdate){
+    public @NotNull SlotResult takeFromSlot(@NotNull HumanEntity p, @NotNull Slot slot, int amountToTake, boolean skipUpdate){
         ItemStack slotItem = getInventory().getItem(slot.getIndex());
         if(slotItem == null || slot.isBlank(slotItem)) return new SlotResult(null, false);
         if(!slot.mayTake(p, slotItem)) return new SlotResult(null, false);
@@ -138,11 +301,11 @@ public interface Menu extends InventoryHolder {
         return new SlotResult(clone, true);
     }
 
-    default @NotNull SlotResult swapSlot(@NotNull HumanEntity p, @NotNull Slot slot, @Nullable ItemStack item){
+    public @NotNull SlotResult swapSlot(@NotNull HumanEntity p, @NotNull Slot slot, @Nullable ItemStack item){
         return swapSlot(p, slot, item, false);
     }
 
-    default @NotNull SlotResult swapSlot(@NotNull HumanEntity p, @NotNull Slot slot, @Nullable ItemStack item, boolean skipUpdate){
+    public @NotNull SlotResult swapSlot(@NotNull HumanEntity p, @NotNull Slot slot, @Nullable ItemStack item, boolean skipUpdate){
         ItemStack slotItem = getInventory().getItem(slot.getIndex());
         boolean isSlotted = slot.isSlottedItem(slotItem);
         if(!slot.mayPlace(p, item) || (!isSlotted && !slot.mayTake(p, slotItem))) return new SlotResult(item, false);
@@ -153,11 +316,11 @@ public interface Menu extends InventoryHolder {
         return new SlotResult(isSlotted ? null : slotItem, true);
     }
 
-    default @NotNull SlotResult giveSlot(@NotNull HumanEntity p, @NotNull Slot slot, @NotNull ItemStack item, int amount){
+    public @NotNull SlotResult giveSlot(@NotNull HumanEntity p, @NotNull Slot slot, @NotNull ItemStack item, int amount){
         return giveSlot(p, slot, item, amount, false);
     }
 
-    default @NotNull SlotResult giveSlot(@NotNull HumanEntity p, @NotNull Slot slot, @NotNull ItemStack item, int amount, boolean skipUpdate){
+    public @NotNull SlotResult giveSlot(@NotNull HumanEntity p, @NotNull Slot slot, @NotNull ItemStack item, int amount, boolean skipUpdate){
         int maxStack = slot.getMaxStackSize(item);
         ItemStack slotItem = getInventory().getItem(slot.getIndex());
         boolean isEmptyOrSlotted = slot.isBlank(slotItem);
@@ -208,7 +371,7 @@ public interface Menu extends InventoryHolder {
         return new SlotResult(item, true);
     }
 
-    class SlotResult{
+    public static class SlotResult{
         protected final ItemStack item;
         protected final boolean result;
 
@@ -226,7 +389,7 @@ public interface Menu extends InventoryHolder {
         }
     }
 
-    default void onInvClick(@NotNull InventoryClickEvent event){
+    public void onInvClick(@NotNull InventoryClickEvent event){
         event.setCancelled(false);
         ClickType clickType = event.getClick();
         if(clickType == ClickType.DOUBLE_CLICK){
@@ -249,7 +412,7 @@ public interface Menu extends InventoryHolder {
 
             int amountToTake = CruxItem.getMaxStackSize(item) - item.getAmount();
             if(amountToTake < 1) return;
-            for(Slot slot : getSlots().values()){
+            for(Slot slot : slots.values()){
                 if(slot.isSlottedItem(slot.getItem()) || !slot.mayTake(p, slot.getItem())) continue;
                 if(!item.isSimilar(slot.getItem())) continue;
                 amountToTake = CruxItem.getMaxStackSize(item) - item.getAmount();
@@ -269,13 +432,13 @@ public interface Menu extends InventoryHolder {
         if(CruxItem.isEmpty(item)) return;
         HumanEntity p = event.getWhoClicked();
 
-        for(Slot slot : getSlots().values()){
+        for(Slot slot : slots.values()){
             if(!slot.isSlottedItem(slot.getItem()) && !slot.mayPlace(p, item)) continue;
             giveSlot(p, slot, item, item.getAmount());
         }
     }
 
-    default void onDrag(@NotNull InventoryDragEvent event){
+    public void onDrag(@NotNull InventoryDragEvent event){
         if(event.getRawSlots().size() < 2){
             for(int i : event.getRawSlots()){
                 if(i >= event.getView().getTopInventory().getSize()){
@@ -300,7 +463,7 @@ public interface Menu extends InventoryHolder {
         event.setCancelled(false);
     }
 
-    default void onMenuClick(@NotNull InventoryClickEvent event){
+    public void onMenuClick(@NotNull InventoryClickEvent event){
         Slot slot = getSlot(event.getSlot());
         if(slot==null) return;
         HumanEntity p = event.getWhoClicked();
