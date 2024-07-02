@@ -3,6 +3,7 @@ package killercreepr.crux.tags;
 import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.crux.tags.container.StringListTagContainer;
 import killercreepr.crux.tags.container.StringTagContainer;
+import killercreepr.crux.tags.context.FormatPrefix;
 import killercreepr.crux.tags.hook.ObjectTag;
 import killercreepr.crux.tags.hook.impl.StringHookedObjectContainer;
 import killercreepr.crux.tags.hook.impl.StringListHookedObjectContainer;
@@ -35,6 +36,15 @@ public interface TagParser {
 
     <T> @Nullable MergedTagContainer buildTags(@NotNull T object);
 
-    <T> @NotNull StringHookedObjectContainer hookStrings(@NotNull T object);
-    <T> @NotNull StringListHookedObjectContainer hookStringLists(@NotNull T object);
+    default <T> @NotNull StringHookedObjectContainer hookStrings(@NotNull T object){
+        return hookStrings(object, null);
+    }
+
+    <T> @NotNull StringHookedObjectContainer hookStrings(@NotNull T object, @Nullable FormatPrefix prefix);
+
+    default <T> @NotNull StringListHookedObjectContainer hookStringLists(@NotNull T object){
+        return hookStringLists(object, null);
+    }
+
+    <T> @NotNull StringListHookedObjectContainer hookStringLists(@NotNull T object, @Nullable FormatPrefix prefix);
 }

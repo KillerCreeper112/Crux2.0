@@ -53,7 +53,7 @@ public class CruxTags implements TagParser {
                     FormatPrefix pre = prefixBuilder == null ? objectTag.defaultPrefix() : prefixBuilder.buildHookedPrefix(
                         objectTag, object, hooked
                     );
-                    tag.addAll(hooked.getTags(), pre);
+                    tag.addAll(hooked.getTags(), FormatPrefix.add(pre, hooked.getPrefix()));
                 });
             }
         });
@@ -61,18 +61,18 @@ public class CruxTags implements TagParser {
     }
 
     @Override
-    public <T> @NotNull StringHookedObjectContainer hookStrings(@NotNull T object){
+    public <T> @NotNull StringHookedObjectContainer hookStrings(@NotNull T object, @Nullable FormatPrefix prefix){
         StringHookedObjectContainer container = HookedObjectContainer.string();
         locateTags(object).forEach(objectTag ->{
             StringTagContainer tags = objectTag.requestStrings(object, this);
             if(tags != null){
-                container.add(new StringHookedObjectTag<>(object, objectTag, tags));
+                container.add(new StringHookedObjectTag<>(object, objectTag, tags, prefix));
             }
 
             StringHookedObjectContainer hookedTags = objectTag.hookStrings(object, this);
             if(hookedTags != null){
                 hookedTags.addAll(container);
-                hookedTags.getHookedObjects().forEach(container::add);
+                container.addAll(hookedTags);
             }
         });
         return container;
@@ -96,7 +96,7 @@ public class CruxTags implements TagParser {
                     FormatPrefix pre = prefixBuilder == null ? objectTag.defaultPrefix() : prefixBuilder.buildHookedPrefix(
                         objectTag, object, hooked
                     );
-                    tag.addAll(hooked.getTags(), pre);
+                    tag.addAll(hooked.getTags(), FormatPrefix.add(pre, hooked.getPrefix()));
                 });
             }
         });
@@ -104,12 +104,12 @@ public class CruxTags implements TagParser {
     }
 
     @Override
-    public <T> @NotNull StringListHookedObjectContainer hookStringLists(@NotNull T object){
+    public <T> @NotNull StringListHookedObjectContainer hookStringLists(@NotNull T object, @Nullable FormatPrefix prefix){
         StringListHookedObjectContainer container = HookedObjectContainer.stringList();
         locateTags(object).forEach(objectTag ->{
             StringListTagContainer tags = objectTag.requestStringLists(object, this);
             if(tags != null){
-                container.add(new StringListHookedObjectTag<>(object, objectTag, tags));
+                container.add(new StringListHookedObjectTag<>(object, objectTag, tags, prefix));
             }
 
             StringListHookedObjectContainer hookedTags = objectTag.hookStringLists(object, this);
