@@ -7,9 +7,13 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class MessageAction extends SimpleMenuAction {
-
     public MessageAction(@NotNull Key key) {
         super(key);
+    }
+
+    @Override
+    public boolean has(@NotNull String x) {
+        return super.has(x) || x.equalsIgnoreCase("msg");
     }
 
     @Override
