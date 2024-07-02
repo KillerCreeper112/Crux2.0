@@ -8,6 +8,7 @@ import killercreepr.cruxmenus.menu.bukkit.api.events.menu.MenuOpenEvent;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.MenuRefreshEvent;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.slot.MenuSlotGiveEvent;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.slot.MenuSlotTakeEvent;
+import killercreepr.cruxmenus.menu.bukkit.module.MenuModuleRegistryImpl;
 import killercreepr.cruxmenus.menu.bukkit.slot.Slot;
 import killercreepr.cruxmenus.menu.bukkit.slot.SlotContext;
 import net.kyori.adventure.text.Component;
@@ -26,14 +27,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public interface Menu extends InventoryHolder {
+public interface Menu extends CommonMenu, InventoryHolder {
     Menu reconstruct(int size, @NotNull Component name);
     Menu reconstruct(@NotNull Inventory inv);
-
     @NotNull
     MenuOpenEvent open(@NotNull Player p);
-    void onOpen(@NotNull Player p);
-
     /**
      * This does not actually close the player's inventory.
      * Use {@link Player#closeInventory()} instead and this method will automatically
@@ -41,9 +39,6 @@ public interface Menu extends InventoryHolder {
      */
     @NotNull
     MenuCloseEvent close(@NotNull Player p);
-
-    void onClose(@NotNull Player p);
-
     MenuRefreshEvent refresh();
 
     /**
@@ -88,13 +83,13 @@ public interface Menu extends InventoryHolder {
     @Nullable Slot getSlot(int index);
     @NotNull Map<Integer, Slot> getSlots();
 
-    void onUpdate();
-
     int buildSize();
     default @Nullable MergedTagContainer buildTags(){
         return null;
     }
     @NotNull Component buildTitle();
+    @NotNull
+    MenuModuleRegistryImpl getModules();
     /**
      * Resets the inventory. More namely, clears the items.
      */

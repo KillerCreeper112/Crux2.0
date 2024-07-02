@@ -14,8 +14,8 @@ public class PagedMenuModule<T> extends SimpleMenuModule{
     protected final @NotNull List<Integer> indexes;
     protected final @NotNull NotNullHolder<List<T>> values;
     protected int page = 0;
-    public PagedMenuModule(@NotNull Key key, @NotNull List<Integer> indexes, @NotNull NotNullHolder<List<T>> values) {
-        super(key);
+    public PagedMenuModule(@NotNull Key key, @NotNull String id, @NotNull List<Integer> indexes, @NotNull NotNullHolder<List<T>> values) {
+        super(key, id);
         this.indexes = indexes;
         this.values = values;
     }

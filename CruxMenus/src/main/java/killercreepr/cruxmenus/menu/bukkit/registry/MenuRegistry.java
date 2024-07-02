@@ -15,6 +15,7 @@ import killercreepr.cruxmenus.menu.bukkit.config.handlers.*;
 import killercreepr.cruxmenus.menu.bukkit.data.ItemDataParser;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuHolder;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuItems;
+import killercreepr.cruxmenus.menu.bukkit.module.MenuModuleBuilder;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,13 +42,14 @@ public class MenuRegistry {
         this.menuModule = menuModule;
     }
 
-    public MenuRegistry(@NotNull Format format) {
+    public MenuRegistry(@NotNull Format format, @NotNull KeyedRegistry<MenuModuleBuilder> menuModuleBuilders) {
         this(format, new FileMenuModule());
         menuModule.setYamlMenuItem(new FileMenuItem(menuModule));
         menuModule.setYamlMenuActions(new FileMenuActions(menuModule));
         menuModule.setYamlMenuItems(new FileMenuItems(menuModule));
         menuModule.setYamlDataExchange(new FileDataExchange(menuModule));
         menuModule.setYamlDynamicItem(BukkitCfgHandlers.DYNAMIC_ITEM);
+        menuModule.setFileMenuModule(new FileMenuMenuModule(menuModule, menuModuleBuilders));
 
         menuModule.getYamlDataExchange().getDataTypes().register("slot", FileDataProvider.generic(NumberProvider.class));
     }

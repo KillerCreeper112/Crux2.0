@@ -24,6 +24,7 @@ public class FileMenuModule extends SimpleFileHandler<MenuHolder> {
     protected FileDataExchange fileDataExchange;
     protected FileMenuActions fileMenuActions;
     protected FileDynamicItem fileDynamicItem;
+    protected FileMenuMenuModule fileMenuModule;
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull MenuHolder object) {
         throw new UnsupportedOperationException("MenuHolder has no serialized implementation!");
@@ -90,6 +91,14 @@ public class FileMenuModule extends SimpleFileHandler<MenuHolder> {
 
     public void setYamlDynamicItem(FileDynamicItem yamlItemStack) {
         this.fileDynamicItem = yamlItemStack;
+    }
+
+    public FileMenuMenuModule getFileMenuModule() {
+        return fileMenuModule;
+    }
+
+    public void setFileMenuModule(FileMenuMenuModule fileMenuModule) {
+        this.fileMenuModule = fileMenuModule;
     }
 
     @Override
