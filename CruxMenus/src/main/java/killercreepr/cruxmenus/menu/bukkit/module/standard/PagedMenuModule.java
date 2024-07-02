@@ -1,8 +1,9 @@
-package killercreepr.cruxmenus.menu.bukkit.module;
+package killercreepr.cruxmenus.menu.bukkit.module.standard;
 
 import killercreepr.crux.data.NotNullHolder;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.cruxmenus.menu.bukkit.Menu;
+import killercreepr.cruxmenus.menu.bukkit.module.SimpleMenuModule;
 import net.kyori.adventure.key.Key;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class PagedMenuModule<T> extends SimpleMenuModule{
+public abstract class PagedMenuModule<T> extends SimpleMenuModule {
     protected final @NotNull List<Integer> indexes;
     protected final @NotNull NotNullHolder<List<T>> values;
     protected int page = 0;
@@ -21,9 +22,14 @@ public class PagedMenuModule<T> extends SimpleMenuModule{
     }
 
     public PagedMenuModule<T> addPage(int amount){
-        page = CruxMath.wrap(page+amount, 0, calculateMaxPages());
+        return setPage(page+amount);
+    }
+
+    public PagedMenuModule<T> setPage(int amount){
+        page = CruxMath.wrap(amount, 0, calculateMaxPages());
         return this;
     }
+
 
     public void openPage(@NotNull Menu menu, int page){
         page = CruxMath.clamp(page, 0, calculateMaxPages());
@@ -37,13 +43,8 @@ public class PagedMenuModule<T> extends SimpleMenuModule{
         }
     }
 
-    public @Nullable ItemStack buildPagedItem(@NotNull T value){
-        return null;
-    }
-
-    public @Nullable ItemStack buildEmptyItem(){
-        return null;
-    }
+    public abstract @Nullable ItemStack buildPagedItem(@NotNull T value);
+    public abstract @Nullable ItemStack buildEmptyItem();
 
     public int calculateMaxPages(){
         return Math.max((int) Math.ceil((double) values.value().size() / indexes.size())-1, 0);
@@ -54,8 +55,20 @@ public class PagedMenuModule<T> extends SimpleMenuModule{
     }
 
     @Override
-    public void load(@NotNull Menu menu) {
-        super.load(menu);
+    public void reload(@NotNull Menu menu) {
+        super.reload(menu);
         openPage(menu, page);
+    }
+
+    public @NotNull List<Integer> getIndexes() {
+        return indexes;
+    }
+
+    public @NotNull NotNullHolder<List<T>> getValues() {
+        return values;
+    }
+
+    public int getPage() {
+        return page;
     }
 }

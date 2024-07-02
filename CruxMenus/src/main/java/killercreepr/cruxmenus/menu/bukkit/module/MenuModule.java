@@ -14,6 +14,9 @@ public interface MenuModule extends Keyed, StringIdentifiable {
     default void onClose(@NotNull Player p, @NotNull Menu menu){}
     default void onUpdate(@NotNull Menu menu){}
 
-    default void load(@NotNull Menu menu){}
+    default void load(@NotNull Menu menu){
+        reload(menu);
+    }
+    default void reload(@NotNull Menu menu){}
     default @Nullable MergedTagContainer buildTags(@NotNull Menu menu){ return null; }
 }
