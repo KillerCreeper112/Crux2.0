@@ -122,6 +122,21 @@ public class DataExchange implements Iterable<Holder<Object>> {
         return object;
     }
 
+    public <T> T getOrDefault(@NotNull Class<T> find, @Nullable T defaultValue){
+        T found = get(find);
+        return found==null?defaultValue:found;
+    }
+
+    public Object getOrDefault(@NotNull String id, @Nullable Object defaultValue){
+        Object found = get(id);
+        return found==null?defaultValue:found;
+    }
+
+    public <T> T getOrDefault(@NotNull String id, @NotNull Class<T> type, @Nullable T defaultValue){
+        T found = get(id, type);
+        return found==null?defaultValue:found;
+    }
+
     /**
      * @return An immutable map containing this DataExchange's data.
      */
