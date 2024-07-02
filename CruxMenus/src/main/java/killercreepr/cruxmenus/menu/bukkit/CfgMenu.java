@@ -1,8 +1,6 @@
-package killercreepr.cruxmenus.menu;
+package killercreepr.cruxmenus.menu.bukkit;
 
 import killercreepr.crux.data.DataInfoHolder;
-import killercreepr.cruxmenus.menu.bukkit.Menu;
-import killercreepr.cruxmenus.menu.bukkit.MenuItem;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuHolder;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

@@ -2,6 +2,7 @@ package killercreepr.cruxmenus.menu.bukkit.listener;
 
 import killercreepr.cruxmenus.menu.bukkit.Menu;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.MenuCloseEvent;
+import killercreepr.cruxmenus.registries.Menus;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,38 +21,32 @@ public class MenuListener implements Listener {
     @EventHandler
     private void inventoryDrag(InventoryDragEvent event){
         if(!(event.getWhoClicked() instanceof Player p)) return;
-        Menu menu = Menu.menu(p);
+        Menu menu = Menus.getOpened(p);
         if(menu==null) return;
         event.setCancelled(true);
-        if(menu.getGeneralDragAction() != null) menu.getGeneralDragAction().drag(p, event);
         menu.onDrag(event);
     }
 
     @EventHandler
     private void inventoryClick(InventoryClickEvent event){
         if(!(event.getWhoClicked() instanceof Player p)) return;
-        Menu menu = Menu.menu(p);
+        Menu menu = Menus.getOpened(p);
         if(menu == null) return;
         event.setCancelled(true);
         if(event.getClickedInventory() != null){
             //Click in our own inventory.
             if(event.getRawSlot() >= p.getOpenInventory().getTopInventory().getSize()){
-                if(menu.getGeneralInvClickAction() != null) menu.getGeneralInvClickAction().click(p, event);
                 menu.onInvClick(event);
             }else{ //Click in the open menu.
-                if(menu.getGeneralClickAction() != null) menu.getGeneralClickAction().click(p, event);
                 menu.onMenuClick(event);
             }
         }
-
-        Menu.MenuClick menuClick = menu.getAction(event.getRawSlot());
-        if(menuClick != null) menuClick.click(p, event);
     }
 
     @EventHandler
     private void inventoryClose(InventoryCloseEvent event){
         if(!(event.getPlayer() instanceof Player p)) return;
-        Menu menu = Menu.menu(p);
+        Menu menu = Menus.getOpened(p);
         if(menu == null) return;
         MenuCloseEvent closeEvent = menu.close(p);
         if(!closeEvent.isCancelled()) return;

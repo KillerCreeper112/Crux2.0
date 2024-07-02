@@ -1,7 +1,6 @@
 package killercreepr.cruxmenus.registries;
 
 import killercreepr.crux.registry.MappedRegistry;
-import killercreepr.crux.registry.Registry;
 import killercreepr.crux.registry.SimpleMappedRegistry;
 import killercreepr.cruxmenus.menu.bukkit.Menu;
 import org.bukkit.entity.Entity;

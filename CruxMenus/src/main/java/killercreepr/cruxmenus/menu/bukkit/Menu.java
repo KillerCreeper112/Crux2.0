@@ -22,7 +22,9 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public interface Menu extends InventoryHolder {
     Menu reconstruct(int size, @NotNull Component name);

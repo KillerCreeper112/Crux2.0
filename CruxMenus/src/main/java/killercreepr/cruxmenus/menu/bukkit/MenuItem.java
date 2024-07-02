@@ -13,7 +13,6 @@ import killercreepr.cruxmenus.menu.bukkit.actions.ActionContext;
 import killercreepr.cruxmenus.menu.bukkit.actions.MenuAction;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.MenuItemClickEvent;
 import killercreepr.cruxmenus.menu.bukkit.holder.ClickActions;
-import killercreepr.cruxmenus.menu.bukkit.holder.MenuHolder;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuItemHolder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;

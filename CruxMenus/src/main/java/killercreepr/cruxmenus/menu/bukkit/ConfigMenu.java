@@ -5,7 +5,6 @@ import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.crux.tags.container.MultiTagContainer;
 import killercreepr.crux.util.InvUtil;
-import killercreepr.cruxmenus.menu.CfgMenu;
 import killercreepr.cruxmenus.menu.bukkit.api.events.menu.MenuRefreshEvent;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuHolder;
 import net.kyori.adventure.text.Component;
