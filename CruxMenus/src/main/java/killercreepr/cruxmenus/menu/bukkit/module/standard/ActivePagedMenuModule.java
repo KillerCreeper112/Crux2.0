@@ -37,11 +37,14 @@ public abstract class ActivePagedMenuModule<T> extends SimpleActiveMenuModule {
     public void openPage(@NotNull Menu menu, int page){
         page = CruxMath.clamp(page, 0, calculateMaxPages());
         List<T> list = values.value();
+        int index = -1;
+        int addon = indexes.size() * page;
         for(int i : indexes){
-            int valueIndex = convertIndexToRegistry(i, page);
+            index++;
+            int valueIndex = index + addon;
             ItemStack item;
             if(valueIndex >= list.size()) item = buildEmptyItem();
-            else item = buildPagedItem(list.get(i));
+            else item = buildPagedItem(list.get(valueIndex));
             menu.setItem(i, item);
         }
     }
@@ -51,10 +54,6 @@ public abstract class ActivePagedMenuModule<T> extends SimpleActiveMenuModule {
 
     public int calculateMaxPages(){
         return Math.max((int) Math.ceil((double) values.value().size() / indexes.size())-1, 0);
-    }
-
-    public int convertIndexToRegistry(int invIndex, int page){
-        return invIndex + (indexes.size() * page);
     }
 
     @Override

@@ -21,16 +21,13 @@ public class FileMenuMenuModule extends FileModuled<MenuModule>{
     @Override
     public @Nullable MenuModule deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e, @Nullable FileObject menuContext) {
         if(!(e instanceof FileObject o)) return null;
-        String id = o.getObject(String.class, "id");
-        if(id==null) return null;
-
         String key = o.getObject(String.class, "type");
         if(key==null) return null;
         Key type = Crux.key(key);
 
         MenuModuleBuilder builder = menuModuleBuilders.get(type);
         if(builder==null) return null;
-        return builder.build(id, context, e, menuContext);
+        return builder.build(context, e, menuContext);
     }
 
     @Override

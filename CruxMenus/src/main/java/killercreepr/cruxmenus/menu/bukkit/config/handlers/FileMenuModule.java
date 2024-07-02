@@ -12,10 +12,13 @@ import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuHolder;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuItems;
+import killercreepr.cruxmenus.menu.bukkit.module.MenuModule;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.TreeMap;
 
 public class FileMenuModule extends SimpleFileHandler<MenuHolder> {
@@ -46,10 +49,19 @@ public class FileMenuModule extends SimpleFileHandler<MenuHolder> {
         MenuItems menuItems = getYamlMenuItems().deserializeFromFile(context, o.get("items"), o);
         if(menuItems == null) menuItems = new MenuItems(new TreeMap<>());
 
+        Collection<MenuModule> modules = new HashSet<>();
+        if(o.get("modules") instanceof FileObject mods){
+            mods.forEach((string, ele) ->{
+                MenuModule module = fileMenuModule.deserializeFromFile(context, ele, o);
+                if(module != null) modules.add(module);
+            });
+        }
+
         Key key = Crux.key(id);
         return new MenuHolder(key, title, size,
             menuItems,
-            extraInfo == null ? DataExchange.empty(): extraInfo
+            extraInfo == null ? DataExchange.empty(): extraInfo,
+            modules
         );
     }
 

@@ -13,6 +13,6 @@ public abstract class PagedMenuModuleBuilder implements SimpleMenuModuleBuilder 
                                                      @NotNull FileElement e,
                                                      @Nullable FileObject menuContext){
         if(!(e instanceof FileObject o)) return null;
-        return o.getObject(NumberProvider.class, "indexes");
+        return context.getRegistry().deserialize(NumberProvider.class, o.get("indexes"));
     }
 }

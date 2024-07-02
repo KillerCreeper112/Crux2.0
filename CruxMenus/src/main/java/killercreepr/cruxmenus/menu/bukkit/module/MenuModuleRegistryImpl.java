@@ -33,6 +33,11 @@ public class MenuModuleRegistryImpl extends SimpleKeyedRegistry<ActiveMenuModule
     }
 
     @Override
+    public @NotNull ActiveMenuModule register(@NotNull ActiveMenuModule object) {
+        return super.register(object);
+    }
+
+    @Override
     public void onUpdate() {
         new HashSet<>(this.values()).forEach(m -> m.onUpdate(menu));
     }
