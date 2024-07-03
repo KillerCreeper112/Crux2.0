@@ -1,5 +1,6 @@
 package killercreepr.cruxmenus.menu.bukkit.actions.impl;
 
+import killercreepr.crux.util.CruxString;
 import killercreepr.cruxmenus.menu.bukkit.actions.ActionContext;
 import killercreepr.cruxmenus.menu.bukkit.actions.SimpleMenuAction;
 import net.kyori.adventure.key.Key;
@@ -18,7 +19,9 @@ public class MessageAction extends SimpleMenuAction {
 
     @Override
     public boolean execute(@NotNull Player p, @NotNull ActionContext actionInfo, @NotNull String[] args) {
-        p.sendMessage(actionInfo.getItem().getFormat().deserialize(args[0]));
+        p.sendMessage(actionInfo.getItem().getFormat().deserialize(
+            CruxString.join(args)
+        ));
         return true;
     }
 }

@@ -32,6 +32,28 @@ public class CruxString {
         try{ return Integer.parseInt(string); } catch (IllegalArgumentException ignored){ return defaultValue; }
     }
 
+    public static @NotNull String join(@NotNull String[] args){
+        return join(args, 0);
+    }
+
+    public static @NotNull String join(@NotNull String[] args, int start){
+        return join(args, start, args.length);
+    }
+
+    public static @NotNull String join(@NotNull String[] args, int start, int end){
+        return join(args, start, end, " ");
+    }
+
+    public static @NotNull String join(@NotNull String[] args, int start, int end, @NotNull String spacing){
+        StringBuilder builder = new StringBuilder();
+        for(int i = start; i < end; i++){
+            String s = args[i];
+            builder.append(s);
+            if(i+1<end) builder.append(spacing);
+        }
+        return builder.toString();
+    }
+
     public static @NotNull String[] quoteSplit(@NotNull String input, @NotNull String delimiter) {
         List<String> result = new ArrayList<>();
 
