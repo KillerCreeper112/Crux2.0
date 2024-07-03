@@ -41,11 +41,11 @@ public class BukkitCfgHandlers {
     public static final FileComponent COMPONENT = new FileComponent();
     public static final FileItemStack ITEM_STACK = new FileItemStack();
     public static final FileDynamicItem DYNAMIC_ITEM = new FileDynamicItem();
+    public static final FileUUID UUID = new FileUUID();
 
     public static void initJson(@NotNull JsonRegistry registry){
         registry.registerHandler(
                 new GenericJsonHandler<>("vector", Vector.class),
-                new GenericJsonHandler<>("uuid", UUID.class),
                 new GenericJsonHandler<>("potion_effect", PotionEffect.class)
         );
     }
@@ -61,6 +61,8 @@ public class BukkitCfgHandlers {
         registry.registerHandler(Component.class, COMPONENT);
         registry.registerHandler(ItemStack.class, ITEM_STACK);
         registry.registerHandler(BukkitDynamicItem.class, DYNAMIC_ITEM);
+        registry.registerHandler(UUID.getClass(), UUID);
+
         DYNAMIC_ITEM.registerComponents(registry);
 
         registry.registerHandler(TrimMaterial.class, new FileGenericKeyedRegistry<>(RegistryKey.TRIM_MATERIAL){
