@@ -241,6 +241,18 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
                 return new DynamicItemFlags(flags);
             }
         });
+
+        COMPONENT_REGISTRY.register("hide_flags", new FileGenericSingleDynamicComponent<>(DynamicItemHideAllFlags.class) {
+            @Override
+            public @NotNull String jsonSerializerID() {
+                return "dynamic_item_hide_flags";
+            }
+
+            @Override
+            public @NotNull DynamicItemHideAllFlags deserialize(@NotNull Object object) {
+                return new DynamicItemHideAllFlags(object);
+            }
+        });
     }
 
     public FileDynamicItem registerComponents(@NotNull FileRegistry registry){
