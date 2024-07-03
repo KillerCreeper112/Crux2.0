@@ -9,7 +9,6 @@ import killercreepr.cruxmenus.menu.bukkit.config.handlers.FileMenuModuled;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuItemHolder;
 import killercreepr.cruxmenus.menu.bukkit.module.MenuModule;
 import killercreepr.cruxmenus.menu.bukkit.module.config.MenuModuleBuilder;
-import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -71,10 +70,5 @@ public abstract class FilePagedCfg extends FileMenuModuled<MenuModule> implement
     @Override
     public @Nullable MenuModule build(@NotNull FileContext<?> context, @NotNull FileElement e, @Nullable FileObject menuContext) {
         return deserializeFromFile(context, e, menuContext);
-    }
-
-    @Override
-    public @NotNull Key key() {
-        return null;
     }
 }
