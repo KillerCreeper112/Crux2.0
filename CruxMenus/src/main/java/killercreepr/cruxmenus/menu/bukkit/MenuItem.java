@@ -6,6 +6,7 @@ import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.crux.tags.container.MultiTagContainer;
 import killercreepr.crux.tags.context.FormatParserContext;
 import killercreepr.crux.tags.format.Format;
+import killercreepr.crux.tags.provider.StringTagProvider;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.crux.util.CruxString;
 import killercreepr.crux.valueproviders.number.NumberProvider;
@@ -37,24 +38,25 @@ public class MenuItem {
         return context.getMenu().getHolder().getRegistry().getFormat();
     }
 
-    public @NotNull Optional<Integer> getSlot(){
+
+    public @NotNull Optional<Integer> getSlot(@NotNull MenuContext menuContext){
         NumberProvider provider = base.info().getObject("slot", NumberProvider.class).orElse(null);
         if(provider != null) return Optional.of(
-                provider.sample(this::setPlaceholders).intValue()
+                provider.sample(text -> setPlaceholders(text, menuContext)).intValue()
         );
         return Optional.empty();
     }
 
-    public boolean canDisplay(){
+    public boolean canDisplay(@NotNull MenuContext menuContext){
         String viewRequirement = base.info().getObject("view_requirement", String.class).orElse(null);
         if(viewRequirement == null) return true;
         return CruxString.parseBoolean(
-            CruxMath.evaluateEvalEx(setPlaceholders(viewRequirement))
+            CruxMath.evaluateEvalEx(setPlaceholders(viewRequirement, menuContext))
         );
     }
 
-    public @NotNull String setPlaceholders(@NotNull String text){
-        return context.getMenu().getHolder().getRegistry().getFormat().deserializeString(text, buildTags());//todo may need to check this
+    public @NotNull String setPlaceholders(@NotNull String text, @NotNull MenuContext ctx){
+        return context.getMenu().getHolder().getRegistry().getFormat().deserializeString(text, ctx.getAllMergedResolvers());
     }
 
     public @NotNull MergedTagContainer buildTags(){

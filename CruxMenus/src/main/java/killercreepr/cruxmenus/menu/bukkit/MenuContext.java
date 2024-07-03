@@ -37,6 +37,7 @@ public class MenuContext {
 
     public @NotNull MergedTagContainer getAllMergedResolvers(){
         MergedTagContainer tags = new MultiTagContainer(menu.getHolder().getRegistry().getFormat().tags());
+        tags.addAll(resolvers);
         tags.hookAll(getAllMergedInfo());
         return tags;
     }

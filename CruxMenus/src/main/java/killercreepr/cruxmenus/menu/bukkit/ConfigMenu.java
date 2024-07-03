@@ -81,16 +81,16 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
         MenuContext menuContext = new MenuContext(this, info, tags);
         holder.getItems().items().forEach(menuItem -> {
             MenuItem i = menuItem.getDisplayItem(viewer, menuContext);
-            Optional<Integer> slot = i.getSlot();
-            if(slot.isEmpty() || !i.canDisplay()) return;
+            Optional<Integer> slot = i.getSlot(menuContext);
+            if(slot.isEmpty() || !i.canDisplay(menuContext)) return;
             setItem(slot.get(), i, viewer);
         });
     }
 
     public @Nullable MenuItem setItem(@NotNull MenuItemHolder menuItem, @NotNull Player viewer, @NotNull MenuContext menuContext){
         MenuItem i = menuItem.getDisplayItem(viewer, menuContext);
-        Optional<Integer> slot = i.getSlot();
-        if(slot.isEmpty() || !i.canDisplay()) return i;
+        Optional<Integer> slot = i.getSlot(menuContext);
+        if(slot.isEmpty() || !i.canDisplay(menuContext)) return i;
         setItem(slot.get(), i, viewer);
         return i;
     }
@@ -102,7 +102,7 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
 
     public void setItem(int index, @NotNull MenuItemHolder menuItem, @NotNull Player viewer, @NotNull MenuContext menuContext){
         MenuItem i = menuItem.getDisplayItem(viewer, menuContext);
-        if(!i.canDisplay()) return;
+        if(!i.canDisplay(menuContext)) return;
         setItem(index, i, viewer);
     }
 
@@ -120,8 +120,8 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
         MenuItem last = null;
         for(MenuItemHolder menuItem : potentialItems){
             MenuItem i = menuItem.getDisplayItem(viewer, menuContext);
-            Optional<Integer> slot = i.getSlot();
-            if(slot.isEmpty() || !i.canDisplay()) continue;
+            Optional<Integer> slot = i.getSlot(menuContext);
+            if(slot.isEmpty() || !i.canDisplay(menuContext)) continue;
             setItem(slot.get(), i, viewer);
             last = i;
         }

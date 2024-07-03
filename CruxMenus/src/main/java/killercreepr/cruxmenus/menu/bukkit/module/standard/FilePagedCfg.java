@@ -1,5 +1,6 @@
 package killercreepr.cruxmenus.menu.bukkit.module.standard;
 
+import killercreepr.crux.data.Holder;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -42,6 +43,22 @@ public abstract class FilePagedCfg extends FileMenuModuled<MenuModule> implement
 
         MenuItemHolder valueItem = parseValueItem(ctx, e, menuContext);
         MenuItemHolder emptyItem = parseEmptyItem(ctx, e, menuContext);
+
+        if(valueItem != null && !valueItem.info().has("slot")){
+            valueItem = new MenuItemHolder(
+                valueItem.getItem(),
+                valueItem.info().append("slot", Holder.directObject("<module_members_slot>")),
+                valueItem.getClickActions()
+            );
+        }
+
+        if(emptyItem != null && !emptyItem.info().has("slot")){
+            emptyItem = new MenuItemHolder(
+                emptyItem.getItem(),
+                emptyItem.info().append("slot", Holder.directObject("<module_members_slot>")),
+                emptyItem.getClickActions()
+            );
+        }
 
 
         return parsePaged(ctx, o, menuContext, id, indexes, valueItem, emptyItem);
