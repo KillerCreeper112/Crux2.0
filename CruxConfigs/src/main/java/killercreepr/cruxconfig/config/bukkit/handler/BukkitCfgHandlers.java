@@ -61,7 +61,7 @@ public class BukkitCfgHandlers {
         registry.registerHandler(Component.class, COMPONENT);
         registry.registerHandler(ItemStack.class, ITEM_STACK);
         registry.registerHandler(BukkitDynamicItem.class, DYNAMIC_ITEM);
-        registry.registerHandler(UUID.getClass(), UUID);
+        registry.registerHandler(UUID.class, UUID);
 
         DYNAMIC_ITEM.registerComponents(registry);
 
