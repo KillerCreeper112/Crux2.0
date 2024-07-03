@@ -44,7 +44,6 @@ public class DataExchange implements Iterable<Holder<Object>> {
         data.put(id, object);
         return new DataExchange(data);
     }
-
     /**
      * @return A new DataExchange with the removed values.
      */

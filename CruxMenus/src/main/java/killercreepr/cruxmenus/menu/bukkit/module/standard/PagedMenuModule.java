@@ -3,6 +3,7 @@ package killercreepr.cruxmenus.menu.bukkit.module.standard;
 import killercreepr.crux.context.DummyInputContext;
 import killercreepr.crux.context.InputContext;
 import killercreepr.crux.context.SimpleInputContext;
+import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.NotNullHolder;
 import killercreepr.crux.tags.resolver.Tag;
 import killercreepr.crux.valueproviders.number.NumberProvider;
@@ -66,7 +67,10 @@ public abstract class PagedMenuModule<T> implements MenuModule {
             public void setPagedItem(@NotNull Menu menu, int slot, @NotNull T value) {
                 if(valueItem == null) return;
                 if(!(menu instanceof CfgMenu cfg)) return;
-                MenuContext menuContext = new MenuContext(cfg, cfg.info(), cfg.buildTags().hook(value).add(
+                MenuContext menuContext = new MenuContext(cfg,
+                    DataExchange.builder().putAll(cfg.info()).put(value).build(), cfg.buildTags().addAll(buildTags(
+                    menu, cfg.getHolder().getRegistry().getFormat().tags()
+                )).add(
                     Tag.parsed(MenuModule.buildTag(id, "slot"), slot+"")
                 ));
                 cfg.setItem(valueItem, menuContext);

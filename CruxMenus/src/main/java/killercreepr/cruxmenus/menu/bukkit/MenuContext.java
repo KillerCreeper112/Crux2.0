@@ -1,11 +1,12 @@
 package killercreepr.cruxmenus.menu.bukkit;
 
 import killercreepr.crux.data.DataExchange;
+import killercreepr.crux.data.DataInfoHolder;
 import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.crux.tags.container.MultiTagContainer;
 import org.jetbrains.annotations.NotNull;
 
-public class MenuContext {
+public class MenuContext implements DataInfoHolder {
     protected final @NotNull CfgMenu menu;
     protected final @NotNull DataExchange info;
     protected final @NotNull MergedTagContainer resolvers;
@@ -40,5 +41,10 @@ public class MenuContext {
         tags.addAll(resolvers);
         tags.hookAll(getAllMergedInfo());
         return tags;
+    }
+
+    @Override
+    public @NotNull DataExchange info() {
+        return info;
     }
 }

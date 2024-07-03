@@ -28,47 +28,53 @@ import java.util.regex.Pattern;
 
 public class MenuItem {
     protected final @NotNull MenuItemHolder base;
-    protected final @NotNull MenuContext context;
-    public MenuItem(@NotNull MenuItemHolder base, @NotNull MenuContext context) {
+    protected final @NotNull MenuContext inputtedContext;
+    protected final @NotNull MenuContext evaluatedContext;
+    public MenuItem(@NotNull MenuItemHolder base, @NotNull MenuContext inputtedContext, @NotNull MenuContext evaluatedContext) {
         this.base = base;
-        this.context = context;
+        this.inputtedContext = inputtedContext;
+        this.evaluatedContext = evaluatedContext;
     }
 
     public @NotNull Format getFormat(){
-        return context.getMenu().getHolder().getRegistry().getFormat();
+        return evaluatedContext.getMenu().getHolder().getRegistry().getFormat();
     }
 
 
-    public @NotNull Optional<Integer> getSlot(@NotNull MenuContext menuContext){
+    public @NotNull Optional<Integer> getSlot(){
         NumberProvider provider = base.info().getObject("slot", NumberProvider.class).orElse(null);
         if(provider != null) return Optional.of(
-                provider.sample(text -> setPlaceholders(text, menuContext)).intValue()
+                provider.sample(text -> setPlaceholders(text)).intValue()
         );
         return Optional.empty();
     }
 
-    public boolean canDisplay(@NotNull MenuContext menuContext){
+    public boolean canDisplay(){
         String viewRequirement = base.info().getObject("view_requirement", String.class).orElse(null);
         if(viewRequirement == null) return true;
         return CruxString.parseBoolean(
-            CruxMath.evaluateEvalEx(setPlaceholders(viewRequirement, menuContext))
+            CruxMath.evaluateEvalEx(setPlaceholders(viewRequirement))
         );
     }
 
-    public @NotNull String setPlaceholders(@NotNull String text, @NotNull MenuContext ctx){
-        return context.getMenu().getHolder().getRegistry().getFormat().deserializeString(text, buildTags().addAll(ctx.getAllMergedResolvers()));
+    public @NotNull String setPlaceholders(@NotNull String text){
+        return getFormat().deserializeString(text, buildTags());
     }
 
     public @NotNull MergedTagContainer buildTags(){
-        MergedTagContainer resolvers = new MultiTagContainer(context.getResolvers().getTagParser());
-        resolvers.hookAll(context.getMenu().getHolder().info());
-        resolvers.addAll(context.getMenu().buildTags());
+        MergedTagContainer resolvers = new MultiTagContainer(evaluatedContext.getResolvers().getTagParser());
+
+        resolvers.addAll(inputtedContext.getResolvers());
+
+        resolvers.hookAll(evaluatedContext.getMenu().getHolder().info());
+        resolvers.addAll(evaluatedContext.getMenu().buildTags());
 
         resolvers.hook(base);
         resolvers.hook(MenuItem.this);
 
         resolvers.hookAll(base.info());
-        resolvers.hookAll(context.getInfo());
+        resolvers.hookAll(inputtedContext.getInfo());
+        resolvers.hookAll(evaluatedContext.getInfo());
         return resolvers;
     }
 
@@ -86,7 +92,11 @@ public class MenuItem {
     }
 
     public @NotNull MenuItemClickEvent click(@NotNull Player p, @NotNull InventoryClickEvent event){
-        ActionContext actionInfo = new ActionContext(context.getMenu(), context.getInfo(), context.getResolvers(), this, event);
+        ActionContext actionInfo = new ActionContext(
+            evaluatedContext.getMenu(),
+            inputtedContext.getInfo().append(evaluatedContext.getInfo()),
+            buildTags(), this, event
+        );
         MenuItemClickEvent clickEvent = new MenuItemClickEvent(p, actionInfo.getMenu(), this, actionInfo, base.getClickActions());
         if(!clickEvent.callEvent()) return clickEvent;
 
@@ -108,7 +118,7 @@ public class MenuItem {
     }
 
     public boolean performAction(@NotNull Player p, @NotNull String action, @NotNull ActionContext actionInfo){
-        return performAction(p, action, actionInfo, context.getMenu().getHolder().getRegistry().MENU_ACTIONS);
+        return performAction(p, action, actionInfo, evaluatedContext.getMenu().getHolder().getRegistry().MENU_ACTIONS);
     }
 
     public boolean performAction(@NotNull Player p, @NotNull String action,
@@ -129,8 +139,12 @@ public class MenuItem {
         return base;
     }
 
-    public @NotNull MenuContext context() {
-        return context;
+
+    public @NotNull MenuContext getInputtedContext() {
+        return inputtedContext;
     }
 
+    public @NotNull MenuContext getEvaluatedContext() {
+        return evaluatedContext;
+    }
 }

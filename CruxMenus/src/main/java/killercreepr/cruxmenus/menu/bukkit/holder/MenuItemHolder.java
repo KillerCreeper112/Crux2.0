@@ -30,7 +30,7 @@ public class MenuItemHolder {
 
     public @NotNull MenuItem getDisplayItem(@NotNull Player p, @NotNull MenuContext info) {
         Evaluation evaluation = new Evaluation(this, p, info);
-        return new MenuItem(this, evaluation.evaluateInfo());
+        return new MenuItem(this, info, evaluation.evaluateInfo());
     }
 
     public @NotNull Holder<DynamicItem> getItem() {

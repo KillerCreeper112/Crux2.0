@@ -81,16 +81,16 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
         MenuContext menuContext = new MenuContext(this, info, tags);
         holder.getItems().items().forEach(menuItem -> {
             MenuItem i = menuItem.getDisplayItem(viewer, menuContext);
-            Optional<Integer> slot = i.getSlot(menuContext);
-            if(slot.isEmpty() || !i.canDisplay(menuContext)) return;
+            Optional<Integer> slot = i.getSlot();
+            if(slot.isEmpty() || !i.canDisplay()) return;
             setItem(slot.get(), i, viewer);
         });
     }
 
     public @Nullable MenuItem setItem(@NotNull MenuItemHolder menuItem, @NotNull Player viewer, @NotNull MenuContext menuContext){
         MenuItem i = menuItem.getDisplayItem(viewer, menuContext);
-        Optional<Integer> slot = i.getSlot(menuContext);
-        if(slot.isEmpty() || !i.canDisplay(menuContext)) return i;
+        Optional<Integer> slot = i.getSlot();
+        if(slot.isEmpty() || !i.canDisplay()) return i;
         setItem(slot.get(), i, viewer);
         return i;
     }
@@ -102,7 +102,7 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
 
     public void setItem(int index, @NotNull MenuItemHolder menuItem, @NotNull Player viewer, @NotNull MenuContext menuContext){
         MenuItem i = menuItem.getDisplayItem(viewer, menuContext);
-        if(!i.canDisplay(menuContext)) return;
+        if(!i.canDisplay()) return;
         setItem(index, i, viewer);
     }
 
@@ -120,8 +120,8 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
         MenuItem last = null;
         for(MenuItemHolder menuItem : potentialItems){
             MenuItem i = menuItem.getDisplayItem(viewer, menuContext);
-            Optional<Integer> slot = i.getSlot(menuContext);
-            if(slot.isEmpty() || !i.canDisplay(menuContext)) continue;
+            Optional<Integer> slot = i.getSlot();
+            if(slot.isEmpty() || !i.canDisplay()) continue;
             setItem(slot.get(), i, viewer);
             last = i;
         }
@@ -136,10 +136,11 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
 
     @Override
     public MenuRefreshEvent refresh() {
-        clearItems(true);
-        MenuRefreshEvent event = super.refresh();
+        MenuRefreshEvent event = new MenuRefreshEvent(this);
         if(event.isCancelled()) return event;
+        clearItems(true);
         clearMenuItems(true);
+        modules.refresh();
         setItems(holder);
         return event;
     }
