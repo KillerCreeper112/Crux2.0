@@ -6,5 +6,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface MenuModule extends Keyed {
+    static @NotNull String buildTagPrefix(@NotNull String moduleID){
+        return "module_" + moduleID + "_";
+    }
+    static @NotNull String buildTag(@NotNull String moduleID, @NotNull String tagID){
+        return buildTagPrefix(moduleID) + tagID;
+    }
     @Nullable ActiveMenuModule build(@NotNull Menu menu);
 }

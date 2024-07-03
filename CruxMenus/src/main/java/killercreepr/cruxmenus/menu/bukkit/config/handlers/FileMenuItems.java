@@ -10,8 +10,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.TreeMap;
 
-public class FileMenuItems extends FileModuled<MenuItems> {
-    public FileMenuItems(@NotNull FileMenuModule menuModule) {
+public class FileMenuItems extends FileMenuModuled<MenuItems> {
+    public FileMenuItems(@NotNull FileMenuHolder menuModule) {
         super(menuModule);
     }
 

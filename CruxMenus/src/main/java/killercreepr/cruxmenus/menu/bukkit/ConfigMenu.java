@@ -54,7 +54,7 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
     }
 
     @Override
-    public @Nullable MergedTagContainer buildTags(@NotNull TagParser tagParser){
+    public @NotNull MergedTagContainer buildTags(@NotNull TagParser tagParser){
         MergedTagContainer tags = new MultiTagContainer(tagParser);
         tags.addAll(super.buildTags(tagParser));
         tags.hookAll(info());
@@ -68,7 +68,7 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
     }
 
     @Override
-    public @Nullable MergedTagContainer buildTags() {
+    public @NotNull MergedTagContainer buildTags() {
         return buildTags(holder.getRegistry().getFormat().tags());
     }
 
@@ -85,6 +85,25 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
             if(slot.isEmpty() || !i.canDisplay()) return;
             setItem(slot.get(), i, viewer);
         });
+    }
+
+    public @Nullable MenuItem setItem(@NotNull MenuItemHolder menuItem, @NotNull Player viewer, @NotNull MenuContext menuContext){
+        MenuItem i = menuItem.getDisplayItem(viewer, menuContext);
+        Optional<Integer> slot = i.getSlot();
+        if(slot.isEmpty() || !i.canDisplay()) return i;
+        setItem(slot.get(), i, viewer);
+        return i;
+    }
+
+    @Override
+    public @Nullable MenuItem setItem(@NotNull MenuItemHolder menuItem, @NotNull MenuContext menuContext) {
+        return setItem(menuItem, info.getOrThrow("viewer", Player.class), menuContext);
+    }
+
+    public void setItem(int index, @NotNull MenuItemHolder menuItem, @NotNull Player viewer, @NotNull MenuContext menuContext){
+        MenuItem i = menuItem.getDisplayItem(viewer, menuContext);
+        if(!i.canDisplay()) return;
+        setItem(index, i, viewer);
     }
 
     @Override

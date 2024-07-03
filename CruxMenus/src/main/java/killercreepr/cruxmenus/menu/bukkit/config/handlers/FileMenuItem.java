@@ -13,8 +13,8 @@ import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FileMenuItem extends FileModuled<MenuItemHolder> {
-    public FileMenuItem(@NotNull FileMenuModule menuModule) {
+public class FileMenuItem extends FileMenuModuled<MenuItemHolder> {
+    public FileMenuItem(@NotNull FileMenuHolder menuModule) {
         super(menuModule);
     }
 

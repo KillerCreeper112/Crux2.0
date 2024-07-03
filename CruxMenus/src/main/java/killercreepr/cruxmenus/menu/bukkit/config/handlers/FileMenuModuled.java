@@ -7,9 +7,9 @@ import killercreepr.cruxconfig.config.common.element.FileObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class FileModuled<T> extends SimpleFileHandler<T> {
-    protected final @NotNull FileMenuModule menuModule;
-    public FileModuled(@NotNull FileMenuModule menuModule) {
+public abstract class FileMenuModuled<T> extends SimpleFileHandler<T> {
+    protected final @NotNull FileMenuHolder menuModule;
+    public FileMenuModuled(@NotNull FileMenuHolder menuModule) {
         this.menuModule = menuModule;
     }
 
@@ -24,16 +24,4 @@ public abstract class FileModuled<T> extends SimpleFileHandler<T> {
     }
 
     public abstract @Nullable T deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e, @Nullable FileObject menuContext);
-
-    /*@Override
-    public @NotNull YamlElement serializeToYaml(@NotNull YamlContext context, @NotNull T object) {
-        throw new UnsupportedOperationException(getClass().getSimpleName() + " does not have a serialization method implemented!");
-    }
-
-    @Override
-    public @Nullable T deserializeFromYaml(@NotNull YamlContext context, @Nullable YamlElement e) {
-        return deserializeFromYaml(context, e, null);
-    }*/
-
-    //public abstract @Nullable T deserializeFromYaml(@NotNull YamlContext context, @Nullable YamlElement e, @Nullable YamlObject menuContext);
 }

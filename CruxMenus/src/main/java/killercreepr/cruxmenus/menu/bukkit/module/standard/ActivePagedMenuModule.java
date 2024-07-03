@@ -9,7 +9,6 @@ import killercreepr.crux.util.CruxMath;
 import killercreepr.cruxmenus.menu.bukkit.Menu;
 import killercreepr.cruxmenus.menu.bukkit.module.MenuModule;
 import killercreepr.cruxmenus.menu.bukkit.module.SimpleActiveMenuModule;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,15 +54,13 @@ public abstract class ActivePagedMenuModule<T> extends SimpleActiveMenuModule {
         for(int i : indexes){
             index++;
             int valueIndex = index + addon;
-            ItemStack item;
-            if(valueIndex >= list.size()) item = buildEmptyItem(menu);
-            else item = buildPagedItem(menu, list.get(valueIndex));
-            menu.setItem(i, item);
+            if(valueIndex >= list.size()) setEmptyItem(menu, i);
+            else setPagedItem(menu, i, list.get(valueIndex));
         }
     }
 
-    public abstract @Nullable ItemStack buildPagedItem(@NotNull Menu menu, @NotNull T value);
-    public abstract @Nullable ItemStack buildEmptyItem(@NotNull Menu menu);
+    public abstract void setPagedItem(@NotNull Menu menu, int slot, @NotNull T value);
+    public abstract void setEmptyItem(@NotNull Menu menu, int slot);
 
     public int calculateMaxPages(){
         return Math.max((int) Math.ceil((double) values.value().size() / indexes.size())-1, 0);

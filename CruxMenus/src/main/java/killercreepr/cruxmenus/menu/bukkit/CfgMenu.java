@@ -3,6 +3,7 @@ package killercreepr.cruxmenus.menu.bukkit;
 import killercreepr.crux.data.DataInfoHolder;
 import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuHolder;
+import killercreepr.cruxmenus.menu.bukkit.holder.MenuItemHolder;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 
 public interface CfgMenu extends Menu, DataInfoHolder {
-    @Nullable
+    @NotNull
     MergedTagContainer buildTags();
     void setItems(@NotNull MenuHolder holder);
     default void setItem(int slot, @Nullable MenuItem item, @NotNull Player viewer){
@@ -33,4 +34,6 @@ public interface CfgMenu extends Menu, DataInfoHolder {
 
     @Nullable MenuItem setItem(@NotNull MenuHolder holder, int index);
     @Nullable MenuItem setItem(@NotNull MenuHolder holder, int index, @NotNull Player viewer, @NotNull MenuContext menuContext);
+    @Nullable MenuItem setItem(@NotNull MenuItemHolder menuItem, @NotNull Player viewer, @NotNull MenuContext menuContext);
+    @Nullable MenuItem setItem(@NotNull MenuItemHolder menuItem, @NotNull MenuContext menuContext);
 }

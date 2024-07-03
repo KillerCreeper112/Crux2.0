@@ -36,14 +36,14 @@ public class MenuRegistry {
     public final KeyedPriorityRegistry<ItemDataParser> ITEM_DATA_PARSERS = new KeyedPriorityRegistry<>();
 
     protected final @NotNull Format format;
-    protected final @NotNull FileMenuModule menuModule;
-    public MenuRegistry(@NotNull Format format, @NotNull FileMenuModule menuModule) {
+    protected final @NotNull FileMenuHolder menuModule;
+    public MenuRegistry(@NotNull Format format, @NotNull FileMenuHolder menuModule) {
         this.format = format;
         this.menuModule = menuModule;
     }
 
     public MenuRegistry(@NotNull Format format, @NotNull KeyedRegistry<MenuModuleBuilder> menuModuleBuilders) {
-        this(format, new FileMenuModule());
+        this(format, new FileMenuHolder());
         menuModule.setYamlMenuItem(new FileMenuItem(menuModule));
         menuModule.setYamlMenuActions(new FileMenuActions(menuModule));
         menuModule.setYamlMenuItems(new FileMenuItems(menuModule));
@@ -93,7 +93,7 @@ public class MenuRegistry {
         return ITEM_DATA_PARSERS;
     }
 
-    public @NotNull FileMenuModule menuModule() {
+    public @NotNull FileMenuHolder menuModule() {
         return menuModule;
     }
 }

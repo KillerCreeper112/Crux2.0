@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.TreeMap;
 
-public class FileMenuModule extends SimpleFileHandler<MenuHolder> {
+public class FileMenuHolder extends SimpleFileHandler<MenuHolder> {
     protected FileMenuItem fileMenuItem;
     protected FileMenuItems fileMenuItems;
     protected FileDataExchange fileDataExchange;

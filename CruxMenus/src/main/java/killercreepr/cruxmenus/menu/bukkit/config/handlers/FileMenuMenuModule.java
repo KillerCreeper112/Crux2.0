@@ -11,9 +11,9 @@ import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FileMenuMenuModule extends FileModuled<MenuModule>{
+public class FileMenuMenuModule extends FileMenuModuled<MenuModule> {
     protected final @NotNull KeyedRegistry<MenuModuleBuilder> menuModuleBuilders;
-    public FileMenuMenuModule(@NotNull FileMenuModule menuModule, @NotNull KeyedRegistry<MenuModuleBuilder> menuModuleBuilders) {
+    public FileMenuMenuModule(@NotNull FileMenuHolder menuModule, @NotNull KeyedRegistry<MenuModuleBuilder> menuModuleBuilders) {
         super(menuModule);
         this.menuModuleBuilders = menuModuleBuilders;
     }

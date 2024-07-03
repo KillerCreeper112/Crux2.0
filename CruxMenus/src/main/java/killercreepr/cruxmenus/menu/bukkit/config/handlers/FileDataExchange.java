@@ -16,9 +16,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FileDataExchange extends FileModuled<DataExchange> {
+public class FileDataExchange extends FileMenuModuled<DataExchange> {
     protected final MappedRegistry<String, FileDataProvider> DATA_TYPES = new SimpleMappedRegistry<>();
-    public FileDataExchange(@NotNull FileMenuModule menuModule) {
+    public FileDataExchange(@NotNull FileMenuHolder menuModule) {
         super(menuModule);
     }
 

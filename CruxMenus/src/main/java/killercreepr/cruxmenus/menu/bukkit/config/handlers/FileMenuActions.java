@@ -16,9 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
-public class FileMenuActions extends FileModuled<ClickActions> {
+public class FileMenuActions extends FileMenuModuled<ClickActions> {
 
-    public FileMenuActions(@NotNull FileMenuModule menuModule) {
+    public FileMenuActions(@NotNull FileMenuHolder menuModule) {
         super(menuModule);
     }
 
