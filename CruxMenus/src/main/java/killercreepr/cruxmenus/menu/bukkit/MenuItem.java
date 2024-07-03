@@ -56,7 +56,7 @@ public class MenuItem {
     }
 
     public @NotNull String setPlaceholders(@NotNull String text, @NotNull MenuContext ctx){
-        return context.getMenu().getHolder().getRegistry().getFormat().deserializeString(text, ctx.getAllMergedResolvers());
+        return context.getMenu().getHolder().getRegistry().getFormat().deserializeString(text, buildTags().addAll(ctx.getAllMergedResolvers()));
     }
 
     public @NotNull MergedTagContainer buildTags(){

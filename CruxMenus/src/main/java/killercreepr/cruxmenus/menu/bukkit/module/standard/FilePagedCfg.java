@@ -1,6 +1,7 @@
 package killercreepr.cruxmenus.menu.bukkit.module.standard;
 
 import killercreepr.crux.data.Holder;
+import killercreepr.crux.valueproviders.number.EquationNumber;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -47,7 +48,7 @@ public abstract class FilePagedCfg extends FileMenuModuled<MenuModule> implement
         if(valueItem != null && !valueItem.info().has("slot")){
             valueItem = new MenuItemHolder(
                 valueItem.getItem(),
-                valueItem.info().append("slot", Holder.directObject("<module_members_slot>")),
+                valueItem.info().append("slot", Holder.directObject(new EquationNumber(MenuModule.buildTag(id, "slot")))),
                 valueItem.getClickActions()
             );
         }
@@ -55,7 +56,7 @@ public abstract class FilePagedCfg extends FileMenuModuled<MenuModule> implement
         if(emptyItem != null && !emptyItem.info().has("slot")){
             emptyItem = new MenuItemHolder(
                 emptyItem.getItem(),
-                emptyItem.info().append("slot", Holder.directObject("<module_members_slot>")),
+                emptyItem.info().append("slot", Holder.directObject(new EquationNumber(MenuModule.buildTag(id, "slot")))),
                 emptyItem.getClickActions()
             );
         }
