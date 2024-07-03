@@ -23,11 +23,12 @@ public abstract class PagedCfgModuleBuilder<T> extends PagedMenuModuleBuilder {
         if(indexes==null) return null;
         DynamicItem valueItem = ctx.getRegistry().deserialize(DynamicItem.class, o.get("value_item"));
         DynamicItem emptyItem = ctx.getRegistry().deserialize(DynamicItem.class, o.get("empty_item"));
-        return buildModule(id, ctx, o, menuBase, valueItem, emptyItem);
+        return buildModule(id, ctx, o, menuBase, indexes, valueItem, emptyItem);
     }
 
     public abstract @NotNull PagedCfgModule<T> buildModule(@NotNull String id, @NotNull FileContext<?> ctx,
                                                            @NotNull FileObject o, @Nullable FileObject menuBase,
+                                                           @NotNull NumberProvider indexes,
                                                            @Nullable DynamicItem valueItem, @Nullable DynamicItem emptyItem);
 
     @Override
