@@ -14,7 +14,6 @@ import killercreepr.cruxmenus.menu.bukkit.MenuContext;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuItemHolder;
 import killercreepr.cruxmenus.menu.bukkit.module.ActiveMenuModule;
 import killercreepr.cruxmenus.menu.bukkit.module.MenuModule;
-import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -81,10 +80,5 @@ public abstract class PagedMenuModule<T> implements MenuModule {
                 cfg.setItem(emptyItem, menuContext);
             }
         };
-    }
-
-    @Override
-    public @NotNull Key key() {
-        return null;
     }
 }

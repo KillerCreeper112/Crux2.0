@@ -5,15 +5,19 @@ import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxmenus.menu.bukkit.CfgMenu;
 import killercreepr.cruxmenus.menu.bukkit.Menu;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuItemHolder;
+import killercreepr.cruxmenus.menu.bukkit.module.config.MenuModuleBuilder;
+import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public abstract class SimplePagedMenuModule<T> extends PagedMenuModule<T>{
+    protected final @NotNull MenuModuleBuilder builder;
     public SimplePagedMenuModule(@NotNull String id, @NotNull NumberProvider indexes, @Nullable MenuItemHolder valueItem,
-                                 @Nullable MenuItemHolder emptyItem) {
+                                 @Nullable MenuItemHolder emptyItem, @NotNull MenuModuleBuilder builder) {
         super(id, indexes, valueItem, emptyItem);
+        this.builder = builder;
     }
 
     @Override
@@ -23,4 +27,9 @@ public abstract class SimplePagedMenuModule<T> extends PagedMenuModule<T>{
     }
 
     public abstract @NotNull NotNullHolder<List<T>> getValues(@NotNull CfgMenu menu);
+
+    @Override
+    public @NotNull Key key() {
+        return builder.key();
+    }
 }
