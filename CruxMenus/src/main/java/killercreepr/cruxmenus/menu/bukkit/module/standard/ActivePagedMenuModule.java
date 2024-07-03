@@ -41,7 +41,9 @@ public abstract class ActivePagedMenuModule<T> extends SimpleActiveMenuModule {
     public @Nullable MergedTagContainer buildTags(@NotNull Menu menu, @NotNull TagParser tagParser) {
         MergedTagContainer tags = new MultiTagContainer(tagParser);
         tags.addAll(super.buildTags(menu, tagParser));
-        tags.add(Tag.parsed("module_" + id() + "_page", page+""));
+        String prefix = "module_" + id() + "_";
+        tags.add(Tag.parsed(prefix + "page", page+""));
+        tags.add(Tag.parsed(prefix + "max_page", calculateMaxPages()+""));
         return tags;
     }
 
