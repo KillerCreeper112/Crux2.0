@@ -50,7 +50,7 @@ public class CruxTags implements TagParser {
             StringHookedObjectContainer hookedTags = objectTag.hookStrings(object, this);
             if(hookedTags != null){
                 hookedTags.getHookedObjects().forEach(hooked ->{
-                    FormatPrefix pre = prefixBuilder == null ? objectTag.defaultPrefix() : prefixBuilder.buildHookedPrefix(
+                    FormatPrefix pre = prefixBuilder == null ? hooked.getObjectTag().defaultPrefix() : prefixBuilder.buildHookedPrefix(
                         objectTag, object, hooked
                     );
                     tag.addAll(hooked.getTags(), FormatPrefix.add(pre, hooked.getPrefix()));
@@ -93,7 +93,7 @@ public class CruxTags implements TagParser {
             StringListHookedObjectContainer hookedTags = objectTag.hookStringLists(object, this);
             if(hookedTags != null){
                 hookedTags.getHookedObjects().forEach(hooked ->{
-                    FormatPrefix pre = prefixBuilder == null ? objectTag.defaultPrefix() : prefixBuilder.buildHookedPrefix(
+                    FormatPrefix pre = prefixBuilder == null ? hooked.getObjectTag().defaultPrefix() : prefixBuilder.buildHookedPrefix(
                         objectTag, object, hooked
                     );
                     tag.addAll(hooked.getTags(), FormatPrefix.add(pre, hooked.getPrefix()));
