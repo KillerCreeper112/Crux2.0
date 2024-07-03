@@ -24,10 +24,10 @@ public class FileUUID extends SimpleFileHandler<UUID> {
     public @Nullable UUID deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = context.getRegistry();
-        Long least = registry.deserialize(Long.class, o.get("least"));
-        Long most = registry.deserialize(Long.class, o.get("most"));
+        Number least = registry.deserialize(Number.class, o.get("least"));
+        Number most = registry.deserialize(Number.class, o.get("most"));
         if(least==null||most==null) return null;
-        return new UUID(most, least);
+        return new UUID(most.longValue(), least.longValue());
     }
 
     @Override
