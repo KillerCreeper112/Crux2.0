@@ -15,7 +15,9 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class BukkitMenu implements Menu{
     protected final LinkedHashMap<Integer, Slot> slots = new LinkedHashMap<>();
