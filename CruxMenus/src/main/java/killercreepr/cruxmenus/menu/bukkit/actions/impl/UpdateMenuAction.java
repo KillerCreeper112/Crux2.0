@@ -12,8 +12,8 @@ public class UpdateMenuAction extends SimpleMenuAction {
     }
 
     @Override
-    public boolean execute(@NotNull Player p, @NotNull ActionContext actionInfo, @NotNull String[] args) {
-        actionInfo.getMenu().getHolder().open(p, actionInfo.getMenu().info().append(actionInfo.getInfo()));
+    public boolean execute(@NotNull Player p, @NotNull ActionContext ctx, @NotNull String[] args) {
+        ctx.getMenu().refresh();
         return true;
     }
 }

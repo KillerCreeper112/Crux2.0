@@ -21,7 +21,7 @@ public class StandardMenuActions {
             add(new UpdateItemAction(Crux.key("update_item")));
 
             add(new PagedAddAction(Crux.key("page_add")));
-            add(new PagedOpenAction(Crux.key("page_open")));
+            add(new PagedSetAction(Crux.key("page_set")));
         }};
     }
 }

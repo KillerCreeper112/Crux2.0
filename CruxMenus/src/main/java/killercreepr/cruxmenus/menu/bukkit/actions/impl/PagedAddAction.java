@@ -25,7 +25,6 @@ public class PagedAddAction extends SimpleMenuAction {
         if(args.length > 1) amount = (int) CruxMath.evaluate(args[1]);
         else amount = 1;
         paged.addPage(amount);
-        paged.refresh(menu);
         return true;
     }
 }

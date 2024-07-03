@@ -9,8 +9,8 @@ import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class PagedOpenAction extends SimpleMenuAction {
-    public PagedOpenAction(@NotNull Key key) {
+public class PagedSetAction extends SimpleMenuAction {
+    public PagedSetAction(@NotNull Key key) {
         super(key);
     }
 
@@ -23,7 +23,6 @@ public class PagedOpenAction extends SimpleMenuAction {
 
         int amount = (int) CruxMath.evaluate(args[1]);
         paged.setPage(amount);
-        paged.refresh(menu);
         return true;
     }
 }

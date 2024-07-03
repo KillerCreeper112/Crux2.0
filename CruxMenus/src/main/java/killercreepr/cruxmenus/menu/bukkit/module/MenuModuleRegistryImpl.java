@@ -28,8 +28,12 @@ public class MenuModuleRegistryImpl extends SimpleKeyedRegistry<ActiveMenuModule
                 register(module);
             });
         }
-        refresh();
         new HashSet<>(this.values()).forEach(m -> m.load(menu));
+    }
+
+    @Override
+    public void refresh() {
+        new HashSet<>(this.values()).forEach(m -> m.refresh(menu));
     }
 
     @Override

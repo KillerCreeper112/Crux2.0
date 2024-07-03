@@ -117,8 +117,10 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
 
     @Override
     public MenuRefreshEvent refresh() {
+        clearItems(true);
         MenuRefreshEvent event = super.refresh();
         if(event.isCancelled()) return event;
+        clearMenuItems(true);
         setItems(holder);
         return event;
     }
