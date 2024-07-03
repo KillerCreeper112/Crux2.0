@@ -9,7 +9,7 @@ import killercreepr.crux.valueproviders.number.UniformNumberArray;
 import killercreepr.cruxmenus.menu.bukkit.CfgMenu;
 import killercreepr.cruxmenus.menu.bukkit.Menu;
 import killercreepr.cruxmenus.menu.bukkit.module.ActiveMenuModule;
-import killercreepr.cruxmenus.menu.bukkit.module.CfgMenuModule;
+import killercreepr.cruxmenus.menu.bukkit.module.config.CfgMenuModule;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

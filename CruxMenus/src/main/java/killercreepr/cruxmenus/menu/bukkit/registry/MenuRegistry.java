@@ -15,7 +15,7 @@ import killercreepr.cruxmenus.menu.bukkit.config.handlers.*;
 import killercreepr.cruxmenus.menu.bukkit.data.ItemDataParser;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuHolder;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuItems;
-import killercreepr.cruxmenus.menu.bukkit.module.MenuModuleBuilder;
+import killercreepr.cruxmenus.menu.bukkit.module.config.MenuModuleBuilder;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 

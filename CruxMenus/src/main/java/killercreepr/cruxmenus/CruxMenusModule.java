@@ -12,7 +12,7 @@ import killercreepr.cruxmenus.command.argument.CruxMenuHolderArgument;
 import killercreepr.cruxmenus.command.argument.CruxMenusArguments;
 import killercreepr.cruxmenus.menu.bukkit.actions.standard.StandardMenuActions;
 import killercreepr.cruxmenus.menu.bukkit.listener.MenuListener;
-import killercreepr.cruxmenus.menu.bukkit.module.MenuModuleBuilder;
+import killercreepr.cruxmenus.menu.bukkit.module.config.MenuModuleBuilder;
 import killercreepr.cruxmenus.menu.bukkit.registry.MenuRegistry;
 import killercreepr.cruxmenus.tags.MenuItemHolderHook;
 import org.jetbrains.annotations.NotNull;

@@ -4,11 +4,11 @@ import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
-import killercreepr.cruxmenus.menu.bukkit.module.SimpleMenuModuleBuilder;
+import killercreepr.cruxmenus.menu.bukkit.module.config.IDInputMenuModuleBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class PagedMenuModuleBuilder implements SimpleMenuModuleBuilder {
+public abstract class PagedMenuModuleBuilder implements IDInputMenuModuleBuilder {
     public @Nullable NumberProvider parsePageIndexes(@NotNull FileContext<?> context,
                                                      @NotNull FileElement e,
                                                      @Nullable FileObject menuContext){

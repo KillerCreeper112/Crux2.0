@@ -3,7 +3,6 @@ package killercreepr.cruxmenus.menu.bukkit.module;
 import killercreepr.crux.registry.Registry;
 import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.container.MultiTagContainer;
-import killercreepr.crux.tags.format.Format;
 import killercreepr.cruxmenus.menu.bukkit.CommonMenu;
 import killercreepr.cruxmenus.menu.bukkit.Menu;
 import net.kyori.adventure.key.Key;
