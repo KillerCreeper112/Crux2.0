@@ -59,7 +59,6 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
         tags.addAll(super.buildTags(tagParser));
         tags.hookAll(info());
         tags.addAll(getTags());
-        Bukkit.broadcastMessage(tags.getStringTags().asMap().keySet() + " tags boi");
         return tags;
     }
 
