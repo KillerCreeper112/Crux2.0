@@ -1,6 +1,9 @@
 package killercreepr.crux.util;
 
+import org.jetbrains.annotations.Contract;
+
 public class CruxObjectValidate {
+    @Contract(pure = true)
     public static boolean checkNull(Object... objects){
         for(Object o : objects){
             if(o==null) return true;
