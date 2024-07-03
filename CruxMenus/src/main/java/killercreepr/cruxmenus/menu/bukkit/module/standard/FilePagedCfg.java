@@ -45,12 +45,13 @@ public abstract class FilePagedCfg extends FileMenuModuled<MenuModule> implement
         MenuItemHolder emptyItem = parseEmptyItem(ctx, e, menuContext);
 
 
-        return parsePaged(ctx, o, menuContext, indexes, valueItem, emptyItem);
+        return parsePaged(ctx, o, menuContext, id, indexes, valueItem, emptyItem);
     }
 
     public abstract @Nullable MenuModule parsePaged(@NotNull FileContext<?> ctx,
                                            @NotNull FileObject o,
                                            @Nullable FileObject menuContext,
+                                           @NotNull String id,
                                            @NotNull NumberProvider indexes,
                                            @Nullable MenuItemHolder valueItem,
                                            @Nullable MenuItemHolder emptyItem);
