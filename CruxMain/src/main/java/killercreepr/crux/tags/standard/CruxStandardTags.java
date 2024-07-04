@@ -19,6 +19,7 @@ public class CruxStandardTags {
     public static @NotNull Collection<StringResolver> buildGlobalStringTags(){
         return new HashSet<>(){{
             add(new LatinFontResolver());
+            add(new StringFormatResolver());
         }};
     }
 
