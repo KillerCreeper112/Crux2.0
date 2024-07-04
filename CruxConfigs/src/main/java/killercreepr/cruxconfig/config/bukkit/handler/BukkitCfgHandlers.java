@@ -15,6 +15,7 @@ import killercreepr.cruxconfig.config.common.yaml.automatic.AutoYamlSerializer;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.EquipmentSlot;
@@ -79,11 +80,12 @@ public class BukkitCfgHandlers {
         });
 
         registerEnums(registry,
-                AttributeModifier.Operation.class,
-                EquipmentSlot.class,
-                World.Environment.class,
-                ItemRarity.class,
-                PotionEffectType.Category.class
+            AttributeModifier.Operation.class,
+            EquipmentSlot.class,
+            World.Environment.class,
+            ItemRarity.class,
+            PotionEffectType.Category.class,
+            Particle.class
         );
     }
 
