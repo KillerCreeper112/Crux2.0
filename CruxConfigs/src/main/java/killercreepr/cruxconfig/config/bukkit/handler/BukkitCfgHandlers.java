@@ -14,6 +14,7 @@ import killercreepr.cruxconfig.config.common.json.container.GenericJsonHandler;
 import killercreepr.cruxconfig.config.common.yaml.automatic.AutoYamlSerializer;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.World;
@@ -43,6 +44,7 @@ public class BukkitCfgHandlers {
     public static final FileItemStack ITEM_STACK = new FileItemStack();
     public static final FileDynamicItem DYNAMIC_ITEM = new FileDynamicItem();
     public static final FileUUID UUID = new FileUUID();
+    public static final FileColor COLOR = new FileColor();
 
     public static void initJson(@NotNull JsonRegistry registry){
         registry.registerHandler(
@@ -63,6 +65,7 @@ public class BukkitCfgHandlers {
         registry.registerHandler(ItemStack.class, ITEM_STACK);
         registry.registerHandler(BukkitDynamicItem.class, DYNAMIC_ITEM);
         registry.registerHandler(UUID.class, UUID);
+        registry.registerHandler(Color.class, COLOR);
 
         DYNAMIC_ITEM.registerComponents(registry);
 
