@@ -16,15 +16,17 @@ public class StoredChunk extends StoredWorld {
     }
 
     public static @NotNull StoredChunk from(@NotNull Location location){
-        int chunkX = location.getBlockX() >> 4;
-        int chunkZ = location.getBlockZ() >> 4;
-        return new StoredChunk(location.getWorld().getUID(), chunkX, chunkZ);
+        return fromWorldPosition(location.getWorld().getUID(), location.getBlockX(), location.getBlockZ());
     }
 
     public static @NotNull StoredChunk from(@NotNull Block block){
-        int chunkX = block.getX() >> 4;
-        int chunkZ = block.getZ() >> 4;
-        return new StoredChunk(block.getWorld().getUID(), chunkX, chunkZ);
+        return fromWorldPosition(block.getWorld().getUID(), block.getX(), block.getZ());
+    }
+
+    public static @NotNull StoredChunk fromWorldPosition(@NotNull UUID worldUUID, int locationX, int locationZ){
+        int chunkX = locationX >> 4;
+        int chunkZ = locationZ >> 4;
+        return new StoredChunk(worldUUID, chunkX, chunkZ);
     }
 
     protected final int chunkX;
