@@ -1,13 +1,12 @@
 package killercreepr.crux.data.communication;
 
-import killercreepr.crux.data.Reloadable;
 import killercreepr.crux.tags.container.MergedTagContainer;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface CreateLang extends Reloadable {
+public interface CreateLang {
     default Communicator use(@NotNull String id, @NotNull Audience a, @Nullable MergedTagContainer tags){
         OfflinePlayer placeholders;
         if(a instanceof OfflinePlayer d) placeholders = d;
