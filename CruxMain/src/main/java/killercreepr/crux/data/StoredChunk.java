@@ -3,6 +3,7 @@ package killercreepr.crux.data;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,6 +13,18 @@ import java.util.UUID;
 public class StoredChunk extends StoredWorld {
     public static @NotNull StoredChunk from(@NotNull Chunk chunk){
         return new StoredChunk(chunk.getWorld().getUID(), chunk.getX(), chunk.getZ());
+    }
+
+    public static @NotNull StoredChunk from(@NotNull Location location){
+        int chunkX = location.getBlockX() >> 4;
+        int chunkZ = location.getBlockZ() >> 4;
+        return new StoredChunk(location.getWorld().getUID(), chunkX, chunkZ);
+    }
+
+    public static @NotNull StoredChunk from(@NotNull Block block){
+        int chunkX = block.getX() >> 4;
+        int chunkZ = block.getZ() >> 4;
+        return new StoredChunk(block.getWorld().getUID(), chunkX, chunkZ);
     }
 
     protected final int chunkX;
