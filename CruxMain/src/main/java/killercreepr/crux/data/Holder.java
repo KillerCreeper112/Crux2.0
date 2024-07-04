@@ -31,6 +31,12 @@ public interface Holder <T>{
     }
     @Nullable T value();
 
+    default T valueOr(T defaultValue){
+        T t = value();
+        if(t==null) return defaultValue;
+        return t;
+    }
+
     record Direct<T>(T value) implements Holder<T> {
         @Override
         public T value() {
