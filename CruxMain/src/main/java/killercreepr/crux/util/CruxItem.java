@@ -225,6 +225,8 @@ public class CruxItem implements Cloneable {
         return item.getAmount();
     }
 
+    @Deprecated(since = "Mojang did weird thing and now hide_attributes does not hide base attributes" +
+        " Keep in mind, this function will add a luck attribute to the item and add hide_attributes.")
     public CruxItem hideAttributes(){
         return editMeta(meta ->{
             meta.addAttributeModifier(Attribute.GENERIC_LUCK, new AttributeModifier(
