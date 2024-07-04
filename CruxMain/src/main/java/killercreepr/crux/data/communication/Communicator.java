@@ -1,4 +1,4 @@
-package killercreepr.crux.data;
+package killercreepr.crux.data.communication;
 
 import killercreepr.crux.tags.container.MergedTagContainer;
 import net.kyori.adventure.audience.Audience;

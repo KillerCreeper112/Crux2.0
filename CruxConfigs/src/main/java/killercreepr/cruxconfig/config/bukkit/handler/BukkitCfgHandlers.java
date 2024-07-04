@@ -1,9 +1,9 @@
 package killercreepr.cruxconfig.config.bukkit.handler;
 
 import io.papermc.paper.registry.RegistryKey;
-import killercreepr.crux.data.CreateSound;
-import killercreepr.crux.data.CreateTitle;
-import killercreepr.crux.data.MsgContainer;
+import killercreepr.crux.data.communication.CreateSound;
+import killercreepr.crux.data.communication.CreateTitle;
+import killercreepr.crux.data.communication.MsgContainer;
 import killercreepr.crux.item.dynamic.BukkitDynamicItem;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.*;

@@ -1,6 +1,6 @@
 package killercreepr.cruxentities.entity.mob.goal.sound;
 
-import killercreepr.crux.data.CreateSound;
+import killercreepr.crux.data.communication.CreateSound;
 import killercreepr.crux.data.tick.Ticked;
 import killercreepr.crux.util.CruxMath;
 import org.bukkit.entity.Entity;

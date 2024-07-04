@@ -11,7 +11,7 @@ import io.papermc.paper.command.brigadier.argument.resolvers.selector.EntitySele
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import killercreepr.crux.Crux;
-import killercreepr.crux.data.MsgContainer;
+import killercreepr.crux.data.communication.MsgContainer;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.util.CruxItem;
 import killercreepr.cruxenchants.command.argument.CruxEnchantArguments;

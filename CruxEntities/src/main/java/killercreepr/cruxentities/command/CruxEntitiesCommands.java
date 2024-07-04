@@ -10,7 +10,7 @@ import io.papermc.paper.command.brigadier.argument.resolvers.BlockPositionResolv
 import io.papermc.paper.math.BlockPosition;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-import killercreepr.crux.data.MsgContainer;
+import killercreepr.crux.data.communication.MsgContainer;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.cruxentities.command.argument.CruxEntitiesArguments;

@@ -1,7 +1,7 @@
 package killercreepr.cruxconfig.config.bukkit.value;
 
-import killercreepr.crux.data.Communicator;
-import killercreepr.crux.data.MsgContainer;
+import killercreepr.crux.data.communication.Communicator;
+import killercreepr.crux.data.communication.MsgContainer;
 import killercreepr.crux.tags.container.MergedTagContainer;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.OfflinePlayer;
