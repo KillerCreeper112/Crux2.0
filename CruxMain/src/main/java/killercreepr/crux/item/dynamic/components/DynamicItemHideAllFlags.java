@@ -20,7 +20,7 @@ public class DynamicItemHideAllFlags extends DynamicSingleValueComponent {
     public void apply(@NotNull CruxItem item, @NotNull TextParserContext context) {
         boolean x = value instanceof Boolean ? (Boolean) value : CruxString.parseBoolean(parseString(context));
         if(x){
-            item.addFlags(ItemFlag.values());
+            item.addFlags(ItemFlag.values()).hideAttributes();
         }else item.removeFlags(ItemFlag.values());
     }
 }
