@@ -4,14 +4,17 @@ import killercreepr.crux.Crux;
 import killercreepr.crux.tags.context.FormatParserContext;
 import killercreepr.crux.tags.format.Format;
 import killercreepr.crux.tags.provider.StringTagProvider;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
@@ -222,13 +225,22 @@ public class CruxItem implements Cloneable {
         return item.getAmount();
     }
 
+    public CruxItem hideAttributes(){
+        return editMeta(meta ->{
+            meta.addAttributeModifier(Attribute.GENERIC_LUCK, new AttributeModifier(
+                Crux.key("hide"), 0D, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.HAND
+            ));
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        });
+    }
+
     public CruxItem addAttribute(@NotNull Attribute attribute, @NotNull AttributeModifier modifier){
         return editMeta(meta -> meta.addAttributeModifier(attribute, modifier));
     }
 
-    public CruxItem addAttribute(@NotNull Attribute attribute, @NotNull String name, double amount, @NotNull AttributeModifier.Operation operation,
-                                 @Nullable EquipmentSlot slot){
-        return addAttribute(attribute, new AttributeModifier(UUID.randomUUID(), name, amount, operation, slot));
+    public CruxItem addAttribute(@NotNull Attribute attribute, @NotNull NamespacedKey key, double amount, @NotNull AttributeModifier.Operation operation,
+                                 @Nullable EquipmentSlotGroup slot){
+        return addAttribute(attribute, new AttributeModifier(key, amount, operation, slot));
     }
 
     public CruxItem color(@Nullable Color color){
