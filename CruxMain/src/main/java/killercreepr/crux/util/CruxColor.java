@@ -3,6 +3,7 @@ package killercreepr.crux.util;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class CruxColor {
     public static @NotNull Color hexToColor(@NotNull String hex) {
@@ -31,10 +32,13 @@ public class CruxColor {
         return String.format("#%02X%02X%02X", r, g, b);
     }
 
-    public static @NotNull Color parseColor(@NotNull String id){
+    public static @Nullable Color parseColor(@NotNull String id){
         try{
             return hexToColor(id);
         }catch (IllegalStateException ignored){}
-        return DyeColor.valueOf(id.toUpperCase()).getColor();
+        try{
+            return DyeColor.valueOf(id.toUpperCase()).getColor();
+        }catch (IllegalStateException ignored){ }
+        return null;
     }
 }
