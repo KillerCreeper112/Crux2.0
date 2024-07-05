@@ -33,12 +33,16 @@ public class CruxColor {
     }
 
     public static @Nullable Color parseColor(@NotNull String id){
+        return parseColor(id, null);
+    }
+
+    public static @Nullable Color parseColor(@NotNull String id, @Nullable Color defaultValue){
         try{
             return hexToColor(id);
         }catch (IllegalStateException ignored){}
         try{
             return DyeColor.valueOf(id.toUpperCase()).getColor();
         }catch (IllegalStateException ignored){ }
-        return null;
+        return defaultValue;
     }
 }
