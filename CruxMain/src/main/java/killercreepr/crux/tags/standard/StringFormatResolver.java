@@ -4,6 +4,7 @@ import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.tags.format.FormatArgs;
 import killercreepr.crux.tags.resolver.StringResolver;
 import killercreepr.crux.util.CruxString;
+import net.kyori.adventure.util.Index;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
