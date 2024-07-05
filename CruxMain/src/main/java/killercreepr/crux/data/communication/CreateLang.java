@@ -27,4 +27,36 @@ public interface CreateLang {
 
     @Nullable Communicator get(@NotNull String id);
     void put(@NotNull String key, @NotNull Communicator communicator);
+
+    //convenience methods
+
+    default @Nullable Communicator get(@NotNull Translatable id){
+        return get(id.translateKey());
+    }
+
+    default void put(@NotNull Translatable key, @NotNull Communicator communicator){
+        put(key.translateKey(), communicator);
+    }
+
+    default Communicator use(@NotNull Translatable id, @NotNull Audience a, @Nullable MergedTagContainer tags){
+        OfflinePlayer placeholders;
+        if(a instanceof OfflinePlayer d) placeholders = d;
+        else placeholders = null;
+        return use(id, a, placeholders, tags);
+    }
+    default Communicator use(@NotNull Translatable id, @NotNull Audience a){
+        return use(id, a,  (MergedTagContainer) null);
+    }
+
+    default Communicator use(@NotNull Translatable id, @NotNull Audience a, @Nullable OfflinePlayer placeholders){
+        return use(id, a, placeholders, null);
+    }
+
+    default Communicator use(@NotNull Translatable id, @NotNull Audience a, @Nullable OfflinePlayer placeholders, @Nullable MergedTagContainer tags){
+        return use(id.translateKey(), a, placeholders, tags);
+    }
+
+    default Communicator broadcast(@NotNull Translatable id, @Nullable MergedTagContainer tags){
+        return broadcast(id.translateKey(), tags);
+    }
 }
