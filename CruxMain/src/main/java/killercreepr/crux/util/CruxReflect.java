@@ -101,6 +101,30 @@ public class CruxReflect {
         return getDeclaredFields(type, NON_STATIC(filter));
     }
 
+    public static @NotNull Field[] getAllDeclaredFields(@NotNull Class<?> type, @Nullable Predicate<Field> filter) {
+        List<Field> fields = new ArrayList<>();
+
+        // Add fields from the current class
+        addDeclaredFields(type, fields, filter);
+
+        // Add fields from all superclasses recursively
+        Class<?> superClass = type.getSuperclass();
+        while (superClass != null) {
+            addDeclaredFields(superClass, fields, filter);
+            superClass = superClass.getSuperclass();
+        }
+
+        return fields.toArray(new Field[0]);
+    }
+
+    private static void addDeclaredFields(@NotNull Class<?> type, @NotNull List<Field> fields, @Nullable Predicate<Field> filter) {
+        for (Field field : type.getDeclaredFields()) {
+            if (filter == null || filter.test(field)) {
+                fields.add(field);
+            }
+        }
+    }
+
     public static @NotNull Field[] getDeclaredFields(@NotNull Class<?> type, @Nullable Predicate<Field> filter){
         Collection<Field> list = new ArrayList<>();
         for(Field field : type.getDeclaredFields()){

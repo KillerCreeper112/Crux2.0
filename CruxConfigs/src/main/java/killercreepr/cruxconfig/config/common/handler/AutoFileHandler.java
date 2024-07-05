@@ -70,7 +70,7 @@ public class AutoFileHandler<T> extends SimpleFileHandler<T> {
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull T object) {
         FileObject map = new FileObject();
         FileRegistry registry = context.getRegistry();
-        for(Field field : CruxReflect.getNonStaticDeclaredFields(object.getClass())){
+        for(Field field : CruxReflect.getAllDeclaredFields(object.getClass(), CruxReflect.NON_STATIC(null))){
             if(disabledFields != null && disabledFields.test(field)) continue;
             try{
                 boolean x = field.canAccess(object);
@@ -91,7 +91,7 @@ public class AutoFileHandler<T> extends SimpleFileHandler<T> {
         FileRegistry registry = context.getRegistry();
         Map<String, Object> fields = new LinkedHashMap<>();
         Map<String, FileElement> yamlMap = o.asMap();
-        for(Field field : CruxReflect.getNonStaticDeclaredFields(type)){
+        for(Field field : CruxReflect.getAllDeclaredFields(type, CruxReflect.NON_STATIC(null))){
             if(disabledFields != null && disabledFields.test(field)) continue;
             Object found  = registry.deserialize(field.getType(), yamlMap.get(field.getName()));
             if(isValid != null && !isValid.test(field.getName(), found)) return null;
