@@ -28,6 +28,12 @@ public class CruxObjects {
         }
     }
 
+    public static <T> @NotNull T castOrThrow(@NotNull Class<T> type, @NotNull Object o){
+        T casted = attemptCast(type, o);
+        if(casted==null) throw new ClassCastException("Object cannot be cast to " + type.getSimpleName() + " (" + o + ")! " + o.getClass().getSimpleName());
+        return casted;
+    }
+
     public static <T> @Nullable T attemptCast(@NotNull Class<T> type, @NotNull Object o){
         if(o instanceof Number n && !Number.class.isAssignableFrom(type)){
             if (type == short.class || type == Short.class) {
