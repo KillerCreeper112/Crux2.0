@@ -27,4 +27,13 @@ public class CruxFolder implements ICruxFile {
     public final @NotNull File file(){
         return file;
     }
+
+    public static @NotNull String withoutFileExtension(@NotNull String fileName) {
+        int lastDotIndex = fileName.lastIndexOf('.');
+        if (lastDotIndex == -1) {
+            return fileName; // No extension found
+        } else {
+            return fileName.substring(0, lastDotIndex);
+        }
+    }
 }
