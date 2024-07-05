@@ -35,12 +35,15 @@ public class CruxObjects {
     }
 
     public static <T> @Nullable T attemptCast(@NotNull Class<T> type, @NotNull Object o){
-        if(o instanceof Number n && !Number.class.isAssignableFrom(type)){
+        Crux.log(Level.WARNING, "attempintg cast: " + o + " type: " + type);
+        if(o instanceof Number n){
+            Crux.log(Level.WARNING, type + " is a number!");
             if (type == short.class || type == Short.class) {
                 return (T) Short.class.cast(n.shortValue());
             } else if (type == int.class || type == Integer.class) {
                 return (T) Integer.class.cast(n.intValue());
             } else if (type == long.class || type == Long.class) {
+                Crux.log(Level.WARNING, "casting to long!");
                 return (T) Long.class.cast(n.longValue());
             } else if (type == float.class || type == Float.class) {
                 return (T) Float.class.cast(n.floatValue());
