@@ -39,7 +39,7 @@ public class CruxColor {
     public static @Nullable Color parseColor(@NotNull String id, @Nullable Color defaultValue){
         try{
             return hexToColor(id);
-        }catch (IllegalStateException ignored){}
+        }catch (IllegalStateException | IndexOutOfBoundsException | IllegalArgumentException ignored){}
         try{
             return DyeColor.valueOf(id.toUpperCase()).getColor();
         }catch (IllegalStateException ignored){ }

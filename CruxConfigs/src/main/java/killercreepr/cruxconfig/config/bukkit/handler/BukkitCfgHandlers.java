@@ -1,6 +1,8 @@
 package killercreepr.cruxconfig.config.bukkit.handler;
 
 import io.papermc.paper.registry.RegistryKey;
+import killercreepr.crux.data.StoredChunk;
+import killercreepr.crux.data.StoredWorld;
 import killercreepr.crux.data.communication.CreateSound;
 import killercreepr.crux.data.communication.CreateTitle;
 import killercreepr.crux.data.communication.MsgContainer;
@@ -9,6 +11,7 @@ import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.*;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.FileDynamicItem;
 import killercreepr.cruxconfig.config.common.FileRegistry;
+import killercreepr.cruxconfig.config.common.handler.AutoFileHandler;
 import killercreepr.cruxconfig.config.common.json.JsonRegistry;
 import killercreepr.cruxconfig.config.common.json.container.GenericJsonHandler;
 import killercreepr.cruxconfig.config.common.yaml.automatic.AutoYamlSerializer;
@@ -90,6 +93,9 @@ public class BukkitCfgHandlers {
             PotionEffectType.Category.class,
             Particle.class
         );
+
+        registry.registerHandler(StoredWorld.class, new AutoFileHandler<>(StoredWorld.class));
+        registry.registerHandler(StoredChunk.class, new AutoFileHandler<>(StoredChunk.class));
     }
 
     public static void initYaml(@NotNull YamlRegistry registry){
