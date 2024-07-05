@@ -102,7 +102,7 @@ public class CruxReflect {
     }
 
     public static @NotNull Field[] getAllDeclaredFields(@NotNull Class<?> type, @Nullable Predicate<Field> filter) {
-        List<Field> fields = new ArrayList<>();
+        Set<Field> fields = new LinkedHashSet<>();
 
         // Add fields from all superclasses recursively
         Class<?> superClass = type.getSuperclass();
@@ -120,10 +120,10 @@ public class CruxReflect {
         // Add fields from the current class
         addDeclaredFields(type, fields, filter);
 
-        return fields.toArray(new Field[0]);
+        return fields.toArray(Field[]::new);
     }
 
-    private static void addDeclaredFields(@NotNull Class<?> type, @NotNull List<Field> fields, @Nullable Predicate<Field> filter) {
+    private static void addDeclaredFields(@NotNull Class<?> type, @NotNull Collection<Field> fields, @Nullable Predicate<Field> filter) {
         for (Field field : type.getDeclaredFields()) {
             if (filter == null || filter.test(field)) {
                 fields.add(field);
