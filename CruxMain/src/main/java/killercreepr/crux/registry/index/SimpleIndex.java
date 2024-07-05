@@ -1,5 +1,6 @@
 package killercreepr.crux.registry.index;
 
+import killercreepr.crux.util.CruxMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -8,6 +9,12 @@ import java.util.function.Function;
 import java.util.function.IntFunction;
 
 public class SimpleIndex<K, V> implements Index<K, V> {
+    public static <K, V> @NotNull Index<K, V> create(@NotNull Map<K, V> constant){
+        return new SimpleIndex<>(
+            Collections.unmodifiableMap(constant), Collections.unmodifiableMap(CruxMap.reverse(constant))
+        );
+    }
+
     public static <K, V extends Enum<V>> @NotNull Index<K, V> create(final Class<V> type, final @NotNull Function<? super V, ? extends K> keyFunction) {
         return create(type, keyFunction, type.getEnumConstants());
     }

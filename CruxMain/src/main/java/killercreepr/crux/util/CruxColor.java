@@ -1,6 +1,7 @@
 package killercreepr.crux.util;
 
 import org.bukkit.Color;
+import org.bukkit.DyeColor;
 import org.jetbrains.annotations.NotNull;
 
 public class CruxColor {
@@ -28,5 +29,12 @@ public class CruxColor {
         int b = color.getBlue();
 
         return String.format("#%02X%02X%02X", r, g, b);
+    }
+
+    public static @NotNull Color parseColor(@NotNull String id){
+        try{
+            return hexToColor(id);
+        }catch (IllegalStateException ignored){}
+        return DyeColor.valueOf(id.toUpperCase()).getColor();
     }
 }
