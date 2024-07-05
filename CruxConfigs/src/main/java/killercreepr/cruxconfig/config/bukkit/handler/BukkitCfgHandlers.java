@@ -2,7 +2,6 @@ package killercreepr.cruxconfig.config.bukkit.handler;
 
 import io.papermc.paper.registry.RegistryKey;
 import killercreepr.crux.data.StoredChunk;
-import killercreepr.crux.data.StoredWorld;
 import killercreepr.crux.data.communication.CreateSound;
 import killercreepr.crux.data.communication.CreateTitle;
 import killercreepr.crux.data.communication.MsgContainer;

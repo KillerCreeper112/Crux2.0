@@ -3,6 +3,7 @@ package killercreepr.cruxconfig.config.common.json;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import killercreepr.crux.util.CruxObjects;
 import killercreepr.crux.valueproviders.number.ConstantNumber;
 import killercreepr.crux.valueproviders.number.EquationNumber;
 import killercreepr.crux.valueproviders.number.UniformNumber;
@@ -188,8 +189,10 @@ public class JsonRegistry implements FileRegistry {
 
     public <T> @Nullable T deserialize(@NotNull Class<T> clazz, @Nullable JsonElement from){
         Object o = deserialize(from);
-        if(o == null || !clazz.isAssignableFrom(o.getClass())) return null;
-        return clazz.cast(o);
+        if(o==null) return null;
+        return CruxObjects.attemptCast(clazz, o);
+        /*if(o == null || !clazz.isAssignableFrom(o.getClass())) return null;
+        return clazz.cast(o);*/
     }
 
     @Override
