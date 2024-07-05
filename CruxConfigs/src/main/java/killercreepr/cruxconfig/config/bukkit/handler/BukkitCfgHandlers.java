@@ -94,7 +94,6 @@ public class BukkitCfgHandlers {
             Particle.class
         );
 
-        registry.registerHandler(StoredWorld.class, new AutoFileHandler<>(StoredWorld.class));
         registry.registerHandler(StoredChunk.class, new AutoFileHandler<>(StoredChunk.class));
     }
 
