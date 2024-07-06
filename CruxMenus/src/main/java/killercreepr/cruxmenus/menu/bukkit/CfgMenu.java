@@ -1,9 +1,11 @@
 package killercreepr.cruxmenus.menu.bukkit;
 
+import killercreepr.crux.Crux;
 import killercreepr.crux.data.DataInfoHolder;
 import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuHolder;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuItemHolder;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +22,18 @@ public interface CfgMenu extends Menu, DataInfoHolder {
     }
 
     default void setItem(int slot, @Nullable MenuItem item, @NotNull Player viewer, boolean silent){
+        if(true){
+            if(item==null){
+                setItem(slot, null, silent);
+                return;
+            }
+            item.buildItemCompletely(viewer).thenAccept(it ->{
+                Crux.getServer().getScheduler().runTask(Crux.getMainPlugin(), task ->{
+                    setItem(slot, item, it.item(), silent);
+                });
+            });
+            return;
+        }
         setItem(slot, item, item==null?null:item.buildItem(viewer), silent);
     }
 

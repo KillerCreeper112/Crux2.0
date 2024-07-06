@@ -1,5 +1,6 @@
 package killercreepr.crux.item.dynamic;
 
+import io.netty.util.concurrent.CompleteFuture;
 import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.util.CruxItem;
 import org.bukkit.Bukkit;
@@ -12,6 +13,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public class BukkitDynamicItem implements DynamicItem{
     protected final @NotNull String material;
@@ -75,6 +77,27 @@ public class BukkitDynamicItem implements DynamicItem{
             component.apply(item, context);
         }
         return item;
+    }
+
+    @Override
+    public @NotNull CompletableFuture<CruxItem> buildCompletely(@NotNull TextParserContext context) {
+        return CompletableFuture.supplyAsync(() ->{
+            String parsed = context.deserializeString(material());
+            Material material = Material.matchMaterial(parsed);
+            ItemStack built;
+            if(material == null){
+                try{
+                    built = Bukkit.getItemFactory().createItemStack(parsed);
+                }catch (IllegalArgumentException ignored){ return null; }
+            }else built = new ItemStack(material);
+            CruxItem item = new CruxItem(built);
+            item.amount(amount==null?1:(int) Double.parseDouble(context.deserializeString(amount)));
+            if(components == null) return item;
+            for(DynamicItemComponent component : components.values()){
+                component.apply(item, context);
+            }
+            return item;
+        });
     }
 
     @Override

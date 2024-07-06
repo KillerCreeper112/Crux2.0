@@ -7,6 +7,7 @@ import killercreepr.crux.tags.container.MultiTagContainer;
 import killercreepr.crux.tags.context.FormatParserContext;
 import killercreepr.crux.tags.format.Format;
 import killercreepr.crux.tags.provider.StringTagProvider;
+import killercreepr.crux.util.CruxItem;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.crux.util.CruxString;
 import killercreepr.crux.valueproviders.number.NumberProvider;
@@ -23,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -89,6 +91,19 @@ public class MenuItem {
             .tags(tags)
             .build();
         return item.buildItem(context);
+    }
+
+    public @NotNull CompletableFuture<CruxItem> buildItemCompletely(@NotNull Player p){
+        DynamicItem item = base.getItem().value();
+        if(item == null) return null;
+        item = item.clone();
+        MergedTagContainer tags = buildTags();
+
+        FormatParserContext context = new FormatParserContext.Builder(getFormat())
+            .viewer(p)
+            .tags(tags)
+            .build();
+        return item.buildCompletely(context);
     }
 
     public @NotNull MenuItemClickEvent click(@NotNull Player p, @NotNull InventoryClickEvent event){
