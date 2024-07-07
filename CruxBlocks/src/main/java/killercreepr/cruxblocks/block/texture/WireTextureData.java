@@ -5,6 +5,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Tripwire;
+import org.bukkit.generator.LimitedRegion;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -108,6 +109,12 @@ public class WireTextureData implements TextureData {
     public void setBlock(@NotNull Block block, boolean applyPhysics) {
         block.setType(Material.TRIPWIRE, false);
         applyToBlock(block, applyPhysics);
+    }
+
+    @Override
+    public void setBlock(@NotNull LimitedRegion region, int x, int y, int z) {
+        region.setType(x, y, z, Material.TRIPWIRE);
+        region.setBlockData(x, y, z, applyToBlockData(region.getBlockData(x, y, z)));
     }
 
     public static final class Builder {

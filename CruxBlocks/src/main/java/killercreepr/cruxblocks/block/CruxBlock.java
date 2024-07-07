@@ -11,6 +11,7 @@ import killercreepr.cruxblocks.event.CruxBlockPlaceEvent;
 import net.kyori.adventure.key.Keyed;
 import org.bukkit.SoundGroup;
 import org.bukkit.block.Block;
+import org.bukkit.generator.LimitedRegion;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -71,5 +72,10 @@ public interface CruxBlock extends Keyed, CruxBlockData {
             //if(active instanceof ActiveTickable) DP.blocks().addTickedBlock(active);
         }
         return active;
+    }
+
+    default void setBlock(@NotNull LimitedRegion region, int x, int y, int z){
+        TextureData data = getTextureData();
+        data.setBlock(region, x, y, z);
     }
 }

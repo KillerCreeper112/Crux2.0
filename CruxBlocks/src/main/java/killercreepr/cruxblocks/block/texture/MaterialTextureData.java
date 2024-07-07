@@ -3,6 +3,7 @@ package killercreepr.cruxblocks.block.texture;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.generator.LimitedRegion;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -60,6 +61,11 @@ public class MaterialTextureData implements TextureData {
     public void setBlock(@NotNull Block block, boolean applyPhysics) {
         block.setType(material, applyPhysics);
         applyToBlock(block, applyPhysics);
+    }
+
+    @Override
+    public void setBlock(@NotNull LimitedRegion region, int x, int y, int z) {
+        region.setType(x, y, z, material);
     }
 
     public static final class Builder {

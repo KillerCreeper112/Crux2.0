@@ -5,6 +5,7 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.NoteBlock;
 import org.bukkit.block.data.type.Tripwire;
+import org.bukkit.generator.LimitedRegion;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,4 +46,5 @@ public interface TextureData {
     }
 
     void setBlock(@NotNull Block block, boolean applyPhysics);
+    void setBlock(@NotNull LimitedRegion region, int x, int y, int z);
 }

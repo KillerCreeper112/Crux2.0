@@ -6,6 +6,7 @@ import org.bukkit.Note;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.NoteBlock;
+import org.bukkit.generator.LimitedRegion;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -84,6 +85,11 @@ public class NoteTextureData implements TextureData{
     public void setBlock(@NotNull Block block, boolean applyPhysics) {
         block.setType(Material.NOTE_BLOCK, false);
         applyToBlock(block, applyPhysics);
+    }
+
+    public void setBlock(@NotNull LimitedRegion region, int x, int y, int z){
+        region.setType(x, y, z, Material.NOTE_BLOCK);
+        region.setBlockData(x, y, z, applyToBlockData(region.getBlockData(x, y, z)));
     }
 
     public static final class Builder {
