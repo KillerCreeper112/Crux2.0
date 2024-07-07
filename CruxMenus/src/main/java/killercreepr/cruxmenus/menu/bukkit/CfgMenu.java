@@ -29,7 +29,7 @@ public interface CfgMenu extends Menu, DataInfoHolder {
             }
             item.buildItemCompletely(viewer).thenAccept(it ->{
                 Crux.getServer().getScheduler().runTask(Crux.getMainPlugin(), task ->{
-                    setItem(slot, item, it.item(), silent);
+                    setItem(slot, item, it == null ? null : it.item(), silent);
                 });
             });
             return;
