@@ -68,13 +68,6 @@ public class CruxModuleRegistry extends SimpleMappedRegistry<String, CruxModule>
         return this;
     }
 
-    public CruxModuleRegistry load(@NotNull CruxPlugin plugin){
-        for(CruxModule m : this){
-            m.onLoad(plugin);
-        }
-        return this;
-    }
-
     public CruxModuleRegistry unregisterAll(@NotNull CruxPlugin plugin){
         for(CruxModule m : this){
             m.onDisable(plugin);

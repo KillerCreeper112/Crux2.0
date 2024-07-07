@@ -9,8 +9,6 @@ public interface CruxModule extends Reloadable {
     @NotNull String name();
     default void onEnable(@NotNull CruxPlugin plugin){}
     default void onDisable(@NotNull CruxPlugin plugin){}
-    default void onLoad(@NotNull CruxPlugin plugin){}
-
     default @NotNull NamespacedKey key(@NotNull String key){
         return key(key.split(":"));
     }
