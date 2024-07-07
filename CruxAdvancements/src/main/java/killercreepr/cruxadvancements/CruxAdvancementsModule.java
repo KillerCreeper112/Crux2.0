@@ -12,9 +12,4 @@ public class CruxAdvancementsModule implements CruxModule {
     public @NotNull String name() {
         return NAMESPACE;
     }
-
-    @Override
-    public void onLoad(@NotNull CruxPlugin plugin) {
-
-    }
 }
