@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface KeyedRegistry<T extends Keyed> extends MappedRegistry<Key,T>{
     @Override
-    default @NotNull T register(@NotNull T object){
+    default @NotNull <E extends T> E register(@NotNull E object){
         return register(object.key(), object);
     }
 

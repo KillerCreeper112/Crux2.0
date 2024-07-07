@@ -12,7 +12,7 @@ import java.util.Set;
 public interface MappedRegistry<K, V> extends Registry<V>{
     V getOrDefault(@NotNull K key, @Nullable V defaultValue);
     @Nullable V get(@NotNull K key);
-    @NotNull V register(@NotNull K key, @NotNull V value);
+    <E extends V> @NotNull E register(@NotNull K key, @NotNull E value);
     @Nullable V remove(@NotNull K key);
     boolean remove(@NotNull K key, @NotNull V value);
     boolean containsKey(@NotNull K key);

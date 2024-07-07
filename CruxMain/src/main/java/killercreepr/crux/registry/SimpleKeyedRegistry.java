@@ -15,7 +15,7 @@ public class SimpleKeyedRegistry<T extends Keyed> extends SimpleMappedRegistry<K
     }
 
     @Override
-    public @NotNull T register(@NotNull T object){
+    public <E extends T> @NotNull E register(@NotNull E object){
         return register(object.key(), object);
     }
 

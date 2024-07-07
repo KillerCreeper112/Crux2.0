@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public class EntityMemoryRegistry<V extends EntityMemory> extends SimpleMappedRegistry<UUID, V> {
     @Override
-    public @NotNull V register(@NotNull V object) {
+    public <E extends V> @NotNull E register(@NotNull E object) {
         return register(object.getUUID(), object);
     }
 

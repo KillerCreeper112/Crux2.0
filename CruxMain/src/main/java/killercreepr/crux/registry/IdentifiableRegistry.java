@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 public interface IdentifiableRegistry<I, T extends Identifiable<I>> extends MappedRegistry<I, T>{
     @Override
-    default @NotNull T register(@NotNull T object){
+    default <E extends T> @NotNull E register(@NotNull E object){
         return register(object.id(), object);
     }
 

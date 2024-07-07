@@ -68,13 +68,13 @@ public class CfgParsedObjectRegistry extends SimpleKeyedRegistry<CfgParsedObject
     }
 
     @Override
-    public @NotNull CfgParsedObjectHandler<?> register(@NotNull CfgParsedObjectHandler<?> object) {
+    public <E extends CfgParsedObjectHandler<?>> @NotNull E register(@NotNull E object) {
         addSorted(object);
         return super.register(object);
     }
 
     @Override
-    public @NotNull CfgParsedObjectHandler<?> register(@NotNull Key key, @NotNull CfgParsedObjectHandler<?> value) {
+    public <E extends CfgParsedObjectHandler<?>> @NotNull E register(@NotNull Key key, @NotNull E value) {
         addSorted(value);
         return super.register(key, value);
     }

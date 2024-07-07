@@ -10,7 +10,7 @@ import java.util.stream.Stream;
  */
 public interface Registry<T> extends Iterable<T>{
     @NotNull Stream<T> stream();
-    @NotNull T register(@NotNull T object);
+    <E extends T> E register(@NotNull E object);
     boolean unregister(@NotNull T object);
     void clear();
     @NotNull

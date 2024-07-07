@@ -29,7 +29,7 @@ public class SimpleRegistry<T> implements Registry<T> {
     }
 
     @Override
-    public @NotNull T register(@NotNull T object) {
+    public <E extends T> @NotNull E register(@NotNull E object) {
         collection.add(object);
         return object;
     }

@@ -38,7 +38,7 @@ public class SimpleMappedRegistry<K, V> implements MappedRegistry<K, V> {
     }
 
     @Override
-    public @NotNull V register(@NotNull K key, @NotNull V value) {
+    public <E extends V> @NotNull E register(@NotNull K key, @NotNull E value) {
         map.put(key, value);
         return value;
     }
@@ -74,7 +74,7 @@ public class SimpleMappedRegistry<K, V> implements MappedRegistry<K, V> {
     }
 
     @Override
-    public @NotNull V register(@NotNull V object) {
+    public <E extends V> @NotNull E register(@NotNull E object) {
         throw new UnsupportedOperationException("Mapped registry does not support object register! Please use register(Key, Value)");
     }
 

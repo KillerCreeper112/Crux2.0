@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public interface PriorityRegistry<T> {
-    @NotNull T register(int priority, @NotNull T object);
+    <E extends T> @NotNull E register(int priority, @NotNull E object);
 
     boolean removeFromPriority(@NotNull Key key);
 

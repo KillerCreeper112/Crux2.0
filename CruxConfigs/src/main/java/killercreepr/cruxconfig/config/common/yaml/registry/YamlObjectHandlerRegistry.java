@@ -20,14 +20,13 @@ public class YamlObjectHandlerRegistry extends SimpleMappedRegistry<Class<?>, Ya
     }
 
     @Override
-    public @NotNull YamlObjectHandler<?> register(@NotNull Class<?> key, @NotNull YamlObjectHandler<?> value) {
+    public <E extends YamlObjectHandler<?>> @NotNull E register(@NotNull Class<?> key, @NotNull E value) {
         return super.register(key, value);
     }
 
     @Override
     public @Nullable YamlObjectHandler<?> remove(@NotNull Class<?> key) {
-        YamlObjectHandler<?> removed = super.remove(key);
-        return removed;
+        return super.remove(key);
     }
 
     @Override

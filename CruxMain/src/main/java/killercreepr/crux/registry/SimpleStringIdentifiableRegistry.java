@@ -14,7 +14,7 @@ public class SimpleStringIdentifiableRegistry<T extends StringIdentifiable> exte
     }
 
     @Override
-    public @NotNull T register(@NotNull T object) {
+    public <E extends T> @NotNull E register(@NotNull E object) {
         return StringIdentifiableRegistry.super.register(object);
     }
 

@@ -23,7 +23,7 @@ public class JsonContainerHandlerRegistry extends SimpleMappedRegistry<Class<?>,
 
     public final MappedRegistry<String, Class<?>> registryByName = SimpleMappedRegistry.fromHashMap();
     @Override
-    public @NotNull JsonContainerHandler<?> register(@NotNull Class<?> key, @NotNull JsonContainerHandler<?> value) {
+    public <E extends JsonContainerHandler<?>> @NotNull E register(@NotNull Class<?> key, @NotNull E value) {
         registryByName.register(registry.getSerializerID(value), key);
         return super.register(key, value);
     }

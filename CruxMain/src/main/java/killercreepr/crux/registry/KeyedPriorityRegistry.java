@@ -12,7 +12,7 @@ public class KeyedPriorityRegistry<T extends Keyed> extends SimpleKeyedRegistry<
     protected final TreeMap<Integer, Collection<T>> BY_PRIORITY = new TreeMap<>();
 
     @Override
-    public @NotNull T register(int priority, @NotNull T object){
+    public <E extends T> @NotNull E register(int priority, @NotNull E object){
         register(object);
         BY_PRIORITY.computeIfAbsent(priority, (x) -> new ArrayList<>()).add(object);
         return object;
