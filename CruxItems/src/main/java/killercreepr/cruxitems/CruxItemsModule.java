@@ -5,6 +5,7 @@ import killercreepr.crux.handler.ItemHandler;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registries.CruxRegistries;
+import killercreepr.cruxitems.command.CruxItemsCommands;
 import killercreepr.cruxitems.config.Config;
 import killercreepr.cruxitems.item.CruxedItem;
 import killercreepr.cruxitems.item.GeneralCruxedItemDisplayUpdater;
@@ -56,7 +57,7 @@ public class CruxItemsModule implements CruxModule, ItemHandler {
             new DisableRecipesListener()
         );
 
-        //todo CruxItemsCommands.register(plugin);
+        CruxItemsCommands.register(plugin);
     }
 
     @Override
