@@ -59,7 +59,7 @@ public class CruxAttributeCommands {
                                 .then(
                                     Commands.argument("attribute", CruxAttributeArguments.cruxAttribute())
                                         .then(
-                                            Commands.argument("modkey", CruxCmdArguments.cruxKey())
+                                            Commands.argument("modkey", CruxCmdArguments.CRUX_KEY)
                                                 .then(
                                                     Commands.argument("amount", DoubleArgumentType.doubleArg())
                                                         .executes(ctx -> addModifier(
@@ -116,7 +116,7 @@ public class CruxAttributeCommands {
                                     .then(
                                         Commands.argument("attribute", CruxAttributeArguments.cruxAttribute())
                                             .then(
-                                                Commands.argument("modkey", CruxCmdArguments.cruxKey())
+                                                Commands.argument("modkey", CruxCmdArguments.CRUX_KEY)
                                                     .executes(ctx -> removeModifier(
                                                         ctx.getSource(),
                                                         ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),

@@ -96,7 +96,7 @@ public class CruxItemsCommands {
                             null
                         ))
                         .then(
-                            Commands.argument("color", CruxCmdArguments.color())
+                            Commands.argument("color", CruxCmdArguments.COLOR)
                                 .executes(ctx -> color(
                                     ctx.getSource(),
                                     ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
@@ -111,7 +111,7 @@ public class CruxItemsCommands {
                         .then(
                             Commands.literal("add")
                                 .then(
-                                    Commands.argument("flag", CruxCmdArguments.itemFlag())
+                                    Commands.argument("flag", CruxCmdArguments.ITEM_FLAG)
                                         .executes(ctx -> addFlag(
                                             ctx.getSource(),
                                             ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
@@ -121,7 +121,7 @@ public class CruxItemsCommands {
                         ).then(
                             Commands.literal("remove")
                                 .then(
-                                    Commands.argument("flag", CruxCmdArguments.itemFlag())
+                                    Commands.argument("flag", CruxCmdArguments.ITEM_FLAG)
                                         .executes(ctx -> removeFlag(
                                             ctx.getSource(),
                                             ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
