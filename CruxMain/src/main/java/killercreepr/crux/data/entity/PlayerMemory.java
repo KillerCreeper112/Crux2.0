@@ -57,7 +57,7 @@ public class PlayerMemory extends EntityMemory {
     }
 
     @Override
-    protected boolean shouldRemoveFromMemory(@Nullable Entity e) {
+    public boolean shouldRemoveFromMemory(@Nullable Entity e) {
         return quit != -1L && System.currentTimeMillis() > quit;
     }
 
