@@ -15,12 +15,16 @@ import java.util.HashSet;
 import java.util.Set;
 
 public interface CruxDirectionalBlockGroup extends CruxBlockGroup{
-    default@Nullable CruxBlockDirectional getBlock(@NotNull Axis direction){
+    static @NotNull BlockFace getFaceFromAxis(@NotNull Axis direction){
         return switch (direction){
-            case X -> getBlock(BlockFace.EAST);
-            case Y -> getBlock(BlockFace.UP);
-            case Z -> getBlock(BlockFace.NORTH);
+            case X -> BlockFace.EAST;
+            case Y -> BlockFace.UP;
+            case Z -> BlockFace.NORTH;
         };
+    }
+
+    default@Nullable CruxBlockDirectional getBlock(@NotNull Axis direction){
+        return getBlock(getFaceFromAxis(direction));
     }
 
     default @NotNull Set<BlockFace> getFaces() {
