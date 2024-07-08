@@ -39,6 +39,16 @@ public class BukkitMenu implements Menu{
         this.inventory = inventory;
     }
 
+    protected void addSlot(@NotNull Slot slot){
+        addSlot(slot, false);
+    }
+
+    protected void addSlot(@NotNull Slot slot, boolean skipUpdate){
+        slots.put(slot.getIndex(), slot);
+        if(skipUpdate) return;
+        slot.setItem(slot.getSlottedItemReplacement(), true);
+    }
+
     @Override
     public Menu reconstruct(int size, @NotNull Component name) {
         return reconstruct(Bukkit.createInventory(this, size, name));

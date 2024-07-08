@@ -9,7 +9,19 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Consumer;
+
 public interface Slot {
+    static @NotNull Slot click(@NotNull Menu menu, int index, @NotNull Consumer<InventoryClickEvent> click){
+        return new SimpleFixedSlot(menu, index){
+            @Override
+            public void onClick(@NotNull HumanEntity p, @NotNull InventoryClickEvent event) {
+                super.onClick(p, event);
+                click.accept(event);
+            }
+        };
+    }
+
     @NotNull Menu getMenu();
     default @Nullable ItemStack getItem(){
         return getMenu().getInventory().getItem(getIndex());
