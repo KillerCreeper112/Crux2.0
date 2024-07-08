@@ -265,6 +265,10 @@ public class CruxItem implements Cloneable {
     public CruxItem editMeta(@NotNull Consumer<ItemMeta> consumer){
         return editMeta(ItemMeta.class, consumer);
     }
+    public CruxItem edit(@NotNull Consumer<ItemStack> consumer){
+        consumer.accept(item);
+        return this;
+    }
 
     public <T extends ItemMeta> CruxItem editMeta(@NotNull Class<T> clazz, @NotNull Consumer<T> consumer){
         ItemMeta meta = meta();
