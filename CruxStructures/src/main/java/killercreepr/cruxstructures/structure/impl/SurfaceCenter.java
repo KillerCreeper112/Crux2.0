@@ -1,0 +1,20 @@
+package killercreepr.cruxstructures.structure.impl;
+
+import killercreepr.cruxstructures.structure.Structure;
+import killercreepr.cruxstructures.structure.StructureCenter;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+public class SurfaceCenter implements StructureCenter {
+    @Override
+    public @Nullable Location scan(@NotNull Structure structure, @NotNull Chunk chunk) {
+        int x = (chunk.getX() << 4) + 8;
+        int z = (chunk.getZ() << 4) + 8;
+        Block b = chunk.getWorld().getHighestBlockAt(x, z);
+        if(!b.isSolid()) return null;
+        return new Location(chunk.getWorld(), x, b.getY(), z);
+    }
+}

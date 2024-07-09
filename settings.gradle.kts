@@ -16,6 +16,7 @@ include(
     "CruxBrewery",
 
     "CruxAdvancements",
+    "CruxStructures",
 
     "CruxTest"
 )
