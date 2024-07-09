@@ -2,7 +2,9 @@ package killercreepr.cruxstructures.structure;
 
 import org.bukkit.Chunk;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface StructureGenerator {
-    void generate(@NotNull Structure structure, @NotNull Chunk at);
+    @NotNull GenerateResult
+    generate(@NotNull Structure structure, @NotNull Chunk at);
 }
