@@ -14,7 +14,10 @@ import com.sk89q.worldedit.session.ClipboardHolder;
 import killercreepr.crux.Crux;
 import killercreepr.cruxstructures.event.StructurePlaceEvent;
 import killercreepr.cruxstructures.structure.Structure;
+import net.kyori.adventure.key.Key;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
+import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -23,12 +26,24 @@ import java.util.Random;
 import java.util.logging.Level;
 
 public class FAWEStructure implements Structure {
+    protected final @NotNull Key key;
     protected final @NotNull ClipboardHolder holder;
-    public FAWEStructure(@NotNull ClipboardHolder holder) {
+    protected final @NotNull BoundingBox box;
+    public FAWEStructure(@NotNull Key key, @NotNull ClipboardHolder holder) {
+        this.key = key;
         this.holder = holder;
+        Clipboard clipboard = holder.getClipboards().getFirst();
+        BlockVector3 min = clipboard.getMinimumPoint();
+        BlockVector3 max = clipboard.getMaximumPoint();
+
+        box = new BoundingBox(
+            min.x(), min.y(), min.z(),
+            max.x(), max.y(), max.z()
+        );
     }
 
-    public FAWEStructure(@NotNull String filename) {
+    public FAWEStructure(@NotNull Key key, @NotNull String filename) {
+        this.key = key;
         File schematicFile = new File(WorldEdit.getInstance().getSchematicsFolderPath().toString() + "/" + filename + ".schem");
         if(!schematicFile.exists()) {
             throw new RuntimeException("Cannot find schematic file!");
@@ -38,8 +53,16 @@ public class FAWEStructure implements Structure {
             throw new RuntimeException("Invalid schematic format for schematic " + filename + "!");
         }
 
+
         try{
             Clipboard clipboard = format.load(schematicFile);
+            BlockVector3 min = clipboard.getMinimumPoint();
+            BlockVector3 max = clipboard.getMaximumPoint();
+
+            box = new BoundingBox(
+                min.x(), min.y(), min.z(),
+                max.x(), max.y(), max.z()
+            );
             this.holder = new ClipboardHolder(clipboard);
         }catch (IOException e){
             throw new RuntimeException(e);
@@ -54,6 +77,11 @@ public class FAWEStructure implements Structure {
         pasteSchematic(at, true, true);
 
         return event;
+    }
+
+    @Override
+    public @NotNull BoundingBox boundingBox() {
+        return box;
     }
 
     public void pasteSchematic(@NotNull Location loc, boolean randomRotation, boolean ignoreAirBlocks){
@@ -74,5 +102,10 @@ public class FAWEStructure implements Structure {
             Crux.log(Level.WARNING, "Couldn't place clipboard at: '" + loc + "'.");
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public @NotNull Key key() {
+        return key;
     }
 }
