@@ -12,5 +12,5 @@ public interface Structure extends Keyed {
     @NotNull
     BoundingBox boundingBox();
 
-    default boolean isSavable(){ return false; }
+    default boolean isPersistent(){ return false; }
 }

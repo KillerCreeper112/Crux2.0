@@ -18,6 +18,7 @@ tasks{
 dependencies {
     paperweight.paperDevBundle(libs.versions.paper)
     compileOnly(project(":CruxMain"))
+    compileOnly((project(":CruxConfigs")))
 
     compileOnly(fileTree("libs") {
         include("*.jar")
