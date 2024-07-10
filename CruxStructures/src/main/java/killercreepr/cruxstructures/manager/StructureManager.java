@@ -52,6 +52,7 @@ public class StructureManager implements Listener {
             for(String worldName : worlds){
                 structures.computeIfAbsent(worldName, e -> new ArrayList<>()).add(generator);
             }
+
         }
     }
 
