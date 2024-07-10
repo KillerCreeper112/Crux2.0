@@ -76,11 +76,11 @@ public class StructureManager implements Listener {
 
 
     public @NotNull CruxFolder createWorldFolder(@NotNull UUID worldUUID){
-        return new CruxFolder(plugin, worldUUID.toString());
+        return new CruxFolder(plugin, "saved_structures/" + worldUUID);
     }
 
     public @NotNull StorageChunkFile createChunkFile(@NotNull UUID worldUUID, long chunkKey){
-        return new StorageChunkFile(plugin, worldUUID + "/" + chunkKey);
+        return new StorageChunkFile(plugin, "saved_structures/" + worldUUID + "/" + chunkKey);
     }
 
     @EventHandler(ignoreCancelled = true)
