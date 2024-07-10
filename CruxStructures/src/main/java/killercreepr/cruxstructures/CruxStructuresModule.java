@@ -4,6 +4,7 @@ import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import killercreepr.cruxstructures.config.FileCfgStructureGen;
+import killercreepr.cruxstructures.config.FileSimpleStoredStructure;
 import killercreepr.cruxstructures.config.FileStructureCenter;
 import killercreepr.cruxstructures.config.FileStructureRequirement;
 import killercreepr.cruxstructures.config.structure.FileBiomeRequirement;
@@ -11,6 +12,7 @@ import killercreepr.cruxstructures.config.structure.FileSurfaceCenter;
 import killercreepr.cruxstructures.structure.StructureCenter;
 import killercreepr.cruxstructures.structure.StructureRequirement;
 import killercreepr.cruxstructures.structure.impl.CfgStructureGen;
+import killercreepr.cruxstructures.structure.stored.SimpleStoredStructure;
 import org.jetbrains.annotations.NotNull;
 
 public class CruxStructuresModule implements CruxModule {
@@ -33,6 +35,8 @@ public class CruxStructuresModule implements CruxModule {
 
     @Override
     public void onEnable(@NotNull CruxPlugin plugin) {
+        CfgRegistries.YAML.registerHandler(SimpleStoredStructure.class, new FileSimpleStoredStructure());
+
         CfgRegistries.YAML.registerHandler(CfgStructureGen.class, new FileCfgStructureGen());
         CfgRegistries.YAML.registerHandler(StructureCenter.class, fileStructureCenter);
         CfgRegistries.YAML.registerHandler(StructureRequirement.class, fileStructureRequirement);

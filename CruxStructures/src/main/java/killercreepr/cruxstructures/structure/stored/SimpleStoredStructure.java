@@ -5,6 +5,7 @@ import killercreepr.crux.data.StoredChunk;
 import killercreepr.cruxstructures.structure.Structure;
 import killercreepr.cruxstructures.structure.active.ActiveStructure;
 import killercreepr.cruxstructures.structure.active.SimpleActiveStructure;
+import net.kyori.adventure.key.Key;
 import org.bukkit.Chunk;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
@@ -12,12 +13,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class SimpleStoredStructure implements StoredStructure{
-    protected final @NotNull Structure structure;
+    protected final @NotNull Key structureKey;
     protected final @NotNull StoredChunk chunk;
     protected final @NotNull BlockPos center;
     protected final @NotNull BoundingBox boundingBox;
     public SimpleStoredStructure(@NotNull Structure structure, @NotNull StoredChunk chunk, @NotNull BlockPos center) {
-        this.structure = structure;
+        this.structureKey = structure.key();
         this.chunk = chunk;
         this.center = center;
         Vector min = structure.boundingBox().getMin();
@@ -33,9 +34,16 @@ public class SimpleStoredStructure implements StoredStructure{
         );
     }
 
+    public SimpleStoredStructure(@NotNull Key structureKey, @NotNull StoredChunk chunk, @NotNull BlockPos center, @NotNull BoundingBox boundingBox) {
+        this.structureKey = structureKey;
+        this.chunk = chunk;
+        this.center = center;
+        this.boundingBox = boundingBox;
+    }
+
     @Override
-    public @NotNull Structure getParent() {
-        return structure;
+    public @NotNull Key getStructureKey() {
+        return structureKey;
     }
 
     @Override

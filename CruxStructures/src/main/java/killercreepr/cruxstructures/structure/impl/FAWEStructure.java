@@ -48,7 +48,7 @@ public class FAWEStructure implements Structure {
     public FAWEStructure(@NotNull Key key, @NotNull File schematicFile) {
         this.key = key;
         if(!schematicFile.exists()) {
-            throw new RuntimeException("Cannot find schematic file!");
+            throw new RuntimeException("Cannot find schematic file at " + schematicFile.getAbsolutePath() + "!");
         }
         ClipboardFormat format = ClipboardFormats.findByFile(schematicFile);
         if(format == null) {
