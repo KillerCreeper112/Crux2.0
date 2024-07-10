@@ -8,4 +8,5 @@ import org.jetbrains.annotations.Nullable;
 public interface StructureCenter {
     @Nullable
     Location scan(@NotNull Structure structure, @NotNull Chunk chunk);
+    @NotNull String type();
 }

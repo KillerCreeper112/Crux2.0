@@ -17,4 +17,9 @@ public class SurfaceCenter implements StructureCenter {
         if(!b.isSolid()) return null;
         return new Location(chunk.getWorld(), x, b.getY(), z);
     }
+
+    @Override
+    public @NotNull String type() {
+        return "surface_center";
+    }
 }

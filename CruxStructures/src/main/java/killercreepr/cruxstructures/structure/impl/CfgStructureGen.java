@@ -8,7 +8,7 @@ import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-
+//todo config deserialization
 public class CfgStructureGen implements StructureGenerator {
     protected final @NotNull Key structureKey;
     protected final @NotNull StructureCenter center;
