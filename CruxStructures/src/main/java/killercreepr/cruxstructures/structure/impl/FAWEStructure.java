@@ -42,14 +42,17 @@ public class FAWEStructure implements Structure {
     }
 
     public FAWEStructure(@NotNull Key key, @NotNull String filename) {
+        this(key, new File(WorldEdit.getInstance().getSchematicsFolderPath().toString() + "/" + filename + ".schem"));
+    }
+
+    public FAWEStructure(@NotNull Key key, @NotNull File schematicFile) {
         this.key = key;
-        File schematicFile = new File(WorldEdit.getInstance().getSchematicsFolderPath().toString() + "/" + filename + ".schem");
         if(!schematicFile.exists()) {
             throw new RuntimeException("Cannot find schematic file!");
         }
         ClipboardFormat format = ClipboardFormats.findByFile(schematicFile);
         if(format == null) {
-            throw new RuntimeException("Invalid schematic format for schematic " + filename + "!");
+            throw new RuntimeException("Invalid schematic format for schematic " + schematicFile.getName() + "!");
         }
 
 

@@ -6,4 +6,5 @@ import org.jetbrains.annotations.NotNull;
 
 public interface StructureRequirement {
     boolean test(@NotNull Structure structure, @NotNull Chunk chunk, @NotNull Location location);
+
 }

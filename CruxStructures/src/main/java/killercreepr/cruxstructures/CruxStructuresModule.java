@@ -1,6 +1,14 @@
 package killercreepr.cruxstructures;
 
 import killercreepr.crux.module.CruxModule;
+import killercreepr.crux.plugin.CruxPlugin;
+import killercreepr.cruxconfig.config.registry.CfgRegistries;
+import killercreepr.cruxstructures.config.FileCfgStructureGen;
+import killercreepr.cruxstructures.config.FileStructureCenter;
+import killercreepr.cruxstructures.config.FileStructureRequirement;
+import killercreepr.cruxstructures.config.structure.FileBiomeRequirement;
+import killercreepr.cruxstructures.structure.StructureCenter;
+import killercreepr.cruxstructures.structure.StructureRequirement;
 import org.jetbrains.annotations.NotNull;
 
 public class CruxStructuresModule implements CruxModule {
@@ -8,5 +16,26 @@ public class CruxStructuresModule implements CruxModule {
     @Override
     public @NotNull String name() {
         return NAMESPACE;
+    }
+
+    protected final FileStructureCenter fileStructureCenter = new FileStructureCenter();
+    protected final FileStructureRequirement fileStructureRequirement = new FileStructureRequirement();
+
+    public FileStructureCenter getFileStructureCenter() {
+        return fileStructureCenter;
+    }
+
+    public FileStructureRequirement getFileStructureRequirement() {
+        return fileStructureRequirement;
+    }
+
+    @Override
+    public void onEnable(@NotNull CruxPlugin plugin) {
+        CfgRegistries.YAML.registerHandler(FileCfgStructureGen.class, new FileCfgStructureGen());
+        CfgRegistries.YAML.registerHandler(StructureCenter.class, fileStructureCenter);
+        CfgRegistries.YAML.registerHandler(StructureRequirement.class, fileStructureRequirement);
+
+        fileStructureCenter.TYPE_HANDLERS.register("surface_center", new FileStructureCenter());
+        fileStructureRequirement.TYPE_HANDLERS.register("biome", new FileBiomeRequirement());
     }
 }
