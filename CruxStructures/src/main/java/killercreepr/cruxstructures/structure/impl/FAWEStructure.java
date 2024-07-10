@@ -16,7 +16,6 @@ import killercreepr.cruxstructures.event.StructurePlaceEvent;
 import killercreepr.cruxstructures.structure.Structure;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 

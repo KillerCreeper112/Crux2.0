@@ -1,6 +1,7 @@
 package killercreepr.crux.data;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -40,6 +41,10 @@ public class BlockPos {
 
     public int z() {
         return z;
+    }
+
+    public @NotNull Block getBlock(@NotNull World world){
+        return world.getBlockAt(x, y, z);
     }
 
     @Override

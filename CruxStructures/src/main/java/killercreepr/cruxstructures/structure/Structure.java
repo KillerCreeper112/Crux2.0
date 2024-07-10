@@ -11,4 +11,6 @@ public interface Structure extends Keyed {
     StructurePlaceEvent place(@NotNull Location at);
     @NotNull
     BoundingBox boundingBox();
+
+    default boolean isSavable(){ return false; }
 }

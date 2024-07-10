@@ -1,41 +1,32 @@
 package killercreepr.cruxstructures.structure.active;
 
-import killercreepr.cruxstructures.structure.Structure;
+import killercreepr.crux.data.BlockPos;
+import killercreepr.cruxstructures.structure.stored.StoredStructure;
+import org.bukkit.Chunk;
 import org.bukkit.block.Block;
-import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 
 public class SimpleActiveStructure implements ActiveStructure {
-    protected final @NotNull Structure structure;
+    protected final @NotNull StoredStructure stored;
     protected final @NotNull Block center;
-    public SimpleActiveStructure(@NotNull Structure structure, @NotNull Block center) {
-        this.structure = structure;
-        this.center = center;
+
+    public SimpleActiveStructure(@NotNull StoredStructure stored, @NotNull Chunk chunk) {
+        this.stored = stored;
+        this.center = stored.getBlockPos().getBlock(chunk.getWorld());
     }
 
     @Override
-    public @NotNull Structure parent() {
-        return structure;
+    public @NotNull StoredStructure getData() {
+        return stored;
     }
 
     @Override
-    public @NotNull Block center() {
+    public @NotNull Block getCenter() {
         return center;
     }
 
     @Override
-    public @NotNull Block getMinPoint() {
-        BoundingBox box = structure.boundingBox();
-        return center.getRelative(
-            (int) box.getMinX(), (int) box.getMinY(), (int) box.getMinZ()
-        );
-    }
-
-    @Override
-    public @NotNull Block getMaxPoint() {
-        BoundingBox box = structure.boundingBox();
-        return center.getRelative(
-            (int) box.getMaxX(), (int) box.getMaxY(), (int) box.getMaxZ()
-        );
+    public @NotNull BlockPos getBlockPos() {
+        return stored.getBlockPos();
     }
 }

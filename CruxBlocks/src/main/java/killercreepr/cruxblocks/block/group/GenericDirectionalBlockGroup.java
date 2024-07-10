@@ -3,7 +3,6 @@ package killercreepr.cruxblocks.block.group;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.CruxBlockDirectional;
 import net.kyori.adventure.key.Key;
-import org.bukkit.Axis;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

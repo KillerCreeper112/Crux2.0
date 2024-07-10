@@ -6,7 +6,6 @@ import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.crux.tags.container.MultiTagContainer;
 import killercreepr.crux.tags.context.FormatParserContext;
 import killercreepr.crux.tags.format.Format;
-import killercreepr.crux.tags.provider.StringTagProvider;
 import killercreepr.crux.util.CruxItem;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.crux.util.CruxString;

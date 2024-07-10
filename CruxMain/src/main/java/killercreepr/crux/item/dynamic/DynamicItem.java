@@ -1,6 +1,5 @@
 package killercreepr.crux.item.dynamic;
 
-import io.netty.util.concurrent.CompleteFuture;
 import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.util.CruxItem;
 import org.bukkit.inventory.ItemStack;

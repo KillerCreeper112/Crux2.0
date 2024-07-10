@@ -1,7 +1,8 @@
 package killercreepr.cruxstructures.structure.impl;
 
+import killercreepr.cruxstructures.registries.StructureRegistries;
 import killercreepr.cruxstructures.structure.*;
-import net.kyori.adventure.key.Keyed;
+import net.kyori.adventure.key.Key;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
@@ -9,17 +10,17 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 public class CfgStructureGen implements StructureGenerator {
-    protected final @NotNull Keyed structureKey;
+    protected final @NotNull Key structureKey;
     protected final @NotNull StructureCenter center;
     protected final @NotNull Collection<StructureRequirement> requirements;
-    public CfgStructureGen(@NotNull Keyed structureKey, @NotNull StructureCenter center, @NotNull Collection<StructureRequirement> requirements) {
+    public CfgStructureGen(@NotNull Key structureKey, @NotNull StructureCenter center, @NotNull Collection<StructureRequirement> requirements) {
         this.structureKey = structureKey;
         this.center = center;
         this.requirements = requirements;
     }
 
     public @NotNull GenerateResult generate(@NotNull Chunk at){
-        Structure structure = null;//todo get structure
+        Structure structure = StructureRegistries.STRUCTURES.get(structureKey);
         if(structure==null) return new GenerateResult(null);
         return generate(structure, at);
     }
