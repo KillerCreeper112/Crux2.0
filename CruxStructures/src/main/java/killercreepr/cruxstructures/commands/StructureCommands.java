@@ -6,11 +6,9 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.resolvers.BlockPositionResolver;
-import io.papermc.paper.command.brigadier.argument.resolvers.selector.EntitySelectorArgumentResolver;
 import io.papermc.paper.math.BlockPosition;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-import killercreepr.crux.data.communication.MsgContainer;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.cruxstructures.commands.argument.StructureArgs;
@@ -20,13 +18,8 @@ import org.bukkit.World;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.EntityEquipment;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -47,6 +40,23 @@ public class StructureCommands {
             Commands.literal("place")
                 .then(
                     Commands.argument("structure", StructureArgs.STRUCTURE)
+                        .executes(ctx ->{
+                            Structure structure = ctx.getArgument("structure", Structure.class);
+                            CommandSender sender = getExecutor(ctx.getSource());
+
+                            Location spawn;
+                            if(sender instanceof BlockCommandSender s){
+                                spawn = s.getBlock().getLocation();
+                            }else if(sender instanceof Entity s){
+                                spawn = s.getLocation();
+                            }else return -1;
+
+                            structure.place(spawn);
+                            sender.sendMessage("Structure, '" + structure.key() + "' has been placed at " +
+                                CruxMath.format(spawn.getX()) + ", " + CruxMath.format(spawn.getY()) + ", " + CruxMath.format(spawn.getZ()) + " in world, " +
+                                spawn.getWorld().getName() + ".");
+                            return 1;
+                        })
                         .then(
                             Commands.argument("location", ArgumentTypes.blockPosition())
                                 .executes(ctx ->{
@@ -70,7 +80,8 @@ public class StructureCommands {
                                         CruxMath.format(spawn.getX()) + ", " + CruxMath.format(spawn.getY()) + ", " + CruxMath.format(spawn.getZ()) + " in world, " +
                                         spawn.getWorld().getName() + ".");
                                     return 1;
-                                }))
+                                })
+                        )
                 )
         )
         ;
