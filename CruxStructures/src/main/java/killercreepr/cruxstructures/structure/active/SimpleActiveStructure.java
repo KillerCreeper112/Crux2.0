@@ -29,4 +29,7 @@ public class SimpleActiveStructure implements ActiveStructure {
     public @NotNull BlockPos getBlockPos() {
         return stored.getBlockPos();
     }
+
+    @Override
+    public void tick() {}
 }

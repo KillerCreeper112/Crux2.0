@@ -41,9 +41,12 @@ public abstract class WorldChunkStorage<T> {
     }
 
     public T add(long chunkKey, @NotNull T block){
-        Bukkit.broadcastMessage(chunkKey + " chunk key!" + block);
-        new RuntimeException().printStackTrace();
-        return data.computeIfAbsent(chunkKey, (i) -> newChunkStorage()).add(block);
+        if(data.containsKey(chunkKey)){
+            return data.get(chunkKey).add(block);
+        }
+        data.put(chunkKey, newChunkStorage());
+        return data.get(chunkKey).add(block);
+        //return data.computeIfAbsent(chunkKey, (i) -> newChunkStorage()).add(block);
     }
 
     public boolean isEmpty(){

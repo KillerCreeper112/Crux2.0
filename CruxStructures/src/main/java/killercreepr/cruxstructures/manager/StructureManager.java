@@ -23,6 +23,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.*;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -42,6 +43,25 @@ public class StructureManager implements Listener {
 
     protected final @NotNull MultiVerseWorldStorage<StoredStructure> stored = new MultiVerseBlockPosedStorage<>(new ConcurrentHashMap<>());
     protected final @NotNull MultiVerseWorldStorage<ActiveStructure> active = new MultiVerseBlockPosedStorage<>(new ConcurrentHashMap<>());
+
+    public @NotNull BukkitRunnable buildRunnable(){
+        return new BukkitRunnable(){
+            @Override
+            public void run() {
+                active.getData().values().forEach(worldChunk ->{
+                    worldChunk.getData().values().forEach(chunkBlock ->{
+                        chunkBlock.getData().values().forEach(a ->{
+                            if(a.shouldStop()){
+                                active.remove(a.getCenter().getWorld().getUID(), a.getChunk().getChunkKey(), a.getBlockPos());
+                                return;
+                            }
+                            a.tick();
+                        });
+                    });
+                });
+            }
+        };
+    }
 
     public void loadConfiguration(){
         structures.clear();
@@ -74,7 +94,7 @@ public class StructureManager implements Listener {
         this.stored.add(spawn.getWorld().getUID(), chunk.getChunkKey(), stored);
         ActiveStructure active = stored.buildActive(chunk);
         if(active==null) return;
-        //this.active.add(spawn.getWorld().getUID(), chunk.getChunkKey(), active);
+        this.active.add(spawn.getWorld().getUID(), chunk.getChunkKey(), active);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -111,14 +131,12 @@ public class StructureManager implements Listener {
         UUID worldUUID = world.getUID();
         CruxFolder folder = createWorldFolder(worldUUID);
         File[] files = folder.file().listFiles();
-        Bukkit.broadcastMessage("World loading: " + world.getName() + " " + files);
         if(files==null) return;
 
         for(File f : files){
             StorageChunkFile file = new StorageChunkFile(f);
             Map<BlockPos, StoredStructure> values = file.structures();
             file.close();
-            Bukkit.broadcastMessage("Files: " + file.file().getName() + " ----   " + values);
             values.values().forEach(v ->{
                 stored.add(worldUUID, v.getChunk().getChunkKey(), v);
             });

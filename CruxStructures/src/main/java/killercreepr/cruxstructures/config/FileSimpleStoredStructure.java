@@ -10,14 +10,14 @@ import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxstructures.registries.StructureRegistries;
 import killercreepr.cruxstructures.structure.Structure;
 import killercreepr.cruxstructures.structure.stored.SimpleStoredStructure;
+import killercreepr.cruxstructures.structure.stored.StoredStructure;
 import net.kyori.adventure.key.Key;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FileSimpleStoredStructure extends SimpleFileHandler<SimpleStoredStructure> {
+public class FileSimpleStoredStructure<T extends StoredStructure> extends SimpleFileHandler<T> {
     @Override
-    public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull SimpleStoredStructure object) {
+    public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull T object) {
         FileRegistry registry = context.getRegistry();
         return new FileObject()
             .add("structure", registry.serializeToFileElement(object.getParent().key()))
@@ -27,17 +27,19 @@ public class FileSimpleStoredStructure extends SimpleFileHandler<SimpleStoredStr
     }
 
     @Override
-    public @Nullable SimpleStoredStructure deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
+    public @Nullable T deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
+        return (T) deserializeSimple(context, e);
+    }
+
+    public @Nullable SimpleStoredStructure deserializeSimple(@NotNull FileContext<?> context, @NotNull FileElement e){
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = context.getRegistry();
         Key structureKey = registry.deserialize(Key.class, o.get("structure"));
-        Bukkit.broadcastMessage("DESERRIALIGIN: KKEKYKKEYEYEY " + structureKey);
         if(structureKey==null) return null;
 
         StoredChunk chunk = registry.deserialize(StoredChunk.class, o.get("chunk"));
         BlockPos center = registry.deserialize(BlockPos.class, o.get("center"));
 
-        Bukkit.broadcastMessage("DESERRIALIGIN: " + chunk + ", " + center);
         if(chunk == null || center == null) return null;
 
         Structure structure = StructureRegistries.STRUCTURES.get(structureKey);

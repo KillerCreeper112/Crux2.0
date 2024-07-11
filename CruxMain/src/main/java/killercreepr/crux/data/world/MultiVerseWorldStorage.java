@@ -54,8 +54,14 @@ public abstract class MultiVerseWorldStorage<T> {
     }
 
     public MultiVerseWorldStorage<T> add(@NotNull UUID worldUUID, long chunkKey, @NotNull T block){
-        data.computeIfAbsent(worldUUID, (u) -> newWorldStorage()).add(chunkKey, block);
+        if(data.containsKey(worldUUID)){
+            data.get(worldUUID).add(chunkKey, block);
+        }
+        data.put(worldUUID, newWorldStorage());
+        data.get(worldUUID).add(chunkKey, block);
         return this;
+        /*data.computeIfAbsent(worldUUID, (u) -> newWorldStorage()).add(chunkKey, block);
+        return this;*/
     }
 
     public boolean isEmpty(){

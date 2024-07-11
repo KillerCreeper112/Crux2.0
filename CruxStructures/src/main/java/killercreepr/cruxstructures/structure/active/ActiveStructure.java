@@ -1,5 +1,6 @@
 package killercreepr.cruxstructures.structure.active;
 
+import killercreepr.crux.data.tick.ManagedTicked;
 import killercreepr.crux.data.world.BlockPosed;
 import killercreepr.cruxstructures.structure.Structure;
 import killercreepr.cruxstructures.structure.stored.StoredStructure;
@@ -8,7 +9,7 @@ import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface ActiveStructure extends BlockPosed {
+public interface ActiveStructure extends BlockPosed, ManagedTicked {
     @NotNull
     StoredStructure getData();
     default @NotNull Structure getStructure(){
