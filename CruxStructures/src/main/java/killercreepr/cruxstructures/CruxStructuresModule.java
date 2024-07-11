@@ -3,6 +3,7 @@ package killercreepr.cruxstructures;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
+import killercreepr.cruxstructures.commands.StructureCommands;
 import killercreepr.cruxstructures.config.FileCfgStructureGen;
 import killercreepr.cruxstructures.config.FileSimpleStoredStructure;
 import killercreepr.cruxstructures.config.FileStructureCenter;
@@ -35,6 +36,7 @@ public class CruxStructuresModule implements CruxModule {
 
     @Override
     public void onEnable(@NotNull CruxPlugin plugin) {
+        StructureCommands.register(plugin);
         CfgRegistries.YAML.registerHandler(CfgStructureGen.class, new FileCfgStructureGen());
         CfgRegistries.YAML.registerHandler(StructureCenter.class, fileStructureCenter);
         CfgRegistries.YAML.registerHandler(StructureRequirement.class, fileStructureRequirement);
@@ -43,5 +45,6 @@ public class CruxStructuresModule implements CruxModule {
         fileStructureRequirement.TYPE_HANDLERS.register("biome", new FileBiomeRequirement());
 
         CfgRegistries.JSON.registerHandler(SimpleStoredStructure.class, new FileSimpleStoredStructure<SimpleStoredStructure>());
+
     }
 }
