@@ -43,7 +43,7 @@ public class StructureManager implements Listener {
     protected final @NotNull MultiVerseWorldStorage<StoredStructure> stored = new MultiVerseBlockPosedStorage<>(new ConcurrentHashMap<>());
     protected final @NotNull MultiVerseWorldStorage<ActiveStructure> active = new MultiVerseBlockPosedStorage<>(new ConcurrentHashMap<>());
 
-    public void load(){
+    public void loadConfiguration(){
         structures.clear();
         CruxFolder cfgFolder = createCfgFolder();
         File[] files = cfgFolder.file().listFiles();
@@ -111,12 +111,14 @@ public class StructureManager implements Listener {
         UUID worldUUID = world.getUID();
         CruxFolder folder = createWorldFolder(worldUUID);
         File[] files = folder.file().listFiles();
+        Bukkit.broadcastMessage("World loading: " + world.getName() + " " + files);
         if(files==null) return;
 
         for(File f : files){
             StorageChunkFile file = new StorageChunkFile(f);
             Map<BlockPos, StoredStructure> values = file.structures();
             file.close();
+            Bukkit.broadcastMessage("Files: " + file.file().getName() + " ----   " + values);
             values.values().forEach(v ->{
                 stored.add(worldUUID, v.getChunk().getChunkKey(), v);
             });

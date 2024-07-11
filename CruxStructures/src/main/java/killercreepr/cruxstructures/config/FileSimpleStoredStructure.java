@@ -11,6 +11,7 @@ import killercreepr.cruxstructures.registries.StructureRegistries;
 import killercreepr.cruxstructures.structure.Structure;
 import killercreepr.cruxstructures.structure.stored.SimpleStoredStructure;
 import net.kyori.adventure.key.Key;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,7 +20,7 @@ public class FileSimpleStoredStructure extends SimpleFileHandler<SimpleStoredStr
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull SimpleStoredStructure object) {
         FileRegistry registry = context.getRegistry();
         return new FileObject()
-            .addProperty("structure", object.getParent().key().asString())
+            .add("structure", registry.serializeToFileElement(object.getParent().key()))
             .add("chunk", registry.serializeToFileElement(object.getChunk()))
             .add("center", registry.serializeToFileElement(object.getBlockPos()))
             ;
@@ -30,11 +31,13 @@ public class FileSimpleStoredStructure extends SimpleFileHandler<SimpleStoredStr
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = context.getRegistry();
         Key structureKey = registry.deserialize(Key.class, o.get("structure"));
+        Bukkit.broadcastMessage("DESERRIALIGIN: KKEKYKKEYEYEY " + structureKey);
         if(structureKey==null) return null;
 
         StoredChunk chunk = registry.deserialize(StoredChunk.class, o.get("chunk"));
         BlockPos center = registry.deserialize(BlockPos.class, o.get("center"));
 
+        Bukkit.broadcastMessage("DESERRIALIGIN: " + chunk + ", " + center);
         if(chunk == null || center == null) return null;
 
         Structure structure = StructureRegistries.STRUCTURES.get(structureKey);
