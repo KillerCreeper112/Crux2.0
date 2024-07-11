@@ -5,6 +5,7 @@ import killercreepr.crux.data.world.MultiVerseWorldStorage;
 import killercreepr.crux.data.world.WorldChunkStorage;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,6 +17,6 @@ public class MultiVerseBlockPosedStorage<T extends BlockPosed> extends MultiVers
 
     @Override
     public @NotNull WorldChunkStorage<T> newWorldStorage() {
-        return new WorldBlockPosedStorage<>(new ConcurrentHashMap<>());
+        return new WorldBlockPosedStorage<>(new HashMap<>());
     }
 }

@@ -2,6 +2,7 @@ package killercreepr.cruxstructures.manager;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.BlockPos;
+import killercreepr.crux.data.world.ChunkBlockStorage;
 import killercreepr.crux.data.world.MultiVerseWorldStorage;
 import killercreepr.crux.data.world.WorldChunkStorage;
 import killercreepr.crux.data.world.standard.MultiVerseBlockPosedStorage;
@@ -18,6 +19,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -49,18 +51,29 @@ public class StructureManager implements Listener {
             @Override
             public void run() {
                 active.getData().values().forEach(worldChunk ->{
-                    worldChunk.getData().values().forEach(chunkBlock ->{
-                        chunkBlock.getData().values().forEach(a ->{
-                            if(a.shouldStop()){
-                                active.remove(a.getCenter().getWorld().getUID(), a.getChunk().getChunkKey(), a.getBlockPos());
-                                return;
-                            }
-                            a.tick();
-                        });
-                    });
+                    tick(worldChunk);
                 });
             }
         };
+    }
+
+    public void tick(@NotNull WorldChunkStorage<ActiveStructure> container){
+        new HashSet<>(container.getData().values()).forEach(blockList ->{
+            new HashSet<>(blockList.getData().values()).forEach(a ->{
+                if(a.shouldStop()){
+                    active.remove(a.getCenter().getWorld().getUID(), a.getChunk().getChunkKey(), a.getBlockPos());
+                    a.stopped();
+                    return;
+                }
+                a.tick();
+            });
+        });
+    }
+
+    public void tick(@NotNull World world){
+        WorldChunkStorage<ActiveStructure> container = active.get(world.getUID());
+        if(container==null) return;
+        tick(container);
     }
 
     public void loadConfiguration(){
@@ -90,11 +103,13 @@ public class StructureManager implements Listener {
         Location spawn = event.getLocation();
         StoredStructure stored = structure.buildStored(spawn);
         if(stored==null) return;
+        if(!stored.shouldPersist()) return;
         Chunk chunk = spawn.getChunk();
         this.stored.add(spawn.getWorld().getUID(), chunk.getChunkKey(), stored);
         ActiveStructure active = stored.buildActive(chunk);
         if(active==null) return;
         this.active.add(spawn.getWorld().getUID(), chunk.getChunkKey(), active);
+        active.started();
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -174,9 +189,44 @@ public class StructureManager implements Listener {
                 Crux.log(Level.INFO, "SAVED BOI");
             }
         });
+
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
+    public void onChunkLoad(ChunkLoadEvent event) {
+        Chunk chunk = event.getChunk();
+        long chunkKey = chunk.getChunkKey();
+        ChunkBlockStorage<StoredStructure> cached = stored.get(chunk.getWorld().getUID(), chunkKey);
+        if(cached==null) return;
+        new HashSet<>(cached.getData().values()).forEach(data ->{
+            if(!data.shouldPersist()){
+                ActiveStructure removed = active.remove(chunk.getWorld().getUID(), chunkKey, data.getBlockPos());
+                if(removed != null) removed.stopped();
+                return;
+            }
+            //BlockPos blockPos = data.getBlockPos();
+            //todo maybe if(cached.get(blockPos) != null) return;
+            ActiveStructure active = data.buildActive(chunk);
+            if(active==null) return;
+            this.active.add(chunk.getWorld().getUID(), chunkKey, active);
+            active.started();
+        });
+    }
+
+    @EventHandler
+    public void onChunkUnload(ChunkUnloadEvent event) {
+        Chunk chunk = event.getChunk();
+        long chunkKey = chunk.getChunkKey();
+        ChunkBlockStorage<ActiveStructure> registered = active.get(chunk.getWorld().getUID(), chunkKey);
+        if(registered==null) return;
+        new HashSet<>(registered.getData().values()).forEach(block ->{
+            registered.remove(block);
+            block.stopped();
+            //todo maybe addCache(block);
+        });
+    }
+
+    /*@EventHandler(ignoreCancelled = true)
     public void onChunkLoad(ChunkLoadEvent event) {
         Chunk chunk = event.getChunk();
         UUID worldUUID = chunk.getWorld().getUID();
@@ -212,7 +262,7 @@ public class StructureManager implements Listener {
             });
         });
         this.active.remove(worldUUID, key);
-    }
+    }*/
 
     public @NotNull Plugin getPlugin() {
         return plugin;

@@ -35,6 +35,10 @@ public abstract class WorldChunkStorage<T> {
         return removed;
     }
 
+    public @Nullable ChunkBlockStorage<T> get(long chunkKey){
+        return data.get(chunkKey);
+    }
+
     public @Nullable T get(long chunkKey, @NotNull BlockPos pos){
         if(!data.containsKey(chunkKey)) return null;
         return data.get(chunkKey).get(pos);

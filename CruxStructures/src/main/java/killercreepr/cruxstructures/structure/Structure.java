@@ -16,6 +16,7 @@ public interface Structure extends Keyed {
     StructurePlaceEvent place(@NotNull Location at);
     @NotNull
     BoundingBox boundingBox();
+    @NotNull BlockPos originPos();
 
     default boolean isPersistent(){ return false; }
     default @Nullable StoredStructure buildStored(@NotNull Location center){

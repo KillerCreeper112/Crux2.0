@@ -12,6 +12,7 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.math.transform.AffineTransform;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import killercreepr.crux.Crux;
+import killercreepr.crux.data.BlockPos;
 import killercreepr.cruxstructures.event.StructurePlaceEvent;
 import killercreepr.cruxstructures.structure.Structure;
 import net.kyori.adventure.key.Key;
@@ -28,6 +29,7 @@ public class FAWEStructure implements Structure {
     protected final @NotNull Key key;
     protected final @NotNull ClipboardHolder holder;
     protected final @NotNull BoundingBox box;
+    protected final @NotNull BlockPos originPos;
     public FAWEStructure(@NotNull Key key, @NotNull ClipboardHolder holder) {
         this.key = key;
         this.holder = holder;
@@ -35,6 +37,8 @@ public class FAWEStructure implements Structure {
         BlockVector3 min = clipboard.getMinimumPoint();
         BlockVector3 max = clipboard.getMaximumPoint();
 
+        BlockVector3 origin = clipboard.getOrigin();
+        originPos = new BlockPos(origin.x(), origin.y(), origin.z());
         box = new BoundingBox(
             min.x(), min.y(), min.z(),
             max.x(), max.y(), max.z()
@@ -61,6 +65,9 @@ public class FAWEStructure implements Structure {
             BlockVector3 min = clipboard.getMinimumPoint();
             BlockVector3 max = clipboard.getMaximumPoint();
 
+            BlockVector3 origin = clipboard.getOrigin();
+            originPos = new BlockPos(origin.x(), origin.y(), origin.z());
+
             box = new BoundingBox(
                 min.x(), min.y(), min.z(),
                 max.x(), max.y(), max.z()
@@ -84,6 +91,11 @@ public class FAWEStructure implements Structure {
     @Override
     public @NotNull BoundingBox boundingBox() {
         return box;
+    }
+
+    @Override
+    public @NotNull BlockPos originPos() {
+        return originPos;
     }
 
     public void pasteSchematic(@NotNull Location loc, boolean randomRotation, boolean ignoreAirBlocks){

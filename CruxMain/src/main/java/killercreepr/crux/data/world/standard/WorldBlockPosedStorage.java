@@ -5,6 +5,7 @@ import killercreepr.crux.data.world.ChunkBlockStorage;
 import killercreepr.crux.data.world.WorldChunkStorage;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -15,6 +16,6 @@ public class WorldBlockPosedStorage<T extends BlockPosed> extends WorldChunkStor
 
     @Override
     public @NotNull ChunkBlockStorage<T> newChunkStorage() {
-        return new ChunkBlockPosedStorage<>(new ConcurrentHashMap<>());
+        return new ChunkBlockPosedStorage<>(new HashMap<>());
     }
 }

@@ -48,6 +48,11 @@ public abstract class MultiVerseWorldStorage<T> {
         if(!data.containsKey(worldUUID)) return null;
         return data.get(worldUUID).get(chunkKey, pos);
     }
+    public @Nullable ChunkBlockStorage<T> get(@NotNull UUID worldUUID, long chunkKey){
+        WorldChunkStorage<T> got = get(worldUUID);
+        if(got==null) return null;
+        return got.get(chunkKey);
+    }
 
     public @Nullable WorldChunkStorage<T> get(@NotNull UUID worldUUID){
         return data.get(worldUUID);
