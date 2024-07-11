@@ -9,7 +9,6 @@ import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxmenus.menu.bukkit.holder.ClickActions;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuItemHolder;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,7 +33,7 @@ public class FileMenuItem extends FileMenuModuled<MenuItemHolder> {
                             context, o.get(baseID), menuContext
                     );
                 }*/
-                Bukkit.getLogger().info("HOLDER HAS BASE: " + baseID + " ////   " + menuContext.get("items").getAsFileObject().get(baseID));
+                //Bukkit.getLogger().info("HOLDER HAS BASE: " + baseID + " ////   " + menuContext.get("items").getAsFileObject().get(baseID));
                 base = menuModule.getYamlMenuItem().deserializeFromFile(
                     context, menuContext.get("items").getAsFileObject().get(baseID), menuContext
                 );

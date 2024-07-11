@@ -4,11 +4,14 @@ import killercreepr.crux.data.BlockPos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public abstract class ChunkBlockStorage<T> {
-    protected final @NotNull Map<BlockPos, T> data = new HashMap<>();
+    protected final @NotNull Map<BlockPos, T> data;
+
+    public ChunkBlockStorage(@NotNull Map<BlockPos, T> data) {
+        this.data = data;
+    }
 
     public @NotNull Map<BlockPos, T> getData() {
         return data;

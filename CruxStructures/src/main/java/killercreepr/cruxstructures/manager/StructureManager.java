@@ -1,20 +1,25 @@
 package killercreepr.cruxstructures.manager;
 
+import killercreepr.crux.Crux;
 import killercreepr.crux.data.BlockPos;
 import killercreepr.crux.data.world.MultiVerseWorldStorage;
 import killercreepr.crux.data.world.WorldChunkStorage;
 import killercreepr.crux.data.world.standard.MultiVerseBlockPosedStorage;
-import killercreepr.cruxconfig.config.bukkit.file.Cfg;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
+import killercreepr.cruxstructures.event.StructurePlaceEvent;
 import killercreepr.cruxstructures.file.StorageChunkFile;
 import killercreepr.cruxstructures.structure.GenerateResult;
+import killercreepr.cruxstructures.structure.Structure;
 import killercreepr.cruxstructures.structure.active.ActiveStructure;
 import killercreepr.cruxstructures.structure.impl.CfgStructureGen;
 import killercreepr.cruxstructures.structure.stored.StoredStructure;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.*;
 import org.bukkit.plugin.Plugin;
@@ -22,7 +27,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
 
 public class StructureManager implements Listener {
     protected final @NotNull Plugin plugin;
@@ -33,8 +40,8 @@ public class StructureManager implements Listener {
     //world name -> structure gens
     protected final @NotNull Map<String, List<CfgStructureGen>> structures = new HashMap<>();
 
-    protected final @NotNull MultiVerseWorldStorage<StoredStructure> stored = new MultiVerseBlockPosedStorage<>();
-    protected final @NotNull MultiVerseWorldStorage<ActiveStructure> active = new MultiVerseBlockPosedStorage<>();
+    protected final @NotNull MultiVerseWorldStorage<StoredStructure> stored = new MultiVerseBlockPosedStorage<>(new ConcurrentHashMap<>());
+    protected final @NotNull MultiVerseWorldStorage<ActiveStructure> active = new MultiVerseBlockPosedStorage<>(new ConcurrentHashMap<>());
 
     public void load(){
         structures.clear();
@@ -54,6 +61,20 @@ public class StructureManager implements Listener {
             }
 
         }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    public void onStructurePlace(StructurePlaceEvent event) {
+        Structure structure = event.getStructure();
+        if(!structure.isPersistent()) return;
+        Location spawn = event.getLocation();
+        StoredStructure stored = structure.buildStored(spawn);
+        if(stored==null) return;
+        Chunk chunk = spawn.getChunk();
+        this.stored.add(spawn.getWorld().getUID(), chunk.getChunkKey(), stored);
+        ActiveStructure active = stored.buildActive(chunk);
+        if(active==null) return;
+        //this.active.add(spawn.getWorld().getUID(), chunk.getChunkKey(), active);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -105,17 +126,33 @@ public class StructureManager implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onWorldUnload(WorldUnloadEvent event) {
         World world = event.getWorld();
-        UUID worldUUID = world.getUID();
+        saveWorld(world);
+    }
 
+    public void saveAllWorlds(){
+        for(World world : Bukkit.getWorlds()){
+            saveWorld(world);
+        }
+    }
+
+    public void saveWorld(@NotNull World world){
+        Crux.log(Level.INFO, "World " + world.getName() + " has been saving now.");
+        UUID worldUUID = world.getUID();
         WorldChunkStorage<StoredStructure> removed = stored.remove(worldUUID);
         if(removed==null) return;
+        Crux.log(Level.INFO, "WORLD CHUNK! ");
         removed.getData().forEach((key, value) ->{
             StorageChunkFile file = createChunkFile(worldUUID, key);
             file.structures(value.getData().values());
+            Crux.log(Level.INFO, "WORLD CHUNK! ");
             if(file.json().isEmpty()){
                 file.close();
                 file.file().delete();
-            }else file.save(true);//todo don't need pretty
+                Crux.log(Level.INFO, "DELETED");
+            }else{
+                file.save(true);//todo don't need pretty
+                Crux.log(Level.INFO, "SAVED BOI");
+            }
         });
     }
 

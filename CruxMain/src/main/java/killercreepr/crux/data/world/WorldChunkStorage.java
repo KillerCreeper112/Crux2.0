@@ -1,14 +1,18 @@
 package killercreepr.crux.data.world;
 
 import killercreepr.crux.data.BlockPos;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public abstract class WorldChunkStorage<T> {
-    protected final @NotNull Map<Long, ChunkBlockStorage<T>> data = new HashMap<>();
+    protected final @NotNull Map<Long, ChunkBlockStorage<T>> data;
+
+    public WorldChunkStorage(@NotNull Map<Long, ChunkBlockStorage<T>> data) {
+        this.data = data;
+    }
 
     public ChunkBlockStorage<T> set(long chunkKey, @Nullable ChunkBlockStorage<T> container){
         if(container==null) return data.remove(chunkKey);
@@ -37,6 +41,8 @@ public abstract class WorldChunkStorage<T> {
     }
 
     public T add(long chunkKey, @NotNull T block){
+        Bukkit.broadcastMessage(chunkKey + " chunk key!" + block);
+        new RuntimeException().printStackTrace();
         return data.computeIfAbsent(chunkKey, (i) -> newChunkStorage()).add(block);
     }
 

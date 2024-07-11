@@ -10,7 +10,6 @@ import killercreepr.cruxconfig.config.common.yaml.automatic.AutoYamlSerializer;
 import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
 import killercreepr.cruxconfig.config.common.yaml.element.*;
 import killercreepr.cruxconfig.config.common.yaml.handler.YamlObjectHandler;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -112,7 +111,7 @@ public class YamlRegistry implements FileRegistry {
     }
 
     public @Nullable Object deserializeObjectRaw(@NotNull Type type, @NotNull YamlElement from, @NotNull YamlContext context){
-        Bukkit.getLogger().severe("DESERLIAIING OBJECT: " + type + " FROM " + from);
+        //Bukkit.getLogger().severe("DESERLIAIING OBJECT: " + type + " FROM " + from);
         /*if(from != null){
             if(isSubtypeOfCollection(type) && from.isYamlArray()){
                 Type[] args = getTypeArguments(type);

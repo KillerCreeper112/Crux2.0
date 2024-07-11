@@ -4,12 +4,15 @@ import killercreepr.crux.data.BlockPos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public abstract class MultiVerseWorldStorage<T> {
-    protected final @NotNull Map<UUID, WorldChunkStorage<T>> data = new HashMap<>();
+    protected final @NotNull Map<UUID, WorldChunkStorage<T>> data;
+
+    public MultiVerseWorldStorage(@NotNull Map<UUID, WorldChunkStorage<T>> data) {
+        this.data = data;
+    }
 
     public MultiVerseWorldStorage<T> set(@NotNull UUID worldUUID, @Nullable WorldChunkStorage<T> container){
         if(container==null) data.remove(worldUUID);

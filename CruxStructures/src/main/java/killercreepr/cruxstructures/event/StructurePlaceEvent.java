@@ -33,4 +33,8 @@ public class StructurePlaceEvent extends StructureEvent implements Cancellable {
     public void setCancelled(boolean cancel) {
         this.cancel = cancel;
     }
+
+    public static HandlerList getHandlerList() {
+        return HANDLER_LIST;
+    }
 }

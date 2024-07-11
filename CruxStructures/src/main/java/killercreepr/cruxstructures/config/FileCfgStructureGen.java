@@ -1,6 +1,5 @@
 package killercreepr.cruxstructures.config;
 
-import killercreepr.cruxconfig.config.bukkit.handler.SimpleFileHandler;
 import killercreepr.cruxconfig.config.bukkit.handler.YamlFileHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
