@@ -16,11 +16,11 @@ import killercreepr.cruxstructures.structure.Structure;
 import killercreepr.cruxstructures.structure.active.ActiveStructure;
 import killercreepr.cruxstructures.structure.impl.CfgStructureGen;
 import killercreepr.cruxstructures.structure.stored.StoredStructure;
+import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -30,6 +30,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
@@ -178,8 +179,14 @@ public class StructureManager implements Listener {
         Crux.log(Level.INFO, "World " + world.getName() + " has been saving now.");
         UUID worldUUID = world.getUID();
         WorldChunkStorage<StoredStructure> removed = stored.remove(worldUUID);
+
+        CruxFolder folder = createWorldFolder(worldUUID);
+        if(folder.file().exists()){
+            try{
+                FileUtils.deleteDirectory(folder.file());
+            }catch (IOException ignored){}
+        }
         if(removed==null) return;
-        Crux.log(Level.INFO, "WORLD CHUNK! ");
         removed.getData().forEach((key, value) ->{
             StorageChunkFile file = createChunkFile(worldUUID, key);
             file.structures(value.getData().values());
