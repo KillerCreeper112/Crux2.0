@@ -47,6 +47,14 @@ public class BlockPos {
         return world.getBlockAt(x, y, z);
     }
 
+    public @NotNull Vector toVector(){
+        return new Vector(x, y, z);
+    }
+
+    public @NotNull Location toLocation(World world){
+        return new Location(world, x, y, z);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

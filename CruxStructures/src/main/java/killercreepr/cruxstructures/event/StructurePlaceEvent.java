@@ -9,14 +9,24 @@ import org.jetbrains.annotations.NotNull;
 public class StructurePlaceEvent extends StructureEvent implements Cancellable {
     private static final HandlerList HANDLER_LIST = new HandlerList();
     protected final @NotNull Location location;
+    protected double rotation;
     protected boolean cancel = false;
-    public StructurePlaceEvent(@NotNull Structure structure, @NotNull Location location) {
+    public StructurePlaceEvent(@NotNull Structure structure, @NotNull Location location, double rotation) {
         super(structure);
         this.location = location;
+        this.rotation = rotation;
     }
 
     public @NotNull Location getLocation() {
         return location;
+    }
+
+    public double getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(double rotation) {
+        this.rotation = rotation;
     }
 
     @Override

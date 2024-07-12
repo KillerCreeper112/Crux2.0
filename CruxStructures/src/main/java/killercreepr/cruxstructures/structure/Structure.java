@@ -11,15 +11,22 @@ import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Random;
+
 public interface Structure extends Keyed {
     @NotNull
-    StructurePlaceEvent place(@NotNull Location at);
+    default StructurePlaceEvent place(@NotNull Location at){
+        return place(at, new Random().nextInt(4) * 90);
+    }
+
+    @NotNull
+    StructurePlaceEvent place(@NotNull Location at, double rotation);
     @NotNull
     BoundingBox boundingBox();
     @NotNull BlockPos originPos();
 
     default boolean isPersistent(){ return false; }
-    default @Nullable StoredStructure buildStored(@NotNull Location center){
-        return new SimpleStoredStructure(this, StoredChunk.from(center), BlockPos.from(center));
+    default @Nullable StoredStructure buildStored(@NotNull Location center, double rotation){
+        return new SimpleStoredStructure(this, StoredChunk.from(center), BlockPos.from(center), rotation);
     }
 }

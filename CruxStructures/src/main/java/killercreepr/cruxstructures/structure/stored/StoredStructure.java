@@ -24,6 +24,8 @@ public interface StoredStructure extends BlockPosed {
     @NotNull
     StoredChunk getChunk();
 
+    double getRotation();
+
     default boolean shouldPersist(){ return getParent().isPersistent(); }
 
     @NotNull

@@ -16,6 +16,7 @@ import killercreepr.crux.data.BlockPos;
 import killercreepr.cruxstructures.event.StructurePlaceEvent;
 import killercreepr.cruxstructures.structure.Structure;
 import net.kyori.adventure.key.Key;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
@@ -79,11 +80,11 @@ public class FAWEStructure implements Structure {
     }
 
     @Override
-    public @NotNull StructurePlaceEvent place(@NotNull Location at) {
-        StructurePlaceEvent event = new StructurePlaceEvent(this, at);
+    public @NotNull StructurePlaceEvent place(@NotNull Location at, double rotation) {
+        StructurePlaceEvent event = new StructurePlaceEvent(this, at, rotation);
         if(!event.callEvent()) return event;
 
-        pasteSchematic(at, true, true);
+        pasteSchematic(at, event.getRotation(), true);
 
         return event;
     }
@@ -98,14 +99,13 @@ public class FAWEStructure implements Structure {
         return originPos;
     }
 
-    public void pasteSchematic(@NotNull Location loc, boolean randomRotation, boolean ignoreAirBlocks){
+    public void pasteSchematic(@NotNull Location loc, double rotation, boolean ignoreAirBlocks){
         //paste schematic
         try (EditSession editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(loc.getWorld()))) {
-            if(randomRotation){
-                AffineTransform transform = new AffineTransform();
-                transform = transform.rotateY(new Random().nextInt(4) * 90);
-                holder.setTransform(holder.getTransform().combine(transform));
-            }
+            AffineTransform transform = new AffineTransform();
+            transform = transform.rotateY(rotation);
+            ClipboardHolder holder = new ClipboardHolder(this.holder.getClipboards().getFirst());
+            holder.setTransform(holder.getTransform().combine(transform));
             Operation operation = holder
                 .createPaste(editSession)
                 .to(BlockVector3.at(loc.getX(), loc.getY(), loc.getZ()))

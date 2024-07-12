@@ -101,7 +101,7 @@ public class StructureManager implements Listener {
         Structure structure = event.getStructure();
         if(!structure.isPersistent()) return;
         Location spawn = event.getLocation();
-        StoredStructure stored = structure.buildStored(spawn);
+        StoredStructure stored = structure.buildStored(spawn, event.getRotation());
         if(stored==null) return;
         if(!stored.shouldPersist()) return;
         Chunk chunk = spawn.getChunk();

@@ -3,6 +3,8 @@ package killercreepr.crux.util;
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.parser.ParseException;
+import org.bukkit.Bukkit;
+import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -230,4 +232,104 @@ public class CruxMath {
     }
 
     public static @NotNull String padWithZeroIfSingleDigit(int x){ return (x < 10 ? "0" : "") + new DecimalFormat().format(x); }
+
+    public static BoundingBox rotateBoundingBox(@NotNull BoundingBox box, double angleDegrees) {
+        // Convert angle to radians
+        double angleRadians = Math.toRadians(angleDegrees);
+
+        // Get the min and max corners of the bounding box
+        double minX = box.getMinX();
+        double minY = box.getMinY();
+        double minZ = box.getMinZ();
+        double maxX = box.getMaxX();
+        double maxY = box.getMaxY();
+        double maxZ = box.getMaxZ();
+
+        // Calculate the center of the bounding box
+        double centerX = (minX + maxX) / 2;
+        double centerZ = (minZ + maxZ) / 2;
+
+        // Rotate the min and max corners around the Y axis
+        double[] newMin = rotatePoint(minX, minZ, centerX, centerZ, angleRadians);
+        double[] newMax = rotatePoint(maxX, maxZ, centerX, centerZ, angleRadians);
+
+        // Create a new bounding box with the new coordinates
+        return new BoundingBox(
+            Math.min(newMin[0], newMax[0]), minY, Math.min(newMin[1], newMax[1]),
+            Math.max(newMin[0], newMax[0]), maxY, Math.max(newMin[1], newMax[1])
+        );
+    }
+
+    private static double[] rotatePoint(double x, double z, double centerX, double centerZ, double angle) {
+        double translatedX = x - centerX;
+        double translatedZ = z - centerZ;
+
+        double rotatedX = translatedX * Math.cos(angle) - translatedZ * Math.sin(angle);
+        double rotatedZ = translatedX * Math.sin(angle) + translatedZ * Math.cos(angle);
+
+        return new double[] { rotatedX + centerX, rotatedZ + centerZ };
+    }
+
+    public static BoundingBox rotateBoundingBox(BoundingBox box, double angleDegrees, double centerX, double centerZ) {
+        Bukkit.broadcastMessage(angleDegrees + " rotation");
+        if (angleDegrees == 0) {
+            return box.clone(); // Return a clone to ensure immutability
+        }
+        // Convert angle to radians
+        double angleRadians = Math.toRadians(angleDegrees);
+
+        // Get the min and max corners of the bounding box
+        double minX = box.getMinX();
+        double minY = box.getMinY();
+        double minZ = box.getMinZ();
+        double maxX = box.getMaxX();
+        double maxY = box.getMaxY();
+        double maxZ = box.getMaxZ();
+
+        // Rotate the min and max corners around the Y axis considering the specified center point
+        double[] newMin = rotatePoint(minX, minZ, centerX, centerZ, angleRadians);
+        double[] newMax = rotatePoint(maxX, maxZ, centerX, centerZ, angleRadians);
+
+        // Create a new bounding box with the new coordinates
+        return new BoundingBox(
+            Math.min(newMin[0], newMax[0]), minY, Math.min(newMin[1], newMax[1]),
+            Math.max(newMin[0], newMax[0]), maxY, Math.max(newMin[1], newMax[1])
+        );
+    }
+    //new
+    public static BoundingBox rotateBoundingBoxAroundPoint(BoundingBox boundingBox, double angleY, double centerX, double centerY, double centerZ) {
+        // Step 1: Translate BoundingBox so its center is at the origin
+        Vector center = boundingBox.getCenter();
+        Vector min = boundingBox.getMin().subtract(center);
+        Vector max = boundingBox.getMax().subtract(center);
+
+        // Step 2: Translate BoundingBox so the specified point is at the origin
+        Vector translationVector = new Vector(centerX, centerY, centerZ);
+        min = min.subtract(translationVector);
+        max = max.subtract(translationVector);
+
+        // Step 3: Rotate corners around the Y-axis
+        min = rotateVectorY(min, angleY);
+        max = rotateVectorY(max, angleY);
+
+        // Step 4: Translate BoundingBox back to its original position relative to the specified point
+        min = min.add(translationVector);
+        max = max.add(translationVector);
+
+        // Create rotated BoundingBox
+        return BoundingBox.of(min, max);
+    }
+    private static Vector rotateVectorY(Vector vector, double angleY) {
+        double radians = Math.toRadians(angleY);
+        double cosTheta = Math.cos(radians);
+        double sinTheta = Math.sin(radians);
+
+        double x = vector.getX();
+        double z = vector.getZ();
+
+        double newX = x * cosTheta - z * sinTheta;
+        double newZ = x * sinTheta + z * cosTheta;
+
+        return new Vector(newX, vector.getY(), newZ);
+    }
 }

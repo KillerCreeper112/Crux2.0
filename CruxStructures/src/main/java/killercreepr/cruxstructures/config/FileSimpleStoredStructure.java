@@ -42,10 +42,13 @@ public class FileSimpleStoredStructure<T extends StoredStructure> extends Simple
 
         if(chunk == null || center == null) return null;
 
+        Double rotation = registry.deserialize(Double.class, o.get("rotation"));
+        if(rotation==null) rotation = 0D;
+
         Structure structure = StructureRegistries.STRUCTURES.get(structureKey);
         if(structure == null) throw new RuntimeException("Structure " + structureKey + " not found!");
 
-        return new SimpleStoredStructure(structure, chunk, center);
+        return new SimpleStoredStructure(structure, chunk, center, rotation);
     }
 
     @Override
