@@ -1,6 +1,7 @@
 package killercreepr.cruxstructures.file;
 
 import com.google.gson.JsonArray;
+import killercreepr.crux.Crux;
 import killercreepr.crux.data.BlockPos;
 import killercreepr.cruxconfig.config.bukkit.file.CruxJson;
 import killercreepr.cruxconfig.config.common.json.JsonRegistry;
@@ -13,6 +14,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 public class StorageChunkFile extends CruxJson {
     public StorageChunkFile(@NotNull File file, @NotNull JsonRegistry jsonRegistry, boolean reloadIfExists) {
@@ -67,6 +69,7 @@ public class StorageChunkFile extends CruxJson {
         JsonArray a = new JsonArray();
         values.forEach(str ->{
             if(!str.shouldPersist()) return;
+            Crux.log(Level.WARNING, str.getClass().getName() + " TEST TEST TEST");
             a.add(jsonRegistry.serializeObject(str));
         });
         json.add("structures", a);

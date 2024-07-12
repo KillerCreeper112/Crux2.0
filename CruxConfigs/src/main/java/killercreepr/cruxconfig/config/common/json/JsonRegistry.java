@@ -120,6 +120,9 @@ public class JsonRegistry implements FileRegistry {
     }
 
     public @Nullable JsonContainerHandler<?> findContainerHandler(@NotNull Class<?> from){
+        JsonContainerHandler<?> handler = CONTAINER_REGISTRY.get(from);
+        if(handler != null) return handler;
+
         for(Map.Entry<Class<?>, JsonContainerHandler<?>> entry : CONTAINER_REGISTRY.entrySet()){
             Class<?> clazz = entry.getKey();
             if(clazz.isAssignableFrom(from)){
