@@ -29,18 +29,18 @@ public abstract class MultiVerseWorldStorage<T> {
     }
 
     public ChunkBlockStorage<T> remove(@NotNull UUID worldUUID, long chunkKey){
-        if(!data.containsKey(worldUUID)) return null;
         WorldChunkStorage<T> found = data.get(worldUUID);
+        if(found==null) return null;
         ChunkBlockStorage<T> removed = found.remove(chunkKey);
         if(found.isEmpty()) data.remove(worldUUID);
         return removed;
     }
 
     public T remove(@NotNull UUID worldUUID, long chunkKey, @NotNull BlockPos pos){
-        if(!data.containsKey(worldUUID)) return null;
         WorldChunkStorage<T> container = data.get(worldUUID);
+        if(container==null) return null;
         T removed = container.remove(chunkKey, pos);
-        if(container.isEmpty()) data.remove(worldUUID);
+        if(container.isEmpty()) remove(worldUUID);
         return removed;
     }
 

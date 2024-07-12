@@ -23,7 +23,6 @@ public abstract class ChunkBlockStorage<T> {
     }
 
     public T add(@NotNull T block){
-        Bukkit.broadcastMessage(" pos: " + getBlockPos(block));
         return data.put(getBlockPos(block), block);
     }
 

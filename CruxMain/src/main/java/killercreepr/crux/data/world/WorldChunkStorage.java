@@ -27,10 +27,10 @@ public abstract class WorldChunkStorage<T> {
     }
 
     public T remove(long chunkKey, @NotNull BlockPos pos){
-        if(!data.containsKey(chunkKey)) return null;
         ChunkBlockStorage<T> container = data.get(chunkKey);
+        if(container==null) return null;
         T removed = container.remove(pos);
-        if(container.isEmpty()) data.remove(chunkKey);
+        if(container.isEmpty()) remove(chunkKey);
         return removed;
     }
 
