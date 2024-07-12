@@ -1,6 +1,7 @@
 package killercreepr.crux.data.world;
 
 import killercreepr.crux.data.BlockPos;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,6 +23,7 @@ public abstract class ChunkBlockStorage<T> {
     }
 
     public T add(@NotNull T block){
+        Bukkit.broadcastMessage(" pos: " + getBlockPos(block));
         return data.put(getBlockPos(block), block);
     }
 

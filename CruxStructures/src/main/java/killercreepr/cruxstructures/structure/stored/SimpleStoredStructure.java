@@ -27,6 +27,14 @@ public class SimpleStoredStructure implements StoredStructure{
         this.boundingBox = calculateBoundingBox(center, structure);
     }
 
+    public SimpleStoredStructure(@NotNull Key structureKey, @NotNull StoredChunk chunk, @NotNull BlockPos center, @NotNull BoundingBox boundingBox, double rotation) {
+        this.structureKey = structureKey;
+        this.chunk = chunk;
+        this.center = center;
+        this.boundingBox = boundingBox;
+        this.rotation = rotation;
+    }
+
     public @NotNull BoundingBox calculateBoundingBox(@NotNull BlockPos center, @NotNull Structure structure){
         BlockPos origin = structure.originPos();
 
@@ -43,14 +51,6 @@ public class SimpleStoredStructure implements StoredStructure{
         );
 
         return new CruxedBoundingBox(box).rotateY(rotation, center.x()+.5, center.y()+.5, center.z()+.5);
-    }
-
-    public SimpleStoredStructure(@NotNull Key structureKey, @NotNull StoredChunk chunk, @NotNull BlockPos center, @NotNull BoundingBox boundingBox, double rotation) {
-        this.structureKey = structureKey;
-        this.chunk = chunk;
-        this.center = center;
-        this.boundingBox = boundingBox;
-        this.rotation = rotation;
     }
 
     @Override

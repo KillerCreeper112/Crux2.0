@@ -44,12 +44,12 @@ public abstract class WorldChunkStorage<T> {
     }
 
     public T add(long chunkKey, @NotNull T block){
-        if(data.containsKey(chunkKey)){
+        /*if(data.containsKey(chunkKey)){
             return data.get(chunkKey).add(block);
         }
         data.put(chunkKey, newChunkStorage());
-        return data.get(chunkKey).add(block);
-        //return data.computeIfAbsent(chunkKey, (i) -> newChunkStorage()).add(block);
+        return data.get(chunkKey).add(block);*/
+        return data.computeIfAbsent(chunkKey, (i) -> newChunkStorage()).add(block);
     }
 
     public boolean isEmpty(){

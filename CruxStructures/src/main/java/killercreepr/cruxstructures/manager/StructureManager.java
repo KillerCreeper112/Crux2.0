@@ -2,6 +2,7 @@ package killercreepr.cruxstructures.manager;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.BlockPos;
+import killercreepr.crux.data.communication.MsgContainer;
 import killercreepr.crux.data.world.ChunkBlockStorage;
 import killercreepr.crux.data.world.MultiVerseWorldStorage;
 import killercreepr.crux.data.world.WorldChunkStorage;
@@ -51,6 +52,9 @@ public class StructureManager implements Listener {
             @Override
             public void run() {
                 active.getData().values().forEach(worldChunk ->{
+                    new MsgContainer.Builder().actionBar(
+                        worldChunk.getData().size() + ""
+                    ).broadcast(true).build().broadcast(null);
                     tick(worldChunk);
                 });
             }
