@@ -1,5 +1,7 @@
 package killercreepr.cruxstructures.commands;
 
+import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -9,8 +11,10 @@ import io.papermc.paper.command.brigadier.argument.resolvers.BlockPositionResolv
 import io.papermc.paper.math.BlockPosition;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import killercreepr.crux.data.communication.MsgContainer;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.util.CruxMath;
+import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxstructures.commands.argument.StructureArgs;
 import killercreepr.cruxstructures.structure.Structure;
 import org.bukkit.Location;
@@ -24,7 +28,12 @@ import java.util.List;
 import java.util.Objects;
 
 public class StructureCommands {
-    public static void register(@NotNull CruxPlugin plugin){
+    protected final @NotNull CruxPlugin plugin;
+    public StructureCommands(@NotNull CruxPlugin plugin) {
+        this.plugin = plugin;
+    }
+
+    public void register(){
         plugin.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event ->{
             final Commands commands = event.registrar();
             LiteralCommandNode<CommandSourceStack> cmd = build(Commands.literal("cruxstructures")
@@ -33,7 +42,7 @@ public class StructureCommands {
         });
     }
 
-    public static LiteralCommandNode<CommandSourceStack> build(LiteralArgumentBuilder<CommandSourceStack> dispatcher,
+    public LiteralCommandNode<CommandSourceStack> build(LiteralArgumentBuilder<CommandSourceStack> dispatcher,
                                                                LifecycleEventManager<?> manager){
         //give <player> <id> <amount>
         dispatcher.then(
@@ -83,6 +92,36 @@ public class StructureCommands {
                                 })
                         )
                 )
+        ).then(
+            Commands.literal("create")
+                .then(
+                    Commands.argument("id", StringArgumentType.word())
+                        .then(
+                            Commands.argument("schematic", StringArgumentType.word())
+                                .executes(ctx -> create(
+                                    ctx.getSource(), ctx.getArgument("id", String.class),
+                                    ctx.getArgument("schematic", String.class),
+                                    false, null
+                                ))
+                                .then(
+                                    Commands.argument("persists", BoolArgumentType.bool())
+                                        .executes(ctx -> create(
+                                            ctx.getSource(), ctx.getArgument("id", String.class),
+                                            ctx.getArgument("schematic", String.class),
+                                            ctx.getArgument("perissts", Boolean.class), null
+                                        ))
+                                        .then(
+                                            Commands.argument("type", StringArgumentType.word())
+                                                .executes(ctx -> create(
+                                                    ctx.getSource(), ctx.getArgument("id", String.class),
+                                                    ctx.getArgument("schematic", String.class),
+                                                    ctx.getArgument("perissts", Boolean.class),
+                                                    ctx.getArgument("type", String.class)
+                                                ))
+                                        )
+                                )
+                        )
+                )
         )
         ;
         return dispatcher.build();
@@ -90,5 +129,17 @@ public class StructureCommands {
 
     public static @NotNull CommandSender getExecutor(@NotNull CommandSourceStack source){
         return Objects.requireNonNullElse(source.getExecutor(), source.getSender());
+    }
+
+    public int create(@NotNull CommandSourceStack source, String id, String schematic, boolean persists, String type){
+        CommandSender sender = getExecutor(source);
+        CruxConfig cfg = new CruxConfig(plugin, "structures/" + id + ".yml");
+        cfg.set("id", id);
+        cfg.set("schematic", schematic);
+        cfg.set("persists", persists);
+        cfg.set("type", type);
+        cfg.save();
+        new MsgContainer("<green>Structure " + id + ", created!").use(sender);
+        return 1;
     }
 }

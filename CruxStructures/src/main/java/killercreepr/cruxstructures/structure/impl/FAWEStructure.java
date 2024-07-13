@@ -16,14 +16,12 @@ import killercreepr.crux.data.BlockPos;
 import killercreepr.cruxstructures.event.StructurePlaceEvent;
 import killercreepr.cruxstructures.structure.Structure;
 import net.kyori.adventure.key.Key;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 import java.util.logging.Level;
 
 public class FAWEStructure implements Structure {

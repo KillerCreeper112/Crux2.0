@@ -9,7 +9,6 @@ import killercreepr.cruxstructures.structure.active.SimpleActiveStructure;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Chunk;
 import org.bukkit.util.BoundingBox;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

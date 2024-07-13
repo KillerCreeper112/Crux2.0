@@ -11,9 +11,11 @@ import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxstructures.event.StructurePlaceEvent;
 import killercreepr.cruxstructures.file.StorageChunkFile;
+import killercreepr.cruxstructures.registries.StructureRegistries;
 import killercreepr.cruxstructures.structure.GenerateResult;
 import killercreepr.cruxstructures.structure.Structure;
 import killercreepr.cruxstructures.structure.active.ActiveStructure;
+import killercreepr.cruxstructures.structure.impl.CfgFAWEStructure;
 import killercreepr.cruxstructures.structure.impl.CfgStructureGen;
 import killercreepr.cruxstructures.structure.stored.StoredStructure;
 import org.apache.commons.io.FileUtils;
@@ -81,7 +83,26 @@ public class StructureManager implements Listener {
         tick(container);
     }
 
-    public void loadConfiguration(){
+    public void loadStructureConfiguration(){
+        CruxFolder cfgFolder = createStructuresFolder();
+        File[] files = cfgFolder.file().listFiles();
+        new HashSet<>(StructureRegistries.STRUCTURES.values()).forEach(str ->{
+            if(str instanceof CfgFAWEStructure){
+                StructureRegistries.STRUCTURES.remove(str.key());
+            }
+        });
+        if(files==null) return;
+
+        for(File f : files){
+            CruxConfig cfg = new CruxConfig(f);
+            CfgFAWEStructure structure = cfg.deserialize(CfgFAWEStructure.class, "");
+            if(structure==null) continue;
+            StructureRegistries.STRUCTURES.register(structure);
+            Crux.log(Level.INFO, "Structure " + structure.key() + ", registered.");
+        }
+    }
+
+    public void loadGenerationConfiguration(){
         structures.clear();
         CruxFolder cfgFolder = createCfgFolder();
         File[] files = cfgFolder.file().listFiles();
@@ -99,6 +120,11 @@ public class StructureManager implements Listener {
             }
 
         }
+    }
+
+    public void loadConfiguration(){
+        loadStructureConfiguration();
+        loadGenerationConfiguration();
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
@@ -133,6 +159,10 @@ public class StructureManager implements Listener {
     }
 
     public @NotNull CruxFolder createCfgFolder(){
+        return new CruxFolder(plugin, "generation");
+    }
+
+    public @NotNull CruxFolder createStructuresFolder(){
         return new CruxFolder(plugin, "structures");
     }
 
