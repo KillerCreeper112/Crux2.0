@@ -145,7 +145,7 @@ public class StructureCommands {
         CruxConfig cfg = new CruxConfig(plugin, "structures/" + id);
         cfg.set("key", id);
         cfg.set("schematic", schematic);
-        cfg.set("persists", persists);
+        cfg.set("persistent", persists);
         cfg.set("type", type);
         cfg.save();
         StructureRegistries.STRUCTURES.register(cfg.deserialize(CfgFAWEStructure.class, ""));
