@@ -11,12 +11,15 @@ import io.papermc.paper.command.brigadier.argument.resolvers.BlockPositionResolv
 import io.papermc.paper.math.BlockPosition;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import killercreepr.crux.Crux;
 import killercreepr.crux.data.communication.MsgContainer;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxstructures.commands.argument.StructureArgs;
+import killercreepr.cruxstructures.registries.StructureRegistries;
 import killercreepr.cruxstructures.structure.Structure;
+import killercreepr.cruxstructures.structure.impl.CfgFAWEStructure;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.BlockCommandSender;
@@ -122,6 +125,12 @@ public class StructureCommands {
                                 )
                         )
                 )
+        ).then(
+            Commands.literal("remove")
+                .then(
+                    Commands.argument("id", StringArgumentType.word())
+                        .executes(ctx -> remove(ctx.getSource(), ctx.getArgument("id", String.class)))
+                )
         )
         ;
         return dispatcher.build();
@@ -139,7 +148,21 @@ public class StructureCommands {
         cfg.set("persists", persists);
         cfg.set("type", type);
         cfg.save();
+        StructureRegistries.STRUCTURES.register(new CfgFAWEStructure(Crux.key(id), schematic, persists));
         new MsgContainer("<green>Structure " + id + ", created!").use(sender);
+        return 1;
+    }
+
+    public int remove(@NotNull CommandSourceStack source, String id){
+        CommandSender sender = getExecutor(source);
+        CruxConfig cfg = new CruxConfig(plugin, "structures/" + id + ".yml");
+        if(!cfg.file().exists()){
+            new MsgContainer("<red>Structure " + id + ", does not exist!").use(sender);
+            return 0;
+        }
+        cfg.file().delete();
+        StructureRegistries.STRUCTURES.remove(Crux.key(id));
+        new MsgContainer("<red>Structure " + id + ", deleted!").use(sender);
         return 1;
     }
 }
