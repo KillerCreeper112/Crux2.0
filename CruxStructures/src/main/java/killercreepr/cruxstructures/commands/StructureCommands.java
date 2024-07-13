@@ -111,14 +111,14 @@ public class StructureCommands {
                                         .executes(ctx -> create(
                                             ctx.getSource(), ctx.getArgument("id", String.class),
                                             ctx.getArgument("schematic", String.class),
-                                            ctx.getArgument("perissts", Boolean.class), null
+                                            ctx.getArgument("persists", Boolean.class), null
                                         ))
                                         .then(
                                             Commands.argument("type", StringArgumentType.word())
                                                 .executes(ctx -> create(
                                                     ctx.getSource(), ctx.getArgument("id", String.class),
                                                     ctx.getArgument("schematic", String.class),
-                                                    ctx.getArgument("perissts", Boolean.class),
+                                                    ctx.getArgument("persists", Boolean.class),
                                                     ctx.getArgument("type", String.class)
                                                 ))
                                         )
@@ -142,20 +142,20 @@ public class StructureCommands {
 
     public int create(@NotNull CommandSourceStack source, String id, String schematic, boolean persists, String type){
         CommandSender sender = getExecutor(source);
-        CruxConfig cfg = new CruxConfig(plugin, "structures/" + id + ".yml");
-        cfg.set("id", id);
+        CruxConfig cfg = new CruxConfig(plugin, "structures/" + id);
+        cfg.set("key", id);
         cfg.set("schematic", schematic);
         cfg.set("persists", persists);
         cfg.set("type", type);
         cfg.save();
-        StructureRegistries.STRUCTURES.register(new CfgFAWEStructure(Crux.key(id), schematic, persists));
+        StructureRegistries.STRUCTURES.register(cfg.deserialize(CfgFAWEStructure.class, ""));
         new MsgContainer("<green>Structure " + id + ", created!").use(sender);
         return 1;
     }
 
     public int remove(@NotNull CommandSourceStack source, String id){
         CommandSender sender = getExecutor(source);
-        CruxConfig cfg = new CruxConfig(plugin, "structures/" + id + ".yml");
+        CruxConfig cfg = new CruxConfig(plugin, "structures/" + id);
         if(!cfg.file().exists()){
             new MsgContainer("<red>Structure " + id + ", does not exist!").use(sender);
             return 0;

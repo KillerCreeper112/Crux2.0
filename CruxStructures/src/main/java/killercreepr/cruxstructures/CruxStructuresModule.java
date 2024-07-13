@@ -38,6 +38,7 @@ public class CruxStructuresModule implements CruxModule {
         CfgRegistries.YAML.registerHandler(CfgStructureGen.class, new FileCfgStructureGen());
         CfgRegistries.YAML.registerHandler(StructureCenter.class, fileStructureCenter);
         CfgRegistries.YAML.registerHandler(StructureRequirement.class, fileStructureRequirement);
+
         CfgRegistries.YAML.registerHandler(CfgFAWEStructure.class, new FileCfgFAWEStructure());
 
         fileStructureCenter.TYPE_HANDLERS.register("surface_center", new FileSurfaceCenter());
