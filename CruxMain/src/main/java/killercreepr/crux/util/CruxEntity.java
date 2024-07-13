@@ -63,7 +63,7 @@ public class CruxEntity {
             closest.put(p, (float) p.getLocation().distance(loc));
         }
 
-        List<Map.Entry<T, Float>> sortedList = CruxMap.sortMapByFloat(closest);
+        List<Map.Entry<T, Float>> sortedList = CruxMap.sortKeysByFloat(closest);
         int index = farthest ? sortedList.size() : -1;
 
         List<T> playerList = new ArrayList<>();

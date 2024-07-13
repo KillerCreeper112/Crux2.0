@@ -12,28 +12,40 @@ import io.papermc.paper.math.BlockPosition;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import killercreepr.crux.Crux;
+import killercreepr.crux.data.BlockPos;
 import killercreepr.crux.data.communication.MsgContainer;
+import killercreepr.crux.data.world.WorldChunkStorage;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.util.CruxMath;
+import killercreepr.crux.util.GetNear;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxstructures.commands.argument.StructureArgs;
+import killercreepr.cruxstructures.manager.StructureManager;
 import killercreepr.cruxstructures.registries.StructureRegistries;
 import killercreepr.cruxstructures.structure.Structure;
 import killercreepr.cruxstructures.structure.impl.CfgFAWEStructure;
+import killercreepr.cruxstructures.structure.stored.StoredStructure;
+import killercreepr.cruxstructures.util.GetStructureNear;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
 
 public class StructureCommands {
     protected final @NotNull CruxPlugin plugin;
-    public StructureCommands(@NotNull CruxPlugin plugin) {
+    protected final @NotNull StructureManager structureManager;
+    public StructureCommands(@NotNull CruxPlugin plugin, @NotNull StructureManager structureManager) {
         this.plugin = plugin;
+        this.structureManager = structureManager;
     }
 
     public void register(){
@@ -131,6 +143,13 @@ public class StructureCommands {
                     Commands.argument("id", StringArgumentType.word())
                         .executes(ctx -> remove(ctx.getSource(), ctx.getArgument("id", String.class)))
                 )
+        ).then(
+            Commands.literal("locate")
+                .executes(ctx -> locate(ctx.getSource(), null))
+                .then(
+                    Commands.argument("structure", StructureArgs.STRUCTURE)
+                        .executes(ctx -> locate(ctx.getSource(), ctx.getArgument("structure", Structure.class)))
+                )
         )
         ;
         return dispatcher.build();
@@ -138,6 +157,35 @@ public class StructureCommands {
 
     public static @NotNull CommandSender getExecutor(@NotNull CommandSourceStack source){
         return Objects.requireNonNullElse(source.getExecutor(), source.getSender());
+    }
+
+    public int locate(@NotNull CommandSourceStack source, @Nullable Structure structure){
+        if(!(getExecutor(source) instanceof Entity p)) return -1;
+        GetNear<StoredStructure> near = new GetStructureNear(structureManager.getStored())
+            .center(p.getLocation())
+            .operation(GetNear.Operation.NEAREST)
+            ;
+        if(structure != null){
+            near.filter(t -> t.getStructureKey().equals(structure.key()));
+        }
+
+        StoredStructure nearest = near.findFirst();
+        if(nearest==null){
+            p.sendMessage("No structures found in " + p.getWorld().getName() + ".");
+            return 0;
+        }
+
+        BlockPos pos = nearest.getBlockPos();
+
+        p.sendMessage(
+            Component.text("Structure, " + nearest.getStructureKey() + " found at " + pos.x() + ", " + pos.y() + ", " + pos.z())
+                .hoverEvent(HoverEvent.showText(Component.text("Click to teleport to\n" + nearest.getStructureKey())))
+                .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND,
+                    "/teleport " + pos.x() + " " + pos.y() + " " + pos.z()
+                ))
+        );
+
+        return 1;
     }
 
     public int create(@NotNull CommandSourceStack source, String id, String schematic, boolean persists, String type){

@@ -4,9 +4,10 @@ import killercreepr.crux.data.BlockPos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Iterator;
 import java.util.Map;
 
-public abstract class WorldChunkStorage<T> {
+public abstract class WorldChunkStorage<T> implements Iterable<ChunkBlockStorage<T>> {
     protected final @NotNull Map<Long, ChunkBlockStorage<T>> data;
 
     public WorldChunkStorage(@NotNull Map<Long, ChunkBlockStorage<T>> data) {
@@ -57,4 +58,10 @@ public abstract class WorldChunkStorage<T> {
     }
 
     public abstract @NotNull ChunkBlockStorage<T> newChunkStorage();
+
+    @NotNull
+    @Override
+    public Iterator<ChunkBlockStorage<T>> iterator() {
+        return data.values().iterator();
+    }
 }

@@ -4,10 +4,11 @@ import killercreepr.crux.data.BlockPos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
-public abstract class MultiVerseWorldStorage<T> {
+public abstract class MultiVerseWorldStorage<T> implements Iterable<WorldChunkStorage<T>> {
     protected final @NotNull Map<UUID, WorldChunkStorage<T>> data;
 
     public MultiVerseWorldStorage(@NotNull Map<UUID, WorldChunkStorage<T>> data) {
@@ -74,4 +75,10 @@ public abstract class MultiVerseWorldStorage<T> {
     }
 
     public abstract @NotNull WorldChunkStorage<T> newWorldStorage();
+
+    @NotNull
+    @Override
+    public Iterator<WorldChunkStorage<T>> iterator() {
+        return data.values().iterator();
+    }
 }

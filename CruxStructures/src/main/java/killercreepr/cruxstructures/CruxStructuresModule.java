@@ -7,6 +7,7 @@ import killercreepr.cruxstructures.commands.StructureCommands;
 import killercreepr.cruxstructures.config.*;
 import killercreepr.cruxstructures.config.structure.FileBiomeRequirement;
 import killercreepr.cruxstructures.config.structure.FileSurfaceCenter;
+import killercreepr.cruxstructures.manager.StructureManager;
 import killercreepr.cruxstructures.structure.StructureCenter;
 import killercreepr.cruxstructures.structure.StructureRequirement;
 import killercreepr.cruxstructures.structure.impl.CfgFAWEStructure;
@@ -32,9 +33,12 @@ public class CruxStructuresModule implements CruxModule {
         return fileStructureRequirement;
     }
 
+    public void registerCommands(@NotNull CruxPlugin plugin, @NotNull StructureManager structureManager){
+        new StructureCommands(plugin, structureManager).register();
+    }
+
     @Override
     public void onEnable(@NotNull CruxPlugin plugin) {
-        new StructureCommands(plugin).register();
         CfgRegistries.YAML.registerHandler(CfgStructureGen.class, new FileCfgStructureGen());
         CfgRegistries.YAML.registerHandler(StructureCenter.class, fileStructureCenter);
         CfgRegistries.YAML.registerHandler(StructureRequirement.class, fileStructureRequirement);

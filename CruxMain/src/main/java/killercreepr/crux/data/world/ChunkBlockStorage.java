@@ -5,9 +5,10 @@ import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Iterator;
 import java.util.Map;
 
-public abstract class ChunkBlockStorage<T> {
+public abstract class ChunkBlockStorage<T> implements Iterable<T> {
     protected final @NotNull Map<BlockPos, T> data;
 
     public ChunkBlockStorage(@NotNull Map<BlockPos, T> data) {
@@ -39,4 +40,10 @@ public abstract class ChunkBlockStorage<T> {
     }
 
     public abstract @NotNull BlockPos getBlockPos(@NotNull T object);
+
+    @NotNull
+    @Override
+    public Iterator<T> iterator() {
+        return data.values().iterator();
+    }
 }
