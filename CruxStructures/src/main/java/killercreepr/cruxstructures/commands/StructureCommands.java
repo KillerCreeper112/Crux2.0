@@ -16,6 +16,7 @@ import killercreepr.crux.data.BlockPos;
 import killercreepr.crux.data.communication.MsgContainer;
 import killercreepr.crux.data.world.WorldChunkStorage;
 import killercreepr.crux.plugin.CruxPlugin;
+import killercreepr.crux.util.CruxMap;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.crux.util.GetNear;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
@@ -37,6 +38,7 @@ import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -145,10 +147,29 @@ public class StructureCommands {
                 )
         ).then(
             Commands.literal("locate")
-                .executes(ctx -> locate(ctx.getSource(), null))
+                .executes(ctx -> locate(ctx.getSource(), null, null))
                 .then(
                     Commands.argument("structure", StructureArgs.STRUCTURE)
-                        .executes(ctx -> locate(ctx.getSource(), ctx.getArgument("structure", Structure.class)))
+                        .executes(ctx -> locate(ctx.getSource(), ctx.getArgument("structure", Structure.class),
+                            null))
+                        .then(
+                            Commands.argument("type", StringArgumentType.word())
+                                .suggests((ctx, s) ->{
+                                    s.suggest("nearest").suggest("random").suggest("farthest");
+                                    return s.buildFuture();
+                                })
+                                .executes(ctx -> locate(ctx.getSource(), ctx.getArgument("structure", Structure.class),
+                                    ctx.getArgument("type", String.class)))
+                        )
+                )
+                .then(
+                    Commands.argument("type", StringArgumentType.word())
+                        .suggests((ctx, s) ->{
+                            s.suggest("nearest").suggest("random").suggest("farthest");
+                            return s.buildFuture();
+                        })
+                        .executes(ctx -> locate(ctx.getSource(), null,
+                            ctx.getArgument("type", String.class)))
                 )
         )
         ;
@@ -159,17 +180,27 @@ public class StructureCommands {
         return Objects.requireNonNullElse(source.getExecutor(), source.getSender());
     }
 
-    public int locate(@NotNull CommandSourceStack source, @Nullable Structure structure){
+    public int locate(@NotNull CommandSourceStack source, @Nullable Structure structure, @Nullable String type){
         if(!(getExecutor(source) instanceof Entity p)) return -1;
         GetNear<StoredStructure> near = new GetStructureNear(structureManager.getStored())
             .center(p.getLocation())
-            .operation(GetNear.Operation.NEAREST)
             ;
         if(structure != null){
             near.filter(t -> t.getStructureKey().equals(structure.key()));
         }
+        if(type == null) type = "nearest";
+        switch (type.toLowerCase()){
+            case "nearest" -> near.operation(GetNear.Operation.NEAREST);
+            case "farthest" -> near.operation(GetNear.Operation.FARTHEST);
+        }
 
-        StoredStructure nearest = near.findFirst();
+        StoredStructure nearest;
+        switch (type.toLowerCase()){
+            case "random" ->{
+                nearest = CruxMath.getRandom(new ArrayList<>(near.find()));
+            }
+            default -> nearest = near.findFirst();
+        }
         if(nearest==null){
             p.sendMessage("No structures found in " + p.getWorld().getName() + ".");
             return 0;
