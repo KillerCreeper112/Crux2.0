@@ -23,6 +23,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -30,12 +31,14 @@ import org.bukkit.event.world.*;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 
 public class StructureManager implements Listener {
@@ -49,6 +52,75 @@ public class StructureManager implements Listener {
 
     protected final @NotNull MultiVerseWorldStorage<StoredStructure> stored = new MultiVerseBlockPosedStorage<>(new ConcurrentHashMap<>());
     protected final @NotNull MultiVerseWorldStorage<ActiveStructure> active = new MultiVerseBlockPosedStorage<>(new ConcurrentHashMap<>());
+
+    public @NotNull Collection<StoredStructure> getStoredAt(@NotNull Block block){
+        return getStoredAt(block, null);
+    }
+
+    public @NotNull Collection<StoredStructure> getStoredAt(@NotNull Block block, @Nullable Predicate<StoredStructure> filter){
+        return getStoredAt(StoredStructure.class, block, filter);
+    }
+
+    public <T extends StoredStructure> @NotNull Collection<T> getStoredAt(@NotNull Class<T> type, @NotNull Block block){
+        return getStoredAt(type, block, null);
+    }
+
+    public <T extends StoredStructure> @NotNull Collection<T> getStoredAt(@NotNull Class<T> type, @NotNull Block block, @Nullable Predicate<T> filter){
+        Collection<T> list = new HashSet<>();
+        for(StoredStructure s : getStoredAt(block)){
+            if(!type.isAssignableFrom(s.getClass())) continue;
+            T value = type.cast(s);
+            if(filter != null && !filter.test(value)) continue;
+            list.add(value);
+        }
+        return list;
+    }
+
+    public <T extends StoredStructure> @Nullable T getFirstStoredAt(@NotNull Class<T> type, @NotNull Block block){
+        return getFirstStoredAt(type, block, null);
+    }
+
+    public <T extends StoredStructure> @Nullable T getFirstStoredAt(@NotNull Class<T> type, @NotNull Block block, @Nullable Predicate<T> filter){
+        for(T t : getStoredAt(type, block, filter)){
+            return t;
+        }
+        return null;
+    }
+
+    //active
+    public @NotNull Collection<ActiveStructure> getActiveAt(@NotNull Block block){
+        return getActiveAt(block, null);
+    }
+
+    public @NotNull Collection<ActiveStructure> getActiveAt(@NotNull Block block, @Nullable Predicate<ActiveStructure> filter){
+        return getActiveAt(ActiveStructure.class, block, filter);
+    }
+
+    public <T extends ActiveStructure> @NotNull Collection<T> getActiveAt(@NotNull Class<T> type, @NotNull Block block){
+        return getActiveAt(type, block, null);
+    }
+
+    public <T extends ActiveStructure> @NotNull Collection<T> getActiveAt(@NotNull Class<T> type, @NotNull Block block, @Nullable Predicate<T> filter){
+        Collection<T> list = new HashSet<>();
+        for(ActiveStructure s : getActiveAt(block)){
+            if(!type.isAssignableFrom(s.getClass())) continue;
+            T value = type.cast(s);
+            if(filter != null && !filter.test(value)) continue;
+            list.add(value);
+        }
+        return list;
+    }
+
+    public <T extends ActiveStructure> @Nullable T getFirstActiveAt(@NotNull Class<T> type, @NotNull Block block){
+        return getFirstActiveAt(type, block, null);
+    }
+
+    public <T extends ActiveStructure> @Nullable T getFirstActiveAt(@NotNull Class<T> type, @NotNull Block block, @Nullable Predicate<T> filter){
+        for(T t : getActiveAt(type, block, filter)){
+            return t;
+        }
+        return null;
+    }
 
     public @NotNull BukkitRunnable buildRunnable(){
         return new BukkitRunnable(){
