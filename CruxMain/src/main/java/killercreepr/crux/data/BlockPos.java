@@ -43,6 +43,22 @@ public class BlockPos {
         return z;
     }
 
+    public @NotNull BlockPos add(@NotNull BlockPos pos){
+        return add(pos.x(), pos.y(), pos.z());
+    }
+
+    public @NotNull BlockPos subtract(@NotNull BlockPos pos){
+        return subtract(pos.x(), pos.y(), pos.z());
+    }
+
+    public @NotNull BlockPos subtract(int x, int y, int z){
+        return new BlockPos(this.x - x, this.y - y, this.z - z);
+    }
+
+    public @NotNull BlockPos add(int x, int y, int z){
+        return new BlockPos(this.x + x, this.y + y, this.z + z);
+    }
+
     public @NotNull Block getBlock(@NotNull World world){
         return world.getBlockAt(x, y, z);
     }
