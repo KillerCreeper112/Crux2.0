@@ -17,7 +17,7 @@ public abstract class GetNear<T> {
     protected LocationHolder center;
     protected NumberHolder range;
     protected NumberHolder amount;
-    protected Operation operation;
+    protected Operation operation = Operation.DEFAULT;
     protected Predicate<T> filter;
 
     public GetNear(LocationHolder center) {

@@ -162,15 +162,6 @@ public class StructureCommands {
                                     ctx.getArgument("type", String.class)))
                         )
                 )
-                .then(
-                    Commands.argument("type", StringArgumentType.word())
-                        .suggests((ctx, s) ->{
-                            s.suggest("nearest").suggest("random").suggest("farthest");
-                            return s.buildFuture();
-                        })
-                        .executes(ctx -> locate(ctx.getSource(), null,
-                            ctx.getArgument("type", String.class)))
-                )
         )
         ;
         return dispatcher.build();
