@@ -5,6 +5,7 @@ import killercreepr.cruxitems.item.CruxedItem;
 import killercreepr.cruxitems.item.plugin.PluginItem;
 import killercreepr.cruxitems.registries.CruxItemRegistries;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -44,6 +45,12 @@ public class CruxedItemTag extends ItemTag {
         protected @NotNull Collection<Key> cruxPluginItems = new HashSet<>();
         public Builder add(Key... keys){
             cruxPluginItems.addAll(Arrays.asList(keys));
+            return this;
+        }
+        public Builder add(Keyed... keys){
+            for(Keyed k : keys){
+                cruxPluginItems.add(k.key());
+            }
             return this;
         }
         public CruxedItemTag build() {
