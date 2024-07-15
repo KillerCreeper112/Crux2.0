@@ -66,7 +66,6 @@ public class MenuRegistry {
     }
 
     public void loadConfiguration(@NotNull File folder){
-        MENU_HOLDERS.clear();
         File[] list = folder.listFiles();
         if(list==null) return;
         for(File f : list){
