@@ -1,10 +1,12 @@
 package killercreepr.cruxstructures.structure.impl;
 
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
+import com.sk89q.worldedit.math.transform.AffineTransform;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.block.BlockState;
 import killercreepr.crux.data.BlockPos;
 import net.kyori.adventure.key.Key;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -29,8 +31,17 @@ public class CfgStoredBlocksStructure extends CfgFAWEStructure{
         blocks = calculateBlocks();
     }
 
-    public @NotNull Collection<BlockPos> getBlocks() {
-        return blocks;
+    public @NotNull Collection<BlockPos> getBlocks(double rotation) {
+        Collection<BlockPos> list = new HashSet<>();
+        Clipboard clipboard = holder.getClipboards().getFirst();
+        clipboard.forEach(block ->{
+            BlockState state = clipboard.getBlock(block);
+            if(state.isAir()) return;
+            list.add(new BlockPos(block.x(), block.y(), block.z()).rotateAroundY(
+                originPos(), rotation
+            ));
+        });
+        return list;
     }
 
     public @NotNull Collection<BlockPos> calculateBlocks(){

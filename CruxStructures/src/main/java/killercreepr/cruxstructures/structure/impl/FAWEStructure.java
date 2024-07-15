@@ -58,7 +58,6 @@ public class FAWEStructure implements Structure {
             throw new RuntimeException("Invalid schematic format for schematic " + schematicFile.getName() + "!");
         }
 
-
         try{
             Clipboard clipboard = format.load(schematicFile);
             BlockVector3 min = clipboard.getMinimumPoint();

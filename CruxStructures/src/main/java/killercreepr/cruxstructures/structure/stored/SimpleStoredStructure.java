@@ -1,5 +1,6 @@
 package killercreepr.cruxstructures.structure.stored;
 
+import com.sk89q.worldedit.session.ClipboardHolder;
 import killercreepr.crux.data.BlockPos;
 import killercreepr.crux.data.StoredChunk;
 import killercreepr.crux.util.CruxedBoundingBox;
@@ -11,6 +12,8 @@ import org.bukkit.Chunk;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
 
 public class SimpleStoredStructure implements StoredStructure{
     protected final @NotNull Key structureKey;
@@ -51,7 +54,7 @@ public class SimpleStoredStructure implements StoredStructure{
 
         return new CruxedBoundingBox(box).rotateY(rotation, center.x()+.5, center.y()+.5, center.z()+.5);
     }
-
+    
     @Override
     public @NotNull Key getStructureKey() {
         return structureKey;

@@ -59,6 +59,57 @@ public class BlockPos {
         return new BlockPos(this.x + x, this.y + y, this.z + z);
     }
 
+    public BlockPos rotateAroundX(BlockPos center, double angle) {
+        double radians = Math.toRadians(angle);
+        double cosTheta = Math.cos(radians);
+        double sinTheta = Math.sin(radians);
+
+        // Translate point to origin
+        int translatedY = this.y - center.y;
+        int translatedZ = this.z - center.z;
+
+        // Apply rotation matrix
+        int rotatedY = (int) Math.round(translatedY * cosTheta - translatedZ * sinTheta);
+        int rotatedZ = (int) Math.round(translatedY * sinTheta + translatedZ * cosTheta);
+
+        // Translate point back
+        return new BlockPos(this.x, rotatedY + center.y, rotatedZ + center.z);
+    }
+
+    public @NotNull BlockPos rotateAroundY(@NotNull BlockPos center, double angle) {
+        double radians = Math.toRadians(angle*-1);
+        double cosTheta = Math.cos(radians);
+        double sinTheta = Math.sin(radians);
+
+        // Translate point to origin
+        int translatedX = this.x - center.x;
+        int translatedZ = this.z - center.z;
+
+        // Apply rotation matrix
+        int rotatedX = (int) Math.round(translatedX * cosTheta - translatedZ * sinTheta);
+        int rotatedZ = (int) Math.round(translatedX * sinTheta + translatedZ * cosTheta);
+
+        // Translate point back
+        return new BlockPos(rotatedX + center.x, this.y, rotatedZ + center.z);
+    }
+
+    public BlockPos rotateAroundZ(BlockPos center, double angle) {
+        double radians = Math.toRadians(angle);
+        double cosTheta = Math.cos(radians);
+        double sinTheta = Math.sin(radians);
+
+        // Translate point to origin
+        int translatedX = this.x - center.x;
+        int translatedY = this.y - center.y;
+
+        // Apply rotation matrix
+        int rotatedX = (int) Math.round(translatedX * cosTheta - translatedY * sinTheta);
+        int rotatedY = (int) Math.round(translatedX * sinTheta + translatedY * cosTheta);
+
+        // Translate point back
+        return new BlockPos(rotatedX + center.x, rotatedY + center.y, this.z);
+    }
+
     public @NotNull Block getBlock(@NotNull World world){
         return world.getBlockAt(x, y, z);
     }
