@@ -31,19 +31,6 @@ public class CfgStoredBlocksStructure extends CfgFAWEStructure{
         blocks = calculateBlocks();
     }
 
-    public @NotNull Collection<BlockPos> getBlocks(double rotation) {
-        Collection<BlockPos> list = new HashSet<>();
-        Clipboard clipboard = holder.getClipboards().getFirst();
-        clipboard.forEach(block ->{
-            BlockState state = clipboard.getBlock(block);
-            if(state.isAir()) return;
-            list.add(new BlockPos(block.x(), block.y(), block.z()).rotateAroundY(
-                originPos(), rotation
-            ));
-        });
-        return list;
-    }
-
     public @NotNull Collection<BlockPos> calculateBlocks(){
         Collection<BlockPos> list = new HashSet<>();
         Clipboard clipboard = holder.getClipboards().getFirst();

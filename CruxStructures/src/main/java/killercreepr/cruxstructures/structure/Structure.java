@@ -1,5 +1,7 @@
 package killercreepr.cruxstructures.structure;
 
+import com.sk89q.worldedit.extent.clipboard.Clipboard;
+import com.sk89q.worldedit.world.block.BlockState;
 import killercreepr.crux.data.BlockPos;
 import killercreepr.crux.data.StoredChunk;
 import killercreepr.cruxstructures.event.StructurePlaceEvent;
@@ -11,6 +13,8 @@ import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Random;
 
 public interface Structure extends Keyed {
@@ -29,4 +33,6 @@ public interface Structure extends Keyed {
     default @Nullable StoredStructure buildStored(@NotNull Location center, double rotation){
         return new SimpleStoredStructure(this, StoredChunk.from(center), BlockPos.from(center), rotation);
     }
+
+    @NotNull Collection<BlockPos> getBlocks(double rotation);
 }

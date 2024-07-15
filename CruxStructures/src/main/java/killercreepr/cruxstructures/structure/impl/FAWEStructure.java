@@ -11,6 +11,7 @@ import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.math.transform.AffineTransform;
 import com.sk89q.worldedit.session.ClipboardHolder;
+import com.sk89q.worldedit.world.block.BlockState;
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.BlockPos;
 import killercreepr.cruxstructures.event.StructurePlaceEvent;
@@ -22,6 +23,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.logging.Level;
 
 public class FAWEStructure implements Structure {
@@ -113,6 +116,21 @@ public class FAWEStructure implements Structure {
             Crux.log(Level.WARNING, "Couldn't place clipboard at: '" + loc + "'.");
             e.printStackTrace();
         }
+    }
+
+    @Override
+    @NotNull
+    public Collection<BlockPos> getBlocks(double rotation) {
+        Collection<BlockPos> list = new HashSet<>();
+        Clipboard clipboard = holder.getClipboards().getFirst();
+        clipboard.forEach(block ->{
+            BlockState state = clipboard.getBlock(block);
+            if(state.isAir()) return;
+            list.add(new BlockPos(block.x(), block.y(), block.z()).rotateAroundY(
+                originPos(), rotation
+            ));
+        });
+        return list;
     }
 
     @Override
