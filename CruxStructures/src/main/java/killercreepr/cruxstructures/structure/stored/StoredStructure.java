@@ -6,7 +6,6 @@ import killercreepr.crux.data.world.BlockPosed;
 import killercreepr.cruxstructures.registries.StructureRegistries;
 import killercreepr.cruxstructures.structure.Structure;
 import killercreepr.cruxstructures.structure.active.ActiveStructure;
-import killercreepr.cruxstructures.structure.impl.CfgStoredBlocksStructure;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Chunk;
 import org.bukkit.util.BoundingBox;

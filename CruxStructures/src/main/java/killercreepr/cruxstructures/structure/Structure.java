@@ -1,7 +1,5 @@
 package killercreepr.cruxstructures.structure;
 
-import com.sk89q.worldedit.extent.clipboard.Clipboard;
-import com.sk89q.worldedit.world.block.BlockState;
 import killercreepr.crux.data.BlockPos;
 import killercreepr.crux.data.StoredChunk;
 import killercreepr.cruxstructures.event.StructurePlaceEvent;
@@ -14,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Random;
 
 public interface Structure extends Keyed {

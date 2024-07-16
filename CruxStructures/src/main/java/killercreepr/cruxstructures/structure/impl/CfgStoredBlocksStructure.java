@@ -1,12 +1,10 @@
 package killercreepr.cruxstructures.structure.impl;
 
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
-import com.sk89q.worldedit.math.transform.AffineTransform;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.block.BlockState;
 import killercreepr.crux.data.BlockPos;
 import net.kyori.adventure.key.Key;
-import net.minecraft.world.level.levelgen.structure.Structure;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;

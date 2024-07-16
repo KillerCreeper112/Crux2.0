@@ -35,10 +35,10 @@ public interface ActiveCruxBlock {
     CruxBlock getCruxBlock();
 
     default @NotNull CruxBlockBreakEvent breakBlock(@Nullable Miner miner){
-        return breakBlock(miner, true);
+        return breakBlock(miner, true, false);
     }
 
-    default @NotNull CruxBlockBreakEvent breakBlock(@Nullable Miner miner, boolean displayEffects){
+    default @NotNull CruxBlockBreakEvent breakBlock(@Nullable Miner miner, boolean displayEffects, boolean disableDrops){
         Block block = getBlock();
         Collection<ItemStack> drops = getDrops(miner);
         CruxBlockBreakEvent event = new CruxBlockBreakEvent(this, new BlockContextImpl(block, miner), drops);
@@ -79,7 +79,7 @@ public interface ActiveCruxBlock {
     }
 
     default @NotNull CruxBlockBreakEvent breakBlock(@Nullable ItemStack tool){
-        return breakBlock(new ItemMiner(tool), true);
+        return breakBlock(new ItemMiner(tool), true, false);
     }
 
     /**

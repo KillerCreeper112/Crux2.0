@@ -23,15 +23,15 @@ public class BlockPosTagType implements PersistentDataType<PersistentDataContain
     @Override
     public @NotNull PersistentDataContainer toPrimitive(@NotNull BlockPos complex, @NotNull PersistentDataAdapterContext context) {
         PersistentDataContainer c = context.newPersistentDataContainer();
-        c.set(k("x"), PersistentDataType.INTEGER, complex.x());
-        c.set(k("y"), PersistentDataType.INTEGER, complex.y());
-        c.set(k("z"), PersistentDataType.INTEGER, complex.z());
+        c.set(k("x"), PersistentDataType.INTEGER, complex.blockX());
+        c.set(k("y"), PersistentDataType.INTEGER, complex.blockY());
+        c.set(k("z"), PersistentDataType.INTEGER, complex.blockZ());
         return c;
     }
 
     @Override
     public @NotNull BlockPos fromPrimitive(@NotNull PersistentDataContainer c, @NotNull PersistentDataAdapterContext context) {
-        return new BlockPos(
+        return BlockPos.at(
             c.getOrDefault(k("x"), PersistentDataType.INTEGER, 0),
             c.getOrDefault(k("y"), PersistentDataType.INTEGER, 0),
             c.getOrDefault(k("z"), PersistentDataType.INTEGER, 0)

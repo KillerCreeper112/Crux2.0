@@ -112,7 +112,8 @@ public class CustomBlocksListener implements Listener {
         Block b = event.getBlock();
         ActiveCruxBlock active = manager.getActiveBlock(b);
         if(active==null) return;
-        active.breakBlock(EntityMiner.from(event.getPlayer()), false);
+        Player p = event.getPlayer();
+        active.breakBlock(EntityMiner.from(event.getPlayer()), false, p.getGameMode() == GameMode.CREATIVE);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -120,7 +121,7 @@ public class CustomBlocksListener implements Listener {
         Block b = event.getBlock();
         ActiveCruxBlock active = manager.getActiveBlock(b);
         if(active==null) return;
-        active.breakBlock(new BlockMiner(event.getSource()), false);
+        active.breakBlock(new BlockMiner(event.getSource()), false, false);
     }
 
     @EventHandler(ignoreCancelled = true)

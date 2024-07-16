@@ -1,14 +1,14 @@
 package killercreepr.crux.data;
 
+import killercreepr.crux.data.world.CruxPosition;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class BlockPos {
+public class BlockPos implements CruxPosition {
     public static @NotNull BlockPos at(int x, int y, int z){
         return new BlockPos(x, y, z);
     }
@@ -31,24 +31,52 @@ public class BlockPos {
         this.z = z;
     }
 
-    public int x() {
+    @Override
+    public double x() {
         return x;
     }
-
-    public int y() {
+    @Override
+    public double y() {
         return y;
     }
-
-    public int z() {
+    @Override
+    public double z() {
         return z;
     }
 
-    public @NotNull BlockPos add(@NotNull BlockPos pos){
-        return add(pos.x(), pos.y(), pos.z());
+    @Override
+    public int blockX() {
+        return x;
     }
 
-    public @NotNull BlockPos subtract(@NotNull BlockPos pos){
-        return subtract(pos.x(), pos.y(), pos.z());
+    @Override
+    public int blockY() {
+        return y;
+    }
+
+    @Override
+    public int blockZ() {
+        return z;
+    }
+
+    @Override
+    public @NotNull BlockPos add(@NotNull CruxPosition pos){
+        return add(pos.blockX(), pos.blockY(), pos.blockZ());
+    }
+
+    @Override
+    public @NotNull BlockPos subtract(@NotNull CruxPosition pos){
+        return subtract(pos.blockX(), pos.blockY(), pos.blockZ());
+    }
+
+    @Override
+    public @NotNull BlockPos subtract(double x, double y, double z) {
+        return subtract((int) x, (int) y, (int) z);
+    }
+
+    @Override
+    public @NotNull BlockPos add(double x, double y, double z) {
+        return add((int) x, (int) y, (int) z);
     }
 
     public @NotNull BlockPos subtract(int x, int y, int z){
@@ -59,67 +87,58 @@ public class BlockPos {
         return new BlockPos(this.x + x, this.y + y, this.z + z);
     }
 
-    public BlockPos rotateAroundX(BlockPos center, double angle) {
+    @Override
+    public @NotNull BlockPos rotateAroundX(@NotNull CruxPosition center, double angle) {
         double radians = Math.toRadians(angle);
         double cosTheta = Math.cos(radians);
         double sinTheta = Math.sin(radians);
 
         // Translate point to origin
-        int translatedY = this.y - center.y;
-        int translatedZ = this.z - center.z;
+        int translatedY = this.y - center.blockY();
+        int translatedZ = this.z - center.blockZ();
 
         // Apply rotation matrix
         int rotatedY = (int) Math.round(translatedY * cosTheta - translatedZ * sinTheta);
         int rotatedZ = (int) Math.round(translatedY * sinTheta + translatedZ * cosTheta);
 
         // Translate point back
-        return new BlockPos(this.x, rotatedY + center.y, rotatedZ + center.z);
+        return new BlockPos(this.x, rotatedY + center.blockY(), rotatedZ + center.blockZ());
     }
 
-    public @NotNull BlockPos rotateAroundY(@NotNull BlockPos center, double angle) {
+    @Override
+    public @NotNull BlockPos rotateAroundY(@NotNull CruxPosition center, double angle) {
         double radians = Math.toRadians(angle*-1);
         double cosTheta = Math.cos(radians);
         double sinTheta = Math.sin(radians);
 
         // Translate point to origin
-        int translatedX = this.x - center.x;
-        int translatedZ = this.z - center.z;
+        int translatedX = this.x - center.blockX();
+        int translatedZ = this.z - center.blockZ();
 
         // Apply rotation matrix
         int rotatedX = (int) Math.round(translatedX * cosTheta - translatedZ * sinTheta);
         int rotatedZ = (int) Math.round(translatedX * sinTheta + translatedZ * cosTheta);
 
         // Translate point back
-        return new BlockPos(rotatedX + center.x, this.y, rotatedZ + center.z);
+        return new BlockPos(rotatedX + center.blockX(), this.y, rotatedZ + center.blockZ());
     }
 
-    public BlockPos rotateAroundZ(BlockPos center, double angle) {
+    @Override
+    public @NotNull BlockPos rotateAroundZ(@NotNull CruxPosition center, double angle) {
         double radians = Math.toRadians(angle);
         double cosTheta = Math.cos(radians);
         double sinTheta = Math.sin(radians);
 
         // Translate point to origin
-        int translatedX = this.x - center.x;
-        int translatedY = this.y - center.y;
+        int translatedX = this.x - center.blockX();
+        int translatedY = this.y - center.blockY();
 
         // Apply rotation matrix
         int rotatedX = (int) Math.round(translatedX * cosTheta - translatedY * sinTheta);
         int rotatedY = (int) Math.round(translatedX * sinTheta + translatedY * cosTheta);
 
         // Translate point back
-        return new BlockPos(rotatedX + center.x, rotatedY + center.y, this.z);
-    }
-
-    public @NotNull Block getBlock(@NotNull World world){
-        return world.getBlockAt(x, y, z);
-    }
-
-    public @NotNull Vector toVector(){
-        return new Vector(x, y, z);
-    }
-
-    public @NotNull Location toLocation(World world){
-        return new Location(world, x, y, z);
+        return new BlockPos(rotatedX + center.blockX(), rotatedY + center.blockY(), this.z);
     }
 
     @Override
