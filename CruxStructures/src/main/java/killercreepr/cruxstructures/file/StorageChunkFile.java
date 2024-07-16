@@ -2,7 +2,6 @@ package killercreepr.cruxstructures.file;
 
 import com.google.gson.JsonArray;
 import killercreepr.crux.Crux;
-import killercreepr.crux.data.BlockPos;
 import killercreepr.crux.data.world.CruxPosition;
 import killercreepr.cruxconfig.config.bukkit.file.CruxJson;
 import killercreepr.cruxconfig.config.common.json.JsonRegistry;
@@ -58,7 +57,7 @@ public class StorageChunkFile extends CruxJson {
 
         a.forEach(ele ->{
             if(!(jsonRegistry.deserialize(ele) instanceof StoredStructure str)) return;
-            map.put(str.getBlockPos(), str);
+            map.put(str.getPosition(), str);
         });
 
         return map;

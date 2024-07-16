@@ -68,7 +68,7 @@ public class SimpleStoredStructure implements StoredStructure{
     }
 
     @Override
-    public @NotNull CruxPosition getBlockPos() {
+    public @NotNull CruxPosition getPosition() {
         return center;
     }
 

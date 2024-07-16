@@ -1,7 +1,6 @@
 package killercreepr.cruxstructures.manager;
 
 import killercreepr.crux.Crux;
-import killercreepr.crux.data.BlockPos;
 import killercreepr.crux.data.communication.MsgContainer;
 import killercreepr.crux.data.world.ChunkBlockStorage;
 import killercreepr.crux.data.world.CruxPosition;
@@ -147,7 +146,7 @@ public class StructureManager implements Listener {
         new HashSet<>(container.getData().values()).forEach(blockList ->{
             new HashSet<>(blockList.getData().values()).forEach(a ->{
                 if(a.shouldStop()){
-                    active.remove(a.getCenter().getWorld().getUID(), a.getChunk().getChunkKey(), a.getBlockPos());
+                    active.remove(a.getCenter().getWorld().getUID(), a.getChunk().getChunkKey(), a.getPosition());
                     a.stopped();
                     return;
                 }
@@ -320,7 +319,7 @@ public class StructureManager implements Listener {
         if(cached==null) return;
         new HashSet<>(cached.getData().values()).forEach(data ->{
             if(!data.shouldPersist()){
-                ActiveStructure removed = active.remove(chunk.getWorld().getUID(), chunkKey, data.getBlockPos());
+                ActiveStructure removed = active.remove(chunk.getWorld().getUID(), chunkKey, data.getPosition());
                 if(removed != null) removed.stopped();
                 return;
             }

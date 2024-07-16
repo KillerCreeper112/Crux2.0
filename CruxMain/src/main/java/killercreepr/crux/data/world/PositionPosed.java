@@ -2,7 +2,7 @@ package killercreepr.crux.data.world;
 
 import org.jetbrains.annotations.NotNull;
 
-public interface BlockPosed {
+public interface PositionPosed {
     @NotNull
-    CruxPosition getBlockPos();
+    CruxPosition getPosition();
 }

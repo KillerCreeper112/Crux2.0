@@ -22,7 +22,7 @@ public class FileSimpleStoredStructure<T extends StoredStructure> extends Simple
         return new FileObject()
             .add("structure", registry.serializeToFileElement(object.getParent().key()))
             .add("chunk", registry.serializeToFileElement(object.getChunk()))
-            .add("center", registry.serializeToFileElement(object.getBlockPos()))
+            .add("center", registry.serializeToFileElement(object.getPosition()))
             .addProperty("rotation", object.getRotation())
             ;
     }

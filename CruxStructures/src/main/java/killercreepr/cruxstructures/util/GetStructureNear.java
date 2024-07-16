@@ -33,7 +33,7 @@ public class GetStructureNear extends GetNear<StoredStructure> {
         if(worldStorage==null) return map.keySet();
         worldStorage.forEach(chunkStorage -> chunkStorage.forEach(stored ->{
             if(filter != null && !filter.test(stored)) return;
-            float distance = (float) center.distanceSquared(stored.getBlockPos().toLocation(center.getWorld()));
+            float distance = (float) center.distanceSquared(stored.getPosition().toLocation(center.getWorld()));
             map.put(stored, distance);
         }));
 
