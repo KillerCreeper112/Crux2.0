@@ -11,6 +11,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class CruxGoalUtil {
     public static @NotNull Location findRandomAwayLocation(@NotNull Location center, @NotNull Location current, double range, double maxAngleDegrees) {
@@ -140,5 +141,13 @@ public class CruxGoalUtil {
         }catch (NoSuchFieldException | IllegalAccessException ignored){
             throw new UnsupportedOperationException(clazz.getSimpleName() + " does not have a static GoalKey<Mob> KEY variable!");
         }
+    }
+    public static Goal<Mob> addIfNotPresent(@NotNull Mob mob, @NotNull GoalKey<Mob> key, int priority, @NotNull Supplier<Goal<Mob>> supplier){
+        Goal<Mob> goal = Bukkit.getMobGoals().getGoal(mob, key);
+        if(goal != null) return goal;
+        goal = supplier.get();
+        if(goal==null) return goal;
+        Bukkit.getMobGoals().addGoal(mob, priority, goal);
+        return goal;
     }
 }
