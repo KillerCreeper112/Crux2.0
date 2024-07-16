@@ -2,6 +2,7 @@ package killercreepr.cruxconfig.config.bukkit.handler;
 
 import io.papermc.paper.registry.RegistryKey;
 import killercreepr.crux.data.BlockPos;
+import killercreepr.crux.data.LocationPos;
 import killercreepr.crux.data.StoredChunk;
 import killercreepr.crux.data.communication.CreateSound;
 import killercreepr.crux.data.communication.CreateTitle;
@@ -99,6 +100,7 @@ public class BukkitCfgHandlers {
 
         registry.registerHandler(StoredChunk.class, new AutoFileHandler<>(StoredChunk.class));
         registry.registerHandler(BlockPos.class, new AutoFileHandler<>(BlockPos.class));
+        registry.registerHandler(LocationPos.class, new AutoFileHandler<>(LocationPos.class));
     }
 
     public static void initYaml(@NotNull YamlRegistry registry){
