@@ -37,7 +37,7 @@ public abstract class MultiVerseWorldStorage<T> implements Iterable<WorldChunkSt
         return removed;
     }
 
-    public T remove(@NotNull UUID worldUUID, long chunkKey, @NotNull BlockPos pos){
+    public T remove(@NotNull UUID worldUUID, long chunkKey, @NotNull CruxPosition pos){
         WorldChunkStorage<T> container = data.get(worldUUID);
         if(container==null) return null;
         T removed = container.remove(chunkKey, pos);
@@ -45,7 +45,7 @@ public abstract class MultiVerseWorldStorage<T> implements Iterable<WorldChunkSt
         return removed;
     }
 
-    public @Nullable T get(@NotNull UUID worldUUID, long chunkKey, @NotNull BlockPos pos){
+    public @Nullable T get(@NotNull UUID worldUUID, long chunkKey, @NotNull CruxPosition pos){
         if(!data.containsKey(worldUUID)) return null;
         return data.get(worldUUID).get(chunkKey, pos);
     }

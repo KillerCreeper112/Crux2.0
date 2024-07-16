@@ -14,6 +14,7 @@ import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.BlockPos;
 import killercreepr.crux.data.communication.MsgContainer;
+import killercreepr.crux.data.world.CruxPosition;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.crux.util.GetNear;
@@ -195,7 +196,7 @@ public class StructureCommands {
             return 0;
         }
 
-        BlockPos pos = nearest.getBlockPos();
+        CruxPosition pos = nearest.getBlockPos();
 
         p.sendMessage(
             Component.text("Structure, " + nearest.getStructureKey() + " found at " + pos.x() + ", " + pos.y() + ", " + pos.z())

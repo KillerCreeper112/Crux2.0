@@ -1,7 +1,7 @@
 package killercreepr.cruxstructures.structure.stored;
 
-import killercreepr.crux.data.BlockPos;
 import killercreepr.crux.data.StoredChunk;
+import killercreepr.crux.data.world.CruxPosition;
 import killercreepr.crux.util.CruxedBoundingBox;
 import killercreepr.cruxstructures.structure.Structure;
 import killercreepr.cruxstructures.structure.active.ActiveStructure;
@@ -15,10 +15,10 @@ import org.jetbrains.annotations.Nullable;
 public class SimpleStoredStructure implements StoredStructure{
     protected final @NotNull Key structureKey;
     protected final @NotNull StoredChunk chunk;
-    protected final @NotNull BlockPos center;
+    protected final @NotNull CruxPosition center;
     protected final @NotNull BoundingBox boundingBox;
     protected final double rotation;
-    public SimpleStoredStructure(@NotNull Structure structure, @NotNull StoredChunk chunk, @NotNull BlockPos center, double rotation) {
+    public SimpleStoredStructure(@NotNull Structure structure, @NotNull StoredChunk chunk, @NotNull CruxPosition center, double rotation) {
         this.structureKey = structure.key();
         this.chunk = chunk;
         this.center = center;
@@ -26,7 +26,7 @@ public class SimpleStoredStructure implements StoredStructure{
         this.boundingBox = calculateBoundingBox(center, structure);
     }
 
-    public SimpleStoredStructure(@NotNull Key structureKey, @NotNull StoredChunk chunk, @NotNull BlockPos center, @NotNull BoundingBox boundingBox, double rotation) {
+    public SimpleStoredStructure(@NotNull Key structureKey, @NotNull StoredChunk chunk, @NotNull CruxPosition center, @NotNull BoundingBox boundingBox, double rotation) {
         this.structureKey = structureKey;
         this.chunk = chunk;
         this.center = center;
@@ -34,8 +34,8 @@ public class SimpleStoredStructure implements StoredStructure{
         this.rotation = rotation;
     }
 
-    public @NotNull BoundingBox calculateBoundingBox(@NotNull BlockPos center, @NotNull Structure structure){
-        BlockPos origin = structure.originPos();
+    public @NotNull BoundingBox calculateBoundingBox(@NotNull CruxPosition center, @NotNull Structure structure){
+        CruxPosition origin = structure.originPos();
 
         int offsetX = center.blockX() - origin.blockX();
         int offsetY = center.blockY() - origin.blockY();
@@ -68,7 +68,7 @@ public class SimpleStoredStructure implements StoredStructure{
     }
 
     @Override
-    public @NotNull BlockPos getBlockPos() {
+    public @NotNull CruxPosition getBlockPos() {
         return center;
     }
 

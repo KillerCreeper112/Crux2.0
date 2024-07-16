@@ -27,7 +27,7 @@ public abstract class WorldChunkStorage<T> implements Iterable<ChunkBlockStorage
         return data.remove(chunkKey);
     }
 
-    public T remove(long chunkKey, @NotNull BlockPos pos){
+    public T remove(long chunkKey, @NotNull CruxPosition pos){
         ChunkBlockStorage<T> container = data.get(chunkKey);
         if(container==null) return null;
         T removed = container.remove(pos);
@@ -39,7 +39,7 @@ public abstract class WorldChunkStorage<T> implements Iterable<ChunkBlockStorage
         return data.get(chunkKey);
     }
 
-    public @Nullable T get(long chunkKey, @NotNull BlockPos pos){
+    public @Nullable T get(long chunkKey, @NotNull CruxPosition pos){
         if(!data.containsKey(chunkKey)) return null;
         return data.get(chunkKey).get(pos);
     }

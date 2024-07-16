@@ -1,6 +1,7 @@
 package killercreepr.cruxstructures.structure.active;
 
 import killercreepr.crux.data.BlockPos;
+import killercreepr.crux.data.world.CruxPosition;
 import killercreepr.cruxstructures.structure.stored.StoredStructure;
 import org.bukkit.Chunk;
 import org.bukkit.block.Block;
@@ -26,7 +27,7 @@ public class SimpleActiveStructure implements ActiveStructure {
     }
 
     @Override
-    public @NotNull BlockPos getBlockPos() {
+    public @NotNull CruxPosition getBlockPos() {
         return stored.getBlockPos();
     }
 

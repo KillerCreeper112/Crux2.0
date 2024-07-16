@@ -14,6 +14,7 @@ import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.block.BlockState;
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.BlockPos;
+import killercreepr.crux.data.world.CruxPosition;
 import killercreepr.cruxstructures.event.StructurePlaceEvent;
 import killercreepr.cruxstructures.structure.Structure;
 import net.kyori.adventure.key.Key;
@@ -120,13 +121,13 @@ public class FAWEStructure implements Structure {
 
     @Override
     @NotNull
-    public Collection<BlockPos> getBlocks(double rotation) {
-        Collection<BlockPos> list = new HashSet<>();
+    public Collection<CruxPosition> getBlocks(double rotation) {
+        Collection<CruxPosition> list = new HashSet<>();
         Clipboard clipboard = holder.getClipboards().getFirst();
         clipboard.forEach(block ->{
             BlockState state = clipboard.getBlock(block);
             if(state.isAir()) return;
-            list.add(new BlockPos(block.x(), block.y(), block.z()).rotateAroundY(
+            list.add(BlockPos.at(block.x(), block.y(), block.z()).rotateAroundY(
                 originPos(), rotation
             ));
         });

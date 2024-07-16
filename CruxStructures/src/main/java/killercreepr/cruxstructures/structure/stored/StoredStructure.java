@@ -1,8 +1,8 @@
 package killercreepr.cruxstructures.structure.stored;
 
-import killercreepr.crux.data.BlockPos;
 import killercreepr.crux.data.StoredChunk;
 import killercreepr.crux.data.world.BlockPosed;
+import killercreepr.crux.data.world.CruxPosition;
 import killercreepr.cruxstructures.registries.StructureRegistries;
 import killercreepr.cruxstructures.structure.Structure;
 import killercreepr.cruxstructures.structure.active.ActiveStructure;
@@ -35,11 +35,11 @@ public interface StoredStructure extends BlockPosed {
     @Nullable
     ActiveStructure buildActive(@NotNull Chunk chunk);
 
-    default @NotNull BlockPos fromWorldToStructurePos(@NotNull BlockPos worldPos){
-        BlockPos placedCenter = getBlockPos();
-        BlockPos structureOrigin = getParent().originPos();
+    default @NotNull CruxPosition fromWorldToStructurePos(@NotNull CruxPosition worldPos){
+        CruxPosition placedCenter = getBlockPos();
+        CruxPosition structureOrigin = getParent().originPos();
 
-        BlockPos difference = placedCenter.subtract(structureOrigin);
+        CruxPosition difference = placedCenter.subtract(structureOrigin);
         return worldPos.subtract(difference);
     }
 }

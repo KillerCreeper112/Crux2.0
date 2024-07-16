@@ -2,6 +2,7 @@ package killercreepr.cruxstructures.structure;
 
 import killercreepr.crux.data.BlockPos;
 import killercreepr.crux.data.StoredChunk;
+import killercreepr.crux.data.world.CruxPosition;
 import killercreepr.cruxstructures.event.StructurePlaceEvent;
 import killercreepr.cruxstructures.structure.stored.SimpleStoredStructure;
 import killercreepr.cruxstructures.structure.stored.StoredStructure;
@@ -24,12 +25,13 @@ public interface Structure extends Keyed {
     StructurePlaceEvent place(@NotNull Location at, double rotation);
     @NotNull
     BoundingBox boundingBox();
-    @NotNull BlockPos originPos();
+    @NotNull
+    CruxPosition originPos();
 
     default boolean isPersistent(){ return false; }
     default @Nullable StoredStructure buildStored(@NotNull Location center, double rotation){
         return new SimpleStoredStructure(this, StoredChunk.from(center), BlockPos.from(center), rotation);
     }
 
-    @NotNull Collection<BlockPos> getBlocks(double rotation);
+    @NotNull Collection<CruxPosition> getBlocks(double rotation);
 }

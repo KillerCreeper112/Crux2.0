@@ -8,17 +8,17 @@ import java.util.Iterator;
 import java.util.Map;
 
 public abstract class ChunkBlockStorage<T> implements Iterable<T> {
-    protected final @NotNull Map<BlockPos, T> data;
+    protected final @NotNull Map<CruxPosition, T> data;
 
-    public ChunkBlockStorage(@NotNull Map<BlockPos, T> data) {
+    public ChunkBlockStorage(@NotNull Map<CruxPosition, T> data) {
         this.data = data;
     }
 
-    public @NotNull Map<BlockPos, T> getData() {
+    public @NotNull Map<CruxPosition, T> getData() {
         return data;
     }
 
-    public @Nullable T get(@NotNull BlockPos pos){
+    public @Nullable T get(@NotNull CruxPosition pos){
         return data.get(pos);
     }
 
@@ -30,7 +30,7 @@ public abstract class ChunkBlockStorage<T> implements Iterable<T> {
         return remove(getBlockPos(block));
     }
 
-    public T remove(@NotNull BlockPos pos){
+    public T remove(@NotNull CruxPosition pos){
         return data.remove(pos);
     }
 
@@ -38,7 +38,7 @@ public abstract class ChunkBlockStorage<T> implements Iterable<T> {
         return data.isEmpty();
     }
 
-    public abstract @NotNull BlockPos getBlockPos(@NotNull T object);
+    public abstract @NotNull CruxPosition getBlockPos(@NotNull T object);
 
     @NotNull
     @Override

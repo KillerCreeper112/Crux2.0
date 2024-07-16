@@ -4,6 +4,7 @@ import killercreepr.crux.Crux;
 import killercreepr.crux.data.BlockPos;
 import killercreepr.crux.data.communication.MsgContainer;
 import killercreepr.crux.data.world.ChunkBlockStorage;
+import killercreepr.crux.data.world.CruxPosition;
 import killercreepr.crux.data.world.MultiVerseWorldStorage;
 import killercreepr.crux.data.world.WorldChunkStorage;
 import killercreepr.crux.data.world.standard.MultiVerseBlockPosedStorage;
@@ -263,7 +264,7 @@ public class StructureManager implements Listener {
 
         for(File f : files){
             StorageChunkFile file = new StorageChunkFile(f);
-            Map<BlockPos, StoredStructure> values = file.structures();
+            Map<CruxPosition, StoredStructure> values = file.structures();
             file.close();
             values.values().forEach(v ->{
                 stored.add(worldUUID, v.getChunk().getChunkKey(), v);
