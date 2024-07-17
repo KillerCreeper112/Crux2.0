@@ -1,5 +1,6 @@
 package killercreepr.crux.data.world;
 
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -29,6 +30,18 @@ public interface CruxPosition {
     int blockX();
     int blockY();
     int blockZ();
+
+    default int toChunkX(){
+        return (int) Math.floor(x()) >> 4;
+    }
+
+    default int toChunkZ(){
+        return (int) Math.floor(z()) >> 4;
+    }
+
+    default long toChunkKey(){
+        return Chunk.getChunkKey(toChunkX(), toChunkZ());
+    }
 
     default @NotNull Block getBlock(@NotNull World world){
         return world.getBlockAt(blockX(), blockY(), blockZ());
