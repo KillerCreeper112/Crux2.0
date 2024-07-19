@@ -25,6 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -48,7 +49,7 @@ public interface Menu extends CommonMenu, InventoryHolder {
      */
     default int close(){
         int x = getViewers().size();
-        getViewers().forEach(HumanEntity::closeInventory);
+        new HashSet<>(getViewers()).forEach(HumanEntity::closeInventory);
         return x;
     }
 
