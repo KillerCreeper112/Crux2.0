@@ -320,19 +320,19 @@ public class StructureManager implements Listener {
     public void onChunkLoad(ChunkLoadEvent event) {
         Chunk chunk = event.getChunk();
         long chunkKey = chunk.getChunkKey();
-        ChunkBlockStorage<StoredStructure> cached = stored.get(chunk.getWorld().getUID(), chunkKey);
+        UUID worldUUID = chunk.getWorld().getUID();
+        ChunkBlockStorage<StoredStructure> cached = stored.get(worldUUID, chunkKey);
         if(cached==null) return;
         new HashSet<>(cached.getData().values()).forEach(data ->{
             if(!data.shouldPersist()){
-                ActiveStructure removed = active.remove(chunk.getWorld().getUID(), chunkKey, data.getPosition());
+                ActiveStructure removed = active.remove(worldUUID, chunkKey, data.getPosition());
                 if(removed != null) removed.stopped();
                 return;
             }
-            //BlockPos blockPos = data.getBlockPos();
-            //todo maybe if(cached.get(blockPos) != null) return;
+            if(active.get(worldUUID, chunkKey, data.getPosition()) != null) return;
             ActiveStructure active = data.buildActive(chunk);
             if(active==null) return;
-            this.active.add(chunk.getWorld().getUID(), chunkKey, active);
+            this.active.add(worldUUID, chunkKey, active);
             active.started();
         });
     }
