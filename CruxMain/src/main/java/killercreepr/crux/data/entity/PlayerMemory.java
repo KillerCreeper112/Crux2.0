@@ -3,7 +3,6 @@ package killercreepr.crux.data.entity;
 import killercreepr.crux.data.Holder;
 import killercreepr.crux.registry.KeyedRegistry;
 import killercreepr.crux.registry.SimpleKeyedRegistry;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

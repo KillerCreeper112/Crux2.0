@@ -108,12 +108,17 @@ public class StructureManager implements Listener {
 
     public <T extends ActiveStructure> @NotNull Collection<T> getActiveAt(@NotNull Class<T> type, @NotNull Block block, @Nullable Predicate<T> filter){
         Collection<T> list = new HashSet<>();
-        for(ActiveStructure s : getActiveAt(block)){
-            if(!type.isAssignableFrom(s.getClass())) continue;
-            T value = type.cast(s);
-            if(filter != null && !filter.test(value)) continue;
-            list.add(value);
-        }
+        WorldChunkStorage<ActiveStructure> worldStorage = active.get(block.getWorld().getUID());
+        if(worldStorage ==null) return list;
+        worldStorage.forEach(chunkStorage ->{
+            for(ActiveStructure s : chunkStorage){
+                if(!s.getData().getBoundingBox().contains(block.getLocation().toVector())) continue;
+                if(!type.isAssignableFrom(s.getClass())) continue;
+                T value = type.cast(s);
+                if(filter != null && !filter.test(value)) continue;
+                list.add(value);
+            }
+        });
         return list;
     }
 

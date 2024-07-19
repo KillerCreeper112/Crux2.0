@@ -138,4 +138,16 @@ public class FAWEStructure implements Structure {
     public @NotNull Key key() {
         return key;
     }
+
+    public @NotNull ClipboardHolder getHolder() {
+        return holder;
+    }
+
+    public @NotNull BoundingBox getBox() {
+        return box;
+    }
+
+    public @NotNull BlockPos getOriginPos() {
+        return originPos;
+    }
 }
