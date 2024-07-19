@@ -1,6 +1,5 @@
 package killercreepr.crux.data.world;
 
-import killercreepr.crux.util.CruxMath;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;

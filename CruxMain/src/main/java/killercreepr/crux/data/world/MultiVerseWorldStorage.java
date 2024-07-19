@@ -1,6 +1,5 @@
 package killercreepr.crux.data.world;
 
-import killercreepr.crux.data.BlockPos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

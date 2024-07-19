@@ -16,7 +16,7 @@ public class LocationPos implements CruxPosition {
         return new LocationPos(block.getX(), block.getY(), block.getZ());
     }
     public static @NotNull LocationPos from(@NotNull Location l){
-        return new LocationPos(l.getX(), l.getX(), l.getZ());
+        return new LocationPos(l.getX(), l.getY(), l.getZ());
     }
     public static @NotNull LocationPos from(@NotNull Vector v){
         return new LocationPos(v.getX(), v.getY(), v.getZ());
