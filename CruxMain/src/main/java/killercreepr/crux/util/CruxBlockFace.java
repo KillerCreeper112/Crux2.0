@@ -26,7 +26,7 @@ public class CruxBlockFace {
     }
 
     public static BlockFace rotateLeft(@NotNull BlockFace center) {
-        return rotate(center, BlockFace.NORTH);
+        return rotate(center, BlockFace.WEST);
     }
 
     public static BlockFace rotateRight(@NotNull BlockFace center) {
