@@ -68,7 +68,7 @@ public class BukkitCfgHandlers {
         registry.registerHandler(PotionEffectType.class, POTION_EFFECT_TYPE);
         registry.registerHandler(Material.class, MATERIAL);
         registry.registerHandler(Component.class, COMPONENT);
-        registry.registerHandler(ItemStack.class, ITEM_STACK);
+        //registry.registerHandler(ItemStack.class, ITEM_STACK);
         registry.registerHandler(BukkitDynamicItem.class, DYNAMIC_ITEM);
         registry.registerHandler(UUID.class, UUID);
         registry.registerHandler(Color.class, COLOR);
