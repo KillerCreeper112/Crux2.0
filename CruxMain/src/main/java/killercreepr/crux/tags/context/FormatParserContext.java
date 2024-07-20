@@ -1,5 +1,6 @@
 package killercreepr.crux.tags.context;
 
+import killercreepr.crux.Crux;
 import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.crux.tags.format.Format;
@@ -12,6 +13,14 @@ import java.util.Collection;
 import java.util.List;
 
 public class FormatParserContext implements TextParserContext {
+    public static @NotNull Builder builder(){
+        return builder(Crux.FORMAT);
+    }
+
+    public static @NotNull Builder builder(@NotNull Format format){
+        return new Builder(format);
+    }
+
     protected final @NotNull Format format;
     protected final @Nullable OfflinePlayer viewer;
     protected final @Nullable FormatPrefix tagsPrefix;
