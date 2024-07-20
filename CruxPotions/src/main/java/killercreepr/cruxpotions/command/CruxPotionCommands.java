@@ -167,8 +167,6 @@ public class CruxPotionCommands {
         return dispatcher.build();
     }
 
-
-
     public static RequiredArgumentBuilder<CommandSourceStack, ?> buildDurationAfter(@Nullable Integer duration){
         return Commands.argument("amplifier", IntegerArgumentType.integer())
             .executes(ctx -> applyEffect(
