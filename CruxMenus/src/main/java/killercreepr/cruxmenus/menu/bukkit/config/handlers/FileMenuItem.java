@@ -27,7 +27,7 @@ public class FileMenuItem extends FileMenuModuled<MenuItemHolder> {
             if(baseID != null){
                 /*String[] checkBase = path.split("\\.");
                 if(checkBase.length > 0 && checkBase[checkBase.length-1].contains(baseID)){
-                    Crux.log(Level.WARNING, "Menu item has the same base ID as its own ID! (" + path + ") Base = (" + baseID + "). Ignoring...");
+                    CCrux.log(Level.WARNING, "Menu item has the same base ID as its own ID! (" + path + ") Base = (" + baseID + "). Ignoring...");
                 }else{
                     base = menuModule.getYamlMenuItem().deserializeFromYaml(
                             context, o.get(baseID), menuContext

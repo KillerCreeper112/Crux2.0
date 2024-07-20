@@ -1,6 +1,5 @@
 package killercreepr.cruxconfig.config.common.yaml.registry;
 
-import killercreepr.crux.Crux;
 import killercreepr.crux.util.CruxObjects;
 import killercreepr.crux.util.CruxReflect;
 import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
@@ -11,7 +10,6 @@ import killercreepr.cruxconfig.config.common.yaml.automatic.AutoYamlSerializer;
 import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
 import killercreepr.cruxconfig.config.common.yaml.element.*;
 import killercreepr.cruxconfig.config.common.yaml.handler.YamlObjectHandler;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,7 +17,6 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
-import java.util.logging.Level;
 
 /**
  * Represents a registry specifically developed to handle YAML syntax.
@@ -130,7 +127,6 @@ public class YamlRegistry implements FileRegistry {
             throw new UnsupportedOperationException(type + " is not a class instance!");
         }*/
 
-        Crux.log(Level.WARNING, "             AHHHHHHHHHHH    " + type + "    /////    ");
         if(isSubtypeOfCollection(type)){
             Type[] args = CruxReflect.getTypeArguments(type);
             Class<?> rawType = (Class<?>) ((ParameterizedType) type).getRawType();
@@ -172,8 +168,6 @@ public class YamlRegistry implements FileRegistry {
                                                  @NotNull YamlArray from){
         Object createdMap = CruxReflect.attemptCreation(mapClazz);
         if(createdMap == null) createdMap = new ArrayList<>();
-
-        Crux.log(Level.WARNING, "             AHHHHHHHHHHH    " + createdMap + "    /////    " + firstType);
 
         Collection<Object> map = (Collection<Object>) createdMap;
         from.forEach((value) ->{
@@ -263,6 +257,13 @@ public class YamlRegistry implements FileRegistry {
     @Override
     public @NotNull FileElement serializeToFileElement(@NotNull Object object) {
         return FileElement.fromYaml(serializeObject(object));
+    }
+
+    @Override
+    public <T> @Nullable T deserialize(@NotNull Type type, @Nullable FileElement o) {
+        if(o==null) return null;
+        Object object = deserializeObject(type, o.toYaml());
+        return (T) object;
     }
 
     @Override

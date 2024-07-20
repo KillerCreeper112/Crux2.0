@@ -5,9 +5,12 @@ import killercreepr.cruxconfig.config.common.element.FileElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Type;
+
 public interface FileRegistry {
     @NotNull
     FileElement serializeToFileElement(@NotNull Object object);
+    <T> @Nullable T deserialize(@NotNull Type type, @Nullable FileElement o);
     <T> @Nullable T deserialize(@NotNull Class<T> clazz, @Nullable FileElement o);
     <T> @Nullable T deserialize(@NotNull Class<T> clazz, @Nullable FileElement o, @NotNull FileContext<?> context);
     @Nullable Object deserializeObject(@NotNull FileElement o);

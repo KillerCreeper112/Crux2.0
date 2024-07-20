@@ -24,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -201,6 +202,13 @@ public class JsonRegistry implements FileRegistry {
     @Override
     public @NotNull FileElement serializeToFileElement(@NotNull Object object) {
         return FileElement.fromJson(serializeObject(object));
+    }
+
+    @Override
+    public <T> @Nullable T deserialize(@NotNull Type type, @Nullable FileElement o) {
+        if(o == null) return null;
+        Object object = deserializeObject(o);
+        return (T) object;
     }
 
     @Override
