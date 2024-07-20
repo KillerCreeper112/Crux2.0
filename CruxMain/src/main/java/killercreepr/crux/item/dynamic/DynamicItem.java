@@ -29,5 +29,7 @@ public interface DynamicItem extends Cloneable {
         return i==null?null:i.item();
     }
 
+    @NotNull CruxItem applyComponents(@NotNull CruxItem item, @NotNull TextParserContext context);
+
     @NotNull DynamicItem clone();
 }

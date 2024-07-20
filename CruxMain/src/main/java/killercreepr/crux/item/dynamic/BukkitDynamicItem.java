@@ -71,32 +71,21 @@ public class BukkitDynamicItem implements DynamicItem{
         }else built = new ItemStack(material);
         CruxItem item = new CruxItem(built);
         item.amount(amount==null?1:(int) Double.parseDouble(context.deserializeString(amount)));
+        return applyComponents(item, context);
+    }
+
+    @Override
+    public @NotNull CompletableFuture<CruxItem> buildCompletely(@NotNull TextParserContext context) {
+        return CompletableFuture.supplyAsync(() -> build(context));
+    }
+
+    @Override
+    public @NotNull CruxItem applyComponents(@NotNull CruxItem item, @NotNull TextParserContext context) {
         if(components == null) return item;
         for(DynamicItemComponent component : components.values()){
             component.apply(item, context);
         }
         return item;
-    }
-
-    @Override
-    public @NotNull CompletableFuture<CruxItem> buildCompletely(@NotNull TextParserContext context) {
-        return CompletableFuture.supplyAsync(() ->{
-            String parsed = context.deserializeString(material());
-            Material material = Material.matchMaterial(parsed);
-            ItemStack built;
-            if(material == null){
-                try{
-                    built = Bukkit.getItemFactory().createItemStack(parsed);
-                }catch (IllegalArgumentException ignored){ return null; }
-            }else built = new ItemStack(material);
-            CruxItem item = new CruxItem(built);
-            item.amount(amount==null?1:(int) Double.parseDouble(context.deserializeString(amount)));
-            if(components == null) return item;
-            for(DynamicItemComponent component : components.values()){
-                component.apply(item, context);
-            }
-            return item;
-        });
     }
 
     @Override
