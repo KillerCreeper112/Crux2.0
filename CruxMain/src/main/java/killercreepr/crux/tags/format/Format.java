@@ -15,6 +15,7 @@ import killercreepr.crux.tags.resolver.StringResolver;
 import killercreepr.crux.util.CruxMath;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.codehaus.plexus.util.FastMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -193,6 +194,9 @@ public class Format implements FormatSerializer{
     //The entire <claim_setting> won't be parsed.
     //
     //IDK maybe it's fine. We will see!
+    //
+    //... its not fine );
+    //todo FIXED IT :D
     public @NotNull String processPlaceholders(@NotNull String text, @NotNull StringTagContainer tags) {
         StringTagContainer resolvers = new StringTagContainer(this.tags);
         resolvers.addAll(STRING_RESOLVERS.values());
@@ -204,6 +208,7 @@ public class Format implements FormatSerializer{
         //Bukkit.broadcastMessage("text to process: " + text);
         boolean found;
         Collection<String> already = new HashSet<>();
+        Map<String, String> unresolved = new FastMap<>();
         do{
             Matcher matcher = STRING_PATTERN.matcher(text);
             StringBuilder result = new StringBuilder(text.length());
@@ -211,6 +216,11 @@ public class Format implements FormatSerializer{
 
             while (matcher.find()) {
                 String placeholder = matcher.group(1);
+
+                for(Map.Entry<String, String> entry : unresolved.entrySet()){
+                    placeholder = placeholder.replace(entry.getKey(), entry.getValue());
+                }
+
                 String[] parts = placeholder.split(":");
                 placeholder = parts[0];
 
@@ -229,9 +239,28 @@ public class Format implements FormatSerializer{
 
                 FormatArgs args = new FormatArgs(arguments);
                 String replacement = resolvePlaceholder(placeholder, args, context, resolvers);
+                //Bukkit.broadcastMessage(placeholder + ": " + replacement + " ---   " + Arrays.toString(arguments));
                 if(replacement == null){
                     already.add(placeholder);
                     replacement = "<" + placeholder + (args.isEmpty() ? "" : ":" + processPlaceholders(String.join(":", args.getArgs()), resolvers)) + ">";
+
+                    //If the placeholder cannot be parsed, generate an unresolved placeholder that
+                    //does not contain <>. Put that in a map with the replacement so in the end, it
+                    //can replace the unresolved placeholders with their normal <> placeholder.
+                    //
+                    //For example, if I had: <something:<test>> and <test> could not be parsed,
+                    //it will basically make the text "<something:|UNRESOLVED-UUID|>".
+                    //Then, when it parses <something>, |UNRESOLVED-UUID| will be turned back into <test> for the
+                    //placeholder's arguments. And at the very end of the parsing, it will
+                    //also replace all the unresolved placeholders back.
+                    //
+                    //It needs to do this because if it doesn't,
+                    //"String placeholder = matcher.group(1);" will get stuck
+                    //on the unparsed placeholder.
+
+                    String replace = "|UNRESOLVED-" + UUID.randomUUID() + "|";
+                    unresolved.put(replace, replacement);
+                    replacement = replace;
                 }
                 matcher.appendReplacement(result, replacement);
             }
@@ -239,6 +268,11 @@ public class Format implements FormatSerializer{
             text = result.toString();
         }while(found);
         //Bukkit.broadcastMessage("after: " + result);
+
+        for(Map.Entry<String, String> entry : unresolved.entrySet()){
+            text = text.replace(entry.getKey(), entry.getValue());
+        }
+
         return text;
     }
 
