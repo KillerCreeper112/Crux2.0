@@ -164,10 +164,14 @@ public class YamlRegistry implements FileRegistry {
         return deserializeObject(type, from, new YamlContext(this));
     }
 
-    public @Nullable Object deserializeObjectCollection(@NotNull Class<?> mapClazz, @NotNull Type firstType,
+    public @Nullable Object deserializeObjectCollection(@NotNull Class<?> collectionClazz, @NotNull Type firstType,
                                                  @NotNull YamlArray from){
-        Object createdMap = CruxReflect.attemptCreation(mapClazz);
-        if(createdMap == null) createdMap = new ArrayList<>();
+        Object createdMap = CruxReflect.attemptCreation(collectionClazz);
+        if(createdMap == null){
+            if(Set.class.isAssignableFrom(collectionClazz)){
+                createdMap = new HashSet<>();
+            }else createdMap = new ArrayList<>();
+        }
 
         Collection<Object> map = (Collection<Object>) createdMap;
         from.forEach((value) ->{
