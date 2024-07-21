@@ -12,6 +12,8 @@ import org.jetbrains.annotations.NotNull;
 public class CruxKeyArgument implements CustomArgumentType<Key, Key> {
     @Override
     public @NotNull Key parse(@NotNull StringReader reader) throws CommandSyntaxException {
+
+
         String string = readString(reader);
         return Crux.key(string);
     }
