@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+//todo Make a translatable system
 public final class Crux {
     public static final String NAMESPACE = "crux";
     public static final TagParser TAGS = new CruxTags.Builder()
