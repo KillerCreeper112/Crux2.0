@@ -23,6 +23,16 @@ public interface ItemHandler {
     @Nullable
     ItemHolder getItem(@NotNull Key key);
 
+    default boolean compare(@Nullable ItemStack item, @Nullable ItemStack item1){
+        if(item == null || item1 == null) return item == item1;
+        return compare(getKey(item), item1);
+    }
+
+    default boolean compare(@NotNull Key key, @Nullable ItemStack item){
+        return item != null && key.equals(getKey(item));
+    }
+
+
     class Dummy implements ItemHandler {
 
         @Override
