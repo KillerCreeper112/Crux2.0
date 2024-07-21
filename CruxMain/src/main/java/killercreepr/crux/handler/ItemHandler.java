@@ -1,6 +1,10 @@
 package killercreepr.crux.handler;
 
+import killercreepr.crux.item.BukkitItemHolder;
+import killercreepr.crux.item.ItemHolder;
 import net.kyori.adventure.key.Key;
+import org.bukkit.Material;
+import org.bukkit.Registry;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -16,6 +20,9 @@ public interface ItemHandler {
 
     @NotNull Key getKey(@NotNull ItemStack item);
 
+    @Nullable
+    ItemHolder getItem(@NotNull Key key);
+
     class Dummy implements ItemHandler {
 
         @Override
@@ -26,6 +33,13 @@ public interface ItemHandler {
         @Override
         public @NotNull Key getKey(@NotNull ItemStack item) {
             return item.getType().getKey();
+        }
+
+        @Override
+        public @Nullable ItemHolder getItem(@NotNull Key key) {
+            Material m = Registry.MATERIAL.get(key);
+            if(m == null) return null;
+            return new BukkitItemHolder(key);
         }
     }
 }

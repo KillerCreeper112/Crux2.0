@@ -2,6 +2,8 @@ package killercreepr.cruxitems;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.handler.ItemHandler;
+import killercreepr.crux.item.BukkitItemHolder;
+import killercreepr.crux.item.ItemHolder;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registries.CruxRegistries;
@@ -10,12 +12,15 @@ import killercreepr.cruxitems.config.Config;
 import killercreepr.cruxitems.item.CruxedItem;
 import killercreepr.cruxitems.item.GeneralCruxedItemDisplayUpdater;
 import killercreepr.cruxitems.item.ItemDisplayFormatter;
+import killercreepr.cruxitems.item.PluginItemHolder;
 import killercreepr.cruxitems.item.plugin.PluginItem;
 import killercreepr.cruxitems.listener.DisableRecipesListener;
 import killercreepr.cruxitems.registries.CruxItemRegistries;
 import killercreepr.cruxitems.values.DefaultValues;
 import killercreepr.cruxitems.values.ValuesProvider;
 import net.kyori.adventure.key.Key;
+import org.bukkit.Material;
+import org.bukkit.Registry;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -72,5 +77,14 @@ public class CruxItemsModule implements CruxModule, ItemHandler {
         Key key = new CruxedItem(item).getPluginItemKey();
         if(key != null) return key;
         return item.getType().getKey();
+    }
+
+    @Override
+    public @Nullable ItemHolder getItem(@NotNull Key key) {
+        PluginItem pluginItem = CruxItemRegistries.ITEMS.get(key);
+        if(pluginItem != null) return new PluginItemHolder(key);
+        Material m = Registry.MATERIAL.get(key);
+        if(m == null) return null;
+        return new BukkitItemHolder(key);
     }
 }
