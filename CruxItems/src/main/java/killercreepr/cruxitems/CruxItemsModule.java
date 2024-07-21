@@ -10,10 +10,12 @@ import killercreepr.cruxitems.config.Config;
 import killercreepr.cruxitems.item.CruxedItem;
 import killercreepr.cruxitems.item.GeneralCruxedItemDisplayUpdater;
 import killercreepr.cruxitems.item.ItemDisplayFormatter;
+import killercreepr.cruxitems.item.plugin.PluginItem;
 import killercreepr.cruxitems.listener.DisableRecipesListener;
 import killercreepr.cruxitems.registries.CruxItemRegistries;
 import killercreepr.cruxitems.values.DefaultValues;
 import killercreepr.cruxitems.values.ValuesProvider;
+import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -63,5 +65,12 @@ public class CruxItemsModule implements CruxModule, ItemHandler {
     @Override
     public @NotNull ItemStack update(@NotNull ItemStack item, @Nullable Entity holder) {
         return new CruxedItem(item).update(holder).item();
+    }
+
+    @Override
+    public @NotNull Key getKey(@NotNull ItemStack item) {
+        Key key = new CruxedItem(item).getPluginItemKey();
+        if(key != null) return key;
+        return item.getType().getKey();
     }
 }
