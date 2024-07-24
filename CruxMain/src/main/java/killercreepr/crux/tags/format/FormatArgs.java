@@ -42,4 +42,16 @@ public class FormatArgs {
     public @NotNull Optional<String> getOptional(int index){
         return Optional.ofNullable(getSafely(index));
     }
+
+    public double parseDouble(int index){
+        return Double.parseDouble(get(index));
+    }
+
+    public int parseInt(int index){
+        return (int) parseDouble(index);
+    }
+
+    public float parseFloat(int index){
+        return (float) parseDouble(index);
+    }
 }

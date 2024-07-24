@@ -191,7 +191,7 @@ public class YamlRegistry implements FileRegistry {
         from.forEach((key, value) ->{
             Object parsedValue = deserializeObject(secondType, value);
             if(parsedValue == null) return;
-            Object parsedKey = key;
+            Object parsedKey;
             if(firstType == Integer.class){
                 parsedKey = Integer.parseInt(key);
             }else if(firstType == Double.class){
@@ -202,6 +202,8 @@ public class YamlRegistry implements FileRegistry {
                 parsedKey = Short.parseShort(key);
             }else if(firstType == Long.class){
                 parsedKey = Long.parseLong(key);
+            }else{
+                parsedKey = deserializeObject(firstType, new YamlPrimitive(key));
             }
             map.put(parsedKey, parsedValue);
         });

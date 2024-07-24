@@ -20,6 +20,7 @@ public class CruxStandardTags {
         return new HashSet<>(){{
             add(new LatinFontResolver());
             add(new StringFormatResolver());
+            add(new CruxSpacingResolver());
         }};
     }
 
