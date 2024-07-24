@@ -9,6 +9,7 @@ import killercreepr.cruxmenus.menu.bukkit.slot.Slot;
 import killercreepr.cruxmenus.registries.Menus;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -47,6 +48,20 @@ public class BukkitMenu implements Menu{
         slots.put(slot.getIndex(), slot);
         if(skipUpdate) return;
         slot.setItem(slot.getSlottedItemReplacement(), true);
+    }
+
+    public void openSilently(@NotNull HumanEntity p){
+        p.openInventory(inventory);
+        Menus.OPENED.register(p.getUniqueId(), this);
+    }
+
+    public Menu reconstruct(int size, @NotNull Component name, boolean keepOldContents){
+        Inventory old = inventory;
+        reconstruct(size, name);
+        if(keepOldContents){
+            inventory.setContents(old.getContents());
+        }
+        return this;
     }
 
     @Override
