@@ -44,6 +44,9 @@ public interface Menu extends CommonMenu, InventoryHolder {
     MenuCloseEvent close(@NotNull Player p);
     MenuRefreshEvent refresh();
 
+    default void onRefresh(){
+    }
+
     /**
      * Closes all viewer's inventories.
      */

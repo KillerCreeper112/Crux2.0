@@ -102,8 +102,13 @@ public class BukkitMenu implements Menu{
         MenuRefreshEvent event = new MenuRefreshEvent(this);
         if(!event.callEvent()) return event;
 
-        modules.refresh();
+        onRefresh();
         return event;
+    }
+
+    @Override
+    public void onRefresh(){
+        modules.refresh();
     }
 
     @Override

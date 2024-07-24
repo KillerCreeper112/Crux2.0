@@ -135,14 +135,11 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
     }
 
     @Override
-    public MenuRefreshEvent refresh() {
-        MenuRefreshEvent event = new MenuRefreshEvent(this);
-        if(event.isCancelled()) return event;
+    public void onRefresh() {
         clearItems(true);
         clearMenuItems(true);
         modules.refresh();
         setItems(holder);
-        return event;
     }
 
     @Override
