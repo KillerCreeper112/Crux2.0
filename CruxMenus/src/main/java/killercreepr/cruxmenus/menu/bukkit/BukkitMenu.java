@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -55,11 +56,16 @@ public class BukkitMenu implements Menu{
         Menus.OPENED.register(p.getUniqueId(), this);
     }
 
-    public Menu reconstruct(int size, @NotNull Component name, boolean keepOldContents){
+    public Menu reconstruct(int size, @NotNull Component name, boolean keepOldContents, boolean reopenSilently){
         Inventory old = inventory;
         reconstruct(size, name);
         if(keepOldContents){
             inventory.setContents(old.getContents());
+        }
+        if(reopenSilently){
+            for(HumanEntity e : new ArrayList<>(old.getViewers())){
+                openSilently(e);
+            }
         }
         return this;
     }
