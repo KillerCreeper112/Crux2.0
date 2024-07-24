@@ -37,7 +37,6 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
         this.info = info;
         this.tags = new MultiTagContainer(holder.getRegistry().getFormat().tags());
         if(tags != null) this.tags.addAll(tags);
-        reconstruct(Bukkit.createInventory(this, InvUtil.getInventorySize(buildSize()), buildTitle()));
     }
 
     @Override
@@ -136,6 +135,8 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
 
     @Override
     public void onRefresh() {
+        reconstruct(InvUtil.getInventorySize(buildSize()), buildTitle(), true, true);
+
         clearItems(true);
         clearMenuItems(true);
         modules.refresh();
