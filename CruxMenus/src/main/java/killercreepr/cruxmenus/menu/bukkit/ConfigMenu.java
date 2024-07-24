@@ -133,9 +133,13 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
         items.clear();
     }
 
+    protected void refreshReconstruct(){
+        reconstruct(InvUtil.getInventorySize(buildSize()), buildTitle(), true, true);
+    }
+
     @Override
     public void onRefresh() {
-        reconstruct(InvUtil.getInventorySize(buildSize()), buildTitle(), true, true);
+        refreshReconstruct();
 
         clearItems(true);
         clearMenuItems(true);
