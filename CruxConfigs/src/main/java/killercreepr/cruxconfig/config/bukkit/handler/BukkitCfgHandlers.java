@@ -4,6 +4,7 @@ import io.papermc.paper.registry.RegistryKey;
 import killercreepr.crux.data.BlockPos;
 import killercreepr.crux.data.LocationPos;
 import killercreepr.crux.data.StoredChunk;
+import killercreepr.crux.data.StoredWorld;
 import killercreepr.crux.data.communication.CreateSound;
 import killercreepr.crux.data.communication.CreateTitle;
 import killercreepr.crux.data.communication.MsgContainer;
@@ -101,6 +102,7 @@ public class BukkitCfgHandlers {
         );
 
         registry.registerHandler(StoredChunk.class, new AutoFileHandler<>(StoredChunk.class));
+        registry.registerHandler(StoredWorld.class, new AutoFileHandler<>(StoredWorld.class));
         registry.registerHandler(BlockPos.class, new AutoFileHandler<>(BlockPos.class));
         registry.registerHandler(LocationPos.class, new AutoFileHandler<>(LocationPos.class));
     }

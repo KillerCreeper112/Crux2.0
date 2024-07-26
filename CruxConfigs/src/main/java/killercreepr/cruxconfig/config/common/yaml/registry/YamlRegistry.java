@@ -268,7 +268,12 @@ public class YamlRegistry implements FileRegistry {
     @Override
     public <T> @Nullable T deserialize(@NotNull Type type, @Nullable FileElement o) {
         if(o==null) return null;
-        Object object = deserializeObject(type, o.toYaml());
+        return deserialize(type, o.toYaml());
+    }
+
+    public <T> @Nullable T deserialize(@NotNull Type type, @Nullable YamlElement o) {
+        if(o==null) return null;
+        Object object = deserializeObject(type, o);
         return (T) object;
     }
 

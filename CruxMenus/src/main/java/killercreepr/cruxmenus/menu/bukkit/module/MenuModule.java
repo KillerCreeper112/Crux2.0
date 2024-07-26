@@ -5,6 +5,9 @@ import net.kyori.adventure.key.Keyed;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * MenuModule tags start with: module_(module_id)_
+ */
 public interface MenuModule extends Keyed {
     static @NotNull String buildTagPrefix(@NotNull String moduleID){
         return "module_" + moduleID + "_";
