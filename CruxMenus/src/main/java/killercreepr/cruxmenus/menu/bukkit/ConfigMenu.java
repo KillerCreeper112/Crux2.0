@@ -6,11 +6,10 @@ import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.crux.tags.container.MultiTagContainer;
 import killercreepr.crux.util.InvUtil;
-import killercreepr.cruxmenus.menu.bukkit.api.events.menu.MenuRefreshEvent;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuHolder;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuItemHolder;
+import killercreepr.cruxmenus.menu.bukkit.holder.MenuItems;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -76,9 +75,24 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
      */
     @Override
     public void setItems(@NotNull MenuHolder holder){
-        Player viewer = info.getOrThrow("viewer", Player.class);
+        setItems(holder.getItems());
+    }
+
+    @Override
+    public void setItems(@NotNull MenuHolder holder, @NotNull MenuContext ctx) {
+        setItems(holder.getItems(), ctx);
+    }
+
+    @Override
+    public void setItems(@NotNull MenuItems items){
         MenuContext menuContext = new MenuContext(this, info, tags);
-        holder.getItems().items().forEach(menuItem -> {
+        setItems(items, menuContext);
+    }
+
+    @Override
+    public void setItems(@NotNull MenuItems items, @NotNull MenuContext menuContext) {
+        Player viewer = info.getOrThrow("viewer", Player.class);
+        items.items().forEach(menuItem -> {
             MenuItem i = menuItem.getDisplayItem(viewer, menuContext);
             Optional<Integer> slot = i.getSlot();
             if(slot.isEmpty() || !i.canDisplay()) return;

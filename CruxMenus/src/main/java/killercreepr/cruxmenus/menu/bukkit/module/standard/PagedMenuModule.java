@@ -71,6 +71,9 @@ public abstract class PagedMenuModule<T> implements MenuModule {
                 )).add(
                     Tag.parsed(MenuModule.buildTag(id, "slot"), slot+"")
                 ));
+
+
+
                 cfg.setItem(valueItem, menuContext);
             }
 

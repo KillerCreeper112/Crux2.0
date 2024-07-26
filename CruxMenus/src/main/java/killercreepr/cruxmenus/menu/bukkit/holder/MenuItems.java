@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class MenuItems {
+public class MenuItems implements Iterable<Collection<MenuItemHolder>> {
     private final TreeMap<Integer, Collection<MenuItemHolder>> items;
     public MenuItems(@NotNull TreeMap<Integer, Collection<MenuItemHolder>> items) {
         this.items = items;
@@ -34,5 +34,11 @@ public class MenuItems {
         List<MenuItemHolder> items = new ArrayList<>();
         this.items.values().forEach(items::addAll);
         return items;
+    }
+
+    @NotNull
+    @Override
+    public Iterator<Collection<MenuItemHolder>> iterator() {
+        return items.values().iterator();
     }
 }
