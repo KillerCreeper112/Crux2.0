@@ -2,6 +2,7 @@ package killercreepr.cruxenchants;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.module.CruxModule;
+import killercreepr.crux.module.StandardModules;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.cruxenchants.command.CruxEnchantCommands;
@@ -12,7 +13,7 @@ import killercreepr.cruxenchants.values.ValuesProvider;
 import org.jetbrains.annotations.NotNull;
 
 public class CruxEnchantsModule implements CruxModule {
-    public static final String NAMESPACE = "CruxEnchants";
+    public static final String NAMESPACE = StandardModules.CRUX_ENCHANTS;
     @Override
     public @NotNull String name() {
         return NAMESPACE;

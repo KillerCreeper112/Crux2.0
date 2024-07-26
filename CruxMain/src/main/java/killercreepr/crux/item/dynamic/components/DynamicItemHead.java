@@ -2,6 +2,7 @@ package killercreepr.crux.item.dynamic.components;
 
 import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.util.CruxItem;
+import killercreepr.crux.util.CruxProfile;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -32,6 +33,11 @@ public class DynamicItemHead extends DynamicSingleValueComponent{
                 return;
             }catch (IllegalArgumentException ignored){} catch (ExecutionException | InterruptedException e) {
                 throw new RuntimeException(e);
+            }
+
+            if(CruxProfile.isBase64(parsed)){
+                CruxProfile.editSkullItemFromBase64(parsed, item.item());
+                return;
             }
 
             //todo head database or smth

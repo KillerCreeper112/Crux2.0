@@ -10,6 +10,7 @@ public interface CruxHandlers {
     @NotNull ItemHandler item();
     void setItem(@NotNull ItemHandler item);
 
+
     class Generic implements CruxHandlers{
         protected @NotNull ItemHandler item = new ItemHandler.Dummy();
         protected @NotNull BlockHandler block = new BlockHandler.Dummy();

@@ -6,6 +6,7 @@ import killercreepr.crux.data.entity.PlayerMemory;
 import killercreepr.crux.data.tick.ManagedTicked;
 import killercreepr.crux.handler.BlockHandler;
 import killercreepr.crux.module.CruxModule;
+import killercreepr.crux.module.StandardModules;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.crux.util.CruxEntity;
@@ -36,7 +37,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHandler {
-    public static final String NAMESPACE = "CruxBlocks";
+    public static final String NAMESPACE = StandardModules.CRUX_BLOCKS;
     @Override
     public @NotNull String name() {
         return NAMESPACE;

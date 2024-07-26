@@ -5,6 +5,7 @@ import killercreepr.crux.handler.ItemHandler;
 import killercreepr.crux.item.BukkitItemHolder;
 import killercreepr.crux.item.ItemHolder;
 import killercreepr.crux.module.CruxModule;
+import killercreepr.crux.module.StandardModules;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.cruxitems.command.CruxItemsCommands;
@@ -27,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class CruxItemsModule implements CruxModule, ItemHandler {
-    public static final String NAMESPACE = "CruxItems";
+    public static final String NAMESPACE = StandardModules.CRUX_ITEMS;
     @Override
     public @NotNull String name() {
         return NAMESPACE;

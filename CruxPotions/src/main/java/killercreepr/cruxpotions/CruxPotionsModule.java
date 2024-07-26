@@ -3,6 +3,7 @@ package killercreepr.cruxpotions;
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.crux.module.CruxModule;
+import killercreepr.crux.module.StandardModules;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.cruxitems.registries.CruxItemRegistries;
@@ -24,7 +25,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.jetbrains.annotations.NotNull;
 
 public class CruxPotionsModule implements CruxModule {
-    public static final String NAMESPACE = "CruxPotions";
+    public static final String NAMESPACE = StandardModules.CRUX_POTIONS;
     @Override
     public @NotNull String name() {
         return NAMESPACE;

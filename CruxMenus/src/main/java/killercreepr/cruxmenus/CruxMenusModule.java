@@ -2,6 +2,7 @@ package killercreepr.cruxmenus;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.module.CruxModule;
+import killercreepr.crux.module.StandardModules;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registry.KeyedRegistry;
 import killercreepr.crux.registry.SimpleKeyedRegistry;
@@ -18,7 +19,7 @@ import killercreepr.cruxmenus.tags.MenuItemHolderHook;
 import org.jetbrains.annotations.NotNull;
 
 public class CruxMenusModule implements CruxModule {
-    public static final String NAMESPACE = "CruxMenus";
+    public static final String NAMESPACE = StandardModules.CRUX_MAIN;
     protected final @NotNull MenuRegistry menuRegistry;
     protected final @NotNull KeyedRegistry<MenuModuleBuilder> menuModuleRegistry;
     public CruxMenusModule(@NotNull MenuRegistry registry, @NotNull KeyedRegistry<MenuModuleBuilder> menuModuleRegistry){

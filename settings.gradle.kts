@@ -17,6 +17,7 @@ include(
 
     "CruxAdvancements",
     "CruxStructures",
+    "CruxExternal",
 
     "CruxTest"
 )

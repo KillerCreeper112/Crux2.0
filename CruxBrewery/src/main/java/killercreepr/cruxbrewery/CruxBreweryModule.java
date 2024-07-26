@@ -2,6 +2,7 @@ package killercreepr.cruxbrewery;
 
 import io.netty.util.internal.UnstableApi;
 import killercreepr.crux.module.CruxModule;
+import killercreepr.crux.module.StandardModules;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.cruxbrewery.listener.BrewingStandListener;
 import org.jetbrains.annotations.NotNull;
@@ -9,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 @UnstableApi
 @Deprecated(since = "CruxBrewery has not had a good implementation thought through yet.")
 public class CruxBreweryModule implements CruxModule {
-    public static final String NAMESPACE = "CruxBrewery";
+    public static final String NAMESPACE = StandardModules.CRUX_BREWERY;
     @Override
     public @NotNull String name() {
         return NAMESPACE;

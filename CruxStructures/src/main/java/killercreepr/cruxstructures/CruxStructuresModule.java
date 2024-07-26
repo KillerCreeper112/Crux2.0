@@ -1,6 +1,7 @@
 package killercreepr.cruxstructures;
 
 import killercreepr.crux.module.CruxModule;
+import killercreepr.crux.module.StandardModules;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import killercreepr.cruxstructures.commands.StructureCommands;
@@ -16,7 +17,7 @@ import killercreepr.cruxstructures.structure.stored.SimpleStoredStructure;
 import org.jetbrains.annotations.NotNull;
 
 public class CruxStructuresModule implements CruxModule {
-    public static final String NAMESPACE = "CruxStructures";
+    public static final String NAMESPACE = StandardModules.CRUX_STRUCTURES;
     @Override
     public @NotNull String name() {
         return NAMESPACE;
