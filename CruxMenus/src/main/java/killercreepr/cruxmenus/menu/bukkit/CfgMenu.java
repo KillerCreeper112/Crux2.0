@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.logging.Level;
 
 public interface CfgMenu extends Menu, DataInfoHolder {
     @NotNull
@@ -33,6 +34,11 @@ public interface CfgMenu extends Menu, DataInfoHolder {
 
             item.buildItemCompletely(viewer).whenComplete((it, throwable) ->{
                 Crux.getServer().getScheduler().runTask(Crux.getMainPlugin(), task ->{
+                    if (throwable != null) {
+                        // An exception occurred
+                        Crux.log(Level.WARNING, "Error occurred when building MenuItem: " + throwable.getMessage());
+                        return;
+                    }
                     setItem(slot, item, it == null ? null : it.item(), silent);
                 });
             });

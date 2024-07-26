@@ -41,6 +41,7 @@ public class DynamicItemHead extends DynamicSingleValueComponent{
                 CruxProfile.editSkullItemFromBase64(parsed, item.item());
                 return;
             }
+
             PlayerProfile profile = Crux.handlers().skullProvider().getProfile(parsed);
             if(profile == null) return;
             meta.setPlayerProfile(profile);

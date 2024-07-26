@@ -17,7 +17,8 @@ public class HeadDataBaseSkullProvider implements SkullProvider {
 
     @Override
     public @Nullable ItemStack getItemHead(@NotNull String id) {
-        return api().getItemHead(id);
+        ItemStack item = api().getItemHead(id);
+        return item;
     }
 
     @Override

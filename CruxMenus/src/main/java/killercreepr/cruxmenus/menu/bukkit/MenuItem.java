@@ -94,7 +94,7 @@ public class MenuItem {
 
     public @NotNull CompletableFuture<CruxItem> buildItemCompletely(@NotNull Player p){
         DynamicItem item = base.getItem().value();
-        if(item == null) return null;
+        if(item == null) return CompletableFuture.completedFuture(null);
         item = item.clone();
         MergedTagContainer tags = buildTags();
 
