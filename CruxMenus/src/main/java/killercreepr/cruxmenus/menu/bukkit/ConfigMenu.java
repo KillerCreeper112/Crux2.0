@@ -92,12 +92,13 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
     @Override
     public void setItems(@NotNull MenuItems items, @NotNull MenuContext menuContext) {
         Player viewer = info.getOrThrow("viewer", Player.class);
-        items.items().forEach(menuItem -> {
+        items.forEach(list -> list.forEach(menuItem ->{
             MenuItem i = menuItem.getDisplayItem(viewer, menuContext);
             Optional<Integer> slot = i.getSlot();
+
             if(slot.isEmpty() || !i.canDisplay()) return;
             setItem(slot.get(), i, viewer);
-        });
+        }));
     }
 
     public @Nullable MenuItem setItem(@NotNull MenuItemHolder menuItem, @NotNull Player viewer, @NotNull MenuContext menuContext){

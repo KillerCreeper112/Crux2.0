@@ -12,7 +12,6 @@ import killercreepr.crux.valueproviders.number.UniformNumberArray;
 import killercreepr.cruxmenus.menu.bukkit.CfgMenu;
 import killercreepr.cruxmenus.menu.bukkit.Menu;
 import killercreepr.cruxmenus.menu.bukkit.MenuContext;
-import killercreepr.cruxmenus.menu.bukkit.holder.MenuItemHolder;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuItems;
 import killercreepr.cruxmenus.menu.bukkit.module.ActiveMenuModule;
 import killercreepr.cruxmenus.menu.bukkit.module.MenuModule;

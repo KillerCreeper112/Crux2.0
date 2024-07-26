@@ -4,7 +4,6 @@ import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxmenus.menu.bukkit.config.handlers.FileMenuHolder;
-import killercreepr.cruxmenus.menu.bukkit.holder.MenuItemHolder;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuItems;
 import killercreepr.cruxmenus.menu.bukkit.module.MenuModule;
 import net.kyori.adventure.key.Key;

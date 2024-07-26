@@ -25,12 +25,13 @@ public interface CfgMenu extends Menu, DataInfoHolder {
     }
 
     default void setItem(int slot, @Nullable MenuItem item, @NotNull Player viewer, boolean silent){
-        if(true){
+        if(true){//todo
             if(item==null){
                 setItem(slot, null, silent);
                 return;
             }
-            item.buildItemCompletely(viewer).thenAccept(it ->{
+
+            item.buildItemCompletely(viewer).whenComplete((it, throwable) ->{
                 Crux.getServer().getScheduler().runTask(Crux.getMainPlugin(), task ->{
                     setItem(slot, item, it == null ? null : it.item(), silent);
                 });
