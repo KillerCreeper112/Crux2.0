@@ -62,26 +62,27 @@ public abstract class PagedMenuModule<T> implements MenuModule {
     public @Nullable ActiveMenuModule build(@NotNull Menu menu) {
         return new ActivePagedMenuModule<T>(id, this, parseIndexes(menu), getValues(menu)) {
             @Override
-            public void setPagedItem(@NotNull Menu menu, int slot, @NotNull T value) {
+            public void setPagedItem(@NotNull Menu menu, int slot, int index, @NotNull T value) {
                 if(valueItems == null) return;
                 if(!(menu instanceof CfgMenu cfg)) return;
                 MenuContext menuContext = new MenuContext(cfg,
                     DataExchange.builder().putAll(cfg.info()).put(value).build(), cfg.buildTags().addAll(buildTags(
                     menu, cfg.getHolder().getRegistry().getFormat().tags()
-                )).add(
-                    Tag.parsed(MenuModule.buildTag(id, "slot"), slot+"")
+                )).addAll(
+                    Tag.parsed(MenuModule.buildTag(id, "slot"), slot+""),
+                    Tag.parsed(MenuModule.buildTag(id, "index"), index+"")
                 ));
 
                 cfg.setItems(valueItems, menuContext);
-                //cfg.setItem(valueItem, menuContext);
             }
 
             @Override
-            public void setEmptyItem(@NotNull Menu menu, int slot) {
+            public void setEmptyItem(@NotNull Menu menu, int slot, int index) {
                 if(emptyItems == null) return;
                 if(!(menu instanceof CfgMenu cfg)) return;
-                MenuContext menuContext = new MenuContext(cfg, cfg.info(), cfg.buildTags().add(
-                    Tag.parsed(MenuModule.buildTag(id, "slot"), slot+"")
+                MenuContext menuContext = new MenuContext(cfg, cfg.info(), cfg.buildTags().addAll(
+                    Tag.parsed(MenuModule.buildTag(id, "slot"), slot+""),
+                    Tag.parsed(MenuModule.buildTag(id, "index"), index+"")
                 ));
                 cfg.setItems(emptyItems, menuContext);
             }
