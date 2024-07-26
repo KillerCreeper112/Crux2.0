@@ -9,8 +9,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class HeadDataBaseSkullProvider implements SkullProvider {
-    protected final HeadDatabaseAPI api = new HeadDatabaseAPI();
+    protected HeadDatabaseAPI api;
     public HeadDatabaseAPI api(){
+        if(api == null) api = new HeadDatabaseAPI();
         return api;
     }
 

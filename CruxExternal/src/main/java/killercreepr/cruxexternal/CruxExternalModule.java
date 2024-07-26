@@ -16,9 +16,10 @@ public class CruxExternalModule implements CruxModule {
     }
 
     @Override
-    public void onEnable(@NotNull CruxPlugin plugin) {
+    public void onLoad(@NotNull CruxPlugin plugin) {
         PluginManager pm = plugin.getServer().getPluginManager();
         if(pm.getPlugin("HeadDataBase") != null){
+            plugin.log("Using HeadDataBase as a Crux SkullProvider!");
             Crux.handlers().setSkullProvider(new HeadDataBaseSkullProvider());
         }
     }
