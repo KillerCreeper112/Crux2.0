@@ -9,26 +9,44 @@ import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxmenus.menu.bukkit.config.handlers.FileMenuHolder;
 import killercreepr.cruxmenus.menu.bukkit.config.handlers.FileMenuModuled;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuItemHolder;
+import killercreepr.cruxmenus.menu.bukkit.holder.MenuItems;
 import killercreepr.cruxmenus.menu.bukkit.module.MenuModule;
 import killercreepr.cruxmenus.menu.bukkit.module.config.MenuModuleBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Function;
 
 public abstract class FilePagedCfg extends FileMenuModuled<MenuModule> implements MenuModuleBuilder {
     public FilePagedCfg(@NotNull FileMenuHolder menuModule) {
         super(menuModule);
     }
 
-    public @Nullable MenuItemHolder parseValueItem(@NotNull FileContext<?> ctx,
-                                                   @NotNull FileElement e, @Nullable FileObject menuContext){
+    public @Nullable MenuItems parseValueItems(@NotNull FileContext<?> ctx,
+                                                   @NotNull FileElement e, @Nullable FileObject menuContext,
+                                               @NotNull String id){
         if(!(e instanceof FileObject o)) return null;
-        return menuModule.getYamlMenuItem().deserializeFromFile(ctx, o.get("value_item"), menuContext);
+        return menuModule.getYamlMenuItems().deserializeFromFile(ctx, o.get("value_items"), menuContext,
+            itemsFunction(id));
     }
 
-    public @Nullable MenuItemHolder parseEmptyItem(@NotNull FileContext<?> ctx,
-                                                   @NotNull FileElement e, @Nullable FileObject menuContext){
+    public @Nullable MenuItems parseEmptyItems(@NotNull FileContext<?> ctx,
+                                                   @NotNull FileElement e, @Nullable FileObject menuContext,
+                                               @NotNull String id){
         if(!(e instanceof FileObject o)) return null;
-        return menuModule.getYamlMenuItem().deserializeFromFile(ctx, o.get("empty_item"), menuContext);
+        return menuModule.getYamlMenuItems().deserializeFromFile(ctx, o.get("empty_items"), menuContext,
+            itemsFunction(id));
+    }
+
+    public @Nullable Function<MenuItemHolder, MenuItemHolder> itemsFunction(@NotNull String id){
+        return item ->{
+            if(item.info().has("slot")) return item;
+            return new MenuItemHolder(
+                item.getItem(),
+                item.info().append("slot", Holder.directObject(new EquationNumber("<"+MenuModule.buildTag(id, "slot") + ">"))),
+                item.getClickActions()
+            );
+        };
     }
 
     @Override
@@ -42,27 +60,10 @@ public abstract class FilePagedCfg extends FileMenuModuled<MenuModule> implement
         NumberProvider indexes = parsePageIndexes(ctx, e, menuContext);
         if(indexes==null) return null;
 
-        MenuItemHolder valueItem = parseValueItem(ctx, e, menuContext);
-        MenuItemHolder emptyItem = parseEmptyItem(ctx, e, menuContext);
+        MenuItems valueItems = parseValueItems(ctx, e, menuContext, id);
+        MenuItems emptyItems = parseEmptyItems(ctx, e, menuContext, id);
 
-        if(valueItem != null && !valueItem.info().has("slot")){
-            valueItem = new MenuItemHolder(
-                valueItem.getItem(),
-                valueItem.info().append("slot", Holder.directObject(new EquationNumber("<"+MenuModule.buildTag(id, "slot") + ">"))),
-                valueItem.getClickActions()
-            );
-        }
-
-        if(emptyItem != null && !emptyItem.info().has("slot")){
-            emptyItem = new MenuItemHolder(
-                emptyItem.getItem(),
-                emptyItem.info().append("slot", Holder.directObject(new EquationNumber("<"+MenuModule.buildTag(id, "slot") + ">"))),
-                emptyItem.getClickActions()
-            );
-        }
-
-
-        return parsePaged(ctx, o, menuContext, id, indexes, valueItem, emptyItem);
+        return parsePaged(ctx, o, menuContext, id, indexes, valueItems, emptyItems);
     }
 
     public abstract @Nullable MenuModule parsePaged(@NotNull FileContext<?> ctx,
@@ -70,8 +71,8 @@ public abstract class FilePagedCfg extends FileMenuModuled<MenuModule> implement
                                            @Nullable FileObject menuContext,
                                            @NotNull String id,
                                            @NotNull NumberProvider indexes,
-                                           @Nullable MenuItemHolder valueItem,
-                                           @Nullable MenuItemHolder emptyItem);
+                                           @Nullable MenuItems valueItems,
+                                           @Nullable MenuItems emptyItems);
 
     public @Nullable NumberProvider parsePageIndexes(@NotNull FileContext<?> ctx,
                                                      @NotNull FileElement e,

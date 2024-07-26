@@ -13,6 +13,7 @@ import killercreepr.cruxmenus.menu.bukkit.CfgMenu;
 import killercreepr.cruxmenus.menu.bukkit.Menu;
 import killercreepr.cruxmenus.menu.bukkit.MenuContext;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuItemHolder;
+import killercreepr.cruxmenus.menu.bukkit.holder.MenuItems;
 import killercreepr.cruxmenus.menu.bukkit.module.ActiveMenuModule;
 import killercreepr.cruxmenus.menu.bukkit.module.MenuModule;
 import org.jetbrains.annotations.NotNull;
@@ -24,13 +25,13 @@ import java.util.List;
 public abstract class PagedMenuModule<T> implements MenuModule {
     protected final @NotNull String id;
     protected final @NotNull NumberProvider indexes;
-    protected final @Nullable MenuItemHolder valueItem;
-    protected final @Nullable MenuItemHolder emptyItem;
-    public PagedMenuModule(@NotNull String id, @NotNull NumberProvider indexes, @Nullable MenuItemHolder valueItem, @Nullable MenuItemHolder emptyItem) {
+    protected final @Nullable MenuItems valueItems;
+    protected final @Nullable MenuItems emptyItems;
+    public PagedMenuModule(@NotNull String id, @NotNull NumberProvider indexes, @Nullable MenuItems valueItems, @Nullable MenuItems emptyItems) {
         this.id = id;
         this.indexes = indexes;
-        this.valueItem = valueItem;
-        this.emptyItem = emptyItem;
+        this.valueItems = valueItems;
+        this.emptyItems = emptyItems;
     }
 
     public abstract @NotNull NotNullHolder<List<T>> getValues(@NotNull Menu menu);
@@ -63,7 +64,7 @@ public abstract class PagedMenuModule<T> implements MenuModule {
         return new ActivePagedMenuModule<T>(id, this, parseIndexes(menu), getValues(menu)) {
             @Override
             public void setPagedItem(@NotNull Menu menu, int slot, @NotNull T value) {
-                if(valueItem == null) return;
+                if(valueItems == null) return;
                 if(!(menu instanceof CfgMenu cfg)) return;
                 MenuContext menuContext = new MenuContext(cfg,
                     DataExchange.builder().putAll(cfg.info()).put(value).build(), cfg.buildTags().addAll(buildTags(
@@ -72,19 +73,18 @@ public abstract class PagedMenuModule<T> implements MenuModule {
                     Tag.parsed(MenuModule.buildTag(id, "slot"), slot+"")
                 ));
 
-
-
-                cfg.setItem(valueItem, menuContext);
+                cfg.setItems(valueItems, menuContext);
+                //cfg.setItem(valueItem, menuContext);
             }
 
             @Override
             public void setEmptyItem(@NotNull Menu menu, int slot) {
-                if(emptyItem == null) return;
+                if(emptyItems == null) return;
                 if(!(menu instanceof CfgMenu cfg)) return;
                 MenuContext menuContext = new MenuContext(cfg, cfg.info(), cfg.buildTags().add(
                     Tag.parsed(MenuModule.buildTag(id, "slot"), slot+"")
                 ));
-                cfg.setItem(emptyItem, menuContext);
+                cfg.setItems(emptyItems, menuContext);
             }
         };
     }
