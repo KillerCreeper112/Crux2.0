@@ -1,4 +1,4 @@
-package killercreepr.crux.external.headdatabase;
+package killercreepr.cruxexternal.headdatabase;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import killercreepr.crux.handler.SkullProvider;
@@ -8,7 +8,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class HeadDataBase implements SkullProvider {
+public class HeadDataBaseSkullProvider implements SkullProvider {
     protected final HeadDatabaseAPI api = new HeadDatabaseAPI();
     public HeadDatabaseAPI api(){
         return api;

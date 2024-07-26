@@ -9,10 +9,6 @@ dependencies {
     paperweight.paperDevBundle(libs.versions.paper)
     implementation(libs.crunch)
     implementation("com.ezylang:EvalEx:3.3.0")
-
-    compileOnly(fileTree("libs") {
-        include("*.jar")
-    })
 }
 
 tasks{

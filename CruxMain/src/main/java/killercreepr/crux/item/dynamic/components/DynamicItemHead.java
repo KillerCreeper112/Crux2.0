@@ -1,5 +1,7 @@
 package killercreepr.crux.item.dynamic.components;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
+import killercreepr.crux.Crux;
 import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.util.CruxItem;
 import killercreepr.crux.util.CruxProfile;
@@ -39,8 +41,9 @@ public class DynamicItemHead extends DynamicSingleValueComponent{
                 CruxProfile.editSkullItemFromBase64(parsed, item.item());
                 return;
             }
-
-            //todo head database or smth
+            PlayerProfile profile = Crux.handlers().skullProvider().getProfile(parsed);
+            if(profile == null) return;
+            meta.setPlayerProfile(profile);
         });
     }
 }
