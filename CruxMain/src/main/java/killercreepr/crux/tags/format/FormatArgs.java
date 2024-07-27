@@ -58,7 +58,7 @@ public class FormatArgs {
     public double parseDoubleOr(int index, double defaultValue){
         try{
             return Double.parseDouble(get(index));
-        }catch (IllegalArgumentException ignored){ return defaultValue; }
+        }catch (IllegalArgumentException | IndexOutOfBoundsException ignored){ return defaultValue; }
     }
 
     public int parseIntOr(int index, int defaultValue){

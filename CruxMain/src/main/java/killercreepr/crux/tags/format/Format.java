@@ -12,6 +12,7 @@ import killercreepr.crux.tags.provider.StringListTagProvider;
 import killercreepr.crux.tags.provider.StringTagProvider;
 import killercreepr.crux.tags.resolver.StringListResolver;
 import killercreepr.crux.tags.resolver.StringResolver;
+import killercreepr.crux.tags.standard.NumberFormatResolver;
 import killercreepr.crux.util.CruxMath;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -314,7 +315,27 @@ public class Format implements FormatSerializer{
         while (matcher.find()) {
             String expression = matcher.group(1);
             String evaluatedValue;
-            try{ evaluatedValue = Double.toString(CruxMath.evaluate(expression)); }
+
+            Integer decimalPlaces = null;
+            String group2 = matcher.group(2);
+            if (group2 != null) {
+                try{
+                    decimalPlaces = (int) Double.parseDouble(group2);
+                }catch (IllegalArgumentException ignored){}
+            }
+
+            try{
+                double output = CruxMath.evaluate(expression);
+
+                if(decimalPlaces == null) evaluatedValue = Double.toString(output);
+                else{
+                    try{
+                        evaluatedValue = NumberFormatResolver.resolve(output, decimalPlaces);
+                    }catch (IllegalArgumentException ignored){
+                        evaluatedValue = Double.toString(output);
+                    }
+                }
+            }
             catch (IllegalArgumentException ignored){ continue; }
             matcher.appendReplacement(result, Matcher.quoteReplacement(evaluatedValue));
         }
@@ -328,8 +349,25 @@ public class Format implements FormatSerializer{
         while (matcher.find()) {
             String expression = matcher.group(1);
             String evaluatedValue;
-            try{ evaluatedValue = CruxMath.evaluateEvalEx(expression) + ""; }
+
+            Integer decimalPlaces = null;
+            String group2 = matcher.group(2);
+            if (group2 != null) {
+                try{
+                    decimalPlaces = (int) Double.parseDouble(group2);
+                }catch (IllegalArgumentException ignored){}
+            }
+
+            try{
+                evaluatedValue = CruxMath.evaluateEvalEx(expression) + "";
+                if(decimalPlaces != null){
+                    try{
+                        evaluatedValue = NumberFormatResolver.resolve(Double.parseDouble(evaluatedValue), decimalPlaces);
+                    }catch (IllegalArgumentException ignored){}
+                }
+            }
             catch (IllegalArgumentException ignored){ continue; }
+
             matcher.appendReplacement(result, Matcher.quoteReplacement(evaluatedValue));
         }
         matcher.appendTail(result);
