@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -52,6 +53,35 @@ public class CruxString {
             if(i+1<end) builder.append(spacing);
         }
         return builder.toString();
+    }
+
+    public static @NotNull List<String> buildDescription(@NotNull String text, int maxLength){
+        List<String> list = new ArrayList<>();
+        buildDescription(text, list::add, maxLength);
+        return list;
+    }
+
+    public static void buildDescription(@NotNull String text, @NotNull Consumer<String> lineConsumer, int maxLength){
+        if(text.isEmpty()) return;
+
+        String[] split = text.split(" ");
+
+        StringBuilder current = new StringBuilder();
+        for (String word : split) {
+            if (current.length() + word.length() + 1 <= maxLength) {
+                current.append(word).append(' ');
+            } else {
+                if (!current.isEmpty()) {
+                    String line = current.substring(0, current.length() - 1);
+                    lineConsumer.accept(line);
+                }
+                current = new StringBuilder(word).append(' ');
+            }
+        }
+        if (!current.isEmpty()) {
+            String s = current.substring(0, current.length() - 1);
+            lineConsumer.accept(s);
+        }
     }
 
     public static @NotNull String[] quoteSplit(@NotNull String input, @NotNull String delimiter) {
