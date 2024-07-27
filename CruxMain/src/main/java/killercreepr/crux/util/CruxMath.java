@@ -19,7 +19,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class CruxMath {
     public static final Random RANDOM = new Random();
-    public static final NumberFormat DECIMAL_FORMAT = new DecimalFormat("#,###.#");
     public static final CruxNumberFormat DECIMAL_FORMAT_0 = new CruxNumberFormat(0);
     public static final CruxNumberFormat DECIMAL_FORMAT_1 = new CruxNumberFormat(1);
     public static final CruxNumberFormat DECIMAL_FORMAT_2 = new CruxNumberFormat(2);
@@ -35,7 +34,7 @@ public class CruxMath {
     }
 
     public static @NotNull String format(@NotNull Number number){
-        return DECIMAL_FORMAT.format(number);
+        return DECIMAL_FORMAT_1.format(number);
     }
 
     /**
