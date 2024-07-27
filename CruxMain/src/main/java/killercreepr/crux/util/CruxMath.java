@@ -20,6 +20,20 @@ import java.util.concurrent.ThreadLocalRandom;
 public class CruxMath {
     public static final Random RANDOM = new Random();
     public static final NumberFormat DECIMAL_FORMAT = new DecimalFormat("#,###.#");
+    public static final CruxNumberFormat DECIMAL_FORMAT_0 = new CruxNumberFormat(0);
+    public static final CruxNumberFormat DECIMAL_FORMAT_1 = new CruxNumberFormat(1);
+    public static final CruxNumberFormat DECIMAL_FORMAT_2 = new CruxNumberFormat(2);
+    public static final CruxNumberFormat DECIMAL_FORMAT_3 = new CruxNumberFormat(3);
+    public static CruxNumberFormat buildOrGetDecimalFormat(int decimalPlaces){
+        return switch (decimalPlaces){
+            case 0 -> DECIMAL_FORMAT_0;
+            case 1 -> DECIMAL_FORMAT_1;
+            case 2 -> DECIMAL_FORMAT_2;
+            case 3 -> DECIMAL_FORMAT_3;
+            default -> new CruxNumberFormat(decimalPlaces);
+        };
+    }
+
     public static @NotNull String format(@NotNull Number number){
         return DECIMAL_FORMAT.format(number);
     }

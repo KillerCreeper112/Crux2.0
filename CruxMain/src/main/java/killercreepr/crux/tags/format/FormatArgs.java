@@ -54,4 +54,18 @@ public class FormatArgs {
     public float parseFloat(int index){
         return (float) parseDouble(index);
     }
+
+    public double parseDoubleOr(int index, double defaultValue){
+        try{
+            return Double.parseDouble(get(index));
+        }catch (IllegalArgumentException ignored){ return defaultValue; }
+    }
+
+    public int parseIntOr(int index, int defaultValue){
+        return (int) parseDoubleOr(index, defaultValue);
+    }
+
+    public float parseFloatOr(int index, float defaultValue){
+        return (float) parseDoubleOr(index, defaultValue);
+    }
 }
