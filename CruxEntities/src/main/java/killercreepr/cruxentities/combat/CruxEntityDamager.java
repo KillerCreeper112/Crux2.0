@@ -15,7 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
+//todo make crux interface for this
 public class CruxEntityDamager {
     private Entity damager;
     private Entity target;
