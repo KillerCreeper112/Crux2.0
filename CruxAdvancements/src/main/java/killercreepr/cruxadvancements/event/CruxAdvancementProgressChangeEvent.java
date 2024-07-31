@@ -1,7 +1,7 @@
 package killercreepr.cruxadvancements.event;
 
 import killercreepr.cruxadvancements.advancement.CruxAdvancement;
-import killercreepr.cruxadvancements.manager.AdvancementManager;
+import killercreepr.cruxadvancements.manager.SimpleAdvancementManager;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,7 +11,7 @@ public class CruxAdvancementProgressChangeEvent extends AbstractAdvancementEvent
     private static final HandlerList HANDLER_LIST = new HandlerList();
     protected int newProgress;
     public CruxAdvancementProgressChangeEvent(@NotNull UUID who,
-                                              @NotNull AdvancementManager manager,
+                                              @NotNull SimpleAdvancementManager manager,
                                               @NotNull CruxAdvancement advancement, int newProgress) {
         super(who, manager, advancement);
         this.newProgress = newProgress;

@@ -1,7 +1,7 @@
 package killercreepr.cruxadvancements.event;
 
 import killercreepr.cruxadvancements.advancement.CruxAdvancement;
-import killercreepr.cruxadvancements.manager.AdvancementManager;
+import killercreepr.cruxadvancements.manager.SimpleAdvancementManager;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public class CruxAdvancementRevokeEvent extends AbstractAdvancementEvent{
     private static final HandlerList HANDLER_LIST = new HandlerList();
-    public CruxAdvancementRevokeEvent(@NotNull UUID who, @NotNull AdvancementManager manager, @NotNull CruxAdvancement advancement) {
+    public CruxAdvancementRevokeEvent(@NotNull UUID who, @NotNull SimpleAdvancementManager manager, @NotNull CruxAdvancement advancement) {
         super(who, manager, advancement);
     }
 

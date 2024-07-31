@@ -1,7 +1,7 @@
 package killercreepr.cruxadvancements.event;
 
 import killercreepr.cruxadvancements.advancement.CruxAdvancement;
-import killercreepr.cruxadvancements.manager.AdvancementManager;
+import killercreepr.cruxadvancements.manager.SimpleAdvancementManager;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,7 +11,7 @@ public class CruxAdvancementCriteriaRevokeEvent extends AbstractAdvancementEvent
     private static final HandlerList HANDLER_LIST = new HandlerList();
     protected @NotNull String[] criteriaToRevoke;
     public CruxAdvancementCriteriaRevokeEvent(@NotNull UUID who,
-                                              @NotNull AdvancementManager manager,
+                                              @NotNull SimpleAdvancementManager manager,
                                               @NotNull CruxAdvancement advancement, @NotNull String[] criteriaToRevoke) {
         super(who, manager, advancement);
         this.criteriaToRevoke = criteriaToRevoke;

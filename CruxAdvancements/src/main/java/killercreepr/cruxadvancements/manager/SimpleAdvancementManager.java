@@ -1,5 +1,8 @@
 package killercreepr.cruxadvancements.manager;
 
+import eu.endercentral.crazy_advancements.advancement.Advancement;
+import killercreepr.crux.registry.KeyedRegistry;
+import killercreepr.crux.registry.SimpleKeyedRegistry;
 import killercreepr.cruxadvancements.advancement.CruxAdvancement;
 import killercreepr.cruxadvancements.advancement.progression.CriteriaResult;
 import killercreepr.cruxadvancements.advancement.progression.CruxAdvancementProgress;
@@ -8,21 +11,29 @@ import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.UUID;
 
-public class AdvancementManager implements CruxAdvancementManager {
+public class SimpleAdvancementManager<T extends CruxAdvancement> implements CruxAdvancementManager<T> {
     protected final @NotNull Key key;
-    protected final @NotNull Map<Key, CruxAdvancement> advancements = new HashMap<>();
+    protected final @NotNull KeyedRegistry<T> advancements = new SimpleKeyedRegistry<>();
 
-    public AdvancementManager(@NotNull Key key) {
+    public SimpleAdvancementManager(@NotNull Key key) {
         this.key = key;
     }
 
     @Override
-    public @Nullable CruxAdvancementGrantEvent grantAdvancement(@NotNull UUID who, @NotNull CruxAdvancement advancement){
+    public void registerAdvancement(@NotNull T a){
+        advancements.register(a);
+    }
+
+    @Override
+    public void unregisterAdvancement(@NotNull T a){
+        advancements.unregister(a);
+    }
+
+    @Override
+    public @Nullable CruxAdvancementGrantEvent grantAdvancement(@NotNull UUID who, @NotNull T advancement){
         CruxAdvancementProgress progress = advancement.getProgress(who);
         if(progress.isDone()) return null;
 
@@ -35,7 +46,7 @@ public class AdvancementManager implements CruxAdvancementManager {
     }
 
     @Override
-    public @Nullable CruxAdvancementRevokeEvent revokeAdvancement(@NotNull UUID who, @NotNull CruxAdvancement advancement) {
+    public @Nullable CruxAdvancementRevokeEvent revokeAdvancement(@NotNull UUID who, @NotNull T advancement) {
         CruxAdvancementProgress progress = advancement.getProgress(who);
         if(!progress.isDone()) return null;
 
@@ -48,7 +59,7 @@ public class AdvancementManager implements CruxAdvancementManager {
     }
 
     @Override
-    public @Nullable CruxAdvancementCriteriaGrantEvent grantCriteria(@NotNull UUID who, @NotNull CruxAdvancement advancement,
+    public @Nullable CruxAdvancementCriteriaGrantEvent grantCriteria(@NotNull UUID who, @NotNull T advancement,
                                                                      @NotNull String... criteria) {
         CruxAdvancementProgress progress = advancement.getProgress(who);
         if(progress.isDone()) return null;
@@ -72,7 +83,7 @@ public class AdvancementManager implements CruxAdvancementManager {
     }
 
     @Override
-    public @Nullable CruxAdvancementCriteriaRevokeEvent revokeCriteria(@NotNull UUID who, @NotNull CruxAdvancement advancement,
+    public @Nullable CruxAdvancementCriteriaRevokeEvent revokeCriteria(@NotNull UUID who, @NotNull T advancement,
                                                                       @NotNull String... criteria) {
         CruxAdvancementProgress progress = advancement.getProgress(who);
         CruxAdvancementCriteriaRevokeEvent event = new CruxAdvancementCriteriaRevokeEvent(
@@ -98,7 +109,7 @@ public class AdvancementManager implements CruxAdvancementManager {
 
     @Override
     public @Nullable CruxAdvancementProgressChangeEvent setCriteriaProgress(@NotNull UUID who,
-                                                                            @NotNull CruxAdvancement advancement,
+                                                                            @NotNull T advancement,
                                                                             int newProgress) {
         CruxAdvancementProgress progress = advancement.getProgress(who);
 
@@ -130,18 +141,18 @@ public class AdvancementManager implements CruxAdvancementManager {
     }
 
     @Override
-    public @NotNull Map<Key, CruxAdvancement> getAdvancements() {
+    public @NotNull KeyedRegistry<T> getAdvancements() {
         return advancements;
     }
 
     @Override
-    public @Nullable CruxAdvancement getAdvancement(@NotNull Key key) {
+    public @Nullable T getAdvancement(@NotNull Key key) {
         return advancements.get(key);
     }
 
     @NotNull
     @Override
-    public Iterator<CruxAdvancement> iterator() {
+    public Iterator<T> iterator() {
         return advancements.values().iterator();
     }
 

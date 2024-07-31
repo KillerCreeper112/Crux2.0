@@ -17,12 +17,19 @@ import java.util.UUID;
 
 public class SimpleAdvancement implements CruxAdvancement {
     protected final @NotNull Key key;
+    protected final @Nullable Key parentKey;
     protected final @NotNull CruxCriteria criteria;
     protected final @NotNull Map<String, CruxAdvancementProgress> progressMap = new HashMap<>();
 
-    public SimpleAdvancement(@NotNull Key key, @NotNull CruxCriteria criteria) {
+    public SimpleAdvancement(@NotNull Key key, @Nullable Key parentKey, @NotNull CruxCriteria criteria) {
         this.key = key;
+        this.parentKey = parentKey;
         this.criteria = criteria;
+    }
+
+    @Override
+    public @Nullable Key parent() {
+        return parentKey;
     }
 
     @Override
