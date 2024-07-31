@@ -84,35 +84,37 @@ public class ListAdvancementProgress extends SimpleCriterionProgress implements 
     }
 
     @Override
-    public @NotNull GrantCriteriaResult grantCriteria(@NotNull String... criteria) {
-        if(isDone()) return GrantCriteriaResult.UNCHANGED;
-        GrantCriteriaResult result = GrantCriteriaResult.UNCHANGED;
+    public @NotNull CriteriaResult grantCriteria(@NotNull String... criteria) {
+        if(isDone()) return CriteriaResult.UNCHANGED;
+        Collection<String> changed = new HashSet<>();
         for (String criterion : criteria) {
             CruxCriterionProgress criterionProgress = this.getCriterionProgress(criterion);
             if(criterionProgress == null || criterionProgress.isDone()) continue;
             criterionProgress.grant();
-            result = GrantCriteriaResult.CHANGED;
+
+            changed.add(criterion);
         }
         update();
-        return isDone() ? GrantCriteriaResult.COMPLETED : result;
+        return new CriteriaResult(changed, isDone());
     }
 
     @Override
-    public @NotNull GenericResult revokeCriteria(@NotNull String... criteria) {
-        if(!isDone()) return GenericResult.UNCHANGED;
-        GenericResult result = GenericResult.UNCHANGED;
+    public @NotNull CriteriaResult revokeCriteria(@NotNull String... criteria) {
+        if(!isDone()) return CriteriaResult.UNCHANGED;
+        Collection<String> changed = new HashSet<>();
         for (String criterion : criteria) {
             CruxCriterionProgress criterionProgress = this.getCriterionProgress(criterion);
             if(criterionProgress == null || !criterionProgress.isDone()) continue;
             criterionProgress.revoke();
-            result = GenericResult.CHANGED;
+
+            changed.add(criterion);
         }
         update();
-        return result;
+        return new CriteriaResult(changed, false);
     }
 
     @Override
-    public @NotNull GrantCriteriaResult setCriteriaProgress(int amount) {
+    public @NotNull CriteriaResult setCriteriaProgress(int amount) {
         List<String> criteria = new ArrayList<>();
         for(int i = 0; i <= amount; i++){
             criteria.add(i+"");

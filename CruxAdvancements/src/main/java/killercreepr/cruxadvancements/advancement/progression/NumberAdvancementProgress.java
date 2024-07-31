@@ -28,21 +28,23 @@ public class NumberAdvancementProgress extends SimpleCriterionProgress implement
     }
 
     @Override
-    public @NotNull GrantCriteriaResult grantCriteria(@NotNull String... criteria) {
+    public @NotNull CriteriaResult grantCriteria(@NotNull String... criteria) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public @NotNull GenericResult revokeCriteria(@NotNull String... criteria) {
+    public @NotNull CriteriaResult revokeCriteria(@NotNull String... criteria) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public @NotNull GrantCriteriaResult setCriteriaProgress(int amount) {
+    public @NotNull CriteriaResult setCriteriaProgress(int amount) {
         amount = CruxMath.clamp(amount, 0, maxProgress);
-        if(progress == amount) return GrantCriteriaResult.UNCHANGED;
-        if(!update()) return GrantCriteriaResult.CHANGED;
-        return isDone() ? GrantCriteriaResult.COMPLETED : GrantCriteriaResult.CHANGED;
+        if(progress == amount) return CriteriaResult.UNCHANGED;
+        int previousProgress = this.progress;
+        this.progress = amount;
+        if(!update()) return new CriteriaResult(previousProgress, this.progress, false);
+        return new CriteriaResult(previousProgress, this.progress, isDone());
     }
 
     @Override

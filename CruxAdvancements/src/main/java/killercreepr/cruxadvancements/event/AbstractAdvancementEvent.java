@@ -2,17 +2,35 @@ package killercreepr.cruxadvancements.event;
 
 import killercreepr.cruxadvancements.advancement.CruxAdvancement;
 import killercreepr.cruxadvancements.manager.AdvancementManager;
-import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerEvent;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class AbstractAdvancementEvent extends PlayerEvent {
+import java.util.UUID;
+
+public abstract class AbstractAdvancementEvent extends Event implements Cancellable {
+    protected final @NotNull UUID who;
     protected final @NotNull AdvancementManager manager;
     protected final @NotNull CruxAdvancement advancement;
-    public AbstractAdvancementEvent(@NotNull Player who, @NotNull AdvancementManager manager, @NotNull CruxAdvancement advancement) {
-        super(who);
+    protected boolean cancel = false;
+    public AbstractAdvancementEvent(@NotNull UUID who, @NotNull AdvancementManager manager, @NotNull CruxAdvancement advancement) {
+        this.who = who;
         this.manager = manager;
         this.advancement = advancement;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancel;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancel = cancel;
+    }
+
+    public @NotNull UUID getWho() {
+        return who;
     }
 
     public @NotNull AdvancementManager getManager() {

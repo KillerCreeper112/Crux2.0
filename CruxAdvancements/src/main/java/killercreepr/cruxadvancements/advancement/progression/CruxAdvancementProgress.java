@@ -7,10 +7,12 @@ import java.util.Collection;
 import java.util.function.Predicate;
 
 public interface CruxAdvancementProgress extends CruxCriterionProgress {
-    @NotNull GrantCriteriaResult grantCriteria(@NotNull String... criteria);
-    @NotNull GenericResult revokeCriteria(@NotNull String... criteria);
+    @NotNull
+    CriteriaResult grantCriteria(@NotNull String... criteria);
+    @NotNull CriteriaResult revokeCriteria(@NotNull String... criteria);
 
-    @NotNull GrantCriteriaResult setCriteriaProgress(int amount);
+    @NotNull
+    CriteriaResult setCriteriaProgress(int amount);
     int getCriteriaProgress();
     @Nullable CruxCriterionProgress getCriterionProgress(@NotNull String name);
     @NotNull

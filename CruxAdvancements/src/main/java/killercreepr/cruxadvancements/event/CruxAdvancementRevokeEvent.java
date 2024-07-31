@@ -7,9 +7,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class CruxAdvancementGrantEvent extends AbstractAdvancementEvent{
+public class CruxAdvancementRevokeEvent extends AbstractAdvancementEvent{
     private static final HandlerList HANDLER_LIST = new HandlerList();
-    public CruxAdvancementGrantEvent(@NotNull UUID who, @NotNull AdvancementManager manager, @NotNull CruxAdvancement advancement) {
+    public CruxAdvancementRevokeEvent(@NotNull UUID who, @NotNull AdvancementManager manager, @NotNull CruxAdvancement advancement) {
         super(who, manager, advancement);
     }
 
@@ -17,7 +17,6 @@ public class CruxAdvancementGrantEvent extends AbstractAdvancementEvent{
     public @NotNull HandlerList getHandlers() {
         return HANDLER_LIST;
     }
-
     public static HandlerList getHandlerList() {
         return HANDLER_LIST;
     }

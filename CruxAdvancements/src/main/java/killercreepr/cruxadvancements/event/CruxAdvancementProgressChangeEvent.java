@@ -7,10 +7,22 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class CruxAdvancementGrantEvent extends AbstractAdvancementEvent{
+public class CruxAdvancementProgressChangeEvent extends AbstractAdvancementEvent{
     private static final HandlerList HANDLER_LIST = new HandlerList();
-    public CruxAdvancementGrantEvent(@NotNull UUID who, @NotNull AdvancementManager manager, @NotNull CruxAdvancement advancement) {
+    protected int newProgress;
+    public CruxAdvancementProgressChangeEvent(@NotNull UUID who,
+                                              @NotNull AdvancementManager manager,
+                                              @NotNull CruxAdvancement advancement, int newProgress) {
         super(who, manager, advancement);
+        this.newProgress = newProgress;
+    }
+
+    public void setNewProgress(int newProgress) {
+        this.newProgress = newProgress;
+    }
+
+    public int getNewProgress() {
+        return newProgress;
     }
 
     @Override
