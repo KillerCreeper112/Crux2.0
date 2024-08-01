@@ -2,11 +2,7 @@ package killercreepr.cruxadvancements.crazy;
 
 import eu.endercentral.crazy_advancements.NameKey;
 import eu.endercentral.crazy_advancements.advancement.Advancement;
-import eu.endercentral.crazy_advancements.advancement.AdvancementDisplay;
 import eu.endercentral.crazy_advancements.manager.AdvancementManager;
-import it.unimi.dsi.fastutil.Hash;
-import killercreepr.crux.registry.KeyedRegistry;
-import killercreepr.cruxadvancements.advancement.CruxAdvancement;
 import killercreepr.cruxadvancements.manager.SimpleAdvancementManager;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class CrazyAdvancementManager<T extends CrazyAdvancement> extends SimpleAdvancementManager<T> {
+public abstract class CrazyAdvancementManager<T extends CrazyAdvancement> extends SimpleAdvancementManager<T> {
     protected final @NotNull AdvancementManager crazyManager;
     protected final @NotNull Map<Key, Advancement> crazyAdvancements = new HashMap<>();
     public CrazyAdvancementManager(@NotNull Key key, @NotNull AdvancementManager crazyManager) {
@@ -43,7 +39,7 @@ public class CrazyAdvancementManager<T extends CrazyAdvancement> extends SimpleA
 
     public @NotNull Advancement getOrCreateCrazyAdvancement(@NotNull T crux){
         Advancement a = crazyAdvancements.get(crux.key());
-        if(a!=null) return a;
+        if(a != null) return a;
         Key parentCrux = crux.parent();
         Advancement parent = parentCrux == null ? null : getOrCreateCrazyAdvancement(
             Objects.requireNonNull(getAdvancement(parentCrux),

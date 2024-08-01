@@ -114,12 +114,7 @@ public class BukkitCfgHandlers {
     @SafeVarargs
     public static void registerEnums(@NotNull FileRegistry registry, @NotNull Class<? extends Enum<?>>... enums){
         for(Class<? extends Enum<?>> e : enums){
-            registry.registerHandler(e, new FileGenericEnum(e){
-                @Override
-                public @NotNull String jsonSerializerID() {
-                    return e.getSimpleName().toLowerCase();
-                }
-            });
+            registry.registerHandler(e, new FileGenericEnum(e));
         }
     }
 }

@@ -1,6 +1,7 @@
 package killercreepr.cruxadvancements.manager;
 
 import eu.endercentral.crazy_advancements.manager.AdvancementManager;
+import killercreepr.crux.data.PluginLoadable;
 import killercreepr.crux.registry.KeyedRegistry;
 import killercreepr.cruxadvancements.advancement.CruxAdvancement;
 import killercreepr.cruxadvancements.event.*;
@@ -11,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public interface CruxAdvancementManager<T extends CruxAdvancement> extends Keyed, Iterable<T> {
+public interface CruxAdvancementManager<T extends CruxAdvancement> extends Keyed, Iterable<T>, PluginLoadable {
     default void registerAdvancement(@NotNull T... advancements){
         for(T a : advancements){
             registerAdvancement(a);

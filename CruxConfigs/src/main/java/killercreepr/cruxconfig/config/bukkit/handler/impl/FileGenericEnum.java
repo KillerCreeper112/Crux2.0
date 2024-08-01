@@ -7,7 +7,7 @@ import killercreepr.cruxconfig.config.common.element.FilePrimitive;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class FileGenericEnum<T extends Enum<T>> extends SimpleFileHandler<T> {
+public class FileGenericEnum<T extends Enum<T>> extends SimpleFileHandler<T> {
     protected final Class<T> clazz;
     public FileGenericEnum(Class<T> clazz) {
         this.clazz = clazz;
@@ -30,5 +30,10 @@ public abstract class FileGenericEnum<T extends Enum<T>> extends SimpleFileHandl
         }catch (IllegalArgumentException ignored){
             return null;
         }
+    }
+
+    @Override
+    public @NotNull String jsonSerializerID() {
+        return clazz.getSimpleName().toLowerCase();
     }
 }

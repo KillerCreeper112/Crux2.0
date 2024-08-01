@@ -18,6 +18,7 @@ tasks{
 dependencies {
     paperweight.paperDevBundle(libs.versions.paper)
     compileOnly(project(":CruxMain"))
+    compileOnly(project(":CruxConfigs"))
     compileOnly("com.github.ZockerAxel", "CrazyAdvancementsAPI", "2.1.19")
 
     compileOnly(fileTree("libs") {

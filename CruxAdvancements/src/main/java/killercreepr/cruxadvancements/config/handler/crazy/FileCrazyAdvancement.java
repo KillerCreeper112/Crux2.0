@@ -1,0 +1,52 @@
+package killercreepr.cruxadvancements.config.handler.crazy;
+
+import eu.endercentral.crazy_advancements.advancement.AdvancementFlag;
+import io.leangen.geantyref.TypeToken;
+import killercreepr.crux.util.CruxObjects;
+import killercreepr.cruxadvancements.advancement.criteria.CruxCriteria;
+import killercreepr.cruxadvancements.crazy.CrazyAdvancement;
+import killercreepr.cruxadvancements.crazy.CrazyAdvancementDisplay;
+import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
+import killercreepr.cruxconfig.config.common.FileContext;
+import killercreepr.cruxconfig.config.common.FileRegistry;
+import killercreepr.cruxconfig.config.common.element.FileElement;
+import killercreepr.cruxconfig.config.common.element.FileObject;
+import net.kyori.adventure.key.Key;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
+
+public class FileCrazyAdvancement implements FileHandler<CrazyAdvancement> {
+    @Override
+    public @NotNull FileElement serializeToFile(@NotNull FileContext<?> ctx, @NotNull CrazyAdvancement object) {
+        return null;
+    }
+
+    @Override
+    public @Nullable CrazyAdvancement deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
+        if(!(e instanceof FileObject o)) return null;
+        FileRegistry registry = ctx.getRegistry();
+        Key key = registry.deserialize(Key.class, o.get("key"));
+        Key parentKey = registry.deserialize(Key.class, o.get("parent"));
+        CruxCriteria criteria = registry.deserialize(CruxCriteria.class, o.get("criteria"));
+        CrazyAdvancementDisplay display = registry.deserialize(CrazyAdvancementDisplay.class, o.get("display"));
+
+        Collection<AdvancementFlag> flags = registry.deserialize(new TypeToken<Collection<AdvancementFlag>>(){}.getType(), o.get("flags"));
+
+        if(CruxObjects.checkNull(key, criteria, display)) return null;
+
+        AdvancementFlag[] flagsParsed;
+        if(flags == null) flagsParsed = AdvancementFlag.TOAST_AND_MESSAGE;
+        else flagsParsed = flags.toArray(new AdvancementFlag[0]);
+
+        return new CrazyAdvancement(
+            key, parentKey, criteria, display, flagsParsed
+        );
+    }
+
+    @Override
+    public @NotNull String jsonSerializerID() {
+        return "crazy_advancement";
+    }
+}

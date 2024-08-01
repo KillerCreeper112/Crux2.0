@@ -1,6 +1,5 @@
 package killercreepr.cruxadvancements.manager;
 
-import eu.endercentral.crazy_advancements.advancement.Advancement;
 import killercreepr.crux.registry.KeyedRegistry;
 import killercreepr.crux.registry.SimpleKeyedRegistry;
 import killercreepr.cruxadvancements.advancement.CruxAdvancement;
@@ -14,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Iterator;
 import java.util.UUID;
 
-public class SimpleAdvancementManager<T extends CruxAdvancement> implements CruxAdvancementManager<T> {
+public abstract class SimpleAdvancementManager<T extends CruxAdvancement> implements CruxAdvancementManager<T> {
     protected final @NotNull Key key;
     protected final @NotNull KeyedRegistry<T> advancements = new SimpleKeyedRegistry<>();
 
