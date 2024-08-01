@@ -23,4 +23,6 @@ public interface CruxAdvancementProgress extends CruxCriterionProgress {
     int count(@NotNull Predicate<String> predicate);
     @NotNull Collection<String> assemble(@NotNull Predicate<String> predicate);
     boolean isEmpty();
+
+    boolean isCriterionDone(@NotNull String name);
 }

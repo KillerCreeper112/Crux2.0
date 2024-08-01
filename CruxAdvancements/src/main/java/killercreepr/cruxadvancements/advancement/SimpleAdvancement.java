@@ -52,10 +52,10 @@ public class SimpleAdvancement implements CruxAdvancement {
 
     public @NotNull CruxAdvancementProgress buildProgress(){
         if(getCriteria() instanceof ListCriteria c){
-            return new ListAdvancementProgress(c.getActionNames());
+            return new ListAdvancementProgress(c);
         }
         if(getCriteria() instanceof NumberCriteria c){
-            return new NumberAdvancementProgress(c.getMaxProgress());
+            return new NumberAdvancementProgress(c);
         }
         throw new UnsupportedOperationException(getCriteria() + " is an unsupported criteria!");
     }

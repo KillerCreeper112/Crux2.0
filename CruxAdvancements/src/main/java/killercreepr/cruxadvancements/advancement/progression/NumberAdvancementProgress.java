@@ -1,6 +1,7 @@
 package killercreepr.cruxadvancements.advancement.progression;
 
 import killercreepr.crux.util.CruxMath;
+import killercreepr.cruxadvancements.advancement.criteria.NumberCriteria;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -8,15 +9,15 @@ import java.util.Collection;
 import java.util.function.Predicate;
 
 public class NumberAdvancementProgress extends SimpleCriterionProgress implements CruxAdvancementProgress{
-    protected final int maxProgress;
+    protected final @NotNull NumberCriteria criteria;
     protected int progress;
 
-    public NumberAdvancementProgress(int maxProgress) {
-        this.maxProgress = maxProgress;
+    public NumberAdvancementProgress(@NotNull NumberCriteria criteria) {
+        this.criteria = criteria;
     }
 
-    public int getMaxProgress() {
-        return maxProgress;
+    public @NotNull NumberCriteria getCriteria() {
+        return criteria;
     }
 
     public int getProgress() {
@@ -39,7 +40,7 @@ public class NumberAdvancementProgress extends SimpleCriterionProgress implement
 
     @Override
     public @NotNull CriteriaResult setCriteriaProgress(int amount) {
-        amount = CruxMath.clamp(amount, 0, maxProgress);
+        amount = CruxMath.clamp(amount, 0, criteria.getMaxProgress());
         if(progress == amount) return CriteriaResult.UNCHANGED;
         int previousProgress = this.progress;
         this.progress = amount;
@@ -69,7 +70,7 @@ public class NumberAdvancementProgress extends SimpleCriterionProgress implement
 
     @Override
     public int getCriteriaMaxProgress() {
-        return maxProgress;
+        return criteria.getMaxProgress();
     }
 
     @Override
@@ -88,7 +89,7 @@ public class NumberAdvancementProgress extends SimpleCriterionProgress implement
     }
 
     protected boolean checkAllGranted(){
-        return progress >= maxProgress;
+        return progress >= criteria.getMaxProgress();
     }
 
     protected boolean update(){

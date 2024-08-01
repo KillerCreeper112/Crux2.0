@@ -1,5 +1,6 @@
 package killercreepr.cruxadvancements.advancement.progression;
 
+import killercreepr.cruxadvancements.advancement.criteria.ListCriteria;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -8,10 +9,10 @@ import java.util.function.Predicate;
 //todo fix
 public class ListAdvancementProgress extends SimpleCriterionProgress implements CruxAdvancementProgress{
     protected final @NotNull Map<String, CruxCriterionProgress> progressMap = new HashMap<>();
-    protected final @NotNull String[] actionNames;
-    public ListAdvancementProgress(@NotNull String[] actionNames) {
-        this.actionNames = actionNames;
-        for(String name : actionNames){
+    protected final @NotNull ListCriteria criteria;
+    public ListAdvancementProgress(@NotNull ListCriteria criteria) {
+        this.criteria = criteria;
+        for(String name : criteria.getActionNames()){
             progressMap.put(name, new SimpleCriterionProgress());
         }
     }
@@ -39,13 +40,13 @@ public class ListAdvancementProgress extends SimpleCriterionProgress implements 
 
     @Override
     public int getCriteriaMaxProgress() {
-        return actionNames.length;
+        return criteria.getActionNames().length;
     }
 
     @Override
     public int count(@NotNull Predicate<String> predicate) {
         int amount = 0;
-        for(String s : actionNames){
+        for(String s : criteria.getActionNames()){
             if(predicate.test(s)) amount++;
         }
         return amount;
@@ -54,7 +55,7 @@ public class ListAdvancementProgress extends SimpleCriterionProgress implements 
     @Override
     public @NotNull Collection<String> assemble(@NotNull Predicate<String> predicate) {
         Collection<String> set = new HashSet<>();
-        for(String s : actionNames){
+        for(String s : criteria.getActionNames()){
             if(predicate.test(s)) set.add(s);
         }
         return set;
@@ -65,11 +66,18 @@ public class ListAdvancementProgress extends SimpleCriterionProgress implements 
         return progressMap.isEmpty();
     }
 
+    @Override
+    public boolean isCriterionDone(@NotNull String name) {
+        CruxCriterionProgress progress = getCriterionProgress(name);
+        return progress != null && progress.isDone();
+    }
+
     protected boolean checkAllGranted(){
-        for(CruxCriterionProgress progress : progressMap.values()){
+        return criteria.test(this::isCriterionDone);
+        /*for(CruxCriterionProgress progress : progressMap.values()){
             if(!progress.isDone()) return false;
         }
-        return true;
+        return true;*/
     }
     protected boolean update(){
         if(checkAllGranted()){
