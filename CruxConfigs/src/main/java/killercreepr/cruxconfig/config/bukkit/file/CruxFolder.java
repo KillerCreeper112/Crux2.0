@@ -36,4 +36,8 @@ public class CruxFolder implements ICruxFile {
             return fileName.substring(0, lastDotIndex);
         }
     }
+
+    public static boolean hasFileExtension(@NotNull File file, @NotNull String extension){
+        return file.getName().endsWith("." + extension);
+    }
 }

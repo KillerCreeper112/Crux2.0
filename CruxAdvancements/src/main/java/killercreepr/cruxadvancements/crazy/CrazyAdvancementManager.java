@@ -6,6 +6,7 @@ import eu.endercentral.crazy_advancements.manager.AdvancementManager;
 import killercreepr.cruxadvancements.manager.SimpleAdvancementManager;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,17 +51,24 @@ public abstract class CrazyAdvancementManager<T extends CrazyAdvancement> extend
         return a;
     }
 
-    @Override
-    public void registerAdvancement(@NotNull T a) {
-        super.registerAdvancement(a);
-        Advancement crazy = getOrCreateCrazyAdvancement(a);
-        crazyManager.addAdvancement(crazy);
+    public @Nullable Advancement getCrazyAdvancement(@NotNull Key key){
+        return crazyAdvancements.get(key);
+    }
+
+    public void loadAllCrazyAdvancements(){
+        for(T a : this){
+            if(getCrazyAdvancement(a.key()) != null) continue;
+            Advancement crazy = getOrCreateCrazyAdvancement(a);
+            crazyManager.addAdvancement(crazy);
+        }
     }
 
     @Override
     public void unregisterAdvancement(@NotNull T a) {
         super.unregisterAdvancement(a);
-        Advancement crazy = getOrCreateCrazyAdvancement(a);
-        crazyManager.addAdvancement(crazy);
+
+        Advancement crazy = getCrazyAdvancement(a.key());
+        if(crazy==null) return;
+        crazyManager.removeAdvancement(crazy);
     }
 }
