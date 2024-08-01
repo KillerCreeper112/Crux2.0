@@ -19,6 +19,8 @@ public class SimpleAdvancement implements CruxAdvancement {
     protected final @NotNull Key key;
     protected final @Nullable Key parentKey;
     protected final @NotNull CruxCriteria criteria;
+    //we're using strings here because Minecraft stores progress as strings as well.
+    //So... just in case if we'd ever want to store more than just UUIDs here in the future
     protected final @NotNull Map<String, CruxAdvancementProgress> progressMap = new HashMap<>();
 
     public SimpleAdvancement(@NotNull Key key, @Nullable Key parentKey, @NotNull CruxCriteria criteria) {
@@ -42,9 +44,15 @@ public class SimpleAdvancement implements CruxAdvancement {
         return progressMap.computeIfAbsent(uuid.toString(), (u) -> buildProgress());
     }
 
+    @Override
+    public void setProgress(@NotNull UUID uuid, @Nullable CruxAdvancementProgress progress) {
+        if(progress==null) progressMap.remove(uuid.toString());
+        else progressMap.put(uuid.toString(), progress);
+    }
+
     public @NotNull CruxAdvancementProgress buildProgress(){
         if(getCriteria() instanceof ListCriteria c){
-            return new ListAdvancementProgress(c.getRequirements());
+            return new ListAdvancementProgress(c.getActionNames());
         }
         if(getCriteria() instanceof NumberCriteria c){
             return new NumberAdvancementProgress(c.getMaxProgress());

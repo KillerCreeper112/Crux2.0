@@ -7,6 +7,8 @@ import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
+
 public class CrazyAdvancement extends SimpleAdvancement {
     protected final @NotNull CrazyAdvancementDisplay display;
     protected final @NotNull AdvancementFlag[] flags;
@@ -22,5 +24,13 @@ public class CrazyAdvancement extends SimpleAdvancement {
 
     public @NotNull AdvancementFlag[] getFlags() {
         return flags;
+    }
+
+    public void save(@NotNull File file){
+
+    }
+
+    public void load(@NotNull File file){
+
     }
 }

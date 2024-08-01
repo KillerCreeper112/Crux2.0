@@ -21,6 +21,7 @@ public interface CruxAdvancement extends Keyed {
     }
     @NotNull
     CruxAdvancementProgress getProgress(@NotNull UUID uuid);
+    void setProgress(@NotNull UUID uuid, @Nullable CruxAdvancementProgress progress);
     @NotNull
     CruxCriteria getCriteria();
 

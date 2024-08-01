@@ -36,6 +36,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.Instant;
 import java.util.UUID;
 
 public class BukkitCfgHandlers {
@@ -53,6 +54,7 @@ public class BukkitCfgHandlers {
     public static final FileColor COLOR = new FileColor();
     public static final FileKey KEY = new FileKey();
     public static final FileItemHolder ITEM_HOLDER = new FileItemHolder();
+    public static final FileInstant INSTANT = new FileInstant();
 
     public static void initJson(@NotNull JsonRegistry registry){
         registry.registerHandler(
@@ -76,6 +78,7 @@ public class BukkitCfgHandlers {
         registry.registerHandler(Color.class, COLOR);
         registry.registerHandler(Key.class, KEY);
         registry.registerHandler(ItemHolder.class, ITEM_HOLDER);
+        registry.registerHandler(Instant.class, INSTANT);
 
         DYNAMIC_ITEM.registerComponents(registry);
 

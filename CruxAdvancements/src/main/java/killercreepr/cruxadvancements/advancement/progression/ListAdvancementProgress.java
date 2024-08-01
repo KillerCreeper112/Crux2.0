@@ -5,16 +5,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Predicate;
-
+//todo fix
 public class ListAdvancementProgress extends SimpleCriterionProgress implements CruxAdvancementProgress{
     protected final @NotNull Map<String, CruxCriterionProgress> progressMap = new HashMap<>();
-    protected final @NotNull String[][] requirements;
-    public ListAdvancementProgress(@NotNull String[][] requirements) {
-        this.requirements = requirements;
-        for(String[] list : requirements){
-            for(String s : list){
-                progressMap.put(s, new SimpleCriterionProgress());
-            }
+    protected final @NotNull String[] actionNames;
+    public ListAdvancementProgress(@NotNull String[] actionNames) {
+        this.actionNames = actionNames;
+        for(String name : actionNames){
+            progressMap.put(name, new SimpleCriterionProgress());
         }
     }
 
@@ -41,16 +39,14 @@ public class ListAdvancementProgress extends SimpleCriterionProgress implements 
 
     @Override
     public int getCriteriaMaxProgress() {
-        return requirements.length;
+        return actionNames.length;
     }
 
     @Override
     public int count(@NotNull Predicate<String> predicate) {
         int amount = 0;
-        for(String[] list : requirements){
-            for(String s : list){
-                if(predicate.test(s)) amount++;
-            }
+        for(String s : actionNames){
+            if(predicate.test(s)) amount++;
         }
         return amount;
     }
@@ -58,12 +54,15 @@ public class ListAdvancementProgress extends SimpleCriterionProgress implements 
     @Override
     public @NotNull Collection<String> assemble(@NotNull Predicate<String> predicate) {
         Collection<String> set = new HashSet<>();
-        for(String[] list : requirements){
-            for(String s : list){
-                if(predicate.test(s)) set.add(s);
-            }
+        for(String s : actionNames){
+            if(predicate.test(s)) set.add(s);
         }
         return set;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return progressMap.isEmpty();
     }
 
     protected boolean checkAllGranted(){

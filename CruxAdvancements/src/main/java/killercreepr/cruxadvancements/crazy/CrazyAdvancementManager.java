@@ -1,9 +1,15 @@
 package killercreepr.cruxadvancements.crazy;
 
 import eu.endercentral.crazy_advancements.advancement.Advancement;
+import eu.endercentral.crazy_advancements.advancement.AdvancementReward;
+import eu.endercentral.crazy_advancements.advancement.criteria.Criteria;
 import eu.endercentral.crazy_advancements.manager.AdvancementManager;
+import killercreepr.cruxadvancements.advancement.criteria.ListCriteria;
+import killercreepr.cruxadvancements.advancement.criteria.NumberCriteria;
+import killercreepr.cruxadvancements.advancement.reward.CruxAdvanceReward;
 import killercreepr.cruxadvancements.manager.SimpleAdvancementManager;
 import net.kyori.adventure.key.Key;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,6 +44,21 @@ public abstract class CrazyAdvancementManager<T extends CrazyAdvancement> extend
                 crux.key() + " does not have its parent registered! (" + parentCrux + ")")
         );
         a = new Advancement(parent, CrazyUtil.toNameKey(crux.key()), crux.getDisplay().toCrazy(this), crux.getFlags());
+        a.setReward(new AdvancementReward() {
+            @Override
+            public void onGrant(Player player) {
+                CruxAdvanceReward r = crux.reward();
+                if(r==null) return;
+                r.reward(player);
+            }
+        });
+
+        if(crux.getCriteria() instanceof ListCriteria c){
+            a.setCriteria(new Criteria(c.getActionNames(), c.getRequirements()));
+        }else if(crux.getCriteria() instanceof NumberCriteria c){
+            a.setCriteria(new Criteria(c.getMaxProgress()));
+        }
+
         crazyAdvancements.put(crux.key(), a);
         return a;
     }

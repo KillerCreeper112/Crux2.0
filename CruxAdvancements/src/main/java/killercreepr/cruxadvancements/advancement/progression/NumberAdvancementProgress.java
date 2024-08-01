@@ -82,6 +82,11 @@ public class NumberAdvancementProgress extends SimpleCriterionProgress implement
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public boolean isEmpty() {
+        return progress==0;
+    }
+
     protected boolean checkAllGranted(){
         return progress >= maxProgress;
     }

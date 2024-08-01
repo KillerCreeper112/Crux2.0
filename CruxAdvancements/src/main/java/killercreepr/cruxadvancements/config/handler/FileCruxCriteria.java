@@ -41,13 +41,15 @@ public class FileCruxCriteria implements FileHandler<CruxCriteria> {
         switch (type.toLowerCase()){
             case "list" ->{
                 if(!(o.get("requirements") instanceof FileArray a)) return null;
+                List<String> actionNames = registry.deserialize(new TypeToken<List<String>>(){}.getType(), o.get("action_names"));
+                if(actionNames==null) return null;
                 List<String[]> requirements = new ArrayList<>();
                 a.forEach(ele ->{
                     List<String> list = registry.deserialize(new TypeToken<List<String>>(){}.getType(), ele);
                     if(list==null) return;
                     requirements.add(list.toArray(new String[0]));
                 });
-                return new ListCriteria(requirements.toArray(new String[][]{}));
+                return new ListCriteria(actionNames.toArray(new String[0]), requirements.toArray(new String[][]{}));
             }
             case "number" ->{
                 if(!(o.get("requirements") instanceof FilePrimitive a)) return null;
