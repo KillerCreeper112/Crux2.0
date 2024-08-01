@@ -24,6 +24,10 @@ public interface CruxAdvancementManager<T extends CruxAdvancement> extends Keyed
         }
     }
 
+    void saveProgress(@NotNull UUID uuid, @NotNull T... advancements);
+    void loadProgress(@NotNull UUID uuid, @NotNull T... advancements);
+    void unloadProgress(@NotNull UUID uuid, @NotNull T... advancements);
+
     void registerAdvancement(@NotNull T advancement);
     void unregisterAdvancement(@NotNull T advancement);
     @NotNull

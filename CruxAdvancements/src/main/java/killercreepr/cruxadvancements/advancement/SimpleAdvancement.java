@@ -45,6 +45,16 @@ public class SimpleAdvancement implements CruxAdvancement {
     }
 
     @Override
+    public @Nullable CruxAdvancementProgress getProgressIfPresent(@NotNull UUID uuid) {
+        return progressMap.get(uuid.toString());
+    }
+
+    @Override
+    public @NotNull Map<String, CruxAdvancementProgress> getProgressMap() {
+        return progressMap;
+    }
+
+    @Override
     public void setProgress(@NotNull UUID uuid, @Nullable CruxAdvancementProgress progress) {
         if(progress==null) progressMap.remove(uuid.toString());
         else progressMap.put(uuid.toString(), progress);

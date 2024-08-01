@@ -31,6 +31,11 @@ public class SimpleCriterionProgress implements CruxCriterionProgress {
     }
 
     @Override
+    public void setObtainedAt(@Nullable Instant obtained) {
+        this.obtained = obtained;
+    }
+
+    @Override
     public String toString() {
         return "SimpleAdvancementProgress{obtained=" + (this.obtained == null ? "false" : this.obtained) + "}";
     }

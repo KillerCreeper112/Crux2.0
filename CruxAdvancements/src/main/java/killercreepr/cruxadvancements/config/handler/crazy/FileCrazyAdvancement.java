@@ -20,7 +20,14 @@ import java.util.Collection;
 public class FileCrazyAdvancement implements FileHandler<CrazyAdvancement> {
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> ctx, @NotNull CrazyAdvancement object) {
-        return null;
+        FileRegistry registry = ctx.getRegistry();
+        FileObject o = new FileObject();
+        o.add("key", registry.serializeToFileElement(object.key()));
+        if(object.parent() != null) o.add("parent", registry.serializeToFileElement(object.parent()));
+        o.add("criteria", registry.serializeToFileElement(object.getCriteria()));
+        o.add("display", registry.serializeToFileElement(object.getDisplay()));
+        o.add("flags", registry.serializeToFileElement(object.getFlags()));
+        return o;
     }
 
     @Override

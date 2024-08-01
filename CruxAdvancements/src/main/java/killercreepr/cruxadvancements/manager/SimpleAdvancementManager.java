@@ -22,6 +22,14 @@ public abstract class SimpleAdvancementManager<T extends CruxAdvancement> implem
     }
 
     @Override
+    public void unloadProgress(@NotNull UUID uuid, @NotNull T... advancements){
+        if(advancements.length == 0) advancements = (T[]) this.advancements.values().toArray(new CruxAdvancement[0]);
+        for(T a : advancements){
+            a.setProgress(uuid, null);
+        }
+    }
+
+    @Override
     public void registerAdvancement(@NotNull T a){
         advancements.register(a);
     }

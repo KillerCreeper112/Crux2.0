@@ -1,0 +1,39 @@
+package killercreepr.cruxadvancements.config.handler;
+
+import killercreepr.cruxadvancements.advancement.progression.SimpleCriterionProgress;
+import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
+import killercreepr.cruxconfig.config.common.FileContext;
+import killercreepr.cruxconfig.config.common.FileRegistry;
+import killercreepr.cruxconfig.config.common.element.FileElement;
+import killercreepr.cruxconfig.config.common.element.FileObject;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.time.Instant;
+
+public class FileSimpleCriterionProgress implements FileHandler<SimpleCriterionProgress> {
+    @Override
+    public @NotNull FileElement serializeToFile(@NotNull FileContext<?> ctx, @NotNull SimpleCriterionProgress object) {
+        FileRegistry registry = ctx.getRegistry();
+        FileObject o = new FileObject();
+        Instant obtained = object.getObtained();
+        if(obtained != null){
+            o.add("obtained", registry.serializeToFileElement(obtained));
+        }
+        return o;
+    }
+
+    @Override
+    public @Nullable SimpleCriterionProgress deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
+        if(!(e instanceof FileObject o)) return null;
+        FileRegistry registry = ctx.getRegistry();
+        Instant obtained = registry.deserialize(Instant.class, o.get("obtained"));
+        if(obtained==null) return null;
+        return new SimpleCriterionProgress(obtained);
+    }
+
+    @Override
+    public @NotNull String jsonSerializerID() {
+        return "simple_criterion_progress";
+    }
+}

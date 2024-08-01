@@ -1,21 +1,22 @@
 package killercreepr.cruxadvancements.crazy;
 
 import eu.endercentral.crazy_advancements.advancement.Advancement;
-import eu.endercentral.crazy_advancements.advancement.AdvancementReward;
 import eu.endercentral.crazy_advancements.advancement.criteria.Criteria;
+import eu.endercentral.crazy_advancements.advancement.progress.AdvancementProgress;
 import eu.endercentral.crazy_advancements.manager.AdvancementManager;
 import killercreepr.cruxadvancements.advancement.criteria.ListCriteria;
 import killercreepr.cruxadvancements.advancement.criteria.NumberCriteria;
-import killercreepr.cruxadvancements.advancement.reward.CruxAdvanceReward;
+import killercreepr.cruxadvancements.advancement.progression.CruxAdvancementProgress;
+import killercreepr.cruxadvancements.advancement.progression.ListAdvancementProgress;
 import killercreepr.cruxadvancements.manager.SimpleAdvancementManager;
 import net.kyori.adventure.key.Key;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 public abstract class CrazyAdvancementManager<T extends CrazyAdvancement> extends SimpleAdvancementManager<T> {
     protected final @NotNull AdvancementManager crazyManager;
@@ -44,14 +45,6 @@ public abstract class CrazyAdvancementManager<T extends CrazyAdvancement> extend
                 crux.key() + " does not have its parent registered! (" + parentCrux + ")")
         );
         a = new Advancement(parent, CrazyUtil.toNameKey(crux.key()), crux.getDisplay().toCrazy(this), crux.getFlags());
-        a.setReward(new AdvancementReward() {
-            @Override
-            public void onGrant(Player player) {
-                CruxAdvanceReward r = crux.reward();
-                if(r==null) return;
-                r.reward(player);
-            }
-        });
 
         if(crux.getCriteria() instanceof ListCriteria c){
             a.setCriteria(new Criteria(c.getActionNames(), c.getRequirements()));
@@ -59,8 +52,26 @@ public abstract class CrazyAdvancementManager<T extends CrazyAdvancement> extend
             a.setCriteria(new Criteria(c.getMaxProgress()));
         }
 
+        loadCrazyProgress(a, crux);
         crazyAdvancements.put(crux.key(), a);
         return a;
+    }
+
+    public void loadCrazyProgress(@NotNull Advancement crazy, @NotNull T crux){
+        crux.getProgressMap().forEach((string, prog) ->{
+            UUID uuid;
+            try{
+                uuid = UUID.fromString(string);
+            }catch (IllegalArgumentException ignored){ return; }
+            CruxAdvancementProgress cruxProgress = crux.getProgress(uuid);
+            if(cruxProgress.isEmpty()) return;
+            AdvancementProgress progress = crazy.getProgress(uuid);
+            if(cruxProgress instanceof ListAdvancementProgress list){
+                progress.grantCriteria(list.getAwardedCriteria().toArray(new String[0]));
+                return;
+            }
+            progress.setCriteriaProgress(cruxProgress.getCriteriaProgress());
+        });
     }
 
     public @Nullable Advancement getCrazyAdvancement(@NotNull Key key){

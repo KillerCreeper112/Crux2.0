@@ -90,6 +90,14 @@ public class ListAdvancementProgress extends SimpleCriterionProgress implements 
         return true;
     }
 
+    public @NotNull Map<String, CruxCriterionProgress> getProgressMap() {
+        return progressMap;
+    }
+
+    public @NotNull ListCriteria getCriteria() {
+        return criteria;
+    }
+
     @Override
     public @NotNull CriteriaResult grantCriteria(@NotNull String... criteria) {
         if(isDone()) return CriteriaResult.UNCHANGED;
