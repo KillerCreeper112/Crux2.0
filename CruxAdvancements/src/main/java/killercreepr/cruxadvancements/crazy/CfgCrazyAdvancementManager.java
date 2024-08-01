@@ -13,6 +13,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdvancement> {
+    public static CfgCrazyAdvancementManager createNew(@NotNull Key key){
+        return new CfgCrazyAdvancementManager(key, new AdvancementManager(CrazyUtil.toNameKey(key)));
+    }
+
     public CfgCrazyAdvancementManager(@NotNull Key key, @NotNull AdvancementManager crazyManager) {
         super(key, crazyManager);
     }

@@ -1,6 +1,5 @@
 package killercreepr.cruxadvancements.crazy;
 
-import eu.endercentral.crazy_advancements.NameKey;
 import eu.endercentral.crazy_advancements.advancement.Advancement;
 import eu.endercentral.crazy_advancements.manager.AdvancementManager;
 import killercreepr.cruxadvancements.manager.SimpleAdvancementManager;
@@ -24,14 +23,6 @@ public abstract class CrazyAdvancementManager<T extends CrazyAdvancement> extend
         return crazyManager;
     }
 
-    public @NotNull Key toKey(@NotNull NameKey key){
-        return Key.key(key.getNamespace(), key.getKey());
-    }
-
-    public @NotNull NameKey toNameKey(@NotNull Key key){
-        return new NameKey(key.namespace(), key.value());
-    }
-
     public @NotNull Advancement getOrCreateCrazyAdvancement(@NotNull Key key){
         return getOrCreateCrazyAdvancement(
             Objects.requireNonNull(getAdvancement(key), "CrazyAdvancement, " + key + " does not exist!")
@@ -46,7 +37,7 @@ public abstract class CrazyAdvancementManager<T extends CrazyAdvancement> extend
             Objects.requireNonNull(getAdvancement(parentCrux),
                 crux.key() + " does not have its parent registered! (" + parentCrux + ")")
         );
-        a = new Advancement(parent, toNameKey(crux.key()), crux.getDisplay().toCrazy(this), crux.getFlags());
+        a = new Advancement(parent, CrazyUtil.toNameKey(crux.key()), crux.getDisplay().toCrazy(this), crux.getFlags());
         crazyAdvancements.put(crux.key(), a);
         return a;
     }
