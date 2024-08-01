@@ -1,6 +1,5 @@
 package killercreepr.cruxadvancements.crazy;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import eu.endercentral.crazy_advancements.manager.AdvancementManager;
 import killercreepr.cruxadvancements.advancement.progression.CruxAdvancementProgress;
@@ -54,9 +53,7 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
 
     @Override
     public void save(@NotNull Plugin plugin) {
-        for(CrazyAdvancement a : this){
-            //a.save(getAdvancementSaveFile(plugin, a).file());
-        }
+
     }
 
     @Override
@@ -74,14 +71,11 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
         cfg.reloadIfNeeded();
         JsonObject json = cfg.json();
         JsonRegistry registry = cfg.jsonRegistry();
-        JsonArray values = new JsonArray();
+        JsonObject values = new JsonObject();
         for(CrazyAdvancement a : advancements){
             CruxAdvancementProgress progress = a.getProgressIfPresent(uuid);
             if(progress==null) continue;
-            JsonObject o = new JsonObject();
-            o.addProperty("advancement", a.key().asString());
-            o.add("progress", registry.serializeObject(progress));
-            values.add(o);
+            values.add(a.key().asString(), registry.serializeObject(progress));
         }
         json.add("values", values);
         cfg.save(true);
@@ -89,6 +83,17 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
 
     @Override
     public void loadProgress(@NotNull UUID uuid, @NotNull CrazyAdvancement... advancements) {
+        CruxJson cfg = getSaveFile(plugin, uuid);
+        if(!cfg.file().exists()) return;
+        JsonObject json = cfg.json();
+        if(json==null) return;
+        if(!(json.get("values") instanceof JsonObject values)) return;
+        JsonRegistry registry = cfg.jsonRegistry();
 
+        for(CrazyAdvancement a : advancements){
+            CruxAdvancementProgress progress = registry.deserialize(CruxAdvancementProgress.class, values.get(a.key().asString()));
+            if(progress==null) continue;
+            a.setProgress(uuid, progress);
+        }
     }
 }
