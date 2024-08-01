@@ -67,6 +67,7 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
 
     @Override
     public void saveProgress(@NotNull UUID uuid, @NotNull CrazyAdvancement... advancements) {
+        if(advancements.length == 0) advancements = this.advancements.values().toArray(new CrazyAdvancement[0]);
         CruxJson cfg = getSaveFile(plugin, uuid);
         cfg.reloadIfNeeded();
         JsonObject json = cfg.json();
@@ -83,6 +84,7 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
 
     @Override
     public void loadProgress(@NotNull UUID uuid, @NotNull CrazyAdvancement... advancements) {
+        if(advancements.length == 0) advancements = this.advancements.values().toArray(new CrazyAdvancement[0]);
         CruxJson cfg = getSaveFile(plugin, uuid);
         if(!cfg.file().exists()) return;
         JsonObject json = cfg.json();
