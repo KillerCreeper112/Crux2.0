@@ -88,6 +88,11 @@ public class NumberAdvancementProgress extends SimpleCriterionProgress implement
         return progress==0;
     }
 
+    @Override
+    public boolean isCriterionDone(@NotNull String name) {
+        return false;
+    }
+
     protected boolean checkAllGranted(){
         return progress >= criteria.getMaxProgress();
     }

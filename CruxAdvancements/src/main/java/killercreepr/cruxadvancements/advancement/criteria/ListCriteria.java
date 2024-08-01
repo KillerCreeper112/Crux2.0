@@ -21,7 +21,6 @@ public class ListCriteria implements CruxCriteria {
         return requirements;
     }
 
-    @Override
     public boolean test(@NotNull Predicate<String> predicate) {
         if (this.actionNames.length == 0) {
             return false;
