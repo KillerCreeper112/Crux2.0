@@ -8,10 +8,15 @@ import killercreepr.cruxadvancements.config.handler.crazy.FileCrazyAdvancement;
 import killercreepr.cruxadvancements.config.handler.crazy.FileCrazyAdvancementDisplay;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.FileGenericEnum;
 import killercreepr.cruxconfig.config.common.FileRegistry;
+import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import org.jetbrains.annotations.NotNull;
 
 public class CrazyAdvancementsHook {
-    public static void registerHandler(@NotNull FileRegistry registry){
+    public static void registerHandlers(){
+        registerHandlers(CfgRegistries.JSON);
+        registerHandlers(CfgRegistries.YAML);
+    }
+    public static void registerHandlers(@NotNull FileRegistry registry){
         registry.registerHandler(AdvancementDisplay.AdvancementFrame.class, new FileGenericEnum<>(AdvancementDisplay.AdvancementFrame.class));
         registry.registerHandler(AdvancementFlag.class, new FileGenericEnum<>(AdvancementFlag.class));
         registry.registerHandler(AdvancementVisibility.class, new FileAdvancementVisibility());

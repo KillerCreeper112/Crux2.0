@@ -9,12 +9,6 @@ repositories{
     maven("https://jitpack.io")
 }
 
-tasks{
-    assemble{
-        dependsOn(shadowJar)
-    }
-}
-
 dependencies {
     paperweight.paperDevBundle(libs.versions.paper)
     compileOnly(project(":CruxMain"))
