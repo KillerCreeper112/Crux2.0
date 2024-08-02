@@ -2,7 +2,6 @@ package killercreepr.cruxpotions;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.entity.EntityMemory;
-import killercreepr.crux.data.entity.SimpleEntityMemory;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.module.StandardModules;
 import killercreepr.crux.plugin.CruxPlugin;

@@ -1,7 +1,6 @@
 package killercreepr.cruxblocks.data.entity;
 
 import killercreepr.crux.Crux;
-import killercreepr.crux.data.entity.PlayerDataHolder;
 import killercreepr.crux.data.entity.PlayerMemory;
 import killercreepr.crux.data.entity.PlayerTickedDataHolder;
 import killercreepr.crux.util.CruxMath;
@@ -31,7 +30,7 @@ public class MinerHolder extends PlayerTickedDataHolder {
     protected @Nullable Double lastBreakSpeed;
     protected @Nullable Long lastMine;
     @Override
-    public void tick(@NotNull Player e) {
+    public void onTick(@NotNull Player e) {
         if(lastMine == null) return;
         if(hasMinedWithin(2)) return;
         lastMine = null;

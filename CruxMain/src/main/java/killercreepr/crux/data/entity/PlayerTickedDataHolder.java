@@ -32,7 +32,18 @@ public abstract class PlayerTickedDataHolder extends PlayerDataHolder implements
     }
 
     @Override
-    public void removing(@Nullable Player e) {
+    public void removing(@Nullable Player e) {}
 
+    /**
+     * Most ticked holders probably won't want to tick after
+     * the player has left.
+     */
+    @Override
+    public void tick(@NotNull Player e) {
+        if(parent.quit() != null) return;
+        onTick(e);
+    }
+
+    protected void onTick(@NotNull Player e){
     }
 }

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 public class PlayerMemory extends SimpleEntityMemory {
-    protected long quit = -1;
+    protected Long quit = null;
     protected final KeyedRegistry<PlayerDataHolder> playerSpecificHolders = new SimpleKeyedRegistry<>();
 
     public @NotNull KeyedRegistry<PlayerDataHolder> getPlayerSpecificHolders() {
@@ -51,15 +51,15 @@ public class PlayerMemory extends SimpleEntityMemory {
         return entity.value();
     }
 
-    public long quit(){ return quit; }
+    public Long quit(){ return quit; }
 
-    public void quit(long time){
+    public void quit(Long time){
         quit = time;
     }
 
     @Override
     public boolean shouldRemoveFromMemory(@Nullable Entity e) {
-        return quit != -1L && System.currentTimeMillis() > quit;
+        return quit != null && System.currentTimeMillis() > quit;
     }
 
     @Override

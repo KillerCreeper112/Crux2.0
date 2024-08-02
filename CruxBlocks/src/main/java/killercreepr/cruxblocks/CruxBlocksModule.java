@@ -2,7 +2,6 @@ package killercreepr.cruxblocks;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.entity.EntityMemory;
-import killercreepr.crux.data.entity.SimpleEntityMemory;
 import killercreepr.crux.data.entity.PlayerMemory;
 import killercreepr.crux.data.tick.ManagedTicked;
 import killercreepr.crux.handler.BlockHandler;
