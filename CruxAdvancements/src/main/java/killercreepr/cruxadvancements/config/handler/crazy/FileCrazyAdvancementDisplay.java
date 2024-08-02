@@ -27,7 +27,7 @@ public class FileCrazyAdvancementDisplay implements FileHandler<CrazyAdvancement
             ;
         if(object.getBackgroundTexture() != null) o.add("background_texture", registry.serializeToFileElement(object.getBackgroundTexture()));
         o.addProperty("x", object.getX())
-            .addProperty("z", object.getY())
+            .addProperty("y", object.getY())
         ;
         if(object.getPositionOrigin() != null) o.add("position_origin", registry.serializeToFileElement(object.getPositionOrigin()));
 

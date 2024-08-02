@@ -86,6 +86,8 @@ public class CrazyAdvancementDisplay {
             Advancement origin = manager.getOrCreateCrazyAdvancement(positionOrigin);
             display.setPositionOrigin(origin);
         }
+        display.setX(x);
+        display.setY(y);
         return display;
     }
 

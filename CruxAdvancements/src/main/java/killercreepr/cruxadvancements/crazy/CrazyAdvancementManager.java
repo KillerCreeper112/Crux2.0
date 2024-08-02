@@ -81,7 +81,7 @@ public abstract class CrazyAdvancementManager<T extends CrazyAdvancement> extend
         Advancement a = crazyAdvancements.get(crux.key());
         if(a != null) return a;
         a = createCrazyAdvancement(crux);
-        crazyAdvancements.put(crux.key(), a);
+        registerCrazyAdvancement(a);
         return a;
     }
 
@@ -143,8 +143,7 @@ public abstract class CrazyAdvancementManager<T extends CrazyAdvancement> extend
     public void loadAllCrazyAdvancements(){
         for(T a : this){
             if(getCrazyAdvancement(a.key()) != null) continue;
-            Advancement crazy = getOrCreateCrazyAdvancement(a);
-            crazyManager.addAdvancement(crazy);
+            getOrCreateCrazyAdvancement(a);
         }
     }
 
@@ -155,6 +154,11 @@ public abstract class CrazyAdvancementManager<T extends CrazyAdvancement> extend
         Advancement crazy = getCrazyAdvancement(a.key());
         if(crazy==null) return;
         unregisterCrazyAdvancement(crazy);
+    }
+
+    public void registerCrazyAdvancement(@NotNull Advancement crazy){
+        crazyManager.addAdvancement(crazy);
+        crazyAdvancements.put(CrazyUtil.toKey(crazy.getName()), crazy);
     }
 
     public void unregisterCrazyAdvancement(@NotNull Advancement crazy){
