@@ -121,6 +121,9 @@ public abstract class SimpleAdvancementManager<T extends CruxAdvancement> implem
         CruxAdvancementProgress progress = advancement.getProgress(who);
 
         if(progress.getCriteriaProgress() == newProgress) return null;
+        if(newProgress >= progress.getCriteriaMaxProgress() && progress.isDone()){
+            return null;
+        }
 
         CruxAdvancementProgressChangeEvent event = new CruxAdvancementProgressChangeEvent(
             who, this, advancement, newProgress

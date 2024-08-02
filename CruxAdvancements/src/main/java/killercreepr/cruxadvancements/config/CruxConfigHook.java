@@ -1,7 +1,9 @@
 package killercreepr.cruxadvancements.config;
 
 import killercreepr.cruxadvancements.advancement.criteria.CruxCriteria;
+import killercreepr.cruxadvancements.advancement.progression.CruxAdvancementProgress;
 import killercreepr.cruxadvancements.advancement.progression.SimpleCriterionProgress;
+import killercreepr.cruxadvancements.config.handler.FileCruxAdvancementProgress;
 import killercreepr.cruxadvancements.config.handler.FileCruxCriteria;
 import killercreepr.cruxadvancements.config.handler.FileSimpleCriterionProgress;
 import killercreepr.cruxconfig.config.common.FileRegistry;
@@ -19,5 +21,6 @@ public class CruxConfigHook {
     public static void registerHandlers(@NotNull FileRegistry registry){
         registry.registerHandler(CruxCriteria.class, new FileCruxCriteria());
         registry.registerHandler(SimpleCriterionProgress.class, new FileSimpleCriterionProgress());
+        registry.registerHandler(CruxAdvancementProgress.class, new FileCruxAdvancementProgress());
     }
 }
