@@ -6,28 +6,25 @@ import killercreepr.crux.tags.resolver.StringResolver;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 public class CruxStandardTags {
     public static @NotNull Collection<ObjectTag<?>> buildObjectTags(){
-        return new HashSet<>(){{
-            add(new OfflinePlayerTags());
-        }};
+        return Set.of(new OfflinePlayerTags());
     }
 
     public static @NotNull Collection<StringResolver> buildGlobalStringTags(){
-        return new HashSet<>(){{
-            add(new LatinFontResolver());
-            add(new StringFormatResolver());
-            add(new CruxSpacingResolver());
-            add(new NumberFormatResolver());
-        }};
+        return Set.of(
+            new LatinFontResolver(),
+            new StringFormatResolver(),
+            new CruxSpacingResolver(),
+            new NumberFormatResolver()
+        );
     }
 
     public static @NotNull Collection<StringListResolver> buildGlobalStringListTags(){
-        return new HashSet<>(){{
-        }};
+        return Set.of();
     }
 
     public static @NotNull Pattern buildStringPattern(){

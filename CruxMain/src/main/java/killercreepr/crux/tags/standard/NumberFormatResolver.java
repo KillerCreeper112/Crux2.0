@@ -4,8 +4,6 @@ import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.tags.format.FormatArgs;
 import killercreepr.crux.tags.resolver.StringResolver;
 import killercreepr.crux.util.CruxMath;
-import killercreepr.crux.util.CruxNumberFormat;
-import killercreepr.crux.util.CruxString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
