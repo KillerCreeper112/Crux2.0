@@ -4,7 +4,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import eu.endercentral.crazy_advancements.advancement.Advancement;
 import eu.endercentral.crazy_advancements.manager.AdvancementManager;
-import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.cruxadvancements.advancement.progression.CruxAdvancementProgress;
 import killercreepr.cruxadvancements.config.CruxConfigHook;
 import killercreepr.cruxadvancements.config.handler.FileCruxAdvancementProgress;
@@ -15,7 +14,6 @@ import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.json.JsonContext;
 import killercreepr.cruxconfig.config.common.json.JsonRegistry;
 import net.kyori.adventure.key.Key;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 

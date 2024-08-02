@@ -154,6 +154,11 @@ public abstract class CrazyAdvancementManager<T extends CrazyAdvancement> extend
 
         Advancement crazy = getCrazyAdvancement(a.key());
         if(crazy==null) return;
+        unregisterCrazyAdvancement(crazy);
+    }
+
+    public void unregisterCrazyAdvancement(@NotNull Advancement crazy){
         crazyManager.removeAdvancement(crazy);
+        crazyAdvancements.remove(CrazyUtil.toKey(crazy.getName()));
     }
 }

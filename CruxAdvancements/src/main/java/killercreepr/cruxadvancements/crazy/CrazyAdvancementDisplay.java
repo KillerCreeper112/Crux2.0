@@ -7,8 +7,6 @@ import killercreepr.crux.Crux;
 import killercreepr.crux.item.dynamic.DynamicItem;
 import killercreepr.crux.tags.context.FormatParserContext;
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.text.serializer.json.JSONComponentSerializer;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -76,16 +74,10 @@ public class CrazyAdvancementDisplay {
     }
 
     public @NotNull AdvancementDisplay toCrazy(@NotNull CrazyAdvancementManager manager){
-        String jsonTitle = JSONComponentSerializer.json().serialize(
-            Crux.FORMAT.deserialize(title)
-        );
-        String jsonDescription = JSONComponentSerializer.json().serialize(
-            Crux.FORMAT.deserialize(description)
-        );
         AdvancementDisplay display = new AdvancementDisplay(
             icon.buildItem(FormatParserContext.builder(Crux.FORMAT).build()),
-            jsonTitle,
-            jsonDescription,
+            title,
+            description,
             frame,
             backgroundTexture,
             visibility
