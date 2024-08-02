@@ -19,7 +19,9 @@ public class CruxAdvancementsModule implements CruxModule {
     public void onLoad(@NotNull CruxPlugin plugin) {
         if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS)){
             CruxConfigHook.registerHandlers();
-            CrazyAdvancementsHook.registerHandlers();
+            if(plugin.getServer().getPluginManager().getPlugin("CrazyAdvancementsAPI") != null){
+                CrazyAdvancementsHook.registerHandlers();
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ import eu.endercentral.crazy_advancements.advancement.AdvancementFlag;
 import io.leangen.geantyref.TypeToken;
 import killercreepr.crux.util.CruxObjects;
 import killercreepr.cruxadvancements.advancement.criteria.CruxCriteria;
+import killercreepr.cruxadvancements.advancement.reward.CruxAdvanceReward;
 import killercreepr.cruxadvancements.crazy.CrazyAdvancement;
 import killercreepr.cruxadvancements.crazy.CrazyAdvancementDisplay;
 import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
@@ -41,6 +42,7 @@ public class FileCrazyAdvancement implements FileHandler<CrazyAdvancement> {
 
         Collection<AdvancementFlag> flags = registry.deserialize(new TypeToken<Collection<AdvancementFlag>>(){}.getType(), o.get("flags"));
 
+        CruxAdvanceReward reward = registry.deserialize(CruxAdvanceReward.class, o.get("reward"));
         if(CruxObjects.checkNull(key, criteria, display)) return null;
 
         AdvancementFlag[] flagsParsed;
@@ -48,7 +50,7 @@ public class FileCrazyAdvancement implements FileHandler<CrazyAdvancement> {
         else flagsParsed = flags.toArray(new AdvancementFlag[0]);
 
         return new CrazyAdvancement(
-            key, parentKey, criteria, display, flagsParsed
+            key, parentKey, criteria, reward, display, flagsParsed
         );
     }
 

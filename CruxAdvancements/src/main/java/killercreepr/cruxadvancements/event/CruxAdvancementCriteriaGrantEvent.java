@@ -1,7 +1,7 @@
 package killercreepr.cruxadvancements.event;
 
 import killercreepr.cruxadvancements.advancement.CruxAdvancement;
-import killercreepr.cruxadvancements.manager.SimpleAdvancementManager;
+import killercreepr.cruxadvancements.manager.CruxAdvancementManager;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,7 +11,7 @@ public class CruxAdvancementCriteriaGrantEvent extends AbstractAdvancementEvent{
     private static final HandlerList HANDLER_LIST = new HandlerList();
     protected @NotNull String[] criteriaToGrant;
     public CruxAdvancementCriteriaGrantEvent(@NotNull UUID who,
-                                             @NotNull SimpleAdvancementManager manager,
+                                             @NotNull CruxAdvancementManager<?> manager,
                                              @NotNull CruxAdvancement advancement, @NotNull String[] criteriaToGrant) {
         super(who, manager, advancement);
         this.criteriaToGrant = criteriaToGrant;

@@ -19,14 +19,16 @@ public class SimpleAdvancement implements CruxAdvancement {
     protected final @NotNull Key key;
     protected final @Nullable Key parentKey;
     protected final @NotNull CruxCriteria criteria;
+    protected final @Nullable CruxAdvanceReward reward;
     //we're using strings here because Minecraft stores progress as strings as well.
     //So... just in case if we'd ever want to store more than just UUIDs here in the future
     protected final @NotNull Map<String, CruxAdvancementProgress> progressMap = new HashMap<>();
 
-    public SimpleAdvancement(@NotNull Key key, @Nullable Key parentKey, @NotNull CruxCriteria criteria) {
+    public SimpleAdvancement(@NotNull Key key, @Nullable Key parentKey, @NotNull CruxCriteria criteria, @Nullable CruxAdvanceReward reward) {
         this.key = key;
         this.parentKey = parentKey;
         this.criteria = criteria;
+        this.reward = reward;
     }
 
     @Override
@@ -36,7 +38,7 @@ public class SimpleAdvancement implements CruxAdvancement {
 
     @Override
     public @Nullable CruxAdvanceReward reward() {
-        return null;
+        return reward;
     }
 
     @Override
