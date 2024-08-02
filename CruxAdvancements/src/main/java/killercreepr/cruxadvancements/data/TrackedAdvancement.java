@@ -1,0 +1,59 @@
+package killercreepr.cruxadvancements.data;
+
+import killercreepr.cruxadvancements.advancement.CruxAdvancement;
+import killercreepr.cruxadvancements.manager.CruxAdvancementManager;
+import killercreepr.cruxadvancements.registries.AdvancementRegistries;
+import net.kyori.adventure.key.Key;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
+
+public class TrackedAdvancement {
+    protected final @NotNull Key managerKey;
+    protected final @NotNull Key advancementKey;
+    public TrackedAdvancement(@NotNull Key managerKey, @NotNull Key advancementKey) {
+        this.managerKey = managerKey;
+        this.advancementKey = advancementKey;
+    }
+
+    public CruxAdvancementManager<?> getManager(){
+        return AdvancementRegistries.ADVANCEMENT_MANAGERS.get(managerKey);
+    }
+
+    public CruxAdvancement getAdvancement(){
+        CruxAdvancementManager<?> manager = getManager();
+        if(manager==null) return null;
+        return manager.getAdvancement(advancementKey);
+    }
+
+    public CruxAdvancement getAdvancementOrThrow(){
+        CruxAdvancement a = getAdvancement();
+        Objects.requireNonNull(a, "CruxAdvancement not found! " + this);
+        return a;
+    }
+
+    public <T extends CruxAdvancement> T getAdvancement(@NotNull Class<T> type){
+        CruxAdvancement a = getAdvancement();
+        if(a==null || type.isAssignableFrom(a.getClass())) return null;
+        return type.cast(a);
+    }
+
+    public <T extends CruxAdvancement> T getAdvancementOrThrow(@NotNull Class<T> type){
+        T a = getAdvancement(type);
+        Objects.requireNonNull(a, "CruxAdvancement not found! (" + type + ") " + this);
+        return a;
+    }
+
+    public @NotNull Key getManagerKey() {
+        return managerKey;
+    }
+
+    public @NotNull Key getAdvancementKey() {
+        return advancementKey;
+    }
+
+    @Override
+    public String toString() {
+        return "TrackedAdvancement{managerKey=" + managerKey + ", advancementKey=" + advancementKey + "}";
+    }
+}

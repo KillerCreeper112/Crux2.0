@@ -12,12 +12,14 @@ public class CrazyAdvancement extends SimpleAdvancement {
     protected final @NotNull CrazyAdvancementDisplay display;
     protected final @NotNull AdvancementFlag[] flags;
 
-    public CrazyAdvancement(@NotNull Key key, @Nullable Key parentKey, @NotNull CruxCriteria criteria, @Nullable CruxAdvanceReward reward, @NotNull CrazyAdvancementDisplay display, @NotNull AdvancementFlag[] flags) {
+    public CrazyAdvancement(@NotNull Key key,
+                            @Nullable Key parentKey, @NotNull CruxCriteria criteria,
+                            @Nullable CruxAdvanceReward reward,
+                            @NotNull CrazyAdvancementDisplay display, @NotNull AdvancementFlag[] flags) {
         super(key, parentKey, criteria, reward);
         this.display = display;
         this.flags = flags;
     }
-
 
     public @NotNull CrazyAdvancementDisplay getDisplay() {
         return display;
