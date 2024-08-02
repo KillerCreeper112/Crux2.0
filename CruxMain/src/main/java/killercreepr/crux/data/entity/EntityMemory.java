@@ -69,7 +69,7 @@ public interface EntityMemory extends Holder<Entity> {
     }
 
     static @Nullable EntityMemory get(@NotNull UUID uuid){
-        return REGISTRY.getOrDefault(uuid, null);
+        return REGISTRY.get(uuid);
     }
 
     static <T extends DataHolder> @Nullable T getDataHolder(@NotNull Entity entity, @NotNull Class<T> clazz){

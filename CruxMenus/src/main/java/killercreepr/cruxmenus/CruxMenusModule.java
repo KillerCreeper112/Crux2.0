@@ -19,7 +19,7 @@ import killercreepr.cruxmenus.tags.MenuItemHolderHook;
 import org.jetbrains.annotations.NotNull;
 
 public class CruxMenusModule implements CruxModule {
-    public static final String NAMESPACE = StandardModules.CRUX_MAIN;
+    public static final String NAMESPACE = StandardModules.CRUX_MENUS;
     protected final @NotNull MenuRegistry menuRegistry;
     protected final @NotNull KeyedRegistry<MenuModuleBuilder> menuModuleRegistry;
     public CruxMenusModule(@NotNull MenuRegistry registry, @NotNull KeyedRegistry<MenuModuleBuilder> menuModuleRegistry){
