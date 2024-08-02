@@ -3,12 +3,17 @@ package killercreepr.cruxadvancements.crazy;
 import com.google.gson.JsonObject;
 import eu.endercentral.crazy_advancements.manager.AdvancementManager;
 import killercreepr.cruxadvancements.advancement.progression.CruxAdvancementProgress;
+import killercreepr.cruxadvancements.config.handler.FileCruxAdvancementProgress;
 import killercreepr.cruxadvancements.event.*;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxconfig.config.bukkit.file.CruxJson;
+import killercreepr.cruxconfig.config.common.element.FileElement;
+import killercreepr.cruxconfig.config.common.element.FileObject;
+import killercreepr.cruxconfig.config.common.json.JsonContext;
 import killercreepr.cruxconfig.config.common.json.JsonRegistry;
 import net.kyori.adventure.key.Key;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -118,6 +123,7 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
         JsonObject values = new JsonObject();
         for(CrazyAdvancement a : advancements){
             CruxAdvancementProgress progress = a.getProgressIfPresent(uuid);
+            Bukkit.broadcastMessage("Saving " + progress);
             if(progress==null) continue;
             values.add(a.key().asString(), registry.serializeObject(progress));
         }
@@ -137,7 +143,11 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
         JsonRegistry registry = cfg.jsonRegistry();
 
         for(CrazyAdvancement a : advancements){
-            CruxAdvancementProgress progress = registry.deserialize(CruxAdvancementProgress.class, values.get(a.key().asString()));
+            CruxAdvancementProgress progress = FileCruxAdvancementProgress.deserialize(
+                new JsonContext(registry),
+                FileElement.fromJson(values.get(a.key().asString())),
+                a.getCriteria()
+            );
             if(progress==null) continue;
             a.setProgress(uuid, progress);
         }

@@ -2,6 +2,8 @@ package killercreepr.cruxadvancements.config;
 
 import killercreepr.cruxadvancements.advancement.criteria.CruxCriteria;
 import killercreepr.cruxadvancements.advancement.progression.CruxAdvancementProgress;
+import killercreepr.cruxadvancements.advancement.progression.ListAdvancementProgress;
+import killercreepr.cruxadvancements.advancement.progression.NumberAdvancementProgress;
 import killercreepr.cruxadvancements.advancement.progression.SimpleCriterionProgress;
 import killercreepr.cruxadvancements.config.handler.FileCruxAdvancementProgress;
 import killercreepr.cruxadvancements.config.handler.FileCruxCriteria;
@@ -18,9 +20,13 @@ public class CruxConfigHook {
         registerHandlers(CfgRegistries.JSON);
         registerHandlers(CfgRegistries.YAML);
     }
+    public static final FileCruxAdvancementProgress CRUX_ADVANCEMENT_PROGRESS = new FileCruxAdvancementProgress();
     public static void registerHandlers(@NotNull FileRegistry registry){
         registry.registerHandler(CruxCriteria.class, new FileCruxCriteria());
         registry.registerHandler(SimpleCriterionProgress.class, new FileSimpleCriterionProgress());
-        registry.registerHandler(CruxAdvancementProgress.class, new FileCruxAdvancementProgress());
+        registry.registerHandler(CruxAdvancementProgress.class, CRUX_ADVANCEMENT_PROGRESS);
+        //register the inheritors objects so the config registry doesn't pick a random handler
+        registry.registerHandler(ListAdvancementProgress.class, CRUX_ADVANCEMENT_PROGRESS);
+        registry.registerHandler(NumberAdvancementProgress.class, CRUX_ADVANCEMENT_PROGRESS);
     }
 }

@@ -24,7 +24,7 @@ public class FileCruxAdvancementProgress implements FileHandler<CruxAdvancementP
         if(object instanceof ListAdvancementProgress a){
             FileObject o = new FileObject();
             Instant obtained = a.getObtained();
-            if(obtained != null) o.add("obtained", registry.serializeToFileElement(object));
+            if(obtained != null) o.add("obtained", registry.serializeToFileElement(obtained));
             FileObject progress = new FileObject();
             a.getProgressMap().forEach((name, prog) ->{
                 progress.add(name, registry.serializeToFileElement(prog));
@@ -35,7 +35,7 @@ public class FileCruxAdvancementProgress implements FileHandler<CruxAdvancementP
         if(object instanceof NumberAdvancementProgress a){
             FileObject o = new FileObject();
             Instant obtained = a.getObtained();
-            if(obtained != null) o.add("obtained", registry.serializeToFileElement(object));
+            if(obtained != null) o.add("obtained", registry.serializeToFileElement(obtained));
             o.addProperty("progress", a.getProgress());
             return o;
         }

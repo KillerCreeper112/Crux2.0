@@ -17,7 +17,7 @@ public interface CruxAdvancement extends Keyed {
     Key parent();
     @Nullable
     CruxAdvanceReward reward();
-    default @Nullable CruxAdvancementProgress getProgress(@NotNull Player p){
+    default @NotNull CruxAdvancementProgress getProgress(@NotNull Player p){
         return getProgress(p.getUniqueId());
     }
     @NotNull
