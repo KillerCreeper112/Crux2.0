@@ -98,7 +98,7 @@ public class FileObject extends FileElement implements Iterable<Map.Entry<String
     }
 
     public <T> T searchForObject(@NotNull Class<T> type, T defaultValue, String... memberNames){
-        Object o = searchOrDefaultObject(defaultValue, memberNames);
+        Object o = searchOrDefaultObject(type, defaultValue, memberNames);
         if(o == null) return defaultValue;
         if(type.isAssignableFrom(o.getClass())) return type.cast(o);
         return defaultValue;
@@ -110,7 +110,7 @@ public class FileObject extends FileElement implements Iterable<Map.Entry<String
     }
 
     public <T> T getObject(@NotNull Class<T> type, String memberName, T defaultValue){
-        Object o = getOrDefaultObject(memberName, defaultValue);
+        Object o = getOrDefaultObject(type, memberName, defaultValue);
         if(o == null) return defaultValue;
         if(type.isAssignableFrom(o.getClass())) return type.cast(o);
         return defaultValue;
@@ -124,6 +124,12 @@ public class FileObject extends FileElement implements Iterable<Map.Entry<String
         FileElement e = search(memberNames);
         if(e==null) return defaultValue;
         return getOrDefault(e, defaultValue);
+    }
+
+    public <T> T searchOrDefaultObject(@NotNull Class<T> type, T defaultValue, String... memberNames){
+        FileElement e = search(memberNames);
+        if(e==null) return defaultValue;
+        return getOrDefault(type, e, defaultValue);
     }
 
     public <T> T getOrDefault(@NotNull FileElement e, T defaultValue){
@@ -149,6 +155,37 @@ public class FileObject extends FileElement implements Iterable<Map.Entry<String
         try{
             return (T) o;
         }catch (ClassCastException ignored){ return defaultValue; }
+    }
+
+    public <T> T getOrDefault(@NotNull Class<T> type, @NotNull FileElement e, T defaultValue){
+        Object o = e.getAsObject();
+        if(o==null) return defaultValue;
+        if(o instanceof Number n){
+            if (Integer.class.isAssignableFrom(type)) {
+                o = n.intValue();
+            } else if (Float.class.isAssignableFrom(type)) {
+                o = n.floatValue();
+            } else if (Double.class.isAssignableFrom(type)) {
+                o = n.doubleValue();
+            } else if (Long.class.isAssignableFrom(type)) {
+                o = n.longValue();
+            } else if (Short.class.isAssignableFrom(type)) {
+                o = n.shortValue();
+            } else if (Byte.class.isAssignableFrom(type)) {
+                o = n.byteValue();
+            }
+        }
+
+        try{
+            return (T) o;
+        }catch (ClassCastException ignored){ return defaultValue; }
+    }
+
+    public <T> T getOrDefaultObject(@NotNull Class<T> type, String memberName, T defaultValue){
+        FileElement e = get(memberName);
+        if(e==null) return defaultValue;
+
+        return getOrDefault(type, e, defaultValue);
     }
 
     public <T> T getOrDefaultObject(String memberName, T defaultValue){

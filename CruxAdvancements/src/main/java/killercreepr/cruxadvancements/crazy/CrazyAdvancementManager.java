@@ -8,6 +8,7 @@ import killercreepr.cruxadvancements.advancement.criteria.ListCriteria;
 import killercreepr.cruxadvancements.advancement.criteria.NumberCriteria;
 import killercreepr.cruxadvancements.advancement.progression.CruxAdvancementProgress;
 import killercreepr.cruxadvancements.advancement.progression.ListAdvancementProgress;
+import killercreepr.cruxadvancements.event.*;
 import killercreepr.cruxadvancements.manager.SimpleAdvancementManager;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
@@ -28,6 +29,46 @@ public abstract class CrazyAdvancementManager<T extends CrazyAdvancement> extend
 
     public @NotNull AdvancementManager getCrazyManager() {
         return crazyManager;
+    }
+
+    @Override
+    public @Nullable CruxAdvancementGrantEvent grantAdvancement(@NotNull UUID who, @NotNull T advancement) {
+        CruxAdvancementGrantEvent event = super.grantAdvancement(who, advancement);
+        if(event==null || event.isCancelled()) return event;
+        crazyManager.grantAdvancement(who, getOrCreateCrazyAdvancement(advancement));
+        return event;
+    }
+
+    @Override
+    public @Nullable CruxAdvancementRevokeEvent revokeAdvancement(@NotNull UUID who, @NotNull T advancement) {
+        CruxAdvancementRevokeEvent event = super.revokeAdvancement(who, advancement);
+        if(event == null || event.isCancelled()) return event;
+        crazyManager.revokeAdvancement(who, getOrCreateCrazyAdvancement(advancement));
+        return event;
+    }
+
+    @Override
+    public @Nullable CruxAdvancementCriteriaGrantEvent grantCriteria(@NotNull UUID who, @NotNull T advancement, @NotNull String... criteria) {
+        CruxAdvancementCriteriaGrantEvent event = super.grantCriteria(who, advancement, criteria);
+        if(event==null || event.isCancelled()) return event;
+        crazyManager.grantCriteria(who, getOrCreateCrazyAdvancement(advancement), criteria);
+        return event;
+    }
+
+    @Override
+    public @Nullable CruxAdvancementCriteriaRevokeEvent revokeCriteria(@NotNull UUID who, @NotNull T advancement, @NotNull String... criteria) {
+        CruxAdvancementCriteriaRevokeEvent event = super.revokeCriteria(who, advancement, criteria);
+        if(event==null || event.isCancelled()) return event;
+        crazyManager.revokeCriteria(who, getOrCreateCrazyAdvancement(advancement), criteria);
+        return event;
+    }
+
+    @Override
+    public @Nullable CruxAdvancementProgressChangeEvent setCriteriaProgress(@NotNull UUID who, @NotNull T advancement, int newProgress) {
+        CruxAdvancementProgressChangeEvent event = super.setCriteriaProgress(who, advancement, newProgress);
+        if(event==null || event.isCancelled()) return event;
+        crazyManager.setCriteriaProgress(who, getOrCreateCrazyAdvancement(advancement), newProgress);
+        return event;
     }
 
     public @NotNull Advancement getOrCreateCrazyAdvancement(@NotNull Key key){
@@ -52,9 +93,27 @@ public abstract class CrazyAdvancementManager<T extends CrazyAdvancement> extend
             a.setCriteria(new Criteria(c.getMaxProgress()));
         }
 
-        loadCrazyProgress(a, crux);
+        //loadCrazyProgress(a, crux);
         crazyAdvancements.put(crux.key(), a);
         return a;
+    }
+
+    public void loadCrazyProgress(@NotNull UUID uuid, @NotNull Advancement crazy, @NotNull CruxAdvancementProgress cruxProgress){
+        AdvancementProgress progress = crazy.getProgress(uuid);
+        if(cruxProgress instanceof ListAdvancementProgress a){
+            a.getProgressMap().forEach((string, prog) ->{
+                progress.grantCriteria(a.getAwardedCriteria().toArray(new String[0]));
+            });
+            return;
+        }else{
+            progress.setCriteriaProgress(cruxProgress.getCriteriaProgress());
+        }
+
+        //The timestamp on the CrazyAdvancements won't be accurate to Crux's, but
+        //it should be fine. Any information should get gotten from Crux anyway.
+        if(cruxProgress.isDone()){
+            progress.grant();
+        }
     }
 
     public void loadCrazyProgress(@NotNull Advancement crazy, @NotNull T crux){

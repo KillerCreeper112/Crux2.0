@@ -1,22 +1,20 @@
 package killercreepr.cruxadvancements.crazy;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import eu.endercentral.crazy_advancements.manager.AdvancementManager;
 import killercreepr.cruxadvancements.advancement.progression.CruxAdvancementProgress;
+import killercreepr.cruxadvancements.config.CruxConfigHook;
 import killercreepr.cruxadvancements.config.handler.FileCruxAdvancementProgress;
-import killercreepr.cruxadvancements.event.*;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxconfig.config.bukkit.file.CruxJson;
 import killercreepr.cruxconfig.config.common.element.FileElement;
-import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.json.JsonContext;
 import killercreepr.cruxconfig.config.common.json.JsonRegistry;
 import net.kyori.adventure.key.Key;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.Collection;
@@ -33,46 +31,6 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
     public CfgCrazyAdvancementManager(@NotNull Key key, @NotNull AdvancementManager crazyManager, @NotNull Plugin plugin) {
         super(key, crazyManager);
         this.plugin = plugin;
-    }
-
-    @Override
-    public @Nullable CruxAdvancementGrantEvent grantAdvancement(@NotNull UUID who, @NotNull CrazyAdvancement advancement) {
-        CruxAdvancementGrantEvent event = super.grantAdvancement(who, advancement);
-        if(event==null || event.isCancelled()) return event;
-        crazyManager.grantAdvancement(who, getOrCreateCrazyAdvancement(advancement));
-        return event;
-    }
-
-    @Override
-    public @Nullable CruxAdvancementRevokeEvent revokeAdvancement(@NotNull UUID who, @NotNull CrazyAdvancement advancement) {
-        CruxAdvancementRevokeEvent event = super.revokeAdvancement(who, advancement);
-        if(event == null || event.isCancelled()) return event;
-        crazyManager.revokeAdvancement(who, getOrCreateCrazyAdvancement(advancement));
-        return event;
-    }
-
-    @Override
-    public @Nullable CruxAdvancementCriteriaGrantEvent grantCriteria(@NotNull UUID who, @NotNull CrazyAdvancement advancement, @NotNull String... criteria) {
-        CruxAdvancementCriteriaGrantEvent event = super.grantCriteria(who, advancement, criteria);
-        if(event==null || event.isCancelled()) return event;
-        crazyManager.grantCriteria(who, getOrCreateCrazyAdvancement(advancement), criteria);
-        return event;
-    }
-
-    @Override
-    public @Nullable CruxAdvancementCriteriaRevokeEvent revokeCriteria(@NotNull UUID who, @NotNull CrazyAdvancement advancement, @NotNull String... criteria) {
-        CruxAdvancementCriteriaRevokeEvent event = super.revokeCriteria(who, advancement, criteria);
-        if(event==null || event.isCancelled()) return event;
-        crazyManager.revokeCriteria(who, getOrCreateCrazyAdvancement(advancement), criteria);
-        return event;
-    }
-
-    @Override
-    public @Nullable CruxAdvancementProgressChangeEvent setCriteriaProgress(@NotNull UUID who, @NotNull CrazyAdvancement advancement, int newProgress) {
-        CruxAdvancementProgressChangeEvent event = super.setCriteriaProgress(who, advancement, newProgress);
-        if(event==null || event.isCancelled()) return event;
-        crazyManager.setCriteriaProgress(who, getOrCreateCrazyAdvancement(advancement), newProgress);
-        return event;
     }
 
     public @NotNull CruxFolder getAdvancementsFolder(@NotNull Plugin plugin){
@@ -121,11 +79,11 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
         JsonObject json = cfg.json();
         JsonRegistry registry = cfg.jsonRegistry();
         JsonObject values = new JsonObject();
+        JsonContext ctx = new JsonContext(registry);
         for(CrazyAdvancement a : advancements){
             CruxAdvancementProgress progress = a.getProgressIfPresent(uuid);
-            Bukkit.broadcastMessage("Saving " + progress);
             if(progress==null) continue;
-            values.add(a.key().asString(), registry.serializeObject(progress));
+            values.add(a.key().asString(), CruxConfigHook.CRUX_ADVANCEMENT_PROGRESS.serializeToJson(ctx, progress));
         }
         json.add("values", values);
         cfg.save(true);
@@ -142,14 +100,18 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
         if(!(json.get("values") instanceof JsonObject values)) return;
         JsonRegistry registry = cfg.jsonRegistry();
 
+        JsonContext ctx = new JsonContext(registry);
         for(CrazyAdvancement a : advancements){
+            JsonElement ele = values.get(a.key().asString());
+            if(ele == null) continue;
             CruxAdvancementProgress progress = FileCruxAdvancementProgress.deserialize(
-                new JsonContext(registry),
-                FileElement.fromJson(values.get(a.key().asString())),
+                ctx,
+                FileElement.fromJson(ele),
                 a.getCriteria()
             );
             if(progress==null) continue;
             a.setProgress(uuid, progress);
+            loadCrazyProgress(uuid, getOrCreateCrazyAdvancement(a), progress);
         }
     }
 }
