@@ -80,21 +80,24 @@ public abstract class CrazyAdvancementManager<T extends CrazyAdvancement> extend
     public @NotNull Advancement getOrCreateCrazyAdvancement(@NotNull T crux){
         Advancement a = crazyAdvancements.get(crux.key());
         if(a != null) return a;
+        a = createCrazyAdvancement(crux);
+        crazyAdvancements.put(crux.key(), a);
+        return a;
+    }
+
+    public @NotNull Advancement createCrazyAdvancement(@NotNull T crux){
         Key parentCrux = crux.parent();
         Advancement parent = parentCrux == null ? null : getOrCreateCrazyAdvancement(
             Objects.requireNonNull(getAdvancement(parentCrux),
                 crux.key() + " does not have its parent registered! (" + parentCrux + ")")
         );
-        a = new Advancement(parent, CrazyUtil.toNameKey(crux.key()), crux.getDisplay().toCrazy(this), crux.getFlags());
+        Advancement a = new Advancement(parent, CrazyUtil.toNameKey(crux.key()), crux.getDisplay().toCrazy(this), crux.getFlags());
 
         if(crux.getCriteria() instanceof ListCriteria c){
             a.setCriteria(new Criteria(c.getActionNames(), c.getRequirements()));
         }else if(crux.getCriteria() instanceof NumberCriteria c){
             a.setCriteria(new Criteria(c.getMaxProgress()));
         }
-
-        //loadCrazyProgress(a, crux);
-        crazyAdvancements.put(crux.key(), a);
         return a;
     }
 

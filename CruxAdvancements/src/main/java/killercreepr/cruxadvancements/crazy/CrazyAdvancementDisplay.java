@@ -8,6 +8,7 @@ import killercreepr.crux.item.dynamic.DynamicItem;
 import killercreepr.crux.tags.context.FormatParserContext;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.serializer.json.JSONComponentSerializer;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

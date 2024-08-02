@@ -7,6 +7,8 @@ import killercreepr.cruxadvancements.advancement.CruxAdvancement;
 import killercreepr.cruxadvancements.event.*;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,6 +24,16 @@ public interface CruxAdvancementManager<T extends CruxAdvancement> extends Keyed
         for(T a : advancements){
             unregisterAdvancement(a);
         }
+    }
+
+    default void saveProgress(@NotNull Player player, @NotNull T... advancements){
+        saveProgress(player.getUniqueId(), advancements);
+    }
+    default void loadProgress(@NotNull Player player, @NotNull T... advancements){
+        loadProgress(player.getUniqueId(), advancements);
+    }
+    default void unloadProgress(@NotNull Player player, @NotNull T... advancements){
+        unloadProgress(player.getUniqueId(), advancements);
     }
 
     void saveProgress(@NotNull UUID uuid, @NotNull T... advancements);
@@ -55,4 +67,35 @@ public interface CruxAdvancementManager<T extends CruxAdvancement> extends Keyed
     CruxAdvancementProgressChangeEvent setCriteriaProgress(@NotNull UUID who,
                                                            @NotNull T advancement,
                                                            int newProgress);
+
+    //player
+    default @Nullable CruxAdvancementGrantEvent grantAdvancement(@NotNull Player who, @NotNull T advancement){
+        return grantAdvancement(who.getUniqueId(), advancement);
+    }
+
+    default @Nullable
+    CruxAdvancementRevokeEvent revokeAdvancement(@NotNull Player who, @NotNull T advancement){
+        return revokeAdvancement(who.getUniqueId(), advancement);
+    }
+
+    default @Nullable
+    CruxAdvancementCriteriaGrantEvent grantCriteria(@NotNull Player who, @NotNull T advancement,
+                                                    @NotNull String... criteria){
+        return grantCriteria(who.getUniqueId(), advancement, criteria);
+    }
+
+    default @Nullable
+    CruxAdvancementCriteriaRevokeEvent revokeCriteria(@NotNull Player who, @NotNull T advancement,
+                                                      @NotNull String... criteria){
+        return revokeCriteria(who.getUniqueId(), advancement, criteria);
+    }
+
+    default @Nullable
+    CruxAdvancementProgressChangeEvent setCriteriaProgress(@NotNull Player who,
+                                                           @NotNull T advancement,
+                                                           int newProgress){
+        return setCriteriaProgress(who.getUniqueId(), advancement, newProgress);
+    }
+
+    void refresh(@NotNull Plugin plugin);
 }

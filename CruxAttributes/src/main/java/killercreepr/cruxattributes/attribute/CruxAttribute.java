@@ -9,6 +9,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -82,16 +83,16 @@ public interface CruxAttribute extends Keyed {
         if(meta == null) return null;
         if(hasAttributeData(meta)){
             boolean add = true;
+            Key disableVanillaKey = Crux.key("disable_vanilla");
             for(Map.Entry<Attribute, AttributeModifier> m : meta.getAttributeModifiers(EquipmentSlot.OFF_HAND).entries()){
-                if(m.getValue().getName().equalsIgnoreCase("crux.disable_vanilla")){
+                if(m.getValue().key().equals(disableVanillaKey)){
                     add = false;
                     break;
                 }
             }
             if(add){
-                meta.addAttributeModifier(Attribute.GENERIC_LUCK, new AttributeModifier(UUID.randomUUID(),
-                        "crux.disable_vanilla", 0D,
-                        AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.OFF_HAND));
+                meta.addAttributeModifier(Attribute.GENERIC_LUCK, new AttributeModifier(Crux.key("disable_vanilla"), 0D,
+                        AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.OFFHAND));
                 meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             }
         }else{
