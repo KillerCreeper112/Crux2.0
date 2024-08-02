@@ -3,6 +3,8 @@ package killercreepr.cruxpotions.data;
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.entity.EntityDataHolder;
 import killercreepr.crux.data.entity.EntityMemory;
+import killercreepr.crux.data.entity.EntityTickedDataHolder;
+import killercreepr.crux.data.entity.SimpleEntityMemory;
 import killercreepr.cruxpotions.event.EntityCruxPotionEvent;
 import killercreepr.cruxpotions.potions.ActivePotion;
 import killercreepr.cruxpotions.potions.CruxPotion;
@@ -19,7 +21,7 @@ import java.util.HashSet;
 /**
  * Represents an object/entity that can have custom potion effects applied to it.
  */
-public class PotionHolder extends EntityDataHolder {
+public class PotionHolder extends EntityTickedDataHolder {
     public static final Key KEY = Crux.key("potions");
     protected final Collection<ActivePotion> effects = new HashSet<>();
 

@@ -13,21 +13,7 @@ public abstract class EntityDataHolder implements DataHolder{
         this.parent = parent;
     }
 
-    @Override
-    public boolean shouldRemoveFromMemory(@Nullable Entity e) {
-        return false;
-    }
-
     protected void removingFromMemory(@Nullable Entity e){}
-
-
-    @Override
-    public void tick(@NotNull Entity e) {}
-
-    @Override
-    public void removing(@Nullable Entity e) {
-         removingFromMemory(e);
-    }
 
     @Override
     public void parentRemoving(@Nullable Entity e) {

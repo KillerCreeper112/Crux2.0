@@ -3,6 +3,7 @@ package killercreepr.cruxblocks.data.entity;
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.entity.PlayerDataHolder;
 import killercreepr.crux.data.entity.PlayerMemory;
+import killercreepr.crux.data.entity.PlayerTickedDataHolder;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.manager.CruxBlockManager;
@@ -15,7 +16,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class MinerHolder extends PlayerDataHolder {
+public class MinerHolder extends PlayerTickedDataHolder {
     public static final Key KEY = Crux.key("miner");
     protected final @NotNull CruxBlockManager blockManager;
     public MinerHolder(@NotNull Key key, @NotNull PlayerMemory parent, @NotNull CruxBlockManager blockManager) {

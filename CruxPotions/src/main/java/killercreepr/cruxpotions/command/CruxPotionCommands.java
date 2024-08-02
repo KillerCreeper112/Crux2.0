@@ -12,6 +12,7 @@ import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.entity.EntityMemory;
+import killercreepr.crux.data.entity.SimpleEntityMemory;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.util.CruxItem;
 import killercreepr.cruxpotions.command.argument.CruxPotionArguments;

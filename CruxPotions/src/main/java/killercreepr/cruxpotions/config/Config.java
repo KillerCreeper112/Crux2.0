@@ -1,6 +1,7 @@
 package killercreepr.cruxpotions.config;
 
 import killercreepr.crux.data.Holder;
+import killercreepr.crux.data.NotNullHolder;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.cruxconfig.config.bukkit.file.Cfg;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
@@ -47,7 +48,7 @@ public class Config extends Cfg implements ValuesProvider {
     }
 
     @Override
-    public @NotNull Holder<Boolean> removePotionsUponDeath() {
+    public @NotNull NotNullHolder<Boolean> removePotionsUponDeath() {
         return REMOVE_POTIONS_UPON_DEATH;
     }
 

@@ -2,7 +2,7 @@ package killercreepr.cruxblocks.listener;
 
 import io.papermc.paper.event.block.BlockBreakBlockEvent;
 import killercreepr.crux.Crux;
-import killercreepr.crux.data.entity.PlayerMemory;
+import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.crux.util.CruxBlockUtil;
 import killercreepr.crux.util.CruxLoc;
 import killercreepr.cruxblocks.block.CruxBlock;
@@ -94,7 +94,7 @@ public class CustomBlocksListener implements Listener {
         Player p = event.getPlayer();
         if(event.getAnimationType() != PlayerAnimationType.ARM_SWING) return;
 
-        MinerHolder data = PlayerMemory.getOrCreateDataHolder(p, MinerHolder.class);
+        MinerHolder data = EntityMemory.getOrCreateDataHolder(p, MinerHolder.class);
         if(data==null) return;
         data.onMine(p);
     }
@@ -102,7 +102,7 @@ public class CustomBlocksListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onBlockDamage(BlockDamageEvent event) {
         Player p = event.getPlayer();
-        MinerHolder data = PlayerMemory.getOrCreateDataHolder(p, MinerHolder.class);
+        MinerHolder data = EntityMemory.getOrCreateDataHolder(p, MinerHolder.class);
         if(data==null) return;
         data.onMine(p, event.getBlock());
     }
@@ -127,7 +127,7 @@ public class CustomBlocksListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onBlockDamageAbort(BlockDamageAbortEvent event) {
         Player p = event.getPlayer();
-        MinerHolder data = PlayerMemory.getOrCreateDataHolder(p, MinerHolder.class);
+        MinerHolder data = EntityMemory.getOrCreateDataHolder(p, MinerHolder.class);
         if(data==null) return;
         data.setLastMine(null);
         data.resetBreakSpeed(p);
@@ -153,7 +153,7 @@ public class CustomBlocksListener implements Listener {
         Block clickedBlock = event.getClickedBlock();
         if(event.getAction().isLeftClick() && clickedBlock != null){
             if(p.getGameMode() == GameMode.CREATIVE) return;
-            MinerHolder data = PlayerMemory.getOrCreateDataHolder(p, MinerHolder.class);
+            MinerHolder data = EntityMemory.getOrCreateDataHolder(p, MinerHolder.class);
             if(data==null) return;
             data.onMine(p, clickedBlock);
             /*ActiveBlock data = CustomBlock.getActiveBlock(clickedBlock);

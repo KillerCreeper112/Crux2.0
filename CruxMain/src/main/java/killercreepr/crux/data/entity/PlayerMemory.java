@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public class PlayerMemory extends EntityMemory {
+public class PlayerMemory extends SimpleEntityMemory {
     protected long quit = -1;
     protected final KeyedRegistry<PlayerDataHolder> playerSpecificHolders = new SimpleKeyedRegistry<>();
 
@@ -19,13 +19,15 @@ public class PlayerMemory extends EntityMemory {
     }
 
     protected final Holder<Player> entity;
+    protected final PlayerDataHolderRegistry playerDataHolders;
     public PlayerMemory(@NotNull Player e) {
         this(e.getUniqueId(), Holder.weakReference(e));
     }
 
     public PlayerMemory(@NotNull UUID uuid, @NotNull Holder<Player> player){
-        super(uuid, player);
+        super(new PlayerDataHolderRegistry(), uuid, player);
         this.entity = player;
+        this.playerDataHolders = (PlayerDataHolderRegistry) this.dataHolders;
     }
     public static @Nullable PlayerMemory get(@NotNull Player p){
         return get(p.getUniqueId());
@@ -34,11 +36,10 @@ public class PlayerMemory extends EntityMemory {
     public static @NotNull PlayerMemory getOrCreate(@NotNull Player p){
         PlayerMemory d = get(p);
         if(d == null){
-            d = register(new PlayerMemory(p));
+            d = EntityMemory.register(new PlayerMemory(p));
         }
         return d;
     }
-
 
     public static @Nullable PlayerMemory get(@NotNull UUID uuid){
         if(EntityMemory.get(uuid) instanceof PlayerMemory d) return d;
@@ -62,29 +63,28 @@ public class PlayerMemory extends EntityMemory {
     }
 
     @Override
-    public boolean tick(){
+    public boolean tick() {
         Player e = value();
-        holders.values().removeIf(x ->{
-            if(x.shouldRemoveFromMemory(e)){
-                x.removing(e);
+        playerDataHolders.removeTickedIf(holder ->{
+            if(holder.shouldRemoveFromMemory(e)){
+                holder.removing(e);
                 return true;
             }
-            if(e != null) x.tick(e);
+            if(e != null) holder.tick(e);
             return false;
         });
-        playerSpecificHolders.values().removeIf(x ->{
-            if(x.shouldRemoveFromMemory(e)){
-                x.removing(e);
+
+        playerDataHolders.removePlayerTickedIf(holder ->{
+            if(holder.shouldRemoveFromMemory(e)){
+                holder.removing(e);
                 return true;
             }
-            if(e != null){
-                x.tick(e);
-            }
+            if(e != null) holder.tick(e);
             return false;
         });
+
         if(shouldRemoveFromMemory(e)){
-            holders.values().forEach(data -> data.parentRemoving(e));
-            playerSpecificHolders.values().forEach(data -> data.parentRemoving(e));
+            removeDataHolders(e);
             return true;
         }
         return false;

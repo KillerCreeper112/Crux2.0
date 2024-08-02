@@ -29,7 +29,7 @@ public interface Holder <T>{
     static <E> @NotNull Holder<E> empty(){
         return direct(null);
     }
-    @Nullable T value();
+    T value();
 
     default T valueOr(T defaultValue){
         T t = value();

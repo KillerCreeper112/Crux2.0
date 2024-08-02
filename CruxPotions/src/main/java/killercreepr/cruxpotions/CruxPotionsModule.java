@@ -2,6 +2,7 @@ package killercreepr.cruxpotions;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.entity.EntityMemory;
+import killercreepr.crux.data.entity.SimpleEntityMemory;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.module.StandardModules;
 import killercreepr.crux.plugin.CruxPlugin;
@@ -47,7 +48,7 @@ public class CruxPotionsModule implements CruxModule {
             values(new Config(plugin, "module/enchant"));
         }else values(new DefaultValues());
 
-        EntityMemory.registerFunction(plugin, e -> e.getHolders().register(new PotionHolder(e)));
+        EntityMemory.registerFunction(plugin, e -> e.getDataHolders().register(new PotionHolder(e)));
         ConfigurationSerialization.registerClass(BlockInflictor.class);
         ConfigurationSerialization.registerClass(EntityInflictor.class);
         ConfigurationSerialization.registerClass(ActivePotionImpl.class);

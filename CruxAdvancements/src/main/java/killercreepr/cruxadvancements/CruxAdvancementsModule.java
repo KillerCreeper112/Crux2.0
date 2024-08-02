@@ -1,11 +1,14 @@
 package killercreepr.cruxadvancements;
 
+import killercreepr.crux.data.entity.EntityMemory;
+import killercreepr.crux.data.entity.PlayerMemory;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.module.StandardModules;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.cruxadvancements.config.CruxConfigHook;
 import killercreepr.cruxadvancements.crazy.CrazyAdvancementsHook;
+import killercreepr.cruxadvancements.data.entity.AdvancementHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class CruxAdvancementsModule implements CruxModule {
@@ -23,5 +26,9 @@ public class CruxAdvancementsModule implements CruxModule {
                 CrazyAdvancementsHook.registerHandlers();
             }
         }
+        EntityMemory.registerFunction(plugin, mem ->{
+            if(!(mem instanceof PlayerMemory data)) return;
+            data.getDataHolders().register(new AdvancementHolder(data));
+        });
     }
 }

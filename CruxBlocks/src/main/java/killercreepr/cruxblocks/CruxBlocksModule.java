@@ -2,6 +2,7 @@ package killercreepr.cruxblocks;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.entity.EntityMemory;
+import killercreepr.crux.data.entity.SimpleEntityMemory;
 import killercreepr.crux.data.entity.PlayerMemory;
 import killercreepr.crux.data.tick.ManagedTicked;
 import killercreepr.crux.handler.BlockHandler;
@@ -67,7 +68,7 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
 
         EntityMemory.registerFunction(plugin, e ->{
             if(!(e instanceof PlayerMemory p)) return;
-            p.getHolders().register(new MinerHolder(p, this));
+            p.getDataHolders().register(new MinerHolder(p, this));
         });
 
         CruxBlocksCommands.register(plugin);

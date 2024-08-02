@@ -1,0 +1,38 @@
+package killercreepr.crux.data.entity;
+
+import net.kyori.adventure.key.Key;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+public abstract class PlayerTickedDataHolder extends PlayerDataHolder implements PlayerTickDataHolder{
+    public PlayerTickedDataHolder(@NotNull Key key, @NotNull PlayerMemory parent) {
+        super(key, parent);
+    }
+
+    @Override
+    public final boolean shouldRemoveFromMemory(@Nullable Entity e) {
+        throw new IllegalStateException("Entity function used on a Player-Only DataHolder");
+    }
+
+    @Override
+    public final void removing(@Nullable Entity e) {
+        throw new IllegalStateException("Entity function used on a Player-Only DataHolder");
+    }
+
+    @Override
+    public final void tick(@NotNull Entity e) {
+        throw new IllegalStateException("Entity function used on a Player-Only DataHolder");
+    }
+
+    @Override
+    public boolean shouldRemoveFromMemory(@Nullable Player e) {
+        return false;
+    }
+
+    @Override
+    public void removing(@Nullable Player e) {
+
+    }
+}
