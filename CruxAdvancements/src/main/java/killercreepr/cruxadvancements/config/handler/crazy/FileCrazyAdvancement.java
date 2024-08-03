@@ -54,13 +54,13 @@ public class FileCrazyAdvancement implements FileHandler<CrazyAdvancement> {
         else flagsParsed = flags.toArray(new AdvancementFlag[0]);
 
         Map<String, AdvancementObjective> objectives = new HashMap<>();
-        if(!(o.get("objectives") instanceof FileObject oo)) return null;
-        oo.forEach((objectiveKey, value) ->{
-            AdvancementObjective objective = FileAdvancementObjective.deserializeFromFile(ctx, value, objectiveKey);
-            if(objective==null) return;
-            objectives.put(objectiveKey, objective);
-        });
-        if(objectives.isEmpty()) return null;
+        if(o.get("objectives") instanceof FileObject oo){
+            oo.forEach((objectiveKey, value) ->{
+                AdvancementObjective objective = FileAdvancementObjective.deserializeFromFile(ctx, value, objectiveKey);
+                if(objective==null) return;
+                objectives.put(objectiveKey, objective);
+            });
+        }
 
         return new CrazyAdvancement(
             key, parentKey, display, criteria, reward, flagsParsed, objectives

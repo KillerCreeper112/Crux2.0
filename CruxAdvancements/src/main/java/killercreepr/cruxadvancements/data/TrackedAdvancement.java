@@ -61,4 +61,16 @@ public class TrackedAdvancement {
     public String toString() {
         return "TrackedAdvancement{managerKey=" + managerKey + ", advancementKey=" + advancementKey + "}";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this) return true;
+        if(!(obj instanceof TrackedAdvancement other)) return false;
+        return other.getManagerKey().equals(managerKey) && other.getAdvancementKey().equals(advancementKey);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(managerKey, advancementKey);
+    }
 }

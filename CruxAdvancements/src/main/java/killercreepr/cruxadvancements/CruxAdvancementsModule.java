@@ -6,6 +6,7 @@ import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.module.StandardModules;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registries.CruxRegistries;
+import killercreepr.cruxadvancements.command.AdvancementCommands;
 import killercreepr.cruxadvancements.config.CruxConfigHook;
 import killercreepr.cruxadvancements.crazy.CrazyAdvancementsHook;
 import killercreepr.cruxadvancements.data.entity.AdvancementHolder;
@@ -21,6 +22,7 @@ public class CruxAdvancementsModule implements CruxModule {
 
     @Override
     public void onLoad(@NotNull CruxPlugin plugin) {
+        AdvancementCommands.register(plugin);
         if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS)){
             CruxConfigHook.registerHandlers();
             if(plugin.getServer().getPluginManager().getPlugin("CrazyAdvancementsAPI") != null){

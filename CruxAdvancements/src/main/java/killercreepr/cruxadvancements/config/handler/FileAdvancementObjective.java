@@ -34,7 +34,7 @@ public class FileAdvancementObjective implements FileHandler<AdvancementObjectiv
         if(type==null) return null;
         switch (type.toLowerCase()){
             case "break_block" ->{
-                Integer maxProgress = o.getObject(Integer.class, "max_progress");
+                Integer maxProgress = o.getObject(Integer.class, "amount");
                 if(maxProgress==null) return null;
                 Material material = registry.deserialize(Material.class, o.get("block_type"));
                 return new BreakBlockObjective(criterion, maxProgress, material);
