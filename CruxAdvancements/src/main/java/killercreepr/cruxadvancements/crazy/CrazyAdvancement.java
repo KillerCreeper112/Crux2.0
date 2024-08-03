@@ -16,11 +16,12 @@ public class CrazyAdvancement extends ObjectiveAdvancement {
     protected final @NotNull AdvancementFlag[] flags;
 
     public CrazyAdvancement(@NotNull Key key,
-                            @Nullable Key parentKey, @NotNull CruxCriteria criteria,
-                            @Nullable CruxAdvanceReward reward,
-                            @NotNull CrazyAdvancementDisplay display, @NotNull AdvancementFlag[] flags,
+                            @Nullable Key parentKey,
+                            @NotNull CrazyAdvancementDisplay display,
+                            @NotNull CruxCriteria criteria,
+                            @Nullable CruxAdvanceReward reward, @NotNull AdvancementFlag[] flags,
                             @NotNull Map<String, AdvancementObjective> objectives) {
-        super(key, parentKey, criteria, reward, objectives);
+        super(key, parentKey, display, criteria, reward, objectives);
         this.display = display;
         this.flags = flags;
     }

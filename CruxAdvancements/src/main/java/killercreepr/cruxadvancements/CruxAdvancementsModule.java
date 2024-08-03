@@ -9,6 +9,7 @@ import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.cruxadvancements.config.CruxConfigHook;
 import killercreepr.cruxadvancements.crazy.CrazyAdvancementsHook;
 import killercreepr.cruxadvancements.data.entity.AdvancementHolder;
+import killercreepr.cruxadvancements.listener.ObjectiveListener;
 import org.jetbrains.annotations.NotNull;
 
 public class CruxAdvancementsModule implements CruxModule {
@@ -30,5 +31,10 @@ public class CruxAdvancementsModule implements CruxModule {
             if(!(mem instanceof PlayerMemory data)) return;
             data.getDataHolders().register(new AdvancementHolder(data));
         });
+    }
+
+    @Override
+    public void onEnable(@NotNull CruxPlugin plugin) {
+        plugin.getServer().getPluginManager().registerEvents(new ObjectiveListener(), plugin);
     }
 }

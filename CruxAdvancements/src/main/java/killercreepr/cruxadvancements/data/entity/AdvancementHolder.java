@@ -3,12 +3,9 @@ package killercreepr.cruxadvancements.data.entity;
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.entity.PlayerDataHolder;
 import killercreepr.crux.data.entity.PlayerMemory;
-import killercreepr.cruxadvancements.data.TrackedAdvancement;
+import killercreepr.cruxadvancements.data.AdvancementTracker;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class AdvancementHolder extends PlayerDataHolder {
     public static final Key KEY = Crux.key("advancement");
@@ -19,5 +16,9 @@ public class AdvancementHolder extends PlayerDataHolder {
         super(key, parent);
     }
 
-    protected final List<TrackedAdvancement> trackedAdvancements = new ArrayList<>();
+    protected final AdvancementTracker advancementTracker = new AdvancementTracker();
+
+    public AdvancementTracker getAdvancementTracker() {
+        return advancementTracker;
+    }
 }

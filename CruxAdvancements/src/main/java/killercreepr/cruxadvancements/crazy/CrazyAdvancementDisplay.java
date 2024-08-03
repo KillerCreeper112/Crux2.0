@@ -6,11 +6,14 @@ import eu.endercentral.crazy_advancements.advancement.AdvancementVisibility;
 import killercreepr.crux.Crux;
 import killercreepr.crux.item.dynamic.DynamicItem;
 import killercreepr.crux.tags.context.FormatParserContext;
+import killercreepr.cruxadvancements.advancement.icon.CruxAdvancementIcon;
 import net.kyori.adventure.key.Key;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CrazyAdvancementDisplay {
+public class CrazyAdvancementDisplay implements CruxAdvancementIcon {
     public static Builder builder(){
         return new Builder();
     }
@@ -89,6 +92,13 @@ public class CrazyAdvancementDisplay {
         display.setX(x);
         display.setY(y);
         return display;
+    }
+
+    @Override
+    public @NotNull ItemStack getItem() {
+        ItemStack item = icon.buildItem(FormatParserContext.empty());
+        if(item==null) return new ItemStack(Material.STONE);
+        return item;
     }
 
     public static final class Builder {

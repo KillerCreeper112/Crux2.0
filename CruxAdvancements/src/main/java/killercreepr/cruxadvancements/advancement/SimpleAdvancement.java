@@ -3,6 +3,7 @@ package killercreepr.cruxadvancements.advancement;
 import killercreepr.cruxadvancements.advancement.criteria.CruxCriteria;
 import killercreepr.cruxadvancements.advancement.criteria.ListCriteria;
 import killercreepr.cruxadvancements.advancement.criteria.NumberCriteria;
+import killercreepr.cruxadvancements.advancement.icon.CruxAdvancementIcon;
 import killercreepr.cruxadvancements.advancement.progression.CruxAdvancementProgress;
 import killercreepr.cruxadvancements.advancement.progression.ListAdvancementProgress;
 import killercreepr.cruxadvancements.advancement.progression.NumberAdvancementProgress;
@@ -18,15 +19,17 @@ import java.util.UUID;
 public class SimpleAdvancement implements CruxAdvancement {
     protected final @NotNull Key key;
     protected final @Nullable Key parentKey;
+    protected final @NotNull CruxAdvancementIcon icon;
     protected final @NotNull CruxCriteria criteria;
     protected final @Nullable CruxAdvanceReward reward;
     //we're using strings here because Minecraft stores progress as strings as well.
     //So... just in case if we'd ever want to store more than just UUIDs here in the future
     protected final @NotNull Map<String, CruxAdvancementProgress> progressMap = new HashMap<>();
 
-    public SimpleAdvancement(@NotNull Key key, @Nullable Key parentKey, @NotNull CruxCriteria criteria, @Nullable CruxAdvanceReward reward) {
+    public SimpleAdvancement(@NotNull Key key, @Nullable Key parentKey, @NotNull CruxAdvancementIcon icon, @NotNull CruxCriteria criteria, @Nullable CruxAdvanceReward reward) {
         this.key = key;
         this.parentKey = parentKey;
+        this.icon = icon;
         this.criteria = criteria;
         this.reward = reward;
     }
@@ -80,6 +83,11 @@ public class SimpleAdvancement implements CruxAdvancement {
     @Override
     public boolean isGranted(@NotNull UUID uuid) {
         return getProgress(uuid).isDone();
+    }
+
+    @Override
+    public @NotNull CruxAdvancementIcon getIcon() {
+        return icon;
     }
 
     @Override

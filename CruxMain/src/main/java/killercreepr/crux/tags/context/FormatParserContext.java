@@ -20,6 +20,13 @@ public class FormatParserContext implements TextParserContext {
     public static @NotNull Builder builder(@NotNull Format format){
         return new Builder(format);
     }
+    public static @NotNull FormatParserContext empty(@NotNull Format format){
+        return new FormatParserContext(format, null, null, null);
+    }
+
+    public static @NotNull FormatParserContext empty(){
+        return empty(Crux.FORMAT);
+    }
 
     protected final @NotNull Format format;
     protected final @Nullable OfflinePlayer viewer;

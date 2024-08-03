@@ -1,6 +1,7 @@
 package killercreepr.cruxadvancements.advancement;
 
 import killercreepr.cruxadvancements.advancement.criteria.CruxCriteria;
+import killercreepr.cruxadvancements.advancement.icon.CruxAdvancementIcon;
 import killercreepr.cruxadvancements.advancement.progression.CruxAdvancementProgress;
 import killercreepr.cruxadvancements.advancement.reward.CruxAdvanceReward;
 import net.kyori.adventure.key.Key;
@@ -33,4 +34,7 @@ public interface CruxAdvancement extends Keyed {
         return isGranted(p.getUniqueId());
     }
     boolean isGranted(@NotNull UUID uuid);
+
+    @NotNull
+    CruxAdvancementIcon getIcon();
 }

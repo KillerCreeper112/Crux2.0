@@ -1,6 +1,7 @@
 package killercreepr.cruxadvancements.advancement;
 
 import killercreepr.cruxadvancements.advancement.criteria.CruxCriteria;
+import killercreepr.cruxadvancements.advancement.icon.CruxAdvancementIcon;
 import killercreepr.cruxadvancements.advancement.objective.AdvancementObjective;
 import killercreepr.cruxadvancements.advancement.objective.progress.ObjectiveProgression;
 import killercreepr.cruxadvancements.advancement.objective.progress.SimpleObjectiveProgression;
@@ -19,8 +20,11 @@ public class ObjectiveAdvancement extends SimpleAdvancement{
     protected final @NotNull Map<String, AdvancementObjective> objectives;
     protected final @NotNull Map<String, ObjectiveProgression> objectiveProgress = new HashMap<>();
     public ObjectiveAdvancement(@NotNull Key key, @Nullable Key parentKey,
-                                @NotNull CruxCriteria criteria, @Nullable CruxAdvanceReward reward, @NotNull Map<String, AdvancementObjective> objectives) {
-        super(key, parentKey, criteria, reward);
+                                @NotNull CruxAdvancementIcon icon,
+                                @NotNull CruxCriteria criteria,
+                                @Nullable CruxAdvanceReward reward,
+                                @NotNull Map<String, AdvancementObjective> objectives) {
+        super(key, parentKey, icon, criteria, reward);
         this.objectives = Collections.unmodifiableMap(objectives);
     }
 
