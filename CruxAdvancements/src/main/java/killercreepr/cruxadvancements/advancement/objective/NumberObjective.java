@@ -18,16 +18,26 @@ public class NumberObjective extends SimpleAdvancementObjective {
     public int getMaxProgress() {
         return maxProgress;
     }
-
+    @SuppressWarnings("rawtypes")
     public void addToProgress(@NotNull UUID who,
-                              @NotNull CruxAdvancementManager<ObjectiveAdvancement> manager,
+                              @NotNull CruxAdvancementManager manager,
                               @NotNull ObjectiveAdvancement advancement,
-                              String criterion,
+                              int amount){
+        addToProgress(who, manager, advancement,
+            advancement.getObjectiveProgress(who).getProgress(criterion).toType(NumberObjectiveProgress.class),
+            amount
+        );
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public void addToProgress(@NotNull UUID who,
+                              @NotNull CruxAdvancementManager manager,
+                              @NotNull ObjectiveAdvancement advancement,
                               @NotNull ObjectiveProgress progress,
                               int amount){
         NumberObjectiveProgress p = progress.toType(NumberObjectiveProgress.class);
         p.setProgress(p.getProgress()+amount);
-        if(isDone(p)){
+        if(shouldUpdateAdvancement(p)){
             manager.grantCriteria(who, advancement, criterion);
         }
     }
@@ -35,5 +45,10 @@ public class NumberObjective extends SimpleAdvancementObjective {
     @Override
     public boolean isDone(@NotNull ObjectiveProgress progress) {
         return progress.toType(NumberObjectiveProgress.class).getProgress() >= maxProgress;
+    }
+
+    @Override
+    public boolean shouldUpdateAdvancement(@NotNull ObjectiveProgress progress) {
+        return isDone(progress);
     }
 }

@@ -7,4 +7,5 @@ public interface AdvancementObjective {
     @NotNull
     String getCriterion();
     boolean isDone(@NotNull ObjectiveProgress progress);
+    boolean shouldUpdateAdvancement(@NotNull ObjectiveProgress progress);
 }

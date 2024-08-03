@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 
 public class ObjectiveAdvancement extends SimpleAdvancement{
     protected final @NotNull Map<String, AdvancementObjective> objectives;
@@ -21,6 +22,10 @@ public class ObjectiveAdvancement extends SimpleAdvancement{
                                 @NotNull CruxCriteria criteria, @Nullable CruxAdvanceReward reward, @NotNull Map<String, AdvancementObjective> objectives) {
         super(key, parentKey, criteria, reward);
         this.objectives = Collections.unmodifiableMap(objectives);
+    }
+
+    public <T extends AdvancementObjective> void accept(@NotNull Class<T> type, @NotNull BiConsumer<String, T> consumer){
+        getObjectives(type).forEach(consumer);
     }
 
     public <T extends AdvancementObjective> @NotNull Map<String, T> getObjectives(@NotNull Class<T> type){

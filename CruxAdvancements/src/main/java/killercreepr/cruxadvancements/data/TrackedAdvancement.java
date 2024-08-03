@@ -1,6 +1,7 @@
 package killercreepr.cruxadvancements.data;
 
 import killercreepr.cruxadvancements.advancement.CruxAdvancement;
+import killercreepr.cruxadvancements.advancement.ObjectiveAdvancement;
 import killercreepr.cruxadvancements.manager.CruxAdvancementManager;
 import killercreepr.cruxadvancements.registries.AdvancementRegistries;
 import net.kyori.adventure.key.Key;
@@ -18,6 +19,10 @@ public class TrackedAdvancement {
 
     public CruxAdvancementManager<?> getManager(){
         return AdvancementRegistries.ADVANCEMENT_MANAGERS.get(managerKey);
+    }
+
+    public ObjectiveAdvancement getObjective(){
+        return getAdvancementOrThrow(ObjectiveAdvancement.class);
     }
 
     public CruxAdvancement getAdvancement(){

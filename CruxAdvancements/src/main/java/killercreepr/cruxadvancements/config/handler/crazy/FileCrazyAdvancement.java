@@ -4,6 +4,7 @@ import eu.endercentral.crazy_advancements.advancement.AdvancementFlag;
 import io.leangen.geantyref.TypeToken;
 import killercreepr.crux.util.CruxObjects;
 import killercreepr.cruxadvancements.advancement.criteria.CruxCriteria;
+import killercreepr.cruxadvancements.advancement.objective.AdvancementObjective;
 import killercreepr.cruxadvancements.advancement.reward.CruxAdvanceReward;
 import killercreepr.cruxadvancements.crazy.CrazyAdvancement;
 import killercreepr.cruxadvancements.crazy.CrazyAdvancementDisplay;
@@ -17,6 +18,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FileCrazyAdvancement implements FileHandler<CrazyAdvancement> {
     @Override
@@ -49,8 +52,18 @@ public class FileCrazyAdvancement implements FileHandler<CrazyAdvancement> {
         if(flags == null) flagsParsed = AdvancementFlag.TOAST_AND_MESSAGE;
         else flagsParsed = flags.toArray(new AdvancementFlag[0]);
 
+        Map<String, AdvancementObjective> objectives = new HashMap<>();
+        if(!(o.get("objectives") instanceof FileObject oo)) return null;
+        oo.forEach((objectiveKey, value) ->{
+            AdvancementObjective objective = registry.deserialize(AdvancementObjective.class, value);
+            if(objective==null) return;
+            objectives.put(objectiveKey, objective);
+        });
+        if(objectives.isEmpty()) return null;
+
         return new CrazyAdvancement(
-            key, parentKey, criteria, reward, display, flagsParsed
+            key, parentKey, criteria, reward, display, flagsParsed, objectives
+
         );
     }
 

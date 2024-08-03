@@ -1,7 +1,6 @@
 package killercreepr.cruxadvancements.advancement.objective;
 
 import killercreepr.cruxadvancements.advancement.ObjectiveAdvancement;
-import killercreepr.cruxadvancements.advancement.objective.progress.ObjectiveProgress;
 import killercreepr.cruxadvancements.manager.CruxAdvancementManager;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
@@ -26,12 +25,10 @@ public class BreakBlockObjective extends NumberObjective{
     }
 
     public void trigger(@NotNull UUID who,
-                              @NotNull CruxAdvancementManager<ObjectiveAdvancement> manager,
+                              @NotNull CruxAdvancementManager manager,
                               @NotNull ObjectiveAdvancement advancement,
-                              String criterion,
-                              @NotNull ObjectiveProgress progress,
                               @NotNull Material m){
         if(!canTrigger(m)) return;
-        addToProgress(who, manager, advancement, criterion, progress, 1);
+        addToProgress(who, manager, advancement,1);
     }
 }
