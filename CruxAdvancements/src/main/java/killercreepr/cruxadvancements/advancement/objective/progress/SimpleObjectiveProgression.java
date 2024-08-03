@@ -1,5 +1,6 @@
 package killercreepr.cruxadvancements.advancement.objective.progress;
 
+import killercreepr.cruxadvancements.advancement.ObjectiveAdvancement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -8,9 +9,19 @@ import java.util.Map;
 
 public class SimpleObjectiveProgression implements ObjectiveProgression{
     protected final @NotNull Map<String, ObjectiveProgress> progressionMap = new HashMap<>();
+    protected final @NotNull ObjectiveAdvancement advancement;
+
+    public SimpleObjectiveProgression(@NotNull ObjectiveAdvancement advancement) {
+        this.advancement = advancement;
+    }
 
     @Override
-    public @Nullable ObjectiveProgress getProgress(@NotNull String taskID) {
+    public @NotNull ObjectiveProgress getProgress(@NotNull String taskID) {
+        return progressionMap.computeIfAbsent(taskID, id -> advancement.getObjective(taskID).createNewProgress());
+    }
+
+    @Override
+    public @Nullable ObjectiveProgress getProgressIfPresent(@NotNull String taskID) {
         return progressionMap.get(taskID);
     }
 

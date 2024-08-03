@@ -47,7 +47,7 @@ public class ObjectiveAdvancement extends SimpleAdvancement{
     }
 
     protected @NotNull ObjectiveProgression buildObjectiveProgression(){
-        return new SimpleObjectiveProgression();
+        return new SimpleObjectiveProgression(this);
     }
 
     public @NotNull ObjectiveProgression getObjectiveProgress(@NotNull UUID uuid) {

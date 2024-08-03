@@ -51,4 +51,9 @@ public class NumberObjective extends SimpleAdvancementObjective {
     public boolean shouldUpdateAdvancement(@NotNull ObjectiveProgress progress) {
         return isDone(progress);
     }
+
+    @Override
+    public @NotNull ObjectiveProgress createNewProgress() {
+        return new NumberObjectiveProgress();
+    }
 }

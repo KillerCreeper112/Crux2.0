@@ -8,4 +8,5 @@ public interface AdvancementObjective {
     String getCriterion();
     boolean isDone(@NotNull ObjectiveProgress progress);
     boolean shouldUpdateAdvancement(@NotNull ObjectiveProgress progress);
+    @NotNull ObjectiveProgress createNewProgress();
 }
