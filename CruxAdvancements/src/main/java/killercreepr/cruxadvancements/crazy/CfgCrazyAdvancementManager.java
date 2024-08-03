@@ -4,9 +4,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import eu.endercentral.crazy_advancements.advancement.Advancement;
 import eu.endercentral.crazy_advancements.manager.AdvancementManager;
+import killercreepr.cruxadvancements.advancement.ObjectiveAdvancement;
+import killercreepr.cruxadvancements.advancement.objective.progress.ObjectiveProgression;
+import killercreepr.cruxadvancements.advancement.objective.progress.SimpleObjectiveProgression;
 import killercreepr.cruxadvancements.advancement.progression.CruxAdvancementProgress;
 import killercreepr.cruxadvancements.config.CruxConfigHook;
 import killercreepr.cruxadvancements.config.handler.FileCruxAdvancementProgress;
+import killercreepr.cruxadvancements.config.handler.FileSimpleObjectiveProgression;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxconfig.config.bukkit.file.CruxJson;
@@ -93,8 +97,19 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
         JsonContext ctx = new JsonContext(registry);
         for(CrazyAdvancement a : advancements){
             CruxAdvancementProgress progress = a.getProgressIfPresent(uuid);
-            if(progress==null) continue;
-            values.add(a.key().asString(), CruxConfigHook.CRUX_ADVANCEMENT_PROGRESS.serializeToJson(ctx, progress));
+            ObjectiveProgression objectiveProgression = a.getObjectiveProgressIfPresent(uuid);
+            if(progress==null && objectiveProgression == null) continue;
+
+            JsonObject completeProgress = new JsonObject();
+            if(progress != null){
+                completeProgress.add("progress", CruxConfigHook.CRUX_ADVANCEMENT_PROGRESS.serializeToJson(ctx, progress));
+            }
+            if(objectiveProgression != null){
+                completeProgress.add("objective_progress",
+                    CruxConfigHook.SIMPLE_OBJECTIVE_PROGRESSION.serializeToJson(ctx, (SimpleObjectiveProgression) objectiveProgression));
+            }
+
+            values.add(a.key().asString(), completeProgress);
         }
         json.add("values", values);
         cfg.save(true);
@@ -113,16 +128,27 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
 
         JsonContext ctx = new JsonContext(registry);
         for(CrazyAdvancement a : advancements){
-            JsonElement ele = values.get(a.key().asString());
-            if(ele == null) continue;
-            CruxAdvancementProgress progress = FileCruxAdvancementProgress.deserialize(
-                ctx,
-                FileElement.fromJson(ele),
-                a.getCriteria()
-            );
-            if(progress==null) continue;
-            a.setProgress(uuid, progress);
-            loadCrazyProgress(uuid, getOrCreateCrazyAdvancement(a), progress);
+            if(!(values.get(a.key().asString()) instanceof JsonObject o)) continue;
+            JsonElement ele = o.get("progress");
+            if(ele != null){
+                CruxAdvancementProgress progress = FileCruxAdvancementProgress.deserialize(
+                    ctx,
+                    FileElement.fromJson(ele),
+                    a.getCriteria()
+                );
+                if(progress!=null){
+                    a.setProgress(uuid, progress);
+                    loadCrazyProgress(uuid, getOrCreateCrazyAdvancement(a), progress);
+                }
+            }
+            ele = o.get("objective_progress");
+            if(ele != null && a instanceof ObjectiveAdvancement op){
+                SimpleObjectiveProgression objectiveProgression = FileSimpleObjectiveProgression.deserialize(
+                    ctx, FileElement.fromJson(ele), op
+                );
+                if(objectiveProgression == null) continue;
+                a.setObjectiveProgress(uuid, objectiveProgression);
+            }
         }
     }
 }

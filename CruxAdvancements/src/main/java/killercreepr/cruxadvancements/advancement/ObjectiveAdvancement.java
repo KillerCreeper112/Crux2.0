@@ -42,6 +42,11 @@ public class ObjectiveAdvancement extends SimpleAdvancement{
         return list;
     }
 
+    public void setObjectiveProgress(@NotNull UUID uuid, @Nullable ObjectiveProgression progression){
+        if(progression==null) objectiveProgress.remove(uuid.toString());
+        else objectiveProgress.put(uuid.toString(), progression);
+    }
+
     public @Nullable AdvancementObjective getObjective(@NotNull String criterion){
         return objectives.get(criterion);
     }

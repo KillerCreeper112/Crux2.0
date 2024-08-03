@@ -1,0 +1,47 @@
+package killercreepr.cruxadvancements.config.handler;
+
+import killercreepr.cruxadvancements.advancement.ObjectiveAdvancement;
+import killercreepr.cruxadvancements.advancement.objective.progress.ObjectiveProgress;
+import killercreepr.cruxadvancements.advancement.objective.progress.SimpleObjectiveProgression;
+import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
+import killercreepr.cruxconfig.config.common.FileContext;
+import killercreepr.cruxconfig.config.common.FileRegistry;
+import killercreepr.cruxconfig.config.common.element.FileElement;
+import killercreepr.cruxconfig.config.common.element.FileObject;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+public class FileSimpleObjectiveProgression implements FileHandler<SimpleObjectiveProgression> {
+    @Override
+    public @NotNull FileElement serializeToFile(@NotNull FileContext<?> ctx, @NotNull SimpleObjectiveProgression object) {
+        FileRegistry registry = ctx.getRegistry();
+        FileObject o = new FileObject();
+        object.getProgressMap().forEach((key, value) ->{
+            o.add(key, registry.serializeToFileElement(value));
+        });
+        return o;
+    }
+
+    @Override
+    public @Nullable SimpleObjectiveProgression deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
+        return null;
+    }
+
+    public static @Nullable SimpleObjectiveProgression deserialize(@NotNull FileContext<?> ctx, @NotNull FileElement e,
+                                                              @NotNull ObjectiveAdvancement a) {
+        if(!(e instanceof FileObject o)) return null;
+        FileRegistry registry = ctx.getRegistry();
+        SimpleObjectiveProgression objective = new SimpleObjectiveProgression(a);
+        o.forEach((key, value) ->{
+            ObjectiveProgress progress = registry.deserialize(ObjectiveProgress.class, value);
+            if(progress==null) return;
+            objective.getProgressMap().put(key, progress);
+        });
+        return objective;
+    }
+
+    @Override
+    public @NotNull String jsonSerializerID() {
+        return "simple_objective_progression";
+    }
+}
