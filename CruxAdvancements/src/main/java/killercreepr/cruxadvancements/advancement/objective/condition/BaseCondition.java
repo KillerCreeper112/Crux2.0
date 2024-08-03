@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class BaseCondition implements ObjectiveCondition{
     protected final @NotNull String target;
-    protected BaseCondition(@NotNull String target) {
+    public BaseCondition(@NotNull String target) {
         this.target = target;
     }
 

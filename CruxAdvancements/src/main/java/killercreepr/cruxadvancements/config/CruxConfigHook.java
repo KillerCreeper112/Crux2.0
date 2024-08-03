@@ -1,7 +1,9 @@
 package killercreepr.cruxadvancements.config;
 
 import killercreepr.cruxadvancements.advancement.criteria.CruxCriteria;
+import killercreepr.cruxadvancements.advancement.objective.condition.ObjectiveCondition;
 import killercreepr.cruxadvancements.advancement.objective.condition.ObjectiveConditions;
+import killercreepr.cruxadvancements.advancement.objective.condition.impl.BlockCondition;
 import killercreepr.cruxadvancements.advancement.objective.impl.BreakBlockObjective;
 import killercreepr.cruxadvancements.advancement.objective.impl.KillEntityObjective;
 import killercreepr.cruxadvancements.advancement.objective.progress.NumberObjectiveProgress;
@@ -72,6 +74,20 @@ public class CruxConfigHook {
                 return new KillEntityObjective(criterion, conditions, maxProgress);
             }
         });
+
+        FileObjectiveCondition.registerCustomHandler(new CustomFileObjectiveCondition<BlockCondition>() {
+            @Override
+            public @NotNull String getType() {
+                return "block";
+            }
+
+            @Override
+            public @Nullable BlockCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                FileRegistry registry = ctx.getRegistry();
+                Material material = registry.deserialize(Material.class, e.get("material"));
+                return new BlockCondition(target, material);
+            }
+        });
     }
 
     public static void registerHandlers(){
@@ -82,6 +98,7 @@ public class CruxConfigHook {
     public static final FileCruxAdvancementProgress CRUX_ADVANCEMENT_PROGRESS = new FileCruxAdvancementProgress();
     public static final FileSimpleObjectiveProgression SIMPLE_OBJECTIVE_PROGRESSION = new FileSimpleObjectiveProgression();
     public static final FileObjectiveProgress OBJECTIVE_PROGRESS = new FileObjectiveProgress();
+    public static final FileObjectiveCondition OBJECTIVE_CONDITION = new FileObjectiveCondition();
     public static void registerHandlers(@NotNull FileRegistry registry){
         registry.registerHandler(CruxCriteria.class, new FileCruxCriteria());
         registry.registerHandler(SimpleCriterionProgress.class, new FileSimpleCriterionProgress());
@@ -94,5 +111,8 @@ public class CruxConfigHook {
         registry.registerHandler(ObjectiveProgress.class, OBJECTIVE_PROGRESS);
 
         registry.registerHandler(SimpleObjectiveProgression.class, SIMPLE_OBJECTIVE_PROGRESSION);
+
+        registry.registerHandler(ObjectiveConditions.class, new FileObjectiveConditions());
+        registry.registerHandler(ObjectiveCondition.class, OBJECTIVE_CONDITION);
     }
 }

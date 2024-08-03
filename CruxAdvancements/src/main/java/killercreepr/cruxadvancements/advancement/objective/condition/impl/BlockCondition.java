@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class BlockCondition extends BaseCondition {
     protected final @Nullable Material type;
-    protected BlockCondition(@NotNull String target, @Nullable Material type) {
+    public BlockCondition(@NotNull String target, @Nullable Material type) {
         super(target);
         this.type = type;
     }
