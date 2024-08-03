@@ -26,6 +26,7 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemRarity;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
@@ -47,6 +48,7 @@ public class BukkitCfgHandlers {
     public static final FileCreateTitle CREATE_TITLE = new FileCreateTitle();
     public static final FilePotionEffectType POTION_EFFECT_TYPE = new FilePotionEffectType();
     public static final FileMaterial MATERIAL = new FileMaterial();
+    public static final FileEntityType ENTITY_TYPE = new FileEntityType();
     public static final FileComponent COMPONENT = new FileComponent();
     public static final FileItemStack ITEM_STACK = new FileItemStack();
     public static final FileDynamicItem DYNAMIC_ITEM = new FileDynamicItem();
@@ -79,6 +81,7 @@ public class BukkitCfgHandlers {
         registry.registerHandler(Key.class, KEY);
         registry.registerHandler(ItemHolder.class, ITEM_HOLDER);
         registry.registerHandler(Instant.class, INSTANT);
+        registry.registerHandler(EntityType.class, ENTITY_TYPE);
 
         DYNAMIC_ITEM.registerComponents(registry);
 
