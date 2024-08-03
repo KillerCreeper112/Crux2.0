@@ -32,6 +32,8 @@ public class TrackedAdvancement {
     }
 
     public CruxAdvancement getAdvancementOrThrow(){
+        CruxAdvancementManager<?> manager = getManager();
+        Objects.requireNonNull(manager, "CruxAdvancementManager not found! " + this);
         CruxAdvancement a = getAdvancement();
         Objects.requireNonNull(a, "CruxAdvancement not found! " + this);
         return a;
@@ -39,13 +41,18 @@ public class TrackedAdvancement {
 
     public <T extends CruxAdvancement> T getAdvancement(@NotNull Class<T> type){
         CruxAdvancement a = getAdvancement();
-        if(a==null || type.isAssignableFrom(a.getClass())) return null;
+        if(a==null || !type.isAssignableFrom(a.getClass())) return null;
         return type.cast(a);
     }
 
     public <T extends CruxAdvancement> T getAdvancementOrThrow(@NotNull Class<T> type){
+        CruxAdvancementManager<?> manager = getManager();
+        Objects.requireNonNull(manager, "CruxAdvancementManager not found! " + this);
         T a = getAdvancement(type);
-        Objects.requireNonNull(a, "CruxAdvancement not found! (" + type + ") " + this);
+        if(a == null){
+            if(getAdvancement() == null) Objects.requireNonNull(a, "CruxAdvancement not found! (" + type + ") " + this);
+            else Objects.requireNonNull(a, "CruxAdvancement not assignable to " + type + " (" + getAdvancement() + ")" + this);
+        }
         return a;
     }
 
