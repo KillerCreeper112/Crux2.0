@@ -23,8 +23,6 @@ public class FileObjectiveCondition implements FileHandler<ObjectiveCondition> {
     @Override
     public @Nullable ObjectiveCondition deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;
-        String type = o.getObject(String.class, "type");
-        if(type==null) return null;
         String target = o.getObject(String.class, "target");
         return deserializeFromFile(context, e, target);
     }

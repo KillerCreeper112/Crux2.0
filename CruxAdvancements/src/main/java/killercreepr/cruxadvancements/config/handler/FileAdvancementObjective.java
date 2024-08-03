@@ -41,7 +41,7 @@ public class FileAdvancementObjective implements FileHandler<AdvancementObjectiv
         CustomFileAdvancementObjective<?> handler = CUSTOM_HANDLERS.get(type);
         if(handler==null) throw new IllegalStateException("AdvancementObject type " + type + " does not exist!");
 
-        ObjectiveConditions conditions = ctx.getRegistry().deserialize(ObjectiveConditions.class, base.get("objectives"));
+        ObjectiveConditions conditions = ctx.getRegistry().deserialize(ObjectiveConditions.class, base.get("conditions"));
 
         return handler.deserializeFromFile(ctx, o, criterion, conditions);
     }
