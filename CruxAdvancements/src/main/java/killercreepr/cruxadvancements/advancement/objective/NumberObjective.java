@@ -1,23 +1,37 @@
 package killercreepr.cruxadvancements.advancement.objective;
 
 import killercreepr.cruxadvancements.advancement.ObjectiveAdvancement;
+import killercreepr.cruxadvancements.advancement.objective.condition.ConditionContext;
+import killercreepr.cruxadvancements.advancement.objective.condition.ObjectiveConditions;
 import killercreepr.cruxadvancements.advancement.objective.progress.NumberObjectiveProgress;
 import killercreepr.cruxadvancements.advancement.objective.progress.ObjectiveProgress;
 import killercreepr.cruxadvancements.manager.CruxAdvancementManager;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
 public class NumberObjective extends SimpleAdvancementObjective {
     protected final int maxProgress;
-    public NumberObjective(@NotNull String criterion, int maxProgress) {
-        super(criterion);
+    public NumberObjective(@NotNull String criterion, @Nullable ObjectiveConditions conditions, int maxProgress) {
+        super(criterion, conditions);
         this.maxProgress = maxProgress;
     }
 
     public int getMaxProgress() {
         return maxProgress;
     }
+
+    @SuppressWarnings("rawtypes")
+    public boolean trigger(@NotNull UUID who,
+                           @NotNull CruxAdvancementManager manager,
+                           @NotNull ObjectiveAdvancement advancement,
+                           @NotNull ConditionContext ctx){
+        if(!canTrigger(ctx)) return false;
+        addToProgress(who, manager, advancement,1);
+        return true;
+    }
+
     @SuppressWarnings("rawtypes")
     public void addToProgress(@NotNull UUID who,
                               @NotNull CruxAdvancementManager manager,

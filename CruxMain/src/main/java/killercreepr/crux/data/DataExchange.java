@@ -156,11 +156,24 @@ public class DataExchange implements Iterable<Holder<Object>> {
     public static class Builder{
         protected final Map<String, Holder<Object>> data = new HashMap<>();
 
+        public Builder putAll(@NotNull Object direct, @NotNull String... ids){
+            for(String i : ids){
+                put(i, direct);
+            }
+            return this;
+        }
         public Builder put(@NotNull String id, @NotNull Object direct){
             return put(id, Holder.direct(direct));
         }
         public Builder put(@NotNull Object direct){
             return put(direct.getClass().getSimpleName().toLowerCase(), Holder.direct(direct));
+        }
+
+        public Builder putAll(@NotNull Holder<Object> holder, @NotNull String... ids){
+            for(String i : ids){
+                put(i, holder);
+            }
+            return this;
         }
 
         public Builder put(@NotNull String id, @NotNull Holder<Object> holder){

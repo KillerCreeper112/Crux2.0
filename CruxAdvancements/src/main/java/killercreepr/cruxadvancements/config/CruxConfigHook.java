@@ -1,6 +1,7 @@
 package killercreepr.cruxadvancements.config;
 
 import killercreepr.cruxadvancements.advancement.criteria.CruxCriteria;
+import killercreepr.cruxadvancements.advancement.objective.condition.ObjectiveConditions;
 import killercreepr.cruxadvancements.advancement.objective.impl.BreakBlockObjective;
 import killercreepr.cruxadvancements.advancement.objective.impl.KillEntityObjective;
 import killercreepr.cruxadvancements.advancement.objective.progress.NumberObjectiveProgress;
@@ -12,14 +13,12 @@ import killercreepr.cruxadvancements.advancement.progression.NumberAdvancementPr
 import killercreepr.cruxadvancements.advancement.progression.SimpleCriterionProgress;
 import killercreepr.cruxadvancements.advancement.reward.CruxAdvanceReward;
 import killercreepr.cruxadvancements.config.handler.*;
-import killercreepr.cruxadvancements.config.handler.crazy.CustomFileAdvancementObjective;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -53,11 +52,11 @@ public class CruxConfigHook {
             }
 
             @Override
-            public @Nullable BreakBlockObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String criterion) {
+            public @Nullable BreakBlockObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String criterion, @Nullable ObjectiveConditions conditions) {
                 Integer maxProgress = e.getObject(Integer.class, "amount");
                 if(maxProgress==null) maxProgress = 1;
                 Material material = ctx.getRegistry().deserialize(Material.class, e.get("block_type"));
-                return new BreakBlockObjective(criterion, maxProgress, material);
+                return new BreakBlockObjective(criterion, conditions, maxProgress, material);
             }
         });
         FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<KillEntityObjective>() {
@@ -67,11 +66,10 @@ public class CruxConfigHook {
             }
 
             @Override
-            public @Nullable KillEntityObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String criterion) {
+            public @Nullable KillEntityObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String criterion, @Nullable ObjectiveConditions conditions) {
                 Integer maxProgress = e.getObject(Integer.class, "amount");
                 if(maxProgress==null) maxProgress = 1;
-                EntityType type = ctx.getRegistry().deserialize(EntityType.class, e.get("entity_type"));
-                return new KillEntityObjective(criterion, maxProgress, type);
+                return new KillEntityObjective(criterion, conditions, maxProgress);
             }
         });
     }

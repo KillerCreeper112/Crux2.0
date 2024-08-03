@@ -1,35 +1,32 @@
 package killercreepr.cruxadvancements.advancement.objective.impl;
 
+import killercreepr.crux.data.DataExchange;
 import killercreepr.cruxadvancements.advancement.ObjectiveAdvancement;
 import killercreepr.cruxadvancements.advancement.objective.NumberObjective;
+import killercreepr.cruxadvancements.advancement.objective.condition.ConditionContext;
+import killercreepr.cruxadvancements.advancement.objective.condition.ObjectiveConditions;
 import killercreepr.cruxadvancements.manager.CruxAdvancementManager;
-import org.bukkit.entity.EntityType;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
 public class KillEntityObjective extends NumberObjective {
-    protected final @Nullable EntityType entityType;
-    public KillEntityObjective(@NotNull String criterion, int maxProgress, @Nullable EntityType entityType) {
-        super(criterion, maxProgress);
-        this.entityType = entityType;
+    public KillEntityObjective(@NotNull String criterion, @Nullable ObjectiveConditions conditions, int maxProgress) {
+        super(criterion, conditions, maxProgress);
     }
 
-    public @Nullable EntityType getEntityType() {
-        return entityType;
-    }
-
-    public boolean canTrigger(@NotNull EntityType m){
-        if(entityType == null) return true;
-        return m == entityType;
-    }
-
-    public void trigger(@NotNull UUID who,
-                              @NotNull CruxAdvancementManager manager,
-                              @NotNull ObjectiveAdvancement advancement,
-                              @NotNull EntityType m){
-        if(!canTrigger(m)) return;
-        addToProgress(who, manager, advancement,1);
+    public boolean trigger(@NotNull UUID who,
+                           @NotNull CruxAdvancementManager manager,
+                           @NotNull ObjectiveAdvancement advancement,
+                           @NotNull EntityDamageByEntityEvent event){
+        ConditionContext ctx = new ConditionContext(DataExchange.builder()
+            .putAll(event.getDamager(), "damager")
+            .putAll(event.getEntity(), "victim", "entity")
+            .build());
+        return trigger(
+            who, manager, advancement, ctx
+        );
     }
 }

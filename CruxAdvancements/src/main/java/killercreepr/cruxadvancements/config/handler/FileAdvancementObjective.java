@@ -3,7 +3,7 @@ package killercreepr.cruxadvancements.config.handler;
 import killercreepr.crux.registry.MappedRegistry;
 import killercreepr.crux.registry.SimpleMappedRegistry;
 import killercreepr.cruxadvancements.advancement.objective.AdvancementObjective;
-import killercreepr.cruxadvancements.config.handler.crazy.CustomFileAdvancementObjective;
+import killercreepr.cruxadvancements.advancement.objective.condition.ObjectiveConditions;
 import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -32,13 +32,18 @@ public class FileAdvancementObjective implements FileHandler<AdvancementObjectiv
     }
 
     public static @Nullable AdvancementObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e, @NotNull String criterion) {
-        if(!(e instanceof FileObject o)) return null;
+        if(!(e instanceof FileObject base)) return null;
+        if(!(base.get("objective") instanceof FileObject o)) return null;
+
         String type = o.getObject(String.class, "type");
         if(type==null) return null;
         type = type.toLowerCase();
         CustomFileAdvancementObjective<?> handler = CUSTOM_HANDLERS.get(type);
         if(handler==null) throw new IllegalStateException("AdvancementObject type " + type + " does not exist!");
-        return handler.deserializeFromFile(ctx, o, criterion);
+
+        ObjectiveConditions conditions = ctx.getRegistry().deserialize(ObjectiveConditions.class, base.get("objectives"));
+
+        return handler.deserializeFromFile(ctx, o, criterion, conditions);
     }
 
     @Override
