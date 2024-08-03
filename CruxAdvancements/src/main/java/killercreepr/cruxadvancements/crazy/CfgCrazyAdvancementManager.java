@@ -104,7 +104,7 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
             if(progress != null){
                 completeProgress.add("progress", CruxConfigHook.CRUX_ADVANCEMENT_PROGRESS.serializeToJson(ctx, progress));
             }
-            if(objectiveProgression != null){
+            if(objectiveProgression != null && !a.isGranted(uuid)){
                 completeProgress.add("objective_progress",
                     CruxConfigHook.SIMPLE_OBJECTIVE_PROGRESSION.serializeToJson(ctx, (SimpleObjectiveProgression) objectiveProgression));
             }
