@@ -1,7 +1,7 @@
 package killercreepr.cruxadvancements.listener;
 
 import killercreepr.crux.data.entity.EntityMemory;
-import killercreepr.cruxadvancements.advancement.objective.BreakBlockObjective;
+import killercreepr.cruxadvancements.advancement.objective.impl.BreakBlockObjective;
 import killercreepr.cruxadvancements.data.entity.AdvancementHolder;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

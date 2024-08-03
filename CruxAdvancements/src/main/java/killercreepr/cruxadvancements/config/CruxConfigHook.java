@@ -1,6 +1,9 @@
 package killercreepr.cruxadvancements.config;
 
 import killercreepr.cruxadvancements.advancement.criteria.CruxCriteria;
+import killercreepr.cruxadvancements.advancement.objective.AdvancementObjective;
+import killercreepr.cruxadvancements.advancement.objective.impl.BreakBlockObjective;
+import killercreepr.cruxadvancements.advancement.objective.progress.NumberObjectiveProgress;
 import killercreepr.cruxadvancements.advancement.objective.progress.ObjectiveProgress;
 import killercreepr.cruxadvancements.advancement.objective.progress.SimpleObjectiveProgression;
 import killercreepr.cruxadvancements.advancement.progression.CruxAdvancementProgress;
@@ -9,17 +12,62 @@ import killercreepr.cruxadvancements.advancement.progression.NumberAdvancementPr
 import killercreepr.cruxadvancements.advancement.progression.SimpleCriterionProgress;
 import killercreepr.cruxadvancements.advancement.reward.CruxAdvanceReward;
 import killercreepr.cruxadvancements.config.handler.*;
+import killercreepr.cruxadvancements.config.handler.crazy.CustomFileAdvancementObjective;
+import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
+import killercreepr.cruxconfig.config.common.element.FileElement;
+import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
+import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class CruxConfigHook {
+    public static void load(){
+        OBJECTIVE_PROGRESS.registerCustomHandler(NumberObjectiveProgress.class, new CustomFileObjectiveProgress<NumberObjectiveProgress>() {
+            @Override
+            public @NotNull String getType() {
+                return "number";
+            }
+
+            @Override
+            public @NotNull FileElement serializeToFile(@NotNull FileContext<?> ctx, @NotNull NumberObjectiveProgress n) {
+                return new FileObject()
+                    .addProperty("type", "number")
+                    .addProperty("progress", n.getProgress())
+                    ;
+            }
+
+            @Override
+            public @Nullable NumberObjectiveProgress deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
+                Integer progress = e.getObject(Integer.class, "progress");
+                if(progress==null) return null;
+                return new NumberObjectiveProgress(progress);
+            }
+        });
+        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<>() {
+            @Override
+            public @NotNull String getType() {
+                return "break_block";
+            }
+
+            @Override
+            public @Nullable AdvancementObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String criterion) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) return null;
+                Material material = ctx.getRegistry().deserialize(Material.class, e.get("block_type"));
+                return new BreakBlockObjective(criterion, maxProgress, material);
+            }
+        });
+    }
+
     public static void registerHandlers(){
         registerHandlers(CfgRegistries.JSON);
         registerHandlers(CfgRegistries.YAML);
     }
     public static final FileCruxAdvancementProgress CRUX_ADVANCEMENT_PROGRESS = new FileCruxAdvancementProgress();
     public static final FileSimpleObjectiveProgression SIMPLE_OBJECTIVE_PROGRESSION = new FileSimpleObjectiveProgression();
+    public static final FileObjectiveProgress OBJECTIVE_PROGRESS = new FileObjectiveProgress();
     public static void registerHandlers(@NotNull FileRegistry registry){
         registry.registerHandler(CruxCriteria.class, new FileCruxCriteria());
         registry.registerHandler(SimpleCriterionProgress.class, new FileSimpleCriterionProgress());
@@ -28,7 +76,8 @@ public class CruxConfigHook {
         registry.registerHandler(ListAdvancementProgress.class, CRUX_ADVANCEMENT_PROGRESS);
         registry.registerHandler(NumberAdvancementProgress.class, CRUX_ADVANCEMENT_PROGRESS);
         registry.registerHandler(CruxAdvanceReward.class, new FileCruxAdvanceReward());
-        registry.registerHandler(ObjectiveProgress.class, new FileObjectiveProgress());
+
+        registry.registerHandler(ObjectiveProgress.class, OBJECTIVE_PROGRESS);
 
         registry.registerHandler(SimpleObjectiveProgression.class, SIMPLE_OBJECTIVE_PROGRESSION);
     }

@@ -1,6 +1,7 @@
-package killercreepr.cruxadvancements.advancement.objective;
+package killercreepr.cruxadvancements.advancement.objective.impl;
 
 import killercreepr.cruxadvancements.advancement.ObjectiveAdvancement;
+import killercreepr.cruxadvancements.advancement.objective.NumberObjective;
 import killercreepr.cruxadvancements.manager.CruxAdvancementManager;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
@@ -8,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public class BreakBlockObjective extends NumberObjective{
+public class BreakBlockObjective extends NumberObjective {
     protected final @Nullable Material blockType;
     public BreakBlockObjective(@NotNull String criterion, int maxProgress, @Nullable Material blockType) {
         super(criterion, maxProgress);

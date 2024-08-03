@@ -18,6 +18,7 @@ import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.json.JsonContext;
 import killercreepr.cruxconfig.config.common.json.JsonRegistry;
 import net.kyori.adventure.key.Key;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -68,10 +69,17 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
 
     @Override
     public void refresh(@NotNull Plugin plugin) {
+        for(Player p : plugin.getServer().getOnlinePlayers()){
+            saveProgress(p.getUniqueId());
+        }
         for(CrazyAdvancement a : new HashSet<>(advancements.values())){
             unregisterAdvancement(a);
         }
         load(plugin);
+
+        for(Player p : plugin.getServer().getOnlinePlayers()){
+            loadProgress(p.getUniqueId());
+        }
 
         crazyManager.updateAdvancement(crazyAdvancements.values().toArray(new Advancement[0]));
     }

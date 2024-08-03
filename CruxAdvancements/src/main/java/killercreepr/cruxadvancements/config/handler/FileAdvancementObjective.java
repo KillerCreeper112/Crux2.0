@@ -1,17 +1,21 @@
 package killercreepr.cruxadvancements.config.handler;
 
+import killercreepr.crux.registry.MappedRegistry;
+import killercreepr.crux.registry.SimpleMappedRegistry;
 import killercreepr.cruxadvancements.advancement.objective.AdvancementObjective;
-import killercreepr.cruxadvancements.advancement.objective.BreakBlockObjective;
+import killercreepr.cruxadvancements.config.handler.crazy.CustomFileAdvancementObjective;
 import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
-import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
-import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class FileAdvancementObjective implements FileHandler<AdvancementObjective> {
+    public static final MappedRegistry<String, CustomFileAdvancementObjective<?>> CUSTOM_HANDLERS = new SimpleMappedRegistry<>();
+    public static void registerCustomHandler(@NotNull CustomFileAdvancementObjective<?> handler){
+        CUSTOM_HANDLERS.register(handler.getType(), handler);
+    }
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull AdvancementObjective object) {
         throw new RuntimeException("todo");
@@ -29,18 +33,12 @@ public class FileAdvancementObjective implements FileHandler<AdvancementObjectiv
 
     public static @Nullable AdvancementObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e, @NotNull String criterion) {
         if(!(e instanceof FileObject o)) return null;
-        FileRegistry registry = ctx.getRegistry();
         String type = o.getObject(String.class, "type");
         if(type==null) return null;
-        switch (type.toLowerCase()){
-            case "break_block" ->{
-                Integer maxProgress = o.getObject(Integer.class, "amount");
-                if(maxProgress==null) return null;
-                Material material = registry.deserialize(Material.class, o.get("block_type"));
-                return new BreakBlockObjective(criterion, maxProgress, material);
-            }
-        }
-        throw new IllegalStateException("AdvancementObject type " + type + " does not exist!");
+        type = type.toLowerCase();
+        CustomFileAdvancementObjective<?> handler = CUSTOM_HANDLERS.get(type);
+        if(handler==null) throw new IllegalStateException("AdvancementObject type " + type + " does not exist!");
+        return handler.deserializeFromFile(ctx, o, criterion);
     }
 
     @Override
