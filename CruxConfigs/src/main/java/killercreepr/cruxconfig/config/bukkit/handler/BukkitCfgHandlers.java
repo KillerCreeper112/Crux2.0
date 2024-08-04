@@ -9,6 +9,7 @@ import killercreepr.crux.data.communication.CreateSound;
 import killercreepr.crux.data.communication.CreateTitle;
 import killercreepr.crux.data.communication.MsgContainer;
 import killercreepr.crux.item.ItemHolder;
+import killercreepr.crux.item.StoredItem;
 import killercreepr.crux.item.dynamic.BukkitDynamicItem;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.*;
@@ -57,6 +58,7 @@ public class BukkitCfgHandlers {
     public static final FileKey KEY = new FileKey();
     public static final FileItemHolder ITEM_HOLDER = new FileItemHolder();
     public static final FileInstant INSTANT = new FileInstant();
+    public static final FileStoredItem STORED_ITEM = new FileStoredItem();
 
     public static void initJson(@NotNull JsonRegistry registry){
         registry.registerHandler(
@@ -82,6 +84,7 @@ public class BukkitCfgHandlers {
         registry.registerHandler(ItemHolder.class, ITEM_HOLDER);
         registry.registerHandler(Instant.class, INSTANT);
         registry.registerHandler(EntityType.class, ENTITY_TYPE);
+        registry.registerHandler(StoredItem.class, STORED_ITEM);
 
         DYNAMIC_ITEM.registerComponents(registry);
 
