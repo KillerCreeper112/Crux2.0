@@ -16,4 +16,9 @@ public class NumberObjectiveProgress implements ObjectiveProgress {
     public void setProgress(int progress) {
         this.progress = progress;
     }
+
+    @Override
+    public String toString() {
+        return "NumberObjectiveProgress{progress=" + progress + "}";
+    }
 }

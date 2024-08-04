@@ -53,6 +53,9 @@ public class NumberObjective extends SimpleAdvancementObjective {
         p.setProgress(p.getProgress()+amount);
         if(shouldUpdateAdvancement(p)){
             manager.grantCriteria(who, advancement, criterion);
+            if(advancement.isGranted(who)){
+                advancement.setObjectiveProgress(who, null);
+            }
         }
     }
 

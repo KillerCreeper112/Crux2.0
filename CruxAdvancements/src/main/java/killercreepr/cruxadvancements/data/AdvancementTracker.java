@@ -14,6 +14,30 @@ import java.util.function.BiConsumer;
 public class AdvancementTracker {
     protected final Collection<TrackedAdvancement> trackedAdvancements = new HashSet<>();
 
+    public void untrackAll(){
+        trackedAdvancements.clear();
+    }
+
+    public void untrack(@NotNull TrackedAdvancement tracked){
+        trackedAdvancements.remove(tracked);
+    }
+
+    public void untrack(@NotNull CruxAdvancementManager<?> manager, @NotNull CruxAdvancement advancement){
+        untrack(manager.key(), advancement.key());
+    }
+
+    public void untrack(@NotNull Key advancement){
+        trackedAdvancements.removeIf(d -> d.getAdvancementKey().equals(advancement));
+    }
+
+    public void untrack(@NotNull CruxAdvancement advancement){
+        untrack(advancement.key());
+    }
+
+    public void untrack(@NotNull Key manager, @NotNull Key advancement){
+        untrack(new TrackedAdvancement(manager, advancement));
+    }
+
     public void track(@NotNull CruxAdvancementManager<?> manager, @NotNull CruxAdvancement advancement){
         track(manager.key(), advancement.key());
     }

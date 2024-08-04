@@ -1,5 +1,6 @@
 package killercreepr.cruxadvancements.advancement.objective.progress;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,6 +11,7 @@ public interface ObjectiveProgression {
     @Nullable ObjectiveProgress getProgressIfPresent(@NotNull String taskID);
     void setProgress(@NotNull String taskID, @Nullable ObjectiveProgress progress);
     //task_id -> progress
+    @ApiStatus.Internal
     @NotNull
     Map<String, ObjectiveProgress> getProgressMap();
 }
