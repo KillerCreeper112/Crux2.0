@@ -54,6 +54,7 @@ public class NumberObjective extends SimpleAdvancementObjective {
         if(shouldUpdateAdvancement(p)){
             manager.grantCriteria(who, advancement, criterion);
             if(advancement.isGranted(who)){
+                //clean up objective data since it isn't needed anymore.
                 advancement.setObjectiveProgress(who, null);
             }
         }
