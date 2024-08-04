@@ -133,6 +133,22 @@ public class JsonRegistry implements FileRegistry {
         return null;
     }
 
+    public @NotNull JsonElement rawSerializeObject(@NotNull Object object){
+        if(object instanceof JsonSerializable s) return serialize(s);
+        JsonContainerHandler<?> handler = findContainerHandler(object.getClass());
+        if(handler == null){
+            JsonElement ele = tryPrimitive(object);
+            if(ele == null){
+                throw new RuntimeException("Cannot find serialization method for " + object + " (class " + object.getClass().getName() + ")");
+            }
+            return ele;
+        }
+        JsonElement element = handler.attemptSerializeToJson(new JsonContext(this), object);
+        if(element == null)
+            throw new RuntimeException("Object cannot be serialized with " + handler + " (" + object + ")");
+        return element;
+    }
+
     public @NotNull JsonElement serializeObject(@NotNull Object object){
         if(object instanceof JsonSerializable s) return serialize(s);
         JsonContainerHandler<?> handler = findContainerHandler(object.getClass());

@@ -1,6 +1,6 @@
 package killercreepr.cruxadvancements.data.entity;
 
-import com.google.common.reflect.TypeToken;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.Loadable;
@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 public class AdvancementHolder extends PlayerDataHolder implements Loadable {
     public static final Key KEY = Crux.key("advancement");
@@ -53,7 +54,11 @@ public class AdvancementHolder extends PlayerDataHolder implements Loadable {
         JsonObject json = cfg.json();
         if(json==null) return;
         JsonRegistry registry = cfg.jsonRegistry();
-        json.add("tracked_advancements", registry.serializeObject(advancementTracker.getTrackedAdvancements()));
+        JsonArray a = new JsonArray();
+        advancementTracker.getTrackedAdvancements().forEach(tracked ->{
+            a.add(registry.serializeObject(tracked));
+        });
+        json.add("tracked_advancements", a);
         cfg.save();
     }
 
@@ -63,11 +68,15 @@ public class AdvancementHolder extends PlayerDataHolder implements Loadable {
         JsonObject json = cfg.json();
         if(json==null) return;
         JsonRegistry registry = cfg.jsonRegistry();
-        Collection<TrackedAdvancement> tracked = registry.deserialize(new TypeToken<Collection<TrackedAdvancement>>(){}.getType(),
-            json.get("tracked_advancements"));
-        cfg.close();
-        if(tracked != null){
-            advancementTracker.setTrackedAdvancements(tracked);
+        Collection<TrackedAdvancement> tracked = new HashSet<>();
+        if(json.get("tracked_advancements") instanceof JsonArray a){
+            a.forEach(ele ->{
+                TrackedAdvancement t = registry.deserialize(TrackedAdvancement.class, ele);
+                if(t==null) return;
+                tracked.add(t);
+            });
         }
+        cfg.close();
+        advancementTracker.setTrackedAdvancements(tracked);
     }
 }
