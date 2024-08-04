@@ -15,6 +15,7 @@ import killercreepr.cruxadvancements.advancement.progression.NumberAdvancementPr
 import killercreepr.cruxadvancements.advancement.progression.SimpleCriterionProgress;
 import killercreepr.cruxadvancements.advancement.reward.CruxAdvanceReward;
 import killercreepr.cruxadvancements.config.handler.*;
+import killercreepr.cruxadvancements.data.TrackedAdvancement;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -114,5 +115,7 @@ public class CruxConfigHook {
 
         registry.registerHandler(ObjectiveConditions.class, new FileObjectiveConditions());
         registry.registerHandler(ObjectiveCondition.class, OBJECTIVE_CONDITION);
+
+        registry.registerHandler(TrackedAdvancement.class, new FileTrackedAdvancement());
     }
 }

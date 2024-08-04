@@ -14,6 +14,15 @@ import java.util.function.BiConsumer;
 public class AdvancementTracker {
     protected final Collection<TrackedAdvancement> trackedAdvancements = new HashSet<>();
 
+    public void setTrackedAdvancements(@NotNull Collection<TrackedAdvancement> advancements){
+        trackedAdvancements.clear();
+        trackedAdvancements.addAll(advancements);
+    }
+
+    public Collection<TrackedAdvancement> getTrackedAdvancements() {
+        return trackedAdvancements;
+    }
+
     public void untrackAll(){
         trackedAdvancements.clear();
     }

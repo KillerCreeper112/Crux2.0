@@ -13,7 +13,6 @@ import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.cruxadvancements.advancement.CruxAdvancement;
 import killercreepr.cruxadvancements.advancement.ObjectiveAdvancement;
-import killercreepr.cruxadvancements.advancement.objective.progress.NumberObjectiveProgress;
 import killercreepr.cruxadvancements.advancement.objective.progress.ObjectiveProgression;
 import killercreepr.cruxadvancements.advancement.progression.CruxAdvancementProgress;
 import killercreepr.cruxadvancements.advancement.progression.ListAdvancementProgress;

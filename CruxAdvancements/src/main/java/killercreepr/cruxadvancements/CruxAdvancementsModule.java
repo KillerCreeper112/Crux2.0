@@ -32,7 +32,7 @@ public class CruxAdvancementsModule implements CruxModule {
         }
         EntityMemory.registerFunction(plugin, mem ->{
             if(!(mem instanceof PlayerMemory data)) return;
-            data.getDataHolders().register(new AdvancementHolder(data));
+            data.getDataHolders().register(new AdvancementHolder(data, plugin));
         });
     }
 
