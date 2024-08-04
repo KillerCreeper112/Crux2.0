@@ -131,7 +131,11 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
         if(!cfg.file().exists()) return;
         JsonObject json = cfg.json();
         if(json==null) return;
-        if(!(json.get("values") instanceof JsonObject values)) return;
+        if(!(json.get("values") instanceof JsonObject values)){
+            cfg.close();
+            return;
+        }
+        cfg.close();
         JsonRegistry registry = cfg.jsonRegistry();
 
         JsonContext ctx = new JsonContext(registry);

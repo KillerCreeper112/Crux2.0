@@ -4,7 +4,6 @@ import eu.endercentral.crazy_advancements.advancement.Advancement;
 import eu.endercentral.crazy_advancements.advancement.criteria.Criteria;
 import eu.endercentral.crazy_advancements.advancement.progress.AdvancementProgress;
 import eu.endercentral.crazy_advancements.manager.AdvancementManager;
-import killercreepr.cruxadvancements.advancement.CruxAdvancement;
 import killercreepr.cruxadvancements.advancement.criteria.ListCriteria;
 import killercreepr.cruxadvancements.advancement.criteria.NumberCriteria;
 import killercreepr.cruxadvancements.advancement.progression.CruxAdvancementProgress;
@@ -35,7 +34,7 @@ public abstract class CrazyAdvancementManager<T extends CrazyAdvancement> extend
     @Override
     public void unloadProgress(@NotNull UUID uuid, @NotNull T... advancements) {
         super.unloadProgress(uuid, advancements);
-        if(advancements.length == 0) advancements = (T[]) this.advancements.values().toArray(new CruxAdvancement[0]);
+        if(advancements.length == 0) advancements = (T[]) this.advancements.values().toArray(new CrazyAdvancement[0]);
         for(T a : advancements){
             Advancement crazy = getCrazyAdvancement(a.key());
             if(crazy == null) continue;
