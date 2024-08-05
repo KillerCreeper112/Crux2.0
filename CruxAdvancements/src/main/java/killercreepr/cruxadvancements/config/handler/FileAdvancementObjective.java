@@ -18,7 +18,7 @@ public class FileAdvancementObjective implements FileHandler<AdvancementObjectiv
     }
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull AdvancementObjective object) {
-        throw new RuntimeException("todo");
+        throw new UnsupportedOperationException("unsupported");
     }
 
     @Override
