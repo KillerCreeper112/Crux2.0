@@ -5,6 +5,7 @@ import killercreepr.crux.registry.SimpleKeyedRegistry;
 import killercreepr.cruxadvancements.advancement.CruxAdvancement;
 import killercreepr.cruxadvancements.advancement.progression.CriteriaResult;
 import killercreepr.cruxadvancements.advancement.progression.CruxAdvancementProgress;
+import killercreepr.cruxadvancements.advancement.reward.CruxAdvanceReward;
 import killercreepr.cruxadvancements.event.*;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
@@ -39,6 +40,29 @@ public abstract class SimpleAdvancementManager<T extends CruxAdvancement> implem
         advancements.unregister(a);
     }
 
+    /**
+     * Attempts to call the advancement grant event and if it does not
+     * get cancelled, will attempt to grant the reward.
+     */
+    protected @NotNull CruxAdvancementGrantEvent callGrantEvent(@NotNull UUID who, @NotNull T advancement){
+        CruxAdvancementGrantEvent event = new CruxAdvancementGrantEvent(who, this, advancement);
+        if(!event.callEvent()) return event;
+        grantAdvancementReward(who, advancement);
+        return event;
+    }
+
+    @Override
+    public @Nullable CruxAdvancementRewardEvent grantAdvancementReward(@NotNull UUID who, @NotNull T advancement){
+        CruxAdvanceReward reward = advancement.reward();
+        if(reward==null) return null;
+        CruxAdvancementRewardEvent event = new CruxAdvancementRewardEvent(who, this, advancement, reward);
+        if(!event.callEvent()) return event;
+
+        reward = event.getReward();
+        reward.onReward(this, advancement, who);
+        return event;
+    }
+
     @Override
     public @Nullable CruxAdvancementGrantEvent grantAdvancement(@NotNull UUID who, @NotNull T advancement){
         CruxAdvancementProgress progress = advancement.getProgress(who);
@@ -49,6 +73,7 @@ public abstract class SimpleAdvancementManager<T extends CruxAdvancement> implem
         if(!event.callEvent()) return event;
 
         progress.grant();
+        grantAdvancementReward(who, advancement);
         return event;
     }
 
@@ -80,8 +105,8 @@ public abstract class SimpleAdvancementManager<T extends CruxAdvancement> implem
 
         CriteriaResult result = progress.grantCriteria(criteria);
         if(result.wasCompleted()){
-            CruxAdvancementGrantEvent grantEvent = new CruxAdvancementGrantEvent(who, this, advancement);
-            if(!grantEvent.callEvent()){
+            CruxAdvancementGrantEvent grantEvent = callGrantEvent(who, advancement);
+            if(grantEvent.isCancelled()){
                 progress.revokeCriteria(result.getChangedCriteria().toArray(new String[0]));
                 event.setCancelled(true);
             }
@@ -135,8 +160,8 @@ public abstract class SimpleAdvancementManager<T extends CruxAdvancement> implem
         boolean had = progress.isDone();
         CriteriaResult result = progress.setCriteriaProgress(newProgress);
         if(result.wasCompleted() && !had){
-            CruxAdvancementGrantEvent grantEvent = new CruxAdvancementGrantEvent(who, this, advancement);
-            if(!grantEvent.callEvent()){
+            CruxAdvancementGrantEvent grantEvent = callGrantEvent(who, advancement);
+            if(grantEvent.isCancelled()){
                 progress.setCriteriaProgress(result.getPreviousProgress());
                 event.setCancelled(true);
             }

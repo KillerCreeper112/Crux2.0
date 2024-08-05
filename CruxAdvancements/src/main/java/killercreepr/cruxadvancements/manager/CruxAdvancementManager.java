@@ -68,6 +68,8 @@ public interface CruxAdvancementManager<T extends CruxAdvancement> extends Keyed
                                                            @NotNull T advancement,
                                                            int newProgress);
 
+    @Nullable CruxAdvancementRewardEvent grantAdvancementReward(@NotNull UUID who, @NotNull T advancement);
+
     //player
     default @Nullable CruxAdvancementGrantEvent grantAdvancement(@NotNull Player who, @NotNull T advancement){
         return grantAdvancement(who.getUniqueId(), advancement);
@@ -95,6 +97,9 @@ public interface CruxAdvancementManager<T extends CruxAdvancement> extends Keyed
                                                            @NotNull T advancement,
                                                            int newProgress){
         return setCriteriaProgress(who.getUniqueId(), advancement, newProgress);
+    }
+    default @Nullable CruxAdvancementRewardEvent grantAdvancementReward(@NotNull Player who, @NotNull T advancement){
+        return grantAdvancementReward(who.getUniqueId(), advancement);
     }
 
     void refresh(@NotNull Plugin plugin);
