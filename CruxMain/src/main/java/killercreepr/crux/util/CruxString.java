@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -55,9 +56,23 @@ public class CruxString {
         return builder.toString();
     }
 
+    public static int DEFAULT_DESCRIPTION_MAX_LENGTH = 30;
+    public static @NotNull List<String> buildDescription(@NotNull String text){
+        return buildDescription(text, DEFAULT_DESCRIPTION_MAX_LENGTH);
+    }
+
     public static @NotNull List<String> buildDescription(@NotNull String text, int maxLength){
         List<String> list = new ArrayList<>();
         buildDescription(text, list::add, maxLength);
+        return list;
+    }
+
+    public static @NotNull List<String> buildDescription(@NotNull String text, int maxLength, @Nullable Function<String, String> function){
+        List<String> list = new ArrayList<>();
+        buildDescription(text, s ->{
+            if(function != null) s = function.apply(s);
+            list.add(s);
+        }, maxLength);
         return list;
     }
 
