@@ -18,6 +18,7 @@ import killercreepr.cruxadvancements.advancement.progression.CruxAdvancementProg
 import killercreepr.cruxadvancements.advancement.progression.ListAdvancementProgress;
 import killercreepr.cruxadvancements.advancement.progression.NumberAdvancementProgress;
 import killercreepr.cruxadvancements.command.argument.AdvancementArguments;
+import killercreepr.cruxadvancements.command.argument.CruxAdvancementListResolver;
 import killercreepr.cruxadvancements.command.argument.CruxAdvancementResolver;
 import killercreepr.cruxadvancements.data.entity.AdvancementHolder;
 import killercreepr.cruxadvancements.manager.CruxAdvancementManager;
@@ -107,6 +108,44 @@ public class AdvancementCommands {
                                 )
                         )
                 )
+        ).then(
+            Commands.literal("grant")
+                .then(
+                    Commands.argument("targets", ArgumentTypes.players())
+                        .then(
+                            Commands.argument("manager", AdvancementArguments.ADVANCEMENT_MANAGER)
+                                .then(
+                                    Commands.argument("advancements", AdvancementArguments.ADVANCEMENT_LIST)
+                                        .executes(ctx ->{
+                                            Collection<Player> targets = ctx.getArgument("targets", PlayerSelectorArgumentResolver.class)
+                                                .resolve(ctx.getSource());
+                                            CruxAdvancementManager<?> manager = ctx.getArgument("manager", CruxAdvancementManager.class);
+                                            Collection<CruxAdvancement> advancements = ctx.getArgument("advancements", CruxAdvancementListResolver.class)
+                                                .resolve(manager);
+                                            return grant(ctx.getSource(), targets, manager, advancements);
+                                        })
+                                )
+                        )
+                )
+        ).then(
+            Commands.literal("revoke")
+                .then(
+                    Commands.argument("targets", ArgumentTypes.players())
+                        .then(
+                            Commands.argument("manager", AdvancementArguments.ADVANCEMENT_MANAGER)
+                                .then(
+                                    Commands.argument("advancements", AdvancementArguments.ADVANCEMENT_LIST)
+                                        .executes(ctx ->{
+                                            Collection<Player> targets = ctx.getArgument("targets", PlayerSelectorArgumentResolver.class)
+                                                .resolve(ctx.getSource());
+                                            CruxAdvancementManager<?> manager = ctx.getArgument("manager", CruxAdvancementManager.class);
+                                            Collection<CruxAdvancement> advancements = ctx.getArgument("advancements", CruxAdvancementListResolver.class)
+                                                .resolve(manager);
+                                            return revoke(ctx.getSource(), targets, manager, advancements);
+                                        })
+                                )
+                        )
+                )
         );
         return dispatcher.build();
     }
@@ -174,6 +213,30 @@ public class AdvancementCommands {
             data.getAdvancementTracker().track(manager, advancement);
             sender.sendMessage(p.getName() + " is now tracking " + advancement.key() + ".");
         }
+        return 1;
+    }
+
+    public static int grant(@NotNull CommandSourceStack source, @NotNull Collection<Player> targets, @NotNull CruxAdvancementManager manager,
+                            @NotNull Collection<CruxAdvancement> advancements){
+        CommandSender sender = getExecutor(source);
+        for(Player p : targets){
+            for(CruxAdvancement a : advancements){
+                manager.grantAdvancement(p, a);
+            }
+        }
+        new MsgContainer(advancements.size() + " advancements granted for " + targets.size() + " players.");
+        return 1;
+    }
+
+    public static int revoke(@NotNull CommandSourceStack source, @NotNull Collection<Player> targets, @NotNull CruxAdvancementManager manager,
+                            @NotNull Collection<CruxAdvancement> advancements){
+        CommandSender sender = getExecutor(source);
+        for(Player p : targets){
+            for(CruxAdvancement a : advancements){
+                manager.revokeAdvancement(p, a);
+            }
+        }
+        new MsgContainer(advancements.size() + " advancements revoked from " + targets.size() + " players.");
         return 1;
     }
 }
