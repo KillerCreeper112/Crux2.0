@@ -2,16 +2,16 @@ package killercreepr.crux.item.dynamic;
 
 import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.util.CruxItem;
+import net.kyori.adventure.key.InvalidKeyException;
+import net.kyori.adventure.key.Key;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Registry;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class BukkitDynamicItem implements DynamicItem{
@@ -59,15 +59,28 @@ public class BukkitDynamicItem implements DynamicItem{
                 .build();
     }
 
+    protected @Nullable Material matchMaterial(@NotNull String s){
+        try{
+            return Registry.MATERIAL.get(Key.key(s));
+        }catch (InvalidKeyException ignored){}
+        return null;
+    }
+
     @Override
     public @Nullable CruxItem build(@NotNull TextParserContext context) {
         String parsed = context.deserializeString(material());
-        Material material = Material.matchMaterial(parsed);
+        Material material = matchMaterial(parsed);
         ItemStack built;
         if(material == null){
             try{
                 built = Bukkit.getItemFactory().createItemStack(parsed);
-            }catch (IllegalArgumentException ignored){ return null; }
+            }catch (IllegalArgumentException ignored){
+                try{
+                    built = ItemStack.deserializeBytes(Base64.getDecoder().decode(parsed));
+                }catch (Exception ignored_){
+                    return null;
+                }
+            }
         }else built = new ItemStack(material);
         CruxItem item = new CruxItem(built);
         item.amount(amount==null?1:(int) Double.parseDouble(context.deserializeString(amount)));

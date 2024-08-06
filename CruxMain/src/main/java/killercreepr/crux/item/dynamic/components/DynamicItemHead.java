@@ -3,6 +3,7 @@ package killercreepr.crux.item.dynamic.components;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import killercreepr.crux.Crux;
 import killercreepr.crux.context.TextParserContext;
+import killercreepr.crux.util.CruxBase64;
 import killercreepr.crux.util.CruxItem;
 import killercreepr.crux.util.CruxProfile;
 import org.bukkit.Bukkit;
@@ -37,7 +38,7 @@ public class DynamicItemHead extends DynamicSingleValueComponent{
                 throw new RuntimeException(e);
             }
 
-            if(CruxProfile.isBase64(parsed)){
+            if(CruxBase64.isBase64(parsed)){
                 CruxProfile.editSkullItemFromBase64(parsed, item.item());
                 return;
             }
