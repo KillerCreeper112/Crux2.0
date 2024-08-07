@@ -89,7 +89,9 @@ public class BukkitDynamicItem implements DynamicItem{
         ItemStack built = buildBase(context);
         if(built==null) return null;
         CruxItem item = new CruxItem(built);
-        item.amount(amount==null?1:(int) Double.parseDouble(context.deserializeString(amount)));
+        if(amount != null){
+            item.amount((int) Double.parseDouble(context.deserializeString(amount)));
+        }
         return applyComponents(item, context);
     }
 
