@@ -111,7 +111,8 @@ public class BukkitCfgHandlers {
             PotionEffectType.Category.class,
             Particle.class,
             Instrument.class,
-            BlockFace.class
+            BlockFace.class,
+            Axis.class
         );
 
         registry.registerHandler(StoredChunk.class, new AutoFileHandler<>(StoredChunk.class));

@@ -3,6 +3,7 @@ package killercreepr.cruxblocks.config.handler;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.GenericBlock;
 import killercreepr.cruxblocks.block.GenericDirectionalBlock;
+import killercreepr.cruxblocks.block.group.CruxDirectionalBlockGroup;
 import killercreepr.cruxblocks.block.texture.TextureData;
 import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
@@ -10,6 +11,7 @@ import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import net.kyori.adventure.key.Key;
+import org.bukkit.Axis;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,6 +38,10 @@ public class FileCruxBlock implements FileHandler<CruxBlock> {
         if(texture==null) return null;
 
         BlockFace direction = registry.deserialize(BlockFace.class, o.get("direction"));
+        if(direction == null){
+            Axis axis = registry.deserialize(Axis.class, o.get("direction"));
+            if(axis != null) direction = CruxDirectionalBlockGroup.getFaceFromAxis(axis);
+        }
         if(direction == null) return new GenericBlock(key, texture);
 
         return new GenericDirectionalBlock(key, texture, direction);
