@@ -265,6 +265,36 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
                 return new DynamicItemHead(object);
             }
         });
+
+        COMPONENT_REGISTRY.register("persistent_tags", new FileDynamicItemComponent<>(DynamicItemPersistentTags.class) {
+            @Override
+            public @NotNull String jsonSerializerID() {
+                return "dynamic_item_persistent_tags";
+            }
+
+
+            @Override
+            public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull DynamicItemPersistentTags object) {
+                FileRegistry registry = context.getRegistry();
+                FileObject o = new FileObject();
+                object.getTags().forEach((key, value) -> o.add(key.toString(), registry.serializeToFileElement(value)));
+                return o;
+            }
+
+            @Override
+            public @Nullable DynamicItemPersistentTags deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
+                if(!(e instanceof FileObject o)) return null;
+                FileRegistry registry = context.getRegistry();
+                Map<Object, DynamicPersistentTag> tags = new HashMap<>();
+                o.forEach((key, value) ->{
+                    DynamicPersistentTag tag = registry.deserialize(DynamicPersistentTag.class, value);
+                    if(tag==null) return;
+                    tags.put(key, tag);
+                });
+                if(tags.isEmpty()) return null;
+                return new DynamicItemPersistentTags(tags);
+            }
+        });
     }
 
     public FileDynamicItem registerComponents(@NotNull FileRegistry registry){
