@@ -1,6 +1,7 @@
 package killercreepr.crux.tags.format;
 
 import killercreepr.crux.context.TextParserContext;
+import killercreepr.crux.data.util.Pair;
 import killercreepr.crux.registry.Registry;
 import killercreepr.crux.registry.SimpleRegistry;
 import killercreepr.crux.tags.TagParser;
@@ -166,24 +167,25 @@ public class Format implements FormatSerializer{
             String placeholder = matcher.group(1);
             String optionalParameter = matcher.group(2);
 
-            List<String> addons = processListPlaceholder(container,
+            Pair<List<String>, Boolean> addons = processListPlaceholder(container,
                 placeholder, new FormatArgs(optionalParameter == null ? new String[0] : optionalParameter.split(":")));
             if(addons != null){
-                addon.addAll(addons);
+                List<String> first = addons.getFirst();
+                if(first != null) addon.addAll(first);
                 found = true;
             }
         }
         return found ? addon : null;
     }
 
-    private @Nullable List<String> processListPlaceholder(@NotNull StringListTagContainer container,
+    private @Nullable Pair<List<String>, Boolean> processListPlaceholder(@NotNull StringListTagContainer container,
                                                           @NotNull String placeholder,
                                                           @NotNull FormatArgs args) {
         StringListResolver resolver = container.get(placeholder);
         if(resolver == null) return null;
         TextParserContext context = new FormatParserContext.Builder(this)
             .build();
-        return resolver.resolve(args, context);
+        return new Pair<>(resolver.resolve(args, context), true);
     }
 
     //todo possibly:
