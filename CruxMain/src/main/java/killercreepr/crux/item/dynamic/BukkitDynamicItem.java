@@ -66,8 +66,7 @@ public class BukkitDynamicItem implements DynamicItem{
         return null;
     }
 
-    @Override
-    public @Nullable CruxItem build(@NotNull TextParserContext context) {
+    public @Nullable ItemStack buildBase(@NotNull TextParserContext context){
         String parsed = context.deserializeString(material());
         Material material = matchMaterial(parsed);
         ItemStack built;
@@ -82,6 +81,13 @@ public class BukkitDynamicItem implements DynamicItem{
                 }
             }
         }else built = new ItemStack(material);
+        return built;
+    }
+
+    @Override
+    public @Nullable CruxItem build(@NotNull TextParserContext context) {
+        ItemStack built = buildBase(context);
+        if(built==null) return null;
         CruxItem item = new CruxItem(built);
         item.amount(amount==null?1:(int) Double.parseDouble(context.deserializeString(amount)));
         return applyComponents(item, context);
