@@ -62,7 +62,7 @@ public abstract class PagedMenuModule<T> implements MenuModule {
     public @Nullable ActiveMenuModule build(@NotNull Menu menu) {
         return new ActivePagedMenuModule<T>(id, this, parseIndexes(menu), getValues(menu)) {
             @Override
-            public void setPagedItem(@NotNull Menu menu, int slot, int index, @NotNull T value) {
+            public void setPagedItem(@NotNull Menu menu, int slot, int index, int listIndex, @NotNull T value) {
                 if(valueItems == null) return;
                 if(!(menu instanceof CfgMenu cfg)) return;
                 MenuContext menuContext = new MenuContext(cfg,
@@ -70,7 +70,8 @@ public abstract class PagedMenuModule<T> implements MenuModule {
                     menu, cfg.getHolder().getRegistry().getFormat().tags()
                 )).addAll(
                     Tag.parsed(MenuModule.buildTag(id, "slot"), slot+""),
-                    Tag.parsed(MenuModule.buildTag(id, "index"), index+"")
+                    Tag.parsed(MenuModule.buildTag(id, "index"), index+""),
+                    Tag.parsed(MenuModule.buildTag(id, "list_index"), listIndex+"")
                 ));
 
                 cfg.setItems(valueItems, menuContext);

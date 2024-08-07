@@ -53,13 +53,13 @@ public abstract class ActivePagedMenuModule<T> extends SimpleActiveMenuModule {
         int addon = indexes.size() * page;
         for(int i : indexes){
             index++;
-            int valueIndex = index + addon;
-            if(valueIndex >= list.size()) setEmptyItem(menu, i, index);
-            else setPagedItem(menu, i, index, list.get(valueIndex));
+            int listIndex = index + addon;
+            if(listIndex >= list.size()) setEmptyItem(menu, i, index);
+            else setPagedItem(menu, i, index, listIndex, list.get(listIndex));
         }
     }
 
-    public abstract void setPagedItem(@NotNull Menu menu, int slot, int index, @NotNull T value);
+    public abstract void setPagedItem(@NotNull Menu menu, int slot, int index,int listIndex, @NotNull T value);
     public abstract void setEmptyItem(@NotNull Menu menu, int slot, int index);
 
     public int calculateMaxPages(){
