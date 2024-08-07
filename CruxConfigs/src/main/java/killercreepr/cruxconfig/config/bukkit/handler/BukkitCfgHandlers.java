@@ -11,9 +11,11 @@ import killercreepr.crux.data.communication.MsgContainer;
 import killercreepr.crux.item.ItemHolder;
 import killercreepr.crux.item.StoredItem;
 import killercreepr.crux.item.dynamic.BukkitDynamicItem;
+import killercreepr.crux.item.dynamic.components.DynamicPersistentTag;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.*;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.FileDynamicItem;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.FileDynamicPersistentTag;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.handler.AutoFileHandler;
 import killercreepr.cruxconfig.config.common.json.JsonRegistry;
@@ -59,6 +61,7 @@ public class BukkitCfgHandlers {
     public static final FileItemHolder ITEM_HOLDER = new FileItemHolder();
     public static final FileInstant INSTANT = new FileInstant();
     public static final FileStoredItem STORED_ITEM = new FileStoredItem();
+    public static final FileDynamicPersistentTag DYNAMIC_PERSISTENT_TAG = new FileDynamicPersistentTag();
 
     public static void initJson(@NotNull JsonRegistry registry){
         registry.registerHandler(
@@ -85,6 +88,7 @@ public class BukkitCfgHandlers {
         registry.registerHandler(Instant.class, INSTANT);
         registry.registerHandler(EntityType.class, ENTITY_TYPE);
         registry.registerHandler(StoredItem.class, STORED_ITEM);
+        registry.registerHandler(DynamicPersistentTag.class, DYNAMIC_PERSISTENT_TAG);
 
         DYNAMIC_ITEM.registerComponents(registry);
 

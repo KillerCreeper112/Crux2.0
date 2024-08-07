@@ -8,6 +8,7 @@ import killercreepr.crux.registry.MappedRegistry;
 import killercreepr.crux.registry.SimpleMappedRegistry;
 import killercreepr.cruxconfig.config.bukkit.handler.SimpleFileHandler;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.FileDynamicItemComponent;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.FileDynamicPersistentTag;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.FileGenericSingleDynamicComponent;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
@@ -284,10 +285,11 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
             @Override
             public @Nullable DynamicItemPersistentTags deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
                 if(!(e instanceof FileObject o)) return null;
-                FileRegistry registry = context.getRegistry();
                 Map<Object, DynamicPersistentTag> tags = new HashMap<>();
                 o.forEach((key, value) ->{
-                    DynamicPersistentTag tag = registry.deserialize(DynamicPersistentTag.class, value);
+                    DynamicPersistentTag tag = FileDynamicPersistentTag.deserialize(
+                        context, value, key
+                    );
                     if(tag==null) return;
                     tags.put(key, tag);
                 });

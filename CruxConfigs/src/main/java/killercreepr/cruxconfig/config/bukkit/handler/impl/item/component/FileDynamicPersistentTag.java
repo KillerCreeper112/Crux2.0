@@ -1,7 +1,6 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.item.component;
 
 import killercreepr.crux.item.dynamic.components.DynamicPersistentTag;
-import killercreepr.crux.util.CruxObjects;
 import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
@@ -24,12 +23,17 @@ public class FileDynamicPersistentTag implements FileHandler<DynamicPersistentTa
     @Override
     public @Nullable DynamicPersistentTag deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;
+        FileElement key = o.get("key");
+        return deserialize(ctx, e, key == null ? null : key.getAsString());
+    }
+
+    public static @Nullable DynamicPersistentTag deserialize(@NotNull FileContext<?> ctx, @NotNull FileElement e, @Nullable Object key) {
+        if(!(e instanceof FileObject o)) return null;
         String type = o.getObject(String.class, "type");
         if(type==null) return null;
-        FileElement key = o.get("key");
         FileElement value = o.get("value");
-        if(CruxObjects.checkNull(key, value)) return null;
-        return new DynamicPersistentTag(type, key, value);
+        if(value == null) return null;
+        return new DynamicPersistentTag(type, key, value.getAsString());
     }
 
     @Override

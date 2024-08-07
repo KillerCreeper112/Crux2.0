@@ -16,6 +16,7 @@ import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.block.data.CustomBlockData;
 import killercreepr.cruxblocks.block.data.events.CustomBlockDataRemoveEvent;
 import killercreepr.cruxblocks.command.CruxBlocksCommands;
+import killercreepr.cruxblocks.config.CruxConfigHook;
 import killercreepr.cruxblocks.data.entity.MinerHolder;
 import killercreepr.cruxblocks.item.CruxItemsItemProvider;
 import killercreepr.cruxblocks.item.KeyedItemProvider;
@@ -56,6 +57,13 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
 
     public void setKeyedItemProvider(@Nullable KeyedItemProvider keyedItemProvider) {
         this.keyedItemProvider = keyedItemProvider;
+    }
+
+    @Override
+    public void onLoad(@NotNull CruxPlugin plugin) {
+        if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS)){
+            CruxConfigHook.register();
+        }
     }
 
     @Override
