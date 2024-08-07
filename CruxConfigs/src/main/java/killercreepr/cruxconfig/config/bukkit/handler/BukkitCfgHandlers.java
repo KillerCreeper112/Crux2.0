@@ -24,11 +24,9 @@ import killercreepr.cruxconfig.config.common.yaml.automatic.AutoYamlSerializer;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Color;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemRarity;
@@ -111,7 +109,9 @@ public class BukkitCfgHandlers {
             World.Environment.class,
             ItemRarity.class,
             PotionEffectType.Category.class,
-            Particle.class
+            Particle.class,
+            Instrument.class,
+            BlockFace.class
         );
 
         registry.registerHandler(StoredChunk.class, new AutoFileHandler<>(StoredChunk.class));

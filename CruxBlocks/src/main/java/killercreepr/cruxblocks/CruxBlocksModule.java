@@ -60,6 +60,13 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
     }
 
     @Override
+    public void reload(@NotNull CruxPlugin plugin) {
+        if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS)){
+            CruxConfigHook.loadCfgBlockGroups(plugin, "blocks");
+        }
+    }
+
+    @Override
     public void onLoad(@NotNull CruxPlugin plugin) {
         if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS)){
             CruxConfigHook.register();
