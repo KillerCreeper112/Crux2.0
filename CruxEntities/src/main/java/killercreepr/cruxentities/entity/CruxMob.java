@@ -41,6 +41,11 @@ public interface CruxMob extends Keyed {
             Collection<MobCategory> list = Arrays.asList(check);
             return Arrays.stream(getVanillaCategories(e)).anyMatch(list::contains);
         }
+        MobCategory[] categories = mob.getCategories();
+        if(categories == null){
+            Collection<MobCategory> list = Arrays.asList(check);
+            return Arrays.stream(getVanillaCategories(e)).anyMatch(list::contains);
+        }
         return isInCategory(e, check);
     }
 
