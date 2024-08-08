@@ -62,6 +62,9 @@ public interface CruxMob extends Keyed {
         if(e instanceof Animals) list.add(MobCategory.ANIMAL);
         if(EntityTags.UNDEADS.isTagged(e.getType())) list.add(MobCategory.UNDEAD);
         if(EntitySetTag.ENTITY_TYPES_ARTHROPOD.isTagged(e.getType())) list.add(MobCategory.ARTHROPOD);
+        switch (e.getType()){
+            case WARDEN -> list.add(MobCategory.SCULK);
+        }
         return list.toArray(new MobCategory[0]);
     }
 

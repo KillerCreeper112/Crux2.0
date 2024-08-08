@@ -9,4 +9,5 @@ public interface MobCategory extends Keyed {
     MobCategory MONSTER = CruxEntityRegistries.MOB_CATEGORY.register(new SimpleMobCategory(Crux.key("monster")));
     MobCategory ARTHROPOD = CruxEntityRegistries.MOB_CATEGORY.register(new SimpleMobCategory(Crux.key("arthropod")));
     MobCategory UNDEAD = CruxEntityRegistries.MOB_CATEGORY.register(new SimpleMobCategory(Crux.key("undead")));
+    MobCategory SCULK = CruxEntityRegistries.MOB_CATEGORY.register(new SimpleMobCategory(Crux.key("sculk")));
 }
