@@ -1,15 +1,23 @@
 package killercreepr.cruxentities.entity;
 
+import io.papermc.paper.tag.EntitySetTag;
+import io.papermc.paper.tag.EntityTags;
 import killercreepr.crux.util.CruxString;
 import killercreepr.cruxentities.persistence.CruxEntitiesPersistTags;
 import killercreepr.cruxentities.registries.CruxEntityRegistries;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import org.bukkit.Location;
+import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Monster;
 import org.bukkit.persistence.PersistentDataHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 
 public interface CruxMob extends Keyed {
     static boolean is(@NotNull Entity e, @NotNull CruxMob@NotNull... grim){
@@ -27,6 +35,31 @@ public interface CruxMob extends Keyed {
         return grim.key().equals(CruxEntitiesPersistTags.ENTITY.get(e, null));
     }
 
+    static boolean isInCategory(@NotNull Entity e, @NotNull MobCategory... check){
+        CruxMob mob = get(e);
+        if(mob==null){
+            Collection<MobCategory> list = Arrays.asList(check);
+            return Arrays.stream(getVanillaCategories(e)).anyMatch(list::contains);
+        }
+        return isInCategory(e, check);
+    }
+
+    static boolean isInCategory(@NotNull CruxMob e, @NotNull MobCategory... check){
+        MobCategory[] categories = e.getCategories();
+        if(categories==null || categories.length == 0) return false;
+        Collection<MobCategory> list = Arrays.asList(check);
+        return Arrays.stream(categories).anyMatch(list::contains);
+    }
+
+    static @NotNull MobCategory[] getVanillaCategories(@NotNull Entity e){
+        Collection<MobCategory> list = new HashSet<>();
+        if(e instanceof Monster) list.add(MobCategory.MONSTER);
+        if(e instanceof Animals) list.add(MobCategory.ANIMAL);
+        if(EntityTags.UNDEADS.isTagged(e.getType())) list.add(MobCategory.UNDEAD);
+        if(EntitySetTag.ENTITY_TYPES_ARTHROPOD.isTagged(e.getType())) list.add(MobCategory.ARTHROPOD);
+        return list.toArray(new MobCategory[0]);
+    }
+
     static <T extends PersistentDataHolder> @Nullable Key getKey(@NotNull T e){
         return CruxEntitiesPersistTags.ENTITY.get(e);
     }
@@ -40,5 +73,8 @@ public interface CruxMob extends Keyed {
     @NotNull Entity spawn(@NotNull Location at);
     default @NotNull String getName(){
         return CruxString.toTitleCase(key().value());
+    }
+    default @NotNull MobCategory @Nullable[] getCategories(){
+        return null;
     }
 }

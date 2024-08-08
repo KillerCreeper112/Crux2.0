@@ -37,7 +37,10 @@ public class FileCruxBlock implements FileHandler<CruxBlock> {
         TextureData texture = registry.deserialize(TextureData.class, o.get("texture"));
         if(texture==null) return null;
 
-        BlockFace direction = registry.deserialize(BlockFace.class, o.get("direction"));
+        BlockFace direction = null;
+        try{
+            direction = registry.deserialize(BlockFace.class, o.get("direction"));
+        }catch (ClassCastException ignored){}
         if(direction == null){
             Axis axis = registry.deserialize(Axis.class, o.get("direction"));
             if(axis != null) direction = CruxDirectionalBlockGroup.getFaceFromAxis(axis);

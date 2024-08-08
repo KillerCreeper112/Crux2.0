@@ -15,10 +15,15 @@ public interface IDesignEntity extends IEntityWrapper {
         return this;
     }
 
+    /**
+     * @return The previous model with the same ID if one was present.
+     */
     default @NotNull Optional<ActiveModel> attemptAddModel(@NotNull String id, boolean overrideHitbox){
         ModeledEntity modeled = getOrCreateModeledEntity();
         if(hasModel(id)) return Optional.empty();
-        return modeled.addModel(createModel(id), overrideHitbox);
+        ActiveModel activeModel = createModel(id);
+        modeled.addModel(activeModel, overrideHitbox);
+        return Optional.of(activeModel);
     }
 
     default IDesignEntity addModel(@NotNull String id){
