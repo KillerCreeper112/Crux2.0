@@ -46,7 +46,7 @@ public interface CruxMob extends Keyed {
             Collection<MobCategory> list = Arrays.asList(check);
             return Arrays.stream(getVanillaCategories(e)).anyMatch(list::contains);
         }
-        return isInCategory(e, check);
+        return isInCategory(mob, check);
     }
 
     static boolean isInCategory(@NotNull CruxMob e, @NotNull MobCategory... check){

@@ -7,6 +7,14 @@ import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
 public class CreateSound {
+    public static CreateSound from(@NotNull org.bukkit.Sound sound){
+        return new CreateSound(sound);
+    }
+
+    public static CreateSound from(@NotNull org.bukkit.Sound sound, float pitch){
+        return new CreateSound(sound, pitch);
+    }
+
     protected final Sound sound;
     public CreateSound(@NotNull Sound sound) {
         this.sound = sound;

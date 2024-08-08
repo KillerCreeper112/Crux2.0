@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Mob;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -108,6 +109,12 @@ public class CruxGoalUtil {
         return new Location(center.getWorld(), newX, newY, newZ);
     }
 
+    public static <T extends Goal<Mob>> @Nullable T getGoal(@NotNull Mob mob, @NotNull Class<T> clazz, @NotNull GoalKey<Mob> key){
+        Goal<Mob> goal = Bukkit.getMobGoals().getGoal(mob, key);
+        if(goal==null) return null;
+        return clazz.cast(goal);
+    }
+
     public static <T extends Goal<Mob>> @NotNull T getOrAddGoal(@NotNull Mob mob, @NotNull Class<T> clazz, @NotNull GoalKey<Mob> key, int priority,
                                                                    @NotNull Function<Mob, Goal<Mob>> notFoundFunction){
         Goal<Mob> goal = Bukkit.getMobGoals().getGoal(mob, key);
@@ -142,6 +149,20 @@ public class CruxGoalUtil {
             throw new UnsupportedOperationException(clazz.getSimpleName() + " does not have a static GoalKey<Mob> KEY variable!");
         }
     }
+
+    /**
+     * @param clazz This class must have
+     *              a public static GoalKey KEY variable.
+     */
+    public static <T extends Goal<Mob>> @Nullable T getGoal(@NotNull Mob mob, @NotNull Class<T> clazz){
+        try{
+            Field field = clazz.getDeclaredField("KEY");
+            return getGoal(mob, clazz, (GoalKey<Mob>) field.get(null));
+        }catch (NoSuchFieldException | IllegalAccessException ignored){
+            throw new UnsupportedOperationException(clazz.getSimpleName() + " does not have a static GoalKey<Mob> KEY variable!");
+        }
+    }
+
     public static Goal<Mob> addIfNotPresent(@NotNull Mob mob, @NotNull GoalKey<Mob> key, int priority, @NotNull Supplier<Goal<Mob>> supplier){
         Goal<Mob> goal = Bukkit.getMobGoals().getGoal(mob, key);
         if(goal != null) return goal;
