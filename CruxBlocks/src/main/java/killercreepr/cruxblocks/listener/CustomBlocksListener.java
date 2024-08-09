@@ -170,7 +170,7 @@ public class CustomBlocksListener implements Listener {
         ActiveCruxBlock customClicked = manager.getActiveBlock(clickedBlock);
         if(customClicked instanceof ActiveCruxInteractable i){
             if((p.isSneaking() && item == null) || !(p.isSneaking())){
-                event.setCancelled(true);
+                //event.setCancelled(true);
                 if(i.interact(event) == Event.Result.ALLOW){
                     p.swingMainHand();
                     return;

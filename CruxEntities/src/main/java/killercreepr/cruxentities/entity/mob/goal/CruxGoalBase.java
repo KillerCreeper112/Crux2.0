@@ -6,10 +6,13 @@ import killercreepr.crux.Crux;
 import killercreepr.crux.event.CruxEntityDamageEvent;
 import killercreepr.crux.persistence.PersistTag;
 import killercreepr.crux.util.CruxEntity;
+import killercreepr.crux.util.CruxMath;
 import killercreepr.cruxattributes.attribute.CruxAttribute;
 import killercreepr.cruxattributes.attribute.CruxAttributeInstance;
 import killercreepr.cruxentities.combat.CruxEntityDamager;
 import killercreepr.cruxentities.combat.EntityHit;
+import killercreepr.cruxentities.entity.CruxMob;
+import killercreepr.cruxentities.entity.MobCategory;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
@@ -31,7 +34,8 @@ public class CruxGoalBase implements ICruxGoal {
         if(e instanceof Player p){
             return (p.getGameMode() != GameMode.CREATIVE && p.getGameMode() != GameMode.SPECTATOR) && p.isValid();
         }
-        return e instanceof LivingEntity && e.getType() != EntityType.ARMOR_STAND && !PersistTag.IGNORED_MOB_TARGET.has(e) && e.isValid();
+        return e instanceof LivingEntity && e.getType() != EntityType.ARMOR_STAND && !PersistTag.IGNORED_MOB_TARGET.has(e) && e.isValid()
+            && !CruxMob.isInCategory(e, MobCategory.OBJECT);
     };
 
     protected final GoalKey<Mob> key;

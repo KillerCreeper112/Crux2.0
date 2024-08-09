@@ -10,4 +10,9 @@ public interface MobCategory extends Keyed {
     MobCategory ARTHROPOD = CruxEntityRegistries.MOB_CATEGORY.register(new SimpleMobCategory(Crux.key("arthropod")));
     MobCategory UNDEAD = CruxEntityRegistries.MOB_CATEGORY.register(new SimpleMobCategory(Crux.key("undead")));
     MobCategory SCULK = CruxEntityRegistries.MOB_CATEGORY.register(new SimpleMobCategory(Crux.key("sculk")));
+    /**
+     * Used for entities that are purely considered objects.
+     * Normal mobs probably do not want to attack these types of entities.
+     */
+    MobCategory OBJECT = CruxEntityRegistries.MOB_CATEGORY.register(new SimpleMobCategory(Crux.key("object")));
 }

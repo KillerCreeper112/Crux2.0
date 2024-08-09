@@ -42,7 +42,7 @@ public class BukkitMenu implements Menu{
     }
 
     protected void addSlot(@NotNull Slot slot){
-        addSlot(slot, false);
+        addSlot(slot, true);
     }
 
     protected void addSlot(@NotNull Slot slot, boolean skipUpdate){
