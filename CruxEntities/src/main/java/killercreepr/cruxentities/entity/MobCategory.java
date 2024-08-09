@@ -5,6 +5,7 @@ import killercreepr.cruxentities.registries.CruxEntityRegistries;
 import net.kyori.adventure.key.Keyed;
 
 public interface MobCategory extends Keyed {
+    MobCategory NEUTRAL = CruxEntityRegistries.MOB_CATEGORY.register(new SimpleMobCategory(Crux.key("neutral")));
     MobCategory ANIMAL = CruxEntityRegistries.MOB_CATEGORY.register(new SimpleMobCategory(Crux.key("animal")));
     MobCategory MONSTER = CruxEntityRegistries.MOB_CATEGORY.register(new SimpleMobCategory(Crux.key("monster")));
     MobCategory ARTHROPOD = CruxEntityRegistries.MOB_CATEGORY.register(new SimpleMobCategory(Crux.key("arthropod")));
@@ -15,4 +16,13 @@ public interface MobCategory extends Keyed {
      * Normal mobs probably do not want to attack these types of entities.
      */
     MobCategory OBJECT = CruxEntityRegistries.MOB_CATEGORY.register(new SimpleMobCategory(Crux.key("object")));
+    /**
+     * Used for entities that are "ghostly".
+     * Normal mobs probably do not want to attack these types of entities.
+     */
+    MobCategory ETERNAL = CruxEntityRegistries.MOB_CATEGORY.register(new SimpleMobCategory(Crux.key("eternal")));
+
+    MobCategory[] ENEMY = new MobCategory[]{
+        MONSTER
+    };
 }

@@ -35,7 +35,7 @@ public class CruxGoalBase implements ICruxGoal {
             return (p.getGameMode() != GameMode.CREATIVE && p.getGameMode() != GameMode.SPECTATOR) && p.isValid();
         }
         return e instanceof LivingEntity && e.getType() != EntityType.ARMOR_STAND && !PersistTag.IGNORED_MOB_TARGET.has(e) && e.isValid()
-            && !CruxMob.isInCategory(e, MobCategory.OBJECT);
+            && !CruxMob.isInCategory(e, MobCategory.OBJECT, MobCategory.ETERNAL);
     };
 
     protected final GoalKey<Mob> key;
