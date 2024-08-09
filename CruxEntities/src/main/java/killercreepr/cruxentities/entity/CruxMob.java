@@ -82,7 +82,7 @@ public interface CruxMob extends Keyed {
     default @NotNull String getName(){
         return CruxString.toTitleCase(key().value());
     }
-    default @NotNull MobCategory @Nullable[] getCategories(){
+    default MobCategory[] getCategories(){
         return null;
     }
 }
