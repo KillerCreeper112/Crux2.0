@@ -20,7 +20,7 @@ public class GetEntityNear<T extends Entity> extends GetNear<T> {
     }
 
     @Override
-    public @NotNull Collection<T> find() {
+    public @NotNull List<T> find() {
         Location center = this.center.value();
         List<T> found = CruxEntity.getEntitiesNear(clazz, center, range.value().doubleValue(), filter);
         switch (operation){

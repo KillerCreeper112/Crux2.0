@@ -9,9 +9,7 @@ import killercreepr.cruxstructures.structure.stored.StoredStructure;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class GetStructureNear extends GetNear<StoredStructure> {
     protected final @NotNull MultiVerseWorldStorage<StoredStructure> storage;
@@ -26,23 +24,23 @@ public class GetStructureNear extends GetNear<StoredStructure> {
     }
 
     @Override
-    public @NotNull Collection<StoredStructure> find() {
+    public @NotNull List<StoredStructure> find() {
         Location center = this.center.value();
         Map<StoredStructure, Float> map = new HashMap<>();
         WorldChunkStorage<StoredStructure> worldStorage = storage.get(center.getWorld().getUID());
-        if(worldStorage==null) return map.keySet();
+        if(worldStorage==null) return new ArrayList<>(map.keySet());
         worldStorage.forEach(chunkStorage -> chunkStorage.forEach(stored ->{
             if(filter != null && !filter.test(stored)) return;
             float distance = (float) center.distanceSquared(stored.getPosition().toLocation(center.getWorld()));
             map.put(stored, distance);
         }));
 
-        Collection<StoredStructure> result;
+        List<StoredStructure> result;
         switch (operation){
             case NEAREST, FARTHEST ->{
                 result = CruxMap.sortMapByFloat(map, operation == Operation.NEAREST);
             }
-            default -> result = map.keySet();
+            default -> result = new ArrayList<>(map.keySet());
         }
         return result;
     }

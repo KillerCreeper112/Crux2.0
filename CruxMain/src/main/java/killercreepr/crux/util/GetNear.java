@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Predicate;
 
 public abstract class GetNear<T> {
@@ -27,7 +28,7 @@ public abstract class GetNear<T> {
     public GetNear() {
     }
 
-    public abstract @NotNull Collection<T> find();
+    public abstract @NotNull List<T> find();
     public @Nullable T findFirst(){
         for(T t : find()){
             return t;

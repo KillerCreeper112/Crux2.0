@@ -36,17 +36,8 @@ public interface CruxMob extends Keyed {
     }
 
     static boolean isInCategory(@NotNull Entity e, @NotNull MobCategory... check){
-        CruxMob mob = get(e);
-        if(mob==null){
-            Collection<MobCategory> list = Arrays.asList(check);
-            return Arrays.stream(getVanillaCategories(e)).anyMatch(list::contains);
-        }
-        MobCategory[] categories = mob.getCategories();
-        if(categories == null){
-            Collection<MobCategory> list = Arrays.asList(check);
-            return Arrays.stream(getVanillaCategories(e)).anyMatch(list::contains);
-        }
-        return isInCategory(mob, check);
+        Collection<MobCategory> list = Arrays.asList(check);
+        return Arrays.stream(getCategories(e)).anyMatch(list::contains);
     }
 
     static boolean isInCategory(@NotNull CruxMob e, @NotNull MobCategory... check){
@@ -54,6 +45,13 @@ public interface CruxMob extends Keyed {
         if(categories==null || categories.length == 0) return false;
         Collection<MobCategory> list = Arrays.asList(check);
         return Arrays.stream(categories).anyMatch(list::contains);
+    }
+
+    static MobCategory[] getCategories(@NotNull Entity e){
+        CruxMob mob = get(e);
+        if(mob==null) return getVanillaCategories(e);
+        MobCategory[] cat = mob.getCategories();
+        return cat == null ? getVanillaCategories(e) : cat;
     }
 
     static @NotNull MobCategory[] getVanillaCategories(@NotNull Entity e){

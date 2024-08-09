@@ -4,15 +4,18 @@ import com.destroystokyo.paper.entity.ai.GoalKey;
 import com.destroystokyo.paper.entity.ai.GoalType;
 import killercreepr.crux.Crux;
 import killercreepr.crux.event.CruxEntityDamageEvent;
+import killercreepr.crux.location.DynamicLocation;
+import killercreepr.crux.location.EntityLocation;
 import killercreepr.crux.persistence.PersistTag;
-import killercreepr.crux.util.CruxEntity;
-import killercreepr.crux.util.CruxMath;
+import killercreepr.crux.util.GetEntityNear;
+import killercreepr.crux.util.GetNear;
 import killercreepr.cruxattributes.attribute.CruxAttribute;
 import killercreepr.cruxattributes.attribute.CruxAttributeInstance;
 import killercreepr.cruxentities.combat.CruxEntityDamager;
 import killercreepr.cruxentities.combat.EntityHit;
 import killercreepr.cruxentities.entity.CruxMob;
 import killercreepr.cruxentities.entity.MobCategory;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
@@ -24,6 +27,7 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Predicate;
@@ -198,23 +202,37 @@ public class CruxGoalBase implements ICruxGoal {
     public @Nullable Entity findTarget(@Nullable Predicate<Entity> targetCheck){
         double followRange = getFollowDistance();
 
-        final List<LivingEntity> targets = CruxEntity.filterEntityDistance(CruxEntity.getEntitiesNear(
+        DynamicLocation loc = EntityLocation.from(mob);
+        final List<LivingEntity> targets = new GetEntityNear<>(loc, LivingEntity.class)
+            .range(followRange)
+            .operation(GetNear.Operation.NEAREST)
+            .filter(e -> isValidNaturalTarget(e) && (targetCheck == null || targetCheck.test(e)))
+            .find();
+
+        /*final List<LivingEntity> targets = CruxEntity.filterEntityDistance(CruxEntity.getEntitiesNear(
             LivingEntity.class,
             mob.getLocation(),
             followRange,
             e -> isValidNaturalTarget(e) && (targetCheck == null || targetCheck.test(e))
-        ), mob.getLocation(), -1, false);
+        ), mob.getLocation(), -1, false);*/
 
-        /*todo List<Mob> teammates = new GetNearbyEntities(mob, followRange).get(Mob.class, null, TeamType.TEAMMATE);
+        Collection<Mob> teammates = new GetEntityNear<>(EntityLocation.from(mob), Mob.class)
+            .range(followRange)
+            .filter(this::isValidTeammate)
+            .find();
+        //List<Mob> teammates = new GetNearbyEntities(mob, followRange).get(Mob.class, null, TeamType.TEAMMATE);
         for(LivingEntity e : targets){
             for(Mob m : teammates){
                 if(Bukkit.getMobGoals().getGoal(m, getKey()) instanceof CruxGoalBase path && e.equals(path.getTarget())) continue;
-                setTarget(e);
-                return true;
+                return e;
             }
-        }*/
+        }
         if(!targets.isEmpty()) return targets.getFirst();
         return null;
+    }
+
+    public boolean isValidTeammate(@NotNull Entity e){
+        return CruxMob.isInCategory(e, CruxMob.getCategories(e));
     }
 
     protected boolean findAndSetTarget(@Nullable Predicate<Entity> targetCheck){
