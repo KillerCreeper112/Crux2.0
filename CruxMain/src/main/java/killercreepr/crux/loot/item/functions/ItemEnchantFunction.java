@@ -1,11 +1,11 @@
 package killercreepr.crux.loot.item.functions;
 
-import killercreepr.crux.loot.SimpleConditionedObject;
 import killercreepr.crux.loot.SimpleLootTable;
 import killercreepr.crux.loot.SimpleWeighted;
 import killercreepr.crux.loot.api.LootContext;
 import killercreepr.crux.loot.api.conditions.LootCondition;
 import killercreepr.crux.loot.functions.SimpleLootFunction;
+import killercreepr.crux.loot.item.api.ItemLootFunction;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import net.kyori.adventure.key.Key;
 import org.bukkit.inventory.ItemStack;
@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
-public class ItemEnchantFunction extends SimpleLootFunction<ItemStack> {
+public class ItemEnchantFunction extends SimpleLootFunction<ItemStack> implements ItemLootFunction {
     private final @NotNull NumberProvider rolls;
     private final @NotNull Collection<Enchant> enchants;
 

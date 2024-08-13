@@ -1,6 +1,6 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 
-import killercreepr.crux.loot.api.functions.LootFunction;
+import killercreepr.crux.loot.item.api.ItemLootFunction;
 import killercreepr.crux.registry.MappedRegistry;
 import killercreepr.crux.registry.SimpleMappedRegistry;
 import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
@@ -10,24 +10,24 @@ import killercreepr.cruxconfig.config.common.element.FileObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FileLootFunction implements FileHandler<LootFunction<?>> {
+public class FileItemLootFunction implements FileHandler<ItemLootFunction> {
     public final MappedRegistry<String, CustomFileLootFunction<?>> CUSTOM_HANDLERS = new SimpleMappedRegistry<>();
     public void registerCustomHandler(@NotNull CustomFileLootFunction<?> handler){
         CUSTOM_HANDLERS.register(handler.getType(), handler);
     }
     @Override
-    public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull LootFunction<?> object) {
+    public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull ItemLootFunction object) {
         throw new RuntimeException("unsupported");
     }
 
     @Override
-    public @Nullable LootFunction<?> deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
+    public @Nullable ItemLootFunction deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;
         String target = o.getObject(String.class, "target");
         return deserializeFromFile(context, e, target);
     }
 
-    public @Nullable LootFunction<?> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e, @Nullable String target) {
+    public @Nullable ItemLootFunction deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e, @Nullable String target) {
         if(!(e instanceof FileObject o)) return null;
         String type = o.getObject(String.class, "type");
         if(type==null) return null;
@@ -39,6 +39,6 @@ public class FileLootFunction implements FileHandler<LootFunction<?>> {
 
     @Override
     public @NotNull String jsonSerializerID() {
-        return "loot_function";
+        return "item_loot_function";
     }
 }

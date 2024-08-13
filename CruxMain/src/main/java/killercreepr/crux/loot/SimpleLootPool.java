@@ -59,11 +59,14 @@ public class SimpleLootPool<T> extends SimpleLootObject<T> implements LootPool<T
         List<LootPoolObject<T>> data = exclude == null ? this.data : new ArrayList<>(this.data);
         if(excludeEmpty && exclude != null) data.removeIf(exclude);
         for(LootPoolObject<T> x : random(data, rolls.sample(context.getRandom()).intValue(), context, exclude)){
-            T i = x.getItem() == null ? null : x.getItem().value();
-            for(LootFunction<T> f : x.getFunctions()){
-                if(f.test(context)) i = f.accept(i, context);
+            Collection<T> items = x.getItems() == null ? null : x.getItems().value();
+            if(items==null) continue;
+            for(T t : items){
+                for(LootFunction<T> f : x.getFunctions()){
+                    if(f.test(context)) t = f.accept(t, context);
+                }
+                list.add(t);
             }
-            list.add(i);
             //list.add(i == null ? null : Crux.handlers().item().update(i));
         }
         return list;

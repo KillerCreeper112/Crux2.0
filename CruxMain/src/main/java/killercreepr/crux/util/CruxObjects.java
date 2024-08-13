@@ -1,11 +1,9 @@
 package killercreepr.crux.util;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class CruxObjects {
-    @Contract(pure = true)
     public static boolean checkNull(Object... objects){
         for(Object o : objects){
             if(o==null) return true;

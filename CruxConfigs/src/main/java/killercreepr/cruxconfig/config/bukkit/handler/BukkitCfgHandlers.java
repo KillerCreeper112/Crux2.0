@@ -14,14 +14,14 @@ import killercreepr.crux.item.dynamic.BukkitDynamicItem;
 import killercreepr.crux.item.dynamic.components.DynamicPersistentTag;
 import killercreepr.crux.loot.api.conditions.LootCondition;
 import killercreepr.crux.loot.api.functions.LootFunction;
+import killercreepr.crux.loot.item.api.ItemLootFunction;
+import killercreepr.crux.loot.item.api.ItemLootPool;
+import killercreepr.crux.loot.item.api.ItemLootTable;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.*;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.FileDynamicItem;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.FileDynamicPersistentTag;
-import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.FileLootCondition;
-import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.FileLootFunction;
-import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.StandardFileLootConditions;
-import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.StandardFileLootFunctions;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.*;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.handler.AutoFileHandler;
 import killercreepr.cruxconfig.config.common.json.JsonRegistry;
@@ -67,7 +67,9 @@ public class BukkitCfgHandlers {
     public static final FileStoredItem STORED_ITEM = new FileStoredItem();
     public static final FileDynamicPersistentTag DYNAMIC_PERSISTENT_TAG = new FileDynamicPersistentTag();
     public static final FileLootCondition LOOT_CONDITION = new FileLootCondition();
-    public static final FileLootFunction LOOT_FUNCTION = new FileLootFunction();
+    public static final FileItemLootFunction ITEM_LOOT_FUNCTION = new FileItemLootFunction();
+    public static final FileItemLootTable ITEM_LOOT_TABLE = new FileItemLootTable();
+    public static final FileItemLootPool ITEM_LOOT_POOL = new FileItemLootPool();
 
     public static void initJson(@NotNull JsonRegistry registry){
         registry.registerHandler(
@@ -95,10 +97,12 @@ public class BukkitCfgHandlers {
         registry.registerHandler(EntityType.class, ENTITY_TYPE);
         registry.registerHandler(StoredItem.class, STORED_ITEM);
         registry.registerHandler(DynamicPersistentTag.class, DYNAMIC_PERSISTENT_TAG);
+        registry.registerHandler(ItemLootTable.class, ITEM_LOOT_TABLE);
+        registry.registerHandler(ItemLootPool.class, ITEM_LOOT_POOL);
         registry.registerHandler(LootCondition.class, LOOT_CONDITION);
-        registry.registerHandler(LootFunction.class, LOOT_FUNCTION);
+        registry.registerHandler(ItemLootFunction.class, ITEM_LOOT_FUNCTION);
         StandardFileLootConditions.register(LOOT_CONDITION);
-        StandardFileLootFunctions.register(LOOT_FUNCTION);
+        StandardFileLootFunctions.register(ITEM_LOOT_FUNCTION);
 
         DYNAMIC_ITEM.registerComponents(registry);
 

@@ -1,5 +1,6 @@
-package killercreepr.crux.loot.item;
+package killercreepr.crux.loot.item.pool;
 
+import killercreepr.crux.Crux;
 import killercreepr.crux.data.Holder;
 import killercreepr.crux.loot.SimpleLootObject;
 import killercreepr.crux.loot.api.conditions.LootCondition;
@@ -8,28 +9,29 @@ import killercreepr.crux.loot.item.api.ItemLootPoolObject;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 
 public class SimpleItemLootPoolObject extends SimpleLootObject<ItemStack> implements ItemLootPoolObject {
-    protected final @Nullable Holder<ItemStack> item;
+    protected final @Nullable Holder<Collection<ItemStack>> item;
 
-    public SimpleItemLootPoolObject(int weight, float quality, @Nullable List<LootCondition> conditions, @Nullable List<LootFunction<ItemStack>> lootFunctions, @Nullable Holder<ItemStack> item) {
+    public SimpleItemLootPoolObject(int weight, float quality, @Nullable List<LootCondition> conditions, @Nullable List<LootFunction<ItemStack>> lootFunctions, @Nullable Holder<Collection<ItemStack>> item) {
         super(weight, quality, conditions, lootFunctions);
         this.item = item;
     }
 
-    public SimpleItemLootPoolObject(int weight, float quality, @Nullable List<LootFunction<ItemStack>> lootFunctions, @Nullable Holder<ItemStack> item) {
+    public SimpleItemLootPoolObject(int weight, float quality, @Nullable List<LootFunction<ItemStack>> lootFunctions, @Nullable Holder<Collection<ItemStack>> item) {
         super(weight, quality, lootFunctions);
         this.item = item;
     }
 
-    public SimpleItemLootPoolObject(int weight, float quality, @Nullable Holder<ItemStack> item) {
+    public SimpleItemLootPoolObject(int weight, float quality, @Nullable Holder<Collection<ItemStack>> item) {
         super(weight, quality);
         this.item = item;
     }
 
     @Override
-    public @Nullable Holder<ItemStack> getItem() {
+    public @Nullable Holder<Collection<ItemStack>> getItems() {
         return item;
     }
 }
