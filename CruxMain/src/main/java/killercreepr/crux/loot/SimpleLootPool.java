@@ -1,7 +1,6 @@
 package killercreepr.crux.loot;
 
 import killercreepr.crux.loot.api.LootContext;
-import killercreepr.crux.loot.api.LootObject;
 import killercreepr.crux.loot.api.LootPool;
 import killercreepr.crux.loot.api.LootPoolObject;
 import killercreepr.crux.loot.api.conditions.LootCondition;
@@ -19,20 +18,26 @@ public class SimpleLootPool<T> extends SimpleLootObject<T> implements LootPool<T
     private final @NotNull NumberProvider rolls;
     private final @NotNull List<LootPoolObject<T>> data;
 
-    public SimpleLootPool(int weight, float quality, @NotNull NumberProvider rolls, @NotNull List<LootPoolObject<T>> data) {
-        super(weight, quality);
-        this.rolls = rolls;
-        this.data = data;
-    }
-
-    public SimpleLootPool(int weight, float quality, @Nullable List<LootCondition> conditions, @Nullable List<LootFunction<T>> lootFunctions, @NotNull NumberProvider rolls, @NotNull List<LootPoolObject<T>> data) {
+    public SimpleLootPool(int weight, float quality,
+                          @Nullable List<LootCondition> conditions,
+                          @Nullable List<LootFunction<T>> lootFunctions,
+                          @NotNull NumberProvider rolls, @NotNull List<LootPoolObject<T>> data) {
         super(weight, quality, conditions, lootFunctions);
         this.rolls = rolls;
         this.data = data;
     }
 
-    public SimpleLootPool(@NotNull LootObject<T> object, @NotNull NumberProvider rolls, @NotNull List<LootPoolObject<T>> data) {
-        super(object);
+    public SimpleLootPool(int weight, float quality,
+                          @Nullable List<LootFunction<T>> lootFunctions,
+                          @NotNull NumberProvider rolls,
+                          @NotNull List<LootPoolObject<T>> data) {
+        super(weight, quality, lootFunctions);
+        this.rolls = rolls;
+        this.data = data;
+    }
+
+    public SimpleLootPool(int weight, float quality, @NotNull NumberProvider rolls, @NotNull List<LootPoolObject<T>> data) {
+        super(weight, quality);
         this.rolls = rolls;
         this.data = data;
     }
@@ -81,8 +86,4 @@ public class SimpleLootPool<T> extends SimpleLootObject<T> implements LootPool<T
         }
         return SimpleLootTable.random(newData, rolls, context);
     }
-
-    /*public @NotNull List<ItemPollData> random(int rolls, @NotNull LootContext context){
-        return random(data, rolls, context, null);
-    }*/
 }

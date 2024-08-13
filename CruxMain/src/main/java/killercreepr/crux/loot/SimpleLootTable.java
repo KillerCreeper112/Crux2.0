@@ -27,55 +27,6 @@ public class SimpleLootTable<T> implements LootTable<T> {
         return rolls;
     }
 
-    /*public static @Nullable GrimLootTable deserialize(@NotNull NamespacedKey key, @NotNull JsonObject o){
-        JsonElement pool = o.get("pools");
-        if(pool == null || !pool.isJsonArray()) return null;
-        JsonElement r = o.get("rolls");
-        if(r == null || !r.isJsonObject()) return null;
-        JsonObject rO = r.getAsJsonObject();
-        NumberProvider rolls;
-        if(rO.get("type") == null) rolls = new ConstantNumber(rO.get("value").getAsInt());
-        else{
-            String s = rO.get("type").getAsString();
-            if (s.equalsIgnoreCase("uniform")) {
-                rolls = new UniformNumber(rO.get("min").getAsInt(), rO.get("max").getAsInt());
-            } else rolls = new ConstantNumber(rO.get("value").getAsInt());
-        }
-        List<GrimLootPool> pools = new ArrayList<>();
-        JsonArray poolArray = pool.getAsJsonArray();
-        poolArray.forEach(e ->{
-            GrimLootPool p = GrimLootPool.deserialize(e);
-            if(p == null) return;
-            pools.add(p);
-        });
-        if(pools.isEmpty()){
-            Crux.log(Level.WARNING, "Pool list is empty for " + key);
-            return null;
-        }
-        return new GrimLootTable(key, rolls, pools);
-    }*/
-
-    /*public @NotNull JsonElement serialize(){
-        JsonObject o = new JsonObject();
-        JsonArray a = new JsonArray();
-        for(GrimLootPool p : pools){
-            a.add(p.serialize());
-        }
-        o.add("rolls", rolls.serialize());
-        o.add("pools", a);
-        return o;
-    }*/
-
-    /*public @NotNull JsonElement serialize(@NotNull JsonObject o){
-        JsonArray a = new JsonArray();
-        for(GrimLootPool p : pools){
-            a.add(p.serialize());
-        }
-        o.add("rolls", rolls.serialize());
-        o.add("pools", a);
-        return o;
-    }*/
-
     public @NotNull List<LootPool<T>> getPools() {
         return pools;
     }
@@ -96,22 +47,8 @@ public class SimpleLootTable<T> implements LootTable<T> {
         return list;
     }
 
-    //@Override
-    /*public void fillInventory(@NotNull Inventory inventory, @NotNull LootContext context) {
-        Random random = new Random();
-        for(ItemStack i : populateLoot(context)){
-            int index = random.nextInt(0, inventory.getSize());
-            ItemStack empty = inventory.getItem(index);
-            while(!CruxItem.isEmpty(empty)){
-                index++;
-                if(index >= inventory.getSize()) return;
-                empty = inventory.getItem(index);
-            }
-            inventory.setItem(index, i);
-        }
-    }*/
-
-    public static <T extends LootObject<?>> @NotNull List<T> random(@NotNull Collection<T> poll, int rolls, @NotNull LootContext context){
+    public static <T extends ConditionedObject & WeightedObject> @NotNull List<T>
+    random(@NotNull Collection<T> poll, int rolls, @NotNull LootContext context){
         float entityChance = 0f;
 
         if(context.getLooter() instanceof LivingEntity e){
