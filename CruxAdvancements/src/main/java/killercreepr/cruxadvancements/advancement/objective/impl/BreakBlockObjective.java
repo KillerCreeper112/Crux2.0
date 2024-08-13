@@ -3,9 +3,9 @@ package killercreepr.cruxadvancements.advancement.objective.impl;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.loot.SimpleLootContext;
 import killercreepr.crux.loot.api.LootContext;
+import killercreepr.crux.loot.api.conditions.LootCondition;
 import killercreepr.cruxadvancements.advancement.ObjectiveAdvancement;
 import killercreepr.cruxadvancements.advancement.objective.NumberObjective;
-import killercreepr.cruxadvancements.advancement.objective.condition.ObjectiveConditions;
 import killercreepr.cruxadvancements.manager.CruxAdvancementManager;
 import org.bukkit.Material;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -16,7 +16,7 @@ import java.util.UUID;
 
 public class BreakBlockObjective extends NumberObjective {
     protected final @Nullable Material blockType;
-    public BreakBlockObjective(@NotNull String criterion, @Nullable ObjectiveConditions conditions, int maxProgress, @Nullable Material blockType) {
+    public BreakBlockObjective(@NotNull String criterion, @Nullable LootCondition conditions, int maxProgress, @Nullable Material blockType) {
         super(criterion, conditions, maxProgress);
         this.blockType = blockType;
     }

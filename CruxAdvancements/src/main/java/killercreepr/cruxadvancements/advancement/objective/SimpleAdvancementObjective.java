@@ -1,13 +1,13 @@
 package killercreepr.cruxadvancements.advancement.objective;
 
-import killercreepr.cruxadvancements.advancement.objective.condition.ObjectiveConditions;
+import killercreepr.crux.loot.api.conditions.LootCondition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class SimpleAdvancementObjective implements AdvancementObjective {
     protected final @NotNull String criterion;
-    protected final @Nullable ObjectiveConditions conditions;
-    public SimpleAdvancementObjective(@NotNull String criterion, @Nullable ObjectiveConditions conditions) {
+    protected final @Nullable LootCondition conditions;
+    public SimpleAdvancementObjective(@NotNull String criterion, @Nullable LootCondition conditions) {
         this.criterion = criterion;
         this.conditions = conditions;
     }
@@ -18,7 +18,7 @@ public abstract class SimpleAdvancementObjective implements AdvancementObjective
     }
 
     @Override
-    public @Nullable ObjectiveConditions getConditions() {
+    public @Nullable LootCondition getConditions() {
         return conditions;
     }
 }

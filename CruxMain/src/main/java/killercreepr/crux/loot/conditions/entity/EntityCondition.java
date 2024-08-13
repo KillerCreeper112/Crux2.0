@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 public class EntityCondition extends BaseCondition {
     protected final @Nullable Key entityType;
     protected final @Nullable String worldName;
-    protected EntityCondition(@NotNull String target, @Nullable Key entityType, @Nullable String worldName) {
+    public EntityCondition(@NotNull String target, @Nullable Key entityType, @Nullable String worldName) {
         super(target);
         this.entityType = entityType;
         this.worldName = worldName;

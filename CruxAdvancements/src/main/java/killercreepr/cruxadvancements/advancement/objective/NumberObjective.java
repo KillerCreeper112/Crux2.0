@@ -1,8 +1,8 @@
 package killercreepr.cruxadvancements.advancement.objective;
 
 import killercreepr.crux.loot.api.LootContext;
+import killercreepr.crux.loot.api.conditions.LootCondition;
 import killercreepr.cruxadvancements.advancement.ObjectiveAdvancement;
-import killercreepr.cruxadvancements.advancement.objective.condition.ObjectiveConditions;
 import killercreepr.cruxadvancements.advancement.objective.progress.NumberObjectiveProgress;
 import killercreepr.cruxadvancements.advancement.objective.progress.ObjectiveProgress;
 import killercreepr.cruxadvancements.manager.CruxAdvancementManager;
@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class NumberObjective extends SimpleAdvancementObjective {
     protected final int maxProgress;
-    public NumberObjective(@NotNull String criterion, @Nullable ObjectiveConditions conditions, int maxProgress) {
+    public NumberObjective(@NotNull String criterion, @Nullable LootCondition conditions, int maxProgress) {
         super(criterion, conditions);
         this.maxProgress = maxProgress;
     }

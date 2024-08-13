@@ -1,4 +1,4 @@
-package killercreepr.cruxadvancements.config.handler;
+package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
 import killercreepr.crux.loot.api.conditions.LootCondition;
 import killercreepr.crux.registry.MappedRegistry;
@@ -10,14 +10,13 @@ import killercreepr.cruxconfig.config.common.element.FileObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-//todo put this in CRUXMAIN because it's now using the loot table system
-public class FileObjectiveCondition implements FileHandler<LootCondition> {
-    public static final MappedRegistry<String, CustomFileObjectiveCondition<?>> CUSTOM_HANDLERS = new SimpleMappedRegistry<>();
-    public static void registerCustomHandler(@NotNull CustomFileObjectiveCondition<?> handler){
+public class FileLootCondition implements FileHandler<LootCondition> {
+    public final MappedRegistry<String, CustomFileLootCondition<?>> CUSTOM_HANDLERS = new SimpleMappedRegistry<>();
+    public void registerCustomHandler(@NotNull CustomFileLootCondition<?> handler){
         CUSTOM_HANDLERS.register(handler.getType(), handler);
     }
     @Override
-    public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull ObjectiveCondition object) {
+    public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull LootCondition object) {
         throw new RuntimeException("unsupported");
     }
 
@@ -28,18 +27,18 @@ public class FileObjectiveCondition implements FileHandler<LootCondition> {
         return deserializeFromFile(context, e, target);
     }
 
-    public static @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e, @Nullable String target) {
+    public @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e, @Nullable String target) {
         if(!(e instanceof FileObject o)) return null;
         String type = o.getObject(String.class, "type");
         if(type==null) return null;
         type = type.toLowerCase();
-        CustomFileObjectiveCondition<?> handler = CUSTOM_HANDLERS.get(type);
-        if(handler==null) throw new IllegalStateException("ObjectiveCondition type " + type + " does not exist!");
+        CustomFileLootCondition<?> handler = CUSTOM_HANDLERS.get(type);
+        if(handler==null) throw new IllegalStateException("LootCondition type " + type + " does not exist!");
         return handler.deserializeFromFile(ctx, o, target == null ? "this" : target);
     }
 
     @Override
     public @NotNull String jsonSerializerID() {
-        return "objective_condition";
+        return "loot_condition";
     }
 }
