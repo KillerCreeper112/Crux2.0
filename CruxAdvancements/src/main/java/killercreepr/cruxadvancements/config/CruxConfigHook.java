@@ -1,9 +1,8 @@
 package killercreepr.cruxadvancements.config;
 
+import killercreepr.crux.loot.conditions.block.BlockCondition;
 import killercreepr.cruxadvancements.advancement.criteria.CruxCriteria;
-import killercreepr.cruxadvancements.advancement.objective.condition.ObjectiveCondition;
 import killercreepr.cruxadvancements.advancement.objective.condition.ObjectiveConditions;
-import killercreepr.cruxadvancements.advancement.objective.condition.impl.BlockCondition;
 import killercreepr.cruxadvancements.advancement.objective.impl.BreakBlockObjective;
 import killercreepr.cruxadvancements.advancement.objective.impl.KillEntityObjective;
 import killercreepr.cruxadvancements.advancement.objective.progress.NumberObjectiveProgress;
