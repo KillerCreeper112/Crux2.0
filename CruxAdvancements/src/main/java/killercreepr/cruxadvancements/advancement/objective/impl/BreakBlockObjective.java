@@ -34,16 +34,7 @@ public class BreakBlockObjective extends NumberObjective {
                         @NotNull CruxAdvancementManager manager,
                         @NotNull ObjectiveAdvancement advancement,
                         @NotNull BlockBreakEvent event){
-        LootContext ctx = SimpleLootContext.builder()
-            .setInfo(
-                DataExchange.builder()
-                    .putAll(event.getPlayer(), "player", "miner", "entity")
-                    .putAll(event.getBlock(), "block", "block_broken")
-                    .build()
-            )
-            .setLocation(event.getBlock().getLocation())
-            .setLooter(event.getPlayer())
-            .build();
+        LootContext ctx = SimpleLootContext.builder(event).build();
         return trigger(
             who, manager, advancement, ctx
         );

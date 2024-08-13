@@ -6,7 +6,15 @@ import killercreepr.crux.loot.api.LootContext;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByBlockEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,6 +24,90 @@ import java.util.Random;
 public class SimpleLootContext implements LootContext {
     public static Builder builder(){
         return new Builder();
+    }
+
+    public static Builder builder(@NotNull EntityDeathEvent event){
+        LivingEntity e = event.getEntity();
+        Player killer = e.getKiller();
+        return builder()
+            .setInfo(
+                DataExchange.builder()
+                    .putAll(e, "victim", "entity")
+                    .putAll(killer, "killer", "attacker")
+                    .build()
+            )
+            .setLocation(e.getLocation())
+            .setLooter(killer)
+            .setLooted(e)
+            ;
+    }
+
+    public static Builder builder(@NotNull EntityDamageByEntityEvent event){
+        Entity victim = event.getEntity();
+        Entity attacker = event.getDamager();
+        return builder()
+            .setInfo(
+                DataExchange.builder()
+                    .putAll(victim, "victim", "entity")
+                    .putAll(attacker, "attacker")
+                    .build()
+            )
+            .setLocation(victim.getLocation())
+            .setLooter(attacker)
+            .setLooted(victim)
+            ;
+    }
+
+    public static Builder builder(@NotNull EntityDamageByBlockEvent event){
+        Entity victim = event.getEntity();
+        Block attacker = event.getDamager();
+        return builder()
+            .setInfo(
+                DataExchange.builder()
+                    .putAll(victim, "victim", "entity")
+                    .putAll(attacker, "attacker")
+                    .build()
+            )
+            .setLocation(victim.getLocation())
+            .setLooter(attacker)
+            .setLooted(victim)
+            ;
+    }
+
+    public static Builder builder(@NotNull BlockBreakEvent event){
+        Block block = event.getBlock();
+        Entity player = event.getPlayer();
+        return builder()
+            .setInfo(
+                DataExchange.builder()
+                    .putAll(player, "player", "miner", "entity")
+                    .putAll(block, "block", "block_broken")
+                    .putAll(event.getExpToDrop(), "exp_to_drop")
+                    .build()
+            )
+            .setLocation(block.getLocation())
+            .setLooter(player)
+            .setLooted(block)
+            ;
+    }
+
+    public static Builder builder(@NotNull BlockPlaceEvent event){
+        Block block = event.getBlock();
+        Entity player = event.getPlayer();
+        return builder()
+            .setInfo(
+                DataExchange.builder()
+                    .putAll(player, "player", "miner", "entity")
+                    .putAll(block, "block", "block_placed")
+                    .putAll(event.getBlockAgainst(), "block_against")
+                    .putAll(event.getBlockReplacedState(), "block_replaced_state")
+                    .putAll(event.getHand(), "hand")
+                    .build()
+            )
+            .setLocation(block.getLocation())
+            .setLooter(player)
+            .setLooted(block)
+            ;
     }
 
     private final Location location;

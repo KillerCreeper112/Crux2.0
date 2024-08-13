@@ -2,6 +2,10 @@ package killercreepr.cruxentities.entity;
 
 import io.papermc.paper.tag.EntitySetTag;
 import io.papermc.paper.tag.EntityTags;
+import killercreepr.crux.loot.SimpleLootContext;
+import killercreepr.crux.loot.api.LootContext;
+import killercreepr.crux.loot.api.LootTable;
+import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.crux.util.CruxString;
 import killercreepr.cruxentities.persistence.CruxEntitiesPersistTags;
 import killercreepr.cruxentities.registries.CruxEntityRegistries;
@@ -12,6 +16,7 @@ import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Monster;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -76,10 +81,20 @@ public interface CruxMob extends Keyed {
         return key==null?null: CruxEntityRegistries.ENTITIES.get(key);
     }
 
-    default void load(@NotNull Entity e){};
+    default void load(@NotNull Entity e){}
     @NotNull Entity spawn(@NotNull Location at);
 
-    default void onDeath(@NotNull Entity e, @NotNull EntityDeathEvent event){}
+    default void onDeath(@NotNull Entity e, @NotNull EntityDeathEvent event){
+        event.getDrops().clear();
+        event.setDroppedExp(0);
+        Key key = key();
+        LootTable<ItemStack> lootTable = CruxRegistries.ITEM_LOOT_TABLE.get(Key.key(
+            key.namespace(), "entity/" + key.value()
+        ));
+        if(lootTable==null) return;
+        LootContext ctx = SimpleLootContext.builder(event).build();
+        event.getDrops().addAll(lootTable.populateLoot(ctx));
+    }
 
     default @NotNull String getName(){
         return CruxString.toTitleCase(key().value());

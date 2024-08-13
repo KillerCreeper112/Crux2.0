@@ -8,19 +8,19 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 //todo make this interface
-public class DataExchange implements Iterable<Holder<Object>> {
+public class DataExchange implements Iterable<Holder<?>> {
     public static @NotNull DataExchange.Builder builder(){
         return new DataExchange.Builder();
     }
 
     public static @NotNull DataExchange empty(){ return new DataExchange(Maps.newHashMap()); }
 
-    protected final @NotNull Map<String, Holder<Object>> data;
-    public DataExchange(@NotNull Map<String, Holder<Object>> data){
+    protected final @NotNull Map<String, Holder<?>> data;
+    public DataExchange(@NotNull Map<String, Holder<?>> data){
         this.data = Collections.unmodifiableMap(data);
     }
 
-    public DataExchange(@NotNull String id, @NotNull Holder<Object> holder){
+    public DataExchange(@NotNull String id, @NotNull Holder<?> holder){
         this(Map.of(id, holder));
     }
 
@@ -40,8 +40,8 @@ public class DataExchange implements Iterable<Holder<Object>> {
      * @return A new DataExchange with the appended info.
      */
     @Contract(pure = true)
-    public @NotNull DataExchange append(@NotNull Map<String, Holder<Object>> info){
-        Map<String, Holder<Object>> data = new HashMap<>(this.data);
+    public @NotNull DataExchange append(@NotNull Map<String, Holder<?>> info){
+        Map<String, Holder<?>> data = new HashMap<>(this.data);
         data.putAll(info);
         return new DataExchange(data);
     }
@@ -50,8 +50,8 @@ public class DataExchange implements Iterable<Holder<Object>> {
      * @return A new DataExchange with the appended object.
      */
     @Contract(pure = true)
-    public @NotNull DataExchange append(@NotNull String id, @NotNull Holder<Object> object){
-        Map<String, Holder<Object>> data = new HashMap<>(this.data);
+    public @NotNull DataExchange append(@NotNull String id, @NotNull Holder<?> object){
+        Map<String, Holder<?>> data = new HashMap<>(this.data);
         data.put(id, object);
         return new DataExchange(data);
     }
@@ -59,8 +59,8 @@ public class DataExchange implements Iterable<Holder<Object>> {
      * @return A new DataExchange with the removed values.
      */
     @Contract(pure = true)
-    public @NotNull DataExchange removeIf(@NotNull Predicate<Object> predicate){
-        Map<String, Holder<Object>> data = new HashMap<>(this.data);
+    public @NotNull DataExchange removeIf(@NotNull Predicate predicate){
+        Map<String, Holder<?>> data = new HashMap<>(this.data);
         data.entrySet().removeIf((entry) -> predicate.test(entry.getKey(), entry.getValue()));
         return new DataExchange(data);
     }
@@ -151,44 +151,41 @@ public class DataExchange implements Iterable<Holder<Object>> {
     /**
      * @return An immutable map containing this DataExchange's data.
      */
-    public @NotNull Map<String, Holder<Object>> asMap() {
+    public @NotNull Map<String, Holder<?>> asMap() {
         return data;
     }
 
     @NotNull
     @Override
-    public Iterator<Holder<Object>> iterator() {
+    public Iterator<Holder<?>> iterator() {
         return data.values().iterator();
     }
 
-    public interface Predicate<T>{
-        boolean test(@NotNull String id, @NotNull Holder<T> holder);
+    public interface Predicate{
+        boolean test(@NotNull String id, @NotNull Holder<?> holder);
     }
 
     public static class Builder{
-        protected final Map<String, Holder<Object>> data = new HashMap<>();
+        protected final Map<String, Holder<?>> data = new HashMap<>();
 
-        public Builder putAll(@NotNull Object direct, @NotNull String... ids){
-            for(String i : ids){
-                put(i, direct);
-            }
-            return this;
+        public Builder putAll(@Nullable Object direct, @NotNull String... ids){
+            return putAll(Holder.direct(direct), ids);
         }
-        public Builder put(@NotNull String id, @NotNull Object direct){
+        public Builder put(@NotNull String id, @Nullable Object direct){
             return put(id, Holder.direct(direct));
         }
         public Builder put(@NotNull Object direct){
             return put(direct.getClass().getSimpleName().toLowerCase(), Holder.direct(direct));
         }
 
-        public Builder putAll(@NotNull Holder<Object> holder, @NotNull String... ids){
+        public Builder putAll(@NotNull Holder<?> holder, @NotNull String... ids){
             for(String i : ids){
                 put(i, holder);
             }
             return this;
         }
 
-        public Builder put(@NotNull String id, @NotNull Holder<Object> holder){
+        public Builder put(@NotNull String id, @NotNull Holder<?> holder){
             data.put(id, holder);
             return this;
         }
@@ -197,7 +194,7 @@ public class DataExchange implements Iterable<Holder<Object>> {
             return info == null ? this : putAll(info.asMap());
         }
 
-        public Builder putAll(@NotNull Map<String, Holder<Object>> map){
+        public Builder putAll(@NotNull Map<String, Holder<?>> map){
             data.putAll(map);
             return this;
         }
