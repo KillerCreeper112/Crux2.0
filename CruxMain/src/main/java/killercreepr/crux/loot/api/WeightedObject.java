@@ -1,4 +1,4 @@
-package killercreepr.crux.loot;
+package killercreepr.crux.loot.api;
 
 public interface WeightedObject {
     int getWeight();

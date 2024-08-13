@@ -1,6 +1,8 @@
 package killercreepr.crux.loot;
 
-public class SimpleWeighted implements WeightedObject{
+import killercreepr.crux.loot.api.WeightedObject;
+
+public class SimpleWeighted implements WeightedObject {
     protected final int weight;
     protected final float quality;
     public SimpleWeighted(int weight, float quality) {

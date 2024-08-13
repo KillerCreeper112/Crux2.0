@@ -56,8 +56,8 @@ public final class Crux {
         .build();
     private static final Logger log = Logger.getLogger(Crux.class.getName());
 
-    private static @Nullable CruxPlugin mainPlugin;
-    public static @Nullable CruxPlugin getMainPlugin() {
+    private static CruxPlugin mainPlugin;
+    public static CruxPlugin getMainPlugin() {
         return mainPlugin;
     }
     public static void setMainPlugin(@Nullable CruxPlugin mainPlugin) {

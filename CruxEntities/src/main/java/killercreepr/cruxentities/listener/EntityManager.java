@@ -1,10 +1,13 @@
 package killercreepr.cruxentities.listener;
 
 import killercreepr.cruxentities.entity.CruxMob;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.level.storage.loot.LootTable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.world.EntitiesLoadEvent;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -32,4 +35,9 @@ public class EntityManager implements Listener {
         if(mob==null) return;
         mob.load(e);
     }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityDeath(EntityDeathEvent event) {
+    }
+
 }
