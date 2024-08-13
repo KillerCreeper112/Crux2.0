@@ -36,6 +36,10 @@ public class EntityManager implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onEntityDeath(EntityDeathEvent event) {
+        Entity e = event.getEntity();
+        CruxMob mob = CruxMob.get(e);
+        if(mob==null) return;
+        mob.onDeath(e, event);
     }
 
 }

@@ -4,6 +4,7 @@ import killercreepr.crux.loot.api.LootContext;
 import killercreepr.crux.loot.api.LootObject;
 import killercreepr.crux.loot.api.LootPool;
 import killercreepr.crux.loot.api.LootPoolObject;
+import killercreepr.crux.loot.api.conditions.LootCondition;
 import killercreepr.crux.loot.api.functions.LootFunction;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
@@ -15,46 +16,26 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class SimpleLootPool<T> extends SimpleLootObject<T> implements LootPool<T> {
-    private final NumberProvider rolls;
-    private final List<LootPoolObject<T>> data = new ArrayList<>();
+    private final @NotNull NumberProvider rolls;
+    private final @NotNull List<LootPoolObject<T>> data;
 
-    public SimpleLootPool(@NotNull NumberProvider rolls, int weight, float quality, @NotNull List<LootPoolObject<T>> data) {
+    public SimpleLootPool(int weight, float quality, @NotNull NumberProvider rolls, @NotNull List<LootPoolObject<T>> data) {
         super(weight, quality);
         this.rolls = rolls;
-        this.data.addAll(data);
+        this.data = data;
     }
 
-    public SimpleLootPool(@NotNull NumberProvider rolls, @NotNull LootObject<T> object, @NotNull List<LootPoolObject<T>> data) {
+    public SimpleLootPool(int weight, float quality, @Nullable List<LootCondition> conditions, @Nullable List<LootFunction<T>> lootFunctions, @NotNull NumberProvider rolls, @NotNull List<LootPoolObject<T>> data) {
+        super(weight, quality, conditions, lootFunctions);
+        this.rolls = rolls;
+        this.data = data;
+    }
+
+    public SimpleLootPool(@NotNull LootObject<T> object, @NotNull NumberProvider rolls, @NotNull List<LootPoolObject<T>> data) {
         super(object);
         this.rolls = rolls;
-        this.data.addAll(data);
+        this.data = data;
     }
-
-    /*public static @Nullable GrimLootPool deserialize(@NotNull JsonElement element){
-        GrimLootObject object = GrimLootObject.deserialize(element);
-        if(object == null) return null;
-        JsonObject o = element.getAsJsonObject();
-        List<ItemPollData> data = new ArrayList<>();
-        o.getAsJsonArray("entries").forEach(x ->{
-            ItemPollData d = ItemPollData.deserialize(x);
-            if(d == null) return;
-            data.add(d);
-        });
-
-        return new GrimLootPool(IntProvider.deserialize(o.get("rolls")), object, data);
-    }
-
-    @Override
-    public @NotNull JsonObject serialize() {
-        JsonObject o = (JsonObject) super.serialize();
-        o.add("rolls", rolls.serialize());
-        JsonArray a = new JsonArray();
-        for(ItemPollData i : data){
-            a.add(i.serialize());
-        }
-        o.add("entries", a);
-        return o;
-    }*/
 
     public @NotNull List<LootPoolObject<T>> getData() {
         return data;

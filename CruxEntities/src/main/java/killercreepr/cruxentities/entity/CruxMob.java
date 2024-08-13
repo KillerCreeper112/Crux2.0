@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Monster;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.persistence.PersistentDataHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -77,6 +78,9 @@ public interface CruxMob extends Keyed {
 
     default void load(@NotNull Entity e){};
     @NotNull Entity spawn(@NotNull Location at);
+
+    default void onDeath(@NotNull Entity e, @NotNull EntityDeathEvent event){}
+
     default @NotNull String getName(){
         return CruxString.toTitleCase(key().value());
     }
