@@ -13,10 +13,15 @@ import killercreepr.crux.item.StoredItem;
 import killercreepr.crux.item.dynamic.BukkitDynamicItem;
 import killercreepr.crux.item.dynamic.components.DynamicPersistentTag;
 import killercreepr.crux.loot.api.conditions.LootCondition;
+import killercreepr.crux.loot.api.functions.LootFunction;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.*;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.FileDynamicItem;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.FileDynamicPersistentTag;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.FileLootCondition;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.FileLootFunction;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.StandardFileLootConditions;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.StandardFileLootFunctions;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.handler.AutoFileHandler;
 import killercreepr.cruxconfig.config.common.json.JsonRegistry;
@@ -62,6 +67,7 @@ public class BukkitCfgHandlers {
     public static final FileStoredItem STORED_ITEM = new FileStoredItem();
     public static final FileDynamicPersistentTag DYNAMIC_PERSISTENT_TAG = new FileDynamicPersistentTag();
     public static final FileLootCondition LOOT_CONDITION = new FileLootCondition();
+    public static final FileLootFunction LOOT_FUNCTION = new FileLootFunction();
 
     public static void initJson(@NotNull JsonRegistry registry){
         registry.registerHandler(
@@ -90,7 +96,9 @@ public class BukkitCfgHandlers {
         registry.registerHandler(StoredItem.class, STORED_ITEM);
         registry.registerHandler(DynamicPersistentTag.class, DYNAMIC_PERSISTENT_TAG);
         registry.registerHandler(LootCondition.class, LOOT_CONDITION);
+        registry.registerHandler(LootFunction.class, LOOT_FUNCTION);
         StandardFileLootConditions.register(LOOT_CONDITION);
+        StandardFileLootFunctions.register(LOOT_FUNCTION);
 
         DYNAMIC_ITEM.registerComponents(registry);
 

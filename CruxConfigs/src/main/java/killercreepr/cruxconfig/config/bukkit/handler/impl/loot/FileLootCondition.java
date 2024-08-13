@@ -1,4 +1,4 @@
-package killercreepr.cruxconfig.config.bukkit.handler.impl;
+package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 
 import killercreepr.crux.loot.api.conditions.LootCondition;
 import killercreepr.crux.registry.MappedRegistry;

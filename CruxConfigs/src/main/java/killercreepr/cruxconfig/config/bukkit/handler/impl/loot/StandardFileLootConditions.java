@@ -1,4 +1,4 @@
-package killercreepr.cruxconfig.config.bukkit.handler;
+package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 
 import com.google.common.reflect.TypeToken;
 import killercreepr.crux.loot.api.conditions.LootCondition;
@@ -6,8 +6,6 @@ import killercreepr.crux.loot.conditions.AllOfCondition;
 import killercreepr.crux.loot.conditions.AnyOfCondition;
 import killercreepr.crux.loot.conditions.block.BlockCondition;
 import killercreepr.crux.loot.conditions.entity.EntityCondition;
-import killercreepr.cruxconfig.config.bukkit.handler.impl.CustomFileLootCondition;
-import killercreepr.cruxconfig.config.bukkit.handler.impl.FileLootCondition;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileObject;
