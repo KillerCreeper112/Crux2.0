@@ -1,8 +1,6 @@
 package killercreepr.cruxentities.listener;
 
 import killercreepr.cruxentities.entity.CruxMob;
-import net.minecraft.world.entity.monster.Zombie;
-import net.minecraft.world.level.storage.loot.LootTable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
