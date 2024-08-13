@@ -3,6 +3,7 @@ package killercreepr.cruxstructures.structure;
 import killercreepr.crux.data.BlockPos;
 import killercreepr.crux.data.StoredChunk;
 import killercreepr.crux.data.world.CruxPosition;
+import killercreepr.crux.util.CruxMath;
 import killercreepr.cruxstructures.event.StructurePlaceEvent;
 import killercreepr.cruxstructures.structure.stored.SimpleStoredStructure;
 import killercreepr.cruxstructures.structure.stored.StoredStructure;
@@ -18,7 +19,7 @@ import java.util.Random;
 public interface Structure extends Keyed {
     @NotNull
     default StructurePlaceEvent place(@NotNull Location at){
-        return place(at, new Random().nextInt(4) * 90);
+        return place(at, CruxMath.RANDOM.nextInt(4) * 90);
     }
 
     @NotNull

@@ -36,7 +36,7 @@ public class ItemCruxAttributeFunction extends SimpleLootFunction<ItemStack> {
 
     @Override
     public ItemStack accept(@Nullable ItemStack i, @NotNull LootContext context) {
-        Random random = new Random();
+        Random random = context.getRandom();
         for(Map.Entry<Key, Collection<Modifier>> entry : modifiers.entrySet()){
             CruxAttribute attribute = getAttribute(entry.getKey());
             if(attribute==null) throw new IllegalStateException(entry.getKey() + " crux attribute not found!");
