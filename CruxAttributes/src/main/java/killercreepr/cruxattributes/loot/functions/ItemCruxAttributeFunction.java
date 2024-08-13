@@ -20,12 +20,12 @@ import java.util.Map;
 import java.util.Random;
 
 public class ItemCruxAttributeFunction extends SimpleLootFunction<ItemStack> {
-    private final Map<Key, Collection<Modifier>> modifiers;
+    private final @NotNull Map<Key, Collection<Modifier>> modifiers;
+
     public ItemCruxAttributeFunction(@Nullable Collection<LootCondition> conditions, @NotNull Map<Key, Collection<Modifier>> modifiers) {
         super(conditions);
         this.modifiers = modifiers;
     }
-
     public ItemCruxAttributeFunction(@NotNull Map<Key, Collection<Modifier>> modifiers) {
         this(null, modifiers);
     }

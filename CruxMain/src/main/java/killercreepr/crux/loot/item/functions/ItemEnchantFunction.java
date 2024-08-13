@@ -16,17 +16,17 @@ import java.util.List;
 import java.util.Random;
 
 public class ItemEnchantFunction extends SimpleLootFunction<ItemStack> {
-    private final NumberProvider rolls;
-    private final Collection<Enchant> enchants;
-
-    public ItemEnchantFunction(@NotNull NumberProvider rolls, @NotNull Collection<Enchant> enchants) {
-        this(null, rolls, enchants);
-    }
+    private final @NotNull NumberProvider rolls;
+    private final @NotNull Collection<Enchant> enchants;
 
     public ItemEnchantFunction(@Nullable Collection<LootCondition> conditions, @NotNull NumberProvider rolls, @NotNull Collection<Enchant> enchants) {
         super(conditions);
         this.rolls = rolls;
         this.enchants = enchants;
+    }
+
+    public ItemEnchantFunction(@NotNull NumberProvider rolls, @NotNull Collection<Enchant> enchants) {
+        this(null, rolls, enchants);
     }
 
     @Override
