@@ -1,9 +1,10 @@
 package killercreepr.cruxadvancements.advancement.objective.impl;
 
 import killercreepr.crux.data.DataExchange;
+import killercreepr.crux.loot.SimpleLootContext;
+import killercreepr.crux.loot.api.LootContext;
 import killercreepr.cruxadvancements.advancement.ObjectiveAdvancement;
 import killercreepr.cruxadvancements.advancement.objective.NumberObjective;
-import killercreepr.cruxadvancements.advancement.objective.condition.ConditionContext;
 import killercreepr.cruxadvancements.advancement.objective.condition.ObjectiveConditions;
 import killercreepr.cruxadvancements.manager.CruxAdvancementManager;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -21,10 +22,17 @@ public class KillEntityObjective extends NumberObjective {
                            @NotNull CruxAdvancementManager manager,
                            @NotNull ObjectiveAdvancement advancement,
                            @NotNull EntityDamageByEntityEvent event){
-        ConditionContext ctx = new ConditionContext(DataExchange.builder()
-            .putAll(event.getDamager(), "damager")
-            .putAll(event.getEntity(), "victim", "entity")
-            .build());
+        LootContext ctx = SimpleLootContext.builder()
+            .setInfo(
+                DataExchange.builder()
+                    .putAll(event.getDamager(), "damager")
+                    .putAll(event.getEntity(), "victim", "entity")
+                    .build()
+            )
+            .setLooter(event.getDamager())
+            .setLooted(event.getEntity())
+            .setLocation(event.getEntity().getLocation())
+            .build();
         return trigger(
             who, manager, advancement, ctx
         );

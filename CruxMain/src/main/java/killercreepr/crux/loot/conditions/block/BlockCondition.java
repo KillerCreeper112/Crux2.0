@@ -1,7 +1,7 @@
-package killercreepr.cruxadvancements.advancement.objective.condition.impl;
+package killercreepr.crux.loot.conditions.block;
 
-import killercreepr.cruxadvancements.advancement.objective.condition.BaseCondition;
-import killercreepr.cruxadvancements.advancement.objective.condition.ConditionContext;
+import killercreepr.crux.loot.api.LootContext;
+import killercreepr.crux.loot.conditions.BaseCondition;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +19,7 @@ public class BlockCondition extends BaseCondition {
     }
 
     @Override
-    public boolean test(@NotNull ConditionContext ctx) {
+    public boolean test(@NotNull LootContext ctx) {
         Block b = ctx.info().get(target, Block.class);
         if(b==null) return false;
         if(type != null && b.getType() != type) return false;

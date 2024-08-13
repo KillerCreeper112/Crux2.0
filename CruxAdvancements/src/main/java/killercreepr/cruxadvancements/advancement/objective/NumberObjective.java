@@ -1,7 +1,7 @@
 package killercreepr.cruxadvancements.advancement.objective;
 
+import killercreepr.crux.loot.api.LootContext;
 import killercreepr.cruxadvancements.advancement.ObjectiveAdvancement;
-import killercreepr.cruxadvancements.advancement.objective.condition.ConditionContext;
 import killercreepr.cruxadvancements.advancement.objective.condition.ObjectiveConditions;
 import killercreepr.cruxadvancements.advancement.objective.progress.NumberObjectiveProgress;
 import killercreepr.cruxadvancements.advancement.objective.progress.ObjectiveProgress;
@@ -26,7 +26,7 @@ public class NumberObjective extends SimpleAdvancementObjective {
     public boolean trigger(@NotNull UUID who,
                            @NotNull CruxAdvancementManager manager,
                            @NotNull ObjectiveAdvancement advancement,
-                           @NotNull ConditionContext ctx){
+                           @NotNull LootContext ctx){
         if(!canTrigger(ctx)) return false;
         addToProgress(who, manager, advancement,1);
         return true;

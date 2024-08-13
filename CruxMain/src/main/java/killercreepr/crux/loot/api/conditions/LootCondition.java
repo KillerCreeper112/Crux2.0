@@ -4,6 +4,7 @@ import killercreepr.crux.loot.api.LootContext;
 import org.jetbrains.annotations.NotNull;
 
 public interface LootCondition {
+    @NotNull String getTarget();
     boolean test(@NotNull LootContext context);
 
     /*public @NotNull JsonElement serialize() { return new JsonObject(); }
@@ -26,13 +27,4 @@ public interface LootCondition {
         }
         return null;
     }*/
-
-    default @NotNull Type getType(){ return null; }
-
-    public enum Type{
-        RANDOM_CHANCE,
-        ANY_OF,
-        ALL_OF,
-        LUCK_CHANCE
-    }
 }

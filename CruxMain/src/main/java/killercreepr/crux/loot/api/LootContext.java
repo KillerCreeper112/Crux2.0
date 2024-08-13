@@ -1,5 +1,6 @@
 package killercreepr.crux.loot.api;
 
+import killercreepr.crux.data.DataExchange;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
@@ -13,4 +14,6 @@ public interface LootContext {
     float getLuck();
     @Nullable Entity getLooter();
     @Nullable Entity getLooted();
+    @NotNull
+    DataExchange info();
 }

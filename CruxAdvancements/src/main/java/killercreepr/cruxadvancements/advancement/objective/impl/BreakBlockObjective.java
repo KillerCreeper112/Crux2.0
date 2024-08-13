@@ -1,9 +1,10 @@
 package killercreepr.cruxadvancements.advancement.objective.impl;
 
 import killercreepr.crux.data.DataExchange;
+import killercreepr.crux.loot.SimpleLootContext;
+import killercreepr.crux.loot.api.LootContext;
 import killercreepr.cruxadvancements.advancement.ObjectiveAdvancement;
 import killercreepr.cruxadvancements.advancement.objective.NumberObjective;
-import killercreepr.cruxadvancements.advancement.objective.condition.ConditionContext;
 import killercreepr.cruxadvancements.advancement.objective.condition.ObjectiveConditions;
 import killercreepr.cruxadvancements.manager.CruxAdvancementManager;
 import org.bukkit.Material;
@@ -33,10 +34,16 @@ public class BreakBlockObjective extends NumberObjective {
                         @NotNull CruxAdvancementManager manager,
                         @NotNull ObjectiveAdvancement advancement,
                         @NotNull BlockBreakEvent event){
-        ConditionContext ctx = new ConditionContext(DataExchange.builder()
-            .putAll(event.getPlayer(), "player", "miner", "entity")
-            .putAll(event.getBlock(), "block", "block_broken")
-            .build());
+        LootContext ctx = SimpleLootContext.builder()
+            .setInfo(
+                DataExchange.builder()
+                    .putAll(event.getPlayer(), "player", "miner", "entity")
+                    .putAll(event.getBlock(), "block", "block_broken")
+                    .build()
+            )
+            .setLocation(event.getBlock().getLocation())
+            .setLooter(event.getPlayer())
+            .build();
         return trigger(
             who, manager, advancement, ctx
         );

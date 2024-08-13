@@ -1,6 +1,8 @@
 package killercreepr.crux.data;
 
 import com.google.common.collect.Maps;
+import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,15 +32,25 @@ public class DataExchange implements Iterable<Holder<Object>> {
     /**
      * @return A new DataExchange with the appended info.
      */
+    @Contract(pure = true)
     public @NotNull DataExchange append(@NotNull DataExchange info){
+        return append(info.asMap());
+    }
+
+    /**
+     * @return A new DataExchange with the appended info.
+     */
+    @Contract(pure = true)
+    public @NotNull DataExchange append(@NotNull Map<String, Holder<Object>> info){
         Map<String, Holder<Object>> data = new HashMap<>(this.data);
-        data.putAll(info.asMap());
+        data.putAll(info);
         return new DataExchange(data);
     }
 
     /**
      * @return A new DataExchange with the appended object.
      */
+    @Contract(pure = true)
     public @NotNull DataExchange append(@NotNull String id, @NotNull Holder<Object> object){
         Map<String, Holder<Object>> data = new HashMap<>(this.data);
         data.put(id, object);
@@ -47,6 +59,7 @@ public class DataExchange implements Iterable<Holder<Object>> {
     /**
      * @return A new DataExchange with the removed values.
      */
+    @Contract(pure = true)
     public @NotNull DataExchange removeIf(@NotNull Predicate<Object> predicate){
         Map<String, Holder<Object>> data = new HashMap<>(this.data);
         data.entrySet().removeIf((entry) -> predicate.test(entry.getKey(), entry.getValue()));

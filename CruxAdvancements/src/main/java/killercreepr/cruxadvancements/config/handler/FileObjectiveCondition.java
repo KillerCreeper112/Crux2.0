@@ -1,8 +1,8 @@
 package killercreepr.cruxadvancements.config.handler;
 
+import killercreepr.crux.loot.api.conditions.LootCondition;
 import killercreepr.crux.registry.MappedRegistry;
 import killercreepr.crux.registry.SimpleMappedRegistry;
-import killercreepr.cruxadvancements.advancement.objective.condition.ObjectiveCondition;
 import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -10,7 +10,8 @@ import killercreepr.cruxconfig.config.common.element.FileObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FileObjectiveCondition implements FileHandler<ObjectiveCondition> {
+//todo put this in CRUXMAIN because it's now using the loot table system
+public class FileObjectiveCondition implements FileHandler<LootCondition> {
     public static final MappedRegistry<String, CustomFileObjectiveCondition<?>> CUSTOM_HANDLERS = new SimpleMappedRegistry<>();
     public static void registerCustomHandler(@NotNull CustomFileObjectiveCondition<?> handler){
         CUSTOM_HANDLERS.register(handler.getType(), handler);
@@ -21,13 +22,13 @@ public class FileObjectiveCondition implements FileHandler<ObjectiveCondition> {
     }
 
     @Override
-    public @Nullable ObjectiveCondition deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
+    public @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;
         String target = o.getObject(String.class, "target");
         return deserializeFromFile(context, e, target);
     }
 
-    public static @Nullable ObjectiveCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e, @Nullable String target) {
+    public static @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e, @Nullable String target) {
         if(!(e instanceof FileObject o)) return null;
         String type = o.getObject(String.class, "type");
         if(type==null) return null;
