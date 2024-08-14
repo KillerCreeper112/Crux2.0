@@ -38,7 +38,7 @@ public class FileItemLootTable implements FileHandler<ItemLootTable> {
         FileRegistry registry = ctx.getRegistry();
         NumberProvider rolls = registry.deserialize(NumberProvider.class, e.get("rolls"));
         List<LootPool<ItemStack>> pools = registry.deserialize(
-            new TypeToken<List<ItemLootPool>>(){}.getType(), e.get("entries")
+            new TypeToken<List<ItemLootPool>>(){}.getType(), e.get("pools")
         );
         if(CruxObjects.checkNull(rolls, pools)) return null;
         return new SimpleItemLootTable(

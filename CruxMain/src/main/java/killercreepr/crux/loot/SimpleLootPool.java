@@ -6,6 +6,7 @@ import killercreepr.crux.loot.api.LootPoolObject;
 import killercreepr.crux.loot.api.conditions.LootCondition;
 import killercreepr.crux.loot.api.functions.LootFunction;
 import killercreepr.crux.valueproviders.number.NumberProvider;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,7 +59,8 @@ public class SimpleLootPool<T> extends SimpleLootObject<T> implements LootPool<T
         List<T> list = new ArrayList<>();
         List<LootPoolObject<T>> data = exclude == null ? this.data : new ArrayList<>(this.data);
         if(excludeEmpty && exclude != null) data.removeIf(exclude);
-        for(LootPoolObject<T> x : random(data, rolls.sample(context.getRandom()).intValue(), context, exclude)){
+        List<LootPoolObject<T>> random = random(data, rolls.sample(context.getRandom()).intValue(), context, exclude);
+        for(LootPoolObject<T> x : random){
             Collection<T> items = x.getItems() == null ? null : x.getItems().value();
             if(items==null) continue;
             for(T t : items){

@@ -5,6 +5,7 @@ import killercreepr.crux.loot.api.conditions.LootCondition;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import net.kyori.adventure.key.Key;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -83,7 +84,7 @@ public class SimpleLootTable<T> implements LootTable<T> {
                 weight = item.getWeight();
                 quality = item.getQuality();
                 weight += (int) (quality * entityChance);
-                if(weight < 1){
+                if(weight < 0){
                     data.remove(item);
                     continue;
                 }
@@ -132,7 +133,7 @@ public class SimpleLootTable<T> implements LootTable<T> {
                 weight = item.getWeight();
                 quality = item.getQuality();
                 weight += (int) (quality * entityChance);
-                if(weight < 1){
+                if(weight < 0){
                     data.remove(item);
                     continue;
                 }

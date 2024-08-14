@@ -41,7 +41,7 @@ public class StandardFileLootPoolObjects {
 
                 if(itemKeys == null || itemKeys.isEmpty()) return null;
                 return new ListItemPoolObject(
-                    loot.getWeight(), loot.getQuality(), loot.getConditions(), loot.getFunctions(),
+                    loot.getWeight(), loot.getQuality(), loot.getConditions(), loot.getFunctions(), itemKeys
                 );
             }
         });
