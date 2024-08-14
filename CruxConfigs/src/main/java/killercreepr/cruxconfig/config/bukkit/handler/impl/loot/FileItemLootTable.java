@@ -2,9 +2,7 @@ package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 
 import com.google.common.reflect.TypeToken;
 import killercreepr.crux.loot.api.LootPool;
-import killercreepr.crux.loot.api.LootTable;
 import killercreepr.crux.loot.item.SimpleItemLootTable;
-import killercreepr.crux.loot.item.api.ItemLootFunction;
 import killercreepr.crux.loot.item.api.ItemLootPool;
 import killercreepr.crux.loot.item.api.ItemLootTable;
 import killercreepr.crux.util.CruxObjects;
@@ -19,7 +17,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.List;
 
 public class FileItemLootTable implements FileHandler<ItemLootTable> {

@@ -13,10 +13,8 @@ import killercreepr.crux.item.StoredItem;
 import killercreepr.crux.item.dynamic.BukkitDynamicItem;
 import killercreepr.crux.item.dynamic.components.DynamicPersistentTag;
 import killercreepr.crux.loot.api.conditions.LootCondition;
-import killercreepr.crux.loot.api.functions.LootFunction;
-import killercreepr.crux.loot.item.api.ItemLootFunction;
-import killercreepr.crux.loot.item.api.ItemLootPool;
-import killercreepr.crux.loot.item.api.ItemLootTable;
+import killercreepr.crux.loot.item.SimpleItemLootObject;
+import killercreepr.crux.loot.item.api.*;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.*;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.FileDynamicItem;
@@ -70,6 +68,8 @@ public class BukkitCfgHandlers {
     public static final FileItemLootFunction ITEM_LOOT_FUNCTION = new FileItemLootFunction();
     public static final FileItemLootTable ITEM_LOOT_TABLE = new FileItemLootTable();
     public static final FileItemLootPool ITEM_LOOT_POOL = new FileItemLootPool();
+    public static final FileSimpleLootObject SIMPLE_LOOT_OBJECT = new FileSimpleLootObject();
+    public static final FileItemLootPoolObject ITEM_LOOT_POOL_OBJECT = new FileItemLootPoolObject();
 
     public static void initJson(@NotNull JsonRegistry registry){
         registry.registerHandler(
@@ -101,8 +101,13 @@ public class BukkitCfgHandlers {
         registry.registerHandler(ItemLootPool.class, ITEM_LOOT_POOL);
         registry.registerHandler(LootCondition.class, LOOT_CONDITION);
         registry.registerHandler(ItemLootFunction.class, ITEM_LOOT_FUNCTION);
+        registry.registerHandler(ItemLootPoolObject.class, ITEM_LOOT_POOL_OBJECT);
+
         StandardFileLootConditions.register(LOOT_CONDITION);
         StandardFileLootFunctions.register(ITEM_LOOT_FUNCTION);
+        StandardFileLootPoolObjects.register(ITEM_LOOT_POOL_OBJECT);
+
+        registry.registerHandler(SimpleItemLootObject.class, SIMPLE_LOOT_OBJECT);
 
         DYNAMIC_ITEM.registerComponents(registry);
 
