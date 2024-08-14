@@ -64,6 +64,11 @@ public class SimpleLootPool<T> extends SimpleLootObject<T> implements LootPool<T
             Collection<T> items = x.getItems() == null ? null : x.getItems().value();
             if(items==null) continue;
             for(T t : items){
+                //pool functions first
+                for(LootFunction<T> f : getFunctions()){
+                    if(f.test(context)) t = f.accept(t, context);
+                }
+                //then entry functions
                 for(LootFunction<T> f : x.getFunctions()){
                     if(f.test(context)) t = f.accept(t, context);
                 }

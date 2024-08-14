@@ -1,5 +1,7 @@
 package killercreepr.crux.loot.item.functions;
 
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import killercreepr.crux.loot.SimpleLootTable;
 import killercreepr.crux.loot.SimpleWeighted;
 import killercreepr.crux.loot.api.LootContext;
@@ -8,6 +10,7 @@ import killercreepr.crux.loot.functions.SimpleLootFunction;
 import killercreepr.crux.loot.item.api.ItemLootFunction;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import net.kyori.adventure.key.Key;
+import org.bukkit.Registry;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -32,11 +35,17 @@ public class ItemEnchantFunction extends SimpleLootFunction<ItemStack> implement
 
     @Override
     public ItemStack accept(@Nullable ItemStack i, @NotNull LootContext context) {
+        if(i==null) return i;
         Random source = context.getRandom();
         List<Enchant> random = SimpleLootTable.randomWeighted(enchants, rolls.sample(source).intValue(), context);
         for(Enchant e : random){
             int level = e.getLevelProvider().sample(source).intValue();
             if(level < 1) continue;
+            i.editMeta(meta ->{
+                meta.addEnchant(RegistryAccess.registryAccess().getRegistry(
+                    RegistryKey.ENCHANTMENT
+                ).get(e.getEnchant()), level, true);
+            });
             //todo CustomEnchant.set(i, e.getEnchant(), level);
         }
         return i;
