@@ -27,41 +27,41 @@ public class FileItemStack extends SimpleFileHandler<ItemStack> {
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull ItemStack item) {
         FileRegistry registry = context.getRegistry();
         FileObject o = new FileObject()
-                .add("material", registry.serializeToFileElement(item.getType()))
-                .add("amount", registry.serializeToFileElement(item.getAmount()))
+                .add("material", registry.serializeToFile(item.getType()))
+                .add("amount", registry.serializeToFile(item.getAmount()))
                 ;
         ItemMeta meta = item.getItemMeta();
         if(meta != null){
             Component name = meta.displayName();
-            if(name != null) o.add("display_name", registry.serializeToFileElement(name));
+            if(name != null) o.add("display_name", registry.serializeToFile(name));
             List<Component> lore = meta.lore();
-            if(lore != null) o.add("lore", registry.serializeToFileElement(lore));
+            if(lore != null) o.add("lore", registry.serializeToFile(lore));
 
             if(meta.isUnbreakable()){
-                o.add("unbreakable", registry.serializeToFileElement(meta.isUnbreakable()));
+                o.add("unbreakable", registry.serializeToFile(meta.isUnbreakable()));
             }
             if(meta.hasEnchantmentGlintOverride()){
-                o.add("enchant_glint_override", registry.serializeToFileElement(meta.getEnchantmentGlintOverride()));
+                o.add("enchant_glint_override", registry.serializeToFile(meta.getEnchantmentGlintOverride()));
             }
 
             if(meta.hasMaxStackSize()){
-                o.add("max_stack_size", registry.serializeToFileElement(meta.getMaxStackSize()));
+                o.add("max_stack_size", registry.serializeToFile(meta.getMaxStackSize()));
             }
             if(meta.hasCustomModelData()){
-                o.add("custom_model_data", registry.serializeToFileElement(meta.getCustomModelData()));
+                o.add("custom_model_data", registry.serializeToFile(meta.getCustomModelData()));
             }
             if(meta.hasRarity()){
-                o.add("rarity", registry.serializeToFileElement(meta.getRarity()));
+                o.add("rarity", registry.serializeToFile(meta.getRarity()));
             }
             if(meta.isFireResistant()){
-                o.add("fire_resistant", registry.serializeToFileElement(meta.isFireResistant()));
+                o.add("fire_resistant", registry.serializeToFile(meta.isFireResistant()));
             }
             if(meta.isHideTooltip()){
-                o.add("hide_tooltip", registry.serializeToFileElement(meta.isHideTooltip()));
+                o.add("hide_tooltip", registry.serializeToFile(meta.isHideTooltip()));
             }
             if(meta instanceof ArmorMeta m){
                 if(m.hasTrim()){
-                    o.add("armor_trim", registry.serializeToFileElement(m.getTrim()));
+                    o.add("armor_trim", registry.serializeToFile(m.getTrim()));
                 }
             }
         }

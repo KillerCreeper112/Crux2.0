@@ -13,7 +13,7 @@ public abstract class FileSingleDynamicComponent<T extends DynamicSingleValueCom
 
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull T object) {
-        return context.getRegistry().serializeToFileElement(object.getValue());
+        return context.getRegistry().serializeToFile(object.getValue());
     }
 
     @Override

@@ -24,7 +24,7 @@ public class UniformNumber implements NumberProvider {
         if (maxInclusive instanceof Float) return random.nextFloat() * ((float) maxInclusive - (float) minInclusive) + (float) minInclusive;
         if (maxInclusive instanceof Long) return random.nextLong() % ((long) maxInclusive - (long) minInclusive + 1) + (long) minInclusive;
         if (maxInclusive instanceof Short) return (short) (random.nextInt((short) maxInclusive - (short) minInclusive + 1) + (short) minInclusive);
-        throw new UnsupportedOperationException("Unsupported Number type");
+        throw new UnsupportedOperationException("Unsupported Number type " + maxInclusive.getClass().getSimpleName() + " / " + minInclusive.getClass().getSimpleName());
     }
 
     @Override

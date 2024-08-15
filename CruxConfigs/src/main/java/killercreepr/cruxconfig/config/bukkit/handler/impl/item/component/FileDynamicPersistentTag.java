@@ -15,8 +15,8 @@ public class FileDynamicPersistentTag implements FileHandler<DynamicPersistentTa
         FileRegistry registry = ctx.getRegistry();
         return new FileObject()
             .addProperty("type", object.getType())
-            .add("key", registry.serializeToFileElement(object.getKey()))
-            .add("value", registry.serializeToFileElement(object.getValue()))
+            .add("key", registry.serializeToFile(object.getKey()))
+            .add("value", registry.serializeToFile(object.getValue()))
             ;
     }
 

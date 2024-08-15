@@ -23,13 +23,13 @@ public class FileMsgContainer extends SimpleFileHandler<MsgContainer> {
         FileRegistry registry = context.getRegistry();
         FileObject map = new FileObject();
         List<String> chat = msg.getChat();
-        if(chat != null) map.add("chat", registry.serializeToFileElement(chat));
+        if(chat != null) map.add("chat", registry.serializeToFile(chat));
         String s = msg.getActionBar();
-        if(s != null) map.add("action_bar", registry.serializeToFileElement(s));
+        if(s != null) map.add("action_bar", registry.serializeToFile(s));
         CreateTitle title = msg.getTitle();
-        if(title != null) map.add("title", registry.serializeToFileElement(title));
+        if(title != null) map.add("title", registry.serializeToFile(title));
         CreateSound sound = msg.getSound();
-        if(sound != null) map.add("sound", registry.serializeToFileElement(sound));
+        if(sound != null) map.add("sound", registry.serializeToFile(sound));
         return map;
     }
 

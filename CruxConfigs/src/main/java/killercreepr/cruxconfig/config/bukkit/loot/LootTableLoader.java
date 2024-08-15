@@ -3,6 +3,7 @@ package killercreepr.cruxconfig.config.bukkit.loot;
 import killercreepr.crux.Crux;
 import killercreepr.crux.loot.item.api.ItemLootTable;
 import killercreepr.crux.registries.CruxRegistries;
+import killercreepr.cruxconfig.config.bukkit.file.BukkitDataFile;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
 import killercreepr.cruxconfig.config.common.FileContext;
@@ -21,9 +22,9 @@ public class LootTableLoader {
     }
 
     public void loadConfiguration(@NotNull File file, @Nullable String path){
-        if(DataFile.isSupported(file)){
+        if(BukkitDataFile.isSupported(file)){
             loadConfiguration(
-                DataFile.parse(file),
+                BukkitDataFile.parse(file),
                 path == null ? file.getName() : path + "/" + CruxFolder.withoutFileExtension(file.getName())
             );
             return;

@@ -18,7 +18,7 @@ public class FileSimpleCriterionProgress implements FileHandler<SimpleCriterionP
         FileObject o = new FileObject();
         Instant obtained = object.getObtained();
         if(obtained != null){
-            o.add("obtained", registry.serializeToFileElement(obtained));
+            o.add("obtained", registry.serializeToFile(obtained));
         }
         return o;
     }

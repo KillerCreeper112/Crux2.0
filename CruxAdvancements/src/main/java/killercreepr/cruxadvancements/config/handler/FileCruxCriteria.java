@@ -24,7 +24,7 @@ public class FileCruxCriteria implements FileHandler<CruxCriteria> {
         FileRegistry registry = ctx.getRegistry();
         if(object instanceof ListCriteria c){
             o.addProperty("type", "list");
-            o.add("requirements", registry.serializeToFileElement(c.getRequirements()));
+            o.add("requirements", registry.serializeToFile(c.getRequirements()));
         }else if(object instanceof NumberCriteria c){
             o.addProperty("type", "number");
             o.addProperty("requirements", c.getMaxProgress());

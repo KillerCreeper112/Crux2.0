@@ -16,8 +16,8 @@ public class FileTrackedAdvancement implements FileHandler<TrackedAdvancement> {
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> ctx, @NotNull TrackedAdvancement object) {
         FileRegistry registry = ctx.getRegistry();
         return new FileObject()
-            .add("manager", registry.serializeToFileElement(object.getManagerKey()))
-            .add("advancement", registry.serializeToFileElement(object.getAdvancementKey()))
+            .add("manager", registry.serializeToFile(object.getManagerKey()))
+            .add("advancement", registry.serializeToFile(object.getAdvancementKey()))
             ;
     }
 

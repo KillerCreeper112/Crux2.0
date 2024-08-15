@@ -17,7 +17,7 @@ public class FileSimpleObjectiveProgression implements FileHandler<SimpleObjecti
         FileRegistry registry = ctx.getRegistry();
         FileObject o = new FileObject();
         object.getProgressMap().forEach((key, value) ->{
-            o.add(key, registry.serializeToFileElement(value));
+            o.add(key, registry.serializeToFile(value));
         });
         return o;
     }

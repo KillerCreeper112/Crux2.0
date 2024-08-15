@@ -20,9 +20,9 @@ public class FileSimpleStoredStructure<T extends StoredStructure> extends Simple
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull T object) {
         FileRegistry registry = context.getRegistry();
         return new FileObject()
-            .add("structure", registry.serializeToFileElement(object.getParent().key()))
-            .add("chunk", registry.serializeToFileElement(object.getChunk()))
-            .add("center", registry.serializeToFileElement(object.getPosition()))
+            .add("structure", registry.serializeToFile(object.getParent().key()))
+            .add("chunk", registry.serializeToFile(object.getChunk()))
+            .add("center", registry.serializeToFile(object.getPosition()))
             .addProperty("rotation", object.getRotation())
             ;
     }

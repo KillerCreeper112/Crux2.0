@@ -1,5 +1,6 @@
 package killercreepr.crux.util;
 
+import com.google.gson.internal.LazilyParsedNumber;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,5 +46,13 @@ public class CruxObjects {
         }
         if(type.isAssignableFrom(o.getClass())) return type.cast(o);
         return null;
+    }
+
+    public static Number parseNumber(Number n){
+        if(n instanceof LazilyParsedNumber l){
+            if(l.toString().contains(".")) return l.doubleValue();
+            return l.intValue();
+        }
+        return n;
     }
 }

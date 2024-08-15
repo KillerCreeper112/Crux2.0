@@ -2,5 +2,4 @@ name: testttt
 version: '1.0'
 main: killercreepr.TestPlugin
 load: STARTUP
-commands:
-  reloadtest:
+api-version: '1.19'

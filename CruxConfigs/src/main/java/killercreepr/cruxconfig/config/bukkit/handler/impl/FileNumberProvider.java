@@ -25,8 +25,8 @@ public class FileNumberProvider extends SimpleFileHandler<NumberProvider> {
         }
         if(object instanceof UniformNumber d){
             FileObject map = new FileObject();
-            map.add("min", registry.serializeToFileElement(d.getMinInclusive()));
-            map.add("max", registry.serializeToFileElement(d.getMaxInclusive()));
+            map.add("min", registry.serializeToFile(d.getMinInclusive()));
+            map.add("max", registry.serializeToFile(d.getMaxInclusive()));
             return map;
         }
         if(object instanceof EquationNumber d){
@@ -35,7 +35,7 @@ public class FileNumberProvider extends SimpleFileHandler<NumberProvider> {
         if(object instanceof UniformNumberArray d){
             FileArray a = new FileArray(d.getNumbers().length);
             for(NumberProvider p : d.getNumbers()){
-                a.add(registry.serializeToFileElement(p));
+                a.add(registry.serializeToFile(p));
             }
             return a;
         }

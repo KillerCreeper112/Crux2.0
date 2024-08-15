@@ -121,7 +121,7 @@ public class CruxJson extends CruxFolder implements ICruxJson, DataFile {
                 object.remove(endPath);
                 return;
             }
-            object.add(endPath, jsonRegistry.serializeToFileElement(value));
+            object.add(endPath, jsonRegistry.serializeToFile(value));
         });
         json.add(element.getSecond(), element.getFirst().toJson());
     }

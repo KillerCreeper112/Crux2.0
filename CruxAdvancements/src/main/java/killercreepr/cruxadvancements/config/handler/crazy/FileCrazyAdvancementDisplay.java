@@ -19,17 +19,17 @@ public class FileCrazyAdvancementDisplay implements FileHandler<CrazyAdvancement
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> ctx, @NotNull CrazyAdvancementDisplay object) {
         FileRegistry registry = ctx.getRegistry();
         FileObject o = new FileObject()
-            .add("icon", registry.serializeToFileElement(object.getIcon()))
-            .add("title", registry.serializeToFileElement(object.getTitle()))
-            .add("description", registry.serializeToFileElement(object.getDescription()))
-            .add("frame", registry.serializeToFileElement(object.getFrame()))
-            .add("visibility", registry.serializeToFileElement(object.getVisibility()))
+            .add("icon", registry.serializeToFile(object.getIcon()))
+            .add("title", registry.serializeToFile(object.getTitle()))
+            .add("description", registry.serializeToFile(object.getDescription()))
+            .add("frame", registry.serializeToFile(object.getFrame()))
+            .add("visibility", registry.serializeToFile(object.getVisibility()))
             ;
-        if(object.getBackgroundTexture() != null) o.add("background_texture", registry.serializeToFileElement(object.getBackgroundTexture()));
+        if(object.getBackgroundTexture() != null) o.add("background_texture", registry.serializeToFile(object.getBackgroundTexture()));
         o.addProperty("x", object.getX())
             .addProperty("y", object.getY())
         ;
-        if(object.getPositionOrigin() != null) o.add("position_origin", registry.serializeToFileElement(object.getPositionOrigin()));
+        if(object.getPositionOrigin() != null) o.add("position_origin", registry.serializeToFile(object.getPositionOrigin()));
 
         return o;
     }

@@ -78,7 +78,7 @@ public class AutoFileHandler<T> extends SimpleFileHandler<T> {
                 Object obj = field.get(object);
                 field.setAccessible(x);
                 if(obj == null) continue;
-                FileElement serialized = registry.serializeToFileElement(obj);
+                FileElement serialized = registry.serializeToFile(obj);
                 map.add(field.getName(), serialized);
             }catch (IllegalAccessException ignored){}
         }

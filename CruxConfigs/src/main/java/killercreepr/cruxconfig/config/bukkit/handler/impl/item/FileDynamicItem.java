@@ -130,8 +130,8 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
             public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull DynamicItemArmorTrim object) {
                 FileRegistry registry = context.getRegistry();
                 return new FileObject()
-                        .add("material", registry.serializeToFileElement(object.getTrimMaterial()))
-                        .add("pattern", registry.serializeToFileElement(object.getTrimPattern()))
+                        .add("material", registry.serializeToFile(object.getTrimMaterial()))
+                        .add("pattern", registry.serializeToFile(object.getTrimPattern()))
                         ;
             }
 
@@ -182,7 +182,7 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
             public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull DynamicItemEnchants object) {
                 FileRegistry registry = context.getRegistry();
                 FileObject o = new FileObject();
-                object.getEnchants().forEach((key, value) -> o.add(key.toString(), registry.serializeToFileElement(value)));
+                object.getEnchants().forEach((key, value) -> o.add(key.toString(), registry.serializeToFile(value)));
                 return o;
             }
 
@@ -224,7 +224,7 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
             public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull DynamicItemFlags object) {
                 FileRegistry registry = context.getRegistry();
                 FileArray o = new FileArray();
-                object.getFlags().forEach(registry::serializeToFileElement);
+                object.getFlags().forEach(registry::serializeToFile);
                 return o;
             }
 
@@ -278,7 +278,7 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
             public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull DynamicItemPersistentTags object) {
                 FileRegistry registry = context.getRegistry();
                 FileObject o = new FileObject();
-                object.getTags().forEach((key, value) -> o.add(key.toString(), registry.serializeToFileElement(value)));
+                object.getTags().forEach((key, value) -> o.add(key.toString(), registry.serializeToFile(value)));
                 return o;
             }
 
@@ -310,11 +310,11 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull DynamicItem item) {
         FileRegistry registry = context.getRegistry();
         FileObject o = new FileObject();
-        o.add("material", registry.serializeToFileElement(item.material()));
-        o.add("amount", registry.serializeToFileElement(item.amount()));
+        o.add("material", registry.serializeToFile(item.material()));
+        o.add("amount", registry.serializeToFile(item.amount()));
         if(item.components() != null){
             item.components().forEach((key, value) ->{
-                o.add(key, registry.serializeToFileElement(value));
+                o.add(key, registry.serializeToFile(value));
             });
         }
         return o;

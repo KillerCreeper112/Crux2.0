@@ -1,6 +1,7 @@
 package killercreepr.cruxconfig.config.common.base;
 
 import com.google.gson.JsonElement;
+import com.google.gson.internal.LazilyParsedNumber;
 import killercreepr.crux.util.CruxObjects;
 import killercreepr.crux.util.CruxReflect;
 import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
@@ -16,6 +17,10 @@ import killercreepr.cruxconfig.config.common.handler.AutoFileHandler;
 import killercreepr.cruxconfig.config.common.json.JsonContext;
 import killercreepr.cruxconfig.config.common.json.JsonRegistry;
 import killercreepr.cruxconfig.config.common.json.container.JsonContainerHandler;
+import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
+import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
+import killercreepr.cruxconfig.config.common.yaml.handler.YamlObjectHandler;
+import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,7 +35,7 @@ import java.util.*;
  * It was made primarily for saving and extracting config values. Therefor meaning that the
  * software knows exactly what classes it needs to serialize and what classes it needs to deserialize.
  */
-public class BaseFileRegistry implements FileRegistry, JsonRegistry {
+public class BaseFileRegistry implements FileRegistry, YamlRegistry, JsonRegistry {
     public final FileObjectHandlerRegistry HANDLER_REGISTRY = new FileObjectHandlerRegistry(new HashMap<>(),this);
     public final FileParsedObjectRegistry PARSED_OBJECT_HANDLERS = new FileParsedObjectRegistry();
 
@@ -244,7 +249,7 @@ public class BaseFileRegistry implements FileRegistry, JsonRegistry {
     }
 
     @Override
-    public @NotNull FileElement serializeToFileElement(@NotNull Object object) {
+    public @NotNull FileElement serializeToFile(@NotNull Object object) {
         return serializeObject(object);
     }
 
@@ -299,41 +304,79 @@ public class BaseFileRegistry implements FileRegistry, JsonRegistry {
 
     @Override
     public @NotNull JsonElement serializeToJson(@NotNull Object object) {
-        return null;
+        return serializeToFile(object).toJson();
     }
 
     @Override
     public @Nullable Object deserializeFromJson(@Nullable JsonElement o) {
-        return null;
+        if(o==null) return null;
+        return deserializeObjectFromFile(FileElement.fromJson(o));
     }
 
     @Override
     public <T> @Nullable T deserializeFromJson(@NotNull Type type, @Nullable JsonElement o) {
-        return null;
+        if(o==null) return null;
+        return deserializeFromFile(type, FileElement.fromJson(o));
     }
 
     @Override
     public <T> @Nullable T deserializeFromJson(@NotNull Type type, @Nullable JsonElement o, @NotNull JsonContext context) {
-        return null;
+        if(o==null) return null;
+        return deserializeFromFile(type, FileElement.fromJson(o), context);
     }
 
     @Override
     public <T> @Nullable T deserializeFromJson(@NotNull Class<T> clazz, @Nullable JsonElement o) {
-        return null;
+        if(o==null) return null;
+        return deserializeFromFile(clazz, FileElement.fromJson(o));
     }
 
     @Override
     public <T> @Nullable T deserializeFromJson(@NotNull Class<T> clazz, @Nullable JsonElement o, @NotNull JsonContext context) {
-        return null;
+        if(o==null) return null;
+        return deserializeFromFile(clazz, FileElement.fromJson(o), context);
     }
 
     @Override
     public @Nullable Object deserializeObjectFromJson(@NotNull JsonElement o) {
-        return null;
+        return deserializeObjectFromFile(FileElement.fromJson(o));
     }
 
     @Override
     public <T extends JsonContainerHandler<?>> void registerJsonHandler(@NotNull Class<?> clazz, @NotNull T handler) {
+        throw new UnsupportedOperationException();
+    }
 
+    @Override
+    public @NotNull YamlElement serializeToYaml(@NotNull Object object) {
+        return serializeToFile(object).toYaml();
+    }
+
+    @Override
+    public <T> @Nullable T deserializeFromYaml(@NotNull Type type, @Nullable YamlElement o) {
+        if(o==null) return null;
+        return deserializeFromFile(type, FileElement.fromYaml(o));
+    }
+
+    @Override
+    public <T> @Nullable T deserializeFromYaml(@NotNull Class<T> clazz, @Nullable YamlElement o) {
+        if(o==null) return null;
+        return deserializeFromFile(clazz, FileElement.fromYaml(o));
+    }
+
+    @Override
+    public <T> @Nullable T deserializeFromYaml(@NotNull Class<T> clazz, @Nullable YamlElement o, @NotNull YamlContext context) {
+        if(o==null) return null;
+        return deserializeFromFile(clazz, FileElement.fromYaml(o), context);
+    }
+
+    @Override
+    public @Nullable Object deserializeObjectFromYaml(@NotNull YamlElement o) {
+        return deserializeObjectFromFile(FileElement.fromYaml(o));
+    }
+
+    @Override
+    public <T extends YamlObjectHandler<?>> void registerYamlHandler(@NotNull Class<?> clazz, @NotNull T handler) {
+        throw new UnsupportedOperationException();
     }
 }

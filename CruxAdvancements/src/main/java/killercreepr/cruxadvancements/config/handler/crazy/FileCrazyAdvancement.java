@@ -27,11 +27,11 @@ public class FileCrazyAdvancement implements FileHandler<CrazyAdvancement> {
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> ctx, @NotNull CrazyAdvancement object) {
         FileRegistry registry = ctx.getRegistry();
         FileObject o = new FileObject();
-        o.add("key", registry.serializeToFileElement(object.key()));
-        if(object.parent() != null) o.add("parent", registry.serializeToFileElement(object.parent()));
-        o.add("criteria", registry.serializeToFileElement(object.getCriteria()));
-        o.add("display", registry.serializeToFileElement(object.getDisplay()));
-        o.add("flags", registry.serializeToFileElement(object.getFlags()));
+        o.add("key", registry.serializeToFile(object.key()));
+        if(object.parent() != null) o.add("parent", registry.serializeToFile(object.parent()));
+        o.add("criteria", registry.serializeToFile(object.getCriteria()));
+        o.add("display", registry.serializeToFile(object.getDisplay()));
+        o.add("flags", registry.serializeToFile(object.getFlags()));
         return o;
     }
 

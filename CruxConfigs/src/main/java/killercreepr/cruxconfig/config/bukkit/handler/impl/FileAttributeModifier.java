@@ -18,8 +18,8 @@ public class FileAttributeModifier extends SimpleFileHandler<AttributeModifier> 
         return new FileObject()
                 .addProperty("name", object.getName())
                 .addProperty("amount", object.getAmount())
-                .add("operation", registry.serializeToFileElement(object.getOperation()))
-                .add("slot", registry.serializeToFileElement(object.getSlotGroup()))
+                .add("operation", registry.serializeToFile(object.getOperation()))
+                .add("slot", registry.serializeToFile(object.getSlotGroup()))
                 ;
     }
 

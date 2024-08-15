@@ -222,7 +222,7 @@ public class SimpleJsonRegistry implements FileRegistry, JsonRegistry {
     }
 
     @Override
-    public @NotNull FileElement serializeToFileElement(@NotNull Object object) {
+    public @NotNull FileElement serializeToFile(@NotNull Object object) {
         return FileElement.fromJson(serializeToJson(object));
     }
 

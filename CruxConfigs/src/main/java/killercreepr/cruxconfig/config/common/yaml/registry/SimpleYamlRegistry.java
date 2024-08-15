@@ -267,7 +267,7 @@ public class SimpleYamlRegistry implements FileRegistry, YamlRegistry {
     }
 
     @Override
-    public @NotNull FileElement serializeToFileElement(@NotNull Object object) {
+    public @NotNull FileElement serializeToFile(@NotNull Object object) {
         return FileElement.fromYaml(serializeToYaml(object));
     }
 
