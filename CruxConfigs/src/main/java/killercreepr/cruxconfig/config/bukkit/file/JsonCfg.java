@@ -2,6 +2,7 @@ package killercreepr.cruxconfig.config.bukkit.file;
 
 import com.google.gson.JsonObject;
 import killercreepr.cruxconfig.config.bukkit.value.CfgValue;
+import killercreepr.cruxconfig.config.common.file.DataFile;
 import killercreepr.cruxconfig.config.common.file.IJsonCfg;
 import killercreepr.cruxconfig.config.common.json.JsonRegistry;
 import org.bukkit.plugin.Plugin;
@@ -12,7 +13,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-public class JsonCfg extends CruxJson implements IJsonCfg<JsonObject, CfgValue<?>> {
+public class JsonCfg extends CruxJson implements IJsonCfg<JsonObject, CfgValue<?>>, DataFile {
     /**
      * @param plugin The plugin to use as a base directory.
      * @param path The plath in which this file will exist.

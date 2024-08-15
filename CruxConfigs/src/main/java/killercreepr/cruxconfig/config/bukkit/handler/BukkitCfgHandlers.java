@@ -29,6 +29,7 @@ import killercreepr.cruxconfig.config.common.json.JsonRegistry;
 import killercreepr.cruxconfig.config.common.json.container.GenericJsonHandler;
 import killercreepr.cruxconfig.config.common.yaml.automatic.AutoYamlSerializer;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
+import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.*;
@@ -79,6 +80,12 @@ public class BukkitCfgHandlers {
                 new GenericJsonHandler<>("vector", Vector.class),
                 new GenericJsonHandler<>("potion_effect", PotionEffect.class)
         );
+    }
+
+    public static void initStandard(){
+        init(CfgRegistries.JSON);
+        init(CfgRegistries.YAML);
+        init(CfgRegistries.FILE);
     }
 
     public static void init(@NotNull FileRegistry registry){

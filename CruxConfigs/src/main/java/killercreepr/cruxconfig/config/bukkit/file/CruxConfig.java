@@ -1,5 +1,9 @@
 package killercreepr.cruxconfig.config.bukkit.file;
 
+import killercreepr.cruxconfig.config.common.FileRegistry;
+import killercreepr.cruxconfig.config.common.element.FileElement;
+import killercreepr.cruxconfig.config.common.element.FileObject;
+import killercreepr.cruxconfig.config.common.file.DataFile;
 import killercreepr.cruxconfig.config.common.file.ICruxConfig;
 import killercreepr.cruxconfig.config.common.file.IYamlCfg;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlArray;
@@ -25,7 +29,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CruxConfig extends CruxFolder implements IYamlCfg<MemoryConfiguration> {
+public class CruxConfig extends CruxFolder implements IYamlCfg<MemoryConfiguration>, DataFile {
     protected final YamlRegistry yamlRegistry;
     protected final FileConfiguration cfg;
 
@@ -278,5 +282,60 @@ public class CruxConfig extends CruxFolder implements IYamlCfg<MemoryConfigurati
 
     public static @NotNull String removeDot(@NotNull String s){
         return ICruxConfig.removeDot(s);
+    }
+
+    @Override
+    public @Nullable FileElement getRoot() {
+        YamlObject root = getRootAsYamlObject();
+        if(root==null) return null;
+        return FileElement.fromYaml(root);
+    }
+
+    @Override
+    public @Nullable FileElement getElement(@NotNull String path) {
+        if(path.isBlank()) return getRoot();
+        if(!(getRoot() instanceof FileObject o)) return null;
+
+        FileObject previous = o;
+        int index = 0;
+        String[] split = path.split(Character.toString(pathSeparator));
+        for(String s : split){
+            index++;
+            if(index == split.length){
+                return previous.get(s);
+            }
+            if(!(previous.get(s) instanceof FileObject got)) return null;
+            previous = got;
+        }
+        return null;
+    }
+
+    @Override
+    public void serialize(@NotNull String path, @Nullable Object value) {
+        set(path, value);
+    }
+
+    @Override
+    public <T> @Nullable T deserialize(@NotNull String path, @NotNull Type type) {
+        ConfigurationSection section = cfg.getRoot();
+        if(section == null) throw new UnsupportedOperationException("Configuration has no root!");
+        return deserialize(type, section, path);
+    }
+
+    @Override
+    public @NotNull FileRegistry fileRegistry() {
+        return yamlRegistry;
+    }
+
+    protected char pathSeparator = '.';
+    @Override
+    public char getPathSeparator() {
+        return pathSeparator;
+    }
+
+    @Override
+    public void setPathSeparator(char separator) {
+        this.pathSeparator = separator;
+        cfg.options().pathSeparator(separator);
     }
 }
