@@ -15,9 +15,9 @@ public class AutoFileOptions {
 
     protected final @Nullable BiPredicate<String, Object> isValid;
     protected final @Nullable Predicate<Field> disabledFields;
-    protected final @Nullable Map<String, FileObjectHandler<?>> manualHandlers;
+    protected final @Nullable Map<String, FileConvertHandler<?, ?>> manualHandlers;
 
-    public AutoFileOptions(@Nullable BiPredicate<String, Object> isValid, @Nullable Predicate<Field> disabledFields, @Nullable Map<String, FileObjectHandler<?>> manualHandlers) {
+    public AutoFileOptions(@Nullable BiPredicate<String, Object> isValid, @Nullable Predicate<Field> disabledFields, @Nullable Map<String, FileConvertHandler<?, ?>> manualHandlers) {
         this.isValid = isValid;
         this.disabledFields = disabledFields;
         this.manualHandlers = manualHandlers;
@@ -31,7 +31,7 @@ public class AutoFileOptions {
         return isValid == null || isValid.test(key, value);
     }
 
-    public FileObjectHandler<?> getManualHandler(@NotNull String id){
+    public FileConvertHandler<?, ?> getManualHandler(@NotNull String id){
         if(manualHandlers==null) return null;
         return manualHandlers.get(id);
     }
@@ -58,7 +58,7 @@ public class AutoFileOptions {
         return disabledFields;
     }
 
-    public @Nullable Map<String, FileObjectHandler<?>> getManualHandlers() {
+    public @Nullable Map<String, FileConvertHandler<?, ?>> getManualHandlers() {
         return manualHandlers;
     }
 
@@ -66,7 +66,7 @@ public class AutoFileOptions {
     public static final class Builder {
         private @Nullable BiPredicate<String, Object> isValid;
         private @Nullable Predicate<Field> disabledFields;
-        private @Nullable Map<String, FileObjectHandler<?>> manualHandlers;
+        private @Nullable Map<String, FileConvertHandler<?, ?>> manualHandlers;
 
         public Builder isValid(BiPredicate<String, Object> isValid) {
             this.isValid = isValid;
@@ -78,7 +78,7 @@ public class AutoFileOptions {
             return this;
         }
 
-        public Builder manualHandlers(Map<String, FileObjectHandler<?>> manualHandlers) {
+        public Builder manualHandlers(Map<String, FileConvertHandler<?, ?>> manualHandlers) {
             this.manualHandlers = manualHandlers;
             return this;
         }

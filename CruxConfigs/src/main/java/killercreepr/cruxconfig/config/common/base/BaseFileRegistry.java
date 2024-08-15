@@ -249,7 +249,7 @@ public class BaseFileRegistry implements FileRegistry {
 
     @Override
     public @NotNull FileElement serializeToFile(@NotNull Object object, @NotNull FileContext<?> context) {
-        return serializeToFile(object, context);
+        return serializeObject(object, context);
     }
 
     @Override

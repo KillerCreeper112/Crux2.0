@@ -19,7 +19,6 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.io.FileReader;
 import java.lang.reflect.Type;
-import java.util.function.BiConsumer;
 import java.util.logging.Level;
 
 public class CruxJson extends CruxFolder implements ICruxJson, DataFile {
@@ -120,30 +119,37 @@ public class CruxJson extends CruxFolder implements ICruxJson, DataFile {
     @Override
     public void serialize(@NotNull String path, @Nullable Object value) {
         reloadIfNeeded();
-        Pair<FileObject, String> element = buildElementPath(path, (object, endPath) ->{
-            if(value==null){
-                object.remove(endPath);
-                return;
-            }
-            object.add(endPath, jsonRegistry.serializeToFile(value));
-        });
+        Pair<FileElement, String> element = buildElementPath(path, value == null ? null : jsonRegistry.serializeToFile(value));
         Crux.log(Level.WARNING, "got gottteeed  " + element.getFirst() + "first " + element.getSecond() + " second");
         json.add(element.getSecond(), element.getFirst().toJson());
     }
 
-    public @NotNull Pair<FileObject, String> buildElementPath(@NotNull String path, @NotNull BiConsumer<FileObject, String> endResult){
+    public @NotNull Pair<FileElement, String> buildElementPath(@NotNull String path, @Nullable FileElement serializedObject){
         Preconditions.checkArgument(!path.isBlank(), "Path may not be blank or empty!");
-        FileObject start = json == null ? new FileObject() : FileObject.fromJson(json);
-        FileObject built = start;
-        int index = 0;
+
         String[] split = path.split("\\" + pathSeparator);
         String startPath = split[0];
+
+        if(split.length == 1){
+            return new Pair<>(serializedObject, startPath);
+        }
+
+        FileObject start;
+        if(json == null) start = new FileObject();
+        else if(json.get(startPath) instanceof JsonObject o){
+            start = FileObject.fromJson(o);
+        }else start = new FileObject();
+
+        FileObject built = start;
+        int index = 0;
         for(String s : split){
             index++;
             if(index == split.length){
-                endResult.accept(built, s);
+                if(serializedObject==null) built.remove(s);
+                else built.add(s, serializedObject);
                 break;
             }
+            if(index==1) continue;
             if(built.get(s) instanceof FileObject o){
                 built = o;
                 continue;
@@ -162,7 +168,7 @@ public class CruxJson extends CruxFolder implements ICruxJson, DataFile {
 
         FileObject previous = FileObject.fromJson(json);
         int index = 0;
-        String[] split = path.split(Character.toString(pathSeparator));
+        String[] split = path.split("\\" + pathSeparator);
         for(String s : split){
             index++;
             if(index == split.length){

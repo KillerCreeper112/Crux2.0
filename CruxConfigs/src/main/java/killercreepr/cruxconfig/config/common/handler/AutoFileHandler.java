@@ -90,8 +90,7 @@ public class AutoFileHandler<T> extends SimpleFileHandler<T> {
 
             Object found;
             if(options != null && options.hasManualHandler(field.getName())) {
-                FileObjectHandler<?> handler = options.getManualHandler(field.getName());
-                found = handler.deserializeFromFile(context, yamlMap.get(field.getName()));
+                found = options.getManualHandler(field.getName()).deserializeFromFile(context, yamlMap.get(field.getName()));
             }else{
                 found = registry.deserializeFromFile(field.getType(), yamlMap.get(field.getName()));
             }
