@@ -266,7 +266,7 @@ public class BaseFileRegistry implements FileRegistry {
 
     @Override
     public @NotNull Object deserializeObjectFromFile(@NotNull FileElement o) {
-        return deserializeObject(o.toYaml());
+        return deserializeObject(o);
     }
 
     public @NotNull Collection<Object> deserializeCollection(@NotNull Collection<?> list){

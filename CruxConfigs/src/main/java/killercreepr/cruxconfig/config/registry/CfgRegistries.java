@@ -13,8 +13,14 @@ public class CfgRegistries {
     public static final SimpleRegistry<JsonRegistry> JSON_REGISTRY = SimpleRegistry.fromSet();
     public static final SimpleRegistry<YamlRegistry> YAML_REGISTRY = SimpleRegistry.fromSet();
 
-    public static final JsonRegistry JSON = JSON_REGISTRY.register(FILE.register(new SimpleJsonRegistry()));
-    public static final YamlRegistry YAML = YAML_REGISTRY.register(FILE.register(new SimpleYamlRegistry()));
+    /**
+     * These file registries are for registries that require the specific
+     * object type to be inputted when deserializing.
+     */
+    public static final SimpleRegistry<FileRegistry> SIMPLE_REGISTRY = SimpleRegistry.fromSet();
+
+    public static final JsonRegistry JSON = JSON_REGISTRY.register(SIMPLE_REGISTRY.register(FILE.register(new SimpleJsonRegistry())));
+    public static final YamlRegistry YAML = YAML_REGISTRY.register(SIMPLE_REGISTRY.register(FILE.register(new SimpleYamlRegistry())));
 
     public static final TaggedJsonRegistry JSON_TAGGED = JSON_REGISTRY.register(FILE.register(new TaggedJsonRegistry()));
 }
