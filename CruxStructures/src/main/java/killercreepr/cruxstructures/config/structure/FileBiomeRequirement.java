@@ -15,7 +15,7 @@ public class FileBiomeRequirement extends YamlFileHandler<StructureBiomeRequirem
     public @Nullable StructureBiomeRequirement deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = ctx.getRegistry();
-        Key key = registry.deserialize(Key.class, o.get("key"));
+        Key key = registry.deserializeFromFile(Key.class, o.get("key"));
         if(key==null) return null;
         return new StructureBiomeRequirement(key);
     }

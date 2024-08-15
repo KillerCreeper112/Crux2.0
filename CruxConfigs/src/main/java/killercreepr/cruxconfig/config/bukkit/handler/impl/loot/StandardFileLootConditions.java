@@ -26,7 +26,7 @@ public class StandardFileLootConditions {
 
             @Override
             public @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
-                Collection<LootCondition> conditions = ctx.getRegistry().deserialize(
+                Collection<LootCondition> conditions = ctx.getRegistry().deserializeFromFile(
                     new TypeToken<Collection<LootCondition>>(){}.getType(),
                     e.get("terms")
                 );
@@ -42,7 +42,7 @@ public class StandardFileLootConditions {
 
             @Override
             public @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
-                Collection<LootCondition> conditions = ctx.getRegistry().deserialize(
+                Collection<LootCondition> conditions = ctx.getRegistry().deserializeFromFile(
                     new TypeToken<Collection<LootCondition>>(){}.getType(),
                     e.get("terms")
                 );
@@ -59,7 +59,7 @@ public class StandardFileLootConditions {
             @Override
             public @NotNull BlockCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 FileRegistry registry = ctx.getRegistry();
-                Material material = registry.deserialize(Material.class, e.get("material"));
+                Material material = registry.deserializeFromFile(Material.class, e.get("material"));
                 return new BlockCondition(target, material);
             }
         });
@@ -72,8 +72,8 @@ public class StandardFileLootConditions {
             @Override
             public @NotNull EntityCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 FileRegistry registry = ctx.getRegistry();
-                Key entityType = registry.deserialize(Key.class, e.get("type"));
-                String worldName = registry.deserialize(String.class, e.get("world"));
+                Key entityType = registry.deserializeFromFile(Key.class, e.get("type"));
+                String worldName = registry.deserializeFromFile(String.class, e.get("world"));
                 return new EntityCondition(
                     target, entityType, worldName
                 );

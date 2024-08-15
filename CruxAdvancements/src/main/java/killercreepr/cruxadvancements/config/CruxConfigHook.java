@@ -56,7 +56,7 @@ public class CruxConfigHook {
             public @Nullable BreakBlockObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String criterion, @Nullable LootCondition conditions) {
                 Integer maxProgress = e.getObject(Integer.class, "amount");
                 if(maxProgress==null) maxProgress = 1;
-                Material material = ctx.getRegistry().deserialize(Material.class, e.get("block_type"));
+                Material material = ctx.getRegistry().deserializeFromFile(Material.class, e.get("block_type"));
                 return new BreakBlockObjective(criterion, conditions, maxProgress, material);
             }
         });
@@ -84,18 +84,18 @@ public class CruxConfigHook {
     public static final FileSimpleObjectiveProgression SIMPLE_OBJECTIVE_PROGRESSION = new FileSimpleObjectiveProgression();
     public static final FileObjectiveProgress OBJECTIVE_PROGRESS = new FileObjectiveProgress();
     public static void registerHandlers(@NotNull FileRegistry registry){
-        registry.registerHandler(CruxCriteria.class, new FileCruxCriteria());
-        registry.registerHandler(SimpleCriterionProgress.class, new FileSimpleCriterionProgress());
-        registry.registerHandler(CruxAdvancementProgress.class, CRUX_ADVANCEMENT_PROGRESS);
+        registry.registerFileHandler(CruxCriteria.class, new FileCruxCriteria());
+        registry.registerFileHandler(SimpleCriterionProgress.class, new FileSimpleCriterionProgress());
+        registry.registerFileHandler(CruxAdvancementProgress.class, CRUX_ADVANCEMENT_PROGRESS);
         //register the inheritors objects so the config registry doesn't pick a random handler
-        registry.registerHandler(ListAdvancementProgress.class, CRUX_ADVANCEMENT_PROGRESS);
-        registry.registerHandler(NumberAdvancementProgress.class, CRUX_ADVANCEMENT_PROGRESS);
-        registry.registerHandler(CruxAdvanceReward.class, new FileCruxAdvanceReward());
+        registry.registerFileHandler(ListAdvancementProgress.class, CRUX_ADVANCEMENT_PROGRESS);
+        registry.registerFileHandler(NumberAdvancementProgress.class, CRUX_ADVANCEMENT_PROGRESS);
+        registry.registerFileHandler(CruxAdvanceReward.class, new FileCruxAdvanceReward());
 
-        registry.registerHandler(ObjectiveProgress.class, OBJECTIVE_PROGRESS);
+        registry.registerFileHandler(ObjectiveProgress.class, OBJECTIVE_PROGRESS);
 
-        registry.registerHandler(SimpleObjectiveProgression.class, SIMPLE_OBJECTIVE_PROGRESSION);
+        registry.registerFileHandler(SimpleObjectiveProgression.class, SIMPLE_OBJECTIVE_PROGRESSION);
 
-        registry.registerHandler(TrackedAdvancement.class, new FileTrackedAdvancement());
+        registry.registerFileHandler(TrackedAdvancement.class, new FileTrackedAdvancement());
     }
 }

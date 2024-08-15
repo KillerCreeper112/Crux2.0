@@ -33,7 +33,7 @@ public class FileSimpleObjectiveProgression implements FileHandler<SimpleObjecti
         FileRegistry registry = ctx.getRegistry();
         SimpleObjectiveProgression objective = new SimpleObjectiveProgression(a);
         o.forEach((key, value) ->{
-            ObjectiveProgress progress = registry.deserialize(ObjectiveProgress.class, value);
+            ObjectiveProgress progress = registry.deserializeFromFile(ObjectiveProgress.class, value);
             if(progress==null) return;
             objective.getProgressMap().put(key, progress);
         });

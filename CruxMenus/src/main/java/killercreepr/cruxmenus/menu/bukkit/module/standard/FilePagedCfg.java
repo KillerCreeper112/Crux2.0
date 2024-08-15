@@ -78,7 +78,7 @@ public abstract class FilePagedCfg extends FileMenuModuled<MenuModule> implement
                                                      @NotNull FileElement e,
                                                      @Nullable FileObject menuContext){
         if(!(e instanceof FileObject o)) return null;
-        return ctx.getRegistry().deserialize(NumberProvider.class, o.get("indexes"), ctx);
+        return ctx.getRegistry().deserializeFromFile(NumberProvider.class, o.get("indexes"), ctx);
     }
 
     @Override

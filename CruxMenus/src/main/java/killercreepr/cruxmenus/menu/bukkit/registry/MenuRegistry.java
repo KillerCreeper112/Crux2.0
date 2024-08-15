@@ -59,10 +59,10 @@ public class MenuRegistry {
     }
 
     public void register(@NotNull YamlRegistry registry){
-        registry.registerHandler(MenuHolder.class, menuModule);
-        registry.registerHandler(DataExchange.class, menuModule.getYamlDataExchange());
-        registry.registerHandler(MenuItem.class, menuModule.getYamlMenuItem());
-        registry.registerHandler(MenuItems.class, menuModule.getYamlMenuItems());
+        registry.registerFileHandler(MenuHolder.class, menuModule);
+        registry.registerFileHandler(DataExchange.class, menuModule.getYamlDataExchange());
+        registry.registerFileHandler(MenuItem.class, menuModule.getYamlMenuItem());
+        registry.registerFileHandler(MenuItems.class, menuModule.getYamlMenuItems());
     }
 
     public void loadConfiguration(@NotNull File folder){

@@ -29,10 +29,10 @@ public class FileSimpleLootObject implements FileHandler<SimpleItemLootObject> {
         int weight = o.getObject(Integer.class, "weight", 0);
         float quality = o.getObject(Float.class, "quality", 0f);
 
-        List<LootCondition> conditions = registry.deserialize(
+        List<LootCondition> conditions = registry.deserializeFromFile(
             new TypeToken<List<LootCondition>>(){}.getType(), o.get("conditions")
         );
-        List<LootFunction<ItemStack>> functions = registry.deserialize(
+        List<LootFunction<ItemStack>> functions = registry.deserializeFromFile(
             new TypeToken<List<ItemLootFunction>>(){}.getType(), o.get("functions")
         );
         return new SimpleItemLootObject(

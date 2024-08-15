@@ -32,7 +32,7 @@ public class AutoJsonSerializer<T> implements JsonSerializable {
                 Object obj = field.get(object);
                 field.setAccessible(x);
                 if(obj == null) continue;
-                JsonElement serialized = registry.serializeObject(obj);
+                JsonElement serialized = registry.serializeToJson(obj);
                 o.add(field.getName(), serialized);
             }catch (IllegalAccessException ignored){}
         }
@@ -45,7 +45,7 @@ public class AutoJsonSerializer<T> implements JsonSerializable {
         Map<String, Object> fields = new LinkedHashMap<>();
         Map<String, JsonElement> jsonMap = o.asMap();
         for(Field field : CruxReflect.getNonStaticDeclaredFields(clazz)){
-            Object found  = registry.deserialize(jsonMap.get(field.getName()));
+            Object found  = registry.deserializeFromJson(jsonMap.get(field.getName()));
             fields.put(field.getName(), found);
         }
         return CruxReflect.attemptCreation(clazz, fields);

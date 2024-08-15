@@ -23,7 +23,7 @@ public class FilePluginItem implements FileHandler<PluginItem> {
     public @Nullable PluginItem deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = ctx.getRegistry();
-        Key key = registry.deserialize(Key.class, o.get("key"));
+        Key key = registry.deserializeFromFile(Key.class, o.get("key"));
         if(key==null) return null;
         return deserialize(ctx, e, key);
     }
@@ -31,7 +31,7 @@ public class FilePluginItem implements FileHandler<PluginItem> {
     public static @Nullable PluginItem deserialize(@NotNull FileContext<?> ctx, @NotNull FileElement e, @NotNull Key key) {
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = ctx.getRegistry();
-        DynamicItem dynamic = registry.deserialize(BukkitDynamicItem.class, o.get("item"));
+        DynamicItem dynamic = registry.deserializeFromFile(BukkitDynamicItem.class, o.get("item"));
         if(dynamic==null) return null;
         return new CfgPluginItem(key, dynamic);
     }

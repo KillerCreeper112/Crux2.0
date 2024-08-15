@@ -48,10 +48,10 @@ public class FileMsgContainer extends SimpleFileHandler<MsgContainer> {
         }
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = context.getRegistry();
-        List<String> chat = registry.deserialize(List.class, o.get("chat"));
+        List<String> chat = registry.deserializeFromFile(List.class, o.get("chat"));
         String actionBar = o.getObject("action_bar");
-        CreateTitle title = registry.deserialize(CreateTitle.class, o.get("title"));
-        CreateSound sound = registry.deserialize(CreateSound.class, o.get("sound"));
+        CreateTitle title = registry.deserializeFromFile(CreateTitle.class, o.get("title"));
+        CreateSound sound = registry.deserializeFromFile(CreateSound.class, o.get("sound"));
         MsgContainer container = new MsgContainer(chat == null || chat.isEmpty() ? null : chat,
                 actionBar,
                 title, sound);

@@ -38,18 +38,18 @@ public class FileCrazyAdvancementDisplay implements FileHandler<CrazyAdvancement
     public @Nullable CrazyAdvancementDisplay deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = ctx.getRegistry();
-        DynamicItem icon = registry.deserialize(DynamicItem.class, o.get("icon"));
+        DynamicItem icon = registry.deserializeFromFile(DynamicItem.class, o.get("icon"));
         String title = o.getObject(String.class, "title", "");
         String description = o.getObject(String.class, "description", "");
-        AdvancementDisplay.AdvancementFrame frame = registry.deserialize(AdvancementDisplay.AdvancementFrame.class, o.get("frame"));
+        AdvancementDisplay.AdvancementFrame frame = registry.deserializeFromFile(AdvancementDisplay.AdvancementFrame.class, o.get("frame"));
         if(frame == null) frame = AdvancementDisplay.AdvancementFrame.GOAL;
-        AdvancementVisibility visibility = registry.deserialize(AdvancementVisibility.class, o.get("visibility"));
+        AdvancementVisibility visibility = registry.deserializeFromFile(AdvancementVisibility.class, o.get("visibility"));
         if(visibility == null) visibility = AdvancementVisibility.ALWAYS;
 
         String backgroundTexture = o.getObject(String.class, "background_texture");
         Float x = o.getObject(Float.class, "x", 0f);
         Float y = o.getObject(Float.class, "y", 0f);
-        Key positionOrigin = registry.deserialize(Key.class, o.get("position_origin"));
+        Key positionOrigin = registry.deserializeFromFile(Key.class, o.get("position_origin"));
 
         if(CruxObjects.checkNull(icon)) return null;
 

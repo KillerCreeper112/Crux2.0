@@ -20,8 +20,8 @@ public class JsonMapHandler implements JsonContainerHandler<Map<Object, Object>>
         JsonRegistry registry = context.getRegistry();
         object.forEach((key, value) ->{
             JsonObject sub = new JsonObject();
-            sub.add("key", registry.serializeObject(key));
-            sub.add("value", registry.serializeObject(value));
+            sub.add("key", registry.serializeToJson(key));
+            sub.add("value", registry.serializeToJson(value));
             o.add(sub);
         });
         return o;
@@ -34,9 +34,9 @@ public class JsonMapHandler implements JsonContainerHandler<Map<Object, Object>>
         JsonRegistry registry = context.getRegistry();
         a.forEach(ee ->{
             if(!(ee instanceof JsonObject o)) return;
-            Object key = registry.deserialize(o.get("key"));
+            Object key = registry.deserializeFromJson(o.get("key"));
             if(key==null) return;
-            Object value = registry.deserialize(o.get("value"));
+            Object value = registry.deserializeFromJson(o.get("value"));
             if(value==null) return;
             list.put(key, value);
         });

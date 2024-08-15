@@ -35,15 +35,15 @@ public class FileSimpleStoredStructure<T extends StoredStructure> extends Simple
     public @Nullable SimpleStoredStructure deserializeSimple(@NotNull FileContext<?> context, @NotNull FileElement e){
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = context.getRegistry();
-        Key structureKey = registry.deserialize(Key.class, o.get("structure"));
+        Key structureKey = registry.deserializeFromFile(Key.class, o.get("structure"));
         if(structureKey==null) return null;
 
-        StoredChunk chunk = registry.deserialize(StoredChunk.class, o.get("chunk"));
-        BlockPos center = registry.deserialize(BlockPos.class, o.get("center"));
+        StoredChunk chunk = registry.deserializeFromFile(StoredChunk.class, o.get("chunk"));
+        BlockPos center = registry.deserializeFromFile(BlockPos.class, o.get("center"));
 
         if(chunk == null || center == null) return null;
 
-        Double rotation = registry.deserialize(Double.class, o.get("rotation"));
+        Double rotation = registry.deserializeFromFile(Double.class, o.get("rotation"));
         if(rotation==null) rotation = 0D;
 
         Structure structure = StructureRegistries.STRUCTURES.get(structureKey);

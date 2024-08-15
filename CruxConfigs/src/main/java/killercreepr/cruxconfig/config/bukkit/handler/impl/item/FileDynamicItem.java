@@ -139,9 +139,9 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
             public @Nullable DynamicItemArmorTrim deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
                 if(!(e instanceof FileObject o)) return null;
                 FileRegistry registry = context.getRegistry();
-                Object material = registry.deserialize(String.class, o.get("material"));
+                Object material = registry.deserializeFromFile(String.class, o.get("material"));
                 if(material==null) return null;
-                Object pattern = registry.deserialize(String.class, o.get("pattern"));
+                Object pattern = registry.deserializeFromFile(String.class, o.get("pattern"));
                 if(pattern==null) return null;
                 return new DynamicItemArmorTrim(material, pattern);
             }
@@ -192,7 +192,7 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
                 FileRegistry registry = context.getRegistry();
                 Map<Object, Object> enchants = new HashMap<>();
                 o.forEach((key, value) ->{
-                    Object level = registry.deserialize(String.class, value);
+                    Object level = registry.deserializeFromFile(String.class, value);
                     if(level==null) return;
                     enchants.put(key, level);
                 });
@@ -234,7 +234,7 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
                 FileRegistry registry = context.getRegistry();
                 Collection<Object> flags = new HashSet<>();
                 o.forEach((value) ->{
-                    Object flag = registry.deserialize(String.class, value);
+                    Object flag = registry.deserializeFromFile(String.class, value);
                     if(flag==null) return;
                     flags.add(flag);
                 });
@@ -301,7 +301,7 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
 
     public FileDynamicItem registerComponents(@NotNull FileRegistry registry){
         for(FileDynamicItemComponent<?> c : COMPONENT_REGISTRY){
-            registry.registerHandler(c.getType(), c);
+            registry.registerFileHandler(c.getType(), c);
         }
         return this;
     }

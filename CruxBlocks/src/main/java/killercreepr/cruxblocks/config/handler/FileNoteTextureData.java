@@ -23,7 +23,7 @@ public class FileNoteTextureData implements FileHandler<NoteTextureData> {
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = ctx.getRegistry();
         Integer note = o.getObject(Integer.class, "note");
-        Instrument instrument = registry.deserialize(Instrument.class, o.get("instrument"));
+        Instrument instrument = registry.deserializeFromFile(Instrument.class, o.get("instrument"));
         if(CruxObjects.checkNull(note, instrument)) return null;
 
         boolean powered = o.getOrDefaultObject(Boolean.class, "powered", false);

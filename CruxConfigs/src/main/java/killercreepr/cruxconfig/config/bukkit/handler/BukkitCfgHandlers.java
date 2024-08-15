@@ -76,7 +76,7 @@ public class BukkitCfgHandlers {
     public static final FileItemLootPoolObject ITEM_LOOT_POOL_OBJECT = new FileItemLootPoolObject();
 
     public static void initJson(@NotNull JsonRegistry registry){
-        registry.registerHandler(
+        registry.registerJsonHandler(
                 new GenericJsonHandler<>("vector", Vector.class),
                 new GenericJsonHandler<>("potion_effect", PotionEffect.class)
         );
@@ -89,45 +89,45 @@ public class BukkitCfgHandlers {
     }
 
     public static void init(@NotNull FileRegistry registry){
-        registry.registerHandler(PotionEffect.class, POTION_EFFECT);
-        registry.registerHandler(NumberProvider.class, NUMBER_PROVIDER);
-        registry.registerHandler(MsgContainer.class, MSG_CONTAINER);
-        registry.registerHandler(CreateSound.class, CREATE_SOUND);
-        registry.registerHandler(CreateTitle.class, CREATE_TITLE);
-        registry.registerHandler(PotionEffectType.class, POTION_EFFECT_TYPE);
-        registry.registerHandler(Material.class, MATERIAL);
-        registry.registerHandler(Component.class, COMPONENT);
+        registry.registerFileHandler(PotionEffect.class, POTION_EFFECT);
+        registry.registerFileHandler(NumberProvider.class, NUMBER_PROVIDER);
+        registry.registerFileHandler(MsgContainer.class, MSG_CONTAINER);
+        registry.registerFileHandler(CreateSound.class, CREATE_SOUND);
+        registry.registerFileHandler(CreateTitle.class, CREATE_TITLE);
+        registry.registerFileHandler(PotionEffectType.class, POTION_EFFECT_TYPE);
+        registry.registerFileHandler(Material.class, MATERIAL);
+        registry.registerFileHandler(Component.class, COMPONENT);
         //registry.registerHandler(ItemStack.class, ITEM_STACK);
-        registry.registerHandler(BukkitDynamicItem.class, DYNAMIC_ITEM);
-        registry.registerHandler(UUID.class, UUID);
-        registry.registerHandler(Color.class, COLOR);
-        registry.registerHandler(Key.class, KEY);
-        registry.registerHandler(ItemHolder.class, ITEM_HOLDER);
-        registry.registerHandler(Instant.class, INSTANT);
-        registry.registerHandler(EntityType.class, ENTITY_TYPE);
-        registry.registerHandler(StoredItem.class, STORED_ITEM);
-        registry.registerHandler(DynamicPersistentTag.class, DYNAMIC_PERSISTENT_TAG);
-        registry.registerHandler(ItemLootTable.class, ITEM_LOOT_TABLE);
-        registry.registerHandler(ItemLootPool.class, ITEM_LOOT_POOL);
-        registry.registerHandler(LootCondition.class, LOOT_CONDITION);
-        registry.registerHandler(ItemLootFunction.class, ITEM_LOOT_FUNCTION);
-        registry.registerHandler(ItemLootPoolObject.class, ITEM_LOOT_POOL_OBJECT);
+        registry.registerFileHandler(BukkitDynamicItem.class, DYNAMIC_ITEM);
+        registry.registerFileHandler(UUID.class, UUID);
+        registry.registerFileHandler(Color.class, COLOR);
+        registry.registerFileHandler(Key.class, KEY);
+        registry.registerFileHandler(ItemHolder.class, ITEM_HOLDER);
+        registry.registerFileHandler(Instant.class, INSTANT);
+        registry.registerFileHandler(EntityType.class, ENTITY_TYPE);
+        registry.registerFileHandler(StoredItem.class, STORED_ITEM);
+        registry.registerFileHandler(DynamicPersistentTag.class, DYNAMIC_PERSISTENT_TAG);
+        registry.registerFileHandler(ItemLootTable.class, ITEM_LOOT_TABLE);
+        registry.registerFileHandler(ItemLootPool.class, ITEM_LOOT_POOL);
+        registry.registerFileHandler(LootCondition.class, LOOT_CONDITION);
+        registry.registerFileHandler(ItemLootFunction.class, ITEM_LOOT_FUNCTION);
+        registry.registerFileHandler(ItemLootPoolObject.class, ITEM_LOOT_POOL_OBJECT);
 
         StandardFileLootConditions.register(LOOT_CONDITION);
         StandardFileLootFunctions.register(ITEM_LOOT_FUNCTION);
         StandardFileLootPoolObjects.register(ITEM_LOOT_POOL_OBJECT);
 
-        registry.registerHandler(SimpleItemLootObject.class, SIMPLE_LOOT_OBJECT);
+        registry.registerFileHandler(SimpleItemLootObject.class, SIMPLE_LOOT_OBJECT);
 
         DYNAMIC_ITEM.registerComponents(registry);
 
-        registry.registerHandler(TrimMaterial.class, new FileGenericKeyedRegistry<>(RegistryKey.TRIM_MATERIAL){
+        registry.registerFileHandler(TrimMaterial.class, new FileGenericKeyedRegistry<>(RegistryKey.TRIM_MATERIAL){
             @Override
             public @NotNull String jsonSerializerID() {
                 return "trim_material";
             }
         });
-        registry.registerHandler(TrimPattern.class, new FileGenericKeyedRegistry<>(RegistryKey.TRIM_PATTERN){
+        registry.registerFileHandler(TrimPattern.class, new FileGenericKeyedRegistry<>(RegistryKey.TRIM_PATTERN){
             @Override
             public @NotNull String jsonSerializerID() {
                 return "trim_pattern";
@@ -146,20 +146,20 @@ public class BukkitCfgHandlers {
             Axis.class
         );
 
-        registry.registerHandler(StoredChunk.class, new AutoFileHandler<>(StoredChunk.class));
-        registry.registerHandler(StoredWorld.class, new AutoFileHandler<>(StoredWorld.class));
-        registry.registerHandler(BlockPos.class, new AutoFileHandler<>(BlockPos.class));
-        registry.registerHandler(LocationPos.class, new AutoFileHandler<>(LocationPos.class));
+        registry.registerFileHandler(StoredChunk.class, new AutoFileHandler<>(StoredChunk.class));
+        registry.registerFileHandler(StoredWorld.class, new AutoFileHandler<>(StoredWorld.class));
+        registry.registerFileHandler(BlockPos.class, new AutoFileHandler<>(BlockPos.class));
+        registry.registerFileHandler(LocationPos.class, new AutoFileHandler<>(LocationPos.class));
     }
 
     public static void initYaml(@NotNull YamlRegistry registry){
-        registry.registerHandler(new AutoYamlSerializer<>(ArmorTrim.class));
+        registry.registerYamlHandler(new AutoYamlSerializer<>(ArmorTrim.class));
     }
 
     @SafeVarargs
     public static void registerEnums(@NotNull FileRegistry registry, @NotNull Class<? extends Enum<?>>... enums){
         for(Class<? extends Enum<?>> e : enums){
-            registry.registerHandler(e, new FileGenericEnum(e));
+            registry.registerFileHandler(e, new FileGenericEnum(e));
         }
     }
 }

@@ -29,7 +29,7 @@ public class CruxConfigHook {
     }
 
     public static void registerHandlers(@NotNull FileRegistry registry){
-        registry.registerHandler(PluginItem.class, new FilePluginItem());
+        registry.registerFileHandler(PluginItem.class, new FilePluginItem());
     }
 
     public static void loadCfgPluginItems(@NotNull Plugin plugin, @NotNull String path){

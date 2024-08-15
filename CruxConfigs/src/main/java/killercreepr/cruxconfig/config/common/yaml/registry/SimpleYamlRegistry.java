@@ -28,18 +28,18 @@ public class SimpleYamlRegistry implements FileRegistry, YamlRegistry {
     public final YamlObjectHandlerRegistry HANDLER_REGISTRY = new YamlObjectHandlerRegistry(this);
     public final CfgParsedObjectRegistry PARSED_OBJECT_HANDLERS = new CfgParsedObjectRegistry();
 
-    public void registerHandler(@NotNull AutoYamlSerializer<?>... serializers){
+    public void registerYamlHandler(@NotNull AutoYamlSerializer<?>... serializers){
         for(AutoYamlSerializer<?> d : serializers){
-            registerHandler(d.getType(), d);
+            registerYamlHandler(d.getType(), d);
         }
     }
 
     @Override
-    public <T extends FileHandler<?>> void registerHandler(@NotNull Class<?> clazz, @NotNull T handler) {
-        registerHandler(clazz, (YamlObjectHandler<?>) handler);
+    public <T extends FileHandler<?>> void registerFileHandler(@NotNull Class<?> clazz, @NotNull T handler) {
+        registerYamlHandler(clazz, (YamlObjectHandler<?>) handler);
     }
 
-    public <T extends YamlObjectHandler<?>> void registerHandler(@NotNull Class<?> clazz, @NotNull T object){
+    public <T extends YamlObjectHandler<?>> void registerYamlHandler(@NotNull Class<?> clazz, @NotNull T object){
         HANDLER_REGISTRY.register(clazz, object);
     }
 
@@ -217,7 +217,7 @@ public class SimpleYamlRegistry implements FileRegistry, YamlRegistry {
         return object;
     }
 
-    public <T> @Nullable T deserialize(@NotNull Class<T> clazz, @NotNull YamlElement from, @NotNull YamlContext context){
+    public <T> @Nullable T deserializeFromYaml(@NotNull Class<T> clazz, @NotNull YamlElement from, @NotNull YamlContext context){
         Object object = deserializeObject(clazz, from, context);
         if(object==null) return null;
         return CruxObjects.castOrThrow(clazz, object);
@@ -226,11 +226,11 @@ public class SimpleYamlRegistry implements FileRegistry, YamlRegistry {
     }
 
     @Override
-    public @Nullable Object deserializeObject(@NotNull YamlElement o) {
+    public @Nullable Object deserializeObjectFromYaml(@NotNull YamlElement o) {
         return deserializeObject((Object) o);
     }
 
-    public <T> @Nullable T deserialize(@NotNull Class<T> clazz, @Nullable YamlElement from){
+    public <T> @Nullable T deserializeFromYaml(@NotNull Class<T> clazz, @Nullable YamlElement from){
         Object object = deserializeObject(clazz, from);
         if(object==null) return null;
         return CruxObjects.castOrThrow(clazz, object);
@@ -250,7 +250,8 @@ public class SimpleYamlRegistry implements FileRegistry, YamlRegistry {
         return o;
     }
 
-    public @NotNull YamlElement serializeObject(@NotNull Object o){
+    @Override
+    public @NotNull YamlElement serializeToYaml(@NotNull Object o){
         if(o instanceof YamlElement d) return d;
         if(o instanceof String s) return new YamlPrimitive(s);
         if(o instanceof Number s) return new YamlPrimitive(s);
@@ -267,42 +268,44 @@ public class SimpleYamlRegistry implements FileRegistry, YamlRegistry {
 
     @Override
     public @NotNull FileElement serializeToFileElement(@NotNull Object object) {
-        return FileElement.fromYaml(serializeObject(object));
+        return FileElement.fromYaml(serializeToYaml(object));
     }
 
     @Override
-    public <T> @Nullable T deserialize(@NotNull Type type, @Nullable FileElement o) {
+    public <T> @Nullable T deserializeFromFile(@NotNull Type type, @Nullable FileElement o) {
         if(o==null) return null;
-        return deserialize(type, o.toYaml());
+        return deserializeFromYaml(type, o.toYaml());
     }
 
+    //todo make context actually used
     @Override
-    public @NotNull YamlElement serializeToYamlElement(@NotNull Object object) {
-        return serializeObject(object);
+    public <T> @Nullable T deserializeFromFile(@NotNull Type type, @Nullable FileElement o, @NotNull FileContext<?> context) {
+        if(o==null) return null;
+        return deserializeFromYaml(type, o.toYaml());
     }
 
-    public <T> @Nullable T deserialize(@NotNull Type type, @Nullable YamlElement o) {
+    public <T> @Nullable T deserializeFromYaml(@NotNull Type type, @Nullable YamlElement o) {
         if(o==null) return null;
         Object object = deserializeObject(type, o);
         return (T) object;
     }
 
     @Override
-    public <T> @Nullable T deserialize(@NotNull Class<T> clazz, @Nullable FileElement o) {
+    public <T> @Nullable T deserializeFromFile(@NotNull Class<T> clazz, @Nullable FileElement o) {
         if(o==null) return null;
-        return deserialize(clazz, o.toYaml());
+        return deserializeFromYaml(clazz, o.toYaml());
     }
 
     @Override
-    public <T> @Nullable T deserialize(@NotNull Class<T> clazz, @Nullable FileElement o, @NotNull FileContext<?> context) {
+    public <T> @Nullable T deserializeFromFile(@NotNull Class<T> clazz, @Nullable FileElement o, @NotNull FileContext<?> context) {
         if(o==null) return null;
-        if(!(context instanceof YamlContext c)) return deserialize(clazz, o);
-        return deserialize(clazz, o.toYaml(), c);
+        if(!(context instanceof YamlContext c)) return deserializeFromFile(clazz, o);
+        return deserializeFromYaml(clazz, o.toYaml(), c);
     }
 
     @Override
-    public @NotNull Object deserializeObject(@NotNull FileElement o) {
-        return deserializeObject(o.toYaml());
+    public @NotNull Object deserializeObjectFromFile(@NotNull FileElement o) {
+        return deserializeObjectFromYaml(o.toYaml());
     }
 
     public @NotNull Collection<Object> deserializeCollection(@NotNull Collection<?> list){
@@ -324,7 +327,7 @@ public class SimpleYamlRegistry implements FileRegistry, YamlRegistry {
     public @NotNull YamlArray serializeCollection(@NotNull Collection<?> list){
         YamlArray array = new YamlArray(list.size());
         for(Object o : list){
-            array.add(serializeObject(o));
+            array.add(serializeToYaml(o));
         }
         return array;
     }
@@ -332,7 +335,7 @@ public class SimpleYamlRegistry implements FileRegistry, YamlRegistry {
     public @NotNull YamlObject serializeMap(@NotNull Map<?, ?> list){
         YamlObject array = new YamlObject();
         for(Map.Entry<?, ?> entry : list.entrySet()){
-            array.add(entry.getKey() + "", serializeObject(entry.getValue()));
+            array.add(entry.getKey() + "", serializeToYaml(entry.getValue()));
         }
         return array;
     }

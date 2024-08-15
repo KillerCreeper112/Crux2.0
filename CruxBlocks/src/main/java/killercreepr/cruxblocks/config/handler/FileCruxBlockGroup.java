@@ -27,7 +27,7 @@ public class FileCruxBlockGroup implements FileHandler<CruxBlockGroup> {
     public @Nullable CruxBlockGroup deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = ctx.getRegistry();
-        Key key = registry.deserialize(Key.class, o.get("key"));
+        Key key = registry.deserializeFromFile(Key.class, o.get("key"));
         if(key == null) return null;
         return deserialize(ctx, e, key);
     }
@@ -35,7 +35,7 @@ public class FileCruxBlockGroup implements FileHandler<CruxBlockGroup> {
     public static @Nullable CruxBlockGroup deserialize(@NotNull FileContext<?> ctx, @NotNull FileElement e, @NotNull Key key) {
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = ctx.getRegistry();
-        List<CruxBlock> blocks = registry.deserialize(new TypeToken<List<CruxBlock>>(){}.getType(), o.get("blocks"));
+        List<CruxBlock> blocks = registry.deserializeFromFile(new TypeToken<List<CruxBlock>>(){}.getType(), o.get("blocks"));
         if(blocks == null || blocks.isEmpty()) return null;
 
         CruxBlock[] blocksArray = blocks.toArray(new CruxBlock[0]);

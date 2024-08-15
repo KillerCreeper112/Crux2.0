@@ -43,7 +43,7 @@ public class FileMenuActions extends FileMenuModuled<ClickActions> {
                     return;
                 }
             }else type = null;
-            Collection<String> actions = registry.deserialize((Class<Collection<String>>) (Class<?>) Collection.class, o.get(key));
+            Collection<String> actions = registry.deserializeFromFile((Class<Collection<String>>) (Class<?>) Collection.class, o.get(key));
             if (actions == null || !actions.isEmpty()) map.put(type, actions);
         });
         return map.isEmpty() ? null : new ClickActions(map);

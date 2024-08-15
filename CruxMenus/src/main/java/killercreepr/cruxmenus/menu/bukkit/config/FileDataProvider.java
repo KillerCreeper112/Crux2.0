@@ -12,7 +12,7 @@ public interface FileDataProvider {
             @Override
             public @Nullable Object deserialize(@NotNull FileContext<?> context, @NotNull FileElement base, @Nullable FileObject menuContext,
                                                 @NotNull FileElement e) {
-                return context.getRegistry().deserialize(parseClass, e, context);
+                return context.getRegistry().deserializeFromFile(parseClass, e, context);
                 //return context.getRegistry().deserializeObject(parseClass, e, context);
             }
         };

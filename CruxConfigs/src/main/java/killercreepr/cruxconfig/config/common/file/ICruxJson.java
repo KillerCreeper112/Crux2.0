@@ -128,11 +128,11 @@ public interface ICruxJson extends ICruxFile {
     }
 
     default @Nullable Object get(@Nullable JsonElement base){
-        return jsonRegistry().deserialize(base);
+        return jsonRegistry().deserializeFromJson(base);
     }
 
     default <T> @Nullable T get(@Nullable JsonElement base, @NotNull Class<T> clazz){
-        return jsonRegistry().deserialize(clazz, base);
+        return jsonRegistry().deserializeFromJson(clazz, base);
     }
 
     default <T> @NotNull JsonObject add(@NotNull String property, @NotNull T object){
@@ -151,7 +151,7 @@ public interface ICruxJson extends ICruxFile {
      * @return The first base JsonObject, for chaining.
      */
     default <T> @NotNull JsonObject add(@NotNull JsonObject base, @NotNull String property, @NotNull T object){
-        base.add(property, jsonRegistry().serializeObject(object));
+        base.add(property, jsonRegistry().serializeToJson(object));
         return base;
     }
 }

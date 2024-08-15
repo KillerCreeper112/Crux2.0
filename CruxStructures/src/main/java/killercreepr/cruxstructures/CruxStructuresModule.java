@@ -40,15 +40,15 @@ public class CruxStructuresModule implements CruxModule {
 
     @Override
     public void onEnable(@NotNull CruxPlugin plugin) {
-        CfgRegistries.YAML.registerHandler(CfgStructureGen.class, new FileCfgStructureGen());
-        CfgRegistries.YAML.registerHandler(StructureCenter.class, fileStructureCenter);
-        CfgRegistries.YAML.registerHandler(StructureRequirement.class, fileStructureRequirement);
+        CfgRegistries.YAML.registerFileHandler(CfgStructureGen.class, new FileCfgStructureGen());
+        CfgRegistries.YAML.registerFileHandler(StructureCenter.class, fileStructureCenter);
+        CfgRegistries.YAML.registerFileHandler(StructureRequirement.class, fileStructureRequirement);
 
-        CfgRegistries.YAML.registerHandler(CfgFAWEStructure.class, new FileCfgFAWEStructure());
+        CfgRegistries.YAML.registerFileHandler(CfgFAWEStructure.class, new FileCfgFAWEStructure());
 
         fileStructureCenter.TYPE_HANDLERS.register("surface_center", new FileSurfaceCenter());
         fileStructureRequirement.TYPE_HANDLERS.register("biome", new FileBiomeRequirement());
 
-        CfgRegistries.JSON.registerHandler(SimpleStoredStructure.class, new FileSimpleStoredStructure<SimpleStoredStructure>());
+        CfgRegistries.JSON.registerFileHandler(SimpleStoredStructure.class, new FileSimpleStoredStructure<SimpleStoredStructure>());
     }
 }

@@ -35,9 +35,9 @@ public class SimpleJsonRegistry implements FileRegistry, JsonRegistry {
     public final JsonContainerHandlerRegistry CONTAINER_REGISTRY = new JsonContainerHandlerRegistry(this);
 
     public SimpleJsonRegistry() {
-        registerHandler(List.class, new JsonListHandler());
-        registerHandler(Map.class, new JsonMapHandler());
-        registerHandler(
+        registerJsonHandler(List.class, new JsonListHandler());
+        registerJsonHandler(Map.class, new JsonMapHandler());
+        registerJsonHandler(
                 new GenericJsonHandler<>("constant_number", ConstantNumber.class),
                 new GenericJsonHandler<>("equation_number", EquationNumber.class),
                 new GenericJsonHandler<>("uniform_number", UniformNumber.class),
@@ -50,11 +50,12 @@ public class SimpleJsonRegistry implements FileRegistry, JsonRegistry {
     }
 
     @Override
-    public <T extends FileHandler<?>> void registerHandler(@NotNull Class<?> clazz, @NotNull T handler) {
-        registerHandler(clazz, (JsonContainerHandler<?>) handler);
+    public <T extends FileHandler<?>> void registerFileHandler(@NotNull Class<?> clazz, @NotNull T handler) {
+        registerJsonHandler(clazz, (JsonContainerHandler<?>) handler);
     }
 
-    public <T extends JsonContainerHandler<?>> void registerHandler(@NotNull Class<?> clazz, @NotNull T object){
+    @Override
+    public <T extends JsonContainerHandler<?>> void registerJsonHandler(@NotNull Class<?> clazz, @NotNull T object){
         CONTAINER_REGISTRY.register(clazz, object);
     }
 
@@ -142,7 +143,8 @@ public class SimpleJsonRegistry implements FileRegistry, JsonRegistry {
         return element;
     }
 
-    public @NotNull JsonElement serializeObject(@NotNull Object object){
+    @Override
+    public @NotNull JsonElement serializeToJson(@NotNull Object object){
         if(object instanceof JsonSerializable s) return serialize(s);
         JsonContainerHandler<?> handler = findContainerHandler(object.getClass());
         if(handler == null){
@@ -170,7 +172,8 @@ public class SimpleJsonRegistry implements FileRegistry, JsonRegistry {
         return o;
     }
 
-    public @Nullable Object deserialize(@Nullable JsonElement from){
+    @Override
+    public @Nullable Object deserializeFromJson(@Nullable JsonElement from){
         if(!(from instanceof JsonObject o)){
             if(from instanceof JsonPrimitive pr){
                 if(pr.isBoolean()) return pr.getAsBoolean();
@@ -200,8 +203,8 @@ public class SimpleJsonRegistry implements FileRegistry, JsonRegistry {
         return null;
     }
 
-    public <T> @Nullable T deserialize(@NotNull Class<T> clazz, @Nullable JsonElement from){
-        Object o = deserialize(from);
+    public <T> @Nullable T deserializeFromJson(@NotNull Class<T> clazz, @Nullable JsonElement from){
+        Object o = deserializeFromJson(from);
         if(o==null) return null;
         return CruxObjects.attemptCast(clazz, o);
         /*if(o == null || !clazz.isAssignableFrom(o.getClass())) return null;
@@ -209,45 +212,60 @@ public class SimpleJsonRegistry implements FileRegistry, JsonRegistry {
     }
 
     @Override
-    public <T> @Nullable T deserialize(@NotNull Class<T> clazz, @Nullable JsonElement o, @NotNull JsonContext context) {
-        return deserialize(clazz, o);//todo make context actually used
+    public <T> @Nullable T deserializeFromJson(@NotNull Class<T> clazz, @Nullable JsonElement o, @NotNull JsonContext context) {
+        return deserializeFromJson(clazz, o);//todo make context actually used
     }
 
     @Override
-    public @Nullable Object deserializeObject(@NotNull JsonElement o) {
-        return deserialize(o);
+    public @Nullable Object deserializeObjectFromJson(@NotNull JsonElement o) {
+        return deserializeFromJson(o);
     }
 
     @Override
     public @NotNull FileElement serializeToFileElement(@NotNull Object object) {
-        return FileElement.fromJson(serializeObject(object));
+        return FileElement.fromJson(serializeToJson(object));
     }
 
     @Override
-    public <T> @Nullable T deserialize(@NotNull Type type, @Nullable FileElement o) {
+    public <T> @Nullable T deserializeFromFile(@NotNull Type type, @Nullable FileElement o) {
         if(o == null) return null;
-        return deserialize(type, o.toJson());
+        return deserializeFromJson(type, o.toJson());
     }
 
-    public <T> @Nullable T deserialize(@NotNull Type type, @Nullable JsonElement o) {
+    @Override
+    public <T> @Nullable T deserializeFromFile(@NotNull Type type, @Nullable FileElement o, @NotNull FileContext<?> context) {
         if(o == null) return null;
-        Object object = deserialize(o);
+        return deserializeFromJson(type, o.toJson(), (JsonContext) context);
+    }
+
+    @Override
+    public <T> @Nullable T deserializeFromJson(@NotNull Type type, @Nullable JsonElement o) {
+        if(o == null) return null;
+        Object object = deserializeFromJson(o);
+        return (T) object;
+    }
+
+    //todo actually make context used
+    @Override
+    public <T> @Nullable T deserializeFromJson(@NotNull Type type, @Nullable JsonElement o, @NotNull JsonContext context) {
+        if(o == null) return null;
+        Object object = deserializeFromJson(o);
         return (T) object;
     }
 
     @Override
-    public <T> @Nullable T deserialize(@NotNull Class<T> clazz, @Nullable FileElement o) {
+    public <T> @Nullable T deserializeFromFile(@NotNull Class<T> clazz, @Nullable FileElement o) {
         if(o==null) return null;
-        return deserialize(clazz, o.toJson());
+        return deserializeFromJson(clazz, o.toJson());
     }
 
     @Override
-    public <T> @Nullable T deserialize(@NotNull Class<T> clazz, @Nullable FileElement o, @NotNull FileContext<?> context) {
-        return deserialize(clazz, o);
+    public <T> @Nullable T deserializeFromFile(@NotNull Class<T> clazz, @Nullable FileElement o, @NotNull FileContext<?> context) {
+        return deserializeFromFile(clazz, o);
     }
 
     @Override
-    public @Nullable Object deserializeObject(@NotNull FileElement o) {
-        return deserialize(o.toJson());
+    public @Nullable Object deserializeObjectFromFile(@NotNull FileElement o) {
+        return deserializeFromJson(o.toJson());
     }
 }

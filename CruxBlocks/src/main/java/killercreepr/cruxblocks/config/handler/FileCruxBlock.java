@@ -26,7 +26,7 @@ public class FileCruxBlock implements FileHandler<CruxBlock> {
     public @Nullable CruxBlock deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = ctx.getRegistry();
-        Key key = registry.deserialize(Key.class, o.get("key"));
+        Key key = registry.deserializeFromFile(Key.class, o.get("key"));
         if(key==null) return null;
         return deserialize(ctx, e, key);
     }
@@ -34,15 +34,15 @@ public class FileCruxBlock implements FileHandler<CruxBlock> {
     public static @Nullable CruxBlock deserialize(@NotNull FileContext<?> ctx, @NotNull FileElement e, @NotNull Key key) {
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = ctx.getRegistry();
-        TextureData texture = registry.deserialize(TextureData.class, o.get("texture"));
+        TextureData texture = registry.deserializeFromFile(TextureData.class, o.get("texture"));
         if(texture==null) return null;
 
         BlockFace direction = null;
         try{
-            direction = registry.deserialize(BlockFace.class, o.get("direction"));
+            direction = registry.deserializeFromFile(BlockFace.class, o.get("direction"));
         }catch (ClassCastException ignored){}
         if(direction == null){
-            Axis axis = registry.deserialize(Axis.class, o.get("direction"));
+            Axis axis = registry.deserializeFromFile(Axis.class, o.get("direction"));
             if(axis != null) direction = CruxDirectionalBlockGroup.getFaceFromAxis(axis);
         }
         if(direction == null) return new GenericBlock(key, texture);

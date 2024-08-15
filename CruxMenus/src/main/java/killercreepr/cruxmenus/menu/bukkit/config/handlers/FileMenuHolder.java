@@ -42,9 +42,9 @@ public class FileMenuHolder extends SimpleFileHandler<MenuHolder> {
         if(id == null) return null;
         String titleString = o.getObject(String.class, "title");
         String title = titleString == null ? "" : titleString;
-        NumberProvider size = registry.deserialize(NumberProvider.class, o.get("size"));
+        NumberProvider size = registry.deserializeFromFile(NumberProvider.class, o.get("size"));
         if(size == null) size = new ConstantNumber(27);
-        DataExchange extraInfo = registry.deserialize(DataExchange.class, o.get("data"));
+        DataExchange extraInfo = registry.deserializeFromFile(DataExchange.class, o.get("data"));
 
         MenuItems menuItems = getYamlMenuItems().deserializeFromFile(context, o.get("items"), o);
         if(menuItems == null) menuItems = new MenuItems(new TreeMap<>());

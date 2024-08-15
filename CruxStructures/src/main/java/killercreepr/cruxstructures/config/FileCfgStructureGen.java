@@ -21,17 +21,17 @@ public class FileCfgStructureGen extends YamlFileHandler<CfgStructureGen> {
     public @Nullable CfgStructureGen deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = context.getRegistry();
-        StructureCenter center = registry.deserialize(StructureCenter.class, o.get("center"));
+        StructureCenter center = registry.deserializeFromFile(StructureCenter.class, o.get("center"));
         if(center==null){
             throw new RuntimeException("StructureCenter type not found!");
         }
-        Key structureKey = registry.deserialize(Key.class, o.get("structure"));
+        Key structureKey = registry.deserializeFromFile(Key.class, o.get("structure"));
         if(structureKey==null) return null;
 
         Collection<StructureRequirement> requirements = new HashSet<>();
         if(o.get("requirements") instanceof FileArray aa){
             aa.forEach(ele ->{
-                StructureRequirement req = registry.deserialize(StructureRequirement.class, ele);
+                StructureRequirement req = registry.deserializeFromFile(StructureRequirement.class, ele);
                 if(req==null){
                     throw new RuntimeException("StructureRequirement type not found!");
                 }

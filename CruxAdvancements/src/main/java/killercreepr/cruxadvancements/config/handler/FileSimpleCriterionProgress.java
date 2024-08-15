@@ -27,7 +27,7 @@ public class FileSimpleCriterionProgress implements FileHandler<SimpleCriterionP
     public @Nullable SimpleCriterionProgress deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = ctx.getRegistry();
-        Instant obtained = registry.deserialize(Instant.class, o.get("obtained"));
+        Instant obtained = registry.deserializeFromFile(Instant.class, o.get("obtained"));
         if(obtained==null) return null;
         return new SimpleCriterionProgress(obtained);
     }

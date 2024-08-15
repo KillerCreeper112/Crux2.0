@@ -3,13 +3,12 @@ package killercreepr.cruxconfig.config.bukkit.loot;
 import killercreepr.crux.Crux;
 import killercreepr.crux.loot.item.api.ItemLootTable;
 import killercreepr.crux.registries.CruxRegistries;
-import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
-import killercreepr.cruxconfig.config.common.element.FileElement;
+import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileObject;
-import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
-import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
+import killercreepr.cruxconfig.config.common.file.DataFile;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,8 +21,11 @@ public class LootTableLoader {
     }
 
     public void loadConfiguration(@NotNull File file, @Nullable String path){
-        if(CruxFolder.hasFileExtension(file, "yml")){
-            loadConfiguration(new CruxConfig(file), path == null ? file.getName() : path + "/" + CruxFolder.withoutFileExtension(file.getName()));
+        if(DataFile.isSupported(file)){
+            loadConfiguration(
+                DataFile.parse(file),
+                path == null ? file.getName() : path + "/" + CruxFolder.withoutFileExtension(file.getName())
+            );
             return;
         }
         File[] list = file.listFiles();
@@ -34,17 +36,16 @@ public class LootTableLoader {
         }
     }
 
-    public void loadConfiguration(@NotNull CruxConfig cfg, @Nullable String path){
+    public void loadConfiguration(@NotNull DataFile cfg, @Nullable String path){
         ItemLootTable table;
-        if(path == null) table = cfg.deserialize(ItemLootTable.class, "");
+        if(path == null) table = cfg.deserialize("", ItemLootTable.class);
         else{
-            YamlObject root = cfg.getRootAsYamlObject();
-            if(root==null) return;
+            if(!(cfg.getRoot() instanceof FileObject root)) return;
 
             table = BukkitCfgHandlers.ITEM_LOOT_TABLE.deserializeFromFile(
-                new YamlContext(cfg.yamlRegistry()), (FileObject) FileElement.fromYaml(root),
-                Crux.key(path)
+                new FileContext<>(cfg.fileRegistry()), root, Crux.key(path)
             );
+            Bukkit.broadcastMessage("ayo ayo ayo ayo  "+ table);
         }
         if(table == null) return;
         Crux.log(Level.INFO, "Registered loot table: " + table.key());

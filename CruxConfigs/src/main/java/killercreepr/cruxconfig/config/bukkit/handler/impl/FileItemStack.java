@@ -81,12 +81,12 @@ public class FileItemStack extends SimpleFileHandler<ItemStack> {
     public @Nullable ItemStack buildItem(@NotNull FileContext<?> context, @Nullable FileElement e){
         FileRegistry registry = context.getRegistry();
         if(e instanceof FilePrimitive s){
-            Material material = registry.deserialize(Material.class, s, context);
+            Material material = registry.deserializeFromFile(Material.class, s, context);
             if(material == null) return null;
             return new ItemStack(material);
         }
         if(!(e instanceof FileObject o)) return null;
-        Material material = registry.deserialize(Material.class, o.get("material"));
+        Material material = registry.deserializeFromFile(Material.class, o.get("material"));
         if(material == null) return null;
         return new ItemStack(material);
     }
@@ -97,17 +97,17 @@ public class FileItemStack extends SimpleFileHandler<ItemStack> {
 
         FileRegistry registry = context.getRegistry();
         if(e instanceof FilePrimitive s){
-            Material material = registry.deserialize(Material.class, s, context);
+            Material material = registry.deserializeFromFile(Material.class, s, context);
             if(material != null) stack = stack.withType(material);
         }
         if(!(e instanceof FileObject o)) return stack;
-        Material material = registry.deserialize(Material.class, o.get("material"));
+        Material material = registry.deserializeFromFile(Material.class, o.get("material"));
         if(material != null) stack = stack.withType(material);
         int amount = o.getObject(Number.class, "amount", 1).intValue();
         CruxItem item = new CruxItem(stack).amount(amount);
 
         String displayName = o.getObject(String.class, "display_name");
-        List<String> lore = registry.deserialize((Class<List<String>>) (Class<?>) List.class, o.get("lore"));
+        List<String> lore = registry.deserializeFromFile((Class<List<String>>) (Class<?>) List.class, o.get("lore"));
 
         if(displayName != null) item.displayName(displayName);
         if(lore != null) item.loreFromString(lore);
@@ -125,7 +125,7 @@ public class FileItemStack extends SimpleFileHandler<ItemStack> {
             Integer cmd = o.searchForObject(Integer.class, "custom_model_data", "model_data", "cmd");
             if(cmd != null) meta.setCustomModelData(cmd);
 
-            ItemRarity rarity = registry.deserialize(ItemRarity.class, o.get("rarity"));
+            ItemRarity rarity = registry.deserializeFromFile(ItemRarity.class, o.get("rarity"));
             if(rarity != null) meta.setRarity(rarity);
 
             Boolean value = o.getObject(Boolean.class, "fire_resistant");
@@ -136,7 +136,7 @@ public class FileItemStack extends SimpleFileHandler<ItemStack> {
         });
 
         item.editMeta(ArmorMeta.class, meta ->{
-            ArmorTrim trim = registry.deserialize(ArmorTrim.class, o.search("armor_trim", "trim"));
+            ArmorTrim trim = registry.deserializeFromFile(ArmorTrim.class, o.search("armor_trim", "trim"));
             if(trim != null) meta.setTrim(trim);
         });
         return item.item();

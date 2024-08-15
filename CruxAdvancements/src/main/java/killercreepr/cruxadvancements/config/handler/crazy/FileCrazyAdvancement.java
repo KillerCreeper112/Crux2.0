@@ -39,14 +39,14 @@ public class FileCrazyAdvancement implements FileHandler<CrazyAdvancement> {
     public @Nullable CrazyAdvancement deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = ctx.getRegistry();
-        Key key = registry.deserialize(Key.class, o.get("key"));
-        Key parentKey = registry.deserialize(Key.class, o.get("parent"));
-        CruxCriteria criteria = registry.deserialize(CruxCriteria.class, o.get("criteria"));
-        CrazyAdvancementDisplay display = registry.deserialize(CrazyAdvancementDisplay.class, o.get("display"));
+        Key key = registry.deserializeFromFile(Key.class, o.get("key"));
+        Key parentKey = registry.deserializeFromFile(Key.class, o.get("parent"));
+        CruxCriteria criteria = registry.deserializeFromFile(CruxCriteria.class, o.get("criteria"));
+        CrazyAdvancementDisplay display = registry.deserializeFromFile(CrazyAdvancementDisplay.class, o.get("display"));
 
-        Collection<AdvancementFlag> flags = registry.deserialize(new TypeToken<Collection<AdvancementFlag>>(){}.getType(), o.get("flags"));
+        Collection<AdvancementFlag> flags = registry.deserializeFromFile(new TypeToken<Collection<AdvancementFlag>>(){}.getType(), o.get("flags"));
 
-        CruxAdvanceReward reward = registry.deserialize(CruxAdvanceReward.class, o.get("reward"));
+        CruxAdvanceReward reward = registry.deserializeFromFile(CruxAdvanceReward.class, o.get("reward"));
         if(CruxObjects.checkNull(key, criteria, display)) return null;
 
         AdvancementFlag[] flagsParsed;

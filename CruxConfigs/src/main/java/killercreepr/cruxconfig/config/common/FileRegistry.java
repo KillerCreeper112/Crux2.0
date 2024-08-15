@@ -10,9 +10,10 @@ import java.lang.reflect.Type;
 public interface FileRegistry {
     @NotNull
     FileElement serializeToFileElement(@NotNull Object object);
-    <T> @Nullable T deserialize(@NotNull Type type, @Nullable FileElement o);
-    <T> @Nullable T deserialize(@NotNull Class<T> clazz, @Nullable FileElement o);
-    <T> @Nullable T deserialize(@NotNull Class<T> clazz, @Nullable FileElement o, @NotNull FileContext<?> context);
-    @Nullable Object deserializeObject(@NotNull FileElement o);
-    <T extends FileHandler<?>> void registerHandler(@NotNull Class<?> clazz, @NotNull T handler);
+    <T> @Nullable T deserializeFromFile(@NotNull Type type, @Nullable FileElement o);
+    <T> @Nullable T deserializeFromFile(@NotNull Type type, @Nullable FileElement o, @NotNull FileContext<?> context);
+    <T> @Nullable T deserializeFromFile(@NotNull Class<T> clazz, @Nullable FileElement o);
+    <T> @Nullable T deserializeFromFile(@NotNull Class<T> clazz, @Nullable FileElement o, @NotNull FileContext<?> context);
+    @Nullable Object deserializeObjectFromFile(@NotNull FileElement o);
+    <T extends FileHandler<?>> void registerFileHandler(@NotNull Class<?> clazz, @NotNull T handler);
 }

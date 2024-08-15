@@ -93,7 +93,7 @@ public class AutoFileHandler<T> extends SimpleFileHandler<T> {
         Map<String, FileElement> yamlMap = o.asMap();
         for(Field field : CruxReflect.getAllDeclaredFields(type, CruxReflect.NON_STATIC(null))){
             if(disabledFields != null && disabledFields.test(field)) continue;
-            Object found  = registry.deserialize(field.getType(), yamlMap.get(field.getName()));
+            Object found  = registry.deserializeFromFile(field.getType(), yamlMap.get(field.getName()));
             if(isValid != null && !isValid.test(field.getName(), found)) return null;
             fields.put(field.getName(), found);
         }

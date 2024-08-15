@@ -78,7 +78,7 @@ public class AutoYamlSerializer<T> implements YamlObjectHandler<T> {
                 Object obj = field.get(object);
                 field.setAccessible(x);
                 if(obj == null) continue;
-                YamlElement serialized = registry.serializeObject(obj);
+                YamlElement serialized = registry.serializeToYaml(obj);
                 map.add(field.getName(), serialized);
             }catch (IllegalAccessException ignored){}
         }
@@ -93,7 +93,7 @@ public class AutoYamlSerializer<T> implements YamlObjectHandler<T> {
         Map<String, YamlElement> yamlMap = o.asMap();
         for(Field field : CruxReflect.getNonStaticDeclaredFields(type)){
             if(disabledFields != null && disabledFields.test(field)) continue;
-            Object found  = registry.deserialize(field.getType(), yamlMap.get(field.getName()));
+            Object found  = registry.deserializeFromYaml(field.getType(), yamlMap.get(field.getName()));
             if(isValid != null && !isValid.test(field.getName(), found)) return null;
             fields.put(field.getName(), found);
         }

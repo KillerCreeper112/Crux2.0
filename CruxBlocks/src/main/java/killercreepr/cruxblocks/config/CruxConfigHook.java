@@ -52,13 +52,13 @@ public class CruxConfigHook {
     public static final FileNoteTextureData WIRE_TEXTURE_DATA = new FileNoteTextureData();//todo
     public static final FileNoteTextureData MATERIAL_TEXTURE_DATA = new FileNoteTextureData();
     public static void registerHandlers(@NotNull FileRegistry registry){
-        registry.registerHandler(TextureData.class, new FileTextureData(Map.of(
+        registry.registerFileHandler(TextureData.class, new FileTextureData(Map.of(
             "note", NOTE_TEXTURE_DATA,
             "wire", WIRE_TEXTURE_DATA,
             "material", MATERIAL_TEXTURE_DATA
         )));
-        registry.registerHandler(CruxBlock.class, new FileCruxBlock());
-        registry.registerHandler(CruxBlockGroup.class, new FileCruxBlockGroup());
+        registry.registerFileHandler(CruxBlock.class, new FileCruxBlock());
+        registry.registerFileHandler(CruxBlockGroup.class, new FileCruxBlockGroup());
     }
 
     public static void loadCfgBlockGroups(@NotNull Plugin plugin, @NotNull String path){

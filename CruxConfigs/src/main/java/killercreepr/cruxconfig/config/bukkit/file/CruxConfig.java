@@ -114,7 +114,7 @@ public class CruxConfig extends CruxFolder implements IYamlCfg<MemoryConfigurati
             cfg.set(path, null);
             return;
         }
-        setElement(path, yamlRegistry.serializeObject(value));
+        setElement(path, yamlRegistry.serializeToYaml(value));
     }
 
     public void setElement(@NotNull String path, @NotNull YamlElement element){
@@ -125,7 +125,7 @@ public class CruxConfig extends CruxFolder implements IYamlCfg<MemoryConfigurati
 
     public @NotNull Object serializeReady(@NotNull YamlElement element){
         if(element instanceof YamlGeneric r){
-            return yamlRegistry.serializeObject(r.getAsObject()).getAsObject();
+            return yamlRegistry.serializeToYaml(r.getAsObject()).getAsObject();
         }
         if(element instanceof YamlArray a){
             if(a.isEmpty()){
@@ -160,7 +160,7 @@ public class CruxConfig extends CruxFolder implements IYamlCfg<MemoryConfigurati
             return;
         }
         if(element instanceof YamlGeneric r){
-            section.set(path, yamlRegistry.serializeObject(r.getAsObject()).getAsObject());
+            section.set(path, yamlRegistry.serializeToYaml(r.getAsObject()).getAsObject());
             return;
         }
         if(element instanceof YamlArray a){
@@ -223,7 +223,7 @@ public class CruxConfig extends CruxFolder implements IYamlCfg<MemoryConfigurati
     public <T> @Nullable T deserialize(@NotNull Type clazz, @NotNull ConfigurationSection section, @NotNull String path){
         YamlElement yaml = getAsYamlObject(section, path);
         if(yaml==null) return null;
-        return (T) yamlRegistry.deserialize(clazz, yaml);
+        return (T) yamlRegistry.deserializeFromYaml(clazz, yaml);
     }
 
     public @Nullable Object deserializeObject(@NotNull Type type, @NotNull String path){
@@ -235,7 +235,7 @@ public class CruxConfig extends CruxFolder implements IYamlCfg<MemoryConfigurati
     public @Nullable Object deserializeObject(@NotNull Class<?> clazz, @NotNull ConfigurationSection section, @NotNull String path){
         YamlElement yaml = getAsYamlObject(section, path);
         if(yaml==null) return null;
-        return yamlRegistry.deserialize(clazz, yaml);
+        return yamlRegistry.deserializeFromYaml(clazz, yaml);
     }
 
     public @Nullable YamlObject getRootAsYamlObject(){
@@ -266,7 +266,7 @@ public class CruxConfig extends CruxFolder implements IYamlCfg<MemoryConfigurati
             }
             return map;
         }
-        return yamlRegistry.serializeObject(object);
+        return yamlRegistry.serializeToYaml(object);
     }
 
 

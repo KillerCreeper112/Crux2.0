@@ -26,16 +26,16 @@ public class StandardFileLootPoolObjects {
             @Override
             public @Nullable ItemLootPoolObject deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
                 FileRegistry registry = ctx.getRegistry();
-                SimpleItemLootObject loot = registry.deserialize(SimpleItemLootObject.class, e);
+                SimpleItemLootObject loot = registry.deserializeFromFile(SimpleItemLootObject.class, e);
                 if(loot==null) return null;
 
                 Collection<Key> itemKeys;
                 if(e.get("item") instanceof FileGeneric){
-                    Key k = registry.deserialize(Key.class, e.get("item"));
+                    Key k = registry.deserializeFromFile(Key.class, e.get("item"));
                     if(k==null) return null;
                     itemKeys = new HashSet<>();
                     itemKeys.add(k);
-                }else itemKeys = registry.deserialize(
+                }else itemKeys = registry.deserializeFromFile(
                     new TypeToken<Collection<Key>>(){}.getType(), e.get("item")
                 );
 

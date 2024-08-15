@@ -25,8 +25,8 @@ public class FileTrackedAdvancement implements FileHandler<TrackedAdvancement> {
     public @Nullable TrackedAdvancement deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = ctx.getRegistry();
-        Key manager = registry.deserialize(Key.class, o.get("manager"));
-        Key advancement = registry.deserialize(Key.class, o.get("advancement"));
+        Key manager = registry.deserializeFromFile(Key.class, o.get("manager"));
+        Key advancement = registry.deserializeFromFile(Key.class, o.get("advancement"));
         if(CruxObjects.checkNull(manager, advancement)) return null;
         return new TrackedAdvancement(manager, advancement);
     }

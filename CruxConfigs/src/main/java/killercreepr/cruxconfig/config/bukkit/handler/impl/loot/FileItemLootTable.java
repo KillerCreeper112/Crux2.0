@@ -29,15 +29,15 @@ public class FileItemLootTable implements FileHandler<ItemLootTable> {
     public @Nullable ItemLootTable deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = ctx.getRegistry();
-        Key key = registry.deserialize(Key.class, o.get("key"));
+        Key key = registry.deserializeFromFile(Key.class, o.get("key"));
         if(key==null) return null;
         return deserializeFromFile(ctx, o, key);
     }
 
     public @Nullable ItemLootTable deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull Key key) {
         FileRegistry registry = ctx.getRegistry();
-        NumberProvider rolls = registry.deserialize(NumberProvider.class, e.get("rolls"));
-        List<LootPool<ItemStack>> pools = registry.deserialize(
+        NumberProvider rolls = registry.deserializeFromFile(NumberProvider.class, e.get("rolls"));
+        List<LootPool<ItemStack>> pools = registry.deserializeFromFile(
             new TypeToken<List<ItemLootPool>>(){}.getType(), e.get("pools")
         );
         if(CruxObjects.checkNull(rolls, pools)) return null;

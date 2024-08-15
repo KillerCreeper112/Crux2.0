@@ -27,7 +27,7 @@ public class StandardFileLootFunctions {
             @Override
             public @Nullable ItemEnchantFunction deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 FileRegistry registry = ctx.getRegistry();
-                NumberProvider rolls = registry.deserialize(NumberProvider.class, e.get("rolls"));
+                NumberProvider rolls = registry.deserializeFromFile(NumberProvider.class, e.get("rolls"));
                 if(rolls==null) return null;
 
                 if(!(e.get("enchants") instanceof FileArray oo)) return null;
@@ -36,8 +36,8 @@ public class StandardFileLootFunctions {
                     if(!(ele instanceof FileObject f)) return;
                     int weight = f.getObject(Integer.class, "weight", 0);
                     float quality = f.getObject(Float.class, "quality", 0f);
-                    Key enchantKey = registry.deserialize(Key.class, f.get("enchant"));
-                    NumberProvider level = registry.deserialize(NumberProvider.class, f.get("level"));
+                    Key enchantKey = registry.deserializeFromFile(Key.class, f.get("enchant"));
+                    NumberProvider level = registry.deserializeFromFile(NumberProvider.class, f.get("level"));
                     if(CruxObjects.checkNull(enchantKey, level)) return;
                     enchants.add(
                         new ItemEnchantFunction.Enchant(weight, quality, enchantKey, level)
@@ -45,7 +45,7 @@ public class StandardFileLootFunctions {
                 });
                 if(enchants.isEmpty()) return null;
 
-                Collection<LootCondition> conditions = registry.deserialize(
+                Collection<LootCondition> conditions = registry.deserializeFromFile(
                     new TypeToken<Collection<LootCondition>>(){}.getType(), e.get("conditions")
                 );
                 return new ItemEnchantFunction(

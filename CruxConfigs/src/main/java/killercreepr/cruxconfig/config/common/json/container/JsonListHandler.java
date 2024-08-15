@@ -18,7 +18,7 @@ public class JsonListHandler implements JsonContainerHandler<List<Object>> {
         JsonRegistry registry = context.getRegistry();
         JsonArray a = new JsonArray();
         for(Object s : object){
-            a.add(registry.serializeObject(s));
+            a.add(registry.serializeToJson(s));
         }
         return a;
     }
@@ -29,7 +29,7 @@ public class JsonListHandler implements JsonContainerHandler<List<Object>> {
         JsonRegistry registry = context.getRegistry();
         List<Object> list = new ArrayList<>();
         a.forEach(ee ->{
-            Object o = registry.deserialize(ee);
+            Object o = registry.deserializeFromJson(ee);
             if(o==null) return;
             list.add(o);
         });

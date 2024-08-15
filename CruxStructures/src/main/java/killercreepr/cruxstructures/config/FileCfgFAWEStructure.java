@@ -15,11 +15,11 @@ public class FileCfgFAWEStructure extends YamlFileHandler<CfgFAWEStructure> {
     public @Nullable CfgFAWEStructure deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = ctx.getRegistry();
-        Key key = registry.deserialize(Key.class, o.get("key"));
+        Key key = registry.deserializeFromFile(Key.class, o.get("key"));
         if(key==null) return null;
-        String schematic = registry.deserialize(String.class, o.get("schematic"));
+        String schematic = registry.deserializeFromFile(String.class, o.get("schematic"));
         if(schematic==null) return null;
-        Boolean persist = registry.deserialize(Boolean.class, o.get("persistent"));
+        Boolean persist = registry.deserializeFromFile(Boolean.class, o.get("persistent"));
         return new CfgFAWEStructure(
             key, schematic, persist != null && persist
         );

@@ -57,7 +57,7 @@ public class FileCruxAdvancementProgress implements FileHandler<CruxAdvancementP
 
             if(o.get("progress") instanceof FileObject progressMap){
                 progressMap.forEach((key, value) ->{
-                    SimpleCriterionProgress simple = registry.deserialize(SimpleCriterionProgress.class, value);
+                    SimpleCriterionProgress simple = registry.deserializeFromFile(SimpleCriterionProgress.class, value);
                     if(simple==null) return;
                     listProgress.getProgressMap().put(key, simple);
                 });
@@ -69,7 +69,7 @@ public class FileCruxAdvancementProgress implements FileHandler<CruxAdvancementP
             if(prog != null) progress.setCriteriaProgress(prog);
         }else throw new IllegalStateException(criteria + " is not a supported crux criteria!");
 
-        Instant obtained = registry.deserialize(Instant.class, o.get("obtained"));
+        Instant obtained = registry.deserializeFromFile(Instant.class, o.get("obtained"));
         if(obtained != null) progress.setObtainedAt(obtained);
 
         return progress.isEmpty() && !progress.isDone() ? null : progress;

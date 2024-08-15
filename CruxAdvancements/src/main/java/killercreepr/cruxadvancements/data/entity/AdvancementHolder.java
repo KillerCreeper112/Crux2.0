@@ -57,7 +57,7 @@ public class AdvancementHolder extends PlayerDataHolder implements Loadable {
         JsonRegistry registry = cfg.jsonRegistry();
         JsonArray a = new JsonArray();
         advancementTracker.getTrackedAdvancements().forEach(tracked ->{
-            a.add(registry.serializeObject(tracked));
+            a.add(registry.serializeToJson(tracked));
         });
         json.add("tracked_advancements", a);
         cfg.save();
@@ -72,7 +72,7 @@ public class AdvancementHolder extends PlayerDataHolder implements Loadable {
         Collection<TrackedAdvancement> tracked = new HashSet<>();
         if(json.get("tracked_advancements") instanceof JsonArray a){
             a.forEach(ele ->{
-                TrackedAdvancement t = registry.deserialize(TrackedAdvancement.class, ele);
+                TrackedAdvancement t = registry.deserializeFromJson(TrackedAdvancement.class, ele);
                 if(t==null) return;
                 tracked.add(t);
             });

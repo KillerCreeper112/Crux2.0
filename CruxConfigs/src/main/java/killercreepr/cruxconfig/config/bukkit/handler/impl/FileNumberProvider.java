@@ -59,15 +59,15 @@ public class FileNumberProvider extends SimpleFileHandler<NumberProvider> {
             FileElement max = map.get("max");
             if(min != null && max != null){
                 return new UniformNumber(
-                        registry.deserialize(NumberProvider.class, min),
-                        registry.deserialize(NumberProvider.class, max)
+                        registry.deserializeFromFile(NumberProvider.class, min),
+                        registry.deserializeFromFile(NumberProvider.class, max)
                 );
             }
         }
         if(e instanceof FileArray a){
             List<NumberProvider> list = new ArrayList<>();
             for(FileElement ele : a){
-                NumberProvider value = registry.deserialize(NumberProvider.class, ele);
+                NumberProvider value = registry.deserializeFromFile(NumberProvider.class, ele);
                 if(value==null) continue;
                 list.add(value);
             }

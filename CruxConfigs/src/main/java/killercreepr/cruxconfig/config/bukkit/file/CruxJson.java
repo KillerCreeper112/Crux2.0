@@ -172,7 +172,7 @@ public class CruxJson extends CruxFolder implements ICruxJson, DataFile {
     @Override
     public <T> @Nullable T deserialize(@NotNull String path, @NotNull Type type) {
         if(json==null) return null;
-        return jsonRegistry.deserialize(type, getElement(path));
+        return jsonRegistry.deserializeFromFile(type, getElement(path));
     }
 
     @Override

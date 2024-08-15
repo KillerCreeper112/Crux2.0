@@ -17,10 +17,10 @@ public class CrazyAdvancementsHook {
         registerHandlers(CfgRegistries.YAML);
     }
     public static void registerHandlers(@NotNull FileRegistry registry){
-        registry.registerHandler(AdvancementDisplay.AdvancementFrame.class, new FileGenericEnum<>(AdvancementDisplay.AdvancementFrame.class));
-        registry.registerHandler(AdvancementFlag.class, new FileGenericEnum<>(AdvancementFlag.class));
-        registry.registerHandler(AdvancementVisibility.class, new FileAdvancementVisibility());
-        registry.registerHandler(CrazyAdvancementDisplay.class, new FileCrazyAdvancementDisplay());
-        registry.registerHandler(CrazyAdvancement.class, new FileCrazyAdvancement());
+        registry.registerFileHandler(AdvancementDisplay.AdvancementFrame.class, new FileGenericEnum<>(AdvancementDisplay.AdvancementFrame.class));
+        registry.registerFileHandler(AdvancementFlag.class, new FileGenericEnum<>(AdvancementFlag.class));
+        registry.registerFileHandler(AdvancementVisibility.class, new FileAdvancementVisibility());
+        registry.registerFileHandler(CrazyAdvancementDisplay.class, new FileCrazyAdvancementDisplay());
+        registry.registerFileHandler(CrazyAdvancement.class, new FileCrazyAdvancement());
     }
 }
