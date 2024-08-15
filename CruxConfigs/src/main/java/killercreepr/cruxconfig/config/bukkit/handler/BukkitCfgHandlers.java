@@ -71,9 +71,7 @@ public class BukkitCfgHandlers {
     public static final FileItemLootPoolObject ITEM_LOOT_POOL_OBJECT = new FileItemLootPoolObject();
 
     public static void initStandard(){
-        init(CfgRegistries.JSON);
-        init(CfgRegistries.YAML);
-        init(CfgRegistries.JSON_TAGGED);
+        CfgRegistries.FILE.forEach(BukkitCfgHandlers::init);
     }
 
     public static void init(@NotNull FileRegistry registry){

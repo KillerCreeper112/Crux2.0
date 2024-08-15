@@ -49,6 +49,8 @@ public class CruxStructuresModule implements CruxModule {
         fileStructureCenter.TYPE_HANDLERS.register("surface_center", new FileSurfaceCenter());
         fileStructureRequirement.TYPE_HANDLERS.register("biome", new FileBiomeRequirement());
 
-        CfgRegistries.JSON.registerFileHandler(SimpleStoredStructure.class, new FileSimpleStoredStructure<SimpleStoredStructure>());
+        CfgRegistries.JSON_REGISTRY.forEach(registry ->{
+            registry.registerFileHandler(SimpleStoredStructure.class, new FileSimpleStoredStructure<SimpleStoredStructure>());
+        });
     }
 }

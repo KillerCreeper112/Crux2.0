@@ -60,6 +60,7 @@ public class CruxMenusModule implements CruxModule {
     @Override
     public void reload(@NotNull CruxPlugin plugin) {
         menuRegistry.register(CfgRegistries.YAML);
+        menuRegistry.register(CfgRegistries.JSON);
         menuRegistry.loadConfiguration(new CruxFolder(plugin, "menus").file());
     }
 }

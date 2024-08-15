@@ -44,8 +44,7 @@ public class CruxConfigHook {
     }
 
     public static void registerHandlers(){
-        registerHandlers(CfgRegistries.YAML);
-        registerHandlers(CfgRegistries.JSON);
+        CfgRegistries.FILE.forEach(CruxConfigHook::registerHandlers);
     }
 
     public static final FileNoteTextureData NOTE_TEXTURE_DATA = new FileNoteTextureData();

@@ -76,8 +76,7 @@ public class CruxConfigHook {
     }
 
     public static void registerHandlers(){
-        registerHandlers(CfgRegistries.JSON);
-        registerHandlers(CfgRegistries.YAML);
+        CfgRegistries.FILE.forEach(CruxConfigHook::registerHandlers);
     }
 
     public static final FileCruxAdvancementProgress CRUX_ADVANCEMENT_PROGRESS = new FileCruxAdvancementProgress();

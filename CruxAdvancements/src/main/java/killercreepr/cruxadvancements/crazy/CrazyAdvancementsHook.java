@@ -3,6 +3,7 @@ package killercreepr.cruxadvancements.crazy;
 import eu.endercentral.crazy_advancements.advancement.AdvancementDisplay;
 import eu.endercentral.crazy_advancements.advancement.AdvancementFlag;
 import eu.endercentral.crazy_advancements.advancement.AdvancementVisibility;
+import killercreepr.cruxadvancements.config.CruxConfigHook;
 import killercreepr.cruxadvancements.config.handler.crazy.FileAdvancementVisibility;
 import killercreepr.cruxadvancements.config.handler.crazy.FileCrazyAdvancement;
 import killercreepr.cruxadvancements.config.handler.crazy.FileCrazyAdvancementDisplay;
@@ -13,8 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class CrazyAdvancementsHook {
     public static void registerHandlers(){
-        registerHandlers(CfgRegistries.JSON);
-        registerHandlers(CfgRegistries.YAML);
+        CfgRegistries.FILE.forEach(CrazyAdvancementsHook::registerHandlers);
     }
     public static void registerHandlers(@NotNull FileRegistry registry){
         registry.registerFileHandler(AdvancementDisplay.AdvancementFrame.class, new FileGenericEnum<>(AdvancementDisplay.AdvancementFrame.class));

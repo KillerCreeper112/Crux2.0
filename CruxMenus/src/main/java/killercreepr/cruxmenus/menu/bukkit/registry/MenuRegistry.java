@@ -7,7 +7,7 @@ import killercreepr.crux.tags.format.Format;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
-import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
+import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxmenus.menu.bukkit.MenuItem;
 import killercreepr.cruxmenus.menu.bukkit.actions.MenuAction;
 import killercreepr.cruxmenus.menu.bukkit.config.FileDataProvider;
@@ -58,7 +58,7 @@ public class MenuRegistry {
         return format;
     }
 
-    public void register(@NotNull YamlRegistry registry){
+    public void register(@NotNull FileRegistry registry){
         registry.registerFileHandler(MenuHolder.class, menuModule);
         registry.registerFileHandler(DataExchange.class, menuModule.getYamlDataExchange());
         registry.registerFileHandler(MenuItem.class, menuModule.getYamlMenuItem());
