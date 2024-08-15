@@ -4,7 +4,7 @@ import killercreepr.crux.registry.MappedRegistry;
 import killercreepr.crux.registry.Registry;
 import killercreepr.crux.registry.SimpleMappedRegistry;
 import killercreepr.cruxadvancements.advancement.objective.progress.ObjectiveProgress;
-import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
+import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-public class FileObjectiveProgress implements FileHandler<ObjectiveProgress> {
+public class FileObjectiveProgress implements FileObjectHandler<ObjectiveProgress> {
     protected final @NotNull MappedRegistry<Class<?>, CustomFileObjectiveProgress<?>> CUSTOM_HANDLERS_BY_CLASS = new SimpleMappedRegistry<>();
     protected final @NotNull MappedRegistry<String, CustomFileObjectiveProgress<?>> CUSTOM_HANDLERS_BY_TYPE = new SimpleMappedRegistry<>();
 

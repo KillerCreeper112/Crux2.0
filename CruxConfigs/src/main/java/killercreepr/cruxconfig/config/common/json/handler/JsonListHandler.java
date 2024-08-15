@@ -1,10 +1,10 @@
-package killercreepr.cruxconfig.config.common.json.container;
+package killercreepr.cruxconfig.config.common.json.handler;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import killercreepr.cruxconfig.config.common.json.JsonContext;
-import killercreepr.cruxconfig.config.common.json.JsonRegistry;
 import killercreepr.cruxconfig.config.common.json.annotation.JsonSerializer;
+import killercreepr.cruxconfig.config.common.json.context.JsonContext;
+import killercreepr.cruxconfig.config.common.json.registry.JsonRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @JsonSerializer(id = "list")
-public class JsonListHandler implements JsonContainerHandler<List<Object>> {
+public class JsonListHandler implements JsonObjectHandler<List<Object>> {
     @Override
     public @NotNull JsonElement serializeToJson(@NotNull JsonContext context, @NotNull List<Object> object) {
         JsonRegistry registry = context.getRegistry();

@@ -6,7 +6,7 @@ import killercreepr.cruxblocks.block.CruxBlockDirectional;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.config.block.CfgGenericBlockGroup;
 import killercreepr.cruxblocks.config.block.CfgGenericDirectionalBlockGroup;
-import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
+import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class FileCruxBlockGroup implements FileHandler<CruxBlockGroup> {
+public class FileCruxBlockGroup implements FileObjectHandler<CruxBlockGroup> {
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull CruxBlockGroup object) {
         throw new UnsupportedOperationException("unsupported");

@@ -2,7 +2,7 @@ package killercreepr.cruxadvancements.config.handler;
 
 import killercreepr.crux.util.CruxObjects;
 import killercreepr.cruxadvancements.data.TrackedAdvancement;
-import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
+import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -11,7 +11,7 @@ import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FileTrackedAdvancement implements FileHandler<TrackedAdvancement> {
+public class FileTrackedAdvancement implements FileObjectHandler<TrackedAdvancement> {
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> ctx, @NotNull TrackedAdvancement object) {
         FileRegistry registry = ctx.getRegistry();

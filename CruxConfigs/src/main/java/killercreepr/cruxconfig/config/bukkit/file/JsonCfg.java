@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import killercreepr.cruxconfig.config.bukkit.value.CfgValue;
 import killercreepr.cruxconfig.config.common.file.DataFile;
 import killercreepr.cruxconfig.config.common.file.IJsonCfg;
-import killercreepr.cruxconfig.config.common.json.JsonRegistry;
+import killercreepr.cruxconfig.config.common.json.registry.JsonRegistry;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -1,6 +1,6 @@
 package killercreepr.cruxstructures.config.structure;
 
-import killercreepr.cruxconfig.config.bukkit.handler.YamlFileHandler;
+import killercreepr.cruxconfig.config.common.handler.PureYamlFileHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -10,7 +10,7 @@ import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FileBiomeRequirement extends YamlFileHandler<StructureBiomeRequirement> {
+public class FileBiomeRequirement extends PureYamlFileHandler<StructureBiomeRequirement> {
     @Override
     public @Nullable StructureBiomeRequirement deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;

@@ -1,6 +1,6 @@
 package killercreepr.cruxstructures.config;
 
-import killercreepr.cruxconfig.config.bukkit.handler.YamlFileHandler;
+import killercreepr.cruxconfig.config.common.handler.PureYamlFileHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -10,7 +10,7 @@ import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FileCfgFAWEStructure extends YamlFileHandler<CfgFAWEStructure> {
+public class FileCfgFAWEStructure extends PureYamlFileHandler<CfgFAWEStructure> {
     @Override
     public @Nullable CfgFAWEStructure deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;

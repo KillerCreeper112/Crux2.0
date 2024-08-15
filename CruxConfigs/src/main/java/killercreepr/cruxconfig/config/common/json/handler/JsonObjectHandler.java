@@ -1,14 +1,14 @@
-package killercreepr.cruxconfig.config.common.json.container;
+package killercreepr.cruxconfig.config.common.json.handler;
 
 import com.google.gson.JsonElement;
-import killercreepr.cruxconfig.config.common.json.JsonContext;
+import killercreepr.cruxconfig.config.common.json.context.JsonContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Requires a public static @Nullable ?Object deserializeFromJson(@Nullable JsonElement from) to be created.
  */
-public interface JsonContainerHandler<T> {
+public interface JsonObjectHandler<T> {
     default @Nullable JsonElement attemptSerializeToJson(@NotNull JsonContext context, @NotNull Object object){
         try{
             return serializeToJson(context, (T) object);

@@ -1,12 +1,12 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
 import killercreepr.crux.util.CruxItem;
-import killercreepr.cruxconfig.config.bukkit.handler.SimpleFileHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.element.FilePrimitive;
+import killercreepr.cruxconfig.config.common.handler.SimpleFileHandler;
 import killercreepr.cruxconfig.config.common.json.annotation.JsonSerializer;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;

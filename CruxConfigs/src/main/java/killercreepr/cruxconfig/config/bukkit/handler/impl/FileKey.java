@@ -1,10 +1,10 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
 import killercreepr.crux.Crux;
-import killercreepr.cruxconfig.config.bukkit.handler.SimpleFileHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FilePrimitive;
+import killercreepr.cruxconfig.config.common.handler.SimpleFileHandler;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

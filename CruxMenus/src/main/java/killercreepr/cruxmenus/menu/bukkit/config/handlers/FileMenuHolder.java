@@ -4,7 +4,7 @@ import killercreepr.crux.Crux;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.valueproviders.number.ConstantNumber;
 import killercreepr.crux.valueproviders.number.NumberProvider;
-import killercreepr.cruxconfig.config.bukkit.handler.SimpleFileHandler;
+import killercreepr.cruxconfig.config.common.handler.SimpleFileHandler;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.FileDynamicItem;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;

@@ -1,7 +1,7 @@
 package killercreepr.cruxblocks.config.handler;
 
 import killercreepr.cruxblocks.block.texture.TextureData;
-import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
+import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
@@ -10,14 +10,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-public class FileTextureData implements FileHandler<TextureData> {
-    protected final @NotNull Map<String, FileHandler<? extends TextureData>> handlers;
+public class FileTextureData implements FileObjectHandler<TextureData> {
+    protected final @NotNull Map<String, FileObjectHandler<? extends TextureData>> handlers;
 
-    public FileTextureData(@NotNull Map<String, FileHandler<? extends TextureData>> handlers) {
+    public FileTextureData(@NotNull Map<String, FileObjectHandler<? extends TextureData>> handlers) {
         this.handlers = handlers;
     }
 
-    public @NotNull Map<String, FileHandler<? extends TextureData>> getHandlers() {
+    public @NotNull Map<String, FileObjectHandler<? extends TextureData>> getHandlers() {
         return handlers;
     }
 
@@ -31,7 +31,7 @@ public class FileTextureData implements FileHandler<TextureData> {
         if(!(e instanceof FileObject o)) return null;
         String type = o.getObject(String.class, "type");
         if(type==null) return null;
-        FileHandler<? extends TextureData> handler = handlers.get(type.toLowerCase());
+        FileObjectHandler<? extends TextureData> handler = handlers.get(type.toLowerCase());
         if(handler==null) return null;
         return handler.deserializeFromFile(ctx, e);
     }

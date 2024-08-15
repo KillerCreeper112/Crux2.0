@@ -5,7 +5,7 @@ import killercreepr.cruxblocks.block.GenericBlock;
 import killercreepr.cruxblocks.block.GenericDirectionalBlock;
 import killercreepr.cruxblocks.block.group.CruxDirectionalBlockGroup;
 import killercreepr.cruxblocks.block.texture.TextureData;
-import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
+import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -16,7 +16,7 @@ import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FileCruxBlock implements FileHandler<CruxBlock> {
+public class FileCruxBlock implements FileObjectHandler<CruxBlock> {
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull CruxBlock object) {
         throw new UnsupportedOperationException("unsupported");

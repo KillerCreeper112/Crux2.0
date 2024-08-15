@@ -4,14 +4,14 @@ import killercreepr.crux.loot.api.conditions.LootCondition;
 import killercreepr.crux.registry.MappedRegistry;
 import killercreepr.crux.registry.SimpleMappedRegistry;
 import killercreepr.cruxadvancements.advancement.objective.AdvancementObjective;
-import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
+import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FileAdvancementObjective implements FileHandler<AdvancementObjective> {
+public class FileAdvancementObjective implements FileObjectHandler<AdvancementObjective> {
     public static final MappedRegistry<String, CustomFileAdvancementObjective<?>> CUSTOM_HANDLERS = new SimpleMappedRegistry<>();
     public static void registerCustomHandler(@NotNull CustomFileAdvancementObjective<?> handler){
         CUSTOM_HANDLERS.register(handler.getType(), handler);

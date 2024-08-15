@@ -5,7 +5,7 @@ import eu.endercentral.crazy_advancements.advancement.AdvancementVisibility;
 import killercreepr.crux.item.dynamic.DynamicItem;
 import killercreepr.crux.util.CruxObjects;
 import killercreepr.cruxadvancements.crazy.CrazyAdvancementDisplay;
-import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
+import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -14,7 +14,7 @@ import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FileCrazyAdvancementDisplay implements FileHandler<CrazyAdvancementDisplay> {
+public class FileCrazyAdvancementDisplay implements FileObjectHandler<CrazyAdvancementDisplay> {
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> ctx, @NotNull CrazyAdvancementDisplay object) {
         FileRegistry registry = ctx.getRegistry();

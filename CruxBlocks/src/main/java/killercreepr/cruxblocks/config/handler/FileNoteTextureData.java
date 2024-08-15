@@ -2,7 +2,7 @@ package killercreepr.cruxblocks.config.handler;
 
 import killercreepr.crux.util.CruxObjects;
 import killercreepr.cruxblocks.block.texture.NoteTextureData;
-import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
+import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -12,7 +12,7 @@ import org.bukkit.Note;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FileNoteTextureData implements FileHandler<NoteTextureData> {
+public class FileNoteTextureData implements FileObjectHandler<NoteTextureData> {
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull NoteTextureData object) {
         throw new UnsupportedOperationException("unsupported");

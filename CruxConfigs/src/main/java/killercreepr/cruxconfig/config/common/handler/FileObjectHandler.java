@@ -1,18 +1,23 @@
-package killercreepr.cruxconfig.config.bukkit.handler;
+package killercreepr.cruxconfig.config.common.handler;
 
 import com.google.gson.JsonElement;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
-import killercreepr.cruxconfig.config.common.json.JsonContext;
 import killercreepr.cruxconfig.config.common.json.annotation.JsonSerializerID;
-import killercreepr.cruxconfig.config.common.json.container.JsonContainerHandler;
+import killercreepr.cruxconfig.config.common.json.context.JsonContext;
+import killercreepr.cruxconfig.config.common.json.handler.JsonObjectHandler;
 import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
 import killercreepr.cruxconfig.config.common.yaml.handler.YamlObjectHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface FileHandler<T> extends YamlObjectHandler<T>, JsonContainerHandler<T>, JsonSerializerID {
+public interface FileObjectHandler<T> extends YamlObjectHandler<T>, JsonObjectHandler<T>, JsonSerializerID {
+
+    @Override
+    default @NotNull String jsonSerializerID(){
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + " does not support tagged json!");
+    }
 
     default @NotNull FileElement serializeToFileFromJson(@NotNull JsonContext context, @NotNull T object){
         return serializeToFile(context, object);

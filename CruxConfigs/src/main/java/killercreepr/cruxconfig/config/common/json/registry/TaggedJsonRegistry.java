@@ -1,4 +1,4 @@
-package killercreepr.cruxconfig.config.common.json;
+package killercreepr.cruxconfig.config.common.json.registry;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -8,17 +8,20 @@ import killercreepr.crux.valueproviders.number.ConstantNumber;
 import killercreepr.crux.valueproviders.number.EquationNumber;
 import killercreepr.crux.valueproviders.number.UniformNumber;
 import killercreepr.crux.valueproviders.number.UniformNumberArray;
-import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
+import killercreepr.cruxconfig.config.common.base.registry.FileObjectHandlerRegistry;
+import killercreepr.cruxconfig.config.common.base.registry.FileParsedObjectRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
+import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
+import killercreepr.cruxconfig.config.common.json.JsonSerializable;
 import killercreepr.cruxconfig.config.common.json.annotation.JsonSerializer;
 import killercreepr.cruxconfig.config.common.json.annotation.JsonSerializerID;
-import killercreepr.cruxconfig.config.common.json.container.GenericJsonHandler;
-import killercreepr.cruxconfig.config.common.json.container.JsonContainerHandler;
-import killercreepr.cruxconfig.config.common.json.container.JsonListHandler;
-import killercreepr.cruxconfig.config.common.json.container.JsonMapHandler;
-import killercreepr.cruxconfig.config.common.json.registry.JsonContainerHandlerRegistry;
+import killercreepr.cruxconfig.config.common.json.context.JsonContext;
+import killercreepr.cruxconfig.config.common.json.handler.GenericJsonHandler;
+import killercreepr.cruxconfig.config.common.json.handler.JsonListHandler;
+import killercreepr.cruxconfig.config.common.json.handler.JsonMapHandler;
+import killercreepr.cruxconfig.config.common.json.handler.JsonObjectHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,12 +32,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SimpleJsonRegistry implements FileRegistry, JsonRegistry {
+public class TaggedJsonRegistry implements FileRegistry, JsonRegistry {
     public final String DESERIALIZE_METHOD_NAME = "deserializeFromJson";
     public final Map<String, Class<? extends JsonSerializable>> REGISTRY = new HashMap<>();
-    public final JsonContainerHandlerRegistry CONTAINER_REGISTRY = new JsonContainerHandlerRegistry(this);
+    public final JsonObjectHandlerRegistry OBJECT_HANDLER_REGISTRY = new JsonObjectHandlerRegistry(this);
 
-    public SimpleJsonRegistry() {
+    public TaggedJsonRegistry() {
         registerJsonHandler(List.class, new JsonListHandler());
         registerJsonHandler(Map.class, new JsonMapHandler());
         registerJsonHandler(
@@ -50,13 +53,31 @@ public class SimpleJsonRegistry implements FileRegistry, JsonRegistry {
     }
 
     @Override
-    public <T extends FileHandler<?>> void registerFileHandler(@NotNull Class<?> clazz, @NotNull T handler) {
-        registerJsonHandler(clazz, (JsonContainerHandler<?>) handler);
+    public <T extends FileObjectHandler<?>> void registerFileHandler(@NotNull Class<?> clazz, @NotNull T handler) {
+        registerJsonHandler(clazz, (JsonObjectHandler<?>) handler);
+    }
+
+    public @NotNull JsonObjectHandlerRegistry getObjectHandlerRegistry(){
+        return OBJECT_HANDLER_REGISTRY;
     }
 
     @Override
-    public <T extends JsonContainerHandler<?>> void registerJsonHandler(@NotNull Class<?> clazz, @NotNull T object){
-        CONTAINER_REGISTRY.register(clazz, object);
+    public @NotNull FileObjectHandlerRegistry getHandlerRegistry() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public @NotNull FileParsedObjectRegistry getParsedObjectRegistry() {
+        throw new UnsupportedOperationException();
+    }
+
+    public  <T extends GenericJsonHandler<?>> void registerJsonHandler(@NotNull T... objects){
+        for(T object : objects){
+            registerJsonHandler(object.getType(), object);
+        }
+    }
+    public <T extends JsonObjectHandler<?>> void registerJsonHandler(@NotNull Class<?> clazz, @NotNull T object){
+        OBJECT_HANDLER_REGISTRY.register(clazz, object);
     }
 
     @SafeVarargs
@@ -92,8 +113,8 @@ public class SimpleJsonRegistry implements FileRegistry, JsonRegistry {
         return REGISTRY.remove(name);
     }
 
-    public @Nullable JsonContainerHandler<?> getContainerHandler(@NotNull Class<?> clazz){
-        return CONTAINER_REGISTRY.get(clazz);
+    public @Nullable JsonObjectHandler<?> getContainerHandler(@NotNull Class<?> clazz){
+        return OBJECT_HANDLER_REGISTRY.get(clazz);
     }
 
     public @Nullable Class<? extends JsonSerializable> get(@NotNull String name){
@@ -114,11 +135,11 @@ public class SimpleJsonRegistry implements FileRegistry, JsonRegistry {
         };
     }
 
-    public @Nullable JsonContainerHandler<?> findContainerHandler(@NotNull Class<?> from){
-        JsonContainerHandler<?> handler = CONTAINER_REGISTRY.get(from);
+    public @Nullable JsonObjectHandler<?> findContainerHandler(@NotNull Class<?> from){
+        JsonObjectHandler<?> handler = OBJECT_HANDLER_REGISTRY.get(from);
         if(handler != null) return handler;
 
-        for(Map.Entry<Class<?>, JsonContainerHandler<?>> entry : CONTAINER_REGISTRY.entrySet()){
+        for(Map.Entry<Class<?>, JsonObjectHandler<?>> entry : OBJECT_HANDLER_REGISTRY.entrySet()){
             Class<?> clazz = entry.getKey();
             if(clazz.isAssignableFrom(from)){
                 return entry.getValue();
@@ -129,7 +150,7 @@ public class SimpleJsonRegistry implements FileRegistry, JsonRegistry {
 
     public @NotNull JsonElement rawSerializeObject(@NotNull Object object){
         if(object instanceof JsonSerializable s) return serialize(s);
-        JsonContainerHandler<?> handler = findContainerHandler(object.getClass());
+        JsonObjectHandler<?> handler = findContainerHandler(object.getClass());
         if(handler == null){
             JsonElement ele = tryPrimitive(object);
             if(ele == null){
@@ -146,7 +167,7 @@ public class SimpleJsonRegistry implements FileRegistry, JsonRegistry {
     @Override
     public @NotNull JsonElement serializeToJson(@NotNull Object object){
         if(object instanceof JsonSerializable s) return serialize(s);
-        JsonContainerHandler<?> handler = findContainerHandler(object.getClass());
+        JsonObjectHandler<?> handler = findContainerHandler(object.getClass());
         if(handler == null){
             JsonElement ele = tryPrimitive(object);
             if(ele == null){
@@ -187,7 +208,7 @@ public class SimpleJsonRegistry implements FileRegistry, JsonRegistry {
         String id = e.getAsString();
         Class<? extends JsonSerializable> clazz = get(id);
         if(clazz == null){
-            JsonContainerHandler<?> handler = CONTAINER_REGISTRY.getByName(id);
+            JsonObjectHandler<?> handler = OBJECT_HANDLER_REGISTRY.getByName(id);
             return handler == null ? null : handler.deserializeFromJson(new JsonContext(this), o.get("value"));
         }
         JsonElement value = o.get("value");

@@ -1,6 +1,6 @@
 package killercreepr.cruxstructures.config;
 
-import killercreepr.cruxconfig.config.bukkit.handler.YamlFileHandler;
+import killercreepr.cruxconfig.config.common.handler.PureYamlFileHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileArray;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.HashSet;
 
-public class FileCfgStructureGen extends YamlFileHandler<CfgStructureGen> {
+public class FileCfgStructureGen extends PureYamlFileHandler<CfgStructureGen> {
     @Override
     public @Nullable CfgStructureGen deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;

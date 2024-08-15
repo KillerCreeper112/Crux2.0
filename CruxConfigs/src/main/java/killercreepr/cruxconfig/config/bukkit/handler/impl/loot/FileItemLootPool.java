@@ -9,18 +9,18 @@ import killercreepr.crux.loot.item.api.ItemLootFunction;
 import killercreepr.crux.loot.item.api.ItemLootPool;
 import killercreepr.crux.loot.item.api.ItemLootPoolObject;
 import killercreepr.crux.valueproviders.number.NumberProvider;
-import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
+import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class FileItemLootPool implements FileHandler<ItemLootPool> {
+public class FileItemLootPool implements FileObjectHandler<ItemLootPool> {
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull ItemLootPool object) {
         throw new UnsupportedOperationException("unsupported");

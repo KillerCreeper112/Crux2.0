@@ -3,14 +3,14 @@ package killercreepr.cruxadvancements.config.handler;
 import killercreepr.crux.registry.MappedRegistry;
 import killercreepr.crux.registry.SimpleMappedRegistry;
 import killercreepr.cruxadvancements.advancement.reward.CruxAdvanceReward;
-import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
+import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FileCruxAdvanceReward implements FileHandler<CruxAdvanceReward> {
+public class FileCruxAdvanceReward implements FileObjectHandler<CruxAdvanceReward> {
     public static final MappedRegistry<String, CustomFileCruxAdvanceReward<?>> CUSTOM_HANDLERS = new SimpleMappedRegistry<>();
     public static void registerCustomHandler(@NotNull CustomFileCruxAdvanceReward<?> handler){
         CUSTOM_HANDLERS.register(handler.getType(), handler);

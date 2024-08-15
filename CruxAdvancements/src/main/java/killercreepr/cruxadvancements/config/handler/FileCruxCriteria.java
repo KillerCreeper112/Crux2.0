@@ -4,7 +4,7 @@ import com.google.common.reflect.TypeToken;
 import killercreepr.cruxadvancements.advancement.criteria.CruxCriteria;
 import killercreepr.cruxadvancements.advancement.criteria.ListCriteria;
 import killercreepr.cruxadvancements.advancement.criteria.NumberCriteria;
-import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
+import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileArray;
@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileCruxCriteria implements FileHandler<CruxCriteria> {
+public class FileCruxCriteria implements FileObjectHandler<CruxCriteria> {
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> ctx, @NotNull CruxCriteria object) {
         FileObject o = new FileObject();

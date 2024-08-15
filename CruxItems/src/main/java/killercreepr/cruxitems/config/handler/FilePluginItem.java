@@ -2,7 +2,7 @@ package killercreepr.cruxitems.config.handler;
 
 import killercreepr.crux.item.dynamic.BukkitDynamicItem;
 import killercreepr.crux.item.dynamic.DynamicItem;
-import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
+import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -13,7 +13,7 @@ import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FilePluginItem implements FileHandler<PluginItem> {
+public class FilePluginItem implements FileObjectHandler<PluginItem> {
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> ctx, @NotNull PluginItem object) {
         throw new UnsupportedOperationException("Unsupported");

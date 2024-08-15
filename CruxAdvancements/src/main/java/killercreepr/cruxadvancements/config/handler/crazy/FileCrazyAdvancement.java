@@ -9,7 +9,7 @@ import killercreepr.cruxadvancements.advancement.reward.CruxAdvanceReward;
 import killercreepr.cruxadvancements.config.handler.FileAdvancementObjective;
 import killercreepr.cruxadvancements.crazy.CrazyAdvancement;
 import killercreepr.cruxadvancements.crazy.CrazyAdvancementDisplay;
-import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
+import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FileCrazyAdvancement implements FileHandler<CrazyAdvancement> {
+public class FileCrazyAdvancement implements FileObjectHandler<CrazyAdvancement> {
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> ctx, @NotNull CrazyAdvancement object) {
         FileRegistry registry = ctx.getRegistry();

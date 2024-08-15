@@ -1,17 +1,17 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
 import killercreepr.crux.item.StoredItem;
-import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FilePrimitive;
+import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Base64;
 
-public class FileStoredItem implements FileHandler<StoredItem> {
+public class FileStoredItem implements FileObjectHandler<StoredItem> {
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> ctx, @NotNull StoredItem object) {
         return new FilePrimitive(

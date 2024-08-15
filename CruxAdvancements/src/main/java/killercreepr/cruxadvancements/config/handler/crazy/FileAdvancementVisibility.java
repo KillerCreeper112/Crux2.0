@@ -1,7 +1,7 @@
 package killercreepr.cruxadvancements.config.handler.crazy;
 
 import eu.endercentral.crazy_advancements.advancement.AdvancementVisibility;
-import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
+import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -9,7 +9,7 @@ import killercreepr.cruxconfig.config.common.element.FileObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FileAdvancementVisibility implements FileHandler<AdvancementVisibility> {
+public class FileAdvancementVisibility implements FileObjectHandler<AdvancementVisibility> {
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> ctx, @NotNull AdvancementVisibility object) {
         return new FileObject()

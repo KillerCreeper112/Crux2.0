@@ -1,7 +1,7 @@
 package killercreepr.cruxadvancements.config.handler;
 
 import killercreepr.cruxadvancements.advancement.progression.SimpleCriterionProgress;
-import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
+import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.time.Instant;
 
-public class FileSimpleCriterionProgress implements FileHandler<SimpleCriterionProgress> {
+public class FileSimpleCriterionProgress implements FileObjectHandler<SimpleCriterionProgress> {
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> ctx, @NotNull SimpleCriterionProgress object) {
         FileRegistry registry = ctx.getRegistry();

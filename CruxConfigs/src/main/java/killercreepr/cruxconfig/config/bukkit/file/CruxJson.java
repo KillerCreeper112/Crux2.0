@@ -8,7 +8,7 @@ import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.file.DataFile;
 import killercreepr.cruxconfig.config.common.file.ICruxJson;
-import killercreepr.cruxconfig.config.common.json.JsonRegistry;
+import killercreepr.cruxconfig.config.common.json.registry.JsonRegistry;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;

@@ -1,7 +1,6 @@
 package killercreepr.cruxconfig.config.bukkit.file;
 
 import killercreepr.cruxconfig.config.common.file.DataFile;
-import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -13,7 +12,7 @@ public class BukkitDataFile {
     }
     public static @NotNull DataFile parse(@NotNull File file){
         if(CruxFolder.hasFileExtension(file, "yml")) return new CruxConfig(file);
-        if(CruxFolder.hasFileExtension(file, "json")) return new CruxJson(file, CfgRegistries.FILE);
+        if(CruxFolder.hasFileExtension(file, "json")) return new CruxJson(file);
         throw new UnsupportedOperationException(file.getName() + " is not a supported file type!");
     }
 }

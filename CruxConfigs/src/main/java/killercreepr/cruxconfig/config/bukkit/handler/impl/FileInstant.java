@@ -1,18 +1,18 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
 import killercreepr.crux.util.CruxObjects;
-import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.element.FilePrimitive;
+import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.DateTimeException;
 import java.time.Instant;
 
-public class FileInstant implements FileHandler<Instant> {
+public class FileInstant implements FileObjectHandler<Instant> {
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull Instant object) {
         return new FileObject()

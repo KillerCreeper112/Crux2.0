@@ -3,14 +3,14 @@ package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 import killercreepr.crux.loot.api.conditions.LootCondition;
 import killercreepr.crux.registry.MappedRegistry;
 import killercreepr.crux.registry.SimpleMappedRegistry;
-import killercreepr.cruxconfig.config.bukkit.handler.FileHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
+import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FileLootCondition implements FileHandler<LootCondition> {
+public class FileLootCondition implements FileObjectHandler<LootCondition> {
     public final MappedRegistry<String, CustomFileLootCondition<?>> CUSTOM_HANDLERS = new SimpleMappedRegistry<>();
     public void registerCustomHandler(@NotNull CustomFileLootCondition<?> handler){
         CUSTOM_HANDLERS.register(handler.getType(), handler);

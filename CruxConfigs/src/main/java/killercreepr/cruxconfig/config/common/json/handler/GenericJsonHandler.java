@@ -1,13 +1,13 @@
-package killercreepr.cruxconfig.config.common.json.container;
+package killercreepr.cruxconfig.config.common.json.handler;
 
 import com.google.gson.JsonElement;
-import killercreepr.cruxconfig.config.common.json.JsonContext;
 import killercreepr.cruxconfig.config.common.json.annotation.JsonSerializerID;
 import killercreepr.cruxconfig.config.common.json.automatic.AutoJsonSerializer;
+import killercreepr.cruxconfig.config.common.json.context.JsonContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class GenericJsonHandler<T> implements JsonContainerHandler<Object>, JsonSerializerID {
+public class GenericJsonHandler<T> implements JsonObjectHandler<Object>, JsonSerializerID {
     protected final String id;
     protected final Class<T> type;
     public GenericJsonHandler(String id, Class<T> type) {

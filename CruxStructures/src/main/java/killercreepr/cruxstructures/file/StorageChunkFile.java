@@ -3,7 +3,7 @@ package killercreepr.cruxstructures.file;
 import com.google.gson.JsonArray;
 import killercreepr.crux.data.world.CruxPosition;
 import killercreepr.cruxconfig.config.bukkit.file.CruxJson;
-import killercreepr.cruxconfig.config.common.json.JsonRegistry;
+import killercreepr.cruxconfig.config.common.json.registry.JsonRegistry;
 import killercreepr.cruxstructures.structure.stored.StoredStructure;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;

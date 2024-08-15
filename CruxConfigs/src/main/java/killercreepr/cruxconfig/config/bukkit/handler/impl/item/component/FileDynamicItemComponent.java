@@ -1,7 +1,7 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.item.component;
 
 import killercreepr.crux.item.dynamic.DynamicItemComponent;
-import killercreepr.cruxconfig.config.bukkit.handler.SimpleFileHandler;
+import killercreepr.cruxconfig.config.common.handler.SimpleFileHandler;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class FileDynamicItemComponent<T extends DynamicItemComponent> extends SimpleFileHandler<T> {

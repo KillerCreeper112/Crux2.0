@@ -1,6 +1,7 @@
 package killercreepr.cruxconfig.config.common.json;
 
 import com.google.gson.JsonElement;
+import killercreepr.cruxconfig.config.common.json.context.JsonContext;
 import org.jetbrains.annotations.NotNull;
 
 /**

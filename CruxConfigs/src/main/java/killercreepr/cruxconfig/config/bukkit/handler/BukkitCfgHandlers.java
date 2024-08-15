@@ -25,10 +25,6 @@ import killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.FileDyn
 import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.*;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.handler.AutoFileHandler;
-import killercreepr.cruxconfig.config.common.json.JsonRegistry;
-import killercreepr.cruxconfig.config.common.json.container.GenericJsonHandler;
-import killercreepr.cruxconfig.config.common.yaml.automatic.AutoYamlSerializer;
-import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
@@ -43,7 +39,6 @@ import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Instant;
@@ -75,17 +70,10 @@ public class BukkitCfgHandlers {
     public static final FileSimpleLootObject SIMPLE_LOOT_OBJECT = new FileSimpleLootObject();
     public static final FileItemLootPoolObject ITEM_LOOT_POOL_OBJECT = new FileItemLootPoolObject();
 
-    public static void initJson(@NotNull JsonRegistry registry){
-        registry.registerJsonHandler(
-                new GenericJsonHandler<>("vector", Vector.class),
-                new GenericJsonHandler<>("potion_effect", PotionEffect.class)
-        );
-    }
-
     public static void initStandard(){
         init(CfgRegistries.JSON);
         init(CfgRegistries.YAML);
-        init(CfgRegistries.FILE);
+        init(CfgRegistries.JSON_TAGGED);
     }
 
     public static void init(@NotNull FileRegistry registry){
@@ -150,10 +138,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(StoredWorld.class, new AutoFileHandler<>(StoredWorld.class));
         registry.registerFileHandler(BlockPos.class, new AutoFileHandler<>(BlockPos.class));
         registry.registerFileHandler(LocationPos.class, new AutoFileHandler<>(LocationPos.class));
-    }
-
-    public static void initYaml(@NotNull YamlRegistry registry){
-        registry.registerYamlHandler(new AutoYamlSerializer<>(ArmorTrim.class));
+        registry.registerFileHandler(ArmorTrim.class, new AutoFileHandler<>(ArmorTrim.class));
     }
 
     @SafeVarargs
