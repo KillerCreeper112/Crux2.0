@@ -61,7 +61,7 @@ public class BukkitDynamicItem implements DynamicItem{
 
     protected @Nullable Material matchMaterial(@NotNull String s){
         try{
-            return Registry.MATERIAL.get(Key.key(s));
+            return Registry.MATERIAL.get(Key.key(s.toLowerCase()));
         }catch (InvalidKeyException ignored){}
         return null;
     }
