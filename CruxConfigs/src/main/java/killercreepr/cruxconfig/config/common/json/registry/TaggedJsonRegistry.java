@@ -248,6 +248,11 @@ public class TaggedJsonRegistry implements FileRegistry, JsonRegistry {
     }
 
     @Override
+    public @NotNull FileElement serializeToFile(@NotNull Object object, @NotNull FileContext<?> context) {
+        return serializeToFile(object);//todo make context actually used
+    }
+
+    @Override
     public <T> @Nullable T deserializeFromFile(@NotNull Type type, @Nullable FileElement o) {
         if(o == null) return null;
         return deserializeFromJson(type, o.toJson());

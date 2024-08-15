@@ -1,9 +1,7 @@
-package killercreepr;
+package killercreepr.cruxcore;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.CruxMainModule;
-import killercreepr.crux.loot.SimpleLootContext;
-import killercreepr.crux.loot.api.LootTable;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registries.CruxModuleRegistry;
 import killercreepr.crux.registries.CruxRegistries;
@@ -15,7 +13,8 @@ import killercreepr.cruxconfig.CruxConfigsModule;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
 import killercreepr.cruxconfig.config.bukkit.loot.LootTableLoader;
-import killercreepr.cruxconfig.config.registry.CfgRegistries;
+import killercreepr.cruxcore.command.CruxCoreCommands;
+import killercreepr.cruxcore.listener.PlayerDataListener;
 import killercreepr.cruxenchants.CruxEnchantsModule;
 import killercreepr.cruxentities.CruxEntitiesModule;
 import killercreepr.cruxexternal.CruxExternalModule;
@@ -29,16 +28,15 @@ import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class TestPlugin extends CruxPlugin implements Listener {
+public class CruxCore extends CruxPlugin implements Listener {
+    private static CruxCore instance;
+    public static CruxCore inst(){ return instance; }
     protected final CruxModuleRegistry MODULES = CruxRegistries.MODULES;
     protected final CruxMainModule CRUX_MAIN = new CruxMainModule();
     protected final CruxItemsModule CRUX_ITEMS = new CruxItemsModule();
@@ -116,16 +114,14 @@ public class TestPlugin extends CruxPlugin implements Listener {
 
     @Override
     public void onLoad() {
-        //instance = this;
+        instance = this;
         Crux.setMainPlugin(this);
 
-        //new CruxCoreCommands(this).register(this);
+        new CruxCoreCommands(this).register(this);
 
         CRUX_STRUCTURES.registerCommands(this, structureManager);
 
         BukkitCfgHandlers.initStandard();
-        BukkitCfgHandlers.initJson(CfgRegistries.JSON);
-        BukkitCfgHandlers.initYaml(CfgRegistries.YAML);
 
         MODULES.register(
             CRUX_MAIN,
@@ -158,7 +154,8 @@ public class TestPlugin extends CruxPlugin implements Listener {
         reload();
         registerListeners(
             this,
-            structureManager
+            structureManager,
+            new PlayerDataListener()
         );
         structureManager.buildRunnable().runTaskTimer(this, 20L, 1L);
     }
@@ -177,7 +174,7 @@ public class TestPlugin extends CruxPlugin implements Listener {
         MODULES.reload(this);
 
         CruxRegistries.PLUGINS.forEach(plugin ->{
-            if(plugin instanceof TestPlugin) return;
+            if(plugin instanceof CruxCore) return;
             plugin.reload(this);
         });
 
@@ -193,14 +190,4 @@ public class TestPlugin extends CruxPlugin implements Listener {
         reload();
         return super.onCommand(sender, command, label, args);
     }
-
-    @EventHandler(ignoreCancelled = true)
-    public void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
-        Player p = event.getPlayer();
-        LootTable<ItemStack> table = CruxRegistries.ITEM_LOOT_TABLE.get(Crux.key("entity/test_ayo_man"));
-        table.populateLoot(SimpleLootContext.builder().build()).forEach(item ->{
-            p.getWorld().dropItem(p.getLocation(), item);
-        });
-    }
-
 }

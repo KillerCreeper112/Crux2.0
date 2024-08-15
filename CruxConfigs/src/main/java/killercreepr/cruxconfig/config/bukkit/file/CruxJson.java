@@ -1,7 +1,9 @@
 package killercreepr.cruxconfig.config.bukkit.file;
 
+import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import killercreepr.crux.Crux;
 import killercreepr.crux.data.util.Pair;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -18,6 +20,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.lang.reflect.Type;
 import java.util.function.BiConsumer;
+import java.util.logging.Level;
 
 public class CruxJson extends CruxFolder implements ICruxJson, DataFile {
     protected final @NotNull JsonRegistry jsonRegistry;
@@ -116,6 +119,7 @@ public class CruxJson extends CruxFolder implements ICruxJson, DataFile {
 
     @Override
     public void serialize(@NotNull String path, @Nullable Object value) {
+        reloadIfNeeded();
         Pair<FileObject, String> element = buildElementPath(path, (object, endPath) ->{
             if(value==null){
                 object.remove(endPath);
@@ -123,18 +127,19 @@ public class CruxJson extends CruxFolder implements ICruxJson, DataFile {
             }
             object.add(endPath, jsonRegistry.serializeToFile(value));
         });
+        Crux.log(Level.WARNING, "got gottteeed  " + element.getFirst() + "first " + element.getSecond() + " second");
         json.add(element.getSecond(), element.getFirst().toJson());
     }
 
     public @NotNull Pair<FileObject, String> buildElementPath(@NotNull String path, @NotNull BiConsumer<FileObject, String> endResult){
+        Preconditions.checkArgument(!path.isBlank(), "Path may not be blank or empty!");
         FileObject start = json == null ? new FileObject() : FileObject.fromJson(json);
         FileObject built = start;
         int index = 0;
-        String[] split = path.split(Character.toString(pathSeparator));
-        String startPath = null;
+        String[] split = path.split("\\" + pathSeparator);
+        String startPath = split[0];
         for(String s : split){
             index++;
-            if(index==1) startPath = s;
             if(index == split.length){
                 endResult.accept(built, s);
                 break;

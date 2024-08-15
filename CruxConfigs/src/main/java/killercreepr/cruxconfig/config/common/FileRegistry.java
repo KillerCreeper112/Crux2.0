@@ -13,6 +13,8 @@ import java.lang.reflect.Type;
 public interface FileRegistry {
     @NotNull
     FileElement serializeToFile(@NotNull Object object);
+    @NotNull
+    FileElement serializeToFile(@NotNull Object object, @NotNull FileContext<?> context);
     <T> @Nullable T deserializeFromFile(@NotNull Type type, @Nullable FileElement o);
     <T> @Nullable T deserializeFromFile(@NotNull Type type, @Nullable FileElement o, @NotNull FileContext<?> context);
     <T> @Nullable T deserializeFromFile(@NotNull Class<T> clazz, @Nullable FileElement o);

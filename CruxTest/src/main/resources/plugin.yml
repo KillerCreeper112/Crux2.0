@@ -1,5 +1,0 @@
-name: testttt
-version: '1.0'
-main: killercreepr.TestPlugin
-load: STARTUP
-api-version: '1.19'

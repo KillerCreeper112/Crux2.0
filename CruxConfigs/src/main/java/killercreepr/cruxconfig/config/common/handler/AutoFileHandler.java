@@ -12,57 +12,44 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.function.BiPredicate;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class AutoFileHandler<T> extends SimpleFileHandler<T> {
     public static <T> AutoFileHandler<T> notNull(@NotNull Class<T> type){
-        return new AutoFileHandler<>(type, (name, value) -> value != null);
+        return new AutoFileHandler<>(
+            type, AutoFileOptions.builder()
+            .isValid((name, value) -> value != null)
+            .build()
+        );
     }
 
     public static <T> AutoFileHandler<T> withDisabledFields(@NotNull Class<T> type, @NotNull String @NotNull... disabledFields){
         Stream<String> stream = Arrays.stream(disabledFields);
-        return new AutoFileHandler<>(type, null, (field) -> stream.anyMatch(x -> x.equals(field.getName())));
+        return new AutoFileHandler<>(
+            type, AutoFileOptions.builder()
+            .disabledFields((field) -> stream.anyMatch(x -> x.equals(field.getName())))
+            .build()
+        );
     }
 
     protected final @NotNull Class<T> type;
-    protected final @Nullable BiPredicate<String, Object> isValid;
-    protected final @Nullable Predicate<Field> disabledFields;
-    public AutoFileHandler(@NotNull Class<T> type, @Nullable BiPredicate<String, Object> isValid, @Nullable Predicate<Field> disabledFields) {
-        this.type = type;
-        this.isValid = isValid;
-        this.disabledFields = disabledFields;
-    }
+    protected final @Nullable AutoFileOptions options;
 
-    public AutoFileHandler(@NotNull Class<T> type, @Nullable BiPredicate<String, Object> isValid) {
-        this(type, isValid, null);
+    public AutoFileHandler(@NotNull Class<T> type, @Nullable AutoFileOptions options) {
+        this.type = type;
+        this.options = options;
     }
 
     public AutoFileHandler(@NotNull Class<T> type) {
-        this(type, null, null);
+        this(type, null);
+    }
+
+    public @Nullable AutoFileOptions getOptions() {
+        return options;
     }
 
     public @NotNull Class<T> getType() {
         return type;
-    }
-
-    /**
-     * @return A predicate that determines whether a Field's object
-     * is valid when deserializing. If any of the fields are not valid,
-     * the deserializeFromYaml method will return null.
-     */
-    public @Nullable BiPredicate<String, Object> getIsValid() {
-        return isValid;
-    }
-
-    /**
-     * @return A predicate that determines whether a Field should be
-     * deserialized and serialized. If the predicate returns
-     * true on a Field, that Field will not be saved or loaded.
-     */
-    public @Nullable Predicate<Field> getDisabledFields() {
-        return disabledFields;
     }
 
     @Override
@@ -70,14 +57,22 @@ public class AutoFileHandler<T> extends SimpleFileHandler<T> {
         FileObject map = new FileObject();
         FileRegistry registry = context.getRegistry();
         for(Field field : CruxReflect.getAllDeclaredFields(object.getClass(), CruxReflect.NON_STATIC(null))){
-            if(disabledFields != null && disabledFields.test(field)) continue;
+            if(options != null && options.testDisabled(field)) continue;
             try{
                 boolean x = field.canAccess(object);
                 field.setAccessible(true);
                 Object obj = field.get(object);
                 field.setAccessible(x);
                 if(obj == null) continue;
-                FileElement serialized = registry.serializeToFile(obj);
+
+                if(options != null && options.hasManualHandler(field.getName())){
+                    FileElement serialized = options.getManualHandler(field.getName()).attemptSerializeToFile(context, obj);
+                    if(serialized==null) continue;
+                    map.add(field.getName(), serialized);
+                    continue;
+                }
+
+                FileElement serialized = registry.serializeToFile(obj, context);
                 map.add(field.getName(), serialized);
             }catch (IllegalAccessException ignored){}
         }
@@ -91,9 +86,16 @@ public class AutoFileHandler<T> extends SimpleFileHandler<T> {
         Map<String, Object> fields = new LinkedHashMap<>();
         Map<String, FileElement> yamlMap = o.asMap();
         for(Field field : CruxReflect.getAllDeclaredFields(type, CruxReflect.NON_STATIC(null))){
-            if(disabledFields != null && disabledFields.test(field)) continue;
-            Object found  = registry.deserializeFromFile(field.getType(), yamlMap.get(field.getName()));
-            if(isValid != null && !isValid.test(field.getName(), found)) return null;
+            if(options != null && options.testDisabled(field)) continue;
+
+            Object found;
+            if(options != null && options.hasManualHandler(field.getName())) {
+                FileObjectHandler<?> handler = options.getManualHandler(field.getName());
+                found = handler.deserializeFromFile(context, yamlMap.get(field.getName()));
+            }else{
+                found = registry.deserializeFromFile(field.getType(), yamlMap.get(field.getName()));
+            }
+            if(options != null && !options.testIsValid(field.getName(), found)) return null;
             fields.put(field.getName(), found);
         }
         return CruxReflect.attemptCreation(type, fields);

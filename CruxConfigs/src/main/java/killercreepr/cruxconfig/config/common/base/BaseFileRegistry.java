@@ -80,10 +80,10 @@ public class BaseFileRegistry implements FileRegistry {
         return null;
     }
 
-    public @Nullable FileElement serialize(@NotNull Object object){
+    public @Nullable FileElement serialize(@NotNull Object object, @NotNull FileContext<?> context){
         FileObjectHandler<?> handler = findObjectHandler(object.getClass());
         if(handler == null) return null;
-        return handler.attemptSerializeToFile(new FileContext<>(this), object);
+        return handler.attemptSerializeToFile(context, object);
     }
 
     public static boolean isSubtypeOfCollection(Type type) {
@@ -227,24 +227,29 @@ public class BaseFileRegistry implements FileRegistry {
         return o;
     }
 
-    public @NotNull FileElement serializeObject(@NotNull Object o){
+    public @NotNull FileElement serializeObject(@NotNull Object o, @NotNull FileContext<?> context){
         if(o instanceof FileElement d) return d;
         if(o instanceof String s) return new FilePrimitive(s);
         if(o instanceof Number s) return new FilePrimitive(s);
         if(o instanceof Boolean s) return new FilePrimitive(s);
-        if(o instanceof Collection<?> l) return serializeCollection(l);
+        if(o instanceof Collection<?> l) return serializeCollection(l, context);
         if(o.getClass().isArray()){
-            return serializeCollection(Arrays.stream(((Object[]) o)).toList());
+            return serializeCollection(Arrays.stream(((Object[]) o)).toList(), context);
         }
-        if(o instanceof Map<?,?> l) return serializeMap(l);
-        FileElement serialized = serialize(o);
+        if(o instanceof Map<?,?> l) return serializeMap(l, context);
+        FileElement serialized = serialize(o, context);
         if(serialized != null) return serialized;
         throw new UnsupportedOperationException(o.getClass().getSimpleName() + " not able to be serialized.");
     }
 
     @Override
     public @NotNull FileElement serializeToFile(@NotNull Object object) {
-        return serializeObject(object);
+        return serializeObject(object, new FileContext<>(this));
+    }
+
+    @Override
+    public @NotNull FileElement serializeToFile(@NotNull Object object, @NotNull FileContext<?> context) {
+        return serializeToFile(object, context);
     }
 
     @Override
@@ -280,18 +285,18 @@ public class BaseFileRegistry implements FileRegistry {
         return array;
     }
 
-    public @NotNull FileArray serializeCollection(@NotNull Collection<?> list){
+    public @NotNull FileArray serializeCollection(@NotNull Collection<?> list, @NotNull FileContext<?> context){
         FileArray array = new FileArray(list.size());
         for(Object o : list){
-            array.add(serializeObject(o));
+            array.add(serializeObject(o, context));
         }
         return array;
     }
 
-    public @NotNull FileObject serializeMap(@NotNull Map<?, ?> list){
+    public @NotNull FileObject serializeMap(@NotNull Map<?, ?> list, @NotNull FileContext<?> context){
         FileObject array = new FileObject();
         for(Map.Entry<?, ?> entry : list.entrySet()){
-            array.add(entry.getKey() + "", serializeObject(entry.getValue()));
+            array.add(entry.getKey() + "", serializeObject(entry.getValue(), context));
         }
         return array;
     }

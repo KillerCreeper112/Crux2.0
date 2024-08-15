@@ -1,0 +1,22 @@
+name: CruxCore
+version: '1.0'
+main: killercreepr.cruxcore.CruxCore
+api-version: '1.19'
+description: TEST CORE
+load: STARTUP
+dependencies:
+  server:
+    FastAsyncWorldEdit:
+      load: BEFORE
+      required: false # Defaults to true
+      join-classpath: true # Defaults to true
+    HeadDatabase:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    CrazyAdvancementsAPI:
+      load: BEFORE
+      required: false
+    ModelEngine:
+      load: BEFORE
+      required: false
