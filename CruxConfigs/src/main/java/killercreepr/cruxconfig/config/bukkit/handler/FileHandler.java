@@ -20,6 +20,11 @@ public interface FileHandler<T> extends YamlObjectHandler<T>, JsonContainerHandl
     default @NotNull FileElement serializeToFileFromYaml(@NotNull YamlContext context, @NotNull T object){
         return serializeToFile(context, object);
     }
+    default @Nullable FileElement attemptSerializeToFile(@NotNull FileContext<?> context, @NotNull Object object){
+        try{
+            return serializeToFile(context, (T) object);
+        }catch (ClassCastException ignored){ return null; }
+    }
     @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull T object);
     @Nullable
     T deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e);

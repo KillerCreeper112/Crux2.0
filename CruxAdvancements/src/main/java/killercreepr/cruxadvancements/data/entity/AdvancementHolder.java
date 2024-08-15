@@ -10,6 +10,7 @@ import killercreepr.cruxadvancements.data.AdvancementTracker;
 import killercreepr.cruxadvancements.data.TrackedAdvancement;
 import killercreepr.cruxconfig.config.bukkit.file.CruxJson;
 import killercreepr.cruxconfig.config.common.json.JsonRegistry;
+import killercreepr.cruxconfig.config.common.json.SimpleJsonRegistry;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;

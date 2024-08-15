@@ -2,7 +2,7 @@ package killercreepr.cruxconfig.config.common.json.registry;
 
 import killercreepr.crux.registry.MappedRegistry;
 import killercreepr.crux.registry.SimpleMappedRegistry;
-import killercreepr.cruxconfig.config.common.json.JsonRegistry;
+import killercreepr.cruxconfig.config.common.json.SimpleJsonRegistry;
 import killercreepr.cruxconfig.config.common.json.container.JsonContainerHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -10,14 +10,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 
 public class JsonContainerHandlerRegistry extends SimpleMappedRegistry<Class<?>, JsonContainerHandler<?>> {
-    protected final @NotNull JsonRegistry registry;
+    protected final @NotNull SimpleJsonRegistry registry;
 
-    public JsonContainerHandlerRegistry(@NotNull Map<Class<?>, JsonContainerHandler<?>> map, @NotNull JsonRegistry registry) {
+    public JsonContainerHandlerRegistry(@NotNull Map<Class<?>, JsonContainerHandler<?>> map, @NotNull SimpleJsonRegistry registry) {
         super(map);
         this.registry = registry;
     }
 
-    public JsonContainerHandlerRegistry(@NotNull JsonRegistry registry) {
+    public JsonContainerHandlerRegistry(@NotNull SimpleJsonRegistry registry) {
         this.registry = registry;
     }
 
@@ -46,7 +46,7 @@ public class JsonContainerHandlerRegistry extends SimpleMappedRegistry<Class<?>,
         return found==null ? null : get(found);
     }
 
-    public @NotNull JsonRegistry getRegistry() {
+    public @NotNull SimpleJsonRegistry getRegistry() {
         return registry;
     }
 

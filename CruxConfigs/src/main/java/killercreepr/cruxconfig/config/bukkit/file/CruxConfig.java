@@ -1,6 +1,5 @@
 package killercreepr.cruxconfig.config.bukkit.file;
 
-import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.file.ICruxConfig;
 import killercreepr.cruxconfig.config.common.file.IYamlCfg;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlArray;
@@ -220,7 +219,7 @@ public class CruxConfig extends CruxFolder implements IYamlCfg<MemoryConfigurati
     public <T> @Nullable T deserialize(@NotNull Type clazz, @NotNull ConfigurationSection section, @NotNull String path){
         YamlElement yaml = getAsYamlObject(section, path);
         if(yaml==null) return null;
-        return (T) yamlRegistry.deserializeObject(clazz, yaml);
+        return (T) yamlRegistry.deserialize(clazz, yaml);
     }
 
     public @Nullable Object deserializeObject(@NotNull Type type, @NotNull String path){
@@ -232,7 +231,7 @@ public class CruxConfig extends CruxFolder implements IYamlCfg<MemoryConfigurati
     public @Nullable Object deserializeObject(@NotNull Class<?> clazz, @NotNull ConfigurationSection section, @NotNull String path){
         YamlElement yaml = getAsYamlObject(section, path);
         if(yaml==null) return null;
-        return yamlRegistry.deserializeObject(clazz, yaml);
+        return yamlRegistry.deserialize(clazz, yaml);
     }
 
     public @Nullable YamlObject getRootAsYamlObject(){

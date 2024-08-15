@@ -17,6 +17,7 @@ import killercreepr.cruxconfig.config.bukkit.file.CruxJson;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.json.JsonContext;
 import killercreepr.cruxconfig.config.common.json.JsonRegistry;
+import killercreepr.cruxconfig.config.common.json.SimpleJsonRegistry;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
