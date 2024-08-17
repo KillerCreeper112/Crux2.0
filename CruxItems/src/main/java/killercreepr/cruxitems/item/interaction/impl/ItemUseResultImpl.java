@@ -9,18 +9,18 @@ public class ItemUseResultImpl implements ItemUseResult {
         return new Builder();
     }
 
-    protected final boolean cancel;
+    protected final Boolean cancel;
     protected final @Nullable Event.Result useItemInHand;
     protected final @Nullable Event.Result useInteractedBlock;
 
-    public ItemUseResultImpl(boolean cancel, @Nullable Event.Result useItemInHand, @Nullable Event.Result useInteractedBlock) {
+    public ItemUseResultImpl(@Nullable Boolean cancel, @Nullable Event.Result useItemInHand, @Nullable Event.Result useInteractedBlock) {
         this.cancel = cancel;
         this.useItemInHand = useItemInHand;
         this.useInteractedBlock = useInteractedBlock;
     }
 
     @Override
-    public boolean isCancelled() {
+    public @Nullable Boolean getCancelled() {
         return cancel;
     }
 
@@ -36,7 +36,7 @@ public class ItemUseResultImpl implements ItemUseResult {
 
 
     public static final class Builder {
-        private boolean cancel;
+        private Boolean cancel;
         private Event.Result useItemInHand;
         private Event.Result useInteractedBlock;
 

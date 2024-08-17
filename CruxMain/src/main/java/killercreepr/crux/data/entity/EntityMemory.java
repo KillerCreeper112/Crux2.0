@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public interface EntityMemory extends Holder<Entity> {
     MappedRegistry<Plugin, Set<Consumer<EntityMemory>>> ADD_FUNCTIONS = new SimpleMappedRegistry<>();
@@ -119,6 +120,15 @@ public interface EntityMemory extends Holder<Entity> {
         T value = getDataHolder(clazz);
         if(value == null) throw new IllegalStateException("EntityMem does not have DataHolder specified! " + clazz);
         return value;
+    }
+
+    default <T extends DataHolder> T getDataHolderOrCompute(@NotNull Class<T> clazz, @NotNull Function<EntityMemory, T> function){
+        T holder = getDataHolder(clazz);
+        if(holder==null){
+            holder = function.apply(this);
+            if(holder != null) getDataHolders().register(holder);
+        }
+        return holder;
     }
 
     @NotNull UUID getUUID();

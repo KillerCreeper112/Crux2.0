@@ -32,7 +32,19 @@ public abstract class PlayerTickedDataHolder extends PlayerDataHolder implements
     }
 
     @Override
-    public void removing(@Nullable Player e) {}
+    public void removing(@Nullable Player e) {
+        removingFromMemory(e);
+    }
+
+    @Override
+    protected void removingFromMemory(@Nullable Entity e) {
+        super.removingFromMemory(e);
+        if(!(e instanceof Player p)) return;
+        removingFromMemory(p);
+    }
+
+    protected void removingFromMemory(@Nullable Player e){}
+
 
     /**
      * Most ticked holders probably won't want to tick after

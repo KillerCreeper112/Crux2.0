@@ -36,7 +36,8 @@ public class ItemInteractionListener implements Listener {
             .build();
 
         ItemUseResult result = pluginItem.onUse(ctx);
-        if(result.isCancelled()) event.setCancelled(true);
+        Boolean cancel = result.getCancelled();
+        if(cancel != null) event.setCancelled(cancel);
         Event.Result r = result.getUseInteractedBlock();
         if(r != null) event.setUseInteractedBlock(r);
         r = result.getUseItemInHand();

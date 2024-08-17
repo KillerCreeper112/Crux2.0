@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public interface PlayerMemory extends EntityMemory {
     static @Nullable PlayerMemory get(@NotNull Player p){
@@ -30,6 +31,15 @@ public interface PlayerMemory extends EntityMemory {
     static @Nullable PlayerMemory get(@NotNull UUID uuid){
         if(EntityMemory.get(uuid) instanceof PlayerMemory d) return d;
         return null;
+    }
+
+    default <T extends DataHolder> T getPlayerDataHolderOrCompute(@NotNull Class<T> clazz, @NotNull Function<PlayerMemory, T> function){
+        T holder = getDataHolder(clazz);
+        if(holder==null){
+            holder = function.apply(this);
+            if(holder != null) getDataHolders().register(holder);
+        }
+        return holder;
     }
 
     @NotNull KeyedRegistry<PlayerDataHolder> getPlayerSpecificHolders();
