@@ -9,7 +9,6 @@ import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.file.DataFile;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,7 +45,6 @@ public class LootTableLoader {
             table = BukkitCfgHandlers.ITEM_LOOT_TABLE.deserializeFromFile(
                 new FileContext<>(cfg.fileRegistry()), root, Crux.key(path)
             );
-            Bukkit.broadcastMessage("ayo ayo ayo ayo  "+ table);
         }
         if(table == null) return;
         Crux.log(Level.INFO, "Registered loot table: " + table.key());
