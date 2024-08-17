@@ -10,7 +10,7 @@ import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.cruxitems.command.CruxItemsCommands;
 import killercreepr.cruxitems.config.Config;
-import killercreepr.cruxitems.config.CruxConfigHook;
+import killercreepr.cruxitems.config.CruxItemsConfigHook;
 import killercreepr.cruxitems.item.CruxedItem;
 import killercreepr.cruxitems.item.GeneralCruxedItemDisplayUpdater;
 import killercreepr.cruxitems.item.ItemDisplayFormatter;
@@ -57,7 +57,7 @@ public class CruxItemsModule implements CruxModule, ItemHandler {
     @Override
     public void onLoad(@NotNull CruxPlugin plugin) {
         if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS)){
-            CruxConfigHook.register();
+            CruxItemsConfigHook.register();
         }
     }
 
@@ -80,7 +80,7 @@ public class CruxItemsModule implements CruxModule, ItemHandler {
     public void reload(@NotNull CruxPlugin plugin) {
         if(values != null) values.reload(plugin);
         if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS)){
-            CruxConfigHook.loadCfgPluginItems(plugin, "items");
+            CruxItemsConfigHook.loadCfgPluginItems(plugin, "items");
         }
     }
 

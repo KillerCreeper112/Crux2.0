@@ -18,19 +18,22 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 
-public class CruxConfigHook {
+public class CruxItemsConfigHook {
+    private static final FilePluginItem FILE_PLUGIN_ITEM = new FilePluginItem();
+    public static FilePluginItem filePluginItem(){
+        return FILE_PLUGIN_ITEM;
+    }
     public static void register(){
         registerHandlers();
     }
 
     public static void registerHandlers(){
-        CfgRegistries.FILE.forEach(CruxConfigHook::registerHandlers);
+        CfgRegistries.FILE.forEach(CruxItemsConfigHook::registerHandlers);
     }
 
     public static void registerHandlers(@NotNull FileRegistry registry){
-        registry.registerFileHandler(PluginItem.class, new FilePluginItem());
+        registry.registerFileHandler(PluginItem.class, FILE_PLUGIN_ITEM);
     }
-
     public static void loadCfgPluginItems(@NotNull Plugin plugin, @NotNull String path){
         CruxFolder folder = new CruxFolder(plugin, path);
         File[] files = folder.file().listFiles();
@@ -44,7 +47,7 @@ public class CruxConfigHook {
         if(cfg.getAsYamlObject("") instanceof YamlObject o){
             YamlContext ctx = new YamlContext(cfg.yamlRegistry());
             o.forEach((key, value) ->{
-                PluginItem item = FilePluginItem.deserialize(
+                PluginItem item = FILE_PLUGIN_ITEM.deserialize(
                     ctx, FileElement.fromYaml(value), Crux.key(key)
                 );
                 if(item == null) return;
