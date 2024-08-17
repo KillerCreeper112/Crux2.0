@@ -17,6 +17,7 @@ import killercreepr.cruxitems.item.ItemDisplayFormatter;
 import killercreepr.cruxitems.item.PluginItemHolder;
 import killercreepr.cruxitems.item.plugin.PluginItem;
 import killercreepr.cruxitems.listener.DisableRecipesListener;
+import killercreepr.cruxitems.listener.ItemInteractionListener;
 import killercreepr.cruxitems.registries.CruxItemRegistries;
 import killercreepr.cruxitems.values.DefaultValues;
 import killercreepr.cruxitems.values.ValuesProvider;
@@ -70,7 +71,8 @@ public class CruxItemsModule implements CruxModule, ItemHandler {
         Crux.handlers().setItem(this);
 
         plugin.registerListeners(
-            new DisableRecipesListener()
+            new DisableRecipesListener(),
+            new ItemInteractionListener()
         );
 
         CruxItemsCommands.register(plugin);

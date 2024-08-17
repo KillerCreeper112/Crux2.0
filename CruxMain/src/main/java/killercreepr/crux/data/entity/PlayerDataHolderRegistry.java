@@ -4,6 +4,7 @@ import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -39,12 +40,10 @@ public class PlayerDataHolderRegistry extends DataHolderRegistry {
     }
 
     public void removePlayerTickedIf(@NotNull Predicate<PlayerTickDataHolder> predicate){
-        playerTickedHolders.values().removeIf(holder ->{
+        new HashSet<>(playerTickedHolders.values()).forEach(holder ->{
             if(predicate.test(holder)){
                 unregister(holder);
-                return true;
             }
-            return false;
         });
     }
 }
