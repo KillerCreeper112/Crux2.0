@@ -46,12 +46,26 @@ public interface EntityMemory extends Holder<Entity> {
 
     static @NotNull EntityMemory getOrCreate(@NotNull Entity p){
         if(p instanceof Player player) return PlayerMemory.getOrCreate(player);
+        return getOrCreate(p, null);
+    }
+
+    /**
+     * @param newConsumer The consumer to use if the memory object needs to be created.
+     *                    The memory gets accepted before it is registered.
+     */
+    static @NotNull EntityMemory getOrCreate(@NotNull Entity p, @Nullable Consumer<EntityMemory> newConsumer){
+        if(p instanceof Player player){
+            return PlayerMemory.getOrCreate(player, newConsumer == null ? null : newConsumer::accept);
+        }
         EntityMemory d = get(p.getUniqueId());
         if(d == null){
-            d = register(new SimpleEntityMemory(p));
+            SimpleEntityMemory mem = new SimpleEntityMemory(p);
+            if(newConsumer != null) newConsumer.accept(mem);
+            d = register(mem);
         }
         return d;
     }
+
     static <T extends EntityMemory> T register(@NotNull T tick){
         for(Map.Entry<Plugin, Set<Consumer<EntityMemory>>> entry : ADD_FUNCTIONS.entrySet()){
             for(Consumer<EntityMemory> d : entry.getValue()){

@@ -1,92 +1,43 @@
 package killercreepr.crux.data.entity;
 
-import killercreepr.crux.data.Holder;
 import killercreepr.crux.registry.KeyedRegistry;
-import killercreepr.crux.registry.SimpleKeyedRegistry;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
+import java.util.function.Consumer;
 
-public class PlayerMemory extends SimpleEntityMemory {
-    protected Long quit = null;
-    protected final KeyedRegistry<PlayerDataHolder> playerSpecificHolders = new SimpleKeyedRegistry<>();
-
-    public @NotNull KeyedRegistry<PlayerDataHolder> getPlayerSpecificHolders() {
-        return playerSpecificHolders;
-    }
-
-    protected final Holder<Player> entity;
-    protected final PlayerDataHolderRegistry playerDataHolders;
-    public PlayerMemory(@NotNull Player e) {
-        this(e.getUniqueId(), Holder.weakReference(e));
-    }
-
-    public PlayerMemory(@NotNull UUID uuid, @NotNull Holder<Player> player){
-        super(new PlayerDataHolderRegistry(), uuid, player);
-        this.entity = player;
-        this.playerDataHolders = (PlayerDataHolderRegistry) this.dataHolders;
-    }
-    public static @Nullable PlayerMemory get(@NotNull Player p){
+public interface PlayerMemory extends EntityMemory {
+    static @Nullable PlayerMemory get(@NotNull Player p){
         return get(p.getUniqueId());
     }
 
-    public static @NotNull PlayerMemory getOrCreate(@NotNull Player p){
+    static @NotNull PlayerMemory getOrCreate(@NotNull Player p){
+        return getOrCreate(p, null);
+    }
+
+    static @NotNull PlayerMemory getOrCreate(@NotNull Player p, @Nullable Consumer<PlayerMemory> newConsumer){
         PlayerMemory d = get(p);
         if(d == null){
-            d = EntityMemory.register(new PlayerMemory(p));
+            SimplePlayerMemory mem = new SimplePlayerMemory(p);
+            if(newConsumer != null) newConsumer.accept(mem);
+            d = EntityMemory.register(new SimplePlayerMemory(p));
         }
         return d;
     }
 
-    public static @Nullable PlayerMemory get(@NotNull UUID uuid){
+    static @Nullable PlayerMemory get(@NotNull UUID uuid){
         if(EntityMemory.get(uuid) instanceof PlayerMemory d) return d;
         return null;
     }
 
-    @Override
-    public @Nullable Player value(){
-        return entity.value();
-    }
-
-    public Long quit(){ return quit; }
-
-    public void quit(Long time){
-        quit = time;
-    }
+    @NotNull KeyedRegistry<PlayerDataHolder> getPlayerSpecificHolders();
 
     @Override
-    public boolean shouldRemoveFromMemory(@Nullable Entity e) {
-        return quit != null && System.currentTimeMillis() > quit;
-    }
+    @Nullable Player value();
 
-    @Override
-    public boolean tick() {
-        Player e = value();
-        playerDataHolders.removeTickedIf(holder ->{
-            if(holder.shouldRemoveFromMemory(e)){
-                holder.removing(e);
-                return true;
-            }
-            if(e != null) holder.tick(e);
-            return false;
-        });
+    @Nullable Long quit();
 
-        playerDataHolders.removePlayerTickedIf(holder ->{
-            if(holder.shouldRemoveFromMemory(e)){
-                holder.removing(e);
-                return true;
-            }
-            if(e != null) holder.tick(e);
-            return false;
-        });
-
-        if(shouldRemoveFromMemory(e)){
-            removeDataHolders(e);
-            return true;
-        }
-        return false;
-    }
+    void quit(@Nullable Long time);
 }

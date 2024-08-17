@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -23,6 +24,11 @@ public class CruxEntity {
     };
     public static @NotNull EquipmentSlot[] getGeneralEntitySlots(){
         return GENERAL_SLOTS;
+    }
+
+    public static @NotNull Location getEyeOrLocation(@NotNull Entity e){
+        if(e instanceof LivingEntity d) return d.getEyeLocation();
+        return e.getLocation();
     }
 
     public static void giveOrDrop(@NotNull HumanEntity p, @NotNull ItemStack... items){
