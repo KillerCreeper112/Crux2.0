@@ -5,6 +5,7 @@ import killercreepr.cruxitems.item.interaction.ItemUseContext;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.inventory.EquipmentSlot;
@@ -23,8 +24,9 @@ public class ItemUseContextImpl implements ItemUseContext {
     protected final @Nullable Block blockClicked;
     protected final @Nullable BlockFace blockFace;
     protected final @Nullable Location interactionPoint;
+    protected final @Nullable Entity entityClicked;
 
-    public ItemUseContextImpl(@NotNull Player player, @NotNull CruxItem item, @NotNull Action action, @NotNull EquipmentSlot hand, @Nullable Block blockClicked, @Nullable BlockFace blockFace, @Nullable Location interactionPoint) {
+    public ItemUseContextImpl(@NotNull Player player, @NotNull CruxItem item, @NotNull Action action, @NotNull EquipmentSlot hand, @Nullable Block blockClicked, @Nullable BlockFace blockFace, @Nullable Location interactionPoint, @Nullable Entity entityClicked) {
         this.player = player;
         this.item = item;
         this.action = action;
@@ -32,6 +34,7 @@ public class ItemUseContextImpl implements ItemUseContext {
         this.blockClicked = blockClicked;
         this.blockFace = blockFace;
         this.interactionPoint = interactionPoint;
+        this.entityClicked = entityClicked;
     }
 
     @Override
@@ -69,6 +72,11 @@ public class ItemUseContextImpl implements ItemUseContext {
         return interactionPoint;
     }
 
+    @Override
+    public @Nullable Entity getEntityClicked() {
+        return entityClicked;
+    }
+
 
     public static final class Builder {
         private @NotNull Player player;
@@ -78,6 +86,7 @@ public class ItemUseContextImpl implements ItemUseContext {
         private @Nullable Block blockClicked;
         private @Nullable BlockFace blockFace;
         private @Nullable Location interactionPoint;
+        private @Nullable Entity entityClicked;
 
         public Builder player(Player player) {
             this.player = player;
@@ -114,8 +123,17 @@ public class ItemUseContextImpl implements ItemUseContext {
             return this;
         }
 
+        public @Nullable Entity entityClicked() {
+            return entityClicked;
+        }
+
+        public Builder entityClicked(@Nullable Entity entityClicked) {
+            this.entityClicked = entityClicked;
+            return this;
+        }
+
         public ItemUseContextImpl build() {
-            return new ItemUseContextImpl(player, item, action, hand, blockClicked, blockFace, interactionPoint);
+            return new ItemUseContextImpl(player, item, action, hand, blockClicked, blockFace, interactionPoint, entityClicked);
         }
     }
 }
