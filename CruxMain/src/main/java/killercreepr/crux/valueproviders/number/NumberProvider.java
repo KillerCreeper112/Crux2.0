@@ -8,6 +8,25 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Random;
 
 public interface NumberProvider extends NumberHolder {
+    static @NotNull NumberProvider constant(@NotNull Number number){
+        return new ConstantNumber(number);
+    }
+    static @NotNull NumberProvider uniform(@NotNull Number min, @NotNull Number max){
+        return new UniformNumber(min, max);
+    }
+    static @NotNull NumberProvider uniform(@NotNull NumberProvider min, @NotNull NumberProvider max){
+        return new UniformNumber(min, max);
+    }
+    static @NotNull NumberProvider equation(@NotNull String equation){
+        return new EquationNumber(equation);
+    }
+    static @NotNull UniformNumberArray uniformArray(@NotNull NumberProvider... array){
+        return new UniformNumberArray(array);
+    }
+    static @NotNull UniformNumberArray uniformArray(@NotNull Number... array){
+        return new UniformNumberArray(array);
+    }
+
     @NotNull Number getMinValue();
     @NotNull Number getMaxValue();
     @Override
