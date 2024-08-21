@@ -83,6 +83,7 @@ public class CruxMobGoal extends CruxGoalBase implements Goal<Mob>, ICruxMobGoal
         if(event.getEntity().equals(mob) && !hasBeenRemovedOrDied){
             hasBeenRemovedOrDied = true;
             onRemovalOrDeath(true);
+            Bukkit.getMobGoals().removeGoal(mob, key);
         }
     }
 
@@ -98,6 +99,7 @@ public class CruxMobGoal extends CruxGoalBase implements Goal<Mob>, ICruxMobGoal
             HandlerList.unregisterAll(this);
             if(!hasBeenRemovedOrDied) onRemovalOrDeath(false);
             hasBeenRemovedOrDied = true;
+            Bukkit.getMobGoals().removeGoal(mob, key);
         }
     }
 

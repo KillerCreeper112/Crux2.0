@@ -7,6 +7,7 @@ import killercreepr.crux.module.StandardModules;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.cruxitems.registries.CruxItemRegistries;
+import killercreepr.cruxpotions.command.CruxPotionCommands;
 import killercreepr.cruxpotions.config.Config;
 import killercreepr.cruxpotions.data.PotionHolder;
 import killercreepr.cruxpotions.item.PotionItemUpdater;
@@ -40,14 +41,21 @@ public class CruxPotionsModule implements CruxModule {
     public void values(@NotNull ValuesProvider values) {
         this.values = values;
     }
+
+    @Override
+    public void onLoad(@NotNull CruxPlugin plugin) {
+        CruxPotionCommands.register(plugin);
+    }
+
     @Override
     public void onEnable(@NotNull CruxPlugin plugin) {
-        boolean cruxConfigs = CruxRegistries.MODULES.containsKey("CruxConfigs");
+        boolean cruxConfigs = CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS);
         if(cruxConfigs){
-            values(new Config(plugin, "module/enchant"));
+            values(new Config(plugin, "module/potion"));
         }else values(new DefaultValues());
 
         EntityMemory.registerFunction(plugin, e -> e.getDataHolders().register(new PotionHolder(e)));
+        //todo use custom serialization now
         ConfigurationSerialization.registerClass(BlockInflictor.class);
         ConfigurationSerialization.registerClass(EntityInflictor.class);
         ConfigurationSerialization.registerClass(ActivePotionImpl.class);
@@ -63,7 +71,7 @@ public class CruxPotionsModule implements CruxModule {
         //CruxPotionCommands.register(plugin);
         Crux.TAGS.register(new PotionsLoreTag(values.potionsFormat()));
 
-        if(CruxRegistries.MODULES.containsKey("CruxItems")){
+        if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_ITEMS)){
             CruxItemRegistries.ITEM_UPDATERS.register(3, new PotionItemUpdater());
         }
     }

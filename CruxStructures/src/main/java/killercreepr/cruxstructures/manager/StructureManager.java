@@ -181,7 +181,7 @@ public class StructureManager implements Listener {
             CfgFAWEStructure structure = cfg.deserialize(CfgFAWEStructure.class, "");
             if(structure==null) continue;
             StructureRegistries.STRUCTURES.register(structure);
-            Crux.log(Level.INFO, "Structure " + structure.key() + ", registered.");
+            Crux.log(Level.INFO, "Registered structure: " + structure.key());
         }
     }
 
@@ -289,7 +289,7 @@ public class StructureManager implements Listener {
     }
 
     public void saveWorld(@NotNull World world){
-        Crux.log(Level.INFO, "World " + world.getName() + " has been saving now.");
+        Crux.log(Level.INFO, "Saving structures in world: " + world.getName());
         UUID worldUUID = world.getUID();
         WorldChunkStorage<StoredStructure> removed = stored.remove(worldUUID);
 
@@ -302,15 +302,13 @@ public class StructureManager implements Listener {
         if(removed==null) return;
         removed.getData().forEach((key, value) ->{
             StorageChunkFile file = createChunkFile(worldUUID, key);
+            file.reloadIfNeeded();
             file.structures(value.getData().values());
-            Crux.log(Level.INFO, "WORLD CHUNK! ");
             if(file.json().isEmpty()){
                 file.close();
                 file.file().delete();
-                Crux.log(Level.INFO, "DELETED");
             }else{
                 file.save(true);//todo don't need pretty
-                Crux.log(Level.INFO, "SAVED BOI");
             }
         });
 
