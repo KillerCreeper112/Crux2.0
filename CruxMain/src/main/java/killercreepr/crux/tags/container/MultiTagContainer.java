@@ -1,6 +1,5 @@
 package killercreepr.crux.tags.container;
 
-import killercreepr.crux.Crux;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.Holder;
 import killercreepr.crux.tags.TagParser;
@@ -13,13 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class MultiTagContainer implements MergedTagContainer {
-    public static @NotNull MultiTagContainer standard(){
-        return new MultiTagContainer(Crux.TAGS);
-    }
-    public static @NotNull MultiTagContainer standard(@Nullable TagResolver<?>... resolvers){
-        return standard().addAll(resolvers);
-    }
-
     protected final @NotNull TagParser tags;
     protected final @NotNull StringTagContainer strings;
     protected final @NotNull StringListTagContainer stringLists;

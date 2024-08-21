@@ -13,6 +13,7 @@ import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import killercreepr.crux.command.argument.CruxCmdArguments;
 import killercreepr.crux.data.communication.MsgContainer;
 import killercreepr.crux.plugin.CruxPlugin;
+import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.crux.tags.container.MultiTagContainer;
 import killercreepr.crux.tags.resolver.Tag;
 import killercreepr.crux.util.CruxItem;
@@ -213,7 +214,7 @@ public class CruxAttributeCommands {
 
                 String format = "<gold><key> <dark_gray>-> <red>{amount=<amount>, slot=<slot>, operation=<operation>}";
                 new MsgContainer(format).use(sender,
-                    MultiTagContainer.standard(
+                    MergedTagContainer.standard(
                         Tag.parsed("key", m.key().asString()),
                         Tag.parsed("amount", m.getAmount()+""),
                         Tag.parsed("operation", m.getOperation().name().toLowerCase()),

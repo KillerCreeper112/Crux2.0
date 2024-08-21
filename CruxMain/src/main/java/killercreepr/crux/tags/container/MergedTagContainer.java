@@ -13,6 +13,21 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface MergedTagContainer extends StringTagProvider, StringListTagProvider {
+    static @NotNull MergedTagContainer standard(){
+        return createNew(Crux.TAGS);
+    }
+    static @NotNull MergedTagContainer standard(@Nullable TagResolver<?>... resolvers){
+        return standard().addAll(resolvers);
+    }
+
+    static @NotNull MergedTagContainer createNew(@NotNull TagParser tags){
+        return new MultiTagContainer(tags);
+    }
+
+    static @NotNull MergedTagContainer createNew(@NotNull TagParser tags, @Nullable TagResolver<?> resolvers){
+        return createNew(tags).addAll(resolvers);
+    }
+
     static @Nullable MergedTagContainer merge(@Nullable MergedTagContainer container, @Nullable TagContainer<?> tags){
         if(container == null && tags == null) return null;
         return new MultiTagContainer(container==null? Crux.TAGS:container.getStringTags().getTagParser())
