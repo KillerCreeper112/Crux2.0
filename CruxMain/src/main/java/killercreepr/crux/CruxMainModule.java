@@ -7,8 +7,6 @@ import killercreepr.crux.module.StandardModules;
 import killercreepr.crux.plugin.CruxPlugin;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.logging.Level;
-
 public class CruxMainModule implements CruxModule {
     public static final String NAMESPACE = StandardModules.CRUX_MAIN;
     @Override
@@ -25,8 +23,7 @@ public class CruxMainModule implements CruxModule {
 
     @Override
     public void onEnable(@NotNull CruxPlugin plugin) {
-        Crux.log(Level.WARNING, "enable crux main");
         plugin.getServer().getPluginManager().registerEvents(new PlayerDataListener(), plugin);
-        Crux.buildTickRunnable().runTaskTimer(plugin, 20L, 1L);
+        Crux.buildTickRunnable().runTaskTimerAsynchronously(plugin, 20L, 1L);
     }
 }

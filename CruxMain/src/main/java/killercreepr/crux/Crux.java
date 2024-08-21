@@ -76,6 +76,7 @@ public final class Crux {
     }
 
     public static @NotNull BukkitRunnable buildTickRunnable(@NotNull KeyedRegistry<CruxTick> registry, boolean includeEntityMemory){
+        Crux.log(Level.WARNING, "BUILDING A TICK RUNNABLE");
         if(!includeEntityMemory){
             return new BukkitRunnable(){
                 @Override
