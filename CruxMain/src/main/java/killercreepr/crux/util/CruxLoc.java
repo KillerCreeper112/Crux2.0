@@ -6,6 +6,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -111,12 +112,13 @@ public class CruxLoc {
     private static boolean isSignificant(double value) {
         return Math.abs(value) >= EPSILON;
     }
-
+    @Contract(pure = true)
     public static @NotNull Location relative(@NotNull Location l, double forward, double up, double right) {
+        Location newLocation = l.clone();
         Vector direction = null;
         if (isSignificant(forward)) {
             direction = l.getDirection();
-            l.add(direction.clone().multiply(forward));
+            newLocation.add(direction.clone().multiply(forward));
         }
         boolean hasUp = isSignificant(up);
         if (hasUp && direction == null) direction = l.getDirection();
@@ -137,51 +139,53 @@ public class CruxLoc {
                 double x = -Math.sin(yawRad);
                 rightDirection = new Vector(x, 0d, z);
             }
-            l.add(rightDirection.clone().multiply(right));
+            newLocation.add(rightDirection.clone().multiply(right));
             if (hasUp) {
                 Vector upDirection = rightDirection.crossProduct(direction);
-                l.add(upDirection.clone().multiply(up));
+                newLocation.add(upDirection.clone().multiply(up));
             }
         }
         return l;
     }
 
+    @Contract(pure = true)
     public static @NotNull Location shift(@NotNull Location loc, @NotNull Vector dir, double forward, double up, double right){
+        Location newLocation = loc.clone();
         Location locDirection = loc.clone().setDirection(dir);
         //+ FORWARD - BACKWARD
-        if(forward != 0D) loc.add(locDirection.getDirection().multiply(forward));
+        if(forward != 0D) newLocation.add(locDirection.getDirection().multiply(forward));
         //- LEFT + RIGHT
         if(right != 0D){
             locDirection.setYaw(90 - loc.getYaw());
             locDirection.setPitch(0);
-            loc.add(locDirection.getDirection().multiply(right));
+            newLocation.add(locDirection.getDirection().multiply(right));
         }
         //+ UP - DOWN
         if(up != 0D){
             locDirection.setYaw(loc.getYaw());
             locDirection.setPitch(loc.getPitch() - 90);
-            loc.add(locDirection.getDirection().multiply(up));
+            newLocation.add(locDirection.getDirection().multiply(up));
         }
-        return loc;
+        return newLocation;
     }
-
+    @Contract(pure = true)
     public static @NotNull Location shift(@NotNull Location loc, double forward, double up, double right){
         return shift(loc, loc.getDirection(), forward, up, right);
     }
-
+    @Contract(pure = true)
     public static @NotNull Location shiftToward(@NotNull Location loc, @NotNull Location loc1, double amount){
         return shiftToward(loc, loc1, amount, false);
     }
-
+    @Contract(pure = true)
     public static @NotNull Location shiftToward(@NotNull Location loc, @NotNull Location loc1, double amount, boolean keepOldRotation){
         return shiftToward(loc, loc1, amount, 0D, 0D, keepOldRotation);
     }
-
+    @Contract(pure = true)
     public static @NotNull Location shiftToward(@NotNull Location loc, @NotNull Location loc1,
                                                 double forward, double up, double right){
         return shiftToward(loc, loc1, forward, right, up, false);
     }
-
+    @Contract(pure = true)
     public static @NotNull Location shiftToward(@NotNull Location loc, @NotNull Location toward,
                                                 double forward, double up, double right,
                                                 boolean keepOldRotation){

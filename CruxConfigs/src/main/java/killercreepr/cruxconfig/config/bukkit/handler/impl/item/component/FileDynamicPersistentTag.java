@@ -24,10 +24,10 @@ public class FileDynamicPersistentTag implements FileObjectHandler<DynamicPersis
     public @Nullable DynamicPersistentTag deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;
         FileElement key = o.get("key");
-        return deserialize(ctx, e, key == null ? null : key.getAsString());
+        return deserialize(o, key == null ? null : key.getAsString());
     }
 
-    public static @Nullable DynamicPersistentTag deserialize(@NotNull FileContext<?> ctx, @NotNull FileElement e, @Nullable Object key) {
+    public static @Nullable DynamicPersistentTag deserialize(@NotNull FileElement e, @Nullable Object key) {
         if(!(e instanceof FileObject o)) return null;
         String type = o.getObject(String.class, "type");
         if(type==null) return null;

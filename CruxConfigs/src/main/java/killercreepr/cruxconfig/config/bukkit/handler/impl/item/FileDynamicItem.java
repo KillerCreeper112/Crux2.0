@@ -287,9 +287,7 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
                 if(!(e instanceof FileObject o)) return null;
                 Map<Object, DynamicPersistentTag> tags = new HashMap<>();
                 o.forEach((key, value) ->{
-                    DynamicPersistentTag tag = FileDynamicPersistentTag.deserialize(
-                        context, value, key
-                    );
+                    DynamicPersistentTag tag = FileDynamicPersistentTag.deserialize(value, key);
                     if(tag==null) return;
                     tags.put(key, tag);
                 });

@@ -107,7 +107,7 @@ public class DynamicPersistentTag {
         return value;
     }
 
-    public @NotNull Object getKey() {
+    public @Nullable Object getKey() {
         return key;
     }
 }
