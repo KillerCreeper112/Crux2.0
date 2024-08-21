@@ -1,6 +1,7 @@
 package killercreepr.crux.data.communication;
 
 import killercreepr.crux.data.StringIdentifiable;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,6 +15,12 @@ public class TranslateMsg implements StringIdentifiable {
 
     public TranslateMsg(@NotNull String id, @Nullable Communicator defaultValue) {
         this.id = id;
+        this.defaultValue = defaultValue;
+    }
+
+    @ApiStatus.Experimental
+    public TranslateMsg(@Nullable Communicator defaultValue) {
+        this.id = null;
         this.defaultValue = defaultValue;
     }
 

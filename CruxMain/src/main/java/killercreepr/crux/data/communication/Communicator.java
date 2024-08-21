@@ -2,7 +2,9 @@ package killercreepr.crux.data.communication;
 
 import killercreepr.crux.tags.container.MergedTagContainer;
 import net.kyori.adventure.audience.Audience;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,4 +26,7 @@ public interface Communicator {
     Communicator use(@NotNull Audience a, @Nullable OfflinePlayer placeholders, @Nullable MergedTagContainer tags);
 
     Communicator broadcast(@Nullable MergedTagContainer tags);
+
+    Communicator playAt(@NotNull Location at);
+    Communicator playAt(@NotNull Entity at);
 }

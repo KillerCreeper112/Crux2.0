@@ -5,7 +5,9 @@ import killercreepr.crux.tags.container.MergedTagContainer;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -84,6 +86,18 @@ public class MsgContainer implements Communicator {
         for(Player p : Bukkit.getOnlinePlayers()){
             use(p, null, false, tags);
         }
+        return this;
+    }
+
+    @Override
+    public Communicator playAt(@NotNull Location at) {
+        if(sound != null) sound.playAt(at);
+        return this;
+    }
+
+    @Override
+    public Communicator playAt(@NotNull Entity at) {
+        if(sound != null) sound.playAt(at);
         return this;
     }
 

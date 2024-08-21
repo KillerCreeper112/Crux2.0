@@ -2,7 +2,9 @@ package killercreepr.crux.data.communication;
 
 import killercreepr.crux.tags.container.MergedTagContainer;
 import net.kyori.adventure.audience.Audience;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,6 +23,18 @@ public class SimpleCreateLang implements CreateLang {
     public Communicator broadcast(@NotNull String id, @Nullable MergedTagContainer tags) {
         Communicator communicator = get(id);
         return communicator == null ? null : communicator.broadcast(tags);
+    }
+
+    @Override
+    public Communicator playAt(@NotNull String id, @NotNull Location at) {
+        Communicator communicator = get(id);
+        return communicator == null ? null : communicator.playAt(at);
+    }
+
+    @Override
+    public Communicator playAt(@NotNull String id, @NotNull Entity at) {
+        Communicator communicator = get(id);
+        return communicator == null ? null : communicator.playAt(at);
     }
 
     @Override

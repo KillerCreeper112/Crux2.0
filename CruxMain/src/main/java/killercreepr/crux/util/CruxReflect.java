@@ -123,6 +123,18 @@ public class CruxReflect {
         return fields.toArray(Field[]::new);
     }
 
+    public static @Nullable Field getDeclaredField(@NotNull Class<?> type, @NotNull String id){
+        Class<?> superClass = type.getSuperclass();
+        while (superClass != null) {
+            try{
+                return superClass.getDeclaredField(id);
+            }catch (NoSuchFieldException ignored){}
+
+            superClass = superClass.getSuperclass();
+        }
+        return null;
+    }
+
     private static void addDeclaredFields(@NotNull Class<?> type, @NotNull Collection<Field> fields, @Nullable Predicate<Field> filter) {
         for (Field field : type.getDeclaredFields()) {
             if (filter == null || filter.test(field)) {

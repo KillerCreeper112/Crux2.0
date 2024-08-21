@@ -4,7 +4,9 @@ import killercreepr.crux.data.communication.Communicator;
 import killercreepr.crux.data.communication.MsgContainer;
 import killercreepr.crux.tags.container.MergedTagContainer;
 import net.kyori.adventure.audience.Audience;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,5 +44,19 @@ public class MsgValue extends CommonValue<MsgContainer> implements Communicator 
         MsgContainer msg = value();
         if(msg == null) return null;
         return msg.broadcast(tags);
+    }
+
+    @Override
+    public Communicator playAt(@NotNull Location at) {
+        MsgContainer msg = value();
+        if(msg == null) return null;
+        return msg.playAt(at);
+    }
+
+    @Override
+    public Communicator playAt(@NotNull Entity at) {
+        MsgContainer msg = value();
+        if(msg == null) return null;
+        return msg.playAt(at);
     }
 }

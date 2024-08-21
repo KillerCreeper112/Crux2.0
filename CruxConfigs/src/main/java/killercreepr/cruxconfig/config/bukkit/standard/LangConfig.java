@@ -3,6 +3,7 @@ package killercreepr.cruxconfig.config.bukkit.standard;
 import killercreepr.crux.data.communication.Communicator;
 import killercreepr.crux.data.communication.CreateLang;
 import killercreepr.crux.data.communication.TranslateMsg;
+import killercreepr.crux.data.communication.handler.LangProcessor;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
 import org.bukkit.configuration.ConfigurationSection;
@@ -56,6 +57,7 @@ public class LangConfig extends CruxConfig {
                 if(!field.canAccess(null)) continue;
 
                 if(!(field.get(null) instanceof TranslateMsg msg)) continue;
+                LangProcessor.process(field);
                 set(msg.id(), msg.defaultValue());
             }
         }catch (IllegalArgumentException | IllegalAccessException ignored){}
