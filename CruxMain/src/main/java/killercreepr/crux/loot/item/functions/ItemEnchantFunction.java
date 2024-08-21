@@ -10,7 +10,6 @@ import killercreepr.crux.loot.functions.SimpleLootFunction;
 import killercreepr.crux.loot.item.api.ItemLootFunction;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import net.kyori.adventure.key.Key;
-import org.bukkit.Registry;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

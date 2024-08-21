@@ -1,6 +1,5 @@
 package killercreepr.crux.loot.item.pool;
 
-import killercreepr.crux.Crux;
 import killercreepr.crux.data.Holder;
 import killercreepr.crux.loot.SimpleLootObject;
 import killercreepr.crux.loot.api.conditions.LootCondition;

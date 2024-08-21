@@ -6,7 +6,6 @@ import killercreepr.crux.loot.api.LootPoolObject;
 import killercreepr.crux.loot.api.conditions.LootCondition;
 import killercreepr.crux.loot.api.functions.LootFunction;
 import killercreepr.crux.valueproviders.number.NumberProvider;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
