@@ -3,6 +3,7 @@ package killercreepr.cruxconfig.config.bukkit.standard;
 import killercreepr.crux.data.Holder;
 import killercreepr.crux.data.communication.CreateLang;
 import killercreepr.crux.data.communication.LangProvider;
+import killercreepr.crux.data.communication.handler.LangProcessor;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
@@ -19,36 +20,46 @@ public class SimpleLangConfig extends LangConfig implements LangProvider {
         super(plugin, path);
         this.lang = lang;
         this.langClass = langClass;
+        process();
     }
 
     public SimpleLangConfig(@NotNull File file, Holder<CreateLang> lang, Class<?> langClass) {
         super(file);
         this.lang = lang;
         this.langClass = langClass;
+        process();
     }
 
     public SimpleLangConfig(@NotNull CruxConfig cfg, Holder<CreateLang> lang, Class<?> langClass) {
         super(cfg);
         this.lang = lang;
         this.langClass = langClass;
+        process();
     }
 
     public SimpleLangConfig(@NotNull Plugin plugin, @NotNull String path, @NotNull YamlRegistry registry, Holder<CreateLang> lang, Class<?> langClass) {
         super(plugin, path, registry);
         this.lang = lang;
         this.langClass = langClass;
+        process();
     }
 
     public SimpleLangConfig(@NotNull File file, @NotNull YamlRegistry registry, Holder<CreateLang> lang, Class<?> langClass) {
         super(file, registry);
         this.lang = lang;
         this.langClass = langClass;
+        process();
     }
 
     public SimpleLangConfig(@NotNull CruxConfig cfg, @NotNull YamlRegistry registry, Holder<CreateLang> lang, Class<?> langClass) {
         super(cfg, registry);
         this.lang = lang;
         this.langClass = langClass;
+        process();
+    }
+
+    public void process(){
+        LangProcessor.process(langClass);
     }
 
     @Override

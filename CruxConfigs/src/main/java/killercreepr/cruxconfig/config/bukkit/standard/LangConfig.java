@@ -57,7 +57,6 @@ public class LangConfig extends CruxConfig {
                 if(!field.canAccess(null)) continue;
 
                 if(!(field.get(null) instanceof TranslateMsg msg)) continue;
-                LangProcessor.process(field);
                 set(msg.id(), msg.defaultValue());
             }
         }catch (IllegalArgumentException | IllegalAccessException ignored){}
