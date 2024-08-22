@@ -144,15 +144,29 @@ public class CruxMath {
         return value;
     }
 
-    public static float random(float min, float max){
-        return ThreadLocalRandom.current().nextInt((int) (min * 10000), (int) (max * 10000) + 1) * .0001f;
+    public static float random(float min, float max) {
+        return RANDOM.nextInt((int) ((max - min) * 10000) + 1) * 0.0001f + min;
     }
 
-    public static float random(double min, double max){
-        return ThreadLocalRandom.current().nextInt((int) (min * 10000), (int) (max * 10000) + 1) * .0001f;
+    public static float random(double min, double max) {
+        return RANDOM.nextInt((int) ((max - min) * 10000) + 1) * 0.0001f + (float) min;
     }
 
-    public static int random(int min, int max){ return ThreadLocalRandom.current().nextInt(min, max + 1); }
+    public static int random(int min, int max) {
+        return RANDOM.nextInt((max - min) + 1) + min;
+    }
+
+    public static float random(float min, float max, @NotNull Random random) {
+        return random.nextInt((int) ((max - min) * 10000) + 1) * 0.0001f + min;
+    }
+
+    public static float random(double min, double max, @NotNull Random random) {
+        return random.nextInt((int) ((max - min) * 10000) + 1) * 0.0001f + (float) min;
+    }
+
+    public static int random(int min, int max, @NotNull Random random) {
+        return random.nextInt((max - min) + 1) + min;
+    }
 
     public static int clamp(int value, int min, int max){
         return Math.max(min, Math.min(max, value));

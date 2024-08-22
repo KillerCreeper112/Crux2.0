@@ -12,12 +12,15 @@ public class LocationPos implements CruxPosition {
     public static @NotNull LocationPos at(double x, double y, double z){
         return new LocationPos(x, y, z);
     }
+    @Deprecated(forRemoval = true)
     public static @NotNull LocationPos from(@NotNull Block block){
         return new LocationPos(block.getX(), block.getY(), block.getZ());
     }
+    @Deprecated(forRemoval = true)
     public static @NotNull LocationPos from(@NotNull Location l){
         return new LocationPos(l.getX(), l.getY(), l.getZ());
     }
+    @Deprecated(forRemoval = true)
     public static @NotNull LocationPos from(@NotNull Vector v){
         return new LocationPos(v.getX(), v.getY(), v.getZ());
     }
