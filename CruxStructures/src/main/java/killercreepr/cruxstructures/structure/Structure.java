@@ -31,7 +31,7 @@ public interface Structure extends Keyed {
 
     default boolean isPersistent(){ return false; }
     default @Nullable StoredStructure buildStored(@NotNull Location center, double rotation){
-        return new SimpleStoredStructure(this, StoredChunk.from(center), BlockPos.from(center), rotation);
+        return new SimpleStoredStructure(this, StoredChunk.from(center), CruxPosition.block(center), rotation);
     }
 
     @NotNull Collection<CruxPosition> getBlocks(double rotation);
