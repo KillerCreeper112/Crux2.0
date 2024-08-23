@@ -9,9 +9,6 @@ plugins {
 dependencies {
     paperweight.paperDevBundle(libs.versions.paper)
     compileOnly(project(":CruxMain"))
-    compileOnly(fileTree("libs") {
-        include("*.jar")
-    })
 }
 
 tasks{

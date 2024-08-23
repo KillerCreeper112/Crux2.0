@@ -18,6 +18,7 @@ include(
     "CruxAdvancements",
     "CruxStructures",
     "CruxExternal",
+    "CruxGeneration",
 
     "CruxTest"
 )
