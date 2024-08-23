@@ -1,6 +1,7 @@
 package killercreepr.cruxentities.modelengine.wrapper;
 
 import com.ticxo.modelengine.api.model.ActiveModel;
+import com.ticxo.modelengine.api.model.ModeledEntity;
 import org.jetbrains.annotations.NotNull;
 
 public interface IModelEntity extends IDesignEntity{
@@ -35,7 +36,20 @@ public interface IModelEntity extends IDesignEntity{
         return getModel().getAnimationHandler().isPlayingAnimation(id);
     }
 
+    default @NotNull ModeledEntity getModeledEntity(){
+        return getModel().getModeledEntity();
+    }
+
     @NotNull ActiveModel getModel();
 
     IModelEntity setModel(@NotNull ActiveModel model);
+    IModelEntity setBaseEntityVisible(boolean value);
+    IModelEntity setModelRotationLocked(boolean value);
+    boolean isModelRotationLocked();
+    boolean isBaseEntityVisible();
+
+    IModelEntity setLockPitch(boolean value);
+    IModelEntity setLockYaw(boolean value);
+    boolean isLockPitch();
+    boolean isLockYaw();
 }

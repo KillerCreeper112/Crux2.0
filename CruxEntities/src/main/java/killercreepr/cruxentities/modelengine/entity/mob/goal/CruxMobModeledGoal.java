@@ -33,6 +33,50 @@ public class CruxMobModeledGoal extends CruxMobGoal implements IModelEntity {
     }
 
     @Override
+    public CruxMobModeledGoal setBaseEntityVisible(boolean value) {
+        getModeledEntity().setBaseEntityVisible(value);
+        return this;
+    }
+
+    @Override
+    public CruxMobModeledGoal setModelRotationLocked(boolean value) {
+        getModeledEntity().setModelRotationLocked(value);
+        return this;
+    }
+
+    @Override
+    public boolean isModelRotationLocked() {
+        return getModeledEntity().isModelRotationLocked();
+    }
+
+    @Override
+    public boolean isBaseEntityVisible() {
+        return getModeledEntity().isBaseEntityVisible();
+    }
+
+    @Override
+    public CruxMobModeledGoal setLockPitch(boolean value) {
+        getModel().setLockPitch(value);
+        return this;
+    }
+
+    @Override
+    public CruxMobModeledGoal setLockYaw(boolean value) {
+        getModel().setLockYaw(value);
+        return this;
+    }
+
+    @Override
+    public boolean isLockPitch() {
+        return getModel().isLockPitch();
+    }
+
+    @Override
+    public boolean isLockYaw() {
+        return getModel().isLockYaw();
+    }
+
+    @Override
     public @NotNull Entity entity() {
         return mob;
     }
