@@ -136,4 +136,21 @@ public class CruxEntity {
         }
         return list;
     }
+
+    public static int getEntityAmountNearChunk(@NotNull Chunk chunk, int radius, @Nullable Predicate<Entity> predicate){
+        int amount = 0;
+        for(int x = -radius; x < radius; x++){
+            for(int z = -radius; z < radius; z++){
+                if(!chunk.getWorld().isChunkLoaded(chunk.getX()+x, chunk.getZ()+z)) continue;
+                Chunk c = chunk.getWorld().getChunkAt(chunk.getX()+x, chunk.getZ()+z);
+                if(predicate == null) amount += c.getEntities().length;
+                else{
+                    for(Entity e : c.getEntities()){
+                        if(predicate.test(e)) amount++;
+                    }
+                }
+            }
+        }
+        return amount;
+    }
 }
