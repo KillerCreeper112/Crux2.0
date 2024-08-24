@@ -1,4 +1,4 @@
-package killercreepr.cruxentities.world.entity.entity;
+package killercreepr.cruxworlds.world.entity.entity;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.world.CruxPosition;

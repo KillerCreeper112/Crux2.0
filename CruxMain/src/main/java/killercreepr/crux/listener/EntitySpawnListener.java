@@ -1,6 +1,6 @@
-package killercreepr.cruxentities.listener;
+package killercreepr.crux.listener;
 
-import killercreepr.cruxentities.persistence.CruxEntitiesPersist;
+import killercreepr.crux.persistence.CruxPersist;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -10,7 +10,7 @@ public class EntitySpawnListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onCreatureSpawn(CreatureSpawnEvent event) {
         Entity e = event.getEntity();
-        if(CruxEntitiesPersist.SPAWN_REASON.get(e,null) != null) return;
-        CruxEntitiesPersist.SPAWN_REASON.set(e, event.getSpawnReason().toString().toLowerCase());
+        if(CruxPersist.SPAWN_REASON.get(e,null) != null) return;
+        CruxPersist.SPAWN_REASON.set(e, event.getSpawnReason().toString().toLowerCase());
     }
 }

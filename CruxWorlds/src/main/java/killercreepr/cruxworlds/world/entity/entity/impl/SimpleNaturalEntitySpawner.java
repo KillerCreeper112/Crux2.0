@@ -1,13 +1,13 @@
-package killercreepr.cruxentities.world.entity.entity.impl;
+package killercreepr.cruxworlds.world.entity.entity.impl;
 
 import killercreepr.crux.data.world.CruxPosition;
+import killercreepr.crux.persistence.CruxPersist;
 import killercreepr.crux.registry.Registry;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.crux.util.CruxWeightedSupplier;
-import killercreepr.cruxentities.persistence.CruxEntitiesPersist;
-import killercreepr.cruxentities.world.entity.entity.NaturalEntitySpawnGroup;
-import killercreepr.cruxentities.world.entity.entity.NaturalEntitySpawner;
-import killercreepr.cruxentities.world.entity.entity.SpawnContext;
+import killercreepr.cruxworlds.world.entity.entity.NaturalEntitySpawnGroup;
+import killercreepr.cruxworlds.world.entity.entity.NaturalEntitySpawner;
+import killercreepr.cruxworlds.world.entity.entity.SpawnContext;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -81,7 +81,7 @@ public class SimpleNaturalEntitySpawner implements NaturalEntitySpawner {
     public boolean belowGlobalCap(@NotNull World world){
         int x = 0;
         for(Entity e : world.getEntitiesByClass(Mob.class)){
-            if("natural".equalsIgnoreCase(CruxEntitiesPersist.SPAWN_REASON.get(e, null))){
+            if("natural".equalsIgnoreCase(CruxPersist.SPAWN_REASON.get(e, null))){
                 x++;
                 if(x >= globalMobLimit) return false;
             }
@@ -92,7 +92,7 @@ public class SimpleNaturalEntitySpawner implements NaturalEntitySpawner {
     public int getNaturallySpawnedMobs(@NotNull World world){
         int x = 0;
         for(Entity e : world.getEntitiesByClass(Mob.class)){
-            if("natural".equalsIgnoreCase(CruxEntitiesPersist.SPAWN_REASON.get(e, null))){
+            if("natural".equalsIgnoreCase(CruxPersist.SPAWN_REASON.get(e, null))){
                 x++;
             }
         }

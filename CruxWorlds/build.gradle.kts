@@ -7,9 +7,11 @@ plugins {
 dependencies {
     paperweight.paperDevBundle(libs.versions.paper)
     compileOnly(project(":CruxMain"))
-    compileOnly(project(":CruxAttributes"))
+}
 
-    compileOnly(fileTree("libs") {
-        include("*.jar")
-    })
+tasks{
+    compileJava{
+        dependsOn(project(":CruxMain").tasks.named("shadowJar"))
+        //dependsOn project(':CruxMain').tasks.named('shadowJar')
+    }
 }

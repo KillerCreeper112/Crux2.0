@@ -2,9 +2,9 @@ package killercreepr.cruxentities.entity;
 
 import io.papermc.paper.tag.EntitySetTag;
 import io.papermc.paper.tag.EntityTags;
-import killercreepr.crux.loot.impl.SimpleLootContext;
 import killercreepr.crux.loot.LootContext;
 import killercreepr.crux.loot.LootTable;
+import killercreepr.crux.loot.impl.SimpleLootContext;
 import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.crux.util.CruxString;
 import killercreepr.cruxentities.persistence.CruxEntitiesPersist;

@@ -1,9 +1,9 @@
-package killercreepr.cruxentities.world.entity.entity.impl;
+package killercreepr.cruxworlds.world.entity.entity.impl;
 
 import killercreepr.crux.loot.impl.SimpleWeighted;
 import killercreepr.crux.util.CruxMath;
-import killercreepr.cruxentities.world.entity.entity.NaturalEntitySpawn;
-import killercreepr.cruxentities.world.entity.entity.SpawnContext;
+import killercreepr.cruxworlds.world.entity.entity.NaturalEntitySpawn;
+import killercreepr.cruxworlds.world.entity.entity.SpawnContext;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 

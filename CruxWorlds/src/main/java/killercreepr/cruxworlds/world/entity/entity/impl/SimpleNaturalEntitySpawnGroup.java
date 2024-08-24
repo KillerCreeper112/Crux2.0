@@ -1,10 +1,10 @@
-package killercreepr.cruxentities.world.entity.entity.impl;
+package killercreepr.cruxworlds.world.entity.entity.impl;
 
 import killercreepr.crux.loot.impl.SimpleWeighted;
 import killercreepr.crux.util.CruxWeightedSupplier;
-import killercreepr.cruxentities.world.entity.entity.NaturalEntitySpawn;
-import killercreepr.cruxentities.world.entity.entity.NaturalEntitySpawnGroup;
-import killercreepr.cruxentities.world.entity.entity.SpawnContext;
+import killercreepr.cruxworlds.world.entity.entity.NaturalEntitySpawn;
+import killercreepr.cruxworlds.world.entity.entity.NaturalEntitySpawnGroup;
+import killercreepr.cruxworlds.world.entity.entity.SpawnContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;

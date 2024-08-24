@@ -19,6 +19,7 @@ include(
     "CruxStructures",
     "CruxExternal",
     "CruxGeneration",
+    "CruxWorlds",
 
     "CruxTest"
 )

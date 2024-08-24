@@ -15,4 +15,5 @@ public class StandardModules {
     public static final String CRUX_POTIONS = "CruxPotions";
     public static final String CRUX_STRUCTURES = "CruxStructures";
     public static final String CRUX_GENERATION = "CruxGeneration";
+    public static final String CRUX_WORLDS = "CruxWorlds";
 }

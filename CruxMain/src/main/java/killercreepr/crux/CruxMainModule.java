@@ -3,6 +3,7 @@ package killercreepr.crux;
 import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.crux.item.dynamic.components.DynamicPersistentTag;
 import killercreepr.crux.item.dynamic.components.TagContainerPersistTagHandler;
+import killercreepr.crux.listener.EntitySpawnListener;
 import killercreepr.crux.listener.PlayerDataListener;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.module.StandardModules;
@@ -30,7 +31,10 @@ public class CruxMainModule implements CruxModule {
 
     @Override
     public void onEnable(@NotNull CruxPlugin plugin) {
-        plugin.getServer().getPluginManager().registerEvents(new PlayerDataListener(), plugin);
+        plugin.registerListeners(
+            new PlayerDataListener(),
+            new EntitySpawnListener()
+        );
         Crux.buildTickRunnable().runTaskTimerAsynchronously(plugin, 20L, 1L);
     }
 }
