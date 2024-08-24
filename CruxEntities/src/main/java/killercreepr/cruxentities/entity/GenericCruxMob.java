@@ -1,6 +1,6 @@
 package killercreepr.cruxentities.entity;
 
-import killercreepr.cruxentities.persistence.CruxEntitiesPersistTags;
+import killercreepr.cruxentities.persistence.CruxEntitiesPersist;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -15,7 +15,7 @@ public abstract class GenericCruxMob implements CruxMob{
     @Override
     public final @NotNull Entity spawn(@NotNull Location at) {
         Entity e = spawnAt(at);
-        CruxEntitiesPersistTags.ENTITY.set(e, key);
+        CruxEntitiesPersist.ENTITY.set(e, key);
         return e;
     }
 

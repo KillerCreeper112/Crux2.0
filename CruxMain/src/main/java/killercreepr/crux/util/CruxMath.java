@@ -143,6 +143,10 @@ public class CruxMath {
         return value;
     }
 
+    public static double square(double x){
+        return x * x;
+    }
+
     public static float random(float min, float max) {
         return RANDOM.nextInt((int) ((max - min) * 10000) + 1) * 0.0001f + min;
     }

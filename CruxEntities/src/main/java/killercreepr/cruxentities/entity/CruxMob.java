@@ -7,7 +7,7 @@ import killercreepr.crux.loot.LootContext;
 import killercreepr.crux.loot.LootTable;
 import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.crux.util.CruxString;
-import killercreepr.cruxentities.persistence.CruxEntitiesPersistTags;
+import killercreepr.cruxentities.persistence.CruxEntitiesPersist;
 import killercreepr.cruxentities.registries.CruxEntityRegistries;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
@@ -34,11 +34,11 @@ public interface CruxMob extends Keyed {
     }
 
     static boolean is(@NotNull Entity e){
-        return CruxEntitiesPersistTags.ENTITY.has(e);
+        return CruxEntitiesPersist.ENTITY.has(e);
     }
 
     static boolean is(@NotNull Entity e, @NotNull CruxMob grim){
-        return grim.key().equals(CruxEntitiesPersistTags.ENTITY.get(e, null));
+        return grim.key().equals(CruxEntitiesPersist.ENTITY.get(e, null));
     }
 
     static boolean isInCategory(@NotNull Entity e, @NotNull MobCategory... check){
@@ -73,7 +73,7 @@ public interface CruxMob extends Keyed {
     }
 
     static <T extends PersistentDataHolder> @Nullable Key getKey(@NotNull T e){
-        return CruxEntitiesPersistTags.ENTITY.get(e);
+        return CruxEntitiesPersist.ENTITY.get(e);
     }
 
     static <T extends PersistentDataHolder> @Nullable CruxMob get(@NotNull T e){

@@ -2,6 +2,7 @@ package killercreepr.crux.data.world;
 
 import killercreepr.crux.data.BlockPos;
 import killercreepr.crux.data.LocationPos;
+import killercreepr.crux.util.CruxMath;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -104,5 +105,11 @@ public interface CruxPosition {
     @Contract(pure = true)
     default @NotNull Location toLocation(World world){
         return new Location(world, x(), y(), z());
+    }
+
+    default double distanceSquared(@NotNull CruxPosition pos){
+        return CruxMath.square(x() - pos.x()) +
+            CruxMath.square(y() - pos.y()) +
+            CruxMath.square(z() - pos.z());
     }
 }

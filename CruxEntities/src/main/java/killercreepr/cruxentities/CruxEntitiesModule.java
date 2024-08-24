@@ -5,6 +5,7 @@ import killercreepr.crux.module.StandardModules;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.cruxentities.command.CruxEntitiesCommands;
 import killercreepr.cruxentities.listener.EntityManager;
+import killercreepr.cruxentities.listener.EntitySpawnListener;
 import org.jetbrains.annotations.NotNull;
 
 public class CruxEntitiesModule implements CruxModule {
@@ -17,7 +18,8 @@ public class CruxEntitiesModule implements CruxModule {
     @Override
     public void onEnable(@NotNull CruxPlugin plugin) {
         plugin.registerListeners(
-            new EntityManager(plugin)
+            new EntityManager(plugin),
+            new EntitySpawnListener()
         );
 
         CruxEntitiesCommands.register(plugin);
