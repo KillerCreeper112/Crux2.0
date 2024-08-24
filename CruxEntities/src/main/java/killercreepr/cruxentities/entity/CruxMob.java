@@ -24,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.function.Consumer;
 
 public interface CruxMob extends Keyed {
     static boolean is(@NotNull Entity e, @NotNull CruxMob@NotNull... grim){
@@ -82,7 +83,10 @@ public interface CruxMob extends Keyed {
     }
 
     default void load(@NotNull Entity e){}
-    @NotNull Entity spawn(@NotNull Location at);
+    default @NotNull Entity spawn(@NotNull Location at){
+        return spawn(at, null);
+    }
+    @NotNull Entity spawn(@NotNull Location at, @Nullable Consumer<Entity> consumer);
 
     default void onDeath(@NotNull Entity e, @NotNull EntityDeathEvent event){
         event.getDrops().clear();

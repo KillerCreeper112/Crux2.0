@@ -5,21 +5,24 @@ import net.kyori.adventure.key.Key;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public abstract class GenericCruxMob implements CruxMob{
+import java.util.function.Consumer;
+
+public abstract class SimpleCruxMob implements CruxMob{
     protected final @NotNull Key key;
-    public GenericCruxMob(@NotNull Key key) {
+    public SimpleCruxMob(@NotNull Key key) {
         this.key = key;
     }
 
     @Override
-    public final @NotNull Entity spawn(@NotNull Location at) {
-        Entity e = spawnAt(at);
+    public final @NotNull Entity spawn(@NotNull Location at, @Nullable Consumer<Entity> consumer) {
+        Entity e = spawnAt(at, consumer);
         CruxEntitiesPersist.ENTITY.set(e, key);
         return e;
     }
 
-    protected abstract @NotNull Entity spawnAt(@NotNull Location at);
+    protected abstract @NotNull Entity spawnAt(@NotNull Location at, @Nullable Consumer<Entity> consumer);
 
     @Override
     public @NotNull Key key() {
