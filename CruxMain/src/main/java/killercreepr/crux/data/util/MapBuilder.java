@@ -15,6 +15,11 @@ public class MapBuilder<K, V> {
         this(new HashMap<>());
     }
 
+    public MapBuilder<K, V> putAll(Map<K, V> map) {
+        this.map.putAll(map);
+        return this;
+    }
+
     public MapBuilder<K, V> put(K key, V value) {
         map.put(key, value);
         return this;

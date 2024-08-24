@@ -20,6 +20,11 @@ public class CollectionBuilder<V> {
         return this;
     }
 
+    public CollectionBuilder<V> addAll(Collection<V> value) {
+        collection.addAll(value);
+        return this;
+    }
+
     public CollectionBuilder<V> apply(@NotNull Consumer<CollectionBuilder<V>> consumer){
         consumer.accept(this);
         return this;
