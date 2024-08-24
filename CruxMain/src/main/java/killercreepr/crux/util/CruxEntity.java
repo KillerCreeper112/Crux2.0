@@ -1,6 +1,7 @@
 package killercreepr.crux.util;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -117,5 +118,22 @@ public class CruxEntity {
             return (entity.getLocation().distanceSquared(location) > radius * radius);
         });
         return entities;
+    }
+
+    public static @NotNull Collection<Entity> getEntitiesNearChunk(@NotNull Chunk chunk, int radius, @Nullable Predicate<Entity> predicate){
+        Collection<Entity> list = new HashSet<>();
+        for(int x = -radius; x < radius; x++){
+            for(int z = -radius; z < radius; z++){
+                if(!chunk.getWorld().isChunkLoaded(chunk.getX()+x, chunk.getZ()+z)) continue;
+                Chunk c = chunk.getWorld().getChunkAt(chunk.getX()+x, chunk.getZ()+z);
+                if(predicate == null) list.addAll(List.of(c.getEntities()));
+                else{
+                    for(Entity e : c.getEntities()){
+                        if(predicate.test(e)) list.add(e);
+                    }
+                }
+            }
+        }
+        return list;
     }
 }
