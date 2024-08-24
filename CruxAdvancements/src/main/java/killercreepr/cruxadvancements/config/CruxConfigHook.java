@@ -1,6 +1,6 @@
 package killercreepr.cruxadvancements.config;
 
-import killercreepr.crux.loot.api.conditions.LootCondition;
+import killercreepr.crux.loot.conditions.LootCondition;
 import killercreepr.cruxadvancements.advancement.criteria.CruxCriteria;
 import killercreepr.cruxadvancements.advancement.objective.impl.BreakBlockObjective;
 import killercreepr.cruxadvancements.advancement.objective.impl.KillEntityObjective;

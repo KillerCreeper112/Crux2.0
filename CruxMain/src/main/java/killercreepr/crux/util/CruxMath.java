@@ -14,7 +14,6 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class CruxMath {
     public static final Random RANDOM = new Random();

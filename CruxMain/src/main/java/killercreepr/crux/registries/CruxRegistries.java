@@ -1,7 +1,7 @@
 package killercreepr.crux.registries;
 
 import killercreepr.crux.data.tick.CruxTick;
-import killercreepr.crux.loot.api.LootTable;
+import killercreepr.crux.loot.LootTable;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registry.KeyedRegistry;
 import killercreepr.crux.registry.MappedRegistry;

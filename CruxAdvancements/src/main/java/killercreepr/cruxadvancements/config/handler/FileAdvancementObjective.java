@@ -1,6 +1,6 @@
 package killercreepr.cruxadvancements.config.handler;
 
-import killercreepr.crux.loot.api.conditions.LootCondition;
+import killercreepr.crux.loot.conditions.LootCondition;
 import killercreepr.crux.registry.MappedRegistry;
 import killercreepr.crux.registry.SimpleMappedRegistry;
 import killercreepr.cruxadvancements.advancement.objective.AdvancementObjective;

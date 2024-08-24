@@ -1,6 +1,6 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 
-import killercreepr.crux.loot.item.api.ItemLootPoolObject;
+import killercreepr.crux.loot.item.ItemLootPoolObject;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import org.jetbrains.annotations.NotNull;

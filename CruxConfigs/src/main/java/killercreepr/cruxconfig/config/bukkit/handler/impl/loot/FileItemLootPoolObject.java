@@ -1,6 +1,6 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 
-import killercreepr.crux.loot.item.api.ItemLootPoolObject;
+import killercreepr.crux.loot.item.ItemLootPoolObject;
 import killercreepr.crux.registry.MappedRegistry;
 import killercreepr.crux.registry.SimpleMappedRegistry;
 import killercreepr.cruxconfig.config.common.FileContext;

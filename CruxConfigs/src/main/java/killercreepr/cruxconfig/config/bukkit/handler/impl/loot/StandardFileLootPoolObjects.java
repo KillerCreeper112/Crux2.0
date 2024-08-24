@@ -1,9 +1,9 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 
 import com.google.common.reflect.TypeToken;
-import killercreepr.crux.loot.item.SimpleItemLootObject;
-import killercreepr.crux.loot.item.api.ItemLootPoolObject;
-import killercreepr.crux.loot.item.pool.ListItemPoolObject;
+import killercreepr.crux.loot.impl.item.SimpleItemLootObject;
+import killercreepr.crux.loot.item.ItemLootPoolObject;
+import killercreepr.crux.loot.impl.item.pool.ListItemPoolObject;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileGeneric;

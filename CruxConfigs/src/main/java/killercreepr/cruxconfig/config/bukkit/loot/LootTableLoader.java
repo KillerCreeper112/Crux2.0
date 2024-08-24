@@ -1,7 +1,7 @@
 package killercreepr.cruxconfig.config.bukkit.loot;
 
 import killercreepr.crux.Crux;
-import killercreepr.crux.loot.item.api.ItemLootTable;
+import killercreepr.crux.loot.item.ItemLootTable;
 import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.cruxconfig.config.bukkit.file.BukkitDataFile;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;

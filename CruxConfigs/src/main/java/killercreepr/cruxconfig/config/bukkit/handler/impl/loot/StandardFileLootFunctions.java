@@ -1,8 +1,8 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 
 import com.google.common.reflect.TypeToken;
-import killercreepr.crux.loot.api.conditions.LootCondition;
-import killercreepr.crux.loot.item.functions.ItemEnchantFunction;
+import killercreepr.crux.loot.conditions.LootCondition;
+import killercreepr.crux.loot.impl.item.functions.ItemEnchantFunction;
 import killercreepr.crux.util.CruxObjects;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.common.FileContext;
