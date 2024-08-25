@@ -1,6 +1,5 @@
 package killercreepr.cruxworlds.world.entity.entity;
 
-import killercreepr.crux.Crux;
 import killercreepr.crux.data.world.CruxPosition;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -21,13 +20,7 @@ public interface NaturalEntitySpawner {
                   @Nullable Consumer<NaturalEntitySpawner> onFinish);
 
     @NotNull
-    default CompletableFuture<Boolean> checkCanNavigate(@NotNull World world){
-        return CompletableFuture.supplyAsync(() ->{
-            CompletableFuture<Boolean> future = new CompletableFuture<>();
-            Crux.getServer().getScheduler().runTask(Crux.getMainPlugin(), task -> future.complete(canNavigate(world)));
-            return future.join();
-        });
-    }
+    CompletableFuture<Boolean> checkCanNavigate(@NotNull World world);
 
     boolean canNavigate(@NotNull World world);
     int getRadius();

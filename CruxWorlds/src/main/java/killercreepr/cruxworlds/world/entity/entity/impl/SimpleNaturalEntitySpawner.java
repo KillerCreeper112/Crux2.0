@@ -68,19 +68,29 @@ public class SimpleNaturalEntitySpawner implements NaturalEntitySpawner {
         return amount < globalMobLimit;
     }
 
-    public CompletableFuture<Boolean> belowGlobalCapMainThread(@NotNull World world){
+    public CompletableFuture<Boolean> checkIsBelowGlobalCap(@NotNull World world){
         return CompletableFuture.supplyAsync(() ->{
             CompletableFuture<Boolean> future = new CompletableFuture<>();
             plugin.getServer().getScheduler().runTask(plugin, task ->{
-                future.complete(belowGlobalCap(world));
+                Collection<Mob> mobs = world.getEntitiesByClass(Mob.class);
+                CompletableFuture.supplyAsync(() -> future.complete(belowGlobalCap(mobs)));
             });
             return future.join();
         });
     }
 
+    @Override
+    public @NotNull CompletableFuture<Boolean> checkCanNavigate(@NotNull World world) {
+        return checkIsBelowGlobalCap(world);
+    }
+
     public boolean belowGlobalCap(@NotNull World world){
+        return belowGlobalCap(world.getEntitiesByClass(Mob.class));
+    }
+
+    public boolean belowGlobalCap(@NotNull Collection<? extends Entity> entities){
         int x = 0;
-        for(Entity e : world.getEntitiesByClass(Mob.class)){
+        for(Entity e : entities){
             if("natural".equalsIgnoreCase(CruxPersist.SPAWN_REASON.get(e, null))){
                 x++;
                 if(x >= globalMobLimit) return false;

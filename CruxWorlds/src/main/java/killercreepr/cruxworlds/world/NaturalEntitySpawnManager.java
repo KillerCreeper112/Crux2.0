@@ -37,20 +37,25 @@ public class NaturalEntitySpawnManager implements Ticked, Listener {
         return world;
     }
 
+    public int maxNaturalSpawnTick(){
+        return CruxMath.random(100, 200);
+    }
+
     public void naturalSpawnTick(){
         World world = this.world.toBukkitWorld();
         if(naturalSpawnTick < 0 || world.getPlayers().isEmpty()) return;
         naturalSpawnTick++;
-        if(naturalSpawnTick < CruxMath.random(100, 200)) return;
+        if(naturalSpawnTick < maxNaturalSpawnTick()) return;
         naturalSpawnTick = 0;
         naturalEntitySpawner.checkCanNavigate(world).whenComplete((value, throwable) ->{
             if(throwable !=  null) Crux.log(Level.WARNING, throwable.getMessage());
             if(!value) return;
 
-            Crux.log(Level.INFO, "Navigating natural entity spawns...");
+            if(!onSpawnNavigation()) return;
             recentlyCheckedMobSpawns.clear();
             for(Player p : world.getPlayers()){
                 if(p.getGameMode() == GameMode.SPECTATOR || nearChecked(p)) continue;
+                if(!onSpawnNavigation(p)) continue;
                 CruxPosition position = CruxPosition.block(p.getLocation());
                 recentlyCheckedMobSpawns.add(position);
                 naturalEntitySpawner.navigate(world, position, spawner -> p.isOnline() && p.isValid(), spawner ->{
@@ -58,6 +63,19 @@ public class NaturalEntitySpawnManager implements Ticked, Listener {
                 });
             }
         });
+    }
+
+    /**
+     * @return If this returns false, the spawn navigation will not commence for the player.
+     */
+    public boolean onSpawnNavigation(@NotNull Player p){
+        return true;
+    }
+    /**
+     * @return If this returns false, the spawn navigation will not commence.
+     */
+    public boolean onSpawnNavigation(){
+        return true;
     }
 
     @Override
