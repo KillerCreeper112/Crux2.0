@@ -12,6 +12,5 @@ dependencies {
 tasks{
     compileJava{
         dependsOn(project(":CruxMain").tasks.named("shadowJar"))
-        //dependsOn project(':CruxMain').tasks.named('shadowJar')
     }
 }

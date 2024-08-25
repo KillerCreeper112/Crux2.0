@@ -2,8 +2,6 @@
 version = "1.0"
 plugins {
     alias(libs.plugins.paperweight)
-    alias(libs.plugins.runPaper)
-    alias(libs.plugins.shadow)
 }
 
 dependencies {
@@ -15,5 +13,7 @@ dependencies {
 }
 
 tasks{
-    paperweight.reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.MOJANG_PRODUCTION
+    compileJava{
+        //todo this fucking thing dependsOn(project(":CruxMain").tasks.named("shadowJar"))
+    }
 }
