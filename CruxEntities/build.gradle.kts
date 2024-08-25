@@ -8,6 +8,7 @@ dependencies {
     paperweight.paperDevBundle(libs.versions.paper)
     compileOnly(project(":CruxMain"))
     compileOnly(project(":CruxAttributes"))
+    compileOnly(project(":CruxWorlds"))
 
     compileOnly(fileTree("libs") {
         include("*.jar")
