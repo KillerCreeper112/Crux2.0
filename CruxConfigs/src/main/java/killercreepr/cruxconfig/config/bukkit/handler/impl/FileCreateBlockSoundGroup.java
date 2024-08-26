@@ -8,11 +8,11 @@ import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
-import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
+import killercreepr.cruxconfig.config.common.handler.SimpleFileHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FileCreateBlockSoundGroup implements FileObjectHandler<CreateBlockSoundGroup> {
+public class FileCreateBlockSoundGroup extends SimpleFileHandler<CreateBlockSoundGroup> {
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> ctx, @NotNull CreateBlockSoundGroup object) {
         FileRegistry registry = ctx.getRegistry();
@@ -44,5 +44,10 @@ public class FileCreateBlockSoundGroup implements FileObjectHandler<CreateBlockS
         return new SimpleCreateBlockSoundGroup(
             breakSound, stepSound, placeSound, hitSound, fallSound
         );
+    }
+
+    @Override
+    public @NotNull String jsonSerializerID() {
+        return "create_block_sound_group";
     }
 }
