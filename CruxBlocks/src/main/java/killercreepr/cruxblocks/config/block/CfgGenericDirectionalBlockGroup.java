@@ -1,15 +1,19 @@
 package killercreepr.cruxblocks.config.block;
 
+import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.group.GenericDirectionalBlockGroup;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class CfgGenericDirectionalBlockGroup extends GenericDirectionalBlockGroup {
     protected final float hardness;
-    public CfgGenericDirectionalBlockGroup(@NotNull Key key, boolean orientable, float hardness, @NotNull CruxBlock... blocks) {
+    protected final @Nullable CreateBlockSoundGroup soundGroup;
+    public CfgGenericDirectionalBlockGroup(@NotNull Key key, boolean orientable, float hardness, @Nullable CreateBlockSoundGroup soundGroup, @NotNull CruxBlock... blocks) {
         super(key, orientable, blocks);
         this.hardness = hardness;
+        this.soundGroup = soundGroup;
     }
 
     @Override
@@ -17,5 +21,8 @@ public class CfgGenericDirectionalBlockGroup extends GenericDirectionalBlockGrou
         return hardness;
     }
 
-
+    @Override
+    public CreateBlockSoundGroup getSoundGroup() {
+        return soundGroup;
+    }
 }

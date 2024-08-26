@@ -1,6 +1,7 @@
 package killercreepr.cruxblocks.config.handler;
 
 import com.google.common.reflect.TypeToken;
+import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.CruxBlockDirectional;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
@@ -41,13 +42,14 @@ public class FileCruxBlockGroup implements FileObjectHandler<CruxBlockGroup> {
         CruxBlock[] blocksArray = blocks.toArray(new CruxBlock[0]);
 
         float hardness = o.getOrDefaultObject(Float.class, "hardness", 1f);
+        CreateBlockSoundGroup soundGroup = registry.deserializeFromFile(CreateBlockSoundGroup.class, o.get("sound_group"));
         if(blocks.getFirst() instanceof CruxBlockDirectional){
             boolean orientable = o.getOrDefaultObject(Boolean.class, "orientable", false);
             return new CfgGenericDirectionalBlockGroup(
-                key,orientable, hardness, blocksArray
+                key,orientable, hardness, soundGroup, blocksArray
             );
         }
-        return new CfgGenericBlockGroup(key, hardness, blocksArray);
+        return new CfgGenericBlockGroup(key, hardness, soundGroup, blocksArray);
     }
 
     @Override
