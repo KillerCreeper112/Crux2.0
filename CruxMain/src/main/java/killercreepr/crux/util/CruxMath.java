@@ -148,15 +148,15 @@ public class CruxMath {
     }
 
     public static float random(float min, float max) {
-        return RANDOM.nextInt((int) ((max - min) * 10000) + 1) * 0.0001f + min;
+        return random(min, max, RANDOM);
     }
 
     public static float random(double min, double max) {
-        return RANDOM.nextInt((int) ((max - min) * 10000) + 1) * 0.0001f + (float) min;
+        return random(min, max, RANDOM);
     }
 
     public static int random(int min, int max) {
-        return RANDOM.nextInt((max - min) + 1) + min;
+        return random(min, max, RANDOM);
     }
 
     public static float random(float min, float max, @NotNull Random random) {

@@ -127,7 +127,7 @@ public class SimpleNaturalEntitySpawner implements NaturalEntitySpawner {
             private Collection<Block> blocks;
             @Override
             public void run() {
-                if(blocks == null) blocks = random(center.getBlock(world), radius, innerRadius, CruxMath.random(7500, 10000));
+                if(blocks == null) blocks = random(center.getBlock(world), radius, innerRadius, CruxMath.random(7500, 10000, random));
                 Block last = null;
                 int amount = CruxMath.random(50, 100);
                 for(Block b : new HashSet<>(blocks)){
@@ -170,7 +170,11 @@ public class SimpleNaturalEntitySpawner implements NaturalEntitySpawner {
     public @NotNull Collection<Block> random(@NotNull Block center, int radius, int innerRadius, int rolls){
         Collection<Block> list = new CopyOnWriteArraySet<>();
         for(int i = 0; i < rolls; i++){
-            int x = CruxMath.random(-radius, radius);
+            int x = CruxMath.random(innerRadius, radius, random) * (random.nextBoolean() ? -1 : 1);
+            int y = CruxMath.random(innerRadius, radius, random) * (random.nextBoolean() ? -1 : 1);
+            int z = CruxMath.random(innerRadius, radius, random) * (random.nextBoolean() ? -1 : 1);
+
+            /*int x = CruxMath.random(-radius, radius);
             int y = CruxMath.random(-radius, radius);
             int z = CruxMath.random(-radius, radius);
             while((-innerRadius <= x && x <= innerRadius) &&
@@ -179,7 +183,7 @@ public class SimpleNaturalEntitySpawner implements NaturalEntitySpawner {
                 x = CruxMath.random(-radius, radius);
                 y = CruxMath.random(-radius, radius);
                 z = CruxMath.random(-radius, radius);
-            }
+            }*/
             Block b = center.getRelative(x,y,z);
             if(b.getChunk().isLoaded()) list.add(b);
         }
