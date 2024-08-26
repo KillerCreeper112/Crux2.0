@@ -1,5 +1,7 @@
 package killercreepr.cruxblocks.block;
 
+import killercreepr.crux.data.communication.CreateBlockSoundGroup;
+import killercreepr.crux.data.communication.CreateSound;
 import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.cruxblocks.CruxBlocksModule;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
@@ -9,7 +11,6 @@ import killercreepr.cruxblocks.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.block.texture.TextureData;
 import killercreepr.cruxblocks.event.CruxBlockPlaceEvent;
 import net.kyori.adventure.key.Keyed;
-import org.bukkit.SoundGroup;
 import org.bukkit.block.Block;
 import org.bukkit.generator.LimitedRegion;
 import org.jetbrains.annotations.NotNull;
@@ -46,7 +47,7 @@ public interface CruxBlock extends Keyed, CruxBlockData {
 
     @Override
     @Nullable
-    default SoundGroup getSoundGroup(){
+    default CreateBlockSoundGroup getSoundGroup(){
         CruxBlockGroup group = getGroup();
         Objects.requireNonNull(group);
         return group.getSoundGroup();
@@ -65,8 +66,12 @@ public interface CruxBlock extends Keyed, CruxBlockData {
         ActiveCruxBlock active = CruxRegistries.MODULES.getModuleOrThrow(CruxBlocksModule.class)
             .getActiveBlock(ctx.getBlock());
         if(active != null){
-            if(getSoundGroup() != null){
-                b.getWorld().playSound(b.getLocation().toCenterLocation(), getSoundGroup().getPlaceSound(), getSoundGroup().getVolume(), getSoundGroup().getPitch());
+            CreateBlockSoundGroup soundGroup = getSoundGroup();
+            if(soundGroup != null){
+                CreateSound sound = soundGroup.getBreakSound();
+                if(sound != null){
+                    sound.playAt(b.getLocation().toCenterLocation());
+                }
             }
             active.placed(ctx);
             //if(active instanceof ActiveTickable) DP.blocks().addTickedBlock(active);

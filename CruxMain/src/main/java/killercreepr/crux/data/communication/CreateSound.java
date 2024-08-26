@@ -1,60 +1,61 @@
 package killercreepr.crux.data.communication;
 
 
+import killercreepr.crux.data.communication.impl.SimpleCreateSound;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
-public class CreateSound {
-    public static CreateSound from(@NotNull org.bukkit.Sound sound){
-        return new CreateSound(sound);
+public interface CreateSound {
+    static CreateSound sound(@NotNull org.bukkit.Sound sound){
+        return new SimpleCreateSound(sound);
+    }
+    static CreateSound sound(@NotNull Key key){
+        return sound(key, 1f);
     }
 
-    public static CreateSound from(@NotNull org.bukkit.Sound sound, float pitch){
-        return new CreateSound(sound, pitch);
+    static CreateSound sound(@NotNull Key key, float pitch){
+        return sound(key, Sound.Source.MASTER, 2f, pitch);
     }
 
-    protected final Sound sound;
-    public CreateSound(@NotNull Sound sound) {
-        this.sound = sound;
+    static CreateSound sound(@NotNull Key key, @NotNull Sound.Source source, float volume, float pitch){
+        return sound(Sound.sound(key, source, volume, pitch));
     }
 
-    public CreateSound(@NotNull org.bukkit.Sound sound, float volume, float pitch) {
-        this(sound, Sound.Source.MASTER, volume, pitch);
+    static CreateSound sound(@NotNull String key){
+        return sound(Key.key(key), 1f);
     }
 
-    public CreateSound(@NotNull org.bukkit.Sound sound, float pitch) {
-        this(sound, 2f, pitch);
+    static CreateSound sound(@NotNull String key, float pitch){
+        return sound(Key.key(key), Sound.Source.MASTER, 2f, pitch);
     }
 
-    public CreateSound(@NotNull org.bukkit.Sound sound) {
-        this(sound,1f);
+    static CreateSound sound(@NotNull String key, @NotNull Sound.Source source, float volume, float pitch){
+        return sound(Key.key(key), source, volume, pitch);
     }
 
-    public CreateSound(@NotNull org.bukkit.Sound sound, @NotNull Sound.Source source, float volume, float pitch) {
-        this.sound = Sound.sound(sound.getKey(), source, volume, pitch);
+    static CreateSound sound(@NotNull org.bukkit.Sound sound, float pitch){
+        return new SimpleCreateSound(sound, pitch);
+    }
+    static CreateSound sound(@NotNull Sound sound){
+        return new SimpleCreateSound(sound);
     }
 
-    public @NotNull Sound getSound() { return sound; }
-
-    public CreateSound playAt(@NotNull Location l){
-        l.getWorld().playSound(sound, l.getX(), l.getY(), l.getZ());
-        return this;
+    static CreateSound sound(@NotNull org.bukkit.Sound sound, float volume, float pitch){
+        return new SimpleCreateSound(sound, volume, pitch);
+    }
+    static CreateSound sound(@NotNull org.bukkit.Sound sound, @NotNull Sound.Source source, float volume, float pitch){
+        return new SimpleCreateSound(sound, source, volume, pitch);
     }
 
-    public CreateSound playAt(@NotNull Entity l){
-        l.getWorld().playSound(sound, l.getLocation().getX(), l.getLocation().getY(), l.getLocation().getZ());
-        return this;
-    }
+    @NotNull Sound getSound();
+    CreateSound playAt(@NotNull Location l);
 
-    public CreateSound playFor(@NotNull Entity p){
-        p.playSound(sound, Sound.Emitter.self());
-        return this;
-    }
+    CreateSound playAt(@NotNull Entity l);
 
-    public CreateSound playFrom(@NotNull Entity l){
-        l.getWorld().playSound(sound, l);
-        return this;
-    }
+    CreateSound playFor(@NotNull Entity p);
+
+    CreateSound playFrom(@NotNull Entity l);
 }

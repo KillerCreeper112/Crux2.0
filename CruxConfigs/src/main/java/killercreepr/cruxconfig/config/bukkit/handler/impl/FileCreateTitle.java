@@ -31,7 +31,7 @@ public class FileCreateTitle extends SimpleFileHandler<CreateTitle> {
         String title = o.getObject("upper");
         String subTitle = o.getObject("lower");
         if(title == null && subTitle == null) return null;
-        return new CreateTitle(title, subTitle,
+        return CreateTitle.title(title, subTitle,
                 Title.Times.times(
                         parseTicks(o, "fade_in"),
                         parseTicks(o, "stay"),

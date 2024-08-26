@@ -37,17 +37,14 @@ public class FileCreateSound extends SimpleFileHandler<CreateSound> {
         float pitch = (float) (double) o.getOrDefaultObject("pitch", 1D);
         try{
             Sound s = Sound.valueOf(keyName.toUpperCase());
-            return new CreateSound(s, source,
-                    volume, pitch
-            );
+            return CreateSound.sound(s, source, volume, pitch);
         }catch (IllegalArgumentException ignored){
             String[] args = keyName.split(":");
-            return new CreateSound(
-                    net.kyori.adventure.sound.Sound.sound(
-                            args.length > 1 ? Key.key(args[0], args[1]) : Key.key(Key.MINECRAFT_NAMESPACE, args[0]),
-                            source,
-                            volume, pitch
-                    ));
+            return CreateSound.sound(
+                args.length > 1 ? Key.key(args[0], args[1]) : Key.key(Key.MINECRAFT_NAMESPACE, args[0]),
+                source,
+                volume, pitch
+            );
         }
     }
 

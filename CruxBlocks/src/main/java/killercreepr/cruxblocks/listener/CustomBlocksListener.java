@@ -2,6 +2,8 @@ package killercreepr.cruxblocks.listener;
 
 import io.papermc.paper.event.block.BlockBreakBlockEvent;
 import killercreepr.crux.Crux;
+import killercreepr.crux.data.communication.CreateBlockSoundGroup;
+import killercreepr.crux.data.communication.CreateSound;
 import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.crux.util.CruxBlockUtil;
 import killercreepr.crux.util.CruxLoc;
@@ -78,9 +80,12 @@ public class CustomBlocksListener implements Listener {
 
         CruxBlock crux = active.getCruxBlock();
         Collection<ItemStack> drops = active.getDrops(EntityMiner.from(p));
-        if(crux.getSoundGroup() != null){
-            block.getWorld().playSound(block.getLocation().toCenterLocation(), crux.getSoundGroup().getBreakSound(),
-                crux.getSoundGroup().getVolume(), crux.getSoundGroup().getPitch());
+        CreateBlockSoundGroup soundGroup = crux.getSoundGroup();
+        if(soundGroup != null){
+            CreateSound sound = soundGroup.getBreakSound();
+            if(sound != null){
+                sound.playAt(block.getLocation().toCenterLocation());
+            }
         }
         if(drops == null) return;
         Location l = block.getLocation().toCenterLocation().subtract(0, .4, 0);

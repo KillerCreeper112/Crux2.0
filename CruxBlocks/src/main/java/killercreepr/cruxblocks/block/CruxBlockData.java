@@ -1,5 +1,6 @@
 package killercreepr.cruxblocks.block;
 
+import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.block.context.BlockContext;
 import killercreepr.cruxblocks.block.context.PlaceBlockContext;
@@ -14,5 +15,6 @@ public interface CruxBlockData {
         return placeBlock(context, true);
     }
     @Nullable ActiveCruxBlock placeBlock(@NotNull PlaceBlockContext ctx, boolean applyPhysics);
-    @Nullable SoundGroup getSoundGroup();
+    @Nullable
+    CreateBlockSoundGroup getSoundGroup();
 }

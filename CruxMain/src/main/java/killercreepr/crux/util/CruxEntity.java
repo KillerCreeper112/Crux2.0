@@ -1,15 +1,15 @@
 package killercreepr.crux.util;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,6 +30,25 @@ public class CruxEntity {
     public static @NotNull Location getEyeOrLocation(@NotNull Entity e){
         if(e instanceof LivingEntity d) return d.getEyeLocation();
         return e.getLocation();
+    }
+
+    public static @Nullable Block getBlockStandingOn(@NotNull Entity entity) {
+        Block block = entity.getLocation().getBlock();
+        Block blockBelow = block.getRelative(BlockFace.DOWN);
+        if (!block.getType().isAir() && block.getType() != Material.LIGHT) return block;
+        if (!blockBelow.getType().isAir()) return blockBelow;
+
+        // Expand players hitbox by 0.3, which is the maximum size a player can be off a block
+        // Whilst not falling off
+        BoundingBox entityBox = entity.getBoundingBox().expand(0.3);
+        for (BlockFace face : BlockFace.values()) {
+            if (!face.isCartesian() || face.getModY() != 0) continue;
+            Block relative = blockBelow.getRelative(face);
+            if (relative.getType() == Material.AIR) continue;
+            if (relative.getBoundingBox().overlaps(entityBox)) return relative;
+        }
+
+        return null;
     }
 
     public static void giveOrDrop(@NotNull HumanEntity p, @NotNull ItemStack... items){

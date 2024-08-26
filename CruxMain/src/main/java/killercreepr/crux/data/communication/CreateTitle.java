@@ -1,50 +1,56 @@
 package killercreepr.crux.data.communication;
 
-import killercreepr.crux.Crux;
+import killercreepr.crux.data.communication.impl.SimpleCreateTitle;
 import killercreepr.crux.tags.provider.StringTagProvider;
-import net.kyori.adventure.text.Component;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.title.Title;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CreateTitle {
-    protected final String title;
-    protected final String subTitle;
-    protected final Title.Times times;
+import java.time.Duration;
 
-    public CreateTitle(@Nullable String title, @Nullable String subTitle, @NotNull Title.Times times) {
-        this.title = title;
-        this.subTitle = subTitle;
-        this.times = times;
+public interface CreateTitle {
+    static CreateTitle title(@Nullable String title, @Nullable String subTitle, @NotNull Title.Times times){
+        return new SimpleCreateTitle(title, subTitle, times);
     }
 
-    public @NotNull Title build(@Nullable OfflinePlayer placeholders, @Nullable StringTagProvider tags){
-        return Title.title(
-                deserialize(placeholders, title, tags),
-                deserialize(placeholders, subTitle, tags),
-                times
+    static CreateTitle title(@Nullable String title, @Nullable String subTitle){
+        return title(title, subTitle, 60, 100, 60);
+    }
+
+    static CreateTitle title(@Nullable String title, @Nullable String subTitle, int fadeInTicks, int stayTicks, int fadeOutTicks){
+        return title(
+            title, subTitle,
+            Title.Times.times(
+                Duration.ofMillis(fadeInTicks * 50L),
+                Duration.ofMillis(stayTicks * 50L),
+                Duration.ofMillis(fadeOutTicks * 50L)
+            )
         );
     }
 
-    public @NotNull Title build(@Nullable StringTagProvider tags){
-        return build(null, tags);
+    default CreateTitle use(@NotNull Audience a, @Nullable StringTagProvider tags){
+        OfflinePlayer placeholders;
+        if(a instanceof OfflinePlayer d) placeholders = d;
+        else placeholders = null;
+        return use(a, placeholders, tags);
+    }
+    default CreateTitle use(@NotNull Audience a){
+        return use(a,  (StringTagProvider) null);
     }
 
-    protected @NotNull Component deserialize(@Nullable OfflinePlayer viewer, @Nullable String input, @Nullable StringTagProvider tags){
-        if(input == null) return Component.empty();
-        return Crux.FORMAT.deserialize(input, StringTagProvider.mergeHook(tags, viewer));
+    default CreateTitle use(@NotNull Audience a, @Nullable OfflinePlayer placeholders){
+        return use(a, placeholders, null);
     }
 
-    public @Nullable String getTitle() {
-        return title;
-    }
+    CreateTitle use(@NotNull Audience a, @Nullable OfflinePlayer placeholders, @Nullable StringTagProvider tags);
 
-    public @Nullable String getSubTitle() {
-        return subTitle;
-    }
+    @NotNull Title build(@Nullable StringTagProvider tags);
+    @NotNull Title build(@Nullable OfflinePlayer placeholders, @Nullable StringTagProvider tags);
+    @Nullable String getTitle();
 
-    public @NotNull Title.Times getTimes() {
-        return times;
-    }
+    @Nullable String getSubTitle();
+
+    @NotNull Title.Times getTimes();
 }

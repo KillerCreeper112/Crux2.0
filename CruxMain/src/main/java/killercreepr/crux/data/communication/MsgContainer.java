@@ -76,7 +76,7 @@ public class MsgContainer implements Communicator {
             }
         }
         if(actionBar != null) p.sendActionBar(deserialize(placeholders, actionBar, tags));
-        if(title != null) p.showTitle(title.build(p, tags));
+        if(title != null) title.use(p, placeholders, tags);
         if(sound != null) sound.playFor(p);
         return this;
     }
@@ -134,7 +134,7 @@ public class MsgContainer implements Communicator {
         return chat == null && actionBar == null && title == null && sound == null;
     }
 
-    public static class Builder{
+    public static class Builder implements Communicator.Builder{
         protected List<String> chat;
         protected String actionBar;
         protected CreateTitle title;

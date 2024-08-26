@@ -21,6 +21,7 @@ import killercreepr.cruxblocks.data.entity.MinerHolder;
 import killercreepr.cruxblocks.item.CruxItemsItemProvider;
 import killercreepr.cruxblocks.item.KeyedItemProvider;
 import killercreepr.cruxblocks.listener.CustomBlocksListener;
+import killercreepr.cruxblocks.listener.NoteBlockSoundsListener;
 import killercreepr.cruxblocks.manager.CruxBlockManager;
 import killercreepr.cruxblocks.registeries.CruxBlocksRegistries;
 import org.bukkit.Bukkit;
@@ -77,7 +78,8 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
     public void onEnable(@NotNull CruxPlugin plugin) {
         Crux.handlers().setBlock(this);
         plugin.registerListeners(
-            new CustomBlocksListener(this)
+            new CustomBlocksListener(this),
+            new NoteBlockSoundsListener(plugin, CruxBlocksRegistries.BLOCKS)
         );
 
         EntityMemory.registerFunction(plugin, e ->{

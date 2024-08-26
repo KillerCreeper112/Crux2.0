@@ -1,5 +1,7 @@
 package killercreepr.cruxblocks.block.group;
 
+import killercreepr.crux.data.communication.CreateBlockSoundGroup;
+import killercreepr.crux.data.communication.CreateSound;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.CruxBlockData;
 import killercreepr.cruxblocks.block.context.BlockContext;
@@ -31,51 +33,12 @@ public interface CruxBlockGroup extends Keyed, CruxBlockData, Iterable<CruxBlock
     }
 
     @Override
-    default SoundGroup getSoundGroup(){
-        return defaultSoundGroup();
+    default CreateBlockSoundGroup getSoundGroup(){
+        return null;
     }
 
     @Override
     default boolean canPlace(@NotNull BlockContext ctx){
         return true;
-    }
-
-    static @NotNull SoundGroup defaultSoundGroup(){
-        return new SoundGroup() {
-            @Override
-            public float getVolume() {
-                return 1f;
-            }
-
-            @Override
-            public float getPitch() {
-                return 1f;
-            }
-
-            @Override
-            public @NotNull Sound getBreakSound() {
-                return Sound.BLOCK_STONE_BREAK;
-            }
-
-            @Override
-            public @NotNull Sound getStepSound() {
-                return Sound.BLOCK_STONE_STEP;
-            }
-
-            @Override
-            public @NotNull Sound getPlaceSound() {
-                return Sound.BLOCK_STONE_PLACE;
-            }
-
-            @Override
-            public @NotNull Sound getHitSound() {
-                return Sound.BLOCK_STONE_HIT;
-            }
-
-            @Override
-            public @NotNull Sound getFallSound() {
-                return Sound.BLOCK_STONE_FALL;
-            }
-        };
     }
 }

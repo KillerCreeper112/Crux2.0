@@ -2,6 +2,8 @@ package killercreepr.cruxblocks.block.active;
 
 import com.destroystokyo.paper.ParticleBuilder;
 import killercreepr.crux.Crux;
+import killercreepr.crux.data.communication.CreateBlockSoundGroup;
+import killercreepr.crux.data.communication.CreateSound;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.context.BlockContext;
 import killercreepr.cruxblocks.block.context.BlockContextImpl;
@@ -50,11 +52,12 @@ public interface ActiveCruxBlock {
 
         if(displayEffects){
             CruxBlock custom = getCruxBlock();
-            if(custom.getSoundGroup() == null){
-                block.getWorld().playSound(block.getLocation().toCenterLocation(), Sound.BLOCK_WOOD_BREAK, 1f, 1f);
-            }else{
-                block.getWorld().playSound(block.getLocation().toCenterLocation(), custom.getSoundGroup().getBreakSound(),
-                    custom.getSoundGroup().getVolume(), custom.getSoundGroup().getPitch());
+            CreateBlockSoundGroup soundGroup = custom.getSoundGroup();
+            if(soundGroup != null){
+                CreateSound sound = soundGroup.getBreakSound();
+                if(sound != null){
+                    sound.playAt(block.getLocation().toCenterLocation());
+                }
             }
 
             new ParticleBuilder(Particle.BLOCK)
