@@ -9,6 +9,9 @@ dependencies {
     compileOnly(project(":CruxMain"))
     compileOnly(project(":CruxAttributes"))
     compileOnly(project(":CruxWorlds"))
+    //todo for some reason gradle won't compile unless these are here.... .___.
+    compileOnly(project(":CruxExternal"))
+    compileOnly(project(":CruxGeneration"))
 
     compileOnly(fileTree("libs") {
         include("*.jar")

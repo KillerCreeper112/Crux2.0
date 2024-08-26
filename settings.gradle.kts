@@ -9,7 +9,6 @@ include(
 
     "CruxAttributes",
     "CruxEnchants",
-    "CruxEntities",
 
     "CruxItems",
     "CruxBlocks",
@@ -17,9 +16,13 @@ include(
 
     "CruxAdvancements",
     "CruxStructures",
+
     "CruxExternal",
+
     "CruxGeneration",
     "CruxWorlds",
+
+    "CruxEntities",
 
     "CruxTest"
 )

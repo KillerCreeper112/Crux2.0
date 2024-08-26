@@ -11,9 +11,3 @@ dependencies {
         include("*.jar")
     })
 }
-
-tasks{
-    compileJava{
-        //todo this fucking thing dependsOn(project(":CruxMain").tasks.named("shadowJar"))
-    }
-}
