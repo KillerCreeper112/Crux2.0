@@ -39,9 +39,8 @@ public class FileCreateSound extends SimpleFileHandler<CreateSound> {
             Sound s = Sound.valueOf(keyName.toUpperCase());
             return CreateSound.sound(s, source, volume, pitch);
         }catch (IllegalArgumentException ignored){
-            String[] args = keyName.split(":");
             return CreateSound.sound(
-                args.length > 1 ? Key.key(args[0], args[1]) : Key.key(Key.MINECRAFT_NAMESPACE, args[0]),
+                Key.key(keyName),
                 source,
                 volume, pitch
             );
