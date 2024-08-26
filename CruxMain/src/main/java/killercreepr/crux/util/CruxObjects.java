@@ -12,6 +12,14 @@ public class CruxObjects {
         return false;
     }
 
+    public static boolean checkAllNull(Object... objects){
+        int amount = 0;
+        for(Object o : objects){
+            if(o==null) amount++;
+        }
+        return amount == objects.length;
+    }
+
     public static void requireNotNull(Object... objects){
         for(Object o : objects){
             if(o==null) throw new NullPointerException();

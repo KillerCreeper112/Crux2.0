@@ -5,6 +5,7 @@ import killercreepr.crux.data.BlockPos;
 import killercreepr.crux.data.LocationPos;
 import killercreepr.crux.data.StoredChunk;
 import killercreepr.crux.data.StoredWorld;
+import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.crux.data.communication.CreateSound;
 import killercreepr.crux.data.communication.CreateTitle;
 import killercreepr.crux.data.communication.MsgContainer;
@@ -69,6 +70,7 @@ public class BukkitCfgHandlers {
     public static final FileItemLootPool ITEM_LOOT_POOL = new FileItemLootPool();
     public static final FileSimpleLootObject SIMPLE_LOOT_OBJECT = new FileSimpleLootObject();
     public static final FileItemLootPoolObject ITEM_LOOT_POOL_OBJECT = new FileItemLootPoolObject();
+    public static final FileCreateBlockSoundGroup CREATE_BLOCK_SOUND_GROUP = new FileCreateBlockSoundGroup();
 
     public static void initStandard(){
         CfgRegistries.FILE.forEach(BukkitCfgHandlers::init);
@@ -98,6 +100,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(LootCondition.class, LOOT_CONDITION);
         registry.registerFileHandler(ItemLootFunction.class, ITEM_LOOT_FUNCTION);
         registry.registerFileHandler(ItemLootPoolObject.class, ITEM_LOOT_POOL_OBJECT);
+        registry.registerFileHandler(CreateBlockSoundGroup.class, CREATE_BLOCK_SOUND_GROUP);
 
         StandardFileLootConditions.register(LOOT_CONDITION);
         StandardFileLootFunctions.register(ITEM_LOOT_FUNCTION);
