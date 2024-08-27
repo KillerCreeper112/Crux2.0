@@ -5,15 +5,29 @@ import killercreepr.cruxblocks.block.active.ActiveCruxBlockImpl;
 import killercreepr.cruxblocks.block.standard.BushBlock;
 import killercreepr.cruxblocks.block.standard.BushType;
 import killercreepr.cruxblocks.registeries.CruxBlocksRegistries;
+import killercreepr.cruxblocks.user.Miner;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
 
 public class ActiveBushBlock extends ActiveCruxBlockImpl {
     protected final @NotNull BushBlock bush;
     public ActiveBushBlock(@NotNull Block block, @NotNull BushBlock cruxBlock) {
         super(block, cruxBlock);
         this.bush = cruxBlock;
+    }
+
+    @Override
+    public @Nullable Collection<ItemStack> getDrops(@Nullable Miner miner) {
+        //only the "base" bush block should drop an item
+        switch (getBushType()){
+            case TOP, MIDDLE ->{ return null; }
+        }
+        return super.getDrops(miner);
     }
 
     @Override
