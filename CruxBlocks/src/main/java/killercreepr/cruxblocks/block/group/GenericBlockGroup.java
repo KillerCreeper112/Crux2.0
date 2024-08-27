@@ -1,5 +1,6 @@
 package killercreepr.cruxblocks.block.group;
 
+import com.google.common.base.Preconditions;
 import killercreepr.crux.registry.KeyedRegistry;
 import killercreepr.crux.registry.SimpleKeyedRegistry;
 import killercreepr.cruxblocks.block.CruxBlock;
@@ -18,12 +19,15 @@ import java.util.function.Predicate;
 public abstract class GenericBlockGroup implements CruxBlockGroup{
     protected final @NotNull Key key;
     protected final @NotNull KeyedRegistry<CruxBlock> group = new SimpleKeyedRegistry<>(new LinkedHashMap<>());
+    protected final @NotNull CruxBlock baseBlock;
     public GenericBlockGroup(@NotNull Key key, @NotNull CruxBlock... blocks) {
+        Preconditions.checkArgument(blocks != null && blocks.length > 0, "Block group must have at least one element!");
         this.key = key;
         for(CruxBlock b : blocks){
             b.setGroup(this);
             group.register(b);
         }
+        baseBlock = blocks[0];
     }
 
     @Override
@@ -77,10 +81,7 @@ public abstract class GenericBlockGroup implements CruxBlockGroup{
 
     @Override
     public @NotNull CruxBlock getBaseBlock() {
-        for(CruxBlock b : group){
-            return b;
-        }
-        throw new UnsupportedOperationException("Block group must have at least one element!");
+        return baseBlock;
     }
 
     @Override
