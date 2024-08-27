@@ -26,6 +26,16 @@ public abstract class GenericBlockGroup implements CruxBlockGroup{
     }
 
     @Override
+    public boolean containsBlock(@NotNull Key key) {
+        return getBlock(key) != null;
+    }
+
+    @Override
+    public boolean containsBlock(@NotNull CruxBlock block) {
+        return containsBlock(block.key());
+    }
+
+    @Override
     public @Nullable CruxBlock getBlock(@NotNull Key key) {
         return group.get(key);
     }

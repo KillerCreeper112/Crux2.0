@@ -18,6 +18,8 @@ import java.util.Iterator;
  * Represents a group of blocks to pretty much fit everything together.
  */
 public interface CruxBlockGroup extends Keyed, CruxBlockData, Iterable<CruxBlock> {
+    boolean containsBlock(@NotNull Key key);
+    boolean containsBlock(@NotNull CruxBlock block);
     @Nullable CruxBlock getBlock(@NotNull Key key);
     @Nullable CruxBlock getBlock(@NotNull BlockData data);
     @Nullable CruxBlock getBlock(@NotNull Block block);
