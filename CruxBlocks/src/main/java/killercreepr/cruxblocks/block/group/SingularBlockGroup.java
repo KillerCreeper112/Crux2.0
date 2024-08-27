@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
 
 public abstract class SingularBlockGroup implements CruxBlockGroup{
     protected final @NotNull Key key;
@@ -23,6 +24,28 @@ public abstract class SingularBlockGroup implements CruxBlockGroup{
 
     public SingularBlockGroup(@NotNull CruxBlock block) {
         this(block.key(), block);
+    }
+
+    @Override
+    public boolean containsBlock(@NotNull Key key) {
+        return block.key().equals(key);
+    }
+
+    @Override
+    public boolean containsBlock(@NotNull CruxBlock block) {
+        return containsBlock(block.key());
+    }
+
+    @Override
+    public @Nullable CruxBlock getBlock(@NotNull Predicate<CruxBlock> predicate) {
+        return predicate.test(block) ? block : null;
+    }
+
+    @Override
+    public <T extends CruxBlock> @Nullable T getBlock(@NotNull Class<T> type, @NotNull Predicate<T> predicate) {
+        if(!type.isAssignableFrom(block.getClass())) return null;
+        T casted = type.cast(block);
+        return predicate.test(casted) ? casted : null;
     }
 
     @Override
