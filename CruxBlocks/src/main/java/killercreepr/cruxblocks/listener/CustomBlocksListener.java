@@ -1,7 +1,6 @@
 package killercreepr.cruxblocks.listener;
 
 import io.papermc.paper.event.block.BlockBreakBlockEvent;
-import killercreepr.crux.Crux;
 import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.crux.data.communication.CreateSound;
 import killercreepr.crux.data.entity.EntityMemory;
@@ -17,7 +16,6 @@ import killercreepr.cruxblocks.manager.CruxBlockManager;
 import killercreepr.cruxblocks.persistence.CruxBlocksPersistTags;
 import killercreepr.cruxblocks.user.BlockMiner;
 import killercreepr.cruxblocks.user.EntityMiner;
-import killercreepr.cruxblocks.user.Miner;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -40,7 +38,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;

@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.function.Predicate;
 
 public abstract class GenericBlockGroup implements CruxBlockGroup{
     protected final @NotNull Key key;
@@ -23,6 +24,24 @@ public abstract class GenericBlockGroup implements CruxBlockGroup{
             b.setGroup(this);
             group.register(b);
         }
+    }
+
+    @Override
+    public @Nullable CruxBlock getBlock(@NotNull Predicate<CruxBlock> predicate) {
+        for(CruxBlock block : this){
+            if(predicate.test(block)) return block;
+        }
+        return null;
+    }
+
+    @Override
+    public <T extends CruxBlock> @Nullable T getBlock(@NotNull Class<T> type, @NotNull Predicate<T> predicate) {
+        for(CruxBlock block : this){
+            if(!type.isAssignableFrom(block.getClass())) continue;
+            T casted = type.cast(block);
+            if(predicate.test(casted)) return casted;
+        }
+        return null;
     }
 
     @Override
