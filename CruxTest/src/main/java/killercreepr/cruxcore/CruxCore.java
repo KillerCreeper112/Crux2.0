@@ -9,6 +9,7 @@ import killercreepr.crux.util.CruxString;
 import killercreepr.cruxadvancements.CruxAdvancementsModule;
 import killercreepr.cruxattributes.CruxAttributesModule;
 import killercreepr.cruxblocks.CruxBlocksModule;
+import killercreepr.cruxblocks.registeries.CruxBlocksRegistries;
 import killercreepr.cruxconfig.CruxConfigsModule;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
@@ -33,7 +34,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.jetbrains.annotations.NotNull;
-
+///// OUTDATED
 public class CruxCore extends CruxPlugin implements Listener {
     private static CruxCore instance;
     public static CruxCore inst(){ return instance; }
@@ -46,7 +47,7 @@ public class CruxCore extends CruxPlugin implements Listener {
     protected final CruxAttributesModule CRUX_ATTRIBUTES = new CruxAttributesModule();
     protected final CruxEntitiesModule CRUX_ENTITIES = new CruxEntitiesModule();
     protected final CruxEnchantsModule CRUX_ENCHANTS = new CruxEnchantsModule();
-    protected final CruxBlocksModule CRUX_BLOCKS = new CruxBlocksModule();
+    protected final CruxBlocksModule CRUX_BLOCKS = new CruxBlocksModule(CruxBlocksRegistries.BLOCKS);
     protected final CruxStructuresModule CRUX_STRUCTURES = new CruxStructuresModule();
     protected final CruxExternalModule CRUX_EXTERNAL = new CruxExternalModule();
     protected final CruxAdvancementsModule CRUX_ADVANCEMENTS = new CruxAdvancementsModule();

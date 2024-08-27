@@ -36,7 +36,20 @@ public abstract class BushBlockGroup extends GenericBlockGroup {
     @Override
     public boolean canPlace(@NotNull BlockContext ctx) {
         Block b = ctx.getBlock();
-        return b.getRelative(BlockFace.DOWN).isSolid();
+        Block check = b;
+        if(!check.isEmpty() && !check.isReplaceable()) return false;
+
+        check = b.getRelative(BlockFace.UP);
+        if(!check.isEmpty() && !check.isReplaceable()) return false;
+
+        check = check.getRelative(BlockFace.UP);
+        if(!check.isEmpty() && !check.isReplaceable()) return false;
+
+        return isValidGround(b.getRelative(BlockFace.DOWN));
+    }
+
+    public boolean isValidGround(@NotNull Block block){
+        return block.isSolid();
     }
 
     @Override
@@ -46,7 +59,7 @@ public abstract class BushBlockGroup extends GenericBlockGroup {
 
         Block b = ctx.getBlock();
         ActiveCruxBlock active = getBaseBlock().placeBlock(ctx, false);
-        middle.placeBlock(ctx.withBlock(b.getRelative(BlockFace.UP)), applyPhysics);
+        middle.placeBlock(ctx.withBlock(b.getRelative(BlockFace.UP)), false);
         top.placeBlock(ctx.withBlock(b.getRelative(BlockFace.UP).getRelative(BlockFace.UP)), applyPhysics);
         return active;
     }

@@ -23,6 +23,7 @@ import killercreepr.cruxblocks.item.KeyedItemProvider;
 import killercreepr.cruxblocks.listener.CustomBlocksListener;
 import killercreepr.cruxblocks.listener.NoteBlockSoundsListener;
 import killercreepr.cruxblocks.manager.CruxBlockManager;
+import killercreepr.cruxblocks.registeries.CruxBlockRegistry;
 import killercreepr.cruxblocks.registeries.CruxBlocksRegistries;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -43,6 +44,15 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
     @Override
     public @NotNull String name() {
         return NAMESPACE;
+    }
+
+    protected final @NotNull CruxBlockRegistry blockRegistry;
+    public CruxBlocksModule(@NotNull CruxBlockRegistry blockRegistry) {
+        this.blockRegistry = blockRegistry;
+    }
+
+    public CruxBlocksModule() {
+        this(CruxBlocksRegistries.BLOCKS);
     }
 
     protected final Map<Block, ActiveCruxBlock> activeBlocks = new HashMap<>();
@@ -104,6 +114,10 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
         activeBlocks.clear();
     }
 
+    public @NotNull CruxBlockRegistry getBlockRegistry() {
+        return blockRegistry;
+    }
+
     @Override
     public @Nullable ActiveCruxBlock getActiveBlock(@NotNull Block at){
         return getActiveBlock(at, at.getBlockData());
@@ -112,8 +126,15 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
     @Override
     public @Nullable ActiveCruxBlock getActiveBlock(@NotNull Block at, @NotNull BlockData data) {
         if(hasTickedBlock(at)) return activeBlocks.get(at);
-        CruxBlock block = CruxBlocksRegistries.BLOCKS.getByBlockData(data);
-        return block==null?null:block.createActive(at);
+        CruxBlock block = blockRegistry.getByBlockData(data);
+        if(block==null) return null;
+        ActiveCruxBlock active = block.createActive(at);
+
+        if(active instanceof ManagedTicked){
+            activeBlocks.put(active.getBlock(), active);
+        }
+
+        return active;
     }
 
     @Override
