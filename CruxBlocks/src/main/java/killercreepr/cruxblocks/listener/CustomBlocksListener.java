@@ -15,7 +15,7 @@ import killercreepr.cruxblocks.data.entity.MinerHolder;
 import killercreepr.cruxblocks.manager.CruxBlockManager;
 import killercreepr.cruxblocks.persistence.CruxBlocksPersistTags;
 import killercreepr.cruxblocks.user.BlockMiner;
-import killercreepr.cruxblocks.user.EntityMiner;
+import killercreepr.cruxblocks.user.Miner;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -77,6 +77,17 @@ public class CustomBlocksListener implements Listener {
         block.update();
     }
 
+    @EventHandler(ignoreCancelled = true)
+    public void onBlockPistonExtend(BlockPistonExtendEvent event) {
+        for(Block b : event.getBlocks()){
+            if(b.getType() != Material.TRIPWIRE) continue;
+            ActiveCruxBlock crux = manager.getActiveBlock(b);
+            if(crux==null) continue;
+            crux.breakBlock(Miner.block(event.getBlock()));
+        }
+    }
+
+
     @EventHandler
     private void blockDropItem(BlockDropItemEvent event){
         Player p = event.getPlayer();
@@ -88,7 +99,7 @@ public class CustomBlocksListener implements Listener {
         if(p.getGameMode() == GameMode.CREATIVE) return;
 
         CruxBlock crux = active.getCruxBlock();
-        Collection<ItemStack> drops = active.getDrops(EntityMiner.from(p));
+        Collection<ItemStack> drops = active.getDrops(Miner.entity(p));
         CreateBlockSoundGroup soundGroup = crux.getSoundGroup();
         if(soundGroup != null){
             CreateSound sound = soundGroup.getBreakSound();
@@ -127,7 +138,7 @@ public class CustomBlocksListener implements Listener {
         ActiveCruxBlock active = manager.getActiveBlock(b);
         if(active==null) return;
         Player p = event.getPlayer();
-        active.breakBlock(EntityMiner.from(event.getPlayer()), true, p.getGameMode() == GameMode.CREATIVE);
+        active.breakBlock(Miner.entity(event.getPlayer()), true, p.getGameMode() == GameMode.CREATIVE);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -241,7 +252,7 @@ public class CustomBlocksListener implements Listener {
             if(e instanceof LivingEntity) return;
         }
         plugin.getServer().getScheduler().runTask(plugin, task ->{
-            ActiveCruxBlock placed = group.placeBlock(PlaceBlockContext.context(placeBlock, EntityMiner.from(p), blockFace));
+            ActiveCruxBlock placed = group.placeBlock(PlaceBlockContext.context(placeBlock, Miner.entity(p), blockFace));
             if(placed == null) return;
 
             if(p.getGameMode() != GameMode.CREATIVE) item.setAmount(item.getAmount() - 1);

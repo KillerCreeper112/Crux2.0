@@ -32,7 +32,6 @@ public class ActiveBushBlock extends ActiveCruxBlockImpl {
 
     @Override
     public boolean isPlacementValid() {
-        if(!super.isPlacementValid()) return false;
         switch (getBushType()){
             case BOTTOM, MIDDLE ->{
                 Block above = block.getRelative(BlockFace.UP);
@@ -40,7 +39,13 @@ public class ActiveBushBlock extends ActiveCruxBlockImpl {
                 if(cruxAbove == null || !cruxBlock.getGroup().containsBlock(cruxAbove)) return false;
             }
         }
-        return true;
+        Block ground = block.getRelative(BlockFace.DOWN);
+        if(getBushType() == BushType.BOTTOM) return ground.isSolid();
+
+        CruxBlock active = CruxBlocksRegistries.BLOCKS.getByBlock(ground);
+
+        if(active == null) return false;
+        return cruxBlock.getGroup().containsBlock(active);
     }
 
     public @NotNull BushType getBushType(){
