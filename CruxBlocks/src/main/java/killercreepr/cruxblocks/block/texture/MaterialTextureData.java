@@ -33,6 +33,11 @@ public class MaterialTextureData implements TextureData {
         return Objects.hash(material);
     }
 
+    @Override
+    public String toString() {
+        return "MaterialTextureData{material=" + material + "}";
+    }
+
     public @NotNull Material getMaterial() {
         return material;
     }

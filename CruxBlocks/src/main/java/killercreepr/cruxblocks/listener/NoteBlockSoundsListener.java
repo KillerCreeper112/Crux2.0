@@ -38,7 +38,7 @@ public class NoteBlockSoundsListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onStepFall(final GenericGameEvent event) {
+    public void onGenericGame(final GenericGameEvent event) {
         Entity entity = event.getEntity();
         if (!(entity instanceof LivingEntity)) return;
         if (!CruxWorldUtil.isLoaded(entity.getLocation())) return;
@@ -77,10 +77,8 @@ public class NoteBlockSoundsListener implements Listener {
         }
     }
 
-
-
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    public void onPlacingWood(final BlockPlaceEvent event) {
+    public void onBlockPlace(BlockPlaceEvent event) {
         Block placed = event.getBlockPlaced();
         CruxBlock crux = registry.getByBlock(placed);
         if(crux==null) return;
@@ -92,7 +90,7 @@ public class NoteBlockSoundsListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    public void onBreakingWood(final BlockBreakEvent event) {
+    public void onBlockBreak(BlockBreakEvent event) {
         final Block block = event.getBlock();
         Location location = block.getLocation();
 
@@ -112,7 +110,7 @@ public class NoteBlockSoundsListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onStopHittingWood(final BlockDamageAbortEvent event) {
+    public void onBlockDamageAbort(BlockDamageAbortEvent event) {
         Location location = event.getBlock().getLocation();
         if (breakerPlaySound.containsKey(location)) {
             breakerPlaySound.get(location).cancel();
@@ -121,7 +119,7 @@ public class NoteBlockSoundsListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onHitWood(final BlockDamageEvent event) {
+    public void onBlockDamage(BlockDamageEvent event) {
         if (event.getInstaBreak()) return;
         Block block = event.getBlock();
         CruxBlock crux = registry.getByBlock(block);

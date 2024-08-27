@@ -43,6 +43,11 @@ public class NoteTextureData implements TextureData{
         return Objects.hash(note, instrument, powered);
     }
 
+    @Override
+    public String toString() {
+        return "NoteTextureData{note=" + note.getId() + ", instrument=" + instrument + ", powered=" + powered + "}";
+    }
+
     public @NotNull Note getNote() {
         return note;
     }

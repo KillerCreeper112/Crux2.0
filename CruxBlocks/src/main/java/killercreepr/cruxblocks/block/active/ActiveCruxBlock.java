@@ -96,11 +96,16 @@ public interface ActiveCruxBlock {
 
     /**
      * Called to basically break the block if it's no longer in a valid location.
+     * In the majority of implementations, the block should break if {@link #isPlacementValid()} returns false.
      * For example, a flower would probably want to break if it's no longer on a solid block.
      */
     default void update(){
-        if(getCruxBlock().canPlace(BlockContext.context(getBlock(), null))) return;
+        if(isPlacementValid()) return;
         breakBlock((Miner) null);
+    }
+
+    default boolean isPlacementValid(){
+        return getCruxBlock().canPlace(BlockContext.context(getBlock(), null));
     }
 
     default boolean canHarvest(@Nullable Miner miner){

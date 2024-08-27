@@ -78,7 +78,7 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
     public void onEnable(@NotNull CruxPlugin plugin) {
         Crux.handlers().setBlock(this);
         plugin.registerListeners(
-            new CustomBlocksListener(this),
+            new CustomBlocksListener(plugin, this),
             new NoteBlockSoundsListener(plugin, CruxBlocksRegistries.BLOCKS)
         );
 

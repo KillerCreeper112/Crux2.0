@@ -9,6 +9,8 @@ import org.bukkit.generator.LimitedRegion;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
+
 public interface TextureData {
     //todo open this up
     static @Nullable TextureData buildFromBlock(@NotNull Block block){
@@ -23,7 +25,7 @@ public interface TextureData {
             return new WireTextureData.Builder()
                 .attached(wire.isAttached())
                 .disarmed(wire.isDisarmed())
-                .faces(wire.getAllowedFaces())
+                .faces(new HashSet<>(wire.getFaces()))
                 .powered(wire.isPowered())
                 .build();
         }

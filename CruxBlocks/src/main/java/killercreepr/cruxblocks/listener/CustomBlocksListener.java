@@ -17,6 +17,7 @@ import killercreepr.cruxblocks.manager.CruxBlockManager;
 import killercreepr.cruxblocks.persistence.CruxBlocksPersistTags;
 import killercreepr.cruxblocks.user.BlockMiner;
 import killercreepr.cruxblocks.user.EntityMiner;
+import killercreepr.cruxblocks.user.Miner;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -38,6 +39,7 @@ import org.bukkit.event.player.PlayerAnimationType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,8 +47,10 @@ import java.util.*;
 
 //todo the block breaking speed is wack
 public class CustomBlocksListener implements Listener {
+    protected final @NotNull Plugin plugin;
     protected final @NotNull CruxBlockManager manager;
-    public CustomBlocksListener(@NotNull CruxBlockManager manager) {
+    public CustomBlocksListener(@NotNull Plugin plugin, @NotNull CruxBlockManager manager) {
+        this.plugin = plugin;
         this.manager = manager;
     }
 
@@ -68,8 +72,16 @@ public class CustomBlocksListener implements Listener {
         event.setCancelled(true);
     }
 
+    @EventHandler(ignoreCancelled = true)
+    public void onBlockPhysics(BlockPhysicsEvent event) {
+        Block b = event.getBlock();
+        ActiveCruxBlock block = manager.getActiveBlock(b);
+        if(block == null) return;
+        block.update();
+    }
+
     @EventHandler
-    private void blockDrop(BlockDropItemEvent event){
+    private void blockDropItem(BlockDropItemEvent event){
         Player p = event.getPlayer();
         Block block = event.getBlock();
         ActiveCruxBlock active = manager.getActiveBlock(block, event.getBlockState().getBlockData());
@@ -220,9 +232,9 @@ public class CustomBlocksListener implements Listener {
                 return;
             }
         }
-        /*todo if(CruxBlocks.isInteractable(clickedBlock.getType()) && clickedBlock.getType() != Material.NOTE_BLOCK){
+        if(clickedBlock.getType().asBlockType().isInteractable() && clickedBlock.getType() != Material.NOTE_BLOCK){
             if(!p.isSneaking() || (p.isSneaking() && item == null)) return;
-        }*/
+        }
         CruxBlockGroup group = CruxBlocksPersistTags.CRUX_BLOCK_GROUP.get(item);
         if(group == null) return;
         Block placeBlock = getPlaceBlock(clickedBlock, blockFace);
@@ -231,15 +243,12 @@ public class CustomBlocksListener implements Listener {
         for(Entity e : clickedBlock.getWorld().getNearbyEntities(CruxBlockUtil.getBlockBox(placeBlock))){
             if(e instanceof LivingEntity) return;
         }
-        new BukkitRunnable(){
-            @Override
-            public void run() {
-                ActiveCruxBlock placed = group.placeBlock(PlaceBlockContext.context(placeBlock, EntityMiner.from(p), blockFace));
-                if(placed == null) return;
+        plugin.getServer().getScheduler().runTask(plugin, task ->{
+            ActiveCruxBlock placed = group.placeBlock(PlaceBlockContext.context(placeBlock, EntityMiner.from(p), blockFace));
+            if(placed == null) return;
 
-                if(p.getGameMode() != GameMode.CREATIVE) item.setAmount(item.getAmount() - 1);
-                p.swingHand(event.getHand());
-            }
-        }.runTaskLater(Crux.getMainPlugin(), 1L);
+            if(p.getGameMode() != GameMode.CREATIVE) item.setAmount(item.getAmount() - 1);
+            p.swingHand(event.getHand());
+        });
     }
 }
