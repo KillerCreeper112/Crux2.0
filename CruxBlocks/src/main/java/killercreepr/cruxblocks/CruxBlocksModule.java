@@ -25,8 +25,8 @@ import killercreepr.cruxblocks.listener.NoteBlockSoundsListener;
 import killercreepr.cruxblocks.manager.CruxBlockManager;
 import killercreepr.cruxblocks.registeries.CruxBlockRegistry;
 import killercreepr.cruxblocks.registeries.CruxBlocksRegistries;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
@@ -130,8 +130,9 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
         if(block==null) return null;
         ActiveCruxBlock active = block.createActive(at);
 
-        if(active instanceof ManagedTicked){
+        if(active instanceof ManagedTicked ticked){
             activeBlocks.put(active.getBlock(), active);
+            ticked.started();
         }
 
         return active;
@@ -147,7 +148,7 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
         return activeBlocks.get(at);
     }
 
-    public @NotNull BukkitRunnable blockTick(){
+    public @NotNull BukkitRunnable buildBlockTickTask(@NotNull Server server){
         return new BukkitRunnable() {
             private int checkBlocks = 40;
             @Override
@@ -156,7 +157,7 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
                     checkBlocks--;
                     if(checkBlocks <= 0){
                         checkBlocks = 40;
-                        for(Player p : Bukkit.getOnlinePlayers()){
+                        for(Player p : server.getOnlinePlayers()){
                             if(!p.getChunk().isLoaded()) continue;
                             for(Block b : CruxLoc.getNearbyBlocks(p.getLocation().getBlock(), 24)){
                                 if(!b.getChunk().isLoaded()) continue;
@@ -174,7 +175,7 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
                 for(ActiveCruxBlock a : new HashSet<>(activeBlocks.values())){
                     if(!(a instanceof ManagedTicked t)) continue;
                     if(!a.isValid() || t.shouldStop() || !a.getBlock().getChunk().isLoaded() ||
-                        CruxEntity.getEntitiesNear(Player.class, a.getBlock().getLocation(), 32f, null).isEmpty()){
+                        CruxEntity.getEntityAmountNearChunk(a.getBlock().getChunk(), 3, e -> e instanceof Player) < 1){
                         t.stopped();
                         activeBlocks.remove(a.getBlock());
                         continue;

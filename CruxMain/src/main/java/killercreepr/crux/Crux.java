@@ -71,11 +71,11 @@ public final class Crux {
     private static final @NotNull CruxHandlers handlers = new CruxHandlers.Generic();
     public static @NotNull CruxHandlers handlers(){ return handlers; }
 
-    public static @NotNull BukkitRunnable buildTickRunnable(){
-        return buildTickRunnable(CruxRegistries.TICKS, true);
+    public static @NotNull BukkitRunnable buildTickTask(){
+        return buildTickTask(CruxRegistries.TICKS, true);
     }
 
-    public static @NotNull BukkitRunnable buildTickRunnable(@NotNull KeyedRegistry<CruxTick> registry, boolean includeEntityMemory){
+    public static @NotNull BukkitRunnable buildTickTask(@NotNull KeyedRegistry<CruxTick> registry, boolean includeEntityMemory){
         Crux.log(Level.WARNING, "BUILDING A TICK RUNNABLE");
         if(!includeEntityMemory){
             return new BukkitRunnable(){

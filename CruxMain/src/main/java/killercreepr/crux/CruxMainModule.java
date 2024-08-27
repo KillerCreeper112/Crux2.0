@@ -35,6 +35,6 @@ public class CruxMainModule implements CruxModule {
             new PlayerDataListener(),
             new EntitySpawnListener()
         );
-        Crux.buildTickRunnable().runTaskTimerAsynchronously(plugin, 20L, 1L);
+        Crux.buildTickTask().runTaskTimerAsynchronously(plugin, 20L, 1L);
     }
 }
