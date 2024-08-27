@@ -10,6 +10,7 @@ import killercreepr.cruxblocks.block.context.PlaceBlockContext;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.block.texture.TextureData;
 import killercreepr.cruxblocks.event.CruxBlockPlaceEvent;
+import killercreepr.cruxblocks.event.CruxBlockSetEvent;
 import net.kyori.adventure.key.Keyed;
 import org.bukkit.block.Block;
 import org.bukkit.generator.LimitedRegion;
@@ -40,9 +41,14 @@ public interface CruxBlock extends Keyed, CruxBlockData {
     /**
      * Skips the can place check and event call.
      */
-    default void setBlock(@NotNull BlockContext ctx, boolean applyPhysics){
+    default @Nullable ActiveCruxBlock setBlock(@NotNull BlockContext ctx, boolean applyPhysics){
+        CruxBlockSetEvent event = new CruxBlockSetEvent(this, ctx);
+        if(!event.callEvent()) return null;
+
         TextureData data = getTextureData();
-        data.applyToBlock(ctx.getBlock(), applyPhysics);
+        data.setBlock(ctx.getBlock(), applyPhysics);
+        return CruxRegistries.MODULES.getModuleOrThrow(CruxBlocksModule.class)
+            .getActiveBlock(ctx.getBlock());
     }
 
     @Override

@@ -6,7 +6,6 @@ import killercreepr.cruxblocks.block.standard.BushBlock;
 import killercreepr.cruxblocks.block.standard.BushType;
 import killercreepr.cruxblocks.registeries.CruxBlocksRegistries;
 import killercreepr.cruxblocks.user.Miner;
-import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
