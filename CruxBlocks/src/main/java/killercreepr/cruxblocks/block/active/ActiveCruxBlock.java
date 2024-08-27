@@ -6,13 +6,15 @@ import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.crux.data.communication.CreateSound;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.context.BlockContext;
-import killercreepr.cruxblocks.block.context.BlockContextImpl;
 import killercreepr.cruxblocks.event.CruxBlockBreakEvent;
 import killercreepr.cruxblocks.user.EntityMiner;
 import killercreepr.cruxblocks.user.ItemMiner;
 import killercreepr.cruxblocks.user.Miner;
 import killercreepr.cruxblocks.user.Tooled;
-import org.bukkit.*;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.LivingEntity;
@@ -38,13 +40,14 @@ public interface ActiveCruxBlock {
         return breakBlock(miner, true, false);
     }
 
+    //todo add block flags inside of booleans for display effects and display drops
     default @NotNull CruxBlockBreakEvent breakBlock(@Nullable Miner miner, boolean displayEffects, boolean disableDrops){
         Block block = getBlock();
         Collection<ItemStack> drops;
         if(miner instanceof EntityMiner m && m.getEntity() instanceof Player p && p.getGameMode() == GameMode.CREATIVE){
             drops = null;
         }else drops = getDrops(miner);
-        CruxBlockBreakEvent event = new CruxBlockBreakEvent(this, new BlockContextImpl(block, miner), drops);
+        CruxBlockBreakEvent event = new CruxBlockBreakEvent(this, BlockContext.context(block, miner), drops);
         if(!event.callEvent()) return event;
         drops = event.getDrops();
         BlockData data = block.getBlockData();
@@ -96,7 +99,7 @@ public interface ActiveCruxBlock {
      * For example, a flower would probably want to break if it's no longer on a solid block.
      */
     default void update(){
-        if(getCruxBlock().canPlace(new BlockContextImpl(getBlock(), null))) return;
+        if(getCruxBlock().canPlace(BlockContext.context(getBlock(), null))) return;
         breakBlock((Miner) null);
     }
 

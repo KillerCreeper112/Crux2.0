@@ -1,14 +1,11 @@
 package killercreepr.cruxblocks.block.group;
 
 import killercreepr.crux.data.communication.CreateBlockSoundGroup;
-import killercreepr.crux.data.communication.CreateSound;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.CruxBlockData;
 import killercreepr.cruxblocks.block.context.BlockContext;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
-import org.bukkit.Sound;
-import org.bukkit.SoundGroup;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.jetbrains.annotations.NotNull;

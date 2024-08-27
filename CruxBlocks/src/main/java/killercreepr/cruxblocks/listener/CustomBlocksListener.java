@@ -10,7 +10,7 @@ import killercreepr.crux.util.CruxLoc;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxInteractable;
-import killercreepr.cruxblocks.block.context.PlaceBlockContextImpl;
+import killercreepr.cruxblocks.block.context.PlaceBlockContext;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.data.entity.MinerHolder;
 import killercreepr.cruxblocks.manager.CruxBlockManager;
@@ -118,7 +118,7 @@ public class CustomBlocksListener implements Listener {
         ActiveCruxBlock active = manager.getActiveBlock(b);
         if(active==null) return;
         Player p = event.getPlayer();
-        active.breakBlock(EntityMiner.from(event.getPlayer()), false, p.getGameMode() == GameMode.CREATIVE);
+        active.breakBlock(EntityMiner.from(event.getPlayer()), true, p.getGameMode() == GameMode.CREATIVE);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -126,7 +126,7 @@ public class CustomBlocksListener implements Listener {
         Block b = event.getBlock();
         ActiveCruxBlock active = manager.getActiveBlock(b);
         if(active==null) return;
-        active.breakBlock(new BlockMiner(event.getSource()), false, false);
+        active.breakBlock(new BlockMiner(event.getSource()), true, false);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -234,7 +234,7 @@ public class CustomBlocksListener implements Listener {
         new BukkitRunnable(){
             @Override
             public void run() {
-                ActiveCruxBlock placed = group.placeBlock(new PlaceBlockContextImpl(placeBlock, EntityMiner.from(p), blockFace));
+                ActiveCruxBlock placed = group.placeBlock(PlaceBlockContext.context(placeBlock, EntityMiner.from(p), blockFace));
                 if(placed == null) return;
 
                 if(p.getGameMode() != GameMode.CREATIVE) item.setAmount(item.getAmount() - 1);

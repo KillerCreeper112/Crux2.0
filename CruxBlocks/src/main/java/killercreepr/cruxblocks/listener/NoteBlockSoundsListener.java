@@ -6,7 +6,9 @@ import killercreepr.crux.util.CruxEntity;
 import killercreepr.crux.util.CruxWorldUtil;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.registeries.CruxBlockRegistry;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.GameEvent;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -74,6 +76,8 @@ public class NoteBlockSoundsListener implements Listener {
             breakerPlaySound.remove(entry.getKey());
         }
     }
+
+
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlacingWood(final BlockPlaceEvent event) {

@@ -68,7 +68,7 @@ public interface CruxBlock extends Keyed, CruxBlockData {
         if(active != null){
             CreateBlockSoundGroup soundGroup = getSoundGroup();
             if(soundGroup != null){
-                CreateSound sound = soundGroup.getBreakSound();
+                CreateSound sound = soundGroup.getPlaceSound();
                 if(sound != null){
                     sound.playAt(b.getLocation().toCenterLocation());
                 }

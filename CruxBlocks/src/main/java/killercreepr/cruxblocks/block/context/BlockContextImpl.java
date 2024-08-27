@@ -22,4 +22,14 @@ public class BlockContextImpl implements BlockContext{
     public @Nullable Miner getMiner() {
         return miner;
     }
+
+    @Override
+    public @NotNull BlockContext withBlock(@NotNull Block block) {
+        return new BlockContextImpl(block, miner);
+    }
+
+    @Override
+    public @NotNull BlockContext withMiner(@Nullable Miner miner) {
+        return new BlockContextImpl(block, miner);
+    }
 }

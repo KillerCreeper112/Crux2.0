@@ -17,4 +17,19 @@ public class PlaceBlockContextImpl extends BlockContextImpl implements PlaceBloc
     public @NotNull BlockFace getBlockFace() {
         return blockFace;
     }
+
+    @Override
+    public @NotNull PlaceBlockContext withBlockFace(@NotNull BlockFace blockFace) {
+        return new PlaceBlockContextImpl(block, miner, blockFace);
+    }
+
+    @Override
+    public @NotNull PlaceBlockContext withBlock(@NotNull Block block) {
+        return new PlaceBlockContextImpl(block, miner, blockFace);
+    }
+
+    @Override
+    public @NotNull PlaceBlockContext withMiner(@Nullable Miner miner) {
+        return new PlaceBlockContextImpl(block, miner, blockFace);
+    }
 }

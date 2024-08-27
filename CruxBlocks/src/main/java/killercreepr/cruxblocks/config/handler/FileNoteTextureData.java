@@ -2,11 +2,11 @@ package killercreepr.cruxblocks.config.handler;
 
 import killercreepr.crux.util.CruxObjects;
 import killercreepr.cruxblocks.block.texture.NoteTextureData;
-import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
+import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
 import org.bukkit.Instrument;
 import org.bukkit.Note;
 import org.jetbrains.annotations.NotNull;
