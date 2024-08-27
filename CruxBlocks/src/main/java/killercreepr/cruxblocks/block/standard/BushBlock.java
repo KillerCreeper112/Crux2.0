@@ -2,7 +2,9 @@ package killercreepr.cruxblocks.block.standard;
 
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.GenericBlock;
+import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.block.context.BlockContext;
+import killercreepr.cruxblocks.block.standard.active.ActiveBushBlock;
 import killercreepr.cruxblocks.block.texture.TextureData;
 import killercreepr.cruxblocks.registeries.CruxBlocksRegistries;
 import net.kyori.adventure.key.Key;
@@ -22,9 +24,18 @@ public class BushBlock extends GenericBlock {
     }
 
     @Override
+    public @NotNull ActiveCruxBlock createActive(@NotNull Block block) {
+        return new ActiveBushBlock(block, this);
+    }
+
+    @Override
     public boolean canPlace(@NotNull BlockContext ctx) {
+        if(bushType == BushType.BOTTOM){
+            return group.canPlace(ctx);
+        }
         Block b = ctx.getBlock();
         Block ground = b.getRelative(BlockFace.DOWN);
+
         CruxBlock active = CruxBlocksRegistries.BLOCKS.getByBlock(ground);
 
         if(active == null) return false;

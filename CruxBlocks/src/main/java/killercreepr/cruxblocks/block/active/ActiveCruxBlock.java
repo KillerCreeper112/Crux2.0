@@ -17,8 +17,8 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +44,7 @@ public interface ActiveCruxBlock {
     default @NotNull CruxBlockBreakEvent breakBlock(@Nullable Miner miner, boolean displayEffects, boolean disableDrops){
         Block block = getBlock();
         Collection<ItemStack> drops;
-        if(miner instanceof EntityMiner m && m.getEntity() instanceof Player p && p.getGameMode() == GameMode.CREATIVE){
+        if(miner instanceof EntityMiner m && m.getEntity() instanceof HumanEntity p && p.getGameMode() == GameMode.CREATIVE){
             drops = null;
         }else drops = getDrops(miner);
         CruxBlockBreakEvent event = new CruxBlockBreakEvent(this, BlockContext.context(block, miner), drops);
