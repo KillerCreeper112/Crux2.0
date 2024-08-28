@@ -38,8 +38,9 @@ public class FileItemTag extends SimpleFileHandler<ItemTag> {
     public @Nullable ItemTag deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e, @NotNull Key key){
         if(!(e instanceof FileObject o)) return null;
         FileElement values = o.get("values");
+        Crux.log(Level.WARNING, "has values? " + values);
         if(values==null) return null;
-        return deserializeValues(ctx, e, key);
+        return deserializeValues(ctx, values, key);
     }
     public @Nullable ItemTag deserializeValues(@NotNull FileContext<?> ctx, @NotNull FileElement e, @NotNull Key key) {
         if(e instanceof FileGeneric single){
