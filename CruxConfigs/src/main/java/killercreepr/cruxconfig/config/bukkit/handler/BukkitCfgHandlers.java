@@ -1,6 +1,7 @@
 package killercreepr.cruxconfig.config.bukkit.handler;
 
 import io.papermc.paper.registry.RegistryKey;
+import killercreepr.crux.ItemTag;
 import killercreepr.crux.data.BlockPos;
 import killercreepr.crux.data.LocationPos;
 import killercreepr.crux.data.StoredChunk;
@@ -71,6 +72,7 @@ public class BukkitCfgHandlers {
     public static final FileSimpleLootObject SIMPLE_LOOT_OBJECT = new FileSimpleLootObject();
     public static final FileItemLootPoolObject ITEM_LOOT_POOL_OBJECT = new FileItemLootPoolObject();
     public static final FileCreateBlockSoundGroup CREATE_BLOCK_SOUND_GROUP = new FileCreateBlockSoundGroup();
+    public static final FileItemTag ITEM_TAG = new FileItemTag();
 
     public static void initStandard(){
         CfgRegistries.FILE.forEach(BukkitCfgHandlers::init);
@@ -101,6 +103,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(ItemLootFunction.class, ITEM_LOOT_FUNCTION);
         registry.registerFileHandler(ItemLootPoolObject.class, ITEM_LOOT_POOL_OBJECT);
         registry.registerFileHandler(CreateBlockSoundGroup.class, CREATE_BLOCK_SOUND_GROUP);
+        registry.registerFileHandler(ItemTag.class, ITEM_TAG);
 
         StandardFileLootConditions.register(LOOT_CONDITION);
         StandardFileLootFunctions.register(ITEM_LOOT_FUNCTION);

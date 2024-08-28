@@ -1,5 +1,6 @@
 package killercreepr.crux.registries;
 
+import killercreepr.crux.ItemTag;
 import killercreepr.crux.data.tick.CruxTick;
 import killercreepr.crux.loot.LootTable;
 import killercreepr.crux.persistence.CruxPersistence;
@@ -29,6 +30,7 @@ public class CruxRegistries {
     public static final MappedRegistry<String, Boolean> BOOLEAN_MAPPED = SimpleMappedRegistry.fromHashMap();
 
     public static final KeyedRegistry<LootTable<ItemStack>> ITEM_LOOT_TABLE = new SimpleKeyedRegistry<>();
+    public static final KeyedRegistry<ItemTag> ITEM_TAG = new SimpleKeyedRegistry<>();
 
     public static final Registry<PersistentDataType<?, ?>> PERSISTENT_DATA_TYPE = SimpleRegistry.fromSet(
         PersistentDataType.BYTE,

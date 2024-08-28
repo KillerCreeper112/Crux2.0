@@ -13,7 +13,7 @@ import killercreepr.cruxblocks.registeries.CruxBlocksRegistries;
 import killercreepr.cruxconfig.CruxConfigsModule;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
-import killercreepr.cruxconfig.config.bukkit.loot.LootTableLoader;
+import killercreepr.cruxconfig.config.bukkit.loader.LootTableLoader;
 import killercreepr.cruxcore.command.CruxCoreCommands;
 import killercreepr.cruxcore.listener.PlayerDataListener;
 import killercreepr.cruxenchants.CruxEnchantsModule;

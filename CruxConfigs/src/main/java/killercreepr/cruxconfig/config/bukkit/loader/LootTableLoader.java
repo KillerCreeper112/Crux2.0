@@ -1,4 +1,4 @@
-package killercreepr.cruxconfig.config.bukkit.loot;
+package killercreepr.cruxconfig.config.bukkit.loader;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.loot.item.ItemLootTable;
@@ -15,27 +15,8 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.util.logging.Level;
 
-public class LootTableLoader {
-    public void loadConfiguration(@NotNull File folder){
-        loadConfiguration(folder, null);
-    }
-
-    public void loadConfiguration(@NotNull File file, @Nullable String path){
-        if(BukkitDataFile.isSupported(file)){
-            loadConfiguration(
-                BukkitDataFile.parse(file),
-                path == null ? file.getName() : path + "/" + CruxFolder.withoutFileExtension(file.getName())
-            );
-            return;
-        }
-        File[] list = file.listFiles();
-        if(list==null) return;
-        for(File f : list){
-            if(f.isDirectory()) path = path == null ? f.getName() : (path + "/" + f.getName());
-            loadConfiguration(f, path);
-        }
-    }
-
+public class LootTableLoader extends CfgLoader {
+    @Override
     public void loadConfiguration(@NotNull DataFile cfg, @Nullable String path){
         ItemLootTable table;
         if(path == null) table = cfg.deserialize("", ItemLootTable.class);
