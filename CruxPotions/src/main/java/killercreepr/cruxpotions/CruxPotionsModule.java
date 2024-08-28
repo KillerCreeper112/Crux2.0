@@ -13,6 +13,7 @@ import killercreepr.cruxpotions.data.PotionHolder;
 import killercreepr.cruxpotions.item.PotionItemUpdater;
 import killercreepr.cruxpotions.listener.PlayerDataListener;
 import killercreepr.cruxpotions.listener.PotionListener;
+import killercreepr.cruxpotions.persistence.CruxPotionsPersistence;
 import killercreepr.cruxpotions.persistence.PotionPersistTags;
 import killercreepr.cruxpotions.potions.ActivePotionImpl;
 import killercreepr.cruxpotions.potions.InflictedPotion;
@@ -27,6 +28,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class CruxPotionsModule implements CruxModule {
     public static final String NAMESPACE = StandardModules.CRUX_POTIONS;
+
+    public CruxPotionsModule() {
+        CruxPotionsPersistence.register();
+    }
+
     @Override
     public @NotNull String name() {
         return NAMESPACE;
