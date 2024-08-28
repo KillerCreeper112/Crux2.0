@@ -49,5 +49,4 @@ public class StringTagContainer extends SimpleTagContainer<StringResolver> {
         super.addAll(tags, prefix);
         return this;
     }
-
 }

@@ -7,27 +7,59 @@ import killercreepr.crux.tags.TagsPrefixBuilder;
 import killercreepr.crux.tags.context.FormatPrefix;
 import killercreepr.crux.tags.resolver.StringListResolver;
 import killercreepr.crux.tags.resolver.StringResolver;
+import killercreepr.crux.tags.resolver.TagResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
-public interface TagContainer<T> extends Iterable<T> {
-    static TagContainer<StringResolver> string(){
+public interface TagContainer<T extends TagResolver<?>> extends Iterable<T> {
+    static StringTagContainProvider string(){
         return string(Crux.TAGS);
     }
+    static StringTagContainProvider string(@NotNull TagParser tagParser){
+        return new SimpleStringTagProvider(tagParser);
+    }
 
-    static TagContainer<StringListResolver> stringList(){
+    static StringTagContainProvider string(@Nullable StringResolver... resolvers){
+        return string(Crux.TAGS, resolvers);
+    }
+
+    static StringTagContainProvider string(@NotNull TagParser tagParser, @Nullable StringResolver... resolvers){
+        return string(tagParser).addAll(resolvers == null ? null : Arrays.asList(resolvers));
+    }
+
+    static StringListTagContainProvider stringList(){
         return stringList(Crux.TAGS);
     }
 
-    static TagContainer<StringResolver> string(@NotNull TagParser tagParser){
-        return new StringTagContainer(tagParser);
+    static StringListTagContainProvider stringList(@NotNull TagParser tagParser){
+        return new SimpleStringListTagProvider(tagParser);
     }
 
-    static TagContainer<StringListResolver> stringList(@NotNull TagParser tagParser){
-        return new StringListTagContainer(tagParser);
+    static StringListTagContainProvider stringList(@Nullable StringListResolver... resolvers){
+        return stringList(Crux.TAGS, resolvers);
+    }
+
+    static StringListTagContainProvider stringList(@NotNull TagParser tagParser, @Nullable StringListResolver... resolvers){
+        return new SimpleStringListTagProvider(tagParser).addAll(resolvers == null ? null : Arrays.asList(resolvers));
+    }
+
+    static @NotNull MergedTagContainer merged(){
+        return merged(Crux.TAGS);
+    }
+    static @NotNull MergedTagContainer merged(@Nullable TagResolver<?>... resolvers){
+        return merged().addAll(resolvers);
+    }
+
+    static @NotNull MergedTagContainer merged(@NotNull TagParser tags){
+        return new MultiTagContainer(tags);
+    }
+
+    static @NotNull MergedTagContainer merged(@NotNull TagParser tags, @Nullable TagResolver<?>... resolvers){
+        return merged(tags).addAll(resolvers);
     }
 
     default TagContainer<T> hookAll(@NotNull DataExchange info){
@@ -47,4 +79,6 @@ public interface TagContainer<T> extends Iterable<T> {
     @Nullable T get(@NotNull String id);
     @NotNull
     Map<String, T> asMap();
+
+    @NotNull TagParser getTagParser();
 }

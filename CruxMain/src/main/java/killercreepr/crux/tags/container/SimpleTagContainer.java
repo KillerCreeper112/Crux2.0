@@ -34,7 +34,7 @@ public abstract class SimpleTagContainer<T extends TagResolver<?>> implements Ta
     }
 
     @Override
-    public SimpleTagContainer<T>  addAll(@Nullable TagContainer<T> tags) {
+    public SimpleTagContainer<T> addAll(@Nullable TagContainer<T> tags) {
         if(tags==null) return this;
         tags.asMap().forEach((id, tag) -> addExact(tag, id));
         return this;
@@ -85,6 +85,7 @@ public abstract class SimpleTagContainer<T extends TagResolver<?>> implements Ta
         return tags.values().iterator();
     }
 
+    @Override
     public @NotNull TagParser getTagParser() {
         return tagParser;
     }

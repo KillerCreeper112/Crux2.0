@@ -1,7 +1,6 @@
 package killercreepr.crux.data.communication.impl;
 
 import killercreepr.crux.Crux;
-import killercreepr.crux.data.communication.Communicator;
 import killercreepr.crux.data.communication.CreateTitle;
 import killercreepr.crux.tags.provider.StringTagProvider;
 import net.kyori.adventure.audience.Audience;

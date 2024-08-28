@@ -92,7 +92,7 @@ public class CruxItemsModule implements CruxModule, ItemHandler {
     }
 
     @Override
-    public @NotNull Key getKey(@NotNull ItemStack item) {
+    public @NotNull Key getType(@NotNull ItemStack item) {
         Key key = new CruxedItem(item).getPluginItemKey();
         if(key != null) return key;
         return item.getType().getKey();

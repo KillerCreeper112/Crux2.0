@@ -8,6 +8,7 @@ import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.crux.tags.container.StringListTagContainer;
 import killercreepr.crux.tags.container.StringTagContainer;
+import killercreepr.crux.tags.container.TagContainer;
 import killercreepr.crux.tags.context.FormatParserContext;
 import killercreepr.crux.tags.provider.StringListTagProvider;
 import killercreepr.crux.tags.provider.StringTagProvider;
@@ -200,7 +201,7 @@ public class Format implements FormatSerializer{
     //
     //... its not fine );
     //todo FIXED IT :D
-    public @NotNull String processPlaceholders(@NotNull String text, @NotNull StringTagContainer tags) {
+    public @NotNull String processPlaceholders(@NotNull String text, @NotNull TagContainer<StringResolver> tags) {
         StringTagContainer resolvers = new StringTagContainer(this.tags);
         resolvers.addAll(STRING_RESOLVERS.values());
         resolvers.addAll(tags);
@@ -279,7 +280,7 @@ public class Format implements FormatSerializer{
         return text;
     }
 
-    private @Nullable String resolvePlaceholder(String placeholderID, FormatArgs args, TextParserContext context, StringTagContainer resolvers) {
+    private @Nullable String resolvePlaceholder(String placeholderID, FormatArgs args, TextParserContext context, TagContainer<StringResolver> resolvers) {
         List<String> replacementList = new ArrayList<>();
         StringResolver resolver = resolvers.get(placeholderID);
         if(resolver != null){

@@ -18,18 +18,18 @@ public interface ItemHandler {
         return update(item, null);
     }
 
-    @NotNull Key getKey(@NotNull ItemStack item);
+    @NotNull Key getType(@NotNull ItemStack item);
 
     @Nullable
     ItemHolder getItem(@NotNull Key key);
 
     default boolean compare(@Nullable ItemStack item, @Nullable ItemStack item1){
         if(item == null || item1 == null) return item == item1;
-        return compare(getKey(item), item1);
+        return compare(getType(item), item1);
     }
 
     default boolean compare(@NotNull Key key, @Nullable ItemStack item){
-        return item != null && key.equals(getKey(item));
+        return item != null && key.equals(getType(item));
     }
 
 
@@ -41,7 +41,7 @@ public interface ItemHandler {
         }
 
         @Override
-        public @NotNull Key getKey(@NotNull ItemStack item) {
+        public @NotNull Key getType(@NotNull ItemStack item) {
             return item.getType().getKey();
         }
 

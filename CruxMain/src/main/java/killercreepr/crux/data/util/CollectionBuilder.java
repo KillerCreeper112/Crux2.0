@@ -2,7 +2,9 @@ package killercreepr.crux.data.util;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.function.Consumer;
 
 public class CollectionBuilder<V> {

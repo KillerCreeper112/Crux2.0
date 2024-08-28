@@ -13,8 +13,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class MultiTagContainer implements MergedTagContainer {
     protected final @NotNull TagParser tags;
-    protected final @NotNull StringTagContainer strings;
-    protected final @NotNull StringListTagContainer stringLists;
+    protected final @NotNull TagContainer<StringResolver> strings;
+    protected final @NotNull TagContainer<StringListResolver> stringLists;
     public MultiTagContainer(@NotNull TagParser tags){
         this(tags, new StringTagContainer(tags), new StringListTagContainer(tags));
     }
@@ -22,19 +22,19 @@ public class MultiTagContainer implements MergedTagContainer {
         this(tags.getTagParser());
         addAll(tags);
     }
-    public MultiTagContainer(@NotNull TagParser tags, @NotNull StringTagContainer strings, @NotNull StringListTagContainer stringLists) {
+    public MultiTagContainer(@NotNull TagParser tags, @NotNull TagContainer<StringResolver> strings, @NotNull TagContainer<StringListResolver> stringLists) {
         this.tags = tags;
         this.strings = strings;
         this.stringLists = stringLists;
     }
 
     @Override
-    public @NotNull StringListTagContainer getStringListTags() {
+    public @NotNull TagContainer<StringListResolver> getStringListTags() {
         return stringLists;
     }
 
     @Override
-    public @NotNull StringTagContainer getStringTags() {
+    public @NotNull TagContainer<StringResolver> getStringTags() {
         return strings;
     }
 
