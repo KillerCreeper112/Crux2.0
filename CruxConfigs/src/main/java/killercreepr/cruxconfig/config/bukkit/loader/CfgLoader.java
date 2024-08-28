@@ -17,7 +17,7 @@ public abstract class CfgLoader {
         if(BukkitDataFile.isSupported(file)){
             loadConfiguration(
                 BukkitDataFile.parse(file),
-                path == null ? file.getName() : path + "/" + CruxFolder.withoutFileExtension(file.getName())
+                path == null ? CruxFolder.withoutFileExtension(file.getName()) : path + "/" + CruxFolder.withoutFileExtension(file.getName())
             );
             return;
         }
