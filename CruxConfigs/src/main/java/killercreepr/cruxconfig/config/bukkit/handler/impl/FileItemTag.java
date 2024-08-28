@@ -32,12 +32,16 @@ public class FileItemTag extends SimpleFileHandler<ItemTag> {
         FileRegistry registry = ctx.getRegistry();
         Key key = registry.deserializeFromFile(Key.class, o.get("key"));
         if(key==null) return null;
-        FileElement values = o.get("values");
-        if(values == null) return null;
-        return deserializeFromFile(ctx, values, key);
+        return deserializeFromFile(ctx, e, key);
     }
 
-    public @Nullable ItemTag deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e, @NotNull Key key) {
+    public @Nullable ItemTag deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e, @NotNull Key key){
+        if(!(e instanceof FileObject o)) return null;
+        FileElement values = o.get("values");
+        if(values==null) return null;
+        return deserializeValues(ctx, e, key);
+    }
+    public @Nullable ItemTag deserializeValues(@NotNull FileContext<?> ctx, @NotNull FileElement e, @NotNull Key key) {
         if(e instanceof FileGeneric single){
             String itemKey = single.getAsString();
             if(itemKey.startsWith("#")){
