@@ -2,12 +2,11 @@ package killercreepr.crux.registries;
 
 import killercreepr.crux.data.tick.CruxTick;
 import killercreepr.crux.loot.LootTable;
+import killercreepr.crux.persistence.CruxPersistence;
 import killercreepr.crux.plugin.CruxPlugin;
-import killercreepr.crux.registry.KeyedRegistry;
-import killercreepr.crux.registry.MappedRegistry;
-import killercreepr.crux.registry.SimpleKeyedRegistry;
-import killercreepr.crux.registry.SimpleMappedRegistry;
+import killercreepr.crux.registry.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 public class CruxRegistries {
@@ -30,4 +29,38 @@ public class CruxRegistries {
     public static final MappedRegistry<String, Boolean> BOOLEAN_MAPPED = SimpleMappedRegistry.fromHashMap();
 
     public static final KeyedRegistry<LootTable<ItemStack>> ITEM_LOOT_TABLE = new SimpleKeyedRegistry<>();
+
+    public static final Registry<PersistentDataType<?, ?>> PERSISTENT_DATA_TYPE = SimpleRegistry.fromSet(
+        PersistentDataType.BYTE,
+        PersistentDataType.SHORT,
+        PersistentDataType.INTEGER,
+        PersistentDataType.LONG,
+        PersistentDataType.FLOAT,
+        PersistentDataType.DOUBLE,
+        PersistentDataType.STRING,
+        PersistentDataType.BYTE_ARRAY,
+        PersistentDataType.INTEGER_ARRAY,
+        PersistentDataType.LONG_ARRAY,
+        PersistentDataType.TAG_CONTAINER,
+
+        PersistentDataType.LIST.booleans(),
+        PersistentDataType.LIST.dataContainers(),
+        PersistentDataType.LIST.longs(),
+        PersistentDataType.LIST.bytes(),
+        PersistentDataType.LIST.doubles(),
+        PersistentDataType.LIST.floats(),
+        PersistentDataType.LIST.strings(),
+
+        //custom
+        CruxPersistence.CRUX_KEY,
+        CruxPersistence.BLOCK_POS,
+        CruxPersistence.UUID,
+        CruxPersistence.LOCATION,
+        CruxPersistence.VECTOR,
+        CruxPersistence.POTION_EFFECT,
+
+        CruxPersistence.LIST.LOCATION,
+        CruxPersistence.LIST.UUID,
+        CruxPersistence.LIST.POTION_EFFECT
+    );
 }

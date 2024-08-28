@@ -1,6 +1,7 @@
 package killercreepr.crux.util;
 
 import killercreepr.crux.Crux;
+import killercreepr.crux.registries.CruxRegistries;
 import net.kyori.adventure.key.Key;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -254,5 +255,22 @@ public class CruxTag {
             e.remove(k);
         }
         return e;
+    }
+
+    public static <E extends PersistentDataHolder> E copyAll(@Nullable E to, @Nullable E from){
+        if(to == null || from == null) return to;
+        for(NamespacedKey k : from.getPersistentDataContainer().getKeys()){
+            PersistentDataType t = getDataType(from.getPersistentDataContainer(), k);
+            if(t == null) continue;
+            CruxTag.set(to, k, t, from.getPersistentDataContainer().get(k, t));
+        }
+        return to;
+    }
+
+    public static @Nullable PersistentDataType<?, ?> getDataType(@NotNull PersistentDataContainer pdc, @NotNull NamespacedKey key) {
+        for (PersistentDataType<?, ?> dataType : CruxRegistries.PERSISTENT_DATA_TYPE) {
+            if (pdc.has(key, dataType)) return dataType;
+        }
+        return null;
     }
 }

@@ -2,10 +2,7 @@ package killercreepr.crux.registry;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.*;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -17,6 +14,10 @@ public class SimpleRegistry<T> implements Registry<T> {
 
     public static <T> SimpleRegistry<T> fromSet(){
         return new SimpleRegistry<>(new HashSet<>());
+    }
+
+    public static <T> SimpleRegistry<T> fromSet(T... startingValues){
+        return new SimpleRegistry<>(new HashSet<>(Set.of(startingValues)));
     }
 
     public static <T> SimpleRegistry<T> fromList(){
