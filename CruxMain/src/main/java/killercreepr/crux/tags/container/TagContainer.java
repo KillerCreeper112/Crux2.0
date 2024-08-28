@@ -55,7 +55,7 @@ public interface TagContainer<T extends TagResolver<?>> extends Iterable<T> {
     }
 
     static @NotNull MergedTagContainer merged(@NotNull TagParser tags){
-        return new MultiTagContainer(tags);
+        return new SimpleMergedTagContainer(tags);
     }
 
     static @NotNull MergedTagContainer merged(@NotNull TagParser tags, @Nullable TagResolver<?>... resolvers){

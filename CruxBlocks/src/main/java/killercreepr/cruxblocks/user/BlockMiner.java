@@ -12,4 +12,9 @@ public class BlockMiner implements Miner {
     public @NotNull Block getBlock() {
         return block;
     }
+
+    @Override
+    public Object getHandle() {
+        return getBlock();
+    }
 }

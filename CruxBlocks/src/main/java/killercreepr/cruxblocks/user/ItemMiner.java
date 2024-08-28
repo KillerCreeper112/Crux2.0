@@ -13,4 +13,9 @@ public class ItemMiner implements Tooled, Miner {
     public @Nullable ItemStack getTool() {
         return tool;
     }
+
+    @Override
+    public Object getHandle() {
+        return tool;
+    }
 }

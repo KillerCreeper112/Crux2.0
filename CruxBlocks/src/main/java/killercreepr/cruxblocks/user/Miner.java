@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
  * Represents an object that can manipulate (mine/place) blocks.
  */
 public interface Miner {
+    Object getHandle();
     static Miner block(@NotNull Block block){
         return new BlockMiner(block);
     }

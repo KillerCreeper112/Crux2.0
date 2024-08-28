@@ -6,15 +6,7 @@ import killercreepr.crux.loot.LootContext;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageByBlockEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,94 +14,6 @@ import java.util.Map;
 import java.util.Random;
 
 public class SimpleLootContext implements LootContext {
-    public static Builder builder(){
-        return new Builder();
-    }
-
-    public static Builder builder(@NotNull EntityDeathEvent event){
-        LivingEntity e = event.getEntity();
-        Player killer = e.getKiller();
-        return builder()
-            .setInfo(
-                DataExchange.builder()
-                    .putAll(e, "victim", "entity")
-                    .putAll(killer, "killer", "attacker")
-                    .build()
-            )
-            .setLocation(e.getLocation())
-            .setLooter(killer)
-            .setLooted(e)
-            ;
-    }
-
-    public static Builder builder(@NotNull EntityDamageByEntityEvent event){
-        Entity victim = event.getEntity();
-        Entity attacker = event.getDamager();
-        return builder()
-            .setInfo(
-                DataExchange.builder()
-                    .putAll(victim, "victim", "entity")
-                    .putAll(attacker, "attacker")
-                    .build()
-            )
-            .setLocation(victim.getLocation())
-            .setLooter(attacker)
-            .setLooted(victim)
-            ;
-    }
-
-    public static Builder builder(@NotNull EntityDamageByBlockEvent event){
-        Entity victim = event.getEntity();
-        Block attacker = event.getDamager();
-        return builder()
-            .setInfo(
-                DataExchange.builder()
-                    .putAll(victim, "victim", "entity")
-                    .putAll(attacker, "attacker")
-                    .build()
-            )
-            .setLocation(victim.getLocation())
-            .setLooter(attacker)
-            .setLooted(victim)
-            ;
-    }
-
-    public static Builder builder(@NotNull BlockBreakEvent event){
-        Block block = event.getBlock();
-        Entity player = event.getPlayer();
-        return builder()
-            .setInfo(
-                DataExchange.builder()
-                    .putAll(player, "player", "miner", "entity")
-                    .putAll(block, "block", "block_broken")
-                    .putAll(event.getExpToDrop(), "exp_to_drop")
-                    .build()
-            )
-            .setLocation(block.getLocation())
-            .setLooter(player)
-            .setLooted(block)
-            ;
-    }
-
-    public static Builder builder(@NotNull BlockPlaceEvent event){
-        Block block = event.getBlock();
-        Entity player = event.getPlayer();
-        return builder()
-            .setInfo(
-                DataExchange.builder()
-                    .putAll(player, "player", "miner", "entity")
-                    .putAll(block, "block", "block_placed")
-                    .putAll(event.getBlockAgainst(), "block_against")
-                    .putAll(event.getBlockReplacedState(), "block_replaced_state")
-                    .putAll(event.getHand(), "hand")
-                    .build()
-            )
-            .setLocation(block.getLocation())
-            .setLooter(player)
-            .setLooted(block)
-            ;
-    }
-
     private final Location location;
     private final float luck;
     private final Object looter;
@@ -166,7 +70,32 @@ public class SimpleLootContext implements LootContext {
         return info;
     }
 
-    public static final class Builder{
+    @Override
+    public LootContext withRandom(@NotNull Random random) {
+        return new SimpleLootContext(location, looter, looted, random, info);
+    }
+
+    @Override
+    public LootContext withLocation(@NotNull Location location) {
+        return new SimpleLootContext(location, looter, looted, random, info);
+    }
+
+    @Override
+    public LootContext withLooter(@Nullable Object looter) {
+        return new SimpleLootContext(location, looter, looted, random, info);
+    }
+
+    @Override
+    public LootContext withLooted(@Nullable Object looted) {
+        return new SimpleLootContext(location, looter, looted, random, info);
+    }
+
+    @Override
+    public LootContext withInfo(@NotNull DataExchange info) {
+        return new SimpleLootContext(location, looter, looted, random, info);
+    }
+
+    public static final class Builder implements LootContext.Builder{
         private Location location;
         private Float luck;
         private Object looter;
@@ -174,28 +103,28 @@ public class SimpleLootContext implements LootContext {
         private Random random;
         private DataExchange info;
 
-        public Builder setInfo(DataExchange info) {
+        public Builder info(DataExchange info) {
             this.info = info; return this;
         }
 
-        public Builder setRandom(Random random) {
+        public Builder random(Random random) {
             this.random = random; return this;
         }
 
-        public Builder setLocation(Location location) {
+        public Builder location(Location location) {
             this.location = location;
             return this;
         }
 
-        public Builder setLuck(Float luck) {
+        public Builder luck(Float luck) {
             this.luck = luck; return this;
         }
 
-        public Builder setLooter(Object looter) {
+        public Builder looter(Object looter) {
             this.looter = looter; return this;
         }
 
-        public Builder setLooted(Object looted) {
+        public Builder looted(Object looted) {
             this.looted = looted; return this;
         }
 

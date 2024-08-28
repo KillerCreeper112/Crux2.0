@@ -96,7 +96,7 @@ public interface CruxMob extends Keyed {
             key.namespace(), "entity/" + key.value()
         ));
         if(lootTable==null) return;
-        LootContext ctx = SimpleLootContext.builder(event).build();
+        LootContext ctx = LootContext.builder(event).build();
         event.getDrops().addAll(lootTable.populateLoot(ctx));
     }
 

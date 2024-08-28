@@ -23,7 +23,7 @@ public interface MergedTagContainer extends StringTagProvider, StringListTagProv
     }
     @Deprecated
     static @NotNull MergedTagContainer createNew(@NotNull TagParser tags){
-        return new MultiTagContainer(tags);
+        return new SimpleMergedTagContainer(tags);
     }
     @Deprecated
     static @NotNull MergedTagContainer createNew(@NotNull TagParser tags, @Nullable TagResolver<?> resolvers){
@@ -32,14 +32,14 @@ public interface MergedTagContainer extends StringTagProvider, StringListTagProv
 
     static @Nullable MergedTagContainer merge(@Nullable MergedTagContainer container, @Nullable TagContainer<?> tags){
         if(container == null && tags == null) return null;
-        return new MultiTagContainer(container==null? Crux.TAGS:container.getStringTags().getTagParser())
+        return new SimpleMergedTagContainer(container==null? Crux.TAGS:container.getStringTags().getTagParser())
             .addAll(tags);
     }
 
     static @Nullable MergedTagContainer mergeHook(@Nullable MergedTagContainer container, @Nullable Object... hookObjects){
         if(container == null && hookObjects == null) return null;
         if(hookObjects==null) return container;
-        MultiTagContainer merged = new MultiTagContainer(container==null?Crux.TAGS:container.getStringTags().getTagParser());
+        SimpleMergedTagContainer merged = new SimpleMergedTagContainer(container==null?Crux.TAGS:container.getStringTags().getTagParser());
         merged.addAll(container);
         for(Object o : hookObjects){
             if(o==null) continue;
@@ -51,7 +51,7 @@ public interface MergedTagContainer extends StringTagProvider, StringListTagProv
     static @Nullable MergedTagContainer mergeHook(@Nullable MergedTagContainer container, @Nullable DataExchange data){
         if(container == null && data == null) return null;
         if(data==null) return container;
-        MultiTagContainer merged = new MultiTagContainer(container==null?Crux.TAGS:container.getStringTags().getTagParser());
+        SimpleMergedTagContainer merged = new SimpleMergedTagContainer(container==null?Crux.TAGS:container.getStringTags().getTagParser());
         merged.addAll(container);
         for(Holder<?> o : data){
             if(o==null) continue;

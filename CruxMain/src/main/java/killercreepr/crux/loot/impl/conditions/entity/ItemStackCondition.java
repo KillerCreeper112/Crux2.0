@@ -20,12 +20,14 @@ import java.util.Map;
 
 public class ItemStackCondition extends BaseCondition {
     protected final @Nullable Key itemType;
-    protected final @Nullable Map<Key, String> hasEnchants;
+    protected final @Nullable String amount;
+    protected final @Nullable Map<Key, String> enchants;
 
-    public ItemStackCondition(@NotNull String target, @Nullable Key itemType, @Nullable Map<Key, String> hasEnchants) {
+    public ItemStackCondition(@NotNull String target, @Nullable Key itemType, @Nullable String amount, @Nullable Map<Key, String> enchants) {
         super(target);
         this.itemType = itemType;
-        this.hasEnchants = hasEnchants;
+        this.amount = amount;
+        this.enchants = enchants;
     }
 
     @Override
@@ -35,9 +37,14 @@ public class ItemStackCondition extends BaseCondition {
         if(itemType != null){
             if(!Crux.handlers().item().getType(item).equals(itemType)) return false;
         }
-        if(hasEnchants != null){
+        if(amount != null){
+            if(!CruxString.parseBoolean(CruxMath.evaluateEvalEx(
+                Crux.FORMAT.deserializeString(amount, TagContainer.string(Tag.parsed("amount", item.getAmount()+"")).hook(item))
+            ))) return false;
+        }
+        if(enchants != null){
             ItemMeta meta = item.getItemMeta();
-            for(Map.Entry<Key, String> entry : hasEnchants.entrySet()){
+            for(Map.Entry<Key, String> entry : enchants.entrySet()){
                 Key enchant = entry.getKey();
 
                 Enchantment enchantment = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).get(enchant);
@@ -47,7 +54,7 @@ public class ItemStackCondition extends BaseCondition {
                 int level = meta == null ? 0 : meta.getEnchantLevel(enchantment);
 
                 if(!CruxString.parseBoolean(CruxMath.evaluateEvalEx(
-                    Crux.FORMAT.deserializeString(equation, TagContainer.string(Tag.parsed("level", level+"")))
+                    Crux.FORMAT.deserializeString(equation, TagContainer.string(Tag.parsed("level", level+"")).hook(item))
                 ))) return false;
             }
         }

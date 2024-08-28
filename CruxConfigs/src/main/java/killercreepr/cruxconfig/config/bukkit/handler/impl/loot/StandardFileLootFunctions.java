@@ -2,6 +2,7 @@ package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 
 import com.google.common.reflect.TypeToken;
 import killercreepr.crux.loot.conditions.LootCondition;
+import killercreepr.crux.loot.impl.item.functions.ItemAmountFunction;
 import killercreepr.crux.loot.impl.item.functions.ItemEnchantFunction;
 import killercreepr.crux.util.CruxObjects;
 import killercreepr.crux.valueproviders.number.NumberProvider;
@@ -51,6 +52,23 @@ public class StandardFileLootFunctions {
                 return new ItemEnchantFunction(
                     conditions, rolls, enchants
                 );
+            }
+        });
+        file.registerCustomHandler(new CustomFileLootFunction<>() {
+            @Override
+            public @NotNull String getType() {
+                return "set_amount";
+            }
+
+            @Override
+            public @Nullable ItemAmountFunction deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                FileRegistry registry = ctx.getRegistry();
+                NumberProvider amount = registry.deserializeFromFile(NumberProvider.class, e.get("amount"));
+                if(amount==null) return null;
+                Collection<LootCondition> conditions = registry.deserializeFromFile(
+                    new TypeToken<Collection<LootCondition>>(){}.getType(), e.get("conditions")
+                );//todo change this cause no I dont want to do this every time
+                return new ItemAmountFunction(conditions, amount);
             }
         });
     }

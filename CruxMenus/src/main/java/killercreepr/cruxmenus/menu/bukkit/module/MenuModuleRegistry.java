@@ -2,7 +2,7 @@ package killercreepr.cruxmenus.menu.bukkit.module;
 
 import killercreepr.crux.registry.Registry;
 import killercreepr.crux.tags.TagParser;
-import killercreepr.crux.tags.container.MultiTagContainer;
+import killercreepr.crux.tags.container.SimpleMergedTagContainer;
 import killercreepr.cruxmenus.menu.bukkit.CommonMenu;
 import killercreepr.cruxmenus.menu.bukkit.Menu;
 import net.kyori.adventure.key.Key;
@@ -22,8 +22,8 @@ public interface MenuModuleRegistry extends CommonMenu, Registry<ActiveMenuModul
     @Nullable
     ActiveMenuModule unregisterByID(@NotNull String id);
     default void refresh(){}
-    default MultiTagContainer buildTags(@NotNull TagParser tagParser){
-        MultiTagContainer tags = new MultiTagContainer(tagParser);
+    default SimpleMergedTagContainer buildTags(@NotNull TagParser tagParser){
+        SimpleMergedTagContainer tags = new SimpleMergedTagContainer(tagParser);
         for(ActiveMenuModule m : this){
             tags.addAll(m.buildTags(getMenu(), tagParser));
         }

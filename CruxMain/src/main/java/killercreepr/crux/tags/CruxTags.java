@@ -1,7 +1,7 @@
 package killercreepr.crux.tags;
 
 import killercreepr.crux.tags.container.MergedTagContainer;
-import killercreepr.crux.tags.container.MultiTagContainer;
+import killercreepr.crux.tags.container.SimpleMergedTagContainer;
 import killercreepr.crux.tags.container.StringListTagContainer;
 import killercreepr.crux.tags.container.StringTagContainer;
 import killercreepr.crux.tags.context.FormatPrefix;
@@ -123,7 +123,7 @@ public class CruxTags implements TagParser {
 
     @Override
     public <T> @Nullable MergedTagContainer buildTags(@NotNull T object){
-        MultiTagContainer tag = new MultiTagContainer(this);
+        SimpleMergedTagContainer tag = new SimpleMergedTagContainer(this);
         locateTags(object).forEach(objectTag ->{
             tag.getStringTags().addAll(buildStringTags(object));
             tag.getStringListTags().addAll(buildStringListTags(object));

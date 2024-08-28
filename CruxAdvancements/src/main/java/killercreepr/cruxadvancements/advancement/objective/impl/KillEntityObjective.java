@@ -22,16 +22,16 @@ public class KillEntityObjective extends NumberObjective {
                            @NotNull CruxAdvancementManager manager,
                            @NotNull ObjectiveAdvancement advancement,
                            @NotNull EntityDamageByEntityEvent event){
-        LootContext ctx = SimpleLootContext.builder()
-            .setInfo(
+        LootContext ctx = LootContext.builder()
+            .info(
                 DataExchange.builder()
                     .putAll(event.getDamager(), "damager")
                     .putAll(event.getEntity(), "victim", "entity")
                     .build()
             )
-            .setLooter(event.getDamager())
-            .setLooted(event.getEntity())
-            .setLocation(event.getEntity().getLocation())
+            .looter(event.getDamager())
+            .looted(event.getEntity())
+            .location(event.getEntity().getLocation())
             .build();
         return trigger(
             who, manager, advancement, ctx

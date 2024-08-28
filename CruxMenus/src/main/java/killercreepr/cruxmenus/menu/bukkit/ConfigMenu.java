@@ -4,7 +4,7 @@ import killercreepr.crux.context.SimpleInputContext;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.container.MergedTagContainer;
-import killercreepr.crux.tags.container.MultiTagContainer;
+import killercreepr.crux.tags.container.SimpleMergedTagContainer;
 import killercreepr.crux.util.InvUtil;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuHolder;
 import killercreepr.cruxmenus.menu.bukkit.holder.MenuItemHolder;
@@ -34,7 +34,7 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
     public ConfigMenu(@NotNull MenuHolder holder, @NotNull DataExchange info, @Nullable MergedTagContainer tags){
         this.holder = holder;
         this.info = info;
-        this.tags = new MultiTagContainer(holder.getRegistry().getFormat().tags());
+        this.tags = new SimpleMergedTagContainer(holder.getRegistry().getFormat().tags());
         if(tags != null) this.tags.addAll(tags);
     }
 
@@ -53,7 +53,7 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
 
     @Override
     public @NotNull MergedTagContainer buildTags(@NotNull TagParser tagParser){
-        MergedTagContainer tags = new MultiTagContainer(tagParser);
+        MergedTagContainer tags = new SimpleMergedTagContainer(tagParser);
         tags.addAll(super.buildTags(tagParser));
         tags.hookAll(info());
         tags.addAll(getTags());

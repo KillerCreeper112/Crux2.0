@@ -1,5 +1,8 @@
 package killercreepr.cruxblocks.block.active;
 
+import killercreepr.crux.data.DataExchange;
+import killercreepr.crux.loot.LootContext;
+import killercreepr.crux.loot.LootTable;
 import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.cruxblocks.CruxBlocksModule;
 import killercreepr.cruxblocks.block.CruxBlock;
@@ -25,8 +28,38 @@ public class ActiveCruxBlockImpl implements ActiveCruxBlock{
         this.cruxBlock = cruxBlock;
     }
 
+    public @NotNull Key buildLootTableKey(){
+        Key key = cruxBlock.getGroup() == null ? cruxBlock.key() : cruxBlock.getGroup().key();
+        return Key.key(key.namespace(), "block/" + key.value());
+    }
+
+    public @Nullable LootTable<ItemStack> getLootTable(){
+        return CruxRegistries.ITEM_LOOT_TABLE.get(buildLootTableKey());
+    }
+
+    public @NotNull LootContext buildLootContext(@Nullable Miner miner){
+        DataExchange.Builder builder = DataExchange.builder()
+            .putAll(block, "block", "block_broken")
+            ;
+        if(miner != null){
+            Object handle = miner.getHandle();
+            if(handle != null) builder.putAll(handle, "miner");
+        }
+        return LootContext.builder()
+            .info(builder.build())
+            .location(block.getLocation())
+            .looter(miner == null ? null : miner.getHandle())
+            .looted(block)
+            .build();
+    }
+
     @Override
     public @Nullable Collection<ItemStack> getDrops(@Nullable Miner miner) {
+        LootTable<ItemStack> lootTable = getLootTable();
+        if(lootTable != null){
+            return lootTable.populateLoot(buildLootContext(miner));
+        }
+
         CruxBlocksModule module = CruxRegistries.MODULES.getModuleOrThrow(CruxBlocksModule.class);
         KeyedItemProvider provider = module.getKeyedItemProvider();
         if(provider==null) return ActiveCruxBlock.super.getDrops(miner);

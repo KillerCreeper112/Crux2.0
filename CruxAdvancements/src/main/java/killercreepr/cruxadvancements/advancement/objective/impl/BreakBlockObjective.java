@@ -33,7 +33,7 @@ public class BreakBlockObjective extends NumberObjective {
                         @NotNull CruxAdvancementManager manager,
                         @NotNull ObjectiveAdvancement advancement,
                         @NotNull BlockBreakEvent event){
-        LootContext ctx = SimpleLootContext.builder(event).build();
+        LootContext ctx = LootContext.builder(event).build();
         return trigger(
             who, manager, advancement, ctx
         );

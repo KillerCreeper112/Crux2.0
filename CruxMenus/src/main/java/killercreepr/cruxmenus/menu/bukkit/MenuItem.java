@@ -3,7 +3,7 @@ package killercreepr.cruxmenus.menu.bukkit;
 import killercreepr.crux.item.dynamic.DynamicItem;
 import killercreepr.crux.registry.Registry;
 import killercreepr.crux.tags.container.MergedTagContainer;
-import killercreepr.crux.tags.container.MultiTagContainer;
+import killercreepr.crux.tags.container.TagContainer;
 import killercreepr.crux.tags.context.FormatParserContext;
 import killercreepr.crux.tags.format.Format;
 import killercreepr.crux.util.CruxItem;
@@ -63,7 +63,7 @@ public class MenuItem {
     }
 
     public @NotNull MergedTagContainer buildTags(){
-        MergedTagContainer resolvers = new MultiTagContainer(evaluatedContext.getResolvers().getTagParser());
+        MergedTagContainer resolvers = TagContainer.merged(evaluatedContext.getResolvers().getTagParser());
 
         resolvers.addAll(inputtedContext.getResolvers());
 

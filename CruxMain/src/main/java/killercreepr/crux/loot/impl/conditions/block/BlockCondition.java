@@ -2,27 +2,27 @@ package killercreepr.crux.loot.impl.conditions.block;
 
 import killercreepr.crux.loot.LootContext;
 import killercreepr.crux.loot.impl.conditions.BaseCondition;
-import org.bukkit.Material;
+import net.kyori.adventure.key.Key;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class BlockCondition extends BaseCondition {
-    protected final @Nullable Material type;
-    public BlockCondition(@NotNull String target, @Nullable Material type) {
+    protected final @Nullable Key blockType;
+    public BlockCondition(@NotNull String target, @Nullable Key blockType) {
         super(target);
-        this.type = type;
+        this.blockType = blockType;
     }
 
-    public @Nullable Material getType() {
-        return type;
+    public @Nullable Key getBlockType() {
+        return blockType;
     }
 
     @Override
     public boolean test(@NotNull LootContext ctx) {
         Block b = ctx.info().get(target, Block.class);
         if(b==null) return false;
-        if(type != null && b.getType() != type) return false;
+        if(blockType != null && !b.getType().key().equals(blockType)) return false;
         return true;
     }
 }

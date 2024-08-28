@@ -3,7 +3,7 @@ package killercreepr.cruxmenus.menu.bukkit.module.standard;
 import killercreepr.crux.data.NotNullHolder;
 import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.container.MergedTagContainer;
-import killercreepr.crux.tags.container.MultiTagContainer;
+import killercreepr.crux.tags.container.SimpleMergedTagContainer;
 import killercreepr.crux.tags.resolver.Tag;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.cruxmenus.menu.bukkit.Menu;
@@ -38,7 +38,7 @@ public abstract class ActivePagedMenuModule<T> extends SimpleActiveMenuModule {
 
     @Override
     public @Nullable MergedTagContainer buildTags(@NotNull Menu menu, @NotNull TagParser tagParser) {
-        MergedTagContainer tags = new MultiTagContainer(tagParser);
+        MergedTagContainer tags = new SimpleMergedTagContainer(tagParser);
         tags.addAll(super.buildTags(menu, tagParser));
         String prefix = MenuModule.buildTagPrefix(id);
         tags.add(Tag.parsed(prefix + "page", page+""));

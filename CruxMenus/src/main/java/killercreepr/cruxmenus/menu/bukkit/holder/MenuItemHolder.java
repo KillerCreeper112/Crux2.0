@@ -4,7 +4,7 @@ import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.Holder;
 import killercreepr.crux.item.dynamic.DynamicItem;
 import killercreepr.crux.tags.container.MergedTagContainer;
-import killercreepr.crux.tags.container.MultiTagContainer;
+import killercreepr.crux.tags.container.SimpleMergedTagContainer;
 import killercreepr.cruxmenus.menu.bukkit.MenuContext;
 import killercreepr.cruxmenus.menu.bukkit.MenuItem;
 import org.bukkit.entity.Player;
@@ -58,7 +58,7 @@ public class MenuItemHolder {
 
         public @NotNull MenuContext evaluateInfo(){
             DataExchange.Builder parsedInfo = new DataExchange.Builder();
-            MergedTagContainer resolvers = new MultiTagContainer(this.context.getResolvers().getTagParser());
+            MergedTagContainer resolvers = new SimpleMergedTagContainer(this.context.getResolvers().getTagParser());
             context.getMenu().getHolder().getRegistry().ITEM_DATA_PARSERS.forEachSorted(parser ->{
                 parsedInfo.putAll(parser.parse(p, context, item));
             });

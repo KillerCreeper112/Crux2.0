@@ -20,4 +20,8 @@ public class EntityMiner extends ItemMiner {
         return entity;
     }
 
+    @Override
+    public Object getHandle() {
+        return entity;
+    }
 }
