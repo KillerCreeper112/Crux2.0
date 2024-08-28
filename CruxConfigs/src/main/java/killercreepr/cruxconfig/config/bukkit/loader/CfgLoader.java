@@ -24,7 +24,7 @@ public abstract class CfgLoader {
         File[] list = file.listFiles();
         if(list==null) return;
         for(File f : list){
-            if(f.isDirectory()) path = path == null ? f.getName() : (path + "/" + CruxFolder.withoutFileExtension(f.getName()));
+            if(f.isDirectory()) path = path == null ? CruxFolder.withoutFileExtension(f.getName()) : (path + "/" + CruxFolder.withoutFileExtension(f.getName()));
             loadConfiguration(f, path);
         }
     }
