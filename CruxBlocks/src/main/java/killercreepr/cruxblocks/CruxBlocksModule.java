@@ -1,6 +1,7 @@
 package killercreepr.cruxblocks;
 
 import killercreepr.crux.Crux;
+import killercreepr.crux.block.CruxBlockWrapper;
 import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.crux.data.entity.PlayerMemory;
 import killercreepr.crux.data.tick.ManagedTicked;
@@ -15,6 +16,9 @@ import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.block.data.CustomBlockData;
 import killercreepr.cruxblocks.block.data.events.CustomBlockDataRemoveEvent;
+import killercreepr.cruxblocks.block.group.CruxBlockGroup;
+import killercreepr.cruxblocks.block.wrapper.CruxBlockCruxWrapper;
+import killercreepr.cruxblocks.block.wrapper.CruxGroupBlockWrapper;
 import killercreepr.cruxblocks.command.CruxBlocksCommands;
 import killercreepr.cruxblocks.config.CruxConfigHook;
 import killercreepr.cruxblocks.data.entity.MinerHolder;
@@ -26,7 +30,9 @@ import killercreepr.cruxblocks.listener.NoteBlockSoundsListener;
 import killercreepr.cruxblocks.manager.CruxBlockManager;
 import killercreepr.cruxblocks.registeries.CruxBlockRegistry;
 import killercreepr.cruxblocks.registeries.CruxBlocksRegistries;
+import net.kyori.adventure.key.Key;
 import org.bukkit.Material;
+import org.bukkit.Registry;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -197,6 +203,21 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
             }
         }
         return b;
+    }
+
+    @Override
+    public @Nullable CruxBlockWrapper getBlock(@NotNull Key key) {
+        CruxBlockGroup group = blockRegistry.getGroup(key);
+        if(group != null){
+            return new CruxGroupBlockWrapper(group);
+        }
+        CruxBlock block = blockRegistry.get(key);
+        if(block != null){
+            return new CruxBlockCruxWrapper(block);
+        }
+        Material material = Registry.MATERIAL.get(key);
+        if(material==null) return null;
+        return new CruxBlockWrapper.Vanilla(material);
     }
 
     public static boolean callRemoveBlockDataEvent(@NotNull Block block, @Nullable Event bukkitEvent) {

@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Set;
 import java.util.UUID;
 
 public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
@@ -60,7 +61,7 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
             if(moduleCreators == null || moduleCreators.isEmpty()) return null;
             cruxWorld = new SimpleWorld(world, moduleCreators);
 
-        }else cruxWorld = creator.create(world);
+        }else cruxWorld = creator.create(world, moduleCreators == null ? Set.of() : moduleCreators);
         return cruxWorld;
     }
 

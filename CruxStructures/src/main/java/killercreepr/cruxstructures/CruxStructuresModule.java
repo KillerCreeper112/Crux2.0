@@ -8,11 +8,13 @@ import killercreepr.cruxstructures.commands.StructureCommands;
 import killercreepr.cruxstructures.config.*;
 import killercreepr.cruxstructures.config.structure.FileBiomeRequirement;
 import killercreepr.cruxstructures.config.structure.FileSurfaceCenter;
+import killercreepr.cruxstructures.config.structure.module.FileCorruptedVeinModule;
 import killercreepr.cruxstructures.manager.StructureManager;
 import killercreepr.cruxstructures.structure.StructureCenter;
 import killercreepr.cruxstructures.structure.StructureRequirement;
 import killercreepr.cruxstructures.structure.impl.CfgFAWEStructure;
 import killercreepr.cruxstructures.structure.impl.CfgStructureGen;
+import killercreepr.cruxstructures.structure.module.StructureModule;
 import killercreepr.cruxstructures.structure.stored.SimpleStoredStructure;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,9 +27,14 @@ public class CruxStructuresModule implements CruxModule {
 
     protected final FileStructureCenter fileStructureCenter = new FileStructureCenter();
     protected final FileStructureRequirement fileStructureRequirement = new FileStructureRequirement();
+    protected final FileStructureModule fileStructureModule = new FileStructureModule();
 
     public FileStructureCenter getFileStructureCenter() {
         return fileStructureCenter;
+    }
+
+    public FileStructureModule getFileStructureModule() {
+        return fileStructureModule;
     }
 
     public FileStructureRequirement getFileStructureRequirement() {
@@ -40,14 +47,18 @@ public class CruxStructuresModule implements CruxModule {
 
     @Override
     public void onEnable(@NotNull CruxPlugin plugin) {
-        CfgRegistries.YAML.registerFileHandler(CfgStructureGen.class, new FileCfgStructureGen());
-        CfgRegistries.YAML.registerFileHandler(StructureCenter.class, fileStructureCenter);
-        CfgRegistries.YAML.registerFileHandler(StructureRequirement.class, fileStructureRequirement);
+        CfgRegistries.SIMPLE_REGISTRY.forEach(registry -> {
+            registry.registerFileHandler(CfgStructureGen.class, new FileCfgStructureGen());
+            registry.registerFileHandler(StructureCenter.class, fileStructureCenter);
+            registry.registerFileHandler(StructureRequirement.class, fileStructureRequirement);
+            registry.registerFileHandler(StructureModule.class, fileStructureModule);
 
-        CfgRegistries.YAML.registerFileHandler(CfgFAWEStructure.class, new FileCfgFAWEStructure());
+            registry.registerFileHandler(CfgFAWEStructure.class, new FileCfgFAWEStructure());
+        });
 
         fileStructureCenter.TYPE_HANDLERS.register("surface_center", new FileSurfaceCenter());
         fileStructureRequirement.TYPE_HANDLERS.register("biome", new FileBiomeRequirement());
+        fileStructureModule.TYPE_HANDLERS.register("corrupt_veins", new FileCorruptedVeinModule());
 
         CfgRegistries.JSON_REGISTRY.forEach(registry ->{
             registry.registerFileHandler(SimpleStoredStructure.class, new FileSimpleStoredStructure<SimpleStoredStructure>());
