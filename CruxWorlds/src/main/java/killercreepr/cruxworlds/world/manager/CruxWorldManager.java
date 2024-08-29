@@ -3,6 +3,7 @@ package killercreepr.cruxworlds.world.manager;
 import killercreepr.crux.registry.MappedRegistry;
 import killercreepr.cruxworlds.world.CruxWorld;
 import killercreepr.cruxworlds.world.creator.CruxWorldCreator;
+import killercreepr.cruxworlds.world.creator.WorldModuleCreatorRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,4 +33,6 @@ public interface CruxWorldManager {
     Collection<CruxWorld> getWorlds();
 
     @NotNull MappedRegistry<String, CruxWorldCreator> getCreatorRegistry();
+    @NotNull
+    WorldModuleCreatorRegistry getModuleCreatorRegistry();
 }

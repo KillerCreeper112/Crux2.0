@@ -4,7 +4,11 @@ import killercreepr.crux.registry.MappedRegistry;
 import killercreepr.crux.registry.SimpleMappedRegistry;
 import killercreepr.cruxworlds.registry.ActiveCruxWorldRegistry;
 import killercreepr.cruxworlds.world.CruxWorld;
+import killercreepr.cruxworlds.world.SimpleWorld;
 import killercreepr.cruxworlds.world.creator.CruxWorldCreator;
+import killercreepr.cruxworlds.world.creator.CruxWorldModuleCreator;
+import killercreepr.cruxworlds.world.creator.WorldModuleCreatorRegistry;
+import killercreepr.cruxworlds.world.creator.WorldModuleCreatorRegistryImpl;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,6 +24,7 @@ import java.util.UUID;
 
 public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
     protected final @NotNull MappedRegistry<String, CruxWorldCreator> creators = new SimpleMappedRegistry<>();
+    protected final @NotNull WorldModuleCreatorRegistry moduleCreators = new WorldModuleCreatorRegistryImpl();
     protected final @NotNull ActiveCruxWorldRegistry active = new ActiveCruxWorldRegistry();
     @Override
     public @Nullable CruxWorld getWorld(@NotNull String name) {
@@ -41,14 +46,30 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
         return creators;
     }
 
+    @Override
+    public @NotNull WorldModuleCreatorRegistry getModuleCreatorRegistry() {
+        return moduleCreators;
+    }
+
+    public @Nullable CruxWorld create(@NotNull World world){
+        String name = world.getName();
+        CruxWorldCreator creator = creators.get(name);
+        Collection<CruxWorldModuleCreator> moduleCreators = this.moduleCreators.get(name);
+        CruxWorld cruxWorld;
+        if(creator == null){
+            if(moduleCreators == null || moduleCreators.isEmpty()) return null;
+            cruxWorld = new SimpleWorld(world, moduleCreators);
+
+        }else cruxWorld = creator.create(world);
+        return cruxWorld;
+    }
+
     @EventHandler(ignoreCancelled = true)
     public void onWorldInit(WorldInitEvent event) {
         World world = event.getWorld();
 
-        CruxWorldCreator creator = creators.get(world.getName());
-        if(creator==null) return;
-
-        CruxWorld crux = creator.create(world);
+        CruxWorld crux = create(world);
+        if(crux==null) return;
         active.register(crux);
         crux.onInitiate();
     }
