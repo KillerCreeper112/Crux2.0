@@ -4,7 +4,6 @@ import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.PureYamlFileHandler;
-import killercreepr.cruxstructures.structure.generation.requirement.StructureChanceRequirement;
 import killercreepr.cruxstructures.structure.generation.requirement.StructureChunkChanceRequirement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

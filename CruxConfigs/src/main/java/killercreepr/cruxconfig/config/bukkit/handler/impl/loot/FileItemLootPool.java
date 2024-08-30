@@ -31,7 +31,7 @@ public class FileItemLootPool implements FileObjectHandler<ItemLootPool> {
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = ctx.getRegistry();
         NumberProvider rolls = registry.deserializeFromFile(NumberProvider.class, o.get("rolls"));
-        if(rolls == null) return null;
+        if(rolls == null) rolls = NumberProvider.constant(1);
 
         int weight = o.getObject(Integer.class, "weight", 0);
         float quality = o.getObject(Float.class, "quality", 0f);

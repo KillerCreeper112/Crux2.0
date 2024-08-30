@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class FileSimpleLootObject implements FileObjectHandler<SimpleItemLootObject> {
+public class FileSimpleItemLootObject implements FileObjectHandler<SimpleItemLootObject> {
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull SimpleItemLootObject object) {
         throw new UnsupportedOperationException("unsupported");
@@ -26,7 +26,7 @@ public class FileSimpleLootObject implements FileObjectHandler<SimpleItemLootObj
     public @Nullable SimpleItemLootObject deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = ctx.getRegistry();
-        int weight = o.getObject(Integer.class, "weight", 0);
+        int weight = o.getObject(Integer.class, "weight", 1);
         float quality = o.getObject(Float.class, "quality", 0f);
 
         List<LootCondition> conditions = registry.deserializeFromFile(

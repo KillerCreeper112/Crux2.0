@@ -28,6 +28,11 @@ public class SimpleLootPoolObject<T> extends SimpleLootObject<T> implements Loot
     }
 
     @Override
+    public String toString() {
+        return "SimpleLootPoolObject{weight=" + weight + ", quality=" + quality + ", item=" + item + ", item_value=" + (item==null?"null":item.value()) + ", conditions=" + getConditions() + ", functions=" + getFunctions() + "}";
+    }
+
+    @Override
     public @Nullable Holder<Collection<T>> getItems() {
         return item;
     }

@@ -3,7 +3,6 @@ package killercreepr.cruxadvancements.crazy;
 import eu.endercentral.crazy_advancements.advancement.AdvancementDisplay;
 import eu.endercentral.crazy_advancements.advancement.AdvancementFlag;
 import eu.endercentral.crazy_advancements.advancement.AdvancementVisibility;
-import killercreepr.cruxadvancements.config.CruxConfigHook;
 import killercreepr.cruxadvancements.config.handler.crazy.FileAdvancementVisibility;
 import killercreepr.cruxadvancements.config.handler.crazy.FileCrazyAdvancement;
 import killercreepr.cruxadvancements.config.handler.crazy.FileCrazyAdvancementDisplay;

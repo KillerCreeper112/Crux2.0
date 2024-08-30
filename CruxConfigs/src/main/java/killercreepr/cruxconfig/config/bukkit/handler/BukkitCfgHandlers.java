@@ -69,7 +69,7 @@ public class BukkitCfgHandlers {
     public static final FileItemLootFunction ITEM_LOOT_FUNCTION = new FileItemLootFunction();
     public static final FileItemLootTable ITEM_LOOT_TABLE = new FileItemLootTable();
     public static final FileItemLootPool ITEM_LOOT_POOL = new FileItemLootPool();
-    public static final FileSimpleLootObject SIMPLE_LOOT_OBJECT = new FileSimpleLootObject();
+    public static final FileSimpleItemLootObject SIMPLE_LOOT_OBJECT = new FileSimpleItemLootObject();
     public static final FileItemLootPoolObject ITEM_LOOT_POOL_OBJECT = new FileItemLootPoolObject();
     public static final FileCreateBlockSoundGroup CREATE_BLOCK_SOUND_GROUP = new FileCreateBlockSoundGroup();
     public static final FileItemTag ITEM_TAG = new FileItemTag();

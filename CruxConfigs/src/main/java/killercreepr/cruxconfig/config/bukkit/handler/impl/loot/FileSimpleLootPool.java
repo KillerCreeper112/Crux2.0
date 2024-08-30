@@ -1,11 +1,9 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 
 import com.google.common.reflect.TypeToken;
-import com.google.gson.ToNumberPolicy;
 import killercreepr.crux.data.Holder;
 import killercreepr.crux.loot.LootPoolObject;
 import killercreepr.crux.loot.conditions.LootCondition;
-import killercreepr.crux.loot.impl.SimpleLootObject;
 import killercreepr.crux.loot.impl.SimpleLootPool;
 import killercreepr.crux.loot.impl.SimpleLootPoolObject;
 import killercreepr.crux.valueproviders.number.NumberProvider;
@@ -50,9 +48,9 @@ public class FileSimpleLootPool<T> implements FileObjectHandler<SimpleLootPool<T
         }
         FileRegistry registry = ctx.getRegistry();
         NumberProvider rolls = registry.deserializeFromFile(NumberProvider.class, o.get("rolls"));
-        if(rolls == null) return null;
+        if(rolls == null) rolls = NumberProvider.constant(1);
 
-        int weight = o.getObject(Integer.class, "weight", 0);
+        int weight = o.getObject(Integer.class, "weight", 1);
         float quality = o.getObject(Float.class, "quality", 0f);
         List<LootCondition> conditions = registry.deserializeFromFile(
             new TypeToken<List<LootCondition>>(){}.getType(), o.get("conditions")

@@ -29,7 +29,7 @@ public class StandardFileLootFunctions {
             public @Nullable ItemEnchantFunction deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 FileRegistry registry = ctx.getRegistry();
                 NumberProvider rolls = registry.deserializeFromFile(NumberProvider.class, e.get("rolls"));
-                if(rolls==null) return null;
+                if(rolls==null) rolls = NumberProvider.constant(1);
 
                 if(!(e.get("enchants") instanceof FileArray oo)) return null;
                 Collection<ItemEnchantFunction.Enchant> enchants = new HashSet<>();

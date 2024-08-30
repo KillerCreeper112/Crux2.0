@@ -1,7 +1,6 @@
 package killercreepr.crux.block;
 
 import killercreepr.crux.data.world.CruxPosition;
-import killercreepr.crux.handler.BlockHandler;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;

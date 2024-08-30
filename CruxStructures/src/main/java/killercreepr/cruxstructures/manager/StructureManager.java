@@ -197,6 +197,7 @@ public class StructureManager implements Listener {
             if(worlds.isEmpty()) continue;
 
             CfgStructureGen generator = cfg.deserialize(CfgStructureGen.class, "");
+            Crux.log(Level.WARNING, "generator: " + generator);
             if(generator==null) continue;
             for(String worldName : worlds){
                 structures.computeIfAbsent(worldName, e -> new ArrayList<>()).add(generator);

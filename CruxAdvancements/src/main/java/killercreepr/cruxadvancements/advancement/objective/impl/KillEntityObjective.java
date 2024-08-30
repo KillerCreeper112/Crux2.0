@@ -1,7 +1,6 @@
 package killercreepr.cruxadvancements.advancement.objective.impl;
 
 import killercreepr.crux.data.DataExchange;
-import killercreepr.crux.loot.impl.SimpleLootContext;
 import killercreepr.crux.loot.LootContext;
 import killercreepr.crux.loot.conditions.LootCondition;
 import killercreepr.cruxadvancements.advancement.ObjectiveAdvancement;

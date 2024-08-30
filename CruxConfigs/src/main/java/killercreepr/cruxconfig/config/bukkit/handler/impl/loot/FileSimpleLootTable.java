@@ -53,13 +53,14 @@ public class FileSimpleLootTable<T> implements FileObjectHandler<SimpleLootTable
         }
         FileRegistry registry = ctx.getRegistry();
         Key key = registry.deserializeFromFile(Key.class, o.get("key"));
-        if(key==null) return null;
+        if(key==null) key = Crux.key("null");
         return deserializeFromFile(ctx, o, key);
     }
 
     public @Nullable SimpleLootTable<T> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull Key key) {
         FileRegistry registry = ctx.getRegistry();
         NumberProvider rolls = registry.deserializeFromFile(NumberProvider.class, e.get("rolls"));
+        if(rolls == null) rolls = NumberProvider.constant(1);
         if(!(e.get("pools") instanceof FileArray a)) return null;
         List<LootPool<T>> pools = new ArrayList<>();
         a.forEach(ele ->{
@@ -67,7 +68,7 @@ public class FileSimpleLootTable<T> implements FileObjectHandler<SimpleLootTable
             if(pool==null) return;
             pools.add(pool);
         });
-        if(CruxObjects.checkNull(rolls, pools)) return null;
+        if(CruxObjects.checkNull(pools)) return null;
         return new SimpleLootTable<>(
             key, rolls, pools
         );

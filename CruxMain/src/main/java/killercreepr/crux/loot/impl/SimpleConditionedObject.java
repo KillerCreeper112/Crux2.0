@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class SimpleConditionedObject extends SimpleWeighted implements LootConditionedObject {
-    private final @NotNull List<LootCondition> conditions;
+    protected final @NotNull List<LootCondition> conditions;
 
     public SimpleConditionedObject(int weight, float quality, @Nullable List<LootCondition> conditions) {
         super(weight, quality);

@@ -7,11 +7,11 @@ import killercreepr.cruxadvancements.advancement.progression.CruxAdvancementProg
 import killercreepr.cruxadvancements.advancement.progression.ListAdvancementProgress;
 import killercreepr.cruxadvancements.advancement.progression.NumberAdvancementProgress;
 import killercreepr.cruxadvancements.advancement.progression.SimpleCriterionProgress;
-import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
+import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -23,6 +22,11 @@ public class SimpleLootTable<T> implements LootTable<T> {
         this.key = key;
         this.rolls = rolls;
         this.pools = pools;
+    }
+
+    @Override
+    public String toString() {
+        return "SimpleLootTable{key=" + key + ", rolls=" + rolls + ", pools=" + pools + "}";
     }
 
     public @NotNull NumberProvider getRolls() {

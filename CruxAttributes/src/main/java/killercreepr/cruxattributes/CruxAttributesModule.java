@@ -3,7 +3,6 @@ package killercreepr.cruxattributes;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.module.StandardModules;
 import killercreepr.crux.plugin.CruxPlugin;
-import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.cruxattributes.command.CruxAttributeCommands;
 import killercreepr.cruxattributes.listener.CruxAttributeListener;
 import killercreepr.cruxattributes.persistence.CruxAttributesPersistence;

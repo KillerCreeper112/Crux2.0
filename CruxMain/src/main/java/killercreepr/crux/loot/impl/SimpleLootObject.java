@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class SimpleLootObject<T> extends SimpleConditionedObject implements LootObject<T> {
-    private final @NotNull List<LootFunction<T>> functions;
+    protected final @NotNull List<LootFunction<T>> functions;
 
     public SimpleLootObject(int weight, float quality, @Nullable List<LootCondition> conditions, @Nullable List<LootFunction<T>> functions) {
         super(weight, quality, conditions);
@@ -24,7 +24,6 @@ public class SimpleLootObject<T> extends SimpleConditionedObject implements Loot
     public SimpleLootObject(int weight, float quality){
         this(weight, quality, null);
     }
-
 
     @Override
     public @NotNull List<LootFunction<T>> getFunctions() {

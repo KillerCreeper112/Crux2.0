@@ -43,6 +43,11 @@ public class SimpleLootPool<T> extends SimpleLootObject<T> implements LootPool<T
         this.data = data;
     }
 
+    @Override
+    public String toString() {
+        return "SimpleLootPool{rolls=" + rolls + ", data=" + data + "}";
+    }
+
     public @NotNull List<LootPoolObject<T>> getData() {
         return data;
     }

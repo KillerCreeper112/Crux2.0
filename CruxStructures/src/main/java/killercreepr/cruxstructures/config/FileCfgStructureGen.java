@@ -1,6 +1,7 @@
 package killercreepr.cruxstructures.config;
 
 import com.google.common.reflect.TypeToken;
+import killercreepr.crux.Crux;
 import killercreepr.crux.loot.LootTable;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.FileSimpleLootTable;
 import killercreepr.cruxconfig.config.common.FileContext;
@@ -20,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
 
 public class FileCfgStructureGen extends PureYamlFileHandler<CfgStructureGen> {
     protected final @NotNull FileSimpleLootTable<Key> fileSimpleLootTable = new FileSimpleLootTable<>(Key.class);
@@ -34,6 +36,7 @@ public class FileCfgStructureGen extends PureYamlFileHandler<CfgStructureGen> {
         LootTable<Key> structurePool = fileSimpleLootTable.deserializeFromFile(
             context, o.get("structure")
         );
+        Crux.log(Level.WARNING, "structurePool: " + structurePool);
         if(structurePool==null) return null;
 
         Collection<StructureRequirement> requirements = new HashSet<>();

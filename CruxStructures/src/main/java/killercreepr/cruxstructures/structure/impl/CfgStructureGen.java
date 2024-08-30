@@ -3,7 +3,6 @@ package killercreepr.cruxstructures.structure.impl;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.loot.LootContext;
 import killercreepr.crux.loot.LootTable;
-import killercreepr.crux.loot.impl.SimpleLootTable;
 import killercreepr.cruxstructures.registries.StructureRegistries;
 import killercreepr.cruxstructures.structure.GenerateResult;
 import killercreepr.cruxstructures.structure.Structure;
