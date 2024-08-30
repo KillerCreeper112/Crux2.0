@@ -65,6 +65,7 @@ public class CruxStructuresModule implements CruxModule {
         fileStructureCenter.TYPE_HANDLERS.register("surface_top", new FileSurfaceTopCenter());
         fileStructureCenter.TYPE_HANDLERS.register("random_surface_top", new FileRandomSurfaceTopCenter());
         fileStructureCenter.TYPE_HANDLERS.register("random_surface", new FileRandomSurfaceCenter());
+        fileStructureCenter.TYPE_HANDLERS.register("random_surface_avoid_trees", new FileRandomSurfaceTopAvoidTreeCenter());
 
         fileStructureRequirement.TYPE_HANDLERS.register("biome", new FileBiomeRequirement());
         fileStructureRequirement.TYPE_HANDLERS.register("solid_nearby", new FileSolidNearbyRequirement());
