@@ -70,6 +70,7 @@ public class CruxStructuresModule implements CruxModule {
         fileStructureRequirement.TYPE_HANDLERS.register("solid_nearby", new FileSolidNearbyRequirement());
         fileStructureRequirement.TYPE_HANDLERS.register("replaceable_nearby", new FileReplaceableNearbyRequirement());
         fileStructureRequirement.TYPE_HANDLERS.register("chance", new FileChanceRequirement());
+        fileStructureRequirement.TYPE_HANDLERS.register("replaceable_directions", new FileReplaceableDirectionTestRequirement());
 
         fileStructureChunkRequirement.TYPE_HANDLERS.register("noise", new FileChunkNoiseRequirement());
         fileStructureChunkRequirement.TYPE_HANDLERS.register("chance", new FileChunkChanceRequirement());
