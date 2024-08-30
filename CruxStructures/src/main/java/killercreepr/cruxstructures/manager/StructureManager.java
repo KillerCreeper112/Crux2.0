@@ -37,7 +37,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 
@@ -197,12 +196,11 @@ public class StructureManager implements Listener {
             if(worlds.isEmpty()) continue;
 
             CfgStructureGen generator = cfg.deserialize(CfgStructureGen.class, "");
-            Crux.log(Level.WARNING, "generator: " + generator);
             if(generator==null) continue;
             for(String worldName : worlds){
                 structures.computeIfAbsent(worldName, e -> new ArrayList<>()).add(generator);
             }
-
+            Crux.log(Level.INFO, "Registered structure generator: " + f.getName());
         }
     }
 
