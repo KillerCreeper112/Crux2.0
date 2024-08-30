@@ -1,5 +1,6 @@
-package killercreepr.cruxstructures.structure;
+package killercreepr.cruxstructures.structure.generation.center;
 
+import killercreepr.cruxstructures.structure.Structure;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;

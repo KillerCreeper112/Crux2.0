@@ -1,4 +1,4 @@
-package killercreepr.cruxstructures.config.structure.module;
+package killercreepr.cruxstructures.config.module;
 
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.common.FileContext;

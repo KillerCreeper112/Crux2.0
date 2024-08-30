@@ -2,6 +2,9 @@ package killercreepr.cruxstructures.structure.impl;
 
 import killercreepr.cruxstructures.registries.StructureRegistries;
 import killercreepr.cruxstructures.structure.*;
+import killercreepr.cruxstructures.structure.generation.StructureGenerator;
+import killercreepr.cruxstructures.structure.generation.center.StructureCenter;
+import killercreepr.cruxstructures.structure.generation.requirement.StructureRequirement;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Chunk;
 import org.bukkit.Location;

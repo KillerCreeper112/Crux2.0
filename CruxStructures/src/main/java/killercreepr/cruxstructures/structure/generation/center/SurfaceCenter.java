@@ -1,7 +1,6 @@
-package killercreepr.cruxstructures.structure.impl;
+package killercreepr.cruxstructures.structure.generation.center;
 
 import killercreepr.cruxstructures.structure.Structure;
-import killercreepr.cruxstructures.structure.StructureCenter;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.block.Block;

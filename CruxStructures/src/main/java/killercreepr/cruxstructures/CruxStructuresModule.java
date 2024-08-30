@@ -6,12 +6,13 @@ import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import killercreepr.cruxstructures.commands.StructureCommands;
 import killercreepr.cruxstructures.config.*;
-import killercreepr.cruxstructures.config.structure.FileBiomeRequirement;
-import killercreepr.cruxstructures.config.structure.FileSurfaceCenter;
-import killercreepr.cruxstructures.config.structure.module.FileCorruptedVeinModule;
+import killercreepr.cruxstructures.config.generation.FileBiomeRequirement;
+import killercreepr.cruxstructures.config.generation.FileChanceRequirement;
+import killercreepr.cruxstructures.config.generation.FileSurfaceCenter;
+import killercreepr.cruxstructures.config.module.FileCorruptedVeinModule;
 import killercreepr.cruxstructures.manager.StructureManager;
-import killercreepr.cruxstructures.structure.StructureCenter;
-import killercreepr.cruxstructures.structure.StructureRequirement;
+import killercreepr.cruxstructures.structure.generation.center.StructureCenter;
+import killercreepr.cruxstructures.structure.generation.requirement.StructureRequirement;
 import killercreepr.cruxstructures.structure.impl.CfgFAWEStructure;
 import killercreepr.cruxstructures.structure.impl.CfgStructureGen;
 import killercreepr.cruxstructures.structure.module.StructureModule;
@@ -57,7 +58,10 @@ public class CruxStructuresModule implements CruxModule {
         });
 
         fileStructureCenter.TYPE_HANDLERS.register("surface_center", new FileSurfaceCenter());
+
         fileStructureRequirement.TYPE_HANDLERS.register("biome", new FileBiomeRequirement());
+        fileStructureRequirement.TYPE_HANDLERS.register("chance", new FileChanceRequirement());
+
         fileStructureModule.TYPE_HANDLERS.register("corrupt_veins", new FileCorruptedVeinModule());
 
         CfgRegistries.JSON_REGISTRY.forEach(registry ->{

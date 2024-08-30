@@ -1,11 +1,11 @@
-package killercreepr.cruxstructures.config.structure;
+package killercreepr.cruxstructures.config.generation;
 
 import killercreepr.cruxconfig.config.common.handler.PureYamlFileHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
-import killercreepr.cruxstructures.structure.impl.StructureBiomeRequirement;
+import killercreepr.cruxstructures.structure.generation.requirement.StructureBiomeRequirement;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
