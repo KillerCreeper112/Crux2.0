@@ -16,6 +16,6 @@ public class StructureChanceRequirement implements StructureRequirement {
 
     @Override
     public boolean test(@NotNull Structure structure, @NotNull Chunk chunk, @NotNull Location location) {
-        return CruxMath.testChance(new Random(chunk.getWorld().getSeed()), chance);
+        return CruxMath.testChance(chance);
     }
 }

@@ -11,6 +11,7 @@ import killercreepr.cruxstructures.structure.generation.center.StructureCenter;
 import killercreepr.cruxstructures.structure.generation.requirement.StructureChunkRequirement;
 import killercreepr.cruxstructures.structure.generation.requirement.StructureRequirement;
 import net.kyori.adventure.key.Key;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
@@ -49,7 +50,6 @@ public class CfgStructureGen implements StructureGenerator {
 
     public @NotNull GenerateResult generate(@NotNull Chunk at){
         List<Key> structureKey = structurePool.populateLoot(LootContext.builder()
-            .random(new Random(at.getWorld().getSeed()))
             .info(DataExchange.builder().put("chunk", at).build())
             .build());
         if(structureKey.isEmpty()) return new GenerateResult(null);
