@@ -62,7 +62,8 @@ public class CruxStructuresModule implements CruxModule {
             registry.registerFileHandler(CfgFAWEStructure.class, new FileCfgFAWEStructure());
         });
 
-        fileStructureCenter.TYPE_HANDLERS.register("surface_center", new FileSurfaceCenter());
+        fileStructureCenter.TYPE_HANDLERS.register("surface", new FileSurfaceCenter());
+        fileStructureCenter.TYPE_HANDLERS.register("random_surface", new FileRandomSurfaceCenter());
 
         fileStructureRequirement.TYPE_HANDLERS.register("biome", new FileBiomeRequirement());
         fileStructureRequirement.TYPE_HANDLERS.register("solid_nearby", new FileSolidNearbyRequirement());
@@ -70,6 +71,7 @@ public class CruxStructuresModule implements CruxModule {
         fileStructureRequirement.TYPE_HANDLERS.register("chance", new FileChanceRequirement());
 
         fileStructureChunkRequirement.TYPE_HANDLERS.register("noise", new FileChunkNoiseRequirement());
+        fileStructureChunkRequirement.TYPE_HANDLERS.register("chance", new FileChunkChanceRequirement());
 
         fileStructureModule.TYPE_HANDLERS.register("corrupt_veins", new FileCorruptedVeinModule());
 

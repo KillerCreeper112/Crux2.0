@@ -1,6 +1,8 @@
 package killercreepr.cruxstructures.config;
 
 import com.google.common.reflect.TypeToken;
+import killercreepr.crux.loot.LootTable;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.FileSimpleLootTable;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileArray;
@@ -20,6 +22,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class FileCfgStructureGen extends PureYamlFileHandler<CfgStructureGen> {
+    protected final @NotNull FileSimpleLootTable<Key> fileSimpleLootTable = new FileSimpleLootTable<>(Key.class);
     @Override
     public @Nullable CfgStructureGen deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;
@@ -28,8 +31,10 @@ public class FileCfgStructureGen extends PureYamlFileHandler<CfgStructureGen> {
         if(center==null){
             throw new RuntimeException("StructureCenter type not found!");
         }
-        Key structureKey = registry.deserializeFromFile(Key.class, o.get("structure"));
-        if(structureKey==null) return null;
+        LootTable<Key> structurePool = fileSimpleLootTable.deserializeFromFile(
+            context, o.get("structure")
+        );
+        if(structurePool==null) return null;
 
         Collection<StructureRequirement> requirements = new HashSet<>();
         if(o.get("requirements") instanceof FileArray aa){
@@ -47,7 +52,7 @@ public class FileCfgStructureGen extends PureYamlFileHandler<CfgStructureGen> {
         );
 
         return new CfgStructureGen(
-            structureKey, center, requirements, chunkRequirements == null ? Set.of() : chunkRequirements
+            structurePool, center, requirements, chunkRequirements == null ? Set.of() : chunkRequirements
         );
     }
 }

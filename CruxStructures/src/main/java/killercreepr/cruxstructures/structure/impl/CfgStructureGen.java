@@ -1,5 +1,9 @@
 package killercreepr.cruxstructures.structure.impl;
 
+import killercreepr.crux.data.DataExchange;
+import killercreepr.crux.loot.LootContext;
+import killercreepr.crux.loot.LootTable;
+import killercreepr.crux.loot.impl.SimpleLootTable;
 import killercreepr.cruxstructures.registries.StructureRegistries;
 import killercreepr.cruxstructures.structure.GenerateResult;
 import killercreepr.cruxstructures.structure.Structure;
@@ -13,21 +17,23 @@ import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Random;
 
 public class CfgStructureGen implements StructureGenerator {
-    protected final @NotNull Key structureKey;
+    protected final @NotNull LootTable<Key> structurePool;
     protected final @NotNull StructureCenter center;
     protected final @NotNull Collection<StructureRequirement> requirements;
     protected final @NotNull Collection<StructureChunkRequirement> chunkRequirements;
-    public CfgStructureGen(@NotNull Key structureKey, @NotNull StructureCenter center, @NotNull Collection<StructureRequirement> requirements, @NotNull Collection<StructureChunkRequirement> chunkRequirements) {
-        this.structureKey = structureKey;
+    public CfgStructureGen(@NotNull LootTable<Key> structurePool, @NotNull StructureCenter center, @NotNull Collection<StructureRequirement> requirements, @NotNull Collection<StructureChunkRequirement> chunkRequirements) {
+        this.structurePool = structurePool;
         this.center = center;
         this.requirements = requirements;
         this.chunkRequirements = chunkRequirements;
     }
 
-    public @NotNull Key getStructureKey() {
-        return structureKey;
+    public @NotNull LootTable<Key> getStructurePool() {
+        return structurePool;
     }
 
     public @NotNull StructureCenter getCenter() {
@@ -43,7 +49,13 @@ public class CfgStructureGen implements StructureGenerator {
     }
 
     public @NotNull GenerateResult generate(@NotNull Chunk at){
-        Structure structure = StructureRegistries.STRUCTURES.get(structureKey);
+        List<Key> structureKey = structurePool.populateLoot(LootContext.builder()
+            .random(new Random(at.getWorld().getSeed()))
+            .info(DataExchange.builder().put("chunk", at).build())
+            .build());
+        if(structureKey.isEmpty()) return new GenerateResult(null);
+
+        Structure structure = StructureRegistries.STRUCTURES.get(structureKey.getFirst());
         if(structure==null) return new GenerateResult(null);
         return generate(structure, at);
     }

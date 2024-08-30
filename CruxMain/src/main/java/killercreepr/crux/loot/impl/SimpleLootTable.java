@@ -34,12 +34,12 @@ public class SimpleLootTable<T> implements LootTable<T> {
     }
 
     @Override
-    public @NotNull Collection<T> populateLoot(@NotNull LootContext context) {
+    public @NotNull List<T> populateLoot(@NotNull LootContext context) {
         return populateLoot(context, null, false);
     }
 
     @Override
-    public @NotNull Collection<T> populateLoot(@NotNull LootContext context, @Nullable Predicate<LootPoolObject<T>> exclude, boolean excludeEmpty) {
+    public @NotNull List<T> populateLoot(@NotNull LootContext context, @Nullable Predicate<LootPoolObject<T>> exclude, boolean excludeEmpty) {
         List<T> list = new ArrayList<>();
         List<LootPool<T>> data = exclude == null ? this.pools : new ArrayList<>(this.pools);
         if(excludeEmpty && exclude != null) data.removeIf(x -> x.isEmptyWith(exclude));
