@@ -6,10 +6,7 @@ import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import killercreepr.cruxstructures.commands.StructureCommands;
 import killercreepr.cruxstructures.config.*;
-import killercreepr.cruxstructures.config.generation.FileBiomeRequirement;
-import killercreepr.cruxstructures.config.generation.FileChanceRequirement;
-import killercreepr.cruxstructures.config.generation.FileChunkNoiseRequirement;
-import killercreepr.cruxstructures.config.generation.FileSurfaceCenter;
+import killercreepr.cruxstructures.config.generation.*;
 import killercreepr.cruxstructures.config.module.FileCorruptedVeinModule;
 import killercreepr.cruxstructures.manager.StructureManager;
 import killercreepr.cruxstructures.structure.generation.center.StructureCenter;
@@ -68,6 +65,8 @@ public class CruxStructuresModule implements CruxModule {
         fileStructureCenter.TYPE_HANDLERS.register("surface_center", new FileSurfaceCenter());
 
         fileStructureRequirement.TYPE_HANDLERS.register("biome", new FileBiomeRequirement());
+        fileStructureRequirement.TYPE_HANDLERS.register("solid_nearby", new FileSolidNearbyRequirement());
+        fileStructureRequirement.TYPE_HANDLERS.register("replaceable_nearby", new FileReplaceableNearbyRequirement());
         fileStructureRequirement.TYPE_HANDLERS.register("chance", new FileChanceRequirement());
 
         fileStructureChunkRequirement.TYPE_HANDLERS.register("noise", new FileChunkNoiseRequirement());
