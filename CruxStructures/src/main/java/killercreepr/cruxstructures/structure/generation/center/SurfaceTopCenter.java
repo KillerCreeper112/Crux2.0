@@ -7,7 +7,7 @@ import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SurfaceCenter implements StructureCenter {
+public class SurfaceTopCenter implements StructureCenter {
     @Override
     public @Nullable Location scan(@NotNull Structure structure, @NotNull Chunk chunk) {
         int x = (chunk.getX() << 4) + 8;

@@ -62,7 +62,8 @@ public class CruxStructuresModule implements CruxModule {
             registry.registerFileHandler(CfgFAWEStructure.class, new FileCfgFAWEStructure());
         });
 
-        fileStructureCenter.TYPE_HANDLERS.register("surface", new FileSurfaceCenter());
+        fileStructureCenter.TYPE_HANDLERS.register("surface_top", new FileSurfaceTopCenter());
+        fileStructureCenter.TYPE_HANDLERS.register("random_surface_top", new FileRandomSurfaceTopCenter());
         fileStructureCenter.TYPE_HANDLERS.register("random_surface", new FileRandomSurfaceCenter());
 
         fileStructureRequirement.TYPE_HANDLERS.register("biome", new FileBiomeRequirement());
