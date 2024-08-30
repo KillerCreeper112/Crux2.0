@@ -73,6 +73,7 @@ public class CruxStructuresModule implements CruxModule {
 
         fileStructureChunkRequirement.TYPE_HANDLERS.register("noise", new FileChunkNoiseRequirement());
         fileStructureChunkRequirement.TYPE_HANDLERS.register("chance", new FileChunkChanceRequirement());
+        fileStructureChunkRequirement.TYPE_HANDLERS.register("per_thousand", new FileChunkPerThousandRequirement());
 
         fileStructureModule.TYPE_HANDLERS.register("corrupt_veins", new FileCorruptedVeinModule());
 

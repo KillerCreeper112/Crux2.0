@@ -232,8 +232,6 @@ public class StructureManager implements Listener {
         Chunk c = event.getChunk();
         List<CfgStructureGen> list = structures.get(c.getWorld().getName());
         if(list==null) return;
-        //landStructuresPerThousandChunks = 2
-        if (ThreadLocalRandom.current().nextDouble() > 2D / 1000D) return;
         Collections.shuffle(list);
         for(CfgStructureGen gen : list){
             GenerateResult result = gen.generate(c);
