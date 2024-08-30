@@ -1,12 +1,14 @@
 package killercreepr.cruxstructures.config;
 
-import killercreepr.cruxconfig.config.common.handler.PureYamlFileHandler;
+import com.google.common.reflect.TypeToken;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileArray;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
+import killercreepr.cruxconfig.config.common.handler.PureYamlFileHandler;
 import killercreepr.cruxstructures.structure.generation.center.StructureCenter;
+import killercreepr.cruxstructures.structure.generation.requirement.StructureChunkRequirement;
 import killercreepr.cruxstructures.structure.generation.requirement.StructureRequirement;
 import killercreepr.cruxstructures.structure.impl.CfgStructureGen;
 import net.kyori.adventure.key.Key;
@@ -15,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 public class FileCfgStructureGen extends PureYamlFileHandler<CfgStructureGen> {
     @Override
@@ -39,6 +42,12 @@ public class FileCfgStructureGen extends PureYamlFileHandler<CfgStructureGen> {
             });
         }
 
-        return new CfgStructureGen(structureKey, center, requirements);
+        Collection<StructureChunkRequirement> chunkRequirements = registry.deserializeFromFile(
+            new TypeToken<Collection<StructureChunkRequirement>>(){}.getType(), o.get("chunk_requirements")
+        );
+
+        return new CfgStructureGen(
+            structureKey, center, requirements, chunkRequirements == null ? Set.of() : chunkRequirements
+        );
     }
 }

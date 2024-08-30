@@ -8,10 +8,12 @@ import killercreepr.cruxstructures.commands.StructureCommands;
 import killercreepr.cruxstructures.config.*;
 import killercreepr.cruxstructures.config.generation.FileBiomeRequirement;
 import killercreepr.cruxstructures.config.generation.FileChanceRequirement;
+import killercreepr.cruxstructures.config.generation.FileChunkNoiseRequirement;
 import killercreepr.cruxstructures.config.generation.FileSurfaceCenter;
 import killercreepr.cruxstructures.config.module.FileCorruptedVeinModule;
 import killercreepr.cruxstructures.manager.StructureManager;
 import killercreepr.cruxstructures.structure.generation.center.StructureCenter;
+import killercreepr.cruxstructures.structure.generation.requirement.StructureChunkRequirement;
 import killercreepr.cruxstructures.structure.generation.requirement.StructureRequirement;
 import killercreepr.cruxstructures.structure.impl.CfgFAWEStructure;
 import killercreepr.cruxstructures.structure.impl.CfgStructureGen;
@@ -28,6 +30,7 @@ public class CruxStructuresModule implements CruxModule {
 
     protected final FileStructureCenter fileStructureCenter = new FileStructureCenter();
     protected final FileStructureRequirement fileStructureRequirement = new FileStructureRequirement();
+    protected final FileStructureChunkRequirement fileStructureChunkRequirement = new FileStructureChunkRequirement();
     protected final FileStructureModule fileStructureModule = new FileStructureModule();
 
     public FileStructureCenter getFileStructureCenter() {
@@ -42,6 +45,10 @@ public class CruxStructuresModule implements CruxModule {
         return fileStructureRequirement;
     }
 
+    public FileStructureChunkRequirement getFileStructureChunkRequirement() {
+        return fileStructureChunkRequirement;
+    }
+
     public void registerCommands(@NotNull CruxPlugin plugin, @NotNull StructureManager structureManager){
         new StructureCommands(plugin, structureManager).register();
     }
@@ -52,6 +59,7 @@ public class CruxStructuresModule implements CruxModule {
             registry.registerFileHandler(CfgStructureGen.class, new FileCfgStructureGen());
             registry.registerFileHandler(StructureCenter.class, fileStructureCenter);
             registry.registerFileHandler(StructureRequirement.class, fileStructureRequirement);
+            registry.registerFileHandler(StructureChunkRequirement.class, fileStructureChunkRequirement);
             registry.registerFileHandler(StructureModule.class, fileStructureModule);
 
             registry.registerFileHandler(CfgFAWEStructure.class, new FileCfgFAWEStructure());
@@ -61,6 +69,8 @@ public class CruxStructuresModule implements CruxModule {
 
         fileStructureRequirement.TYPE_HANDLERS.register("biome", new FileBiomeRequirement());
         fileStructureRequirement.TYPE_HANDLERS.register("chance", new FileChanceRequirement());
+
+        fileStructureChunkRequirement.TYPE_HANDLERS.register("noise", new FileChunkNoiseRequirement());
 
         fileStructureModule.TYPE_HANDLERS.register("corrupt_veins", new FileCorruptedVeinModule());
 

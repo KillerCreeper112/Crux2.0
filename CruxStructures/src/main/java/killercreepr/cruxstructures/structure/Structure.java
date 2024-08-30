@@ -1,6 +1,5 @@
 package killercreepr.cruxstructures.structure;
 
-import killercreepr.crux.data.BlockPos;
 import killercreepr.crux.data.StoredChunk;
 import killercreepr.crux.data.world.CruxPosition;
 import killercreepr.crux.util.CruxMath;
@@ -14,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.Random;
 
 public interface Structure extends Keyed {
     @NotNull
