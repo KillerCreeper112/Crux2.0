@@ -29,6 +29,10 @@ public abstract class AbstractStructureNearbyRequirement implements StructureReq
     public abstract boolean isValidBlock(@NotNull Block block);
     public boolean isValidAmount(int amount){
         if(amount < min) return false;
+        return isValidMaxAmount(amount);
+    }
+
+    public boolean isValidMaxAmount(int amount){
         return max == null || amount <= max;
     }
 
@@ -41,11 +45,11 @@ public abstract class AbstractStructureNearbyRequirement implements StructureReq
                     Block block = world.getBlockAt(x + xRange, y + yRange + (yOffset == null ? 0 : yOffset.sample().intValue()), z + zRange);
                     if(isValidBlock(block)){
                         amount++;
-                        if(!isValidAmount(amount)) return false;
+                        if(!isValidMaxAmount(amount)) return false;
                     }
                 }
             }
         }
-        return true;
+        return isValidAmount(amount);
     }
 }
