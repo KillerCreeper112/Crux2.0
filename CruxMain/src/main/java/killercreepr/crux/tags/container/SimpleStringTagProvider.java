@@ -21,7 +21,7 @@ public class SimpleStringTagProvider implements StringTagContainProvider {
     }
 
     public SimpleStringTagProvider(@NotNull TagParser tags) {
-        this(tags, TagContainer.string(tags));
+        this(tags, new StringTagContainer(tags));
     }
 
     @Override

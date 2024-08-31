@@ -1,8 +1,10 @@
-package killercreepr.crux.loot.impl.conditions.entity;
+package killercreepr.crux.loot.impl.conditions.item;
 
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import killercreepr.crux.Crux;
+import killercreepr.crux.ItemTag;
+import killercreepr.crux.item.predicate.ItemPredicate;
 import killercreepr.crux.loot.LootContext;
 import killercreepr.crux.loot.impl.conditions.BaseCondition;
 import killercreepr.crux.tags.container.TagContainer;
@@ -19,13 +21,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 
 public class ItemStackCondition extends BaseCondition {
-    protected final @Nullable Key itemType;
+    protected final @Nullable ItemPredicate itemPredicate;
     protected final @Nullable String amount;
     protected final @Nullable Map<Key, String> enchants;
 
-    public ItemStackCondition(@NotNull String target, @Nullable Key itemType, @Nullable String amount, @Nullable Map<Key, String> enchants) {
+    public ItemStackCondition(@NotNull String target, @Nullable ItemPredicate itemPredicate, @Nullable String amount, @Nullable Map<Key, String> enchants) {
         super(target);
-        this.itemType = itemType;
+        this.itemPredicate = itemPredicate;
         this.amount = amount;
         this.enchants = enchants;
     }
@@ -34,8 +36,8 @@ public class ItemStackCondition extends BaseCondition {
     public boolean test(@NotNull LootContext ctx) {
         ItemStack item = ctx.info().get(target, ItemStack.class);
         if(item==null) return false;
-        if(itemType != null){
-            if(!Crux.handlers().item().getType(item).equals(itemType)) return false;
+        if(itemPredicate != null){
+            if(!itemPredicate.test(item)) return false;
         }
         if(amount != null){
             if(!CruxString.parseBoolean(CruxMath.evaluateEvalEx(

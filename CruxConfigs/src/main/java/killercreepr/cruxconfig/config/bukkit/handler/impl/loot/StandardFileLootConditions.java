@@ -1,12 +1,14 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 
 import com.google.common.reflect.TypeToken;
+import killercreepr.crux.ItemTag;
+import killercreepr.crux.item.predicate.ItemPredicate;
 import killercreepr.crux.loot.conditions.LootCondition;
 import killercreepr.crux.loot.impl.conditions.AllOfCondition;
 import killercreepr.crux.loot.impl.conditions.AnyOfCondition;
 import killercreepr.crux.loot.impl.conditions.block.BlockCondition;
 import killercreepr.crux.loot.impl.conditions.entity.EntityCondition;
-import killercreepr.crux.loot.impl.conditions.entity.ItemStackCondition;
+import killercreepr.crux.loot.impl.conditions.item.ItemStackCondition;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileObject;
@@ -94,7 +96,7 @@ public class StandardFileLootConditions {
             @Override
             public @NotNull ItemStackCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 FileRegistry registry = ctx.getRegistry();
-                Key itemType = registry.deserializeFromFile(Key.class, e.get("item_type"));
+                ItemPredicate itemType = registry.deserializeFromFile(ItemPredicate.class, e.get("item_predicate"));
                 String amount = registry.deserializeFromFile(String.class, e.get("amount"));
                 Map<Key, String> enchants = registry.deserializeFromFile(
                     new TypeToken<Map<Key, String>>(){}.getType(), e.get("enchants")

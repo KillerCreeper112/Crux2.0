@@ -1,9 +1,11 @@
 package killercreepr.crux.loot.impl;
 
 import killercreepr.crux.data.Holder;
+import killercreepr.crux.loot.LootContext;
 import killercreepr.crux.loot.LootPoolObject;
 import killercreepr.crux.loot.conditions.LootCondition;
 import killercreepr.crux.loot.functions.LootFunction;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -33,7 +35,7 @@ public class SimpleLootPoolObject<T> extends SimpleLootObject<T> implements Loot
     }
 
     @Override
-    public @Nullable Holder<Collection<T>> getItems() {
+    public @Nullable Holder<Collection<T>> getItems(@NotNull LootContext ctx) {
         return item;
     }
 }

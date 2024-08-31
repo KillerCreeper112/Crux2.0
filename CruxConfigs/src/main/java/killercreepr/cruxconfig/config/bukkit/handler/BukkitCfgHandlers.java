@@ -14,6 +14,7 @@ import killercreepr.crux.item.ItemHolder;
 import killercreepr.crux.item.StoredItem;
 import killercreepr.crux.item.dynamic.BukkitDynamicItem;
 import killercreepr.crux.item.dynamic.components.DynamicPersistentTag;
+import killercreepr.crux.item.predicate.ItemPredicate;
 import killercreepr.crux.loot.conditions.LootCondition;
 import killercreepr.crux.loot.impl.item.SimpleItemLootObject;
 import killercreepr.crux.loot.item.ItemLootFunction;
@@ -73,6 +74,7 @@ public class BukkitCfgHandlers {
     public static final FileItemLootPoolObject ITEM_LOOT_POOL_OBJECT = new FileItemLootPoolObject();
     public static final FileCreateBlockSoundGroup CREATE_BLOCK_SOUND_GROUP = new FileCreateBlockSoundGroup();
     public static final FileItemTag ITEM_TAG = new FileItemTag();
+    public static final FileItemPredicate ITEM_PREDICATE = new FileItemPredicate();
 
     public static void initStandard(){
         CfgRegistries.FILE.forEach(BukkitCfgHandlers::init);
@@ -104,6 +106,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(ItemLootPoolObject.class, ITEM_LOOT_POOL_OBJECT);
         registry.registerFileHandler(CreateBlockSoundGroup.class, CREATE_BLOCK_SOUND_GROUP);
         registry.registerFileHandler(ItemTag.class, ITEM_TAG);
+        registry.registerFileHandler(ItemPredicate.class, ITEM_PREDICATE);
 
         StandardFileLootConditions.register(LOOT_CONDITION);
         StandardFileLootFunctions.register(ITEM_LOOT_FUNCTION);

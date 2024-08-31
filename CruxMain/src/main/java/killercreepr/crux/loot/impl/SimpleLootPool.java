@@ -1,5 +1,6 @@
 package killercreepr.crux.loot.impl;
 
+import killercreepr.crux.data.Holder;
 import killercreepr.crux.loot.LootContext;
 import killercreepr.crux.loot.LootPool;
 import killercreepr.crux.loot.LootPoolObject;
@@ -66,7 +67,8 @@ public class SimpleLootPool<T> extends SimpleLootObject<T> implements LootPool<T
         if(excludeEmpty && exclude != null) data.removeIf(exclude);
         List<LootPoolObject<T>> random = random(data, rolls.sample(context.getRandom()).intValue(), context, exclude);
         for(LootPoolObject<T> x : random){
-            Collection<T> items = x.getItems() == null ? null : x.getItems().value();
+            Holder<Collection<T>> holder = x.getItems(context);
+            Collection<T> items = holder == null ? null : holder.value();
             if(items==null) continue;
             for(T t : items){
                 //pool functions first

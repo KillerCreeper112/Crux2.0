@@ -17,8 +17,10 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +46,11 @@ public interface ActiveCruxBlock {
     default @NotNull CruxBlockBreakEvent breakBlock(@Nullable Miner miner, boolean displayEffects, boolean disableDrops){
         Block block = getBlock();
         Collection<ItemStack> drops;
-        if(miner instanceof EntityMiner m && m.getEntity() instanceof HumanEntity p && p.getGameMode() == GameMode.CREATIVE){
+        Entity entityMiner;
+        if(miner instanceof EntityMiner m){
+            entityMiner = m.getEntity();
+        }else entityMiner = null;
+        if(entityMiner instanceof HumanEntity p && p.getGameMode() == GameMode.CREATIVE){
             drops = null;
         }else drops = getDrops(miner);
         CruxBlockBreakEvent event = new CruxBlockBreakEvent(this, BlockContext.context(block, miner), drops);
@@ -64,8 +70,8 @@ public interface ActiveCruxBlock {
             }
 
             new ParticleBuilder(Particle.BLOCK)
-                .count(20)
-                .offset(.5, .5, .5)
+                .count(15)
+                .offset(.3, .3, .3)
                 .extra(.1)
                 .data(data)
                 .location(block.getLocation().toCenterLocation().subtract(0, .5, 0))
@@ -79,8 +85,16 @@ public interface ActiveCruxBlock {
                 block.getWorld().dropItem(x, i);
             }
         }
-        /*todo if(e != null) GrimItem.damage(e, tool, 1, EquipmentSlot.HAND);
-        else GrimItem.damage(tool, 1);*/
+        if(miner instanceof Tooled tooled){
+            ItemStack tool = tooled.getTool();
+            if(tool != null){
+                if(entityMiner instanceof LivingEntity e){
+                    e.damageItemStack(EquipmentSlot.HAND, 1);
+                }else{
+                    Crux.handlers().item().damageItem(tool, 1, entityMiner);
+                }
+            }
+        }
         broken(event.getContext());
         return event;
     }

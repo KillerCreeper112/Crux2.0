@@ -1,10 +1,11 @@
 package killercreepr.crux.loot;
 
 import killercreepr.crux.data.Holder;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
 public interface LootPoolObject<T> extends LootObject<T> {
-    @Nullable Holder<Collection<T>> getItems();
+    @Nullable Holder<Collection<T>> getItems(@NotNull LootContext ctx);
 }
