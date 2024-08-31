@@ -86,13 +86,13 @@ public class NoteBlockSoundsListener implements Listener {
         if(sounds==null) return;
         CreateSound sound = sounds.getPlaceSound();
         if(sound==null) return;
-        sound.playAt(placed.getLocation());
+        sound.playAt(placed.getLocation().toCenterLocation());
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent event) {
         final Block block = event.getBlock();
-        Location location = block.getLocation();
+        Location location = block.getLocation().toCenterLocation();
 
         if (breakerPlaySound.containsKey(location)) {
             breakerPlaySound.get(location).cancel();
@@ -111,7 +111,7 @@ public class NoteBlockSoundsListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockDamageAbort(BlockDamageAbortEvent event) {
-        Location location = event.getBlock().getLocation();
+        Location location = event.getBlock().getLocation().toCenterLocation();
         if (breakerPlaySound.containsKey(location)) {
             breakerPlaySound.get(location).cancel();
             breakerPlaySound.remove(location);
@@ -124,7 +124,7 @@ public class NoteBlockSoundsListener implements Listener {
         Block block = event.getBlock();
         CruxBlock crux = registry.getByBlock(block);
         if(crux==null) return;
-        Location location = block.getLocation();
+        Location location = block.getLocation().toCenterLocation();
 
         CreateBlockSoundGroup soundGroup = crux.getSoundGroup();
         if(soundGroup==null) return;
