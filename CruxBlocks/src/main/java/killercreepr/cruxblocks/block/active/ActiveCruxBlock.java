@@ -8,18 +8,15 @@ import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.context.BlockContext;
 import killercreepr.cruxblocks.event.CruxBlockBreakEvent;
 import killercreepr.cruxblocks.user.EntityMiner;
-import killercreepr.cruxblocks.user.ItemMiner;
 import killercreepr.cruxblocks.user.Miner;
 import killercreepr.cruxblocks.user.Tooled;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
@@ -89,7 +86,9 @@ public interface ActiveCruxBlock {
             ItemStack tool = tooled.getTool();
             if(tool != null){
                 if(entityMiner instanceof LivingEntity e){
-                    e.damageItemStack(EquipmentSlot.HAND, 1);
+                    if(!(e instanceof Player p) || p.getGameMode() != GameMode.CREATIVE){
+                        e.damageItemStack(EquipmentSlot.HAND, 1);
+                    }
                 }else{
                     Crux.handlers().item().damageItem(tool, 1, entityMiner);
                 }
@@ -100,7 +99,7 @@ public interface ActiveCruxBlock {
     }
 
     default @NotNull CruxBlockBreakEvent breakBlock(@Nullable ItemStack tool){
-        return breakBlock(new ItemMiner(tool), true, false);
+        return breakBlock(Miner.item(tool), true, false);
     }
 
     /**

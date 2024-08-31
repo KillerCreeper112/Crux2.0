@@ -99,7 +99,7 @@ public class CustomBlocksListener implements Listener {
         if(p.getGameMode() == GameMode.CREATIVE) return;
 
         CruxBlock crux = active.getCruxBlock();
-        Collection<ItemStack> drops = active.getDrops(Miner.entity(p));
+        Collection<ItemStack> drops = active.getDrops(Miner.entity(p.getInventory().getItemInMainHand(), p));
         CreateBlockSoundGroup soundGroup = crux.getSoundGroup();
         if(soundGroup != null){
             CreateSound sound = soundGroup.getBreakSound();
@@ -138,7 +138,7 @@ public class CustomBlocksListener implements Listener {
         ActiveCruxBlock active = manager.getActiveBlock(b);
         if(active==null) return;
         Player p = event.getPlayer();
-        active.breakBlock(Miner.entity(event.getPlayer()), true, p.getGameMode() == GameMode.CREATIVE);
+        active.breakBlock(Miner.entity(p.getInventory().getItemInMainHand(), p), true, p.getGameMode() == GameMode.CREATIVE);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -252,7 +252,7 @@ public class CustomBlocksListener implements Listener {
             if(e instanceof LivingEntity) return;
         }
         plugin.getServer().getScheduler().runTask(plugin, task ->{
-            ActiveCruxBlock placed = group.placeBlock(PlaceBlockContext.context(placeBlock, Miner.entity(p), blockFace));
+            ActiveCruxBlock placed = group.placeBlock(PlaceBlockContext.context(placeBlock, Miner.entity(p.getInventory().getItemInMainHand(), p), blockFace));
             if(placed == null) return;
 
             if(p.getGameMode() != GameMode.CREATIVE) item.setAmount(item.getAmount() - 1);

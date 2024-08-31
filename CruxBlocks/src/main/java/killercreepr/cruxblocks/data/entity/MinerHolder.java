@@ -71,7 +71,7 @@ public class MinerHolder extends PlayerTickedDataHolder {
 
     public void onMine(@NotNull Player p, @NotNull ActiveCruxBlock block){
         lastMine = System.currentTimeMillis();
-        float mineSpeed = block.getMineSpeed(Miner.entity(p), true);
+        float mineSpeed = block.getMineSpeed(Miner.entity(p.getInventory().getItemInMainHand(), p), true);
         if(lastBreakSpeed == null){
             lastBreakSpeed = p.getAttribute(Attribute.PLAYER_BLOCK_BREAK_SPEED).getBaseValue();
         }
