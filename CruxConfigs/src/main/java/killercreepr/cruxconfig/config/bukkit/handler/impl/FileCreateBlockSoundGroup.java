@@ -1,12 +1,15 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
+import killercreepr.crux.Crux;
 import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.crux.data.communication.CreateSound;
 import killercreepr.crux.data.communication.impl.SimpleCreateBlockSoundGroup;
+import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.crux.util.CruxObjects;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
+import killercreepr.cruxconfig.config.common.element.FileGeneric;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.SimpleFileHandler;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +35,15 @@ public class FileCreateBlockSoundGroup extends SimpleFileHandler<CreateBlockSoun
 
     @Override
     public @Nullable CreateBlockSoundGroup deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
-        if(!(e instanceof FileObject o)) return null;
+        if(!(e instanceof FileObject o)){
+            if(e instanceof FileGeneric g){
+                String key = g.getAsString();
+                return CruxRegistries.BLOCK_SOUND_GROUP.get(
+                    Crux.key(key.startsWith("#") ? key.substring(1) : key)
+                );
+            }
+            return null;
+        }
         FileRegistry registry = ctx.getRegistry();
         CreateSound breakSound = registry.deserializeFromFile(CreateSound.class, o.get("break"));
         CreateSound placeSound = registry.deserializeFromFile(CreateSound.class, o.get("place"));

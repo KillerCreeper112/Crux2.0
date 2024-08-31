@@ -66,14 +66,14 @@ public interface ActiveCruxBlock {
                 }
             }
 
-            new ParticleBuilder(Particle.BLOCK)
-                .count(15)
+            /*new ParticleBuilder(Particle.BLOCK)
+                .count(10)
                 .offset(.3, .3, .3)
                 .extra(.1)
                 .data(data)
                 .location(block.getLocation().toCenterLocation().subtract(0, .5, 0))
                 .spawn()
-            ;
+            ;*/
         }
 
         if(drops != null){
