@@ -7,6 +7,7 @@ import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import killercreepr.cruxstructures.commands.StructureCommands;
 import killercreepr.cruxstructures.config.*;
 import killercreepr.cruxstructures.config.generation.*;
+import killercreepr.cruxstructures.config.module.FileConeVeinModule;
 import killercreepr.cruxstructures.config.module.FileCorruptedVeinModule;
 import killercreepr.cruxstructures.manager.StructureManager;
 import killercreepr.cruxstructures.structure.generation.center.StructureCenter;
@@ -78,6 +79,7 @@ public class CruxStructuresModule implements CruxModule {
         fileStructureChunkRequirement.TYPE_HANDLERS.register("per_chunks", new FileChunkPerRequirement());
 
         fileStructureModule.TYPE_HANDLERS.register("corrupt_veins", new FileCorruptedVeinModule());
+        fileStructureModule.TYPE_HANDLERS.register("cone_veins", new FileConeVeinModule());
 
         CfgRegistries.JSON_REGISTRY.forEach(registry ->{
             registry.registerFileHandler(SimpleStoredStructure.class, new FileSimpleStoredStructure<SimpleStoredStructure>());

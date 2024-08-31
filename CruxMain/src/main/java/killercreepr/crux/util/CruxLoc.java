@@ -2,6 +2,7 @@ package killercreepr.crux.util;
 
 import org.bukkit.Axis;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -251,6 +252,53 @@ public class CruxLoc {
         }
 
         return locs;
+    }
+
+    /**
+     * Pitch and yaw must be 0, 0 to get a cone pointing towards.
+     * Otherwise, it generates some interesting results.
+     */
+    public static @NotNull List<Location> getInterestingCone(@NotNull Location center, double radius, int numPoints, double downwardPitch) {
+        double angleIncrement = 2 * Math.PI / numPoints; // Angle increment between points
+
+        // Get the center's yaw and pitch
+        float centerYaw = center.getYaw();
+        float centerPitch = center.getPitch();
+
+        List<Location> list = new ArrayList<>();
+        for (int i = 0; i < numPoints; i++) {
+            double angle = i * angleIncrement;
+
+            // Calculate x and z using the angle
+            double x = center.getX() + radius * Math.cos(angle);
+            double z = center.getZ() + radius * Math.sin(angle);
+            double y = center.getY(); // Assuming we want all points at the same y level
+
+            // Create the location
+            Location loc = new Location(center.getWorld(), x, y, z);
+
+            // Calculate direction vector relative to the center's orientation
+            Vector direction = new Vector(center.getX() - x, center.getY() - y, center.getZ() - z).normalize();
+
+            // Apply slight downward pitch relative to the center's orientation
+            Vector directionRelative = direction.clone();
+
+            // Convert downward pitch to radians
+            double pitchRad = Math.toRadians(downwardPitch);
+            directionRelative.setY(directionRelative.getY() - Math.sin(pitchRad));
+            directionRelative.normalize();
+
+            // Calculate yaw and pitch adjustments
+            double yawAdjustment = centerYaw + Math.toDegrees(Math.atan2(directionRelative.getZ(), directionRelative.getX())) - 90;
+            double pitchAdjustment = centerPitch - Math.toDegrees(Math.asin(directionRelative.getY()));
+
+            // Apply adjustments to the location's yaw and pitch
+            loc.setYaw((float) yawAdjustment);
+            loc.setPitch((float) pitchAdjustment);
+
+            list.add(loc);
+        }
+        return list;
     }
 
     public static @NotNull List<Location> getCircleRelative(@NotNull Location loc, double r, double spacing) {
