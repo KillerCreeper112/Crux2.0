@@ -18,6 +18,12 @@ public class CfgBushBlockGroup extends BushBlockGroup {
         this.soundGroup = soundGroup;
     }
 
+    public CfgBushBlockGroup(@NotNull Key key, float hardness, @Nullable CreateBlockSoundGroup soundGroup, @NotNull CruxBlock... blocks) {
+        super(key, blocks);
+        this.hardness = hardness;
+        this.soundGroup = soundGroup;
+    }
+
     @Override
     public float getHardness() {
         return hardness;
