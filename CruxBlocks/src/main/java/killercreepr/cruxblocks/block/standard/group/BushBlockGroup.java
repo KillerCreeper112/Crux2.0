@@ -1,5 +1,6 @@
 package killercreepr.cruxblocks.block.standard.group;
 
+import killercreepr.crux.Crux;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.block.context.BlockContext;
@@ -15,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 public abstract class BushBlockGroup extends GenericBlockGroup {
     protected final Map<BushType, BushBlock> bushTypeToBlock = new HashMap<>();
@@ -22,6 +24,17 @@ public abstract class BushBlockGroup extends GenericBlockGroup {
         super(key, blocks);
         for(BushBlock b : blocks){
             bushTypeToBlock.put(b.getBushType(), b);
+        }
+    }
+
+    public BushBlockGroup(@NotNull Key key, @NotNull CruxBlock... blocks) {
+        super(key, blocks);
+        for(CruxBlock b : blocks){
+            if(!(b instanceof BushBlock bush)){
+                Crux.log(Level.WARNING, "BushBlockGroup created with non-bush block, " + b.key() + ". Ignoring...");
+                continue;
+            }
+            bushTypeToBlock.put(bush.getBushType(), bush);
         }
     }
 
@@ -39,11 +52,15 @@ public abstract class BushBlockGroup extends GenericBlockGroup {
         Block check = b;
         if(!check.isEmpty() && !check.isReplaceable()) return false;
 
-        check = b.getRelative(BlockFace.UP);
-        if(!check.isEmpty() && !check.isReplaceable()) return false;
+        if(getBlocks().size() > 1){
+            check = b.getRelative(BlockFace.UP);
+            if(!check.isEmpty() && !check.isReplaceable()) return false;
+        }
 
-        check = check.getRelative(BlockFace.UP);
-        if(!check.isEmpty() && !check.isReplaceable()) return false;
+        if(getBlocks().size() > 2){
+            check = check.getRelative(BlockFace.UP);
+            if(!check.isEmpty() && !check.isReplaceable()) return false;
+        }
 
         return isValidGround(b.getRelative(BlockFace.DOWN));
     }
@@ -59,8 +76,12 @@ public abstract class BushBlockGroup extends GenericBlockGroup {
 
         Block b = ctx.getBlock();
         ActiveCruxBlock active = getBaseBlock().placeBlock(ctx, false);
-        middle.placeBlock(ctx.withBlock(b.getRelative(BlockFace.UP)), false);
-        top.placeBlock(ctx.withBlock(b.getRelative(BlockFace.UP).getRelative(BlockFace.UP)), applyPhysics);
+        Block current = b.getRelative(BlockFace.UP);
+        if(middle != null){
+            middle.placeBlock(ctx.withBlock(current), false);
+            current = current.getRelative(BlockFace.UP);
+        }
+        top.placeBlock(ctx.withBlock(current), applyPhysics);
         return active;
     }
 }

@@ -4,6 +4,8 @@ import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.GenericBlock;
 import killercreepr.cruxblocks.block.GenericDirectionalBlock;
 import killercreepr.cruxblocks.block.group.CruxDirectionalBlockGroup;
+import killercreepr.cruxblocks.block.standard.BushBlock;
+import killercreepr.cruxblocks.block.standard.BushType;
 import killercreepr.cruxblocks.block.texture.TextureData;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
@@ -46,9 +48,12 @@ public class FileCruxBlock implements FileObjectHandler<CruxBlock> {
             Axis axis = registry.deserializeFromFile(Axis.class, o.get("direction"));
             if(axis != null) direction = CruxDirectionalBlockGroup.getFaceFromAxis(axis);
         }
-        if(direction == null) return new GenericBlock(key, texture);
+        if(direction != null) return new GenericDirectionalBlock(key, texture, direction);
 
-        return new GenericDirectionalBlock(key, texture, direction);
+        BushType bushType = registry.deserializeFromFile(BushType.class, o.get("bush_type"));
+        if(bushType != null) return new BushBlock(key, texture, bushType);
+
+        return new GenericBlock(key, texture);
     }
 
     @Override

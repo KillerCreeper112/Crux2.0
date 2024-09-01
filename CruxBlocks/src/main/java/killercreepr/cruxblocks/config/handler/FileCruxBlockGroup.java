@@ -5,8 +5,11 @@ import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.CruxBlockDirectional;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
-import killercreepr.cruxblocks.config.block.CfgGenericBlockGroup;
-import killercreepr.cruxblocks.config.block.CfgGenericDirectionalBlockGroup;
+import killercreepr.cruxblocks.block.standard.BushBlock;
+import killercreepr.cruxblocks.block.standard.group.BushBlockGroup;
+import killercreepr.cruxblocks.config.block.CfgBlockGroup;
+import killercreepr.cruxblocks.config.block.CfgBushBlockGroup;
+import killercreepr.cruxblocks.config.block.CfgDirectionalBlockGroup;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -43,13 +46,17 @@ public class FileCruxBlockGroup implements FileObjectHandler<CruxBlockGroup> {
 
         float hardness = o.getOrDefaultObject(Float.class, "hardness", 1f);
         CreateBlockSoundGroup soundGroup = registry.deserializeFromFile(CreateBlockSoundGroup.class, o.get("sound_group"));
-        if(blocks.getFirst() instanceof CruxBlockDirectional){
+        CruxBlock first = blocks.getFirst();
+        if(first instanceof CruxBlockDirectional){
             boolean orientable = o.getOrDefaultObject(Boolean.class, "orientable", false);
-            return new CfgGenericDirectionalBlockGroup(
+            return new CfgDirectionalBlockGroup(
                 key,orientable, hardness, soundGroup, blocksArray
             );
         }
-        return new CfgGenericBlockGroup(key, hardness, soundGroup, blocksArray);
+        if(first instanceof BushBlock){
+            return new CfgBushBlockGroup(key, hardness, soundGroup, blocksArray);
+        }
+        return new CfgBlockGroup(key, hardness, soundGroup, blocksArray);
     }
 
     @Override

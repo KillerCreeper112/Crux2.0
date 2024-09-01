@@ -6,6 +6,7 @@ import killercreepr.crux.item.dynamic.components.DynamicPersistTagHandler;
 import killercreepr.crux.item.dynamic.components.DynamicPersistentTag;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
+import killercreepr.cruxblocks.block.standard.BushType;
 import killercreepr.cruxblocks.block.texture.TextureData;
 import killercreepr.cruxblocks.config.handler.FileCruxBlock;
 import killercreepr.cruxblocks.config.handler.FileCruxBlockGroup;
@@ -15,6 +16,8 @@ import killercreepr.cruxblocks.persistence.CruxBlocksPersistTags;
 import killercreepr.cruxblocks.registeries.CruxBlocksRegistries;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
+import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.FileGenericEnum;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
@@ -58,6 +61,7 @@ public class CruxConfigHook {
         )));
         registry.registerFileHandler(CruxBlock.class, new FileCruxBlock());
         registry.registerFileHandler(CruxBlockGroup.class, new FileCruxBlockGroup());
+        registry.registerFileHandler(BushType.class, new FileGenericEnum<>(BushType.class));
     }
 
     public static void loadCfgBlockGroups(@NotNull Plugin plugin, @NotNull String path){
