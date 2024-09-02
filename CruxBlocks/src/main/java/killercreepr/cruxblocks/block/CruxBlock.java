@@ -14,6 +14,7 @@ import killercreepr.cruxblocks.event.CruxBlockSetEvent;
 import net.kyori.adventure.key.Keyed;
 import org.bukkit.block.Block;
 import org.bukkit.generator.LimitedRegion;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -85,6 +86,7 @@ public interface CruxBlock extends Keyed, CruxBlockData {
         return active;
     }
 
+    @ApiStatus.Experimental
     default void setBlock(@NotNull LimitedRegion region, int x, int y, int z){
         TextureData data = getTextureData();
         data.setBlock(region, x, y, z);

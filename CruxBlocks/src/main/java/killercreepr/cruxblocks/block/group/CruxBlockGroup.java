@@ -4,10 +4,12 @@ import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.CruxBlockData;
 import killercreepr.cruxblocks.block.context.BlockContext;
+import killercreepr.cruxblocks.block.texture.TextureData;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.generator.LimitedRegion;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,5 +46,9 @@ public interface CruxBlockGroup extends Keyed, CruxBlockData, Iterable<CruxBlock
     @Override
     default boolean canPlace(@NotNull BlockContext ctx){
         return true;
+    }
+
+    default void setBlock(@NotNull LimitedRegion region, int x, int y, int z){
+        getBaseBlock().setBlock(region, x, y, z);
     }
 }

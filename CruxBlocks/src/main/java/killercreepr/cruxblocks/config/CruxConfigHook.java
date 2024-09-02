@@ -8,15 +8,11 @@ import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.block.standard.BushType;
 import killercreepr.cruxblocks.block.texture.TextureData;
-import killercreepr.cruxblocks.config.handler.FileCruxBlock;
-import killercreepr.cruxblocks.config.handler.FileCruxBlockGroup;
-import killercreepr.cruxblocks.config.handler.FileNoteTextureData;
-import killercreepr.cruxblocks.config.handler.FileTextureData;
+import killercreepr.cruxblocks.config.handler.*;
 import killercreepr.cruxblocks.persistence.CruxBlocksPersistTags;
 import killercreepr.cruxblocks.registeries.CruxBlocksRegistries;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
-import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.FileGenericEnum;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -51,8 +47,8 @@ public class CruxConfigHook {
     }
 
     public static final FileNoteTextureData NOTE_TEXTURE_DATA = new FileNoteTextureData();
-    public static final FileNoteTextureData WIRE_TEXTURE_DATA = new FileNoteTextureData();//todo
-    public static final FileNoteTextureData MATERIAL_TEXTURE_DATA = new FileNoteTextureData();
+    public static final FileWireTextureData WIRE_TEXTURE_DATA = new FileWireTextureData();
+    public static final FileNoteTextureData MATERIAL_TEXTURE_DATA = new FileNoteTextureData();//todo
     public static void registerHandlers(@NotNull FileRegistry registry){
         registry.registerFileHandler(TextureData.class, new FileTextureData(Map.of(
             "note", NOTE_TEXTURE_DATA,

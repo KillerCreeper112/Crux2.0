@@ -6,7 +6,6 @@ import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.CruxBlockDirectional;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.block.standard.BushBlock;
-import killercreepr.cruxblocks.block.standard.group.BushBlockGroup;
 import killercreepr.cruxblocks.config.block.CfgBlockGroup;
 import killercreepr.cruxblocks.config.block.CfgBushBlockGroup;
 import killercreepr.cruxblocks.config.block.CfgDirectionalBlockGroup;
