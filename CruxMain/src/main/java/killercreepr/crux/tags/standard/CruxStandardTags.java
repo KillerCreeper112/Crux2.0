@@ -11,7 +11,10 @@ import java.util.regex.Pattern;
 
 public class CruxStandardTags {
     public static @NotNull Collection<ObjectTag<?>> buildObjectTags(){
-        return Set.of(new OfflinePlayerTags());
+        return Set.of(
+            new OfflinePlayerTags(),
+            new ItemStackTags()
+        );
     }
 
     public static @NotNull Collection<StringResolver> buildGlobalStringTags(){
