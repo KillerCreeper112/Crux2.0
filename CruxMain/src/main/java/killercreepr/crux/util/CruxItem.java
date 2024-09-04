@@ -59,22 +59,26 @@ public class CruxItem implements Cloneable {
         this.item = item;
     }
 
-    private Component c(@Nullable String s){
+    private Component cNoItalics(@Nullable String s){
         if(s==null) return null;
-        /*DataExchange.builder().put("item", item()).build(), null, s*/
-        return c(format.deserialize(s, StringTagProvider.build(format.tags().buildStringTags(item))));
+        return cNoItalics(format.deserialize(s, StringTagProvider.build(format.tags().buildStringTags(item))));
     }
 
-    private Component c(@Nullable Component s){
+    private Component c(@Nullable String s){
+        if(s==null) return null;
+        return format.deserialize(s, StringTagProvider.build(format.tags().buildStringTags(item)));
+    }
+
+    private Component cNoItalics(@Nullable Component s){
         if(s==null) return null;
         return NO_ITALICS.append(s);
     }
 
-    private List<Component> c(@Nullable Collection<Component> s){
+    private List<Component> cNoItalics(@Nullable Collection<Component> s){
         if(s==null) return null;
         List<Component> newList = new ArrayList<>();
         for(Component c : s){
-            newList.add(c(c));
+            newList.add(cNoItalics(c));
         }
         return newList;
     }
@@ -107,10 +111,7 @@ public class CruxItem implements Cloneable {
     }
 
     public @NotNull FormatParserContext buildFormatContext(){
-        return new FormatParserContext(format, null, null,
-            format.tags().buildTags(item())
-            /*format.tags().hookStringResolvers(new FormatParserContext.Builder(format).build(), Holder.direct(item()), null),
-            format.tags().hookLoreTags(item(), null)*/);
+        return new FormatParserContext(format, null, null, format.tags().buildTags(item()));
     }
 
     public CruxItem addLoreFromString(@NotNull String @Nullable... lore){
@@ -149,12 +150,12 @@ public class CruxItem implements Cloneable {
 
     @Deprecated(forRemoval = true)
     public CruxItem displayName(@Nullable String name) {
-        return displayName(c(name));
+        return displayName(cNoItalics(name));
     }
 
     @Deprecated(forRemoval = true)
     public CruxItem displayName(@Nullable Component name) {
-        return editMeta(meta -> meta.displayName(c(name)));
+        return editMeta(meta -> meta.displayName(cNoItalics(name)));
     }
 
     public CruxItem customName(@Nullable String name) {
@@ -162,7 +163,7 @@ public class CruxItem implements Cloneable {
     }
 
     public CruxItem customName(@Nullable Component name) {
-        return editMeta(meta -> meta.displayName(c(name)));
+        return editMeta(meta -> meta.displayName(name));
     }
 
     public CruxItem itemName(@Nullable String name) {
@@ -170,7 +171,7 @@ public class CruxItem implements Cloneable {
     }
 
     public CruxItem itemName(@Nullable Component name) {
-        return editMeta(meta -> meta.itemName(c(name)));
+        return editMeta(meta -> meta.itemName(name));
     }
 
     public @Nullable List<Component> lore() {
@@ -185,7 +186,7 @@ public class CruxItem implements Cloneable {
     }
 
     public CruxItem lore(@Nullable List<Component> lore) {
-        return editMeta(meta -> meta.lore(c(lore)));
+        return editMeta(meta -> meta.lore(cNoItalics(lore)));
     }
 
     public @NotNull Collection<ItemFlag> flags() {
