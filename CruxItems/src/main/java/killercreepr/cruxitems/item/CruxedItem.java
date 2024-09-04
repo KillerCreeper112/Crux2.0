@@ -1,6 +1,6 @@
 package killercreepr.cruxitems.item;
 
-import killercreepr.crux.tags.format.Format;
+import killercreepr.crux.tags.format.FormatSerializer;
 import killercreepr.crux.util.CruxItem;
 import killercreepr.cruxitems.item.plugin.PluginItem;
 import killercreepr.cruxitems.persistence.CruxItemsPersistTags;
@@ -23,11 +23,11 @@ public class CruxedItem extends CruxItem {
         super(item);
     }
 
-    public CruxedItem(@NotNull Format format, @NotNull Material material) {
+    public CruxedItem(@NotNull FormatSerializer format, @NotNull Material material) {
         super(format, material);
     }
 
-    public CruxedItem(@NotNull Format format, @NotNull ItemStack item) {
+    public CruxedItem(@NotNull FormatSerializer format, @NotNull ItemStack item) {
         super(format, item);
     }
 

@@ -2,7 +2,7 @@ package killercreepr.crux.util;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.tags.context.FormatParserContext;
-import killercreepr.crux.tags.format.Format;
+import killercreepr.crux.tags.format.FormatSerializer;
 import killercreepr.crux.tags.provider.StringTagProvider;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -43,7 +43,7 @@ public class CruxItem implements Cloneable {
 
     public static final @NotNull Component NO_ITALICS = Component.empty().decoration(TextDecoration.ITALIC, false);
     protected @NotNull ItemStack item;
-    protected @NotNull Format format;
+    protected @NotNull FormatSerializer format;
     public CruxItem(@NotNull Material material) {
         this(new ItemStack(material));
     }
@@ -51,10 +51,10 @@ public class CruxItem implements Cloneable {
         this(Crux.FORMAT, item);
     }
 
-    public CruxItem(@NotNull Format format, @NotNull Material material) {
+    public CruxItem(@NotNull FormatSerializer format, @NotNull Material material) {
         this(format, new ItemStack(material));
     }
-    public CruxItem(@NotNull Format format, @NotNull ItemStack item) {
+    public CruxItem(@NotNull FormatSerializer format, @NotNull ItemStack item) {
         this.format = format;
         this.item = item;
     }
@@ -296,7 +296,7 @@ public class CruxItem implements Cloneable {
         }
     }
 
-    public @NotNull Format getFormat() {
+    public @NotNull FormatSerializer getFormat() {
         return format;
     }
 }

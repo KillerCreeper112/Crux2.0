@@ -5,9 +5,8 @@ import killercreepr.crux.data.tick.CruxTick;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.crux.registry.KeyedRegistry;
-import killercreepr.crux.tags.CruxTags;
 import killercreepr.crux.tags.TagParser;
-import killercreepr.crux.tags.format.Format;
+import killercreepr.crux.tags.format.FormatSerializer;
 import killercreepr.crux.tags.standard.CruxStandardTags;
 import killercreepr.crux.tags.standard.minimessage.*;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -29,10 +28,10 @@ import java.util.logging.Logger;
 //todo Make a translatable system
 public final class Crux {
     public static final String NAMESPACE = "crux";
-    public static final TagParser TAGS = new CruxTags.Builder()
+    public static final TagParser TAGS = TagParser.builder()
         .addTags(CruxStandardTags.buildObjectTags())
         .build();
-    public static final Format FORMAT = new Format.Builder()
+    public static final FormatSerializer FORMAT = FormatSerializer.builder()
         .miniMessage(MiniMessage.builder()
             .tags(TagResolver.builder()
                 .resolvers(TagResolver.standard(),

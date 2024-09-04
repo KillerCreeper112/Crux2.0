@@ -2,8 +2,8 @@ package killercreepr.crux.external.placeholderapi;
 
 import killercreepr.crux.tags.container.StringTagContainer;
 import killercreepr.crux.tags.context.FormatParserContext;
-import killercreepr.crux.tags.format.Format;
 import killercreepr.crux.tags.format.FormatArgs;
+import killercreepr.crux.tags.format.FormatSerializer;
 import killercreepr.crux.tags.hook.ObjectTag;
 import killercreepr.crux.tags.hook.impl.StringHookedObjectContainer;
 import killercreepr.crux.tags.resolver.StringResolver;
@@ -17,9 +17,9 @@ import java.util.List;
 //todo test this out
 public class TagsExpansionHook /*extends PlaceholderExpansion */{
     protected final @NotNull String identifier;
-    protected final @NotNull Format format;
+    protected final @NotNull FormatSerializer format;
 
-    public TagsExpansionHook(@NotNull String identifier, @NotNull Format format) {
+    public TagsExpansionHook(@NotNull String identifier, @NotNull FormatSerializer format) {
         this.identifier = identifier;
         this.format = format;
     }

@@ -5,7 +5,7 @@ import killercreepr.crux.registry.Registry;
 import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.crux.tags.container.TagContainer;
 import killercreepr.crux.tags.context.FormatParserContext;
-import killercreepr.crux.tags.format.Format;
+import killercreepr.crux.tags.format.FormatSerializer;
 import killercreepr.crux.util.CruxItem;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.crux.util.CruxString;
@@ -37,7 +37,7 @@ public class MenuItem {
         this.evaluatedContext = evaluatedContext;
     }
 
-    public @NotNull Format getFormat(){
+    public @NotNull FormatSerializer getFormat(){
         return evaluatedContext.getMenu().getHolder().getRegistry().getFormat();
     }
 

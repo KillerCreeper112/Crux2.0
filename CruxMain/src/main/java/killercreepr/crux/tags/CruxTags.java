@@ -131,7 +131,7 @@ public class CruxTags implements TagParser {
         return tag;
     }
 
-    public static class Builder{
+    public static class Builder implements TagParser.Builder{
         protected final Collection<ObjectTag<?>> tags = new HashSet<>();
         public Builder addTag(@NotNull ObjectTag<?> tag) {
             tags.add(tag);

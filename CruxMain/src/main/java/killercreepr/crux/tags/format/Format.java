@@ -377,7 +377,7 @@ public class Format implements FormatSerializer{
         return result.toString();
     }
 
-    public static class Builder{
+    public static class Builder implements FormatSerializer.Builder{
         protected MiniMessage miniMessage;
         protected TagParser tagParser;
         protected Pattern stringPattern;

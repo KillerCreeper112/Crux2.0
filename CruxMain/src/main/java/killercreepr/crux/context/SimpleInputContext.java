@@ -1,19 +1,19 @@
 package killercreepr.crux.context;
 
-import killercreepr.crux.tags.format.Format;
+import killercreepr.crux.tags.format.FormatSerializer;
 import killercreepr.crux.tags.provider.StringTagProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class SimpleInputContext implements InputContext {
-    protected final @NotNull Format format;
+    protected final @NotNull FormatSerializer format;
     protected final @Nullable StringTagProvider tags;
-    public SimpleInputContext(@NotNull Format format, @Nullable StringTagProvider tags) {
+    public SimpleInputContext(@NotNull FormatSerializer format, @Nullable StringTagProvider tags) {
         this.format = format;
         this.tags = tags;
     }
 
-    public @NotNull Format getFormat() {
+    public @NotNull FormatSerializer getFormat() {
         return format;
     }
 

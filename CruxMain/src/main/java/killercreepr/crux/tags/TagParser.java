@@ -13,6 +13,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 public interface TagParser {
+    static Builder builder(){
+        return new CruxTags.Builder();
+    }
+
     default TagParser register(@NotNull ObjectTag<?>... tags){
         for(ObjectTag<?> t : tags){
             register(t);
@@ -47,4 +51,10 @@ public interface TagParser {
     }
 
     <T> @NotNull StringListHookedObjectContainer hookStringLists(@NotNull T object, @Nullable FormatPrefix prefix);
+
+    interface Builder{
+        Builder addTag(@NotNull ObjectTag<?> tag);
+        Builder addTags(@NotNull Collection<ObjectTag<?>> tags);
+        @NotNull TagParser build();
+    }
 }

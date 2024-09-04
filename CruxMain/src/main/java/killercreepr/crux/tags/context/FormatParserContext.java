@@ -3,7 +3,7 @@ package killercreepr.crux.tags.context;
 import killercreepr.crux.Crux;
 import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.tags.container.MergedTagContainer;
-import killercreepr.crux.tags.format.Format;
+import killercreepr.crux.tags.format.FormatSerializer;
 import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
@@ -17,10 +17,10 @@ public class FormatParserContext implements TextParserContext {
         return builder(Crux.FORMAT);
     }
 
-    public static @NotNull Builder builder(@NotNull Format format){
+    public static @NotNull Builder builder(@NotNull FormatSerializer format){
         return new Builder(format);
     }
-    public static @NotNull FormatParserContext empty(@NotNull Format format){
+    public static @NotNull FormatParserContext empty(@NotNull FormatSerializer format){
         return new FormatParserContext(format, null, null, null);
     }
 
@@ -28,12 +28,12 @@ public class FormatParserContext implements TextParserContext {
         return empty(Crux.FORMAT);
     }
 
-    protected final @NotNull Format format;
+    protected final @NotNull FormatSerializer format;
     protected final @Nullable OfflinePlayer viewer;
     protected final @Nullable FormatPrefix tagsPrefix;
     protected final @Nullable MergedTagContainer tags;
 
-    public FormatParserContext(@NotNull Format format,
+    public FormatParserContext(@NotNull FormatSerializer format,
                                @Nullable OfflinePlayer viewer,
                                @Nullable FormatPrefix tagsPrefix,
                                @Nullable MergedTagContainer tags) {
@@ -70,7 +70,7 @@ public class FormatParserContext implements TextParserContext {
     }
 
     @Override
-    public @NotNull Format getFormat() {
+    public @NotNull FormatSerializer getFormat() {
         return format;
     }
 
@@ -88,11 +88,11 @@ public class FormatParserContext implements TextParserContext {
     }
 
     public static final class Builder {
-        private @NotNull Format format;
+        private @NotNull FormatSerializer format;
         private @Nullable OfflinePlayer viewer;
         private @Nullable FormatPrefix tagsPrefix;
         private @Nullable MergedTagContainer tags;
-        public Builder(@NotNull Format format) {
+        public Builder(@NotNull FormatSerializer format) {
             this.format = format;
         }
 
@@ -102,7 +102,7 @@ public class FormatParserContext implements TextParserContext {
             tagsPrefix(context.getTagsPrefix());
         }
 
-        public Builder format(@NotNull Format format) {
+        public Builder format(@NotNull FormatSerializer format) {
             this.format = format;
             return this;
         }

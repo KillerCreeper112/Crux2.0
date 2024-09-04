@@ -3,7 +3,7 @@ package killercreepr.cruxmenus.menu.bukkit.registry;
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.registry.*;
-import killercreepr.crux.tags.format.Format;
+import killercreepr.crux.tags.format.FormatSerializer;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
@@ -35,14 +35,14 @@ public class MenuRegistry {
     public final Registry<MenuAction> MENU_ACTIONS = new SimpleRegistry<>(new HashSet<>());
     public final KeyedPriorityRegistry<ItemDataParser> ITEM_DATA_PARSERS = new KeyedPriorityRegistry<>();
 
-    protected final @NotNull Format format;
+    protected final @NotNull FormatSerializer format;
     protected final @NotNull FileMenuHolder menuModule;
-    public MenuRegistry(@NotNull Format format, @NotNull FileMenuHolder menuModule) {
+    public MenuRegistry(@NotNull FormatSerializer format, @NotNull FileMenuHolder menuModule) {
         this.format = format;
         this.menuModule = menuModule;
     }
 
-    public MenuRegistry(@NotNull Format format, @NotNull KeyedRegistry<MenuModuleBuilder> menuModuleBuilders) {
+    public MenuRegistry(@NotNull FormatSerializer format, @NotNull KeyedRegistry<MenuModuleBuilder> menuModuleBuilders) {
         this(format, new FileMenuHolder());
         menuModule.setYamlMenuItem(new FileMenuItem(menuModule));
         menuModule.setYamlMenuActions(new FileMenuActions(menuModule));
@@ -54,7 +54,7 @@ public class MenuRegistry {
         menuModule.getYamlDataExchange().getDataTypes().register("slot", FileDataProvider.generic(NumberProvider.class));
     }
 
-    public @NotNull Format getFormat() {
+    public @NotNull FormatSerializer getFormat() {
         return format;
     }
 
