@@ -4,7 +4,6 @@ import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.CruxBlockData;
 import killercreepr.cruxblocks.block.context.BlockContext;
-import killercreepr.cruxblocks.block.texture.TextureData;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import org.bukkit.block.Block;

@@ -47,6 +47,8 @@ public interface Menu extends CommonMenu, InventoryHolder {
     default void onRefresh(){
     }
 
+    boolean isRefreshing();
+
     /**
      * Closes all viewer's inventories.
      */

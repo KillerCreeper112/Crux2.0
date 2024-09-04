@@ -2,7 +2,6 @@ package killercreepr.cruxblocks.config.block;
 
 import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.cruxblocks.block.CruxBlock;
-import killercreepr.cruxblocks.block.group.GenericDirectionalBlockGroup;
 import killercreepr.cruxblocks.block.standard.BushBlock;
 import killercreepr.cruxblocks.block.standard.group.BushBlockGroup;
 import net.kyori.adventure.key.Key;

@@ -5,8 +5,6 @@ import killercreepr.cruxstructures.structure.Structure;
 import org.bukkit.Chunk;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Random;
-
 public class StructureChunkChanceRequirement implements StructureChunkRequirement {
     protected final float chance;
     public StructureChunkChanceRequirement(float chance) {

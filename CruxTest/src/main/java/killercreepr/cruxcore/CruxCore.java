@@ -5,7 +5,6 @@ import killercreepr.crux.CruxMainModule;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registries.CruxModuleRegistry;
 import killercreepr.crux.registries.CruxRegistries;
-import killercreepr.crux.util.CruxString;
 import killercreepr.cruxadvancements.CruxAdvancementsModule;
 import killercreepr.cruxattributes.CruxAttributesModule;
 import killercreepr.cruxblocks.CruxBlocksModule;
@@ -24,15 +23,9 @@ import killercreepr.cruxmenus.CruxMenusModule;
 import killercreepr.cruxpotions.CruxPotionsModule;
 import killercreepr.cruxstructures.CruxStructuresModule;
 import killercreepr.cruxstructures.manager.StructureManager;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.jetbrains.annotations.NotNull;
 ///// OUTDATED
 public class CruxCore extends CruxPlugin implements Listener {
@@ -97,14 +90,6 @@ public class CruxCore extends CruxPlugin implements Listener {
 
     public CruxEnchantsModule cruxEnchants() {
         return CRUX_ENCHANTS;
-    }
-
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
-    public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
-        Bukkit.broadcast(
-            Component.text(CruxString.latinFont(event.getMessage()))
-                .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, CruxString.latinFont(event.getMessage())))
-        );
     }
 
     protected final StructureManager structureManager = new StructureManager(this);

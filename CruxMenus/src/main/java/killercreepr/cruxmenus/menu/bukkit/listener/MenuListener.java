@@ -48,6 +48,7 @@ public class MenuListener implements Listener {
         if(!(event.getPlayer() instanceof Player p)) return;
         Menu menu = Menus.getOpened(p);
         if(menu == null) return;
+        if(menu.isRefreshing()) return;
         MenuCloseEvent closeEvent = menu.close(p);
         if(!closeEvent.isCancelled()) return;
 

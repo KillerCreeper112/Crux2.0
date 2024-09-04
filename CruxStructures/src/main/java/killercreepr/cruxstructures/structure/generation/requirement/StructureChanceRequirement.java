@@ -6,8 +6,6 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Random;
-
 public class StructureChanceRequirement implements StructureRequirement {
     protected final float chance;
     public StructureChanceRequirement(float chance) {

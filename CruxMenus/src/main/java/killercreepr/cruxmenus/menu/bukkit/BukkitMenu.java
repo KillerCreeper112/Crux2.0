@@ -27,6 +27,7 @@ public class BukkitMenu implements Menu{
     protected @NotNull Inventory inventory;
 
     protected final MenuModuleRegistry modules = new MenuModuleRegistryImpl(this);
+    protected boolean refreshing = false;
 
     public BukkitMenu(){
         this(UUID.randomUUID());
@@ -131,7 +132,18 @@ public class BukkitMenu implements Menu{
 
     @Override
     public void onRefresh(){
+        setRefreshing(true);
         modules.refresh();
+        setRefreshing(false);
+    }
+
+    @Override
+    public boolean isRefreshing() {
+        return refreshing;
+    }
+
+    public void setRefreshing(boolean refreshing) {
+        this.refreshing = refreshing;
     }
 
     @Override

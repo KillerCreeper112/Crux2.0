@@ -11,14 +11,12 @@ import killercreepr.cruxstructures.structure.generation.center.StructureCenter;
 import killercreepr.cruxstructures.structure.generation.requirement.StructureChunkRequirement;
 import killercreepr.cruxstructures.structure.generation.requirement.StructureRequirement;
 import net.kyori.adventure.key.Key;
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Random;
 
 public class CfgStructureGen implements StructureGenerator {
     protected final @NotNull LootTable<Key> structurePool;

@@ -7,7 +7,6 @@ import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.PureYamlFileHandler;
 import killercreepr.cruxstructures.structure.module.standard.ConeVeinModule;
-import killercreepr.cruxstructures.structure.module.standard.CorruptedVeinModule;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

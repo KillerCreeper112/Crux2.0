@@ -3,7 +3,6 @@ package killercreepr.crux.loot.impl.conditions.item;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import killercreepr.crux.Crux;
-import killercreepr.crux.ItemTag;
 import killercreepr.crux.item.predicate.ItemPredicate;
 import killercreepr.crux.loot.LootContext;
 import killercreepr.crux.loot.impl.conditions.BaseCondition;

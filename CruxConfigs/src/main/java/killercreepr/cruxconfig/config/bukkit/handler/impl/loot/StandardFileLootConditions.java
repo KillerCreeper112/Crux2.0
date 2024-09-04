@@ -1,7 +1,6 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 
 import com.google.common.reflect.TypeToken;
-import killercreepr.crux.ItemTag;
 import killercreepr.crux.item.predicate.ItemPredicate;
 import killercreepr.crux.loot.conditions.LootCondition;
 import killercreepr.crux.loot.impl.conditions.AllOfCondition;

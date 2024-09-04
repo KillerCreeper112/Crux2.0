@@ -2,7 +2,6 @@ package killercreepr.crux.util;
 
 import org.bukkit.Axis;
 import org.bukkit.Location;
-import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;

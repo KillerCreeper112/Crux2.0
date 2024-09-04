@@ -44,7 +44,7 @@ public class FileItemLootPool implements FileObjectHandler<ItemLootPool> {
         List<LootPoolObject<ItemStack>> entries = registry.deserializeFromFile(
             new TypeToken<List<ItemLootPoolObject>>(){}.getType(), o.get("entries")
         );
-        if(entries==null || entries.isEmpty()) return null;
+        if(entries==null) return null;
         return new SimpleItemLootPool(
             weight, quality, conditions, functions, rolls, entries
         );

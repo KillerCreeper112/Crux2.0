@@ -1,6 +1,5 @@
 package killercreepr.cruxblocks.block.active;
 
-import com.destroystokyo.paper.ParticleBuilder;
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.crux.data.communication.CreateSound;
@@ -10,7 +9,9 @@ import killercreepr.cruxblocks.event.CruxBlockBreakEvent;
 import killercreepr.cruxblocks.user.EntityMiner;
 import killercreepr.cruxblocks.user.Miner;
 import killercreepr.cruxblocks.user.Tooled;
-import org.bukkit.*;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;

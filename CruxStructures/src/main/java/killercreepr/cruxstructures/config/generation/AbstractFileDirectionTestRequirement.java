@@ -9,7 +9,6 @@ import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.PureYamlFileHandler;
 import killercreepr.cruxstructures.structure.generation.requirement.AbstractStructureDirectionTestRequirement;
-import killercreepr.cruxstructures.structure.generation.requirement.AbstractStructureNearbyRequirement;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

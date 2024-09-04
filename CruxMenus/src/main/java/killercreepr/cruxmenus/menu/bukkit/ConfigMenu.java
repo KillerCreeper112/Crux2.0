@@ -154,12 +154,14 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
 
     @Override
     public void onRefresh() {
+        setRefreshing(true);
         refreshReconstruct();
 
         clearItems(true);
         clearMenuItems(true);
         modules.refresh();
         setItems(holder);
+        setRefreshing(false);
     }
 
     @Override
