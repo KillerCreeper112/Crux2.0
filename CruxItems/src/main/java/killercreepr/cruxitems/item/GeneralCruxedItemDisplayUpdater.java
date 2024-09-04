@@ -20,7 +20,7 @@ public class GeneralCruxedItemDisplayUpdater implements CruxedItemUpdater{
         ItemStack i = item.item();
         String name = formatter.getNameFormat(i);
         if(name != null){
-            item.displayName(name);
+            item.itemName(name);
         }
         List<String> lore = formatter.getLoreFormat(i);
         if(lore != null){

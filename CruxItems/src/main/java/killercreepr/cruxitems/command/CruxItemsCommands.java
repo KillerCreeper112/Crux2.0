@@ -69,17 +69,35 @@ public class CruxItemsCommands {
                         )
                 )
         ).then(
-            Commands.literal("name")
+            Commands.literal("item_name")
                 .then(
                     Commands.argument("targets", ArgumentTypes.entities())
-                        .executes(ctx -> name(
+                        .executes(ctx -> itemName(
                             ctx.getSource(),
                             ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
                             null
                         ))
                         .then(
                             Commands.argument("name", ArgumentTypes.component())
-                                .executes(ctx -> name(
+                                .executes(ctx -> itemName(
+                                    ctx.getSource(),
+                                    ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
+                                    ctx.getArgument("name", Component.class)
+                                ))
+                        )
+                )
+        ).then(
+            Commands.literal("custom_name")
+                .then(
+                    Commands.argument("targets", ArgumentTypes.entities())
+                        .executes(ctx -> customName(
+                            ctx.getSource(),
+                            ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
+                            null
+                        ))
+                        .then(
+                            Commands.argument("name", ArgumentTypes.component())
+                                .executes(ctx -> customName(
                                     ctx.getSource(),
                                     ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
                                     ctx.getArgument("name", Component.class)
@@ -180,11 +198,19 @@ public class CruxItemsCommands {
         return given > 0 ? 1 : -1;
     }
 
-    public static int name(@NotNull CommandSourceStack source, @NotNull Collection<Entity> targets, @Nullable Component name){
+    public static int itemName(@NotNull CommandSourceStack source, @NotNull Collection<Entity> targets, @Nullable Component name){
         int given = mainHandArgument(source, targets, item ->{
-            item.displayName(name);
+            item.itemName(name);
         });
-        new MsgContainer("Changed the name of main hand items on " + given + " entities.").use(getExecutor(source));
+        new MsgContainer("Changed the item name of main hand items on " + given + " entities.").use(getExecutor(source));
+        return given > 0 ? 1 : -1;
+    }
+
+    public static int customName(@NotNull CommandSourceStack source, @NotNull Collection<Entity> targets, @Nullable Component name){
+        int given = mainHandArgument(source, targets, item ->{
+            item.customName(name);
+        });
+        new MsgContainer("Changed the custom name of main hand items on " + given + " entities.").use(getExecutor(source));
         return given > 0 ? 1 : -1;
     }
 

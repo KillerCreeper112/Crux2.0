@@ -147,12 +147,30 @@ public class CruxItem implements Cloneable {
         return meta==null?null : meta.displayName();
     }
 
+    @Deprecated(forRemoval = true)
     public CruxItem displayName(@Nullable String name) {
         return displayName(c(name));
     }
 
+    @Deprecated(forRemoval = true)
     public CruxItem displayName(@Nullable Component name) {
         return editMeta(meta -> meta.displayName(c(name)));
+    }
+
+    public CruxItem customName(@Nullable String name) {
+        return customName(c(name));
+    }
+
+    public CruxItem customName(@Nullable Component name) {
+        return editMeta(meta -> meta.displayName(c(name)));
+    }
+
+    public CruxItem itemName(@Nullable String name) {
+        return itemName(c(name));
+    }
+
+    public CruxItem itemName(@Nullable Component name) {
+        return editMeta(meta -> meta.itemName(c(name)));
     }
 
     public @Nullable List<Component> lore() {

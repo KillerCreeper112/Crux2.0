@@ -106,10 +106,12 @@ public class FileItemStack extends SimpleFileHandler<ItemStack> {
         int amount = o.getObject(Number.class, "amount", 1).intValue();
         CruxItem item = new CruxItem(stack).amount(amount);
 
-        String displayName = o.getObject(String.class, "display_name");
+        String customName = o.getObject(String.class, "custom_name");
+        String itemName = o.getObject(String.class, "item_name");
         List<String> lore = registry.deserializeFromFile((Class<List<String>>) (Class<?>) List.class, o.get("lore"));
 
-        if(displayName != null) item.displayName(displayName);
+        if(customName != null) item.customName(customName);
+        if(itemName != null) item.itemName(customName);
         if(lore != null) item.loreFromString(lore);
         Boolean unbreakable = o.getObject(Boolean.class, "unbreakable");
         if(unbreakable != null) item.unbreakable(unbreakable);

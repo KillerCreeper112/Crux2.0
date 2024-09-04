@@ -16,6 +16,6 @@ public class DynamicItemName extends DynamicSingleValueComponent{
 
     @Override
     public void apply(@NotNull CruxItem item, @NotNull TextParserContext context) {
-        item.displayName(parseComponent(context));
+        item.itemName(parseComponent(context));
     }
 }
