@@ -47,7 +47,7 @@ public class ItemStackTags implements ObjectTag<ItemStack> {
             .add(Tag.string("type", (args, context) -> item.getType().key().asString()))
             .add(Tag.string("custom_model_data", (args, context) ->{
                 ItemMeta meta = item.getItemMeta();
-                if(meta==null) return null;
+                if(meta==null) return "0";
                 return (meta.hasCustomModelData() ? meta.getCustomModelData() : 0) + "";
             }))
             .add(Tag.string("as_string", (args, context) ->{
@@ -57,7 +57,7 @@ public class ItemStackTags implements ObjectTag<ItemStack> {
             }))
             .add(Tag.string("enchant_level", (args, context) ->{
                 ItemMeta meta = item.getItemMeta();
-                if(meta==null) return null;
+                if(meta==null) return "0";
                 Key key = Key.key(args.get(0));
                 Enchantment enchantment = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).get(key);
                 if(enchantment == null) return key + " enchant not found";
