@@ -1,8 +1,12 @@
 package killercreepr.cruxentities.modelengine.wrapper;
 
 import com.ticxo.modelengine.api.model.ActiveModel;
+import com.ticxo.modelengine.api.model.ModeledEntity;
+import killercreepr.cruxentities.wrapper.IEntityWrapper;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Consumer;
 
 public class ModelEntity extends DesignEntity implements IModelEntity{
     protected @NotNull ActiveModel model;
@@ -16,6 +20,16 @@ public class ModelEntity extends DesignEntity implements IModelEntity{
         super(entity);
         this.model = model;
         setBaseEntityVisible(false);
+    }
+
+    public ModelEntity applyToModel(@NotNull Consumer<ActiveModel> consumer){
+        consumer.accept(getModel());
+        return this;
+    }
+
+    public ModelEntity applyToModeledEntity(@NotNull Consumer<ModeledEntity> consumer){
+        consumer.accept(getModeledEntity());
+        return this;
     }
 
     @Override
