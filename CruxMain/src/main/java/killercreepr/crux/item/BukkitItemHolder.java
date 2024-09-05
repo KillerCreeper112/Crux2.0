@@ -2,7 +2,6 @@ package killercreepr.crux.item;
 
 import net.kyori.adventure.key.Key;
 import org.bukkit.Material;
-import org.bukkit.Registry;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +15,7 @@ public class BukkitItemHolder implements ItemHolder{
 
     @Override
     public @NotNull ItemStack value() {
-        Material material = Registry.MATERIAL.get(key);
+        Material material = org.bukkit.Registry.MATERIAL.get(key);
         Objects.requireNonNull(material, "Material " + key + " does not exist!");
         return new ItemStack(material);
     }

@@ -5,6 +5,8 @@ import killercreepr.crux.item.predicate.ItemPredicate;
 import killercreepr.crux.loot.conditions.LootCondition;
 import killercreepr.crux.loot.impl.conditions.AllOfCondition;
 import killercreepr.crux.loot.impl.conditions.AnyOfCondition;
+import killercreepr.crux.loot.impl.conditions.EntityOrItemCondition;
+import killercreepr.crux.loot.impl.conditions.TargetCheckCondition;
 import killercreepr.crux.loot.impl.conditions.block.BlockCondition;
 import killercreepr.crux.loot.impl.conditions.entity.EntityCondition;
 import killercreepr.crux.loot.impl.conditions.item.ItemStackCondition;
@@ -103,6 +105,41 @@ public class StandardFileLootConditions {
                 return new ItemStackCondition(
                     target, itemType, amount, enchants
                 );
+            }
+        });
+
+        file.registerCustomHandler(new CustomFileLootCondition<>() {
+            @Override
+            public @NotNull String getType() {
+                return "entity_or_item";
+            }
+
+            @Override
+            public @Nullable EntityOrItemCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                FileRegistry registry = ctx.getRegistry();
+                LootCondition itemCondition = registry.deserializeFromFile(LootCondition.class, e.get("item_condition"));
+                if(itemCondition==null) return null;
+                Collection<EquipmentSlot> ifEntitySlots = registry.deserializeFromFile(
+                    new TypeToken<Collection<EquipmentSlot>>(){}.getType(), e.get("if_entity_slots")
+                );
+                return new EntityOrItemCondition(target, itemCondition, ifEntitySlots);
+            }
+        });
+
+        file.registerCustomHandler(new CustomFileLootCondition<>() {
+            @Override
+            public @NotNull String getType() {
+                return "target_check";
+            }
+
+            @Override
+            public @Nullable TargetCheckCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                FileRegistry registry = ctx.getRegistry();
+                String targetType = e.getObject(String.class, "target_type");
+                if(targetType==null) return null;
+                LootCondition ifTrue = registry.deserializeFromFile(LootCondition.class, e.get("if"));
+                LootCondition ifFalse = registry.deserializeFromFile(LootCondition.class, e.get("else"));
+                return new TargetCheckCondition(target, targetType, ifTrue, ifFalse);
             }
         });
     }

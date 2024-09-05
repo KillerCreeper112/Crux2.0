@@ -115,7 +115,7 @@ public class BaseFileRegistry implements FileRegistry {
         if(isSubtypeOfCollection(type)){
             Type[] args = CruxReflect.getTypeArguments(type);
             Class<?> rawType = (Class<?>) ((ParameterizedType) type).getRawType();
-            return deserializeObjectCollection(rawType, args[0], from.getAsFileArray());
+            return deserializeObjectCollection(rawType, args[0], from);
         }else if(isSubtypeOfMap(type)){
             Type[] args = CruxReflect.getTypeArguments(type);
             Class<?> rawType = (Class<?>) ((ParameterizedType) type).getRawType();
@@ -150,7 +150,7 @@ public class BaseFileRegistry implements FileRegistry {
     }
 
     public @Nullable Object deserializeObjectCollection(@NotNull Class<?> collectionClazz, @NotNull Type firstType,
-                                                 @NotNull FileArray from){
+                                                 @NotNull FileElement from){
         Object createdMap = CruxReflect.attemptCreation(collectionClazz);
         if(createdMap == null){
             if(Set.class.isAssignableFrom(collectionClazz)){
@@ -159,11 +159,16 @@ public class BaseFileRegistry implements FileRegistry {
         }
 
         Collection<Object> map = (Collection<Object>) createdMap;
-        from.forEach((value) ->{
-            Object parsedValue = deserializeObject(firstType, value);
-            if(parsedValue==null) return;
-            map.add(parsedValue);
-        });
+        if(from.isFileArray()){
+            from.getAsFileArray().forEach((value) ->{
+                Object parsedValue = deserializeObject(firstType, value);
+                if(parsedValue==null) return;
+                map.add(parsedValue);
+            });
+        }else{
+            Object parsedValue = deserializeObject(firstType, from);
+            if(parsedValue!=null) map.add(parsedValue);
+        }
         return createdMap;
     }
 

@@ -12,6 +12,7 @@ import killercreepr.cruxblocks.user.Miner;
 import net.kyori.adventure.key.Key;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -43,7 +44,12 @@ public class ActiveCruxBlockImpl implements ActiveCruxBlock{
             ;
         if(miner != null){
             Object handle = miner.getHandle();
-            if(handle != null) builder.putAll(handle, "miner");
+            if(handle != null){
+                builder.putAll(handle, "miner");
+                if(handle instanceof Player) builder.putAll(handle, "entity", "player");
+                else if(handle instanceof Entity) builder.putAll(handle, "entity");
+                else if(handle instanceof ItemStack) builder.putAll(handle, "item");
+            }
         }
         return LootContext.builder()
             .info(builder.build())

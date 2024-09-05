@@ -284,7 +284,17 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
 
             @Override
             public @Nullable DynamicItemPersistentTags deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
-                if(!(e instanceof FileObject o)) return null;
+                if(!(e instanceof FileObject o)){
+                    if(!(e instanceof FileArray a)) return null;
+                    Map<Object, DynamicPersistentTag> tags = new HashMap<>();
+                    a.forEach(ele ->{
+                        DynamicPersistentTag tag = context.getRegistry().deserializeFromFile(DynamicPersistentTag.class, ele);
+                        if(tag==null) return;
+                        tags.put(tag.getKey(), tag);
+                    });
+                    if(tags.isEmpty()) return null;
+                    return new DynamicItemPersistentTags(tags);
+                }
                 Map<Object, DynamicPersistentTag> tags = new HashMap<>();
                 o.forEach((key, value) ->{
                     DynamicPersistentTag tag = FileDynamicPersistentTag.deserialize(value, key);
