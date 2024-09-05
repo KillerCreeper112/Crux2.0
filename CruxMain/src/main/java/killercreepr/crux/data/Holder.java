@@ -1,5 +1,7 @@
 package killercreepr.crux.data;
 
+import killercreepr.crux.registry.MappedRegistry;
+import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,6 +31,11 @@ public interface Holder <T>{
     static <E> @NotNull Holder<E> empty(){
         return direct(null);
     }
+
+    static <K, E> Holder<E> registry(@NotNull K key, @NotNull MappedRegistry<K, E> registry){
+        return new Registry<>(key, registry);
+    }
+
     T value();
 
     default T valueOr(T defaultValue){
@@ -41,6 +48,13 @@ public interface Holder <T>{
         @Override
         public T value() {
             return this.value;
+        }
+    }
+
+    record Registry<K, V>(K key, MappedRegistry<K, V> registry) implements Holder<V>{
+        @Override
+        public V value() {
+            return registry.get(key);
         }
     }
 }
