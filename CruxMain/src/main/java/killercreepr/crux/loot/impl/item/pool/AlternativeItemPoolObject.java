@@ -52,7 +52,9 @@ public class AlternativeItemPoolObject extends SimpleItemLootPoolObject{
             if(gotItems==null) continue;
             Collection<ItemStack> result = gotItems.value();
             if(result==null) continue;
-            items.addAll(result);
+            for(ItemStack i : result){
+                items.add(item.applyFunctions(i, ctx));
+            }
         }
         return Holder.direct(items);
     }
