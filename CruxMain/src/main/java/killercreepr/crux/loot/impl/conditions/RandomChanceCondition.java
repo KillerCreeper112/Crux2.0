@@ -19,6 +19,6 @@ public class RandomChanceCondition implements LootCondition {
 
     @Override
     public boolean test(@NotNull LootContext context) {
-        return CruxMath.random(1f, 100f) <= chance;
+        return context.getRandom().nextFloat() <= chance;
     }
 }

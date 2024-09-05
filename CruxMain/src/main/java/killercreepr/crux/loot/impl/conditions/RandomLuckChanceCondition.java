@@ -15,6 +15,6 @@ public class RandomLuckChanceCondition extends RandomChanceCondition {
     @Override
     public boolean test(@NotNull LootContext context) {
         float c = (chance + (context.getLuck() * luckMultiplier));
-        return CruxMath.random(1f, 100f) <= c;
+        return context.getRandom().nextFloat() <= c;
     }
 }

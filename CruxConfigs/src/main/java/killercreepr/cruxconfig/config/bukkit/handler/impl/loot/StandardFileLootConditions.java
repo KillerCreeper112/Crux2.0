@@ -3,10 +3,7 @@ package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 import com.google.common.reflect.TypeToken;
 import killercreepr.crux.item.predicate.ItemPredicate;
 import killercreepr.crux.loot.conditions.LootCondition;
-import killercreepr.crux.loot.impl.conditions.AllOfCondition;
-import killercreepr.crux.loot.impl.conditions.AnyOfCondition;
-import killercreepr.crux.loot.impl.conditions.EntityOrItemCondition;
-import killercreepr.crux.loot.impl.conditions.TargetCheckCondition;
+import killercreepr.crux.loot.impl.conditions.*;
 import killercreepr.crux.loot.impl.conditions.block.BlockCondition;
 import killercreepr.crux.loot.impl.conditions.entity.EntityCondition;
 import killercreepr.crux.loot.impl.conditions.item.ItemStackCondition;
@@ -140,6 +137,36 @@ public class StandardFileLootConditions {
                 LootCondition ifTrue = registry.deserializeFromFile(LootCondition.class, e.get("if"));
                 LootCondition ifFalse = registry.deserializeFromFile(LootCondition.class, e.get("else"));
                 return new TargetCheckCondition(target, targetType, ifTrue, ifFalse);
+            }
+        });
+
+        file.registerCustomHandler(new CustomFileLootCondition<>() {
+            @Override
+            public @NotNull String getType() {
+                return "random_chance";
+            }
+
+            @Override
+            public @Nullable RandomChanceCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                Float chance = e.getObject(Float.class, "chance");
+                if(chance==null) return null;
+                return new RandomChanceCondition(chance);
+            }
+        });
+
+        file.registerCustomHandler(new CustomFileLootCondition<>() {
+            @Override
+            public @NotNull String getType() {
+                return "random_luck_chance";
+            }
+
+            @Override
+            public @Nullable RandomChanceCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                Float chance = e.getObject(Float.class, "chance");
+                if(chance==null) return null;
+                Float luckMultiplier = e.getObject(Float.class, "luck_multiplier");
+                if(luckMultiplier==null) return null;
+                return new RandomLuckChanceCondition(chance, luckMultiplier);
             }
         });
     }
