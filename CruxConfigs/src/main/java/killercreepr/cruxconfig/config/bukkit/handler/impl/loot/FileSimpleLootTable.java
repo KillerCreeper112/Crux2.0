@@ -46,7 +46,7 @@ public class FileSimpleLootTable<T> implements FileObjectHandler<SimpleLootTable
             if(object==null) return null;
             return new SimpleLootTable<>(Crux.key("null"), NumberProvider.constant(1),
                 List.of(
-                    new SimpleLootPool<>(1, 0f, NumberProvider.constant(1), List.of(
+                    new SimpleLootPool<>(NumberProvider.constant(1), List.of(
                         new SimpleLootPoolObject<>(1, 0f, Holder.direct(Set.of(object)))
                     ))
                 ));

@@ -40,7 +40,7 @@ public class FileSimpleLootPool<T> implements FileObjectHandler<SimpleLootPool<T
                 T object = ctx.getRegistry().deserializeFromFile(type, g);
                 if(object==null) return null;
                 Collection<T> objects = Set.of(object);
-                return new SimpleLootPool<>(1, 0f, NumberProvider.constant(1), List.of(
+                return new SimpleLootPool<>( NumberProvider.constant(1), List.of(
                     new SimpleLootPoolObject<>(1, 0f, Holder.direct(objects))
                 ));
             }
@@ -50,8 +50,6 @@ public class FileSimpleLootPool<T> implements FileObjectHandler<SimpleLootPool<T
         NumberProvider rolls = registry.deserializeFromFile(NumberProvider.class, o.get("rolls"));
         if(rolls == null) rolls = NumberProvider.constant(1);
 
-        int weight = o.getObject(Integer.class, "weight", 1);
-        float quality = o.getObject(Float.class, "quality", 0f);
         List<LootCondition> conditions = registry.deserializeFromFile(
             new TypeToken<List<LootCondition>>(){}.getType(), o.get("conditions")
         );
@@ -67,7 +65,7 @@ public class FileSimpleLootPool<T> implements FileObjectHandler<SimpleLootPool<T
         });
         if(entries.isEmpty()) return null;
         return new SimpleLootPool<>(
-            weight, quality, conditions, null, rolls, entries
+            conditions, null, rolls, entries
         );
     }
 

@@ -4,7 +4,6 @@ import killercreepr.crux.loot.LootContext;
 import killercreepr.crux.loot.conditions.LootCondition;
 import killercreepr.crux.loot.impl.functions.SimpleLootFunction;
 import killercreepr.crux.loot.item.ItemLootFunction;
-import killercreepr.crux.util.CruxItem;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;

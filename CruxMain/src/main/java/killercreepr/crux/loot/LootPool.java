@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 
-public interface LootPool<T> extends LootObject<T> {
+public interface LootPool<T> extends ConditionedObject, FunctionedObject<T>  {
     default @NotNull Collection<T> populateLoot(@NotNull LootContext context) {
         return populateLoot(context, null, false);
     }

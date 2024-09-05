@@ -16,30 +16,28 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class SimpleLootPool<T> extends SimpleLootObject<T> implements LootPool<T> {
+public class SimpleLootPool<T> extends SimpleFunctionedConditionedObject<T> implements LootPool<T> {
     private final @NotNull NumberProvider rolls;
     private final @NotNull List<LootPoolObject<T>> data;
 
-    public SimpleLootPool(int weight, float quality,
-                          @Nullable List<LootCondition> conditions,
+    public SimpleLootPool(@Nullable List<LootCondition> conditions,
                           @Nullable List<LootFunction<T>> lootFunctions,
                           @NotNull NumberProvider rolls, @NotNull List<LootPoolObject<T>> data) {
-        super(weight, quality, conditions, lootFunctions);
+        super(conditions, lootFunctions);
         this.rolls = rolls;
         this.data = data;
     }
 
-    public SimpleLootPool(int weight, float quality,
-                          @Nullable List<LootFunction<T>> lootFunctions,
+    public SimpleLootPool(@Nullable List<LootFunction<T>> lootFunctions,
                           @NotNull NumberProvider rolls,
                           @NotNull List<LootPoolObject<T>> data) {
-        super(weight, quality, lootFunctions);
+        super(null, lootFunctions);
         this.rolls = rolls;
         this.data = data;
     }
 
-    public SimpleLootPool(int weight, float quality, @NotNull NumberProvider rolls, @NotNull List<LootPoolObject<T>> data) {
-        super(weight, quality);
+    public SimpleLootPool(@NotNull NumberProvider rolls, @NotNull List<LootPoolObject<T>> data) {
+        super(null, null);
         this.rolls = rolls;
         this.data = data;
     }

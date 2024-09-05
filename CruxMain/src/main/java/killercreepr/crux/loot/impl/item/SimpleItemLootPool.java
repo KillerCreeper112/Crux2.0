@@ -13,15 +13,15 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class SimpleItemLootPool extends SimpleLootPool<ItemStack> implements ItemLootPool {
-    public SimpleItemLootPool(int weight, float quality, @Nullable List<LootCondition> conditions, @Nullable List<LootFunction<ItemStack>> lootFunctions, @NotNull NumberProvider rolls, @NotNull List<LootPoolObject<ItemStack>> data) {
-        super(weight, quality, conditions, lootFunctions, rolls, data);
+    public SimpleItemLootPool(@Nullable List<LootCondition> conditions, @Nullable List<LootFunction<ItemStack>> lootFunctions, @NotNull NumberProvider rolls, @NotNull List<LootPoolObject<ItemStack>> data) {
+        super(conditions, lootFunctions, rolls, data);
     }
 
-    public SimpleItemLootPool(int weight, float quality, @Nullable List<LootFunction<ItemStack>> lootFunctions, @NotNull NumberProvider rolls, @NotNull List<LootPoolObject<ItemStack>> data) {
-        super(weight, quality, lootFunctions, rolls, data);
+    public SimpleItemLootPool(@Nullable List<LootFunction<ItemStack>> lootFunctions, @NotNull NumberProvider rolls, @NotNull List<LootPoolObject<ItemStack>> data) {
+        super(lootFunctions, rolls, data);
     }
 
-    public SimpleItemLootPool(int weight, float quality, @NotNull NumberProvider rolls, @NotNull List<LootPoolObject<ItemStack>> data) {
-        super(weight, quality, rolls, data);
+    public SimpleItemLootPool(@NotNull NumberProvider rolls, @NotNull List<LootPoolObject<ItemStack>> data) {
+        super(rolls, data);
     }
 }

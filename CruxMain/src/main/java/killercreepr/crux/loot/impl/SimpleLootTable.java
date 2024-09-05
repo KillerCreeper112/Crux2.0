@@ -4,7 +4,6 @@ import killercreepr.crux.loot.LootContext;
 import killercreepr.crux.loot.LootPool;
 import killercreepr.crux.loot.LootPoolObject;
 import killercreepr.crux.loot.LootTable;
-import killercreepr.crux.util.CruxWeightedSupplier;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
@@ -47,20 +46,19 @@ public class SimpleLootTable<T> implements LootTable<T> {
         List<T> list = new ArrayList<>();
         List<LootPool<T>> data = exclude == null ? this.pools : new ArrayList<>(this.pools);
         if(excludeEmpty && exclude != null) data.removeIf(x -> x.isEmptyWith(exclude));
-        for(LootPool<T> pool : random(rolls.sample(context.getRandom()).intValue(), context)){
+        for(LootPool<T> pool : getPools()){
             list.addAll(pool.populateLoot(context));
         }
         return list;
     }
 
-    @Override
+    /*@Override
     public @NotNull List<LootPool<T>> random(int rolls, @NotNull LootContext context){
         return CruxWeightedSupplier.builder(pools)
             .applyContext(context)
             .rolls(rolls)
             .build().rollList();
-        //return CruxWeightedUtil.randomConditioned(pools, rolls, context);
-    }
+    }*/
 
     @Override
     public @NotNull Key key() {

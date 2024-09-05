@@ -33,8 +33,6 @@ public class FileItemLootPool implements FileObjectHandler<ItemLootPool> {
         NumberProvider rolls = registry.deserializeFromFile(NumberProvider.class, o.get("rolls"));
         if(rolls == null) rolls = NumberProvider.constant(1);
 
-        int weight = o.getObject(Integer.class, "weight", 0);
-        float quality = o.getObject(Float.class, "quality", 0f);
         List<LootCondition> conditions = registry.deserializeFromFile(
             new TypeToken<List<LootCondition>>(){}.getType(), o.get("conditions")
         );
@@ -46,7 +44,7 @@ public class FileItemLootPool implements FileObjectHandler<ItemLootPool> {
         );
         if(entries==null) return null;
         return new SimpleItemLootPool(
-            weight, quality, conditions, functions, rolls, entries
+            conditions, functions, rolls, entries
         );
     }
 

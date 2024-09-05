@@ -1,7 +1,6 @@
 package killercreepr.crux.data;
 
 import killercreepr.crux.registry.MappedRegistry;
-import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
