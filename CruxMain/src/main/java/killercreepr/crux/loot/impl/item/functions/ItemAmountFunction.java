@@ -4,6 +4,7 @@ import killercreepr.crux.loot.LootContext;
 import killercreepr.crux.loot.conditions.LootCondition;
 import killercreepr.crux.loot.impl.functions.SimpleLootFunction;
 import killercreepr.crux.loot.item.ItemLootFunction;
+import killercreepr.crux.util.CruxItem;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -14,9 +15,11 @@ import java.util.Random;
 
 public class ItemAmountFunction extends SimpleLootFunction<ItemStack> implements ItemLootFunction {
     private final @NotNull NumberProvider amount;
-    public ItemAmountFunction(@Nullable Collection<LootCondition> conditions, @NotNull NumberProvider amount) {
+    private final boolean add;
+    public ItemAmountFunction(@Nullable Collection<LootCondition> conditions, @NotNull NumberProvider amount, boolean add) {
         super(conditions);
         this.amount = amount;
+        this.add = add;
     }
 
 
@@ -25,7 +28,7 @@ public class ItemAmountFunction extends SimpleLootFunction<ItemStack> implements
         if(i==null) return i;
         Random source = context.getRandom();
         int amount = this.amount.sample(source).intValue();
-        i.setAmount(amount);
+        i.setAmount(add ? (i.getAmount() + amount) : amount);
         return i;
     }
 }

@@ -29,7 +29,7 @@ public class FileItemLootFunction implements FileObjectHandler<ItemLootFunction>
 
     public @Nullable ItemLootFunction deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e, @Nullable String target) {
         if(!(e instanceof FileObject o)) return null;
-        String type = o.getObject(String.class, "type");
+        String type = o.getObject(String.class, "function");
         if(type==null) return null;
         type = type.toLowerCase();
         CustomFileLootFunction<?> handler = CUSTOM_HANDLERS.get(type);

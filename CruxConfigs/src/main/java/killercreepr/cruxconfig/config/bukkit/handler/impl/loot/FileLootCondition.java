@@ -29,7 +29,7 @@ public class FileLootCondition implements FileObjectHandler<LootCondition> {
 
     public @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e, @Nullable String target) {
         if(!(e instanceof FileObject o)) return null;
-        String type = o.getObject(String.class, "type");
+        String type = o.getObject(String.class, "condition");
         if(type==null) return null;
         type = type.toLowerCase();
         CustomFileLootCondition<?> handler = CUSTOM_HANDLERS.get(type);

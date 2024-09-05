@@ -57,18 +57,18 @@ public class StandardFileLootFunctions {
         file.registerCustomHandler(new CustomFileLootFunction<>() {
             @Override
             public @NotNull String getType() {
-                return "set_amount";
+                return "set_count";
             }
 
             @Override
             public @Nullable ItemAmountFunction deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 FileRegistry registry = ctx.getRegistry();
-                NumberProvider amount = registry.deserializeFromFile(NumberProvider.class, e.get("amount"));
+                NumberProvider amount = registry.deserializeFromFile(NumberProvider.class, e.get("count"));
                 if(amount==null) return null;
                 Collection<LootCondition> conditions = registry.deserializeFromFile(
                     new TypeToken<Collection<LootCondition>>(){}.getType(), e.get("conditions")
                 );//todo change this cause no I dont want to do this every time
-                return new ItemAmountFunction(conditions, amount);
+                return new ItemAmountFunction(conditions, amount, e.getObject(Boolean.class, "add", false));
             }
         });
     }
