@@ -2,7 +2,6 @@ package killercreepr.cruxentities.modelengine.wrapper;
 
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
-import killercreepr.cruxentities.wrapper.IEntityWrapper;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
