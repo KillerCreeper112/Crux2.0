@@ -1,5 +1,6 @@
 package killercreepr.cruxentities.modelengine.wrapper;
 
+import com.ticxo.modelengine.api.animation.property.IAnimationProperty;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 import org.jetbrains.annotations.NotNull;
@@ -34,6 +35,11 @@ public interface IModelEntity extends IDesignEntity{
 
     default boolean isPlayingAnimation(@NotNull String id){
         return getModel().getAnimationHandler().isPlayingAnimation(id);
+    }
+
+    default double getAnimationLength(@NotNull String id){
+        IAnimationProperty animationProperty = getModel().getAnimationHandler().getAnimation(id);
+        return animationProperty == null ? 0D : animationProperty.getBlueprintAnimation().getLength();
     }
 
     default @NotNull ModeledEntity getModeledEntity(){

@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
+import java.util.function.Consumer;
 
 public interface Holder <T>{
     static @NotNull Direct<Object> directObject(@Nullable Object o){
@@ -36,6 +37,13 @@ public interface Holder <T>{
     }
 
     T value();
+
+    default Holder<T> ifPresent(@NotNull Consumer<T> consumer){
+        T value = value();
+        if(value == null) return this;
+        consumer.accept(value);
+        return this;
+    }
 
     default T valueOr(T defaultValue){
         T t = value();
