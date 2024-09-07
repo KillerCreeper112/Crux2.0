@@ -21,6 +21,16 @@ public class CruxMath {
     public static final CruxNumberFormat DECIMAL_FORMAT_1 = new CruxNumberFormat(1);
     public static final CruxNumberFormat DECIMAL_FORMAT_2 = new CruxNumberFormat(2);
     public static final CruxNumberFormat DECIMAL_FORMAT_3 = new CruxNumberFormat(3);
+    public static int calculateLevelsForExperiencePoints(int points) {
+        if (points <= 352) { // Level 0-16
+            return (int) Math.floor(Math.sqrt(points + 9) - 3);
+        } else if (points <= 1507) { // Level 17-31
+            return (int) Math.floor(8.1 + Math.sqrt(0.4 * (points - (7839.0 / 40.0))));
+        } else { // 32+
+            return (int) Math.floor((325.0 / 18.0) + Math.sqrt((2.0 / 9.0) * (points - (54215.0 / 72.0))));
+        }
+    }
+
     public static CruxNumberFormat buildOrGetDecimalFormat(int decimalPlaces){
         return switch (decimalPlaces){
             case 0 -> DECIMAL_FORMAT_0;
