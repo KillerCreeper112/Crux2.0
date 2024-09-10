@@ -1,5 +1,6 @@
 package killercreepr.cruxstructures.manager;
 
+import com.google.common.reflect.TypeToken;
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.communication.MsgContainer;
 import killercreepr.crux.data.world.ChunkBlockStorage;
@@ -8,9 +9,9 @@ import killercreepr.crux.data.world.MultiVerseWorldStorage;
 import killercreepr.crux.data.world.WorldChunkStorage;
 import killercreepr.crux.data.world.standard.MultiVerseBlockPosedStorage;
 import killercreepr.crux.registries.CruxRegistries;
-import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxstructures.CruxStructuresModule;
+import killercreepr.cruxstructures.config.loader.StructureGeneratorLoader;
 import killercreepr.cruxstructures.config.loader.StructureLoader;
 import killercreepr.cruxstructures.event.StructurePlaceEvent;
 import killercreepr.cruxstructures.file.StorageChunkFile;
@@ -18,8 +19,8 @@ import killercreepr.cruxstructures.registries.StructureRegistries;
 import killercreepr.cruxstructures.structure.GenerateResult;
 import killercreepr.cruxstructures.structure.Structure;
 import killercreepr.cruxstructures.structure.active.ActiveStructure;
+import killercreepr.cruxstructures.structure.generation.StructureGenerator;
 import killercreepr.cruxstructures.structure.impl.CfgFAWEStructure;
-import killercreepr.cruxstructures.structure.impl.CfgStructureGen;
 import killercreepr.cruxstructures.structure.stored.StoredStructure;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
@@ -50,7 +51,7 @@ public class StructureManager implements Listener {
     }
 
     //world name -> structure gens
-    protected final @NotNull Map<String, List<CfgStructureGen>> structures = new HashMap<>();
+    protected final @NotNull Map<String, List<StructureGenerator>> structures = new HashMap<>();
 
     protected final @NotNull MultiVerseWorldStorage<StoredStructure> stored = new MultiVerseBlockPosedStorage<>(new ConcurrentHashMap<>());
     protected final @NotNull MultiVerseWorldStorage<ActiveStructure> active = new MultiVerseBlockPosedStorage<>(new ConcurrentHashMap<>());
@@ -183,21 +184,19 @@ public class StructureManager implements Listener {
     public void loadGenerationConfiguration(){
         structures.clear();
         CruxFolder cfgFolder = createCfgFolder();
-        File[] files = cfgFolder.file().listFiles();
-        if(files==null) return;
 
-        for(File f : files){
-            CruxConfig cfg = new CruxConfig(f);
-            List<String> worlds = cfg.config().getStringList("worlds");
-            if(worlds.isEmpty()) continue;
-
-            CfgStructureGen generator = cfg.deserialize(CfgStructureGen.class, "");
-            if(generator==null) continue;
+        new StructureGeneratorLoader((cfg, generator) ->{
+            List<String> worlds = cfg.deserialize("worlds",
+                new TypeToken<List<String>>(){}.getType());
+            if(worlds == null || worlds.isEmpty()){
+                Crux.log(Level.WARNING, "Structure generator, " + cfg.file().getName() + " does not have any worlds set for it.");
+                return;
+            }
             for(String worldName : worlds){
                 structures.computeIfAbsent(worldName, e -> new ArrayList<>()).add(generator);
             }
-            Crux.log(Level.INFO, "Registered structure generator: " + f.getName());
-        }
+            Crux.log(Level.INFO, "Registered structure generator: " + cfg.file().getName());
+        }).loadConfiguration(cfgFolder.file());
     }
 
     public void loadConfiguration(){
@@ -224,10 +223,10 @@ public class StructureManager implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onChunkPopulate(ChunkPopulateEvent event) {
         Chunk c = event.getChunk();
-        List<CfgStructureGen> list = structures.get(c.getWorld().getName());
+        List<StructureGenerator> list = structures.get(c.getWorld().getName());
         if(list==null) return;
         Collections.shuffle(list);
-        for(CfgStructureGen gen : list){
+        for(StructureGenerator gen : list){
             GenerateResult result = gen.generate(c);
             if(result.getPlaceEvent() == null || result.getPlaceEvent().isCancelled()) continue;
             break;
@@ -383,7 +382,7 @@ public class StructureManager implements Listener {
         return plugin;
     }
 
-    public @NotNull Map<String, List<CfgStructureGen>> getStructures() {
+    public @NotNull Map<String, List<StructureGenerator>> getStructures() {
         return structures;
     }
 
