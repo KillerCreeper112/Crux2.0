@@ -5,6 +5,7 @@ import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.world.CruxPosition;
 import killercreepr.crux.loot.LootContext;
 import killercreepr.crux.loot.LootTable;
+import killercreepr.crux.util.CruxBlockFace;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxstructures.registries.StructureRegistries;
@@ -14,21 +15,23 @@ import net.kyori.adventure.key.Key;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 
 public class WallsModule implements StructureModule {
-    protected final @NotNull Map<BlockFace, LootTable<Key>> walls;
+    protected final @NotNull Map<BlockFace, Wall> walls;
+    protected final @NotNull Map<BlockFace, LootTable<Key>> corners;
     protected final @NotNull NumberProvider defaultWallSpacing;
     protected final @NotNull Map<BlockFace, NumberProvider> wallSpacing;
     protected final @NotNull WallRotationType wallRotationType;
     protected final @NotNull NumberProvider wallMaxYCheck;
 
-    public WallsModule(@NotNull Map<BlockFace, LootTable<Key>> walls, @NotNull NumberProvider defaultWallSpacing, @NotNull Map<BlockFace, NumberProvider> wallSpacing, @NotNull WallRotationType wallRotationType, @NotNull NumberProvider wallMaxYCheck) {
+    public WallsModule(@NotNull Map<BlockFace, Wall> walls, @NotNull Map<BlockFace, LootTable<Key>> corners, @NotNull NumberProvider defaultWallSpacing, @NotNull Map<BlockFace, NumberProvider> wallSpacing, @NotNull WallRotationType wallRotationType, @NotNull NumberProvider wallMaxYCheck) {
         this.walls = walls;
+        this.corners = corners;
         this.defaultWallSpacing = defaultWallSpacing;
         this.wallSpacing = wallSpacing;
         this.wallRotationType = wallRotationType;
@@ -50,8 +53,11 @@ public class WallsModule implements StructureModule {
                 .put("structure_module", this)
                 .build())
             .build();
-        walls.forEach((face, wallLoot) ->{
-            List<Key> keys = wallLoot.populateLoot(ctx);
+        walls.forEach((face, wall) ->{
+
+            wall.place(this, at, ctx, face, wallRotation);
+
+            /*List<Key> keys = wallLoot.populateLoot(ctx);
             if(keys.isEmpty()) return;
             Structure wallStructure = StructureRegistries.STRUCTURES.get(keys.getFirst());
             if(wallStructure== null){
@@ -74,7 +80,7 @@ public class WallsModule implements StructureModule {
             Block validSpawn = findValidBlock(spawn.getBlock(at.getWorld()));
             if(validSpawn == null) return;
 
-            wallStructure.place(validSpawn.getLocation(), wallRotation);
+            wallStructure.place(validSpawn.getLocation(), wallRotation);*/
         });
     }
 
@@ -103,5 +109,112 @@ public class WallsModule implements StructureModule {
         RANDOM,
         STRUCTURE,
         NONE
+    }
+
+    public static class Wall{
+        protected final @NotNull List<LootTable<Key>> structures;
+        protected final @NotNull NumberProvider wallSpacing;
+        public Wall(@NotNull List<LootTable<Key>> structures, @NotNull NumberProvider wallSpacing) {
+            this.structures = structures;
+            this.wallSpacing = wallSpacing;
+        }
+
+        public void place(@NotNull WallsModule module, @NotNull Location at, @NotNull LootContext ctx,
+                          @NotNull BlockFace face, double rotation){
+
+            List<Structure> toPlace = new ArrayList<>();
+            structures.forEach((wallLoot) ->{
+
+                List<Key> keys = wallLoot.populateLoot(ctx);
+                if(keys.isEmpty()) return;
+                Structure wallStructure = StructureRegistries.STRUCTURES.get(keys.getFirst());
+                if(wallStructure== null){
+                    Crux.log(Level.WARNING, "No crux Structure found for wall " + face + " (" + keys.getFirst() + ")");
+                    return;
+                }
+                toPlace.add(wallStructure);
+            });
+
+            int spacing = wallSpacing.value().intValue();
+
+            int centerIndex = structures.size() / 2;
+            Structure centerStructure = toPlace.get(centerIndex);
+
+            CruxPosition spawn = CruxPosition.location(
+                at.clone().add(
+                    face.getModX() * spacing,
+                    face.getModY() * spacing,
+                    face.getModZ() * spacing
+                )
+            );
+
+            spawn = spawn.rotateAroundY(CruxPosition.location(at), rotation);
+
+            Block validSpawn = module.findValidBlock(spawn.getBlock(at.getWorld()));
+            if(validSpawn != null){
+                centerStructure.place(validSpawn.getLocation(), rotation);
+            }
+
+            double centerStructureSpacing = getWidth(centerStructure.boundingBox(), face);
+            if(structures.size() % 2 == 0) centerStructureSpacing /= 2;
+
+            double currentWidth = centerStructureSpacing;
+            for(int i = centerIndex+1; i < structures.size(); i++){
+                Structure wall = toPlace.get(i);
+
+                int index = i - (centerIndex+1)+1;
+                spawnWall(wall, index, currentWidth, face, at, spacing, rotation, module, CruxBlockFace.rotateRight(face));
+
+                currentWidth += getWidth(wall.boundingBox(), face);
+            }
+
+            currentWidth = centerStructureSpacing;
+            for(int i = centerIndex-1; i > -1; i--){
+                Structure wall = toPlace.get(i);
+
+                int index = ((centerIndex-1) - i)+1;
+                spawnWall(wall, index, currentWidth, face, at, spacing, rotation, module, CruxBlockFace.rotateLeft(face));
+
+                currentWidth += getWidth(wall.boundingBox(), face);
+            }
+        }
+
+        public void spawnWall(Structure wall, int index, double currentWidth, BlockFace face,
+                              Location at, int spacing, double rotation,
+                              WallsModule module, BlockFace side){
+
+            int addon = (int) Math.ceil(currentWidth + ((getWidth(wall.boundingBox(), face) / 2) * index));
+
+            CruxPosition spawn = CruxPosition.location(
+                at.clone().add(
+                    face.getModX() * spacing + (side.getModX() * addon),
+                    face.getModY() * spacing + (side.getModY() * addon),
+                    face.getModZ() * spacing + (side.getModZ() * addon)
+                )
+            );
+
+            spawn = spawn.rotateAroundY(CruxPosition.location(at), rotation);
+
+            Block validSpawn = module.findValidBlock(spawn.getBlock(at.getWorld()));
+            if(validSpawn != null){
+                wall.place(validSpawn.getLocation(), rotation);
+            }
+        }
+
+        public static double getWidth(BoundingBox boundingBox, BlockFace direction) {
+            return switch (direction) {
+                case EAST, WEST -> boundingBox.getMaxX() - boundingBox.getMinX();
+                case NORTH, SOUTH -> boundingBox.getMaxZ() - boundingBox.getMinZ();
+                default -> throw new IllegalArgumentException("Unsupported BlockFace direction: " + direction);
+            };
+        }
+
+        public @NotNull List<LootTable<Key>> getStructures() {
+            return structures;
+        }
+
+        public @NotNull NumberProvider getWallSpacing() {
+            return wallSpacing;
+        }
     }
 }
