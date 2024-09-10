@@ -46,6 +46,7 @@ public class CfgStructureGen implements StructureGenerator {
         return chunkRequirements;
     }
 
+    @Override
     public @NotNull GenerateResult generate(@NotNull Chunk at){
         List<Key> structureKey = structurePool.populateLoot(LootContext.builder()
             .info(DataExchange.builder().put("chunk", at).build())
@@ -55,6 +56,26 @@ public class CfgStructureGen implements StructureGenerator {
         Structure structure = StructureRegistries.STRUCTURES.get(structureKey.getFirst());
         if(structure==null) return new GenerateResult(null);
         return generate(structure, at);
+    }
+
+    @Override
+    public @NotNull GenerateResult generate(@NotNull Location at) {
+        List<Key> structureKey = structurePool.populateLoot(LootContext.builder()
+            .location(at)
+            .build());
+        if(structureKey.isEmpty()) return new GenerateResult(null);
+
+        Structure structure = StructureRegistries.STRUCTURES.get(structureKey.getFirst());
+        if(structure==null) return new GenerateResult(null);
+        return generate(structure, at);
+    }
+
+    @Override
+    public @NotNull GenerateResult generate(@NotNull Structure structure, @NotNull Location at) {
+        for(StructureRequirement requirement : requirements){
+            if(!requirement.test(structure, at.getChunk(), at)) return new GenerateResult(null);
+        }
+        return new GenerateResult(structure.place(at));
     }
 
     @Override

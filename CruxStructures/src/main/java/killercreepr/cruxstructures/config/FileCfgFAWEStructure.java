@@ -22,6 +22,12 @@ public class FileCfgFAWEStructure extends PureYamlFileHandler<CfgFAWEStructure> 
         FileRegistry registry = ctx.getRegistry();
         Key key = registry.deserializeFromFile(Key.class, o.get("key"));
         if(key==null) return null;
+        return deserializeFromFile(ctx, e, key);
+    }
+
+    public @Nullable CfgFAWEStructure deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e, @NotNull Key key) {
+        if(!(e instanceof FileObject o)) return null;
+        FileRegistry registry = ctx.getRegistry();
         String schematic = registry.deserializeFromFile(String.class, o.get("schematic"));
         if(schematic==null) return null;
         Boolean persist = registry.deserializeFromFile(Boolean.class, o.get("persistent"));

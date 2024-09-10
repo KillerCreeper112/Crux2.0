@@ -3,19 +3,22 @@ package killercreepr.cruxstructures;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.module.StandardModules;
 import killercreepr.crux.plugin.CruxPlugin;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.FileGenericEnum;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import killercreepr.cruxstructures.commands.StructureCommands;
 import killercreepr.cruxstructures.config.*;
 import killercreepr.cruxstructures.config.generation.*;
 import killercreepr.cruxstructures.config.module.FileConeVeinModule;
 import killercreepr.cruxstructures.config.module.FileCorruptedVeinModule;
+import killercreepr.cruxstructures.config.module.FileWallsModule;
 import killercreepr.cruxstructures.manager.StructureManager;
+import killercreepr.cruxstructures.structure.generation.StructureGenerator;
 import killercreepr.cruxstructures.structure.generation.center.StructureCenter;
 import killercreepr.cruxstructures.structure.generation.requirement.StructureChunkRequirement;
 import killercreepr.cruxstructures.structure.generation.requirement.StructureRequirement;
 import killercreepr.cruxstructures.structure.impl.CfgFAWEStructure;
-import killercreepr.cruxstructures.structure.impl.CfgStructureGen;
 import killercreepr.cruxstructures.structure.module.StructureModule;
+import killercreepr.cruxstructures.structure.module.standard.WallsModule;
 import killercreepr.cruxstructures.structure.stored.SimpleStoredStructure;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,6 +33,11 @@ public class CruxStructuresModule implements CruxModule {
     protected final FileStructureRequirement fileStructureRequirement = new FileStructureRequirement();
     protected final FileStructureChunkRequirement fileStructureChunkRequirement = new FileStructureChunkRequirement();
     protected final FileStructureModule fileStructureModule = new FileStructureModule();
+    public final FileCfgFAWEStructure fileCfgFAWEStructure = new FileCfgFAWEStructure();
+
+    public FileCfgFAWEStructure getFileCfgFAWEStructure() {
+        return fileCfgFAWEStructure;
+    }
 
     public FileStructureCenter getFileStructureCenter() {
         return fileStructureCenter;
@@ -52,15 +60,16 @@ public class CruxStructuresModule implements CruxModule {
     }
 
     @Override
-    public void onEnable(@NotNull CruxPlugin plugin) {
+    public void onLoad(@NotNull CruxPlugin plugin) {
         CfgRegistries.SIMPLE_REGISTRY.forEach(registry -> {
-            registry.registerFileHandler(CfgStructureGen.class, new FileCfgStructureGen());
+            registry.registerFileHandler(StructureGenerator.class, new FileCfgStructureGen());
             registry.registerFileHandler(StructureCenter.class, fileStructureCenter);
             registry.registerFileHandler(StructureRequirement.class, fileStructureRequirement);
             registry.registerFileHandler(StructureChunkRequirement.class, fileStructureChunkRequirement);
             registry.registerFileHandler(StructureModule.class, fileStructureModule);
 
-            registry.registerFileHandler(CfgFAWEStructure.class, new FileCfgFAWEStructure());
+            registry.registerFileHandler(CfgFAWEStructure.class, fileCfgFAWEStructure);
+            registry.registerFileHandler(WallsModule.WallRotationType.class, new FileGenericEnum<>(WallsModule.WallRotationType.class));
         });
 
         fileStructureCenter.TYPE_HANDLERS.register("surface_top", new FileSurfaceTopCenter());
@@ -80,6 +89,7 @@ public class CruxStructuresModule implements CruxModule {
 
         fileStructureModule.TYPE_HANDLERS.register("corrupt_veins", new FileCorruptedVeinModule());
         fileStructureModule.TYPE_HANDLERS.register("cone_veins", new FileConeVeinModule());
+        fileStructureModule.TYPE_HANDLERS.register("walls", new FileWallsModule());
 
         CfgRegistries.JSON_REGISTRY.forEach(registry ->{
             registry.registerFileHandler(SimpleStoredStructure.class, new FileSimpleStoredStructure<SimpleStoredStructure>());

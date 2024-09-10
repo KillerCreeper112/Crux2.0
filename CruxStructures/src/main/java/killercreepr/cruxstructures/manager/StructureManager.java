@@ -7,8 +7,11 @@ import killercreepr.crux.data.world.CruxPosition;
 import killercreepr.crux.data.world.MultiVerseWorldStorage;
 import killercreepr.crux.data.world.WorldChunkStorage;
 import killercreepr.crux.data.world.standard.MultiVerseBlockPosedStorage;
+import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
+import killercreepr.cruxstructures.CruxStructuresModule;
+import killercreepr.cruxstructures.config.loader.StructureLoader;
 import killercreepr.cruxstructures.event.StructurePlaceEvent;
 import killercreepr.cruxstructures.file.StorageChunkFile;
 import killercreepr.cruxstructures.registries.StructureRegistries;
@@ -167,21 +170,14 @@ public class StructureManager implements Listener {
 
     public void loadStructureConfiguration(){
         CruxFolder cfgFolder = createStructuresFolder();
-        File[] files = cfgFolder.file().listFiles();
         new HashSet<>(StructureRegistries.STRUCTURES.values()).forEach(str ->{
             if(str instanceof CfgFAWEStructure){
                 StructureRegistries.STRUCTURES.remove(str.key());
             }
         });
-        if(files==null) return;
 
-        for(File f : files){
-            CruxConfig cfg = new CruxConfig(f);
-            CfgFAWEStructure structure = cfg.deserialize(CfgFAWEStructure.class, "");
-            if(structure==null) continue;
-            StructureRegistries.STRUCTURES.register(structure);
-            Crux.log(Level.INFO, "Registered structure: " + structure.key());
-        }
+        new StructureLoader(CruxRegistries.MODULES.getModuleOrThrow(CruxStructuresModule.class).getFileCfgFAWEStructure())
+            .loadConfiguration(cfgFolder.file());
     }
 
     public void loadGenerationConfiguration(){
