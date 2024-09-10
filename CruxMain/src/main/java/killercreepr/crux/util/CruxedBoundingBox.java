@@ -2,6 +2,7 @@ package killercreepr.crux.util;
 
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,17 +30,17 @@ public class CruxedBoundingBox {
     public CruxedBoundingBox centerPoint(@Nullable Vector centerPoint) {
         this.centerPoint = centerPoint; return this;
     }
-
+    @Contract(pure = true)
     public @NotNull BoundingBox rotateX(double angleDegrees){
         Objects.requireNonNull(centerPoint);
         return rotateX(angleDegrees, centerPoint.getX(), centerPoint.getY(), centerPoint.getZ());
     }
-
+    @Contract(pure = true)
     public @NotNull BoundingBox rotateY(double angleDegrees){
         Objects.requireNonNull(centerPoint);
         return rotateY(angleDegrees, centerPoint.getX(), centerPoint.getY(), centerPoint.getZ());
     }
-
+    @Contract(pure = true)
     public @NotNull BoundingBox rotateZ(double angleDegrees){
         Objects.requireNonNull(centerPoint);
         return rotateZ(angleDegrees, centerPoint.getX(), centerPoint.getY(), centerPoint.getZ());
@@ -48,6 +49,7 @@ public class CruxedBoundingBox {
     /**
      * @return A new BoundingBox.
      */
+    @Contract(pure = true)
     public @NotNull BoundingBox rotateX(double angleDegrees, double centerX, double centerY, double centerZ) {
         if(angleDegrees==0D) return box.clone();
         // Convert angle to radians
@@ -71,7 +73,7 @@ public class CruxedBoundingBox {
             maxRotated.getX() + centerX, maxRotated.getY() + centerY, maxRotated.getZ() + centerZ
         );
     }
-
+    @Contract(pure = true)
     public @NotNull BoundingBox rotateY(double angleDegrees, double centerX, double centerY, double centerZ) {
         if(angleDegrees==0D) return box.clone();
         // Convert angle to radians
@@ -95,7 +97,7 @@ public class CruxedBoundingBox {
             maxRotated.getX() + centerX, maxRotated.getY() + centerY, maxRotated.getZ() + centerZ
         );
     }
-
+    @Contract(pure = true)
     public @NotNull BoundingBox rotateZ(double angleDegrees, double centerX, double centerY, double centerZ) {
         if(angleDegrees==0D) return box.clone();
         // Convert angle to radians
