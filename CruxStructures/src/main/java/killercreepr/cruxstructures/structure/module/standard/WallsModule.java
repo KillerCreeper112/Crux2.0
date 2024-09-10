@@ -87,8 +87,12 @@ public class WallsModule implements StructureModule {
     public Block findValidBlock(Block start){
         if(isValidBlock(start)) return start;
         int max = wallMaxYCheck.value().intValue();
-        for(int y = -max; y <= max; y++){
-            if(y==0) continue;
+        for(int y = 1; y <= max; y++){
+            Block check = start.getRelative(0, y, 0);
+            if(isValidBlock(check)) return check;
+        }
+
+        for(int y = -1; y >= -max; y--){
             Block check = start.getRelative(0, y, 0);
             if(isValidBlock(check)) return check;
         }
