@@ -4,16 +4,18 @@ import killercreepr.crux.loot.LootContext;
 import killercreepr.crux.loot.LootPool;
 import killercreepr.crux.loot.LootPoolObject;
 import killercreepr.crux.loot.LootTable;
+import killercreepr.crux.loot.opened.OpenedLootObject;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class SimpleLootTable<T> implements LootTable<T> {
+public class SimpleLootTable<T> implements LootTable<T>, OpenedLootObject<T> {
     private final Key key;
     private final NumberProvider rolls;
     private final List<LootPool<T>> pools;
@@ -63,5 +65,15 @@ public class SimpleLootTable<T> implements LootTable<T> {
     @Override
     public @NotNull Key key() {
         return key;
+    }
+
+    @Override
+    public @NotNull Collection<LootPoolObject<T>> getAllItems() {
+        Collection<LootPoolObject<T>> list = new ArrayList<>();
+        pools.forEach(pool ->{
+            if(!(pool instanceof OpenedLootObject<?> l)) return;
+            list.addAll((Collection<? extends LootPoolObject<T>>) (Collection) l.getAllItems());
+        });
+        return list;
     }
 }

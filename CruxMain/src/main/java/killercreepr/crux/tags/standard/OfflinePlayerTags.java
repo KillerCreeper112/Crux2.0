@@ -1,10 +1,14 @@
 package killercreepr.crux.tags.standard;
 
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.container.StringTagContainer;
 import killercreepr.crux.tags.context.FormatPrefix;
 import killercreepr.crux.tags.hook.ObjectTag;
 import killercreepr.crux.tags.resolver.Tag;
+import net.kyori.adventure.key.Key;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Registry;
@@ -13,6 +17,8 @@ import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -84,6 +90,33 @@ public class OfflinePlayerTags implements ObjectTag<OfflinePlayer> {
                 EquipmentSlot slot = EquipmentSlot.valueOf(args.get(0).toUpperCase());
                 ItemStack item = online.getInventory().getItem(slot);
                 return item.getType().toString().toLowerCase();
+            }))
+            .add(Tag.string("has_permission", (args, ctx) ->{
+                Player online = p.getPlayer();
+                if(online==null) return "false";
+                String permission = args.get(0);
+                return online.hasPermission(permission) + "";
+            }))
+            .add(Tag.string("has_potion_effect", (args, ctx) ->{
+                Player online = p.getPlayer();
+                if(online==null) return "false";
+                String potionName = args.get(0);
+                PotionEffectType type = RegistryAccess.registryAccess().getRegistry(RegistryKey.MOB_EFFECT).get(Key.key(potionName));
+                if(type == null) return potionName + " not found";
+                return online.hasPotionEffect(type) + "";
+            }))
+            .add(Tag.string("has_cooldown", (args, ctx) ->{
+                Player online = p.getPlayer();
+                if(online==null) return "false";
+                String materialName = args.get(0);
+                Material type = Registry.MATERIAL.get(Key.key(materialName));
+                if(type == null) return materialName + " not found";
+                return online.hasCooldown(type) + "";
+            }))
+            .add(Tag.string("has_resourcepack", (args, ctx) ->{
+                Player online = p.getPlayer();
+                if(online==null) return "false";
+                return online.hasResourcePack() + "";
             }))
             ;
     }

@@ -6,6 +6,7 @@ import killercreepr.crux.loot.LootPool;
 import killercreepr.crux.loot.LootPoolObject;
 import killercreepr.crux.loot.conditions.LootCondition;
 import killercreepr.crux.loot.functions.LootFunction;
+import killercreepr.crux.loot.opened.OpenedLootObject;
 import killercreepr.crux.util.CruxWeightedSupplier;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +17,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class SimpleLootPool<T> extends SimpleFunctionedConditionedObject<T> implements LootPool<T> {
+public class SimpleLootPool<T> extends SimpleFunctionedConditionedObject<T> implements LootPool<T>, OpenedLootObject<T> {
     private final @NotNull NumberProvider rolls;
     private final @NotNull List<LootPoolObject<T>> data;
 
@@ -103,5 +104,10 @@ public class SimpleLootPool<T> extends SimpleFunctionedConditionedObject<T> impl
             .rolls(rolls)
             .applyContext(context)
             .build().rollList();
+    }
+
+    @Override
+    public @NotNull Collection<LootPoolObject<T>> getAllItems() {
+        return data;
     }
 }
