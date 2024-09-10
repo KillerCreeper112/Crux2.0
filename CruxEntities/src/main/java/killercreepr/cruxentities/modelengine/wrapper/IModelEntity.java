@@ -39,7 +39,7 @@ public interface IModelEntity extends IDesignEntity{
 
     default int getAnimationLengthTicks(@NotNull String id){
         IAnimationProperty animationProperty = getModel().getAnimationHandler().getAnimation(id);
-        return animationProperty == null ? 0 : (int) (animationProperty.getBlueprintAnimation().getLength() * 20D);
+        return animationProperty == null ? 0 : (int) Math.ceil(animationProperty.getBlueprintAnimation().getLength() * 20D);
     }
 
     default @NotNull ModeledEntity getModeledEntity(){
