@@ -30,7 +30,7 @@ public class FileWallPart extends PureYamlFileHandler<WallsModule.WallPart> {
         return new WallsModule.WallPart(
             lootTable,
             registry.deserializeFromFile(NumberProvider.class, o.get("spacing")),
-            registry.deserializeFromFile(NumberProvider.class, o.get("side_offset"))
+            registry.deserializeFromFile(NumberProvider.class, o.get("offset"))
         );
     }
 }

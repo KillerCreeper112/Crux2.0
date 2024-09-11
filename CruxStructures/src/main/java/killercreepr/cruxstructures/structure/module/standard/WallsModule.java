@@ -92,16 +92,16 @@ public class WallsModule implements StructureModule {
     public static class WallPart{
         protected final @NotNull LootTable<Key> structure;
         protected final @Nullable NumberProvider spacing;
-        protected final @Nullable NumberProvider sideOffset;
+        protected final @Nullable NumberProvider offset;
 
-        public WallPart(@NotNull LootTable<Key> structure, @Nullable NumberProvider spacing, @Nullable NumberProvider sideOffset) {
+        public WallPart(@NotNull LootTable<Key> structure, @Nullable NumberProvider spacing, @Nullable NumberProvider offset) {
             this.structure = structure;
             this.spacing = spacing;
-            this.sideOffset = sideOffset;
+            this.offset = offset;
         }
 
-        public @Nullable NumberProvider getSideOffset() {
-            return sideOffset;
+        public @Nullable NumberProvider getOffset() {
+            return offset;
         }
 
         public @NotNull LootTable<Key> getStructure() {
@@ -173,8 +173,7 @@ public class WallsModule implements StructureModule {
             for(int i = centerIndex+1; i < structures.size(); i++){
                 Structure wall = toPlace.get(i).getFirst();
 
-                int index = i - (centerIndex+1)+1;
-                spawnWall(toPlace.get(i), index, currentWidth + doubleRightAddon, face, at, wallSpacing.value().intValue(),
+                spawnWall(toPlace.get(i), currentWidth + doubleRightAddon, face, at, wallSpacing.value().intValue(),
                     rotation, module, rightSide);
 
                 currentWidth += getLength(wall.boundingBox(), face);
@@ -184,15 +183,14 @@ public class WallsModule implements StructureModule {
             for(int i = centerIndex-1; i > -1; i--){
                 Structure wall = toPlace.get(i).getFirst();
 
-                int index = ((centerIndex-1) - i)+1;
-                spawnWall(toPlace.get(i), index, currentWidth, face, at, wallSpacing.value().intValue(),
+                spawnWall(toPlace.get(i), currentWidth, face, at, wallSpacing.value().intValue(),
                     rotation, module, leftSide);
 
                 currentWidth += getLength(wall.boundingBox(), face);
             }
         }
 
-        public void spawnWall(Pair<Structure, WallPart> wall, int index, double currentWidth, BlockFace face,
+        public void spawnWall(Pair<Structure, WallPart> wall, double currentWidth, BlockFace face,
                               Location at, int spacing, double rotation,
                               WallsModule module, BlockFace side){
 
@@ -201,13 +199,13 @@ public class WallsModule implements StructureModule {
             WallPart part = wall.getSecond();
             if(part.getSpacing() != null) spacing = part.getSpacing().value().intValue();
 
-            int offset = part.getSideOffset() == null ? 0 : part.getSideOffset() .value().intValue();
+            int offset = part.getOffset() == null ? 0 : part.getOffset().value().intValue();
 
             CruxPosition spawn = CruxPosition.location(
                 at.clone().add(
-                    face.getModX() * spacing + (side.getModX() * addon) + offset,
-                    face.getModY() * spacing + (side.getModY() * addon) + offset,
-                    face.getModZ() * spacing + (side.getModZ() * addon) + offset
+                    face.getModX() * spacing + (side.getModX() * addon) + (face.getModX() * offset),
+                    face.getModY() * spacing + (side.getModY() * addon) + (face.getModY() * offset),
+                    face.getModZ() * spacing + (side.getModZ() * addon) + (face.getModZ() * offset)
                 )
             );
 
