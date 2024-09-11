@@ -61,10 +61,11 @@ public class FileWallsModule extends PureYamlFileHandler<WallsModule> {
         return new WallsModule(
             walls,
             corners,
-            registry.deserializeFromFile(NumberProvider.class, o.get("default_wall_spacing")),
+            registry.deserializeFromFile(NumberProvider.class, o.get("default_spacing")),
             wallSpacing,
             rotationType,
-            finder
+            finder,
+            o.getObject(Boolean.class, "default_auto_rotate", true)
         );
     }
 }

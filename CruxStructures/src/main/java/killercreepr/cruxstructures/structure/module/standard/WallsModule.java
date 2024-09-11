@@ -32,14 +32,16 @@ public class WallsModule implements StructureModule {
     protected final @NotNull Map<BlockFace, NumberProvider> wallSpacing;
     protected final @NotNull WallRotationType wallRotationType;
     protected final @NotNull LocationFinder locationFinder;
+    protected final boolean defaultAutoRotate;
 
-    public WallsModule(@NotNull Map<BlockFace, Wall> walls, @NotNull Map<BlockFace, LootTable<Key>> corners, @NotNull NumberProvider defaultWallSpacing, @NotNull Map<BlockFace, NumberProvider> wallSpacing, @NotNull WallRotationType wallRotationType, @NotNull LocationFinder locationFinder) {
+    public WallsModule(@NotNull Map<BlockFace, Wall> walls, @NotNull Map<BlockFace, LootTable<Key>> corners, @NotNull NumberProvider defaultWallSpacing, @NotNull Map<BlockFace, NumberProvider> wallSpacing, @NotNull WallRotationType wallRotationType, @NotNull LocationFinder locationFinder, boolean defaultAutoRotate) {
         this.walls = walls;
         this.corners = corners;
         this.defaultWallSpacing = defaultWallSpacing;
         this.wallSpacing = wallSpacing;
         this.wallRotationType = wallRotationType;
         this.locationFinder = locationFinder;
+        this.defaultAutoRotate = defaultAutoRotate;
     }
 
     @Override
@@ -62,6 +64,34 @@ public class WallsModule implements StructureModule {
         });
     }
 
+    public @NotNull Map<BlockFace, Wall> getWalls() {
+        return walls;
+    }
+
+    public @NotNull Map<BlockFace, LootTable<Key>> getCorners() {
+        return corners;
+    }
+
+    public @NotNull NumberProvider getDefaultWallSpacing() {
+        return defaultWallSpacing;
+    }
+
+    public @NotNull Map<BlockFace, NumberProvider> getWallSpacing() {
+        return wallSpacing;
+    }
+
+    public @NotNull WallRotationType getWallRotationType() {
+        return wallRotationType;
+    }
+
+    public @NotNull LocationFinder getLocationFinder() {
+        return locationFinder;
+    }
+
+    public boolean isDefaultAutoRotate() {
+        return defaultAutoRotate;
+    }
+
     public enum WallRotationType{
         RANDOM,
         STRUCTURE,
@@ -72,11 +102,23 @@ public class WallsModule implements StructureModule {
         protected final @NotNull LootTable<Key> structure;
         protected final @Nullable NumberProvider spacing;
         protected final @Nullable NumberProvider offset;
+        protected final @Nullable Boolean autoRotate;
 
-        public WallPart(@NotNull LootTable<Key> structure, @Nullable NumberProvider spacing, @Nullable NumberProvider offset) {
+        public WallPart(@NotNull LootTable<Key> structure, @Nullable NumberProvider spacing, @Nullable NumberProvider offset, @Nullable Boolean autoRotate) {
             this.structure = structure;
             this.spacing = spacing;
             this.offset = offset;
+            this.autoRotate = autoRotate;
+        }
+
+        public double rotate(double rotation, @NotNull BlockFace direction, boolean defaultRotate){
+            boolean x = autoRotate == null ? defaultRotate : autoRotate;
+            if(!x) return rotation;
+            return CruxMath.wrap(rotation + getRotationAddon(direction), 0D, 360D);
+        }
+
+        public @Nullable Boolean getAutoRotate() {
+            return autoRotate;
         }
 
         public @Nullable NumberProvider getOffset() {
@@ -91,6 +133,14 @@ public class WallsModule implements StructureModule {
             return spacing;
         }
 
+        public static double getRotationAddon(BlockFace direction){
+            return switch (direction){
+                case WEST -> 90;
+                case NORTH -> -90;
+                case EAST -> 180;
+                default -> 0D;
+            };
+        }
     }
 
     public static class Wall{
@@ -138,7 +188,7 @@ public class WallsModule implements StructureModule {
 
             Location validSpawn = module.locationFinder.find(spawn.toLocation(at.getWorld()));
             if(validSpawn != null){
-                centerStructure.place(validSpawn, rotation);
+                centerStructure.place(validSpawn, centerPart.rotate(rotation, face, module.defaultAutoRotate));
             }
 
             double centerStructureSpacing = getLength(centerStructure.boundingBox(), face);
@@ -192,7 +242,7 @@ public class WallsModule implements StructureModule {
 
             Location validSpawn = module.locationFinder.find(spawn.toLocation(at.getWorld()));
             if(validSpawn != null){
-                wall.getFirst().place(validSpawn, rotation);
+                wall.getFirst().place(validSpawn, part.rotate(rotation, face, module.defaultAutoRotate));
             }
         }
 
