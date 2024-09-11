@@ -9,6 +9,7 @@ import killercreepr.cruxconfig.config.common.element.FileArray;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.PureYamlFileHandler;
+import killercreepr.cruxstructures.CruxStructuresModule;
 import killercreepr.cruxstructures.structure.generation.StructureGenerator;
 import killercreepr.cruxstructures.structure.generation.center.StructureCenter;
 import killercreepr.cruxstructures.structure.generation.requirement.StructureChunkRequirement;
@@ -23,7 +24,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class FileCfgStructureGen extends PureYamlFileHandler<StructureGenerator> {
-    protected final @NotNull FileSimpleLootTable<Key> fileSimpleLootTable = new FileSimpleLootTable<>(Key.class);
+    protected static final @NotNull FileSimpleLootTable<Key> fileSimpleLootTable = CruxStructuresModule.fileSimpleLootTable;
     @Override
     public @Nullable StructureGenerator deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;

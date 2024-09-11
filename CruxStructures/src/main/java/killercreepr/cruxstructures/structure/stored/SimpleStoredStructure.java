@@ -35,6 +35,17 @@ public class SimpleStoredStructure implements StoredStructure{
     }
 
     public @NotNull BoundingBox calculateBoundingBox(@NotNull CruxPosition center, @NotNull Structure structure){
+        if(true){
+            CruxPosition origin = structure.originPos();
+            return CruxedBoundingBox.wrap(structure.boundingBox())
+                .moveTo(origin, center)
+                .rotateY(
+                    rotation, center.x()+.5, center.y()+.5, center.z()+.5
+                )
+                .box()
+                ;
+        }
+
         CruxPosition origin = structure.originPos();
 
         int offsetX = center.blockX() - origin.blockX();
@@ -49,7 +60,7 @@ public class SimpleStoredStructure implements StoredStructure{
             box.getMaxX()+1, box.getMaxY()+1, box.getMaxZ()+1
         );
 
-        return new CruxedBoundingBox(box).rotateY(rotation, center.x()+.5, center.y()+.5, center.z()+.5);
+        return new CruxedBoundingBox(box).rotateY(rotation, center.x()+.5, center.y()+.5, center.z()+.5).box();
     }
     
     @Override

@@ -4,6 +4,7 @@ import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.module.StandardModules;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.FileGenericEnum;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.FileSimpleLootTable;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import killercreepr.cruxstructures.commands.StructureCommands;
 import killercreepr.cruxstructures.config.*;
@@ -18,9 +19,11 @@ import killercreepr.cruxstructures.structure.impl.CfgFAWEStructure;
 import killercreepr.cruxstructures.structure.module.StructureModule;
 import killercreepr.cruxstructures.structure.module.standard.WallsModule;
 import killercreepr.cruxstructures.structure.stored.SimpleStoredStructure;
+import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 
 public class CruxStructuresModule implements CruxModule {
+    public static final FileSimpleLootTable<Key> fileSimpleLootTable = new FileSimpleLootTable<>(Key.class);
     public static final String NAMESPACE = StandardModules.CRUX_STRUCTURES;
     @Override
     public @NotNull String name() {
@@ -91,6 +94,7 @@ public class CruxStructuresModule implements CruxModule {
         fileStructureModule.TYPE_HANDLERS.register("corrupt_veins", new FileCorruptedVeinModule());
         fileStructureModule.TYPE_HANDLERS.register("cone_veins", new FileConeVeinModule());
         fileStructureModule.TYPE_HANDLERS.register("walls", new FileWallsModule());
+        fileStructureModule.TYPE_HANDLERS.register("structure_scatter", new FileStructureScatterModule());
 
         CfgRegistries.JSON_REGISTRY.forEach(registry ->{
             registry.registerFileHandler(SimpleStoredStructure.class, new FileSimpleStoredStructure<SimpleStoredStructure>());

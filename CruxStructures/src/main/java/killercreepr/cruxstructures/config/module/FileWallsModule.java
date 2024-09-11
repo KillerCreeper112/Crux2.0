@@ -9,6 +9,7 @@ import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.PureYamlFileHandler;
+import killercreepr.cruxstructures.CruxStructuresModule;
 import killercreepr.cruxstructures.structure.module.standard.WallsModule;
 import net.kyori.adventure.key.Key;
 import org.bukkit.block.BlockFace;
@@ -19,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FileWallsModule extends PureYamlFileHandler<WallsModule> {
-    protected final @NotNull FileSimpleLootTable<Key> fileSimpleLootTable = new FileSimpleLootTable<>(Key.class);
+    protected static final @NotNull FileSimpleLootTable<Key> fileSimpleLootTable = CruxStructuresModule.fileSimpleLootTable;
     @Override
     public @Nullable WallsModule deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;

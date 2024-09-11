@@ -1,16 +1,21 @@
 package killercreepr.crux.util;
 
+import killercreepr.crux.data.world.CruxPosition;
+import org.bukkit.Location;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
 public class CruxedBoundingBox {
+    public static @NotNull CruxedBoundingBox wrap(@NotNull BoundingBox box){
+        return new CruxedBoundingBox(box);
+    }
+
     protected @NotNull BoundingBox box;
-    protected @Nullable Vector centerPoint;
+    protected @Nullable CruxPosition centerPoint;
     public CruxedBoundingBox(@NotNull BoundingBox box) {
         this.box = box;
     }
@@ -23,35 +28,36 @@ public class CruxedBoundingBox {
         this.box = box; return this;
     }
 
-    public @Nullable Vector centerPoint() {
+    public @Nullable CruxPosition centerPoint() {
         return centerPoint;
     }
 
-    public CruxedBoundingBox centerPoint(@Nullable Vector centerPoint) {
+    public CruxedBoundingBox centerPoint(@Nullable CruxPosition centerPoint) {
         this.centerPoint = centerPoint; return this;
     }
-    @Contract(pure = true)
-    public @NotNull BoundingBox rotateX(double angleDegrees){
-        Objects.requireNonNull(centerPoint);
-        return rotateX(angleDegrees, centerPoint.getX(), centerPoint.getY(), centerPoint.getZ());
+
+    public @NotNull CruxPosition centerPointOrBoxCenter(){
+        return this.centerPoint == null ? CruxPosition.location(box.getCenter()) : this.centerPoint;
     }
-    @Contract(pure = true)
-    public @NotNull BoundingBox rotateY(double angleDegrees){
-        Objects.requireNonNull(centerPoint);
-        return rotateY(angleDegrees, centerPoint.getX(), centerPoint.getY(), centerPoint.getZ());
+
+    public @NotNull CruxedBoundingBox rotateX(double angleDegrees){
+        CruxPosition centerPoint = centerPointOrBoxCenter();
+        return rotateX(angleDegrees, centerPoint.x(), centerPoint.y(), centerPoint.z());
     }
-    @Contract(pure = true)
-    public @NotNull BoundingBox rotateZ(double angleDegrees){
-        Objects.requireNonNull(centerPoint);
-        return rotateZ(angleDegrees, centerPoint.getX(), centerPoint.getY(), centerPoint.getZ());
+    public @NotNull CruxedBoundingBox rotateY(double angleDegrees){
+        CruxPosition centerPoint = centerPointOrBoxCenter();
+        return rotateY(angleDegrees, centerPoint.x(), centerPoint.y(), centerPoint.z());
+    }
+    public @NotNull CruxedBoundingBox rotateZ(double angleDegrees){
+        CruxPosition centerPoint = centerPointOrBoxCenter();
+        return rotateZ(angleDegrees, centerPoint.x(), centerPoint.y(), centerPoint.z());
     }
 
     /**
      * @return A new BoundingBox.
      */
-    @Contract(pure = true)
-    public @NotNull BoundingBox rotateX(double angleDegrees, double centerX, double centerY, double centerZ) {
-        if(angleDegrees==0D) return box.clone();
+    public @NotNull CruxedBoundingBox rotateX(double angleDegrees, double centerX, double centerY, double centerZ) {
+        if(angleDegrees==0D) return this;
         // Convert angle to radians
         double angleRadians = Math.toRadians(angleDegrees);
 
@@ -68,14 +74,16 @@ public class CruxedBoundingBox {
         Vector maxRotated = rotatePointX(maxX, maxY, maxZ, angleRadians);
 
         // Create a new bounding box with the new coordinates
-        return new BoundingBox(
-            minRotated.getX() + centerX, minRotated.getY() + centerY, minRotated.getZ() + centerZ,
-            maxRotated.getX() + centerX, maxRotated.getY() + centerY, maxRotated.getZ() + centerZ
+        box(
+            new BoundingBox(
+                minRotated.getX() + centerX, minRotated.getY() + centerY, minRotated.getZ() + centerZ,
+                maxRotated.getX() + centerX, maxRotated.getY() + centerY, maxRotated.getZ() + centerZ
+            )
         );
+        return this;
     }
-    @Contract(pure = true)
-    public @NotNull BoundingBox rotateY(double angleDegrees, double centerX, double centerY, double centerZ) {
-        if(angleDegrees==0D) return box.clone();
+    public @NotNull CruxedBoundingBox rotateY(double angleDegrees, double centerX, double centerY, double centerZ) {
+        if(angleDegrees==0D) return this;
         // Convert angle to radians
         double angleRadians = Math.toRadians(angleDegrees);
 
@@ -92,14 +100,16 @@ public class CruxedBoundingBox {
         Vector maxRotated = rotatePointY(maxX, maxY, maxZ, angleRadians);
 
         // Create a new bounding box with the new coordinates
-        return new BoundingBox(
-            minRotated.getX() + centerX, minRotated.getY() + centerY, minRotated.getZ() + centerZ,
-            maxRotated.getX() + centerX, maxRotated.getY() + centerY, maxRotated.getZ() + centerZ
+        box(
+            new BoundingBox(
+                minRotated.getX() + centerX, minRotated.getY() + centerY, minRotated.getZ() + centerZ,
+                maxRotated.getX() + centerX, maxRotated.getY() + centerY, maxRotated.getZ() + centerZ
+            )
         );
+        return this;
     }
-    @Contract(pure = true)
-    public @NotNull BoundingBox rotateZ(double angleDegrees, double centerX, double centerY, double centerZ) {
-        if(angleDegrees==0D) return box.clone();
+    public @NotNull CruxedBoundingBox rotateZ(double angleDegrees, double centerX, double centerY, double centerZ) {
+        if(angleDegrees==0D) return this;
         // Convert angle to radians
         double angleRadians = Math.toRadians(angleDegrees);
 
@@ -116,10 +126,58 @@ public class CruxedBoundingBox {
         Vector maxRotated = rotatePointZ(maxX, maxY, maxZ, angleRadians);
 
         // Create a new bounding box with the new coordinates
-        return new BoundingBox(
-            minRotated.getX() + centerX, minRotated.getY() + centerY, minRotated.getZ() + centerZ,
-            maxRotated.getX() + centerX, maxRotated.getY() + centerY, maxRotated.getZ() + centerZ
+        box(
+            new BoundingBox(
+                minRotated.getX() + centerX, minRotated.getY() + centerY, minRotated.getZ() + centerZ,
+                maxRotated.getX() + centerX, maxRotated.getY() + centerY, maxRotated.getZ() + centerZ
+            )
         );
+        return this;
+    }
+
+    public @NotNull CruxedBoundingBox moveTo(@NotNull CruxPosition from, @NotNull CruxPosition to){
+        return moveTo(
+            from.x(), from.y(), from.z(),
+            to.x(), to.y(), to.z()
+        );
+    }
+
+    public @NotNull CruxedBoundingBox moveTo(@NotNull Vector position){
+        return moveTo(position.getX(), position.getY(), position.getZ());
+    }
+    public @NotNull CruxedBoundingBox moveTo(@NotNull Location position){
+        return moveTo(position.getX(), position.getY(), position.getZ());
+    }
+    public @NotNull CruxedBoundingBox moveTo(@NotNull CruxPosition position){
+        return moveTo(position.x(), position.y(), position.z());
+    }
+
+    public @NotNull CruxedBoundingBox moveTo(double x, double y, double z){
+        CruxPosition origin = centerPointOrBoxCenter();
+        return moveTo(
+            origin.x(), origin.y(), origin.z(),
+            x, y, z
+        );
+    }
+
+    public @NotNull CruxedBoundingBox moveTo(
+        double fromX, double fromY, double fromZ,
+        double toX, double toY, double toZ
+    ){
+        double offsetX = toX - fromX;
+        double offsetY = toY - fromY;
+        double offsetZ = toZ - fromZ;
+
+        BoundingBox box = this.box.clone();
+
+        box = box.shift(offsetX, offsetY, offsetZ);
+        box(
+            new BoundingBox(
+                box.getMinX(), box.getMinY(), box.getMinZ(),
+                box.getMaxX()+1, box.getMaxY()+1, box.getMaxZ()+1
+            )
+        );
+        return this;
     }
 
     private static Vector rotatePointX(double x, double y, double z, double angle) {
