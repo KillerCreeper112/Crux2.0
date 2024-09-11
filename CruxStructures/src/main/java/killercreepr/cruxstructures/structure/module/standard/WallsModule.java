@@ -58,33 +58,7 @@ public class WallsModule implements StructureModule {
                 .build())
             .build();
         walls.forEach((face, wall) ->{
-
             wall.place(this, at, ctx, face, wallRotation);
-
-            /*List<Key> keys = wallLoot.populateLoot(ctx);
-            if(keys.isEmpty()) return;
-            Structure wallStructure = StructureRegistries.STRUCTURES.get(keys.getFirst());
-            if(wallStructure== null){
-                Crux.log(Level.WARNING, "No crux Structure found for wall " + face + " (" + keys.getFirst() + ")");
-                return;
-            }
-
-            int width = wallSpacing.getOrDefault(face, defaultWallSpacing).value().intValue();
-
-            CruxPosition spawn = CruxPosition.location(
-                at.clone().add(
-                    face.getModX() * width,
-                    face.getModY() * width,
-                    face.getModZ() * width
-                )
-            );
-
-            spawn = spawn.rotateAroundY(CruxPosition.location(at), wallRotation);
-
-            Block validSpawn = findValidBlock(spawn.getBlock(at.getWorld()));
-            if(validSpawn == null) return;
-
-            wallStructure.place(validSpawn.getLocation(), wallRotation);*/
         });
     }
 
@@ -157,16 +131,21 @@ public class WallsModule implements StructureModule {
                 toPlace.add(Pair.of(wallStructure, wallLoot));
             });
 
-            int spacing = wallSpacing.value().intValue();
-
             int centerIndex = structures.size() / 2;
             Structure centerStructure = toPlace.get(centerIndex).getFirst();
+            WallPart centerPart = toPlace.get(centerIndex).getSecond();
+
+            int centerSpacing = centerPart.getSpacing() == null ? wallSpacing.value().intValue() : centerPart.getSpacing().value().intValue();
+
+            BlockFace rightSide = CruxBlockFace.rotateRight(face);
+            BlockFace leftSide = CruxBlockFace.rotateLeft(face);
+            int addon = structures.size() % 2 == 0 ? (int) (getLength(centerStructure.boundingBox(), face) / 2D) : 0;
 
             CruxPosition spawn = CruxPosition.location(
                 at.clone().add(
-                    face.getModX() * spacing,
-                    face.getModY() * spacing,
-                    face.getModZ() * spacing
+                    face.getModX() * centerSpacing + (rightSide.getModX() * addon),
+                    face.getModY() * centerSpacing + (rightSide.getModY() * addon),
+                    face.getModZ() * centerSpacing + (rightSide.getModZ() * addon)
                 )
             );
 
@@ -177,17 +156,22 @@ public class WallsModule implements StructureModule {
                 centerStructure.place(validSpawn.getLocation(), rotation);
             }
 
-            double centerStructureSpacing = getWidth(centerStructure.boundingBox(), face);
-            if(structures.size() % 2 == 0) centerStructureSpacing /= 2;
+            double centerStructureSpacing = getLength(centerStructure.boundingBox(), face);
+            int doubleRightAddon;
+            if(structures.size() % 2 == 0){
+                doubleRightAddon = (int) Math.ceil(centerStructureSpacing-1);
+                centerStructureSpacing /= 2;
+            }else doubleRightAddon = 0;
 
             double currentWidth = centerStructureSpacing;
             for(int i = centerIndex+1; i < structures.size(); i++){
                 Structure wall = toPlace.get(i).getFirst();
 
                 int index = i - (centerIndex+1)+1;
-                spawnWall(toPlace.get(i), index, currentWidth, face, at, spacing, rotation, module, CruxBlockFace.rotateRight(face));
+                spawnWall(toPlace.get(i), index, currentWidth + doubleRightAddon, face, at, wallSpacing.value().intValue(),
+                    rotation, module, rightSide);
 
-                currentWidth += getWidth(wall.boundingBox(), face);
+                currentWidth += getLength(wall.boundingBox(), face);
             }
 
             currentWidth = centerStructureSpacing;
@@ -195,9 +179,10 @@ public class WallsModule implements StructureModule {
                 Structure wall = toPlace.get(i).getFirst();
 
                 int index = ((centerIndex-1) - i)+1;
-                spawnWall(toPlace.get(i), index, currentWidth, face, at, spacing, rotation, module, CruxBlockFace.rotateLeft(face));
+                spawnWall(toPlace.get(i), index, currentWidth, face, at, wallSpacing.value().intValue(),
+                    rotation, module, leftSide);
 
-                currentWidth += getWidth(wall.boundingBox(), face);
+                currentWidth += getLength(wall.boundingBox(), face);
             }
         }
 
@@ -205,7 +190,7 @@ public class WallsModule implements StructureModule {
                               Location at, int spacing, double rotation,
                               WallsModule module, BlockFace side){
 
-            int addon = (int) Math.ceil(currentWidth + ((getWidth(wall.getFirst().boundingBox(), face) / 2) * index));
+            int addon = (int) Math.ceil(currentWidth /*+ ((getLength(wall.getFirst().boundingBox(), face) / 2) * index)*/);
 
             WallPart part = wall.getSecond();
             if(part.getSpacing() != null) spacing = part.getSpacing().value().intValue();
@@ -231,6 +216,14 @@ public class WallsModule implements StructureModule {
                 case EAST, WEST -> boundingBox.getWidthX();
                 //case NORTH, SOUTH -> boundingBox.getMaxZ() - boundingBox.getMinZ();
                 default -> boundingBox.getWidthZ();
+            };
+        }
+
+        public static double getLength(BoundingBox boundingBox, BlockFace direction) {
+            return switch (direction) {
+                case EAST, WEST -> boundingBox.getWidthZ()+1;
+                //case NORTH, SOUTH -> boundingBox.getMaxZ() - boundingBox.getMinZ();
+                default -> boundingBox.getWidthX()+1;
             };
         }
 

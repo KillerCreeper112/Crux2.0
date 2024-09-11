@@ -10,18 +10,25 @@ public class CruxBlockFace {
         BlockFace.NORTH, new BlockFace[]{BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST},
         BlockFace.EAST, new BlockFace[]{BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.NORTH},
         BlockFace.SOUTH, new BlockFace[]{BlockFace.SOUTH, BlockFace.WEST, BlockFace.NORTH, BlockFace.EAST},
-        BlockFace.WEST, new BlockFace[]{BlockFace.WEST, BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH}
+        BlockFace.WEST, new BlockFace[]{BlockFace.WEST, BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH},
+
+        BlockFace.NORTH_EAST, new BlockFace[]{BlockFace.NORTH_EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH_WEST, BlockFace.NORTH_WEST},
+        BlockFace.SOUTH_EAST, new BlockFace[]{BlockFace.SOUTH_EAST, BlockFace.SOUTH_WEST, BlockFace.NORTH_WEST, BlockFace.NORTH_EAST},
+        BlockFace.SOUTH_WEST, new BlockFace[]{BlockFace.SOUTH_WEST, BlockFace.NORTH_WEST, BlockFace.NORTH_EAST, BlockFace.SOUTH_EAST},
+        BlockFace.NORTH_WEST, new BlockFace[]{BlockFace.NORTH_WEST, BlockFace.NORTH_EAST, BlockFace.SOUTH_EAST, BlockFace.SOUTH_WEST}
     );
 
     public static BlockFace rotate(@NotNull BlockFace center, @NotNull BlockFace direction) {
         BlockFace[] rotations = rotationMap.get(center);
-        return switch (direction) {
-            case NORTH -> rotations[0];
-            case EAST -> rotations[1];
-            case SOUTH -> rotations[2];
-            case WEST -> rotations[3];
+        if(rotations == null) throw new IllegalArgumentException("Unsupported center: " + center);
+        int index = switch (direction){
+            case NORTH -> 0;
+            case EAST -> 1;
+            case SOUTH -> 2;
+            case WEST -> 3;
             default -> throw new IllegalArgumentException("Unsupported direction: " + direction);
         };
+        return rotations[index];
     }
 
     public static BlockFace rotateLeft(@NotNull BlockFace center) {
