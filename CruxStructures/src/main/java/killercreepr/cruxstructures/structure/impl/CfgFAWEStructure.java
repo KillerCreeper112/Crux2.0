@@ -8,24 +8,24 @@ import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.util.Collection;
+import java.util.List;
 
 public class CfgFAWEStructure extends FAWEStructure{
     protected final boolean persistent;
-    protected final @NotNull Collection<StructureModule> modules;
-    public CfgFAWEStructure(@NotNull Key key, @NotNull ClipboardHolder holder, boolean persistent, @NotNull Collection<StructureModule> modules) {
+    protected final @NotNull List<StructureModule> modules;
+    public CfgFAWEStructure(@NotNull Key key, @NotNull ClipboardHolder holder, boolean persistent, @NotNull List<StructureModule> modules) {
         super(key, holder);
         this.persistent = persistent;
         this.modules = modules;
     }
 
-    public CfgFAWEStructure(@NotNull Key key, @NotNull String filename, boolean persistent, @NotNull Collection<StructureModule> modules) {
+    public CfgFAWEStructure(@NotNull Key key, @NotNull String filename, boolean persistent, @NotNull List<StructureModule> modules) {
         super(key, filename);
         this.persistent = persistent;
         this.modules = modules;
     }
 
-    public CfgFAWEStructure(@NotNull Key key, @NotNull File schematicFile, boolean persistent, @NotNull Collection<StructureModule> modules) {
+    public CfgFAWEStructure(@NotNull Key key, @NotNull File schematicFile, boolean persistent, @NotNull List<StructureModule> modules) {
         super(key, schematicFile);
         this.persistent = persistent;
         this.modules = modules;
@@ -39,7 +39,7 @@ public class CfgFAWEStructure extends FAWEStructure{
         return event;
     }
 
-    public @NotNull Collection<StructureModule> getModules() {
+    public @NotNull List<StructureModule> getModules() {
         return modules;
     }
 

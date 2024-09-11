@@ -12,8 +12,7 @@ import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 public class FileCfgFAWEStructure extends PureYamlFileHandler<CfgFAWEStructure> {
     @Override
@@ -31,11 +30,11 @@ public class FileCfgFAWEStructure extends PureYamlFileHandler<CfgFAWEStructure> 
         String schematic = registry.deserializeFromFile(String.class, o.get("schematic"));
         if(schematic==null) return null;
         Boolean persist = registry.deserializeFromFile(Boolean.class, o.get("persistent"));
-        Collection<StructureModule> modules = registry.deserializeFromFile(
-            new TypeToken<Collection<StructureModule>>(){}.getType(), o.get("modules")
+        List<StructureModule> modules = registry.deserializeFromFile(
+            new TypeToken<List<StructureModule>>(){}.getType(), o.get("modules")
         );
         return new CfgFAWEStructure(
-            key, schematic, persist != null && persist, modules == null ? Set.of() : modules
+            key, schematic, persist != null && persist, modules == null ? List.of() : modules
         );
     }
 }

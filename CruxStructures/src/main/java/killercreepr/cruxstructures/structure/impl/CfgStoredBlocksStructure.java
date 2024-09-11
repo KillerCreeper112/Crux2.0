@@ -11,21 +11,22 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 public class CfgStoredBlocksStructure extends CfgFAWEStructure{
     protected final @NotNull Collection<BlockPos> blocks;
 
-    public CfgStoredBlocksStructure(@NotNull Key key, @NotNull ClipboardHolder holder, boolean persistent, @NotNull Collection<StructureModule> modules) {
+    public CfgStoredBlocksStructure(@NotNull Key key, @NotNull ClipboardHolder holder, boolean persistent, @NotNull List<StructureModule> modules) {
         super(key, holder, persistent, modules);
         this.blocks = calculateBlocks();
     }
 
-    public CfgStoredBlocksStructure(@NotNull Key key, @NotNull String filename, boolean persistent, @NotNull Collection<StructureModule> modules) {
+    public CfgStoredBlocksStructure(@NotNull Key key, @NotNull String filename, boolean persistent, @NotNull List<StructureModule> modules) {
         super(key, filename, persistent, modules);
         this.blocks = calculateBlocks();
     }
 
-    public CfgStoredBlocksStructure(@NotNull Key key, @NotNull File schematicFile, boolean persistent, @NotNull Collection<StructureModule> modules) {
+    public CfgStoredBlocksStructure(@NotNull Key key, @NotNull File schematicFile, boolean persistent, @NotNull List<StructureModule> modules) {
         super(key, schematicFile, persistent, modules);
         this.blocks = calculateBlocks();
     }
