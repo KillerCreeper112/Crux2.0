@@ -5,6 +5,7 @@ import killercreepr.crux.module.StandardModules;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.FileGenericEnum;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.FileSimpleLootTable;
+import killercreepr.cruxconfig.config.bukkit.standard.CommonLootTableHandlers;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import killercreepr.cruxstructures.commands.StructureCommands;
 import killercreepr.cruxstructures.config.*;
@@ -23,7 +24,7 @@ import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 
 public class CruxStructuresModule implements CruxModule {
-    public static final FileSimpleLootTable<Key> fileSimpleLootTable = new FileSimpleLootTable<>(Key.class);
+    public static final FileSimpleLootTable<Key> fileSimpleLootTable = CommonLootTableHandlers.KEY;
     public static final String NAMESPACE = StandardModules.CRUX_STRUCTURES;
     @Override
     public @NotNull String name() {
