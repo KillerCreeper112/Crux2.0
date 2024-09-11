@@ -1,12 +1,12 @@
 package killercreepr.cruxstructures.structure.module.standard;
 
+import killercreepr.crux.context.InputContext;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.crux.util.CruxedBoundingBox;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxstructures.event.StructurePlaceEvent;
 import killercreepr.cruxstructures.structure.Structure;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,22 +18,38 @@ import java.util.Map;
 public class StructureScatterer {
     protected final @NotNull Location center;
     protected final @NotNull Collection<Structure> structures;
-    protected final @NotNull NumberProvider scatterRange;
+    protected final @NotNull NumberProvider scatterRangeX;
     protected final @NotNull NumberProvider scatterRangeY;
+    protected final @NotNull NumberProvider scatterRangeZ;
     protected final @NotNull NumberProvider maxScatterAttempts;
 
     protected final @NotNull Map<Location, BoundingBox> placed = new HashMap<>();
-    public StructureScatterer(@NotNull Location center, @NotNull Collection<Structure> structures, @NotNull NumberProvider scatterRange, @NotNull NumberProvider scatterRangeY, @NotNull NumberProvider maxScatterAttempts) {
+
+    public StructureScatterer(@NotNull Location center, @NotNull Collection<Structure> structures, @NotNull NumberProvider scatterRangeX, @NotNull NumberProvider scatterRangeY, @NotNull NumberProvider scatterRangeZ, @NotNull NumberProvider maxScatterAttempts) {
         this.center = center;
         this.structures = structures;
-        this.scatterRange = scatterRange;
+        this.scatterRangeX = scatterRangeX;
         this.scatterRangeY = scatterRangeY;
+        this.scatterRangeZ = scatterRangeZ;
         this.maxScatterAttempts = maxScatterAttempts;
+    }
+
+    protected @Nullable InputContext inputContext;
+
+    public void addPlacedStructure(@NotNull Structure structure, @NotNull Location spawn, double rotation){
+        BoundingBox box = CruxedBoundingBox.wrap(structure.boundingBox())
+            .centerPoint(structure.originPos())
+            .moveTo(spawn)
+            .rotateY(
+                rotation, spawn.x()+.5, spawn.y()+.5, spawn.z()+.5
+            )
+            .box();
+        placed.put(spawn, box);
     }
 
     public void scatter(){
         for(Structure structure : structures){
-            Location spawn = findRandomSpot(structure, center.getWorld(), maxScatterAttempts.value().intValue());
+            Location spawn = findRandomSpot(structure, maxScatterAttempts.sample(inputContext).intValue());
             if(spawn==null) continue;
 
             double rotation = CruxMath.RANDOM.nextInt(4) * 90;
@@ -42,14 +58,7 @@ public class StructureScatterer {
             );
             if(event.isCancelled()) continue;
             rotation = event.getRotation();
-            BoundingBox box = CruxedBoundingBox.wrap(structure.boundingBox())
-                .centerPoint(structure.originPos())
-                .moveTo(spawn)
-                .rotateY(
-                    rotation, spawn.x()+.5, spawn.y()+.5, spawn.z()+.5
-                )
-                .box();
-            placed.put(spawn, box);
+            addPlacedStructure(structure, spawn, rotation);
         }
     }
 
@@ -64,21 +73,61 @@ public class StructureScatterer {
         return false;
     }
 
-    public @NotNull Location getRandomSpotUnchecked(@NotNull World world){
-        int xRange = scatterRange.value().intValue();
-        int yRange = scatterRangeY.value().intValue();
-        int zRange = scatterRange.value().intValue();
+    public @NotNull Location getRandomSpotUnchecked(){
+        int xRange = scatterRangeX.sample(inputContext).intValue();
+        int yRange = scatterRangeY.sample(inputContext).intValue();
+        int zRange = scatterRangeZ.sample(inputContext).intValue();
 
-        return new Location(world, xRange, yRange, zRange);
+        if(CruxMath.RANDOM.nextBoolean()) xRange *= -1;
+        if(CruxMath.RANDOM.nextBoolean()) yRange *= -1;
+        if(CruxMath.RANDOM.nextBoolean()) zRange *= -1;
+
+        return center.clone().add(xRange, yRange, zRange);
     }
 
-    public @Nullable Location findRandomSpot(@NotNull Structure forStructure, @NotNull World world, int attempts){
+    public @Nullable Location findRandomSpot(@NotNull Structure forStructure, int attempts){
         while(attempts > 0){
             attempts--;
-            Location potentialSpawn = getRandomSpotUnchecked(world);
+            Location potentialSpawn = getRandomSpotUnchecked();
             if(impedesOnAlreadyPlacedStructures(forStructure, potentialSpawn)) continue;
             return potentialSpawn;
         }
         return null;
+    }
+
+    public @NotNull Location getCenter() {
+        return center;
+    }
+
+    public @NotNull Collection<Structure> getStructures() {
+        return structures;
+    }
+
+    public @NotNull NumberProvider getScatterRangeX() {
+        return scatterRangeX;
+    }
+
+    public @NotNull NumberProvider getScatterRangeZ() {
+        return scatterRangeZ;
+    }
+
+    public @NotNull NumberProvider getScatterRangeY() {
+        return scatterRangeY;
+    }
+
+    public @NotNull NumberProvider getMaxScatterAttempts() {
+        return maxScatterAttempts;
+    }
+
+    public @NotNull Map<Location, BoundingBox> getPlaced() {
+        return placed;
+    }
+
+    public @Nullable InputContext getInputContext() {
+        return inputContext;
+    }
+
+    public void setInputContext(@Nullable InputContext inputContext) {
+        this.inputContext = inputContext;
     }
 }

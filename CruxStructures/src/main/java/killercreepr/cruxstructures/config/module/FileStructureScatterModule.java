@@ -27,15 +27,18 @@ public class FileStructureScatterModule extends PureYamlFileHandler<StructureSca
         NumberProvider maxAttempts = registry.deserializeFromFile(NumberProvider.class, o.get("max_attempts"));
         if(maxAttempts == null) maxAttempts = NumberProvider.constant(16);
 
-        NumberProvider range = registry.deserializeFromFile(NumberProvider.class, o.get("range"));
-        if(range==null) return null;
+        NumberProvider xRange = registry.deserializeFromFile(NumberProvider.class, o.get("range_x"));
+        if(xRange==null) return null;
         NumberProvider yRange = registry.deserializeFromFile(NumberProvider.class, o.get("range_y"));
-        if(yRange == null) yRange = range;
+        if(yRange == null) yRange = xRange;
+        NumberProvider zRange = registry.deserializeFromFile(NumberProvider.class, o.get("range_z"));
+        if(zRange == null) zRange = xRange;
 
         return new StructureScatterModule(
             structures,
-            range, yRange,
-            maxAttempts
+            xRange, yRange, zRange,
+            maxAttempts,
+            o.getObject(Boolean.class, "ignore_center", false)
         );
     }
 }

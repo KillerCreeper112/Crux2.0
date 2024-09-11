@@ -22,7 +22,8 @@ public class CruxStandardTags {
             new LatinFontResolver(),
             new StringFormatResolver(),
             new CruxSpacingResolver(),
-            new NumberFormatResolver()
+            new NumberFormatResolver(),
+            new MathsResolver()
         );
     }
 
