@@ -92,10 +92,16 @@ public class WallsModule implements StructureModule {
     public static class WallPart{
         protected final @NotNull LootTable<Key> structure;
         protected final @Nullable NumberProvider spacing;
+        protected final @Nullable NumberProvider sideOffset;
 
-        public WallPart(@NotNull LootTable<Key> structure, @Nullable NumberProvider spacing) {
+        public WallPart(@NotNull LootTable<Key> structure, @Nullable NumberProvider spacing, @Nullable NumberProvider sideOffset) {
             this.structure = structure;
             this.spacing = spacing;
+            this.sideOffset = sideOffset;
+        }
+
+        public @Nullable NumberProvider getSideOffset() {
+            return sideOffset;
         }
 
         public @NotNull LootTable<Key> getStructure() {
@@ -195,11 +201,13 @@ public class WallsModule implements StructureModule {
             WallPart part = wall.getSecond();
             if(part.getSpacing() != null) spacing = part.getSpacing().value().intValue();
 
+            int offset = part.getSideOffset() == null ? 0 : part.getSideOffset() .value().intValue();
+
             CruxPosition spawn = CruxPosition.location(
                 at.clone().add(
-                    face.getModX() * spacing + (side.getModX() * addon),
-                    face.getModY() * spacing + (side.getModY() * addon),
-                    face.getModZ() * spacing + (side.getModZ() * addon)
+                    face.getModX() * spacing + (side.getModX() * addon) + offset,
+                    face.getModY() * spacing + (side.getModY() * addon) + offset,
+                    face.getModZ() * spacing + (side.getModZ() * addon) + offset
                 )
             );
 

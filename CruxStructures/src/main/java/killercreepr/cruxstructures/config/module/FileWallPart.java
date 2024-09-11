@@ -19,7 +19,7 @@ public class FileWallPart extends PureYamlFileHandler<WallsModule.WallPart> {
         if(!(e instanceof FileObject o)){
             LootTable<Key> lootTable = new FileSimpleLootTable<>(Key.class).deserializeFromFile(ctx, e);
             if(lootTable == null) return null;
-            return new WallsModule.WallPart(lootTable, null);
+            return new WallsModule.WallPart(lootTable, null, null);
         }
         FileRegistry registry = ctx.getRegistry();
         FileElement element = o.get("structure");
@@ -29,7 +29,8 @@ public class FileWallPart extends PureYamlFileHandler<WallsModule.WallPart> {
         if(lootTable == null) return null;
         return new WallsModule.WallPart(
             lootTable,
-            registry.deserializeFromFile(NumberProvider.class, o.get("spacing"))
+            registry.deserializeFromFile(NumberProvider.class, o.get("spacing")),
+            registry.deserializeFromFile(NumberProvider.class, o.get("side_offset"))
         );
     }
 }
