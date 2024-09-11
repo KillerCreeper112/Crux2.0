@@ -203,9 +203,9 @@ public class WallsModule implements StructureModule {
 
             CruxPosition spawn = CruxPosition.location(
                 at.clone().add(
-                    face.getModX() * spacing + (side.getModX() * addon) + (face.getModX() * offset),
-                    face.getModY() * spacing + (side.getModY() * addon) + (face.getModY() * offset),
-                    face.getModZ() * spacing + (side.getModZ() * addon) + (face.getModZ() * offset)
+                    face.getModX() * spacing + (side.getModX() * addon) + (side.getModX() * offset),
+                    face.getModY() * spacing + (side.getModY() * addon) + (side.getModY() * offset),
+                    face.getModZ() * spacing + (side.getModZ() * addon) + (side.getModZ() * offset)
                 )
             );
 
