@@ -5,6 +5,7 @@ import com.destroystokyo.paper.entity.ai.GoalKey;
 import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
 import killercreepr.crux.Crux;
 import killercreepr.cruxentities.entity.mob.goal.sound.CruxGoalSounds;
+import killercreepr.cruxentities.entity.mob.goal.sound.SoundedMob;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -20,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
 
-public class CruxMobGoal extends CruxGoalBase implements Goal<Mob>, ICruxMobGoal, Listener {
+public class CruxMobGoal extends CruxGoalBase implements Goal<Mob>, ICruxMobGoal, Listener, SoundedMob {
     protected Predicate<Entity> targetCheck;
     protected CruxGoalSounds sounds;
     public CruxMobGoal(@NotNull Mob mob) {
@@ -42,7 +43,8 @@ public class CruxMobGoal extends CruxGoalBase implements Goal<Mob>, ICruxMobGoal
     }
     public @NotNull CruxMobGoal sounds(@Nullable CruxGoalSounds sounds){ this.sounds = sounds; return this; }
 
-    public @Nullable CruxGoalSounds getSounds() {
+    @Override
+    public @Nullable CruxGoalSounds getGoalSounds() {
         return sounds;
     }
 
