@@ -8,9 +8,7 @@ import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import killercreepr.cruxstructures.commands.StructureCommands;
 import killercreepr.cruxstructures.config.*;
 import killercreepr.cruxstructures.config.generation.*;
-import killercreepr.cruxstructures.config.module.FileConeVeinModule;
-import killercreepr.cruxstructures.config.module.FileCorruptedVeinModule;
-import killercreepr.cruxstructures.config.module.FileWallsModule;
+import killercreepr.cruxstructures.config.module.*;
 import killercreepr.cruxstructures.manager.StructureManager;
 import killercreepr.cruxstructures.structure.generation.StructureGenerator;
 import killercreepr.cruxstructures.structure.generation.center.StructureCenter;
@@ -70,6 +68,9 @@ public class CruxStructuresModule implements CruxModule {
 
             registry.registerFileHandler(CfgFAWEStructure.class, fileCfgFAWEStructure);
             registry.registerFileHandler(WallsModule.WallRotationType.class, new FileGenericEnum<>(WallsModule.WallRotationType.class));
+
+            registry.registerFileHandler(WallsModule.Wall.class, new FileWall());
+            registry.registerFileHandler(WallsModule.WallPart.class, new FileWallPart());
         });
 
         fileStructureCenter.TYPE_HANDLERS.register("surface_top", new FileSurfaceTopCenter());
