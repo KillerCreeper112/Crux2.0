@@ -9,12 +9,12 @@ import killercreepr.crux.loot.LootTable;
 import killercreepr.crux.util.CruxBlockFace;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.cruxstructures.location.LocationFinder;
 import killercreepr.cruxstructures.registries.StructureRegistries;
 import killercreepr.cruxstructures.structure.Structure;
 import killercreepr.cruxstructures.structure.module.StructureModule;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Location;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
@@ -31,15 +31,15 @@ public class WallsModule implements StructureModule {
     protected final @NotNull NumberProvider defaultWallSpacing;
     protected final @NotNull Map<BlockFace, NumberProvider> wallSpacing;
     protected final @NotNull WallRotationType wallRotationType;
-    protected final @NotNull NumberProvider wallMaxYCheck;
+    protected final @NotNull LocationFinder locationFinder;
 
-    public WallsModule(@NotNull Map<BlockFace, Wall> walls, @NotNull Map<BlockFace, LootTable<Key>> corners, @NotNull NumberProvider defaultWallSpacing, @NotNull Map<BlockFace, NumberProvider> wallSpacing, @NotNull WallRotationType wallRotationType, @NotNull NumberProvider wallMaxYCheck) {
+    public WallsModule(@NotNull Map<BlockFace, Wall> walls, @NotNull Map<BlockFace, LootTable<Key>> corners, @NotNull NumberProvider defaultWallSpacing, @NotNull Map<BlockFace, NumberProvider> wallSpacing, @NotNull WallRotationType wallRotationType, @NotNull LocationFinder locationFinder) {
         this.walls = walls;
         this.corners = corners;
         this.defaultWallSpacing = defaultWallSpacing;
         this.wallSpacing = wallSpacing;
         this.wallRotationType = wallRotationType;
-        this.wallMaxYCheck = wallMaxYCheck;
+        this.locationFinder = locationFinder;
     }
 
     @Override
@@ -60,27 +60,6 @@ public class WallsModule implements StructureModule {
         walls.forEach((face, wall) ->{
             wall.place(this, at, ctx, face, wallRotation);
         });
-    }
-
-    public boolean isValidBlock(Block b){
-        if(!b.isSolid()) return false;
-        Block check = b.getRelative(BlockFace.UP);
-        return check.isEmpty() || check.isPassable() || check.isReplaceable();
-    }
-
-    public Block findValidBlock(Block start){
-        if(isValidBlock(start)) return start;
-        int max = wallMaxYCheck.value().intValue();
-        for(int y = 1; y <= max; y++){
-            Block check = start.getRelative(0, y, 0);
-            if(isValidBlock(check)) return check;
-        }
-
-        for(int y = -1; y >= -max; y--){
-            Block check = start.getRelative(0, y, 0);
-            if(isValidBlock(check)) return check;
-        }
-        return null;
     }
 
     public enum WallRotationType{
@@ -157,9 +136,9 @@ public class WallsModule implements StructureModule {
 
             spawn = spawn.rotateAroundY(CruxPosition.location(at), rotation);
 
-            Block validSpawn = module.findValidBlock(spawn.getBlock(at.getWorld()));
+            Location validSpawn = module.locationFinder.find(spawn.toLocation(at.getWorld()));
             if(validSpawn != null){
-                centerStructure.place(validSpawn.getLocation(), rotation);
+                centerStructure.place(validSpawn, rotation);
             }
 
             double centerStructureSpacing = getLength(centerStructure.boundingBox(), face);
@@ -211,9 +190,9 @@ public class WallsModule implements StructureModule {
 
             spawn = spawn.rotateAroundY(CruxPosition.location(at), rotation);
 
-            Block validSpawn = module.findValidBlock(spawn.getBlock(at.getWorld()));
+            Location validSpawn = module.locationFinder.find(spawn.toLocation(at.getWorld()));
             if(validSpawn != null){
-                wall.getFirst().place(validSpawn.getLocation(), rotation);
+                wall.getFirst().place(validSpawn, rotation);
             }
         }
 

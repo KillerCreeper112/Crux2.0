@@ -5,6 +5,7 @@ import killercreepr.crux.util.CruxMath;
 import killercreepr.crux.util.CruxedBoundingBox;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxstructures.event.StructurePlaceEvent;
+import killercreepr.cruxstructures.location.LocationFinder;
 import killercreepr.cruxstructures.structure.Structure;
 import org.bukkit.Location;
 import org.bukkit.util.BoundingBox;
@@ -22,16 +23,18 @@ public class StructureScatterer {
     protected final @NotNull NumberProvider scatterRangeY;
     protected final @NotNull NumberProvider scatterRangeZ;
     protected final @NotNull NumberProvider maxScatterAttempts;
+    protected final @NotNull LocationFinder locationFinder;
 
     protected final @NotNull Map<Location, BoundingBox> placed = new HashMap<>();
 
-    public StructureScatterer(@NotNull Location center, @NotNull Collection<Structure> structures, @NotNull NumberProvider scatterRangeX, @NotNull NumberProvider scatterRangeY, @NotNull NumberProvider scatterRangeZ, @NotNull NumberProvider maxScatterAttempts) {
+    public StructureScatterer(@NotNull Location center, @NotNull Collection<Structure> structures, @NotNull NumberProvider scatterRangeX, @NotNull NumberProvider scatterRangeY, @NotNull NumberProvider scatterRangeZ, @NotNull NumberProvider maxScatterAttempts, @NotNull LocationFinder locationFinder) {
         this.center = center;
         this.structures = structures;
         this.scatterRangeX = scatterRangeX;
         this.scatterRangeY = scatterRangeY;
         this.scatterRangeZ = scatterRangeZ;
         this.maxScatterAttempts = maxScatterAttempts;
+        this.locationFinder = locationFinder;
     }
 
     protected @Nullable InputContext inputContext;
@@ -90,7 +93,8 @@ public class StructureScatterer {
             attempts--;
             Location potentialSpawn = getRandomSpotUnchecked();
             if(impedesOnAlreadyPlacedStructures(forStructure, potentialSpawn)) continue;
-            return potentialSpawn;
+            potentialSpawn = locationFinder.find(potentialSpawn);
+            if(potentialSpawn != null) return potentialSpawn;
         }
         return null;
     }

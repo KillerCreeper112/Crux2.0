@@ -9,6 +9,7 @@ import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.PureYamlFileHandler;
 import killercreepr.cruxstructures.CruxStructuresModule;
+import killercreepr.cruxstructures.location.LocationFinder;
 import killercreepr.cruxstructures.structure.module.standard.StructureScatterModule;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
@@ -34,10 +35,14 @@ public class FileStructureScatterModule extends PureYamlFileHandler<StructureSca
         NumberProvider zRange = registry.deserializeFromFile(NumberProvider.class, o.get("range_z"));
         if(zRange == null) zRange = xRange;
 
+        LocationFinder locationFinder = registry.deserializeFromFile(LocationFinder.class, o.get("location_finder"));
+        if(locationFinder == null) locationFinder = new LocationFinder.Dummy();
+
         return new StructureScatterModule(
             structures,
             xRange, yRange, zRange,
             maxAttempts,
+            locationFinder,
             o.getObject(Boolean.class, "ignore_center", false)
         );
     }

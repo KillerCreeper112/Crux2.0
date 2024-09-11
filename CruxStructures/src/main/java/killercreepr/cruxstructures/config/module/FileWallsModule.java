@@ -10,6 +10,7 @@ import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.PureYamlFileHandler;
 import killercreepr.cruxstructures.CruxStructuresModule;
+import killercreepr.cruxstructures.location.LocationFinder;
 import killercreepr.cruxstructures.structure.module.standard.WallsModule;
 import net.kyori.adventure.key.Key;
 import org.bukkit.block.BlockFace;
@@ -55,13 +56,15 @@ public class FileWallsModule extends PureYamlFileHandler<WallsModule> {
         );
         if(rotationType==null) rotationType = WallsModule.WallRotationType.STRUCTURE;
 
+        LocationFinder finder = registry.deserializeFromFile(LocationFinder.class, o.get("location_finder"));
+        if(finder == null) finder = new LocationFinder.Dummy();
         return new WallsModule(
             walls,
             corners,
             registry.deserializeFromFile(NumberProvider.class, o.get("default_wall_spacing")),
             wallSpacing,
             rotationType,
-            registry.deserializeFromFile(NumberProvider.class, o.get("wall_max_y_check"))
+            finder
         );
     }
 }

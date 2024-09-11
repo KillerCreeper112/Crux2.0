@@ -10,7 +10,10 @@ import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import killercreepr.cruxstructures.commands.StructureCommands;
 import killercreepr.cruxstructures.config.*;
 import killercreepr.cruxstructures.config.generation.*;
+import killercreepr.cruxstructures.config.location.FileDummyLocationFinder;
+import killercreepr.cruxstructures.config.location.FileNearbySolidBlockFinder;
 import killercreepr.cruxstructures.config.module.*;
+import killercreepr.cruxstructures.location.LocationFinder;
 import killercreepr.cruxstructures.manager.StructureManager;
 import killercreepr.cruxstructures.structure.generation.StructureGenerator;
 import killercreepr.cruxstructures.structure.generation.center.StructureCenter;
@@ -36,6 +39,12 @@ public class CruxStructuresModule implements CruxModule {
     protected final FileStructureChunkRequirement fileStructureChunkRequirement = new FileStructureChunkRequirement();
     protected final FileStructureModule fileStructureModule = new FileStructureModule();
     public final FileCfgFAWEStructure fileCfgFAWEStructure = new FileCfgFAWEStructure();
+
+    protected final FileLocationFinder fileLocationFinder = new FileLocationFinder();
+
+    public FileLocationFinder getFileLocationFinder() {
+        return fileLocationFinder;
+    }
 
     public FileCfgFAWEStructure getFileCfgFAWEStructure() {
         return fileCfgFAWEStructure;
@@ -71,6 +80,7 @@ public class CruxStructuresModule implements CruxModule {
             registry.registerFileHandler(StructureModule.class, fileStructureModule);
 
             registry.registerFileHandler(CfgFAWEStructure.class, fileCfgFAWEStructure);
+            registry.registerFileHandler(LocationFinder.class, fileLocationFinder);
             registry.registerFileHandler(WallsModule.WallRotationType.class, new FileGenericEnum<>(WallsModule.WallRotationType.class));
 
             registry.registerFileHandler(WallsModule.Wall.class, new FileWall());
@@ -100,5 +110,8 @@ public class CruxStructuresModule implements CruxModule {
         CfgRegistries.JSON_REGISTRY.forEach(registry ->{
             registry.registerFileHandler(SimpleStoredStructure.class, new FileSimpleStoredStructure<SimpleStoredStructure>());
         });
+
+        fileLocationFinder.TYPE_HANDLERS.register("nearby_solid_block", new FileNearbySolidBlockFinder());
+        fileLocationFinder.TYPE_HANDLERS.register("dummy", new FileDummyLocationFinder());
     }
 }

@@ -9,6 +9,7 @@ import killercreepr.crux.tags.container.TagContainer;
 import killercreepr.crux.tags.provider.StringTagProvider;
 import killercreepr.crux.tags.resolver.Tag;
 import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.cruxstructures.location.LocationFinder;
 import killercreepr.cruxstructures.registries.StructureRegistries;
 import killercreepr.cruxstructures.structure.Structure;
 import killercreepr.cruxstructures.structure.module.StructureModule;
@@ -27,14 +28,16 @@ public class StructureScatterModule implements StructureModule {
     protected final @NotNull NumberProvider scatterRangeY;
     protected final @NotNull NumberProvider scatterRangeZ;
     protected final @NotNull NumberProvider maxScatterAttempts;
+    protected final @NotNull LocationFinder locationFinder;
     protected final boolean ignoreCenterStructure;
 
-    public StructureScatterModule(@NotNull LootTable<Key> structuresToScatter, @NotNull NumberProvider scatterRangeX, @NotNull NumberProvider scatterRangeY, @NotNull NumberProvider scatterRangeZ, @NotNull NumberProvider maxScatterAttempts, boolean ignoreCenterStructure) {
+    public StructureScatterModule(@NotNull LootTable<Key> structuresToScatter, @NotNull NumberProvider scatterRangeX, @NotNull NumberProvider scatterRangeY, @NotNull NumberProvider scatterRangeZ, @NotNull NumberProvider maxScatterAttempts, @NotNull LocationFinder locationFinder, boolean ignoreCenterStructure) {
         this.structuresToScatter = structuresToScatter;
         this.scatterRangeX = scatterRangeX;
         this.scatterRangeY = scatterRangeY;
         this.scatterRangeZ = scatterRangeZ;
         this.maxScatterAttempts = maxScatterAttempts;
+        this.locationFinder = locationFinder;
         this.ignoreCenterStructure = ignoreCenterStructure;
     }
 
@@ -59,7 +62,8 @@ public class StructureScatterModule implements StructureModule {
             }
             structuresToScatter.add(scatterStructure);
         }
-        StructureScatterer scatterer = new StructureScatterer(at, structuresToScatter, scatterRangeX, scatterRangeY, scatterRangeZ, maxScatterAttempts);
+        StructureScatterer scatterer = new StructureScatterer(at, structuresToScatter, scatterRangeX, scatterRangeY, scatterRangeZ, maxScatterAttempts,
+            locationFinder);
         if(!ignoreCenterStructure){
             scatterer.addPlacedStructure(structure, at, rotation);
         }
