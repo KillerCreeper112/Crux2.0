@@ -7,8 +7,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.function.Predicate;
 
-public interface ItemPredicate {
+public interface ItemPredicate extends Predicate<ItemStack> {
     static ItemPredicate fromType(@NotNull Key type){
         return new ItemTypePredicate(type);
     }

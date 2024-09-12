@@ -59,7 +59,7 @@ public class BukkitCfgHandlers {
     public static final FileMaterial MATERIAL = new FileMaterial();
     public static final FileEntityType ENTITY_TYPE = new FileEntityType();
     public static final FileComponent COMPONENT = new FileComponent();
-    public static final FileItemStack ITEM_STACK = new FileItemStack();
+    //todo not used public static final FileItemStack ITEM_STACK = new FileItemStack();
     public static final FileDynamicItem DYNAMIC_ITEM = new FileDynamicItem();
     public static final FileUUID UUID = new FileUUID();
     public static final FileColor COLOR = new FileColor();

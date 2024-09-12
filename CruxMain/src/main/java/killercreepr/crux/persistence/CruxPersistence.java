@@ -9,6 +9,7 @@ public class CruxPersistence {
     public static final LocationTagType LOCATION = new LocationTagType();
     public static final VectorTagType VECTOR = new VectorTagType();
     public static final BlockPosTagType BLOCK_POS = new BlockPosTagType();
+    public static final ToolComponentTagType TOOL_COMPONENT = new ToolComponentTagType();
 
     public static final CruxListPersistence LIST = new CruxListPersistence();
 }

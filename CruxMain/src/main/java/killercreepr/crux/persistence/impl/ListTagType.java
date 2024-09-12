@@ -1,50 +1,48 @@
 package killercreepr.crux.persistence.impl;
 
-import killercreepr.crux.util.CruxTag;
-import org.bukkit.NamespacedKey;
+import com.google.common.collect.Lists;
+import org.bukkit.persistence.ListPersistentDataType;
 import org.bukkit.persistence.PersistentDataAdapterContext;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class ListTagType<T> implements PersistentDataType<PersistentDataContainer, List<T>> {
-    protected final @NotNull PersistentDataType<?, T> tagType;
-    public ListTagType(@NotNull PersistentDataType<?, T> tagType) {
+public class ListTagType<P, C> implements ListPersistentDataType<P, C> {
+    protected final @NotNull PersistentDataType<P, C> tagType;
+    public ListTagType(@NotNull PersistentDataType<P, C> tagType) {
         this.tagType = tagType;
     }
 
+    @NotNull
     @Override
-    public @NotNull Class<PersistentDataContainer> getPrimitiveType() {
-        return PersistentDataContainer.class;
+    @SuppressWarnings("unchecked")
+    public Class<List<P>> getPrimitiveType() {
+        return (Class<List<P>>) (Object) List.class;
     }
 
+    @NotNull
     @Override
-    public @NotNull Class<List<T>> getComplexType() {
-        return (Class<List<T>>) (Class<?>) List.class;
+    @SuppressWarnings("unchecked")
+    public Class<List<C>> getComplexType() {
+        return (Class<List<C>>) (Object) List.class;
     }
 
+    @NotNull
     @Override
-    public @NotNull PersistentDataContainer toPrimitive(@NotNull List<T> complex, @NotNull PersistentDataAdapterContext context) {
-        PersistentDataContainer c = context.newPersistentDataContainer();
-        int index = -1;
-        for(T t : complex){
-            CruxTag.set(c, index+"", tagType, t);
-        }
-        return c;
+    public List<P> toPrimitive(@NotNull final List<C> complex, @NotNull final PersistentDataAdapterContext context) {
+        return Lists.transform(complex, s -> tagType.toPrimitive(s, context));
     }
 
+    @NotNull
     @Override
-    public @NotNull List<T> fromPrimitive(@NotNull PersistentDataContainer primitive, @NotNull PersistentDataAdapterContext context) {
-        List<T> list = new ArrayList<>();
-        for(NamespacedKey key : primitive.getKeys()){
-            T object = CruxTag.get(primitive, key, tagType, null);
-            if(object==null) continue;
-            list.add(object);
-        }
-        return list;
+    public List<C> fromPrimitive(@NotNull final List<P> primitive, @NotNull final PersistentDataAdapterContext context) {
+        return Lists.transform(primitive, s -> tagType.fromPrimitive(s, context));
     }
 
+    @NotNull
+    @Override
+    public PersistentDataType<P, C> elementType() {
+        return this.tagType;
+    }
 }
