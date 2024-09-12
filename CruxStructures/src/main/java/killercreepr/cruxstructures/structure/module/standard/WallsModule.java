@@ -135,9 +135,9 @@ public class WallsModule implements StructureModule {
 
         public static double getRotationAddon(BlockFace direction){
             return switch (direction){
-                case WEST -> 90;
-                case NORTH -> -90;
-                case EAST -> 180;
+                case WEST -> -90;
+                case SOUTH -> 90;
+                case EAST -> -180;
                 default -> 0D;
             };
         }

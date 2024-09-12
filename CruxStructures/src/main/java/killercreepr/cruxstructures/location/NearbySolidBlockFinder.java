@@ -21,9 +21,9 @@ public class NearbySolidBlockFinder implements LocationFinder{
     }
 
     public boolean isValidBlock(@NotNull Block b){
-        if(!b.isSolid()) return false;
-        Block check = b.getRelative(BlockFace.UP);
-        return check.isEmpty() || check.isPassable() || check.isReplaceable();
+        if(!b.isEmpty() && !b.isPassable() && !b.isReplaceable()) return false;
+        Block check = b.getRelative(BlockFace.DOWN);
+        return check.isSolid();
     }
 
     public @Nullable Block findValidBlock(@NotNull Block start){
