@@ -1,6 +1,8 @@
 package killercreepr.crux.item.dynamic;
 
+import killercreepr.crux.Crux;
 import killercreepr.crux.context.TextParserContext;
+import killercreepr.crux.item.ItemHolder;
 import killercreepr.crux.util.CruxItem;
 import net.kyori.adventure.key.InvalidKeyException;
 import net.kyori.adventure.key.Key;
@@ -68,6 +70,14 @@ public class BukkitDynamicItem implements DynamicItem{
 
     public @Nullable ItemStack buildBase(@NotNull TextParserContext context){
         String parsed = context.deserializeString(material());
+
+        try{
+            ItemHolder itemHolder = Crux.handlers().item().getItem(Crux.key(parsed));
+            if(itemHolder != null){
+                return itemHolder.value();
+            }
+        }catch (Exception ignored){}
+
         Material material = matchMaterial(parsed);
         ItemStack built;
         if(material == null){

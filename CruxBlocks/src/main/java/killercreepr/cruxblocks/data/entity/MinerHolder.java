@@ -1,8 +1,10 @@
 package killercreepr.cruxblocks.data.entity;
 
 import killercreepr.crux.Crux;
+import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.entity.PlayerMemory;
 import killercreepr.crux.data.entity.PlayerTickedDataHolder;
+import killercreepr.crux.loot.LootContext;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.manager.CruxBlockManager;
@@ -12,6 +14,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -69,8 +72,27 @@ public class MinerHolder extends PlayerTickedDataHolder {
         onMine(p, active);
     }
 
+    public LootContext buildContext(@NotNull Player p, @NotNull ActiveCruxBlock block){
+        DataExchange.Builder builder = DataExchange.builder();
+        Miner miner = Miner.entity(p.getInventory().getItemInMainHand(), p);
+        builder.putAll(miner, "miner");
+        switch (miner) {
+            case Player player -> builder.putAll(miner, "entity", "player");
+            case Entity entity -> builder.putAll(miner, "entity");
+            case ItemStack itemStack -> builder.putAll(miner, "item");
+            default -> {}
+        }
+        return LootContext.builder()
+            .looter(p)
+            .location(block.getBlock().getLocation())
+            .looted(block)
+            .info(builder.build())
+            .build();
+    }
+
     public void onMine(@NotNull Player p, @NotNull ActiveCruxBlock block){
         lastMine = System.currentTimeMillis();
+        LootContext ctx = buildContext(p, block);
         float mineSpeed = block.getMineSpeed(Miner.entity(p.getInventory().getItemInMainHand(), p), true);
         if(lastBreakSpeed == null){
             lastBreakSpeed = p.getAttribute(Attribute.PLAYER_BLOCK_BREAK_SPEED).getBaseValue();

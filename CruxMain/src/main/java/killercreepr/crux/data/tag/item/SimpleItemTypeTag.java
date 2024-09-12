@@ -1,5 +1,6 @@
-package killercreepr.crux;
+package killercreepr.crux.data.tag.item;
 
+import killercreepr.crux.Crux;
 import killercreepr.crux.item.ItemHolder;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Material;
@@ -30,7 +31,6 @@ public class SimpleItemTypeTag extends BaseItemTag implements ItemTypeTag {
         return values.contains(Crux.handlers().item().getType(item));
     }
 
-    @Override
     public @NotNull Collection<ItemStack> getValues() {
         Collection<ItemStack> list = new HashSet<>();
         values.forEach(m ->{

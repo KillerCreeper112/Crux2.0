@@ -2,7 +2,7 @@ package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
 import com.google.common.reflect.TypeToken;
 import killercreepr.crux.Crux;
-import killercreepr.crux.ItemTag;
+import killercreepr.crux.data.tag.item.ItemTag;
 import killercreepr.crux.item.predicate.ItemAllPredicate;
 import killercreepr.crux.item.predicate.ItemAnyPredicate;
 import killercreepr.crux.item.predicate.ItemPredicate;

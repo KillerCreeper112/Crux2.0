@@ -1,11 +1,11 @@
-package killercreepr.crux;
+package killercreepr.crux.data.tag.item;
 
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class BaseTag<T> implements Tag<T>{
+public abstract class BaseItemTag implements ItemTag {
     protected final @NotNull Key key;
-    public BaseTag(@NotNull Key key) {
+    public BaseItemTag(@NotNull Key key) {
         this.key = key;
     }
 

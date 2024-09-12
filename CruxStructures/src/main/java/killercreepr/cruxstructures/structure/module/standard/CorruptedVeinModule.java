@@ -50,7 +50,7 @@ public class CorruptedVeinModule implements StructureModule {
 
     public CruxBlockWrapper getVeinBlock(){
         return Objects.requireNonNull(
-            Crux.handlers().block().getBlock(veinBlock)
+            Crux.handlers().block().getBlockWrapper(veinBlock)
         );
     }
 

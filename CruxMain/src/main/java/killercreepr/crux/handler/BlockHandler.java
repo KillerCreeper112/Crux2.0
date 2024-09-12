@@ -1,6 +1,8 @@
 package killercreepr.crux.handler;
 
+import killercreepr.crux.block.BukkitCruxedBlock;
 import killercreepr.crux.block.CruxBlockWrapper;
+import killercreepr.crux.block.CruxedBlock;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Material;
 import org.bukkit.Registry;
@@ -14,9 +16,13 @@ public interface BlockHandler {
     }
 
     @NotNull Block setType(@NotNull Block b, @NotNull Material m, boolean applyPhysics, boolean removeTags);
+    @NotNull Key getType(@NotNull Block block);
 
     @Nullable
-    CruxBlockWrapper getBlock(@NotNull Key key);
+    CruxBlockWrapper getBlockWrapper(@NotNull Key key);
+
+    @Nullable
+    CruxedBlock getBlock(@NotNull Block block);
 
     class Dummy implements BlockHandler {
 
@@ -27,10 +33,20 @@ public interface BlockHandler {
         }
 
         @Override
-        public @Nullable CruxBlockWrapper getBlock(@NotNull Key key) {
+        public @NotNull Key getType(@NotNull Block block) {
+            return block.getType().key();
+        }
+
+        @Override
+        public @Nullable CruxBlockWrapper getBlockWrapper(@NotNull Key key) {
             Material material = Registry.MATERIAL.get(key);
             if(material==null) return null;
             return new CruxBlockWrapper.Vanilla(material);
+        }
+
+        @Override
+        public @Nullable CruxedBlock getBlock(@NotNull Block block) {
+            return new BukkitCruxedBlock(block);
         }
     }
 }

@@ -46,9 +46,12 @@ public class ActiveCruxBlockImpl implements ActiveCruxBlock{
             Object handle = miner.getHandle();
             if(handle != null){
                 builder.putAll(handle, "miner");
-                if(handle instanceof Player) builder.putAll(handle, "entity", "player");
-                else if(handle instanceof Entity) builder.putAll(handle, "entity");
-                else if(handle instanceof ItemStack) builder.putAll(handle, "item");
+                switch (handle) {
+                    case Player player -> builder.putAll(handle, "entity", "player");
+                    case Entity entity -> builder.putAll(handle, "entity");
+                    case ItemStack itemStack -> builder.putAll(handle, "item");
+                    default -> {}
+                }
             }
         }
         return LootContext.builder()

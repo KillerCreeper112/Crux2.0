@@ -1,7 +1,7 @@
 package killercreepr.cruxconfig.config.bukkit.loader;
 
 import killercreepr.crux.Crux;
-import killercreepr.crux.ItemTag;
+import killercreepr.crux.data.tag.item.ItemTag;
 import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
 import killercreepr.cruxconfig.config.common.FileContext;

@@ -1,12 +1,14 @@
 package killercreepr.crux.registries;
 
-import killercreepr.crux.ItemTag;
+import killercreepr.crux.data.tag.block.BlockTag;
+import killercreepr.crux.data.tag.item.ItemTag;
 import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.crux.data.tick.CruxTick;
 import killercreepr.crux.loot.LootTable;
 import killercreepr.crux.persistence.CruxPersistence;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registry.*;
+import killercreepr.crux.valueproviders.number.NumberProvider;
 import net.kyori.adventure.key.Key;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -33,7 +35,10 @@ public class CruxRegistries {
 
     public static final KeyedRegistry<LootTable<ItemStack>> ITEM_LOOT_TABLE = new SimpleKeyedRegistry<>();
     public static final KeyedRegistry<LootTable<Key>> KEY_LOOT_TABLE = new SimpleKeyedRegistry<>();
+    public static final KeyedRegistry<LootTable<NumberProvider>> NUMBER_LOOT_TABLE = new SimpleKeyedRegistry<>();
+
     public static final KeyedRegistry<ItemTag> ITEM_TAG = new SimpleKeyedRegistry<>();
+    public static final KeyedRegistry<BlockTag> BLOCK_TAG = new SimpleKeyedRegistry<>();
     public static final MappedRegistry<Key, CreateBlockSoundGroup> BLOCK_SOUND_GROUP = new SimpleMappedRegistry<>();
 
     public static final Registry<PersistentDataType<?, ?>> PERSISTENT_DATA_TYPE = SimpleRegistry.fromSet(

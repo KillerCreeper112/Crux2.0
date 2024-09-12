@@ -40,7 +40,7 @@ public class FileMenuItem extends FileMenuModuled<MenuItemHolder> {
             }
         }
 
-        DataExchange.Builder extraInfo = new DataExchange.Builder();
+        DataExchange.Builder extraInfo = DataExchange.builder();
         if(base != null) extraInfo.putAll(base.info());
         extraInfo.putAll(registry.deserializeFromFile(DataExchange.class, o));
         extraInfo.putAll(registry.deserializeFromFile(DataExchange.class, o.get("data")));

@@ -1,6 +1,6 @@
 package killercreepr.crux.item.predicate;
 
-import killercreepr.crux.Tag;
+import killercreepr.crux.data.tag.Tag;
 import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;

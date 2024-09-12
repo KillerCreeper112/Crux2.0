@@ -1,5 +1,6 @@
-package killercreepr.crux;
+package killercreepr.crux.data.tag.item;
 
+import killercreepr.crux.data.tag.Tag;
 import net.kyori.adventure.key.Key;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;

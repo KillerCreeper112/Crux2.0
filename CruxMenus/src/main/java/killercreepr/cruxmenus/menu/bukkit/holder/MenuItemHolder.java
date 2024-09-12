@@ -57,7 +57,7 @@ public class MenuItemHolder {
         }
 
         public @NotNull MenuContext evaluateInfo(){
-            DataExchange.Builder parsedInfo = new DataExchange.Builder();
+            DataExchange.Builder parsedInfo = DataExchange.builder();
             MergedTagContainer resolvers = new SimpleMergedTagContainer(this.context.getResolvers().getTagParser());
             context.getMenu().getHolder().getRegistry().ITEM_DATA_PARSERS.forEachSorted(parser ->{
                 parsedInfo.putAll(parser.parse(p, context, item));

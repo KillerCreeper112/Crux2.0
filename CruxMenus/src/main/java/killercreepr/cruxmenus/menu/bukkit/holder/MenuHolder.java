@@ -58,7 +58,7 @@ public class MenuHolder implements Keyed, DataInfoHolder {
     }
 
     public @NotNull MenuOpenEvent open(@NotNull Player p, @NotNull DataExchange data){
-        DataExchange.Builder builder = new DataExchange.Builder().putAll(data);
+        DataExchange.Builder builder = DataExchange.builder().putAll(data);
         builder.put("viewer", p);
 
         CfgMenu menu = createMenu(builder.build());

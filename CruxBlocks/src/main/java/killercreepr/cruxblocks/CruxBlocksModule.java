@@ -1,7 +1,9 @@
 package killercreepr.cruxblocks;
 
 import killercreepr.crux.Crux;
+import killercreepr.crux.block.BukkitCruxedBlock;
 import killercreepr.crux.block.CruxBlockWrapper;
+import killercreepr.crux.block.CruxedBlock;
 import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.crux.data.entity.PlayerMemory;
 import killercreepr.crux.data.tick.ManagedTicked;
@@ -13,6 +15,7 @@ import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.crux.util.CruxEntity;
 import killercreepr.crux.util.CruxLoc;
 import killercreepr.cruxblocks.block.CruxBlock;
+import killercreepr.cruxblocks.block.CruxCruxedBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.block.data.CustomBlockData;
 import killercreepr.cruxblocks.block.data.events.CustomBlockDataRemoveEvent;
@@ -206,7 +209,14 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
     }
 
     @Override
-    public @Nullable CruxBlockWrapper getBlock(@NotNull Key key) {
+    public @NotNull Key getType(@NotNull Block block) {
+        CruxBlock cruxBlock = getBlockRegistry().getByBlock(block);
+        if(cruxBlock == null) return block.getType().key();
+        return cruxBlock.key();
+    }
+
+    @Override
+    public @Nullable CruxBlockWrapper getBlockWrapper(@NotNull Key key) {
         CruxBlockGroup group = blockRegistry.getGroup(key);
         if(group != null){
             return new CruxGroupBlockWrapper(group);
@@ -218,6 +228,13 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
         Material material = Registry.MATERIAL.get(key);
         if(material==null) return null;
         return new CruxBlockWrapper.Vanilla(material);
+    }
+
+    @Override
+    public @Nullable CruxedBlock getBlock(@NotNull Block block) {
+        ActiveCruxBlock active = getActiveBlock(block);
+        if(active == null) return new BukkitCruxedBlock(block);
+        return new CruxCruxedBlock(active);
     }
 
     public static boolean callRemoveBlockDataEvent(@NotNull Block block, @Nullable Event bukkitEvent) {

@@ -1,211 +1,121 @@
 package killercreepr.crux.data;
 
-import com.google.common.collect.Maps;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Optional;
 
-//todo make this interface
-public class DataExchange implements Iterable<Holder<?>> {
-    public static @NotNull DataExchange.Builder builder(){
-        return new DataExchange.Builder();
+public interface DataExchange extends Iterable<Holder<?>> {
+    DataExchange EMPTY = new SimpleDataExchange(Map.of());
+
+    static @NotNull Builder builder() {
+        return new SimpleDataExchange.Builder();
     }
 
-    public static @NotNull DataExchange empty(){ return new DataExchange(Maps.newHashMap()); }
-
-    protected final @NotNull Map<String, Holder<?>> data;
-    public DataExchange(@NotNull Map<String, Holder<?>> data){
-        this.data = Collections.unmodifiableMap(data);
+    static @NotNull DataExchange empty() {
+        return EMPTY;
     }
 
-    public DataExchange(@NotNull String id, @NotNull Holder<?> holder){
-        this(Map.of(id, holder));
+    static @NotNull DataExchange single(@NotNull String id, @NotNull Holder<?> holder) {
+        return new SimpleDataExchange(id, holder);
     }
 
-    public boolean isEmpty(){
-        return data.isEmpty();
-    }
+    boolean isEmpty();
 
     /**
      * @return A new DataExchange with the appended info.
      */
     @Contract(pure = true)
-    public @NotNull DataExchange append(@NotNull DataExchange info){
-        return append(info.asMap());
-    }
+    @NotNull
+    DataExchange append(@NotNull DataExchange info);
 
     /**
      * @return A new DataExchange with the appended info.
      */
     @Contract(pure = true)
-    public @NotNull DataExchange append(@NotNull Map<String, Holder<?>> info){
-        Map<String, Holder<?>> data = new HashMap<>(this.data);
-        data.putAll(info);
-        return new DataExchange(data);
-    }
+    @NotNull
+    DataExchange append(@NotNull Map<String, Holder<?>> info);
 
     /**
      * @return A new DataExchange with the appended object.
      */
     @Contract(pure = true)
-    public @NotNull DataExchange append(@NotNull String id, @NotNull Holder<?> object){
-        Map<String, Holder<?>> data = new HashMap<>(this.data);
-        data.put(id, object);
-        return new DataExchange(data);
-    }
+    @NotNull
+    DataExchange append(@NotNull String id, @NotNull Holder<?> object);
+
     /**
      * @return A new DataExchange with the removed values.
      */
     @Contract(pure = true)
-    public @NotNull DataExchange removeIf(@NotNull Predicate predicate){
-        Map<String, Holder<?>> data = new HashMap<>(this.data);
-        data.entrySet().removeIf((entry) -> predicate.test(entry.getKey(), entry.getValue()));
-        return new DataExchange(data);
-    }
+    @NotNull
+    DataExchange removeIf(@NotNull Predicate predicate);
 
-    public boolean has(@NotNull String id){ return data.containsKey(id); }
+    boolean has(@NotNull String id);
 
-    public <T> @NotNull Optional<T> getObject(@NotNull Class<T> findFirst){
-        return Optional.ofNullable(get(findFirst));
-    }
+    <T> @NotNull Optional<T> getObject(@NotNull Class<T> findFirst);
 
-    public <T> @Nullable T get(@NotNull Class<T> findFirst){
-        T attempt = get(findFirst.getSimpleName().toLowerCase(), findFirst);
-        if(attempt != null) return attempt;
+    <T> @Nullable T get(@NotNull Class<T> findFirst);
 
-        for(Holder<?> o : data.values()){
-            if(o == null) continue;
-            Object value = o.value();
-            if(value==null) continue;
-            if(findFirst.isAssignableFrom(value.getClass())) return findFirst.cast(value);
-        }
-        return null;
-    }
+    <T> @NotNull Map<String, T> getObjects(@NotNull Class<T> findAll);
 
-    public <T> @NotNull Map<String, T> getObjects(@NotNull Class<T> findAll){
-        Map<String, T> map = new HashMap<>();
-        data.forEach((id, o) ->{
-            if(o == null) return;
-            Object value = o.value();
-            if(value==null) return;
-            if(findAll.isAssignableFrom(value.getClass())) map.put(id, findAll.cast(value));
-        });
-        return map;
-    }
+    @NotNull
+    Optional<Object> getObject(@NotNull String id);
 
-    public @NotNull Optional<Object> getObject(@NotNull String id){
-        return Optional.ofNullable(get(id));
-    }
+    <T> @NotNull Optional<T> getObject(@NotNull String id, @NotNull Class<T> find);
 
-    public <T> @NotNull Optional<T> getObject(@NotNull String id, @NotNull Class<T> find){
-        return Optional.ofNullable(get(id, find));
-    }
+    @Nullable
+    Object get(@NotNull String id);
 
-    public @Nullable Object get(@NotNull String id){
-        Holder<?> holder = data.getOrDefault(id, null);
-        return holder==null?null:holder.value();
-    }
-
-    public <T> @Nullable T get(@NotNull String id, @NotNull Class<T> find){
-        Object found = get(id);
-        if(found == null || !(find.isAssignableFrom(found.getClass()))) return null;
-        return find.cast(found);
-    }
+    <T> @Nullable T get(@NotNull String id, @NotNull Class<T> find);
 
     //Convenience methods.
-    public <T> @NotNull T getOrThrow(@NotNull Class<T> find){
-        T object = get(find);
-        if(object==null) throw new IllegalArgumentException("Class, " + find.getSimpleName() + " is not present!");
-        return object;
-    }
+    <T> @NotNull T getOrThrow(@NotNull Class<T> find);
 
-    public @NotNull Object getOrThrow(@NotNull String id){
-        Object object = get(id);
-        if(object==null) throw new IllegalArgumentException(id + " is not present!");
-        return object;
-    }
+    @NotNull
+    Object getOrThrow(@NotNull String id);
 
-    public <T> @NotNull T getOrThrow(@NotNull String id, @NotNull Class<T> find){
-        T object = get(id, find);
-        if(object==null) throw new IllegalArgumentException(id + " is not present!");
-        return object;
-    }
+    <T> @NotNull T getOrThrow(@NotNull String id, @NotNull Class<T> find);
 
-    public <T> T getOrDefault(@NotNull Class<T> find, @Nullable T defaultValue){
-        T found = get(find);
-        return found==null?defaultValue:found;
-    }
+    <T> T getOrDefault(@NotNull Class<T> find, @Nullable T defaultValue);
 
-    public Object getOrDefault(@NotNull String id, @Nullable Object defaultValue){
-        Object found = get(id);
-        return found==null?defaultValue:found;
-    }
+    Object getOrDefault(@NotNull String id, @Nullable Object defaultValue);
 
-    public <T> T getOrDefault(@NotNull String id, @NotNull Class<T> type, @Nullable T defaultValue){
-        T found = get(id, type);
-        return found==null?defaultValue:found;
-    }
+    <T> T getOrDefault(@NotNull String id, @NotNull Class<T> type, @Nullable T defaultValue);
 
     /**
      * @return An immutable map containing this DataExchange's data.
      */
-    public @NotNull Map<String, Holder<?>> asMap() {
-        return data;
-    }
+    @NotNull
+    Map<String, Holder<?>> asMap();
 
     @NotNull
     @Override
-    public Iterator<Holder<?>> iterator() {
-        return data.values().iterator();
-    }
+    Iterator<Holder<?>> iterator();
 
-    public interface Predicate{
+    interface Predicate {
         boolean test(@NotNull String id, @NotNull Holder<?> holder);
     }
 
-    public static class Builder{
-        protected final Map<String, Holder<?>> data = new HashMap<>();
+    interface Builder {
+        Builder putAll(@Nullable Object direct, @NotNull String... ids);
 
-        public Builder putAll(@Nullable Object direct, @NotNull String... ids){
-            return putAll(Holder.direct(direct), ids);
-        }
-        public Builder put(@NotNull String id, @Nullable Object direct){
-            return put(id, Holder.direct(direct));
-        }
-        public Builder put(@NotNull Object direct){
-            return put(direct.getClass().getSimpleName().toLowerCase(), Holder.direct(direct));
-        }
+        Builder put(@NotNull String id, @Nullable Object direct);
 
-        public Builder putAll(@NotNull Holder<?> holder, @NotNull String... ids){
-            for(String i : ids){
-                put(i, holder);
-            }
-            return this;
-        }
+        Builder put(@NotNull Object direct);
 
-        public Builder put(@NotNull String id, @NotNull Holder<?> holder){
-            data.put(id, holder);
-            return this;
-        }
+        Builder putAll(@NotNull Holder<?> holder, @NotNull String... ids);
 
-        public Builder putAll(@Nullable DataExchange info){
-            return info == null ? this : putAll(info.asMap());
-        }
+        Builder put(@NotNull String id, @NotNull Holder<?> holder);
 
-        public Builder putAll(@NotNull Map<String, Holder<?>> map){
-            data.putAll(map);
-            return this;
-        }
+        Builder putAll(@Nullable DataExchange info);
 
-        public Builder remove(@NotNull String id){
-            data.remove(id);
-            return this;
-        }
+        Builder putAll(@NotNull Map<String, Holder<?>> map);
 
-        public @NotNull DataExchange build(){
-            return new DataExchange(data);
-        }
+        Builder remove(@NotNull String id);
+
+        @NotNull DataExchange build();
     }
 }

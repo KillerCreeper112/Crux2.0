@@ -137,6 +137,7 @@ public interface ActiveCruxBlock {
     default Collection<ItemStack> getDrops(){ return getDrops(null); }
 
     default float getMineSpeed(@Nullable Miner miner, boolean includeEnchants){
+
         Tooled tooled;
         if(miner instanceof Tooled m) tooled = m;
         else tooled = null;

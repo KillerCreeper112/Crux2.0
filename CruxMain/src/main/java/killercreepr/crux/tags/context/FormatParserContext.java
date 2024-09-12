@@ -13,17 +13,19 @@ import java.util.Collection;
 import java.util.List;
 
 public class FormatParserContext implements TextParserContext {
+    @Deprecated(since = "Use TextParserContext")
     public static @NotNull Builder builder(){
         return builder(Crux.FORMAT);
     }
-
+    @Deprecated(since = "Use TextParserContext")
     public static @NotNull Builder builder(@NotNull FormatSerializer format){
         return new Builder(format);
     }
+    @Deprecated(since = "Use TextParserContext")
     public static @NotNull FormatParserContext empty(@NotNull FormatSerializer format){
         return new FormatParserContext(format, null, null, null);
     }
-
+    @Deprecated(since = "Use TextParserContext")
     public static @NotNull FormatParserContext empty(){
         return empty(Crux.FORMAT);
     }
@@ -87,7 +89,7 @@ public class FormatParserContext implements TextParserContext {
         return tagsPrefix;
     }
 
-    public static final class Builder {
+    public static final class Builder implements TextParserContext.Builder {
         private @NotNull FormatSerializer format;
         private @Nullable OfflinePlayer viewer;
         private @Nullable FormatPrefix tagsPrefix;

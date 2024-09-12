@@ -29,7 +29,7 @@ public class FileDataExchange extends FileMenuModuled<DataExchange> {
     @Override
     public @Nullable DataExchange deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e, @Nullable FileObject menuContext) {
         if(!(e instanceof FileObject o)) return null;
-        DataExchange.Builder builder = new DataExchange.Builder();
+        DataExchange.Builder builder = DataExchange.builder();
         o.forEach((s, element) ->{
             s = s.toLowerCase();
             switch (s){
