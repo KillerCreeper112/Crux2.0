@@ -13,6 +13,10 @@ public class CruxGroupBlockWrapper implements CruxBlockWrapper {
         this.group = group;
     }
 
+    public @NotNull CruxBlockGroup getGroup() {
+        return group;
+    }
+
     @Override
     public void setBlock(@NotNull World world, @NotNull CruxPosition position, boolean applyPhysics) {
         group.getBaseBlock().setBlock(BlockContext.context(position.getBlock(world), null), applyPhysics);

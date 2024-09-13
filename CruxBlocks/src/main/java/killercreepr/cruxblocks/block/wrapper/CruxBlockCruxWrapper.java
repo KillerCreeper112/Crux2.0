@@ -13,6 +13,10 @@ public class CruxBlockCruxWrapper implements CruxBlockWrapper {
         this.block = block;
     }
 
+    public @NotNull CruxBlock getBlock() {
+        return block;
+    }
+
     @Override
     public void setBlock(@NotNull World world, @NotNull CruxPosition position, boolean applyPhysics) {
         block.setBlock(BlockContext.context(position.getBlock(world), null), applyPhysics);

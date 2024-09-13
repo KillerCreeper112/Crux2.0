@@ -1,5 +1,9 @@
 package killercreepr.cruxstructures.structure.module.standard;
 
+import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.world.block.BlockStateHolder;
 import killercreepr.crux.block.CruxBlockWrapper;
 import killercreepr.crux.data.world.CruxPosition;
 import killercreepr.cruxstructures.structure.Structure;
@@ -44,11 +48,31 @@ public class ElongateFloorModule implements StructureModule {
 
     public void setBlocks(Block b, CruxBlockWrapper toSet){
         int minY = b.getWorld().getMinHeight();
-        while(b.isEmpty() || b.isReplaceable()){
-            toSet.setBlock(b, false);
-            b = b.getRelative(BlockFace.DOWN);
 
-            if(b.getY() < minY) break;
+        //todo better implementation
+        BlockStateHolder<?> state;
+        if(toSet instanceof CruxBlockWrapper.Vanilla d){
+            state = BukkitAdapter.adapt(d.getMaterial().createBlockData());
+        }else if(toSet instanceof CruxBlockWrapper.VanillaData d){
+            state = BukkitAdapter.adapt(d.getData());
+        }else {
+            while(b.isEmpty() || b.isReplaceable()){
+                toSet.setBlock(b, false);
+                b = b.getRelative(BlockFace.DOWN);
+
+                if(b.getY() < minY) break;
+            }
+            return;
+        }
+
+        try(EditSession session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(b.getWorld()))){
+            while(b.isEmpty() || b.isReplaceable()){
+                session.setBlock(b.getX(), b.getY(), b.getZ(), state);
+                //toSet.setBlock(b, false);
+                b = b.getRelative(BlockFace.DOWN);
+
+                if(b.getY() < minY) break;
+            }
         }
     }
 
