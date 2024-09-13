@@ -30,11 +30,14 @@ public class FileCfgFAWEStructure extends PureYamlFileHandler<CfgFAWEStructure> 
         String schematic = registry.deserializeFromFile(String.class, o.get("schematic"));
         if(schematic==null) return null;
         Boolean persist = registry.deserializeFromFile(Boolean.class, o.get("persistent"));
+        List<StructureModule> beforePlacementModules = registry.deserializeFromFile(
+            new TypeToken<List<StructureModule>>(){}.getType(), o.get("before_modules")
+        );
         List<StructureModule> modules = registry.deserializeFromFile(
             new TypeToken<List<StructureModule>>(){}.getType(), o.get("modules")
         );
         return new CfgFAWEStructure(
-            key, schematic, persist != null && persist, modules == null ? List.of() : modules
+            key, schematic, persist != null && persist, beforePlacementModules, modules == null ? List.of() : modules
         );
     }
 }

@@ -106,6 +106,8 @@ public class CruxStructuresModule implements CruxModule {
         fileStructureModule.TYPE_HANDLERS.register("cone_veins", new FileConeVeinModule());
         fileStructureModule.TYPE_HANDLERS.register("walls", new FileWallsModule());
         fileStructureModule.TYPE_HANDLERS.register("structure_scatter", new FileStructureScatterModule());
+        fileStructureModule.TYPE_HANDLERS.register("elongate_floor", new FileElongateFloorModule());
+        fileStructureModule.TYPE_HANDLERS.register("clear_space", new FileClearSpaceModule());
 
         CfgRegistries.JSON_REGISTRY.forEach(registry ->{
             registry.registerFileHandler(SimpleStoredStructure.class, new FileSimpleStoredStructure<SimpleStoredStructure>());

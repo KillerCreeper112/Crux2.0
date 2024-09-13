@@ -1,40 +1,55 @@
 package killercreepr.cruxstructures.structure.module.standard;
 
+import killercreepr.crux.block.CruxBlockWrapper;
 import killercreepr.crux.data.world.CruxPosition;
 import killercreepr.cruxstructures.structure.Structure;
 import killercreepr.cruxstructures.structure.impl.FAWEStructure;
 import killercreepr.cruxstructures.structure.module.StructureModule;
-import killercreepr.cruxstructures.structure.stored.StoredStructure;
 import killercreepr.cruxstructures.util.CruxStructureUtil;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ElongateFloorModule implements StructureModule {
-    protected final @Nullable
+    protected final @Nullable CruxBlockWrapper blockType;
+    public ElongateFloorModule(@Nullable CruxBlockWrapper blockType) {
+        this.blockType = blockType;
+    }
+
     @Override
     public void onPlaced(@NotNull Structure structure, @NotNull Location at, double rotation) {
         if(!(structure instanceof FAWEStructure fawe)) return;
         CruxPosition atCrux = CruxPosition.block(at);
 
-        CruxPosition structurePos = CruxStructureUtil.fromWorldToStructurePos(
-            structure, atCrux, atCrux
-        );
-
-        getPositionsAtLowestY(fawe.getBlocks(rotation)).forEach(block ->{
-
-        });
-
-        fawe.getBlocks(rotation).forEach(block ->{
+        World world = at.getWorld();
+        getPositionsAtLowestY(fawe.getBlocks(rotation)).forEach(blockPos ->{
             CruxPosition worldPos = CruxStructureUtil.fromStructureToWorldPos(
-                structure, atCrux, block
+                structure, atCrux, blockPos
             );
+
+            Block block = world.getBlockAt(worldPos.toLocation(world));
+            if(!block.isSolid()) return;
+
+            CruxBlockWrapper toSet = blockType == null ? CruxBlockWrapper.blockData(block.getBlockData()) : blockType;
+            setBlocks(block.getRelative(BlockFace.DOWN), toSet);
         });
+    }
+
+    public void setBlocks(Block b, CruxBlockWrapper toSet){
+        int minY = b.getWorld().getMinHeight();
+        while(b.isEmpty() || b.isReplaceable()){
+            toSet.setBlock(b, false);
+            b = b.getRelative(BlockFace.DOWN);
+
+            if(b.getY() < minY) break;
+        }
     }
 
     public static Collection<CruxPosition> getPositionsAtLowestY(Collection<CruxPosition> positions) {

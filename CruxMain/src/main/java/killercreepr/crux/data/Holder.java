@@ -5,7 +5,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public interface Holder <T>{
     static @NotNull Direct<Object> directObject(@Nullable Object o){
@@ -43,6 +46,18 @@ public interface Holder <T>{
         if(value == null) return this;
         consumer.accept(value);
         return this;
+    }
+
+    default T valueOrThrow() {
+        T value = value();
+        if (value == null) throw new NoSuchElementException("No value present");
+        return value;
+    }
+
+    default  <X extends Throwable> T valueOrThrow(Supplier<? extends X> exceptionSupplier) throws X {
+        T value = value();
+        if(value != null) return value;
+        throw exceptionSupplier.get();
     }
 
     default T valueOr(T defaultValue){

@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-//todo Make a translatable system
+//todo maybe eventually separate bukkit/paper and crux
 public final class Crux {
     public static final String NAMESPACE = "crux";
     public static final TagParser TAGS = TagParser.builder()

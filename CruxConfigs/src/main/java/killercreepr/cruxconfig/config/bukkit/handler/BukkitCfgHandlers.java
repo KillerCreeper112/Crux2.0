@@ -1,6 +1,7 @@
 package killercreepr.cruxconfig.config.bukkit.handler;
 
 import io.papermc.paper.registry.RegistryKey;
+import killercreepr.crux.block.CruxBlockWrapper;
 import killercreepr.crux.data.tag.block.BlockTag;
 import killercreepr.crux.data.tag.item.ItemTag;
 import killercreepr.crux.block.predicate.BlockPredicate;
@@ -79,6 +80,7 @@ public class BukkitCfgHandlers {
     public static final FileItemPredicate ITEM_PREDICATE = new FileItemPredicate();
     public static final FileBlockTag BLOCK_TAG = new FileBlockTag();
     public static final FileBlockPredicate BLOCK_PREDICATE = new FileBlockPredicate();
+    public static final FileCruxBlockWrapper CRUX_BLOCK_WRAPPER = new FileCruxBlockWrapper();
 
     public static void initStandard(){
         CfgRegistries.FILE.forEach(BukkitCfgHandlers::init);
@@ -113,6 +115,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(ItemPredicate.class, ITEM_PREDICATE);
         registry.registerFileHandler(BlockTag.class, BLOCK_TAG);
         registry.registerFileHandler(BlockPredicate.class, BLOCK_PREDICATE);
+        registry.registerFileHandler(CruxBlockWrapper.class, CRUX_BLOCK_WRAPPER);
 
         StandardFileLootConditions.register(LOOT_CONDITION);
         StandardFileLootFunctions.register(ITEM_LOOT_FUNCTION);
