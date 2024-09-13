@@ -1,6 +1,7 @@
 package killercreepr.cruxstructures.commands;
 
 import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
@@ -104,7 +105,31 @@ public class StructureCommands {
                                         CruxMath.format(spawn.getX()) + ", " + CruxMath.format(spawn.getY()) + ", " + CruxMath.format(spawn.getZ()) + " in world, " +
                                         spawn.getWorld().getName() + ".");
                                     return 1;
-                                })
+                                }).then(
+                                    Commands.argument("rotation", DoubleArgumentType.doubleArg())
+                                        .executes(ctx ->{
+                                            Structure structure = ctx.getArgument("structure", Structure.class);
+                                            BlockPosition position = ctx.getArgument("location", BlockPositionResolver.class)
+                                                .resolve(ctx.getSource());
+                                            CommandSender sender = getExecutor(ctx.getSource());
+
+                                            World world;
+                                            if(sender instanceof BlockCommandSender s){
+                                                world = s.getBlock().getWorld();
+                                            }else if(sender instanceof Entity s){
+                                                world = s.getWorld();
+                                            }else return -1;
+
+                                            Location spawn = new Location(
+                                                world, position.x(), position.y(), position.z()
+                                            );
+                                            structure.place(spawn, ctx.getArgument("rotation", Double.class));
+                                            sender.sendMessage("Structure, '" + structure.key() + "' has been placed at " +
+                                                CruxMath.format(spawn.getX()) + ", " + CruxMath.format(spawn.getY()) + ", " + CruxMath.format(spawn.getZ()) + " in world, " +
+                                                spawn.getWorld().getName() + ".");
+                                            return 1;
+                                        })
+                                )
                         )
                 )
         ).then(

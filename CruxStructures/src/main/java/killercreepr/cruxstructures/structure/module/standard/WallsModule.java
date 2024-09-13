@@ -134,11 +134,22 @@ public class WallsModule implements StructureModule {
         }
 
         public static double getRotationAddon(BlockFace direction){
+            //if(!direction.isCartesian()) direction = direction.getOppositeFace();
             return switch (direction){
-                case WEST -> -90;
-                case SOUTH -> 90;
-                case EAST -> -180;
+                case WEST, SOUTH_WEST -> 90;
+                case SOUTH, SOUTH_EAST -> 180;
+                case EAST, NORTH_EAST -> 270;
                 default -> 0D;
+            };
+        }
+
+        public double getLength(BoundingBox boundingBox, BlockFace direction, boolean defaultAutoRotate) {
+            boolean autoRotate = this.autoRotate == null ? defaultAutoRotate : this.autoRotate;
+            if(autoRotate) return boundingBox.getWidthX()+1;
+            return switch (direction) {
+                case EAST, WEST -> boundingBox.getWidthZ()+1;
+                //case NORTH, SOUTH -> boundingBox.getMaxZ() - boundingBox.getMinZ();
+                default -> boundingBox.getWidthX()+1;
             };
         }
     }
@@ -174,7 +185,7 @@ public class WallsModule implements StructureModule {
 
             BlockFace rightSide = CruxBlockFace.rotateRight(face);
             BlockFace leftSide = CruxBlockFace.rotateLeft(face);
-            int addon = structures.size() % 2 == 0 ? (int) (getLength(centerStructure.boundingBox(), face) / 2D) : 0;
+            int addon = structures.size() % 2 == 0 ? (int) (centerPart.getLength(centerStructure.boundingBox(), face, module.defaultAutoRotate) / 2D) : 0;
 
             CruxPosition spawn = CruxPosition.location(
                 at.clone().add(
@@ -191,7 +202,7 @@ public class WallsModule implements StructureModule {
                 centerStructure.place(validSpawn, centerPart.rotate(rotation, face, module.defaultAutoRotate));
             }
 
-            double centerStructureSpacing = getLength(centerStructure.boundingBox(), face);
+            double centerStructureSpacing = centerPart.getLength(centerStructure.boundingBox(), face, module.defaultAutoRotate);
             int doubleRightAddon;
             if(structures.size() % 2 == 0){
                 doubleRightAddon = (int) Math.ceil(centerStructureSpacing-1);
@@ -201,21 +212,23 @@ public class WallsModule implements StructureModule {
             double currentWidth = centerStructureSpacing;
             for(int i = centerIndex+1; i < structures.size(); i++){
                 Structure wall = toPlace.get(i).getFirst();
+                WallPart part = toPlace.get(i).getSecond();
 
                 spawnWall(toPlace.get(i), currentWidth + doubleRightAddon, face, at, wallSpacing.value().intValue(),
                     rotation, module, rightSide);
 
-                currentWidth += getLength(wall.boundingBox(), face);
+                currentWidth += part.getLength(wall.boundingBox(), face, module.defaultAutoRotate);
             }
 
             currentWidth = centerStructureSpacing;
             for(int i = centerIndex-1; i > -1; i--){
                 Structure wall = toPlace.get(i).getFirst();
+                WallPart part = toPlace.get(i).getSecond();
 
                 spawnWall(toPlace.get(i), currentWidth, face, at, wallSpacing.value().intValue(),
                     rotation, module, leftSide);
 
-                currentWidth += getLength(wall.boundingBox(), face);
+                currentWidth +=  part.getLength(wall.boundingBox(), face, module.defaultAutoRotate);
             }
         }
 
@@ -254,13 +267,13 @@ public class WallsModule implements StructureModule {
             };
         }
 
-        public static double getLength(BoundingBox boundingBox, BlockFace direction) {
+        /*public static double getLength(BoundingBox boundingBox, BlockFace direction) {
             return switch (direction) {
                 case EAST, WEST -> boundingBox.getWidthZ()+1;
                 //case NORTH, SOUTH -> boundingBox.getMaxZ() - boundingBox.getMinZ();
                 default -> boundingBox.getWidthX()+1;
             };
-        }
+        }*/
 
         public @NotNull List<WallPart> getStructures() {
             return structures;

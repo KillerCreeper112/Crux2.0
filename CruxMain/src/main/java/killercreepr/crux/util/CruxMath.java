@@ -142,9 +142,26 @@ public class CruxMath {
     }
 
     public static double wrap(double value, double min, double max){
-        if(value < min) value = max;
+        /*if(value < min) value = max;
         else if (value > max) value = min;
-        return value;
+        return value;*/
+
+        if (min >= max) {
+            throw new IllegalArgumentException("Min must be less than Max");
+        }
+
+        double range = max - min;
+        if (range <= 0) {
+            throw new IllegalArgumentException("Range must be positive");
+        }
+
+        // Use modulo to wrap the value
+        double wrappedValue = (value - min) % range;
+        if (wrappedValue < 0) {
+            wrappedValue += range;
+        }
+
+        return wrappedValue + min;
     }
 
     public static long wrap(long value, long min, long max){
