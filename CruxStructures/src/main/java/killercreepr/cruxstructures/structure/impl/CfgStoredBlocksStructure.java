@@ -7,6 +7,7 @@ import killercreepr.crux.data.BlockPos;
 import killercreepr.cruxstructures.structure.module.StructureModule;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.Collection;
@@ -16,18 +17,18 @@ import java.util.List;
 public class CfgStoredBlocksStructure extends CfgFAWEStructure{
     protected final @NotNull Collection<BlockPos> blocks;
 
-    public CfgStoredBlocksStructure(@NotNull Key key, @NotNull ClipboardHolder holder, boolean persistent, @NotNull List<StructureModule> modules) {
-        super(key, holder, persistent, modules);
+    public CfgStoredBlocksStructure(@NotNull Key key, @NotNull ClipboardHolder holder, boolean persistent, @Nullable List<StructureModule> beforePlacementModules, @NotNull List<StructureModule> modules) {
+        super(key, holder, persistent, beforePlacementModules, modules);
         this.blocks = calculateBlocks();
     }
 
-    public CfgStoredBlocksStructure(@NotNull Key key, @NotNull String filename, boolean persistent, @NotNull List<StructureModule> modules) {
-        super(key, filename, persistent, modules);
+    public CfgStoredBlocksStructure(@NotNull Key key, @NotNull String filename, boolean persistent,@Nullable List<StructureModule> beforePlacementModules,  @NotNull List<StructureModule> modules) {
+        super(key, filename, persistent, beforePlacementModules, modules);
         this.blocks = calculateBlocks();
     }
 
-    public CfgStoredBlocksStructure(@NotNull Key key, @NotNull File schematicFile, boolean persistent, @NotNull List<StructureModule> modules) {
-        super(key, schematicFile, persistent, modules);
+    public CfgStoredBlocksStructure(@NotNull Key key, @NotNull File schematicFile, boolean persistent, @Nullable List<StructureModule> beforePlacementModules, @NotNull List<StructureModule> modules) {
+        super(key, schematicFile, persistent,beforePlacementModules, modules);
         this.blocks = calculateBlocks();
     }
 

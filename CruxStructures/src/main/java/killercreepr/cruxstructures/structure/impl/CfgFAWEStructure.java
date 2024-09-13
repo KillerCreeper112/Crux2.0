@@ -51,6 +51,10 @@ public class CfgFAWEStructure extends FAWEStructure{
         return modules;
     }
 
+    public @Nullable List<StructureModule> getBeforePlacementModules() {
+        return beforePlacementModules;
+    }
+
     @Override
     public boolean isPersistent() {
         return persistent;
