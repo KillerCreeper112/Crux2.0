@@ -1,19 +1,16 @@
 package killercreepr.crux.item.dynamic.components;
 
-import com.google.errorprone.annotations.DoNotMock;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import killercreepr.crux.Crux;
 import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.persistence.CruxPersistence;
-import killercreepr.crux.persistence.impl.ListTagType;
 import killercreepr.crux.registry.MappedRegistry;
 import killercreepr.crux.registry.SimpleMappedRegistry;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.crux.util.CruxString;
 import killercreepr.crux.util.CruxTag;
 import net.kyori.adventure.key.Key;
-import org.bukkit.Bukkit;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataHolder;
 import org.bukkit.persistence.PersistentDataType;

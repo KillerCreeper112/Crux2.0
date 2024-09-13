@@ -3,6 +3,9 @@ package killercreepr.cruxblocks.block.active;
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.crux.data.communication.CreateSound;
+import killercreepr.crux.item.ToolComponent;
+import killercreepr.crux.persistence.CruxPersistence;
+import killercreepr.crux.util.CruxTag;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.context.BlockContext;
 import killercreepr.cruxblocks.event.CruxBlockBreakEvent;
@@ -12,7 +15,6 @@ import killercreepr.cruxblocks.user.Tooled;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
@@ -26,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Represents a crux block that is placed into the world.
@@ -124,7 +127,17 @@ public interface ActiveCruxBlock {
     }
 
     default boolean canHarvest(@Nullable Miner miner){
-        return true;
+        Tooled tooled;
+        if(miner instanceof Tooled m) tooled = m;
+        else tooled = null;
+
+        ToolComponent toolComponent = CruxTag.get(tooled == null ? null : tooled.getTool(), "tool", CruxPersistence.TOOL_COMPONENT, null);
+        if(toolComponent == null) return false;
+        ToolComponent.Result result = toolComponent.test(Objects.requireNonNull(
+            Crux.handlers().block().getBlock(getBlock())
+        ));
+        if(result == null) return false;
+        return result.canHarvest();
     }
 
     @Nullable
@@ -132,7 +145,23 @@ public interface ActiveCruxBlock {
         return null;
     }
 
-    default boolean isPreferredTool(@Nullable ItemStack item){ return false; }
+    default boolean isPreferredTool(@Nullable ItemStack item){
+        return false;
+    }
+
+    default float getSpeedMultiplier(@Nullable Miner miner){
+        Tooled tooled;
+        if(miner instanceof Tooled m) tooled = m;
+        else tooled = null;
+
+        ToolComponent toolComponent = CruxTag.get(tooled == null ? null : tooled.getTool(), "tool", CruxPersistence.TOOL_COMPONENT, null);
+        if(toolComponent == null) return 1f;
+        ToolComponent.Result result = toolComponent.test(Objects.requireNonNull(
+            Crux.handlers().block().getBlock(getBlock())
+        ));
+        if(result == null) return 1f;
+        return result.getSpeed();
+    }
 
     @Nullable
     default Collection<ItemStack> getDrops(){ return getDrops(null); }
@@ -142,10 +171,10 @@ public interface ActiveCruxBlock {
         Tooled tooled;
         if(miner instanceof Tooled m) tooled = m;
         else tooled = null;
-        boolean preferredTool = isPreferredTool(tooled==null?null:tooled.getTool());
+        //boolean preferredTool = isPreferredTool(tooled==null?null:tooled.getTool());
         boolean canHarvest = canHarvest(miner);
 
-        float speedMultiplier = 1f;
+        float speedMultiplier = getSpeedMultiplier(miner);
         if(canHarvest && includeEnchants) {
             //enchants
         }

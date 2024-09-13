@@ -45,7 +45,7 @@ public class NoteTextureData implements TextureData{
 
     @Override
     public String toString() {
-        return "NoteTextureData{note=" + note.getId() + ", instrument=" + instrument + ", powered=" + powered + "}";
+        return "NoteTextureData{note=" + note + ", instrument=" + instrument + ", powered=" + powered + "}";
     }
 
     public @NotNull Note getNote() {
