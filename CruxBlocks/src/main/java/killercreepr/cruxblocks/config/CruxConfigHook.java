@@ -10,6 +10,7 @@ import killercreepr.cruxblocks.block.standard.BushType;
 import killercreepr.cruxblocks.block.texture.TextureData;
 import killercreepr.cruxblocks.config.handler.*;
 import killercreepr.cruxblocks.persistence.CruxBlocksPersistTags;
+import killercreepr.cruxblocks.persistence.CruxBlocksPersistence;
 import killercreepr.cruxblocks.registeries.CruxBlocksRegistries;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
@@ -37,6 +38,15 @@ public class CruxConfigHook {
                                                                    @NotNull Object value, @NotNull TextParserContext ctx) {
                 Key groupKey = Crux.key(ctx.deserializeString(value.toString()));
                 CruxBlocksPersistTags.CRUX_BLOCK_GROUP.set(to, CruxBlocksRegistries.BLOCKS.getGroup(groupKey));
+            }
+
+            @Override
+            public <T extends PersistentDataContainer> DynamicPersistentTag.ParseResult<?> parseObject(@NotNull T object,
+                                                                                                                          @NotNull Object value, @NotNull TextParserContext ctx) {
+                Key groupKey = Crux.key(ctx.deserializeString(value.toString()));
+                return DynamicPersistentTag.ParseResult.result(
+                    CruxBlocksPersistence.CRUX_BLOCK_GROUP, CruxBlocksRegistries.BLOCKS.getGroup(groupKey)
+                );
             }
         });
         registerHandlers();

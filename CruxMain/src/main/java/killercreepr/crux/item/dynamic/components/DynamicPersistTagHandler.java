@@ -11,4 +11,6 @@ public interface DynamicPersistTagHandler {
                                                     @NotNull T to,
                                                     @Nullable Key key, @NotNull Object value,
                                                     @NotNull TextParserContext ctx);
+    @Nullable
+    <T extends PersistentDataContainer> DynamicPersistentTag.ParseResult<?> parseObject(@NotNull T object, @NotNull Object value, @NotNull TextParserContext ctx);
 }
