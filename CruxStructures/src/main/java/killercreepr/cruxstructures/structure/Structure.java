@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.function.Predicate;
 
 public interface Structure extends Keyed {
     @NotNull
@@ -32,5 +33,8 @@ public interface Structure extends Keyed {
         return new SimpleStoredStructure(this, StoredChunk.from(center), CruxPosition.block(center), rotation);
     }
 
-    @NotNull Collection<CruxPosition> getBlocks(double rotation);
+    default @NotNull Collection<CruxPosition> getBlocks(double rotation){
+        return getBlocks(rotation, null);
+    }
+    @NotNull Collection<CruxPosition> getBlocks(double rotation, @Nullable Predicate<CruxPosition> filter);
 }

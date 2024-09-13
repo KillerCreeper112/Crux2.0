@@ -21,11 +21,13 @@ import net.kyori.adventure.key.Key;
 import org.bukkit.Location;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 
 public class FAWEStructure implements Structure {
@@ -121,15 +123,18 @@ public class FAWEStructure implements Structure {
 
     @Override
     @NotNull
-    public Collection<CruxPosition> getBlocks(double rotation) {
+    public Collection<CruxPosition> getBlocks(double rotation, @Nullable Predicate<CruxPosition> filter) {
         Collection<CruxPosition> list = new HashSet<>();
         Clipboard clipboard = holder.getClipboards().getFirst();
         clipboard.forEach(block ->{
             BlockState state = clipboard.getBlock(block);
             if(state.isAir()) return;
-            list.add(BlockPos.at(block.x(), block.y(), block.z()).rotateAroundY(
+            CruxPosition pos = BlockPos.at(block.x(), block.y(), block.z()).rotateAroundY(
                 originPos(), rotation
-            ));
+            );
+            if(filter != null && !filter.test(pos)) return;
+
+            list.add(pos);
         });
         return list;
     }
