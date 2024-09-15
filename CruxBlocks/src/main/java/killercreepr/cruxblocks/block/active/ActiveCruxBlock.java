@@ -12,15 +12,18 @@ import killercreepr.cruxblocks.event.CruxBlockBreakEvent;
 import killercreepr.cruxblocks.user.EntityMiner;
 import killercreepr.cruxblocks.user.Miner;
 import killercreepr.cruxblocks.user.Tooled;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
@@ -167,6 +170,19 @@ public interface ActiveCruxBlock {
     default Collection<ItemStack> getDrops(){ return getDrops(null); }
 
     default float getMineSpeed(@Nullable Miner miner, boolean includeEnchants){
+        if(true){
+            float speedMultiplier = getSpeedMultiplier(miner);
+
+            float hardness = getCruxBlock().getHardness();
+            if(hardness <= 0D) return Float.MAX_VALUE;
+            float speed = speedMultiplier / hardness;
+
+            if(!canHarvest(miner)){
+                speed /= 5;
+            }
+
+            return speed;
+        }
 
         Tooled tooled;
         if(miner instanceof Tooled m) tooled = m;
@@ -192,7 +208,11 @@ public interface ActiveCruxBlock {
                 speedMultiplier *= Math.pow(.3f, Math.min(lE.getPotionEffect(PotionEffectType.MINING_FATIGUE).getAmplifier(), 4));
             }
             if(lE.getEyeLocation().getBlock().getType() == Material.WATER /*&& doesNotHaveAquaAffinity*/){
-                speedMultiplier /= 5f;
+                EntityEquipment equipment = lE.getEquipment();
+                ItemStack helmet = equipment == null ? null : equipment.getHelmet();
+                if(equipment == null || helmet == null || helmet.getEnchantmentLevel(Enchantment.AQUA_AFFINITY) < 1){
+                    speedMultiplier /= 5f;
+                }
             }
         }
         if(entityMiner != null && entityMiner.getEntity().getFallDistance() > 0f) speedMultiplier /= 5f;

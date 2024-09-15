@@ -10,6 +10,7 @@ import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.manager.CruxBlockManager;
 import killercreepr.cruxblocks.user.Miner;
 import net.kyori.adventure.key.Key;
+import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -72,27 +73,8 @@ public class MinerHolder extends PlayerTickedDataHolder {
         onMine(p, active);
     }
 
-    public LootContext buildContext(@NotNull Player p, @NotNull ActiveCruxBlock block){
-        DataExchange.Builder builder = DataExchange.builder();
-        Miner miner = Miner.entity(p.getInventory().getItemInMainHand(), p);
-        builder.putAll(miner, "miner");
-        switch (miner) {
-            case Player player -> builder.putAll(miner, "entity", "player");
-            case Entity entity -> builder.putAll(miner, "entity");
-            case ItemStack itemStack -> builder.putAll(miner, "item");
-            default -> {}
-        }
-        return LootContext.builder()
-            .looter(p)
-            .location(block.getBlock().getLocation())
-            .looted(block)
-            .info(builder.build())
-            .build();
-    }
-
     public void onMine(@NotNull Player p, @NotNull ActiveCruxBlock block){
         lastMine = System.currentTimeMillis();
-        LootContext ctx = buildContext(p, block);
         float mineSpeed = block.getMineSpeed(Miner.entity(p.getInventory().getItemInMainHand(), p), true);
         if(lastBreakSpeed == null){
             lastBreakSpeed = p.getAttribute(Attribute.PLAYER_BLOCK_BREAK_SPEED).getBaseValue();
@@ -101,8 +83,8 @@ public class MinerHolder extends PlayerTickedDataHolder {
     }
 
     public void setMineSpeed(@NotNull Player p, double mineSpeed){
-        mineSpeed = 1D - mineSpeed;
-        if(mineSpeed < 0D) mineSpeed = Double.MAX_VALUE;
+        //mineSpeed = mineSpeed <= 0D ? 0D : 1D + mineSpeed;
+        //if(mineSpeed < 0D) mineSpeed = Double.MAX_VALUE;
         p.getAttribute(Attribute.PLAYER_BLOCK_BREAK_SPEED).setBaseValue(mineSpeed);
     }
 
