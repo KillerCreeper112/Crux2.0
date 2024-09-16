@@ -9,6 +9,7 @@ import killercreepr.cruxblocks.block.standard.BushBlock;
 import killercreepr.cruxblocks.config.block.CfgBlockGroup;
 import killercreepr.cruxblocks.config.block.CfgBushBlockGroup;
 import killercreepr.cruxblocks.config.block.CfgDirectionalBlockGroup;
+import killercreepr.cruxblocks.config.block.SimpleCfgBlockGroup;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -55,7 +56,7 @@ public class FileCruxBlockGroup implements FileObjectHandler<CruxBlockGroup> {
         if(first instanceof BushBlock){
             return new CfgBushBlockGroup(key, hardness, soundGroup, blocksArray);
         }
-        return new CfgBlockGroup(
+        return new SimpleCfgBlockGroup(
             key, hardness, soundGroup,
             o.getObject(Boolean.class, "require_correct_tool_for_harvest", false),
             blocksArray

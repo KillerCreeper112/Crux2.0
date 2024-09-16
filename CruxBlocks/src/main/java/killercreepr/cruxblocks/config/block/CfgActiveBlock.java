@@ -2,13 +2,16 @@ package killercreepr.cruxblocks.config.block;
 
 import killercreepr.cruxblocks.block.active.ActiveCruxBlockImpl;
 import killercreepr.cruxblocks.user.Miner;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+//todo FIX THIS SYSTEM AHHHHHHHHHHH
+//  maybe block data or something in blockgroups
 public class CfgActiveBlock extends ActiveCruxBlockImpl {
-    protected final @NotNull SimpleCfgBlock cfgBlock;
-    public CfgActiveBlock(@NotNull Block block, @NotNull SimpleCfgBlock cruxBlock) {
+    protected final @NotNull CfgBlock cfgBlock;
+    public CfgActiveBlock(@NotNull Block block, @NotNull CfgBlock cruxBlock) {
         super(block, cruxBlock);
         this.cfgBlock = cruxBlock;
     }
