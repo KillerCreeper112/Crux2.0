@@ -55,7 +55,11 @@ public class FileCruxBlockGroup implements FileObjectHandler<CruxBlockGroup> {
         if(first instanceof BushBlock){
             return new CfgBushBlockGroup(key, hardness, soundGroup, blocksArray);
         }
-        return new CfgBlockGroup(key, hardness, soundGroup, blocksArray);
+        return new CfgBlockGroup(
+            key, hardness, soundGroup,
+            o.getObject(Boolean.class, "require_correct_tool_for_harvest", false),
+            blocksArray
+        );
     }
 
     @Override

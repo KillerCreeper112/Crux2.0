@@ -57,11 +57,12 @@ public interface ActiveCruxBlock {
         }else entityMiner = null;
         if(entityMiner instanceof HumanEntity p && p.getGameMode() == GameMode.CREATIVE){
             drops = null;
-        }else drops = getDrops(miner);
+        }else if(canHarvest(miner)) drops = getDrops(miner);
+        else drops = null;
         CruxBlockBreakEvent event = new CruxBlockBreakEvent(this, BlockContext.context(block, miner), drops);
         if(!event.callEvent()) return event;
         drops = event.getDrops();
-        BlockData data = block.getBlockData();
+
         Crux.handlers().block().setType(getBlock(), Material.AIR);
 
         if(displayEffects){

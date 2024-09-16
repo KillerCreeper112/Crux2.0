@@ -18,6 +18,7 @@ tasks{
     }
     shadowJar{
         archiveClassifier = null
+        relocate("redempt", "killercreepr.crux.redempt")
     }
 }
 paperweight.reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.MOJANG_PRODUCTION

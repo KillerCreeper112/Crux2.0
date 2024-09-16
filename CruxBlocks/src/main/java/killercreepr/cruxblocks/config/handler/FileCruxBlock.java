@@ -1,12 +1,12 @@
 package killercreepr.cruxblocks.config.handler;
 
 import killercreepr.cruxblocks.block.CruxBlock;
-import killercreepr.cruxblocks.block.GenericDirectionalBlock;
 import killercreepr.cruxblocks.block.group.CruxDirectionalBlockGroup;
-import killercreepr.cruxblocks.block.standard.BushBlock;
 import killercreepr.cruxblocks.block.standard.BushType;
 import killercreepr.cruxblocks.block.texture.TextureData;
-import killercreepr.cruxblocks.config.block.CfgBlock;
+import killercreepr.cruxblocks.config.block.CfgBushBlock;
+import killercreepr.cruxblocks.config.block.CfgDirectionBlock;
+import killercreepr.cruxblocks.config.block.SimpleCfgBlock;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -48,12 +48,14 @@ public class FileCruxBlock implements FileObjectHandler<CruxBlock> {
             Axis axis = registry.deserializeFromFile(Axis.class, o.get("direction"));
             if(axis != null) direction = CruxDirectionalBlockGroup.getFaceFromAxis(axis);
         }
-        if(direction != null) return new GenericDirectionalBlock(key, texture, direction);
+        if(direction != null) return new CfgDirectionBlock(key, texture, direction);
 
         BushType bushType = registry.deserializeFromFile(BushType.class, o.get("bush_type"));
-        if(bushType != null) return new BushBlock(key, texture, bushType);
+        if(bushType != null) return new CfgBushBlock(key, texture, bushType);
 
-        return new CfgBlock(key, texture);
+        return new SimpleCfgBlock(
+            key, texture
+        );
     }
 
     @Override

@@ -10,11 +10,21 @@ import org.jetbrains.annotations.Nullable;
 public class CfgBlockGroup extends GenericBlockGroup {
     protected final float hardness;
     protected final @Nullable CreateBlockSoundGroup soundGroup;
+    protected final boolean requireCorrectToolForHarvest;
 
-    public CfgBlockGroup(@NotNull Key key, float hardness, @Nullable CreateBlockSoundGroup soundGroup, @NotNull CruxBlock... blocks) {
+    public CfgBlockGroup(@NotNull Key key,
+                         float hardness,
+                         @Nullable CreateBlockSoundGroup soundGroup,
+                         boolean requireCorrectToolForHarvest,
+                         @NotNull CruxBlock... blocks) {
         super(key, blocks);
         this.hardness = hardness;
         this.soundGroup = soundGroup;
+        this.requireCorrectToolForHarvest = requireCorrectToolForHarvest;
+    }
+
+    public boolean isRequireCorrectToolForHarvest() {
+        return requireCorrectToolForHarvest;
     }
 
     @Override
