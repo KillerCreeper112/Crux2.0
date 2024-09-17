@@ -7,8 +7,6 @@ import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
 public class SimpleBlock implements CruxBlock {
     protected final @NotNull Key key;
     protected final @NotNull TextureData textureData;
@@ -42,6 +40,8 @@ public class SimpleBlock implements CruxBlock {
 
     @Override
     public @NotNull DataComponentHandler getComponents() {
-        return group == null ? Objects.requireNonNull(components, this + " does not have a group or a DataComponentHandler set!") : group.getComponents();
+        if(components != null) return components;
+        if(group == null) throw new IllegalStateException(this + " does not have a group or a DataComponentHandler set!");
+        return group.getComponents();
     }
 }

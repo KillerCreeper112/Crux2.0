@@ -102,7 +102,9 @@ public class CustomBlocksListener implements Listener {
 
         CruxBlock crux = active.getCruxBlock();
         Collection<ItemStack> drops = active.getDrops(Miner.entity(p.getInventory().getItemInMainHand(), p));
-        CreateBlockSoundGroup soundGroup = crux.getComponents().get(CruxBlockComponents.BLOCK_SOUND_GROUP);
+        CreateBlockSoundGroup soundGroup = crux.getComponents().getOrDefault(
+            CruxBlockComponents.BLOCK_SOUND_GROUP, crux.getGroup().getComponents().get(CruxBlockComponents.BLOCK_SOUND_GROUP)
+        );
         if(soundGroup != null){
             CreateSound sound = soundGroup.getBreakSound();
             if(sound != null){
