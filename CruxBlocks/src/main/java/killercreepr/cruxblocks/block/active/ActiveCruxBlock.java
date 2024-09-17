@@ -67,7 +67,9 @@ public interface ActiveCruxBlock {
 
         if(displayEffects){
             CruxBlock custom = getCruxBlock();
-            CreateBlockSoundGroup soundGroup = custom.getComponents().get(CruxBlockComponents.BLOCK_SOUND_GROUP);
+            CreateBlockSoundGroup soundGroup = custom.getComponents().getOrDefault(
+                CruxBlockComponents.BLOCK_SOUND_GROUP, custom.getGroup().getComponents().get(CruxBlockComponents.BLOCK_SOUND_GROUP)
+            );
             if(soundGroup != null){
                 CreateSound sound = soundGroup.getBreakSound();
                 if(sound != null){
@@ -131,7 +133,10 @@ public interface ActiveCruxBlock {
     }
 
     default boolean canHarvest(@Nullable Miner miner){
-        boolean requiresCorrectToolForDrops = getCruxBlock().getComponents().getOrDefault(CruxBlockComponents.REQUIRES_CORRECT_TOOL_FOR_DROPS, false);
+        boolean requiresCorrectToolForDrops = getCruxBlock().getComponents().getOrDefault(
+            CruxBlockComponents.REQUIRES_CORRECT_TOOL_FOR_DROPS,
+            getCruxBlock().getComponents().getOrDefault(CruxBlockComponents.REQUIRES_CORRECT_TOOL_FOR_DROPS, false)
+        );
         if(!requiresCorrectToolForDrops) return true;
 
         Tooled tooled;
@@ -177,7 +182,9 @@ public interface ActiveCruxBlock {
         if(true){
             float speedMultiplier = getSpeedMultiplier(miner);
 
-            float hardness = getCruxBlock().getComponents().getOrDefault(CruxComponents.HARDNESS, 1f);
+            float hardness = getCruxBlock().getComponents().getOrDefault(
+                CruxComponents.HARDNESS, getCruxBlock().getGroup().getComponents().getOrDefault(CruxComponents.HARDNESS, 1f)
+            );
             if(hardness <= 0D) return Float.MAX_VALUE;
             float speed = speedMultiplier / hardness;
 
