@@ -159,7 +159,7 @@ public class CruxCore extends CruxPlugin implements Listener {
         //CRUX_CONFIGS.reload(this);
         MODULES.reload(this);
 
-        CruxRegistries.PLUGINS.forEach(plugin ->{
+        CruxRegistries.PLUGIN.forEach(plugin ->{
             if(plugin instanceof CruxCore) return;
             plugin.reload(this);
         });

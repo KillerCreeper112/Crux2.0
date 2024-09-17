@@ -1,6 +1,5 @@
 package killercreepr.cruxblocks.block.group;
 
-import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.CruxBlockData;
 import killercreepr.cruxblocks.block.context.BlockContext;
@@ -35,11 +34,6 @@ public interface CruxBlockGroup extends Keyed, CruxBlockData, Iterable<CruxBlock
     @Override
     default Iterator<CruxBlock> iterator(){
         return getBlocks().iterator();
-    }
-
-    @Override
-    default CreateBlockSoundGroup getSoundGroup(){
-        return null;
     }
 
     @Override

@@ -1,8 +1,8 @@
 package killercreepr.cruxblocks.config.handler;
 
 import killercreepr.cruxblocks.block.CruxBlock;
+import killercreepr.cruxblocks.block.component.BushType;
 import killercreepr.cruxblocks.block.group.CruxDirectionalBlockGroup;
-import killercreepr.cruxblocks.block.standard.BushType;
 import killercreepr.cruxblocks.block.texture.TextureData;
 import killercreepr.cruxblocks.config.block.CfgBushBlock;
 import killercreepr.cruxblocks.config.block.CfgDirectionBlock;

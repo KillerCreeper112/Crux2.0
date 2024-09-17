@@ -71,7 +71,7 @@ public final class Crux {
     public static @NotNull CruxHandlers handlers(){ return handlers; }
 
     public static @NotNull BukkitRunnable buildTickTask(){
-        return buildTickTask(CruxRegistries.TICKS, true);
+        return buildTickTask(CruxRegistries.TICK, true);
     }
 
     public static @NotNull BukkitRunnable buildTickTask(@NotNull KeyedRegistry<CruxTick> registry, boolean includeEntityMemory){

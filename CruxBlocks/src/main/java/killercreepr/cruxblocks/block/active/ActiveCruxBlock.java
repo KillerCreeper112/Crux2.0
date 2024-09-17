@@ -1,23 +1,23 @@
 package killercreepr.cruxblocks.block.active;
 
 import killercreepr.crux.Crux;
+import killercreepr.crux.component.CruxComponents;
 import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.crux.data.communication.CreateSound;
 import killercreepr.crux.item.ToolComponent;
 import killercreepr.crux.persistence.CruxPersistence;
 import killercreepr.crux.util.CruxTag;
 import killercreepr.cruxblocks.block.CruxBlock;
+import killercreepr.cruxblocks.block.component.CruxBlockComponents;
 import killercreepr.cruxblocks.block.context.BlockContext;
 import killercreepr.cruxblocks.event.CruxBlockBreakEvent;
 import killercreepr.cruxblocks.user.EntityMiner;
 import killercreepr.cruxblocks.user.Miner;
 import killercreepr.cruxblocks.user.Tooled;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
@@ -67,7 +67,7 @@ public interface ActiveCruxBlock {
 
         if(displayEffects){
             CruxBlock custom = getCruxBlock();
-            CreateBlockSoundGroup soundGroup = custom.getSoundGroup();
+            CreateBlockSoundGroup soundGroup = custom.getComponents().get(CruxBlockComponents.BLOCK_SOUND_GROUP);
             if(soundGroup != null){
                 CreateSound sound = soundGroup.getBreakSound();
                 if(sound != null){
@@ -174,7 +174,7 @@ public interface ActiveCruxBlock {
         if(true){
             float speedMultiplier = getSpeedMultiplier(miner);
 
-            float hardness = getCruxBlock().getHardness();
+            float hardness = getCruxBlock().getComponents().getOrDefault(CruxComponents.HARDNESS, 1f);
             if(hardness <= 0D) return Float.MAX_VALUE;
             float speed = speedMultiplier / hardness;
 
@@ -217,7 +217,7 @@ public interface ActiveCruxBlock {
             }
         }
         if(entityMiner != null && entityMiner.getEntity().getFallDistance() > 0f) speedMultiplier /= 5f;
-        float damage = speedMultiplier / getCruxBlock().getHardness();
+        float damage = speedMultiplier / getCruxBlock().getComponents().getOrDefault(CruxComponents.HARDNESS, 1f);
         if(canHarvest) damage /= 30f;
         else damage /= 100f;
         return damage;

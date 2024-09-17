@@ -1,7 +1,7 @@
 package killercreepr.cruxblocks.config.block;
 
-import killercreepr.cruxblocks.block.group.CruxBlockGroup;
+import killercreepr.cruxblocks.block.CruxBlockData;
 
-public interface CfgBlockGroup extends CruxBlockGroup {
-boolean isRequireCorrectToolForHarvest();
+public interface CfgBlockGroup extends CruxBlockData {
+    boolean isRequireCorrectToolForHarvest();
 }

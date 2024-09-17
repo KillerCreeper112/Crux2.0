@@ -5,6 +5,7 @@ import killercreepr.crux.data.communication.CreateSound;
 import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.cruxblocks.CruxBlocksModule;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
+import killercreepr.cruxblocks.block.component.CruxBlockComponents;
 import killercreepr.cruxblocks.block.context.BlockContext;
 import killercreepr.cruxblocks.block.context.PlaceBlockContext;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
@@ -22,12 +23,6 @@ import java.util.Objects;
 
 public interface CruxBlock extends Keyed, CruxBlockData {
     @NotNull ActiveCruxBlock createActive(@NotNull Block block);
-    @Override
-    default float getHardness(){
-        CruxBlockGroup group = getGroup();
-        Objects.requireNonNull(group, "CruxBlock getHardness method has not been overridden and does not have a group set!");
-        return group.getHardness();
-    }
     @NotNull TextureData getTextureData();
     @Nullable CruxBlockGroup getGroup();
     void setGroup(@Nullable CruxBlockGroup group);
@@ -53,15 +48,6 @@ public interface CruxBlock extends Keyed, CruxBlockData {
     }
 
     @Override
-    @Nullable
-    default CreateBlockSoundGroup getSoundGroup(){
-        CruxBlockGroup group = getGroup();
-        Objects.requireNonNull(group);
-        return group.getSoundGroup();
-    }
-
-
-    @Override
     default @Nullable ActiveCruxBlock placeBlock(@NotNull PlaceBlockContext ctx, boolean applyPhysics){
         if(!canPlace(ctx)) return null;
         CruxBlockPlaceEvent event = new CruxBlockPlaceEvent(this, ctx);
@@ -73,7 +59,10 @@ public interface CruxBlock extends Keyed, CruxBlockData {
         ActiveCruxBlock active = CruxRegistries.MODULES.getModuleOrThrow(CruxBlocksModule.class)
             .getActiveBlock(ctx.getBlock());
         if(active != null){
-            CreateBlockSoundGroup soundGroup = getSoundGroup();
+            CruxBlockGroup group = getGroup();
+            CreateBlockSoundGroup soundGroup = getComponents().getOrDefault(
+                CruxBlockComponents.BLOCK_SOUND_GROUP, group == null ? null : group.getComponents().get(CruxBlockComponents.BLOCK_SOUND_GROUP)
+            );
             if(soundGroup != null){
                 CreateSound sound = soundGroup.getPlaceSound();
                 if(sound != null){

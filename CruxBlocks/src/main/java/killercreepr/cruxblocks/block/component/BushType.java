@@ -1,4 +1,4 @@
-package killercreepr.cruxblocks.block.standard;
+package killercreepr.cruxblocks.block.component;
 
 public enum BushType {
     TOP,

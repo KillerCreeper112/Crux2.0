@@ -2,12 +2,12 @@ package killercreepr.cruxblocks.config.block;
 
 import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.cruxblocks.block.CruxBlock;
-import killercreepr.cruxblocks.block.group.GenericBlockGroup;
+import killercreepr.cruxblocks.block.group.SimpleBlockGroup;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SimpleCfgBlockGroup extends GenericBlockGroup implements CfgBlockGroup {
+public class SimpleCfgBlockGroup extends SimpleBlockGroup implements CfgBlockGroup {
     final float hardness;
     final @Nullable CreateBlockSoundGroup soundGroup;
     final boolean requireCorrectToolForHarvest;
@@ -31,10 +31,5 @@ public class SimpleCfgBlockGroup extends GenericBlockGroup implements CfgBlockGr
     @Override
     public float getHardness() {
         return hardness;
-    }
-
-    @Override
-    public CreateBlockSoundGroup getSoundGroup() {
-        return soundGroup;
     }
 }

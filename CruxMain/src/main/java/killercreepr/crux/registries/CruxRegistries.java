@@ -1,5 +1,6 @@
 package killercreepr.crux.registries;
 
+import killercreepr.crux.component.DataComponentType;
 import killercreepr.crux.data.tag.block.BlockTag;
 import killercreepr.crux.data.tag.item.ItemTag;
 import killercreepr.crux.data.communication.CreateBlockSoundGroup;
@@ -15,7 +16,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 public class CruxRegistries {
-    public static final MappedRegistry<String, CruxPlugin> PLUGINS = new SimpleMappedRegistry<>(){
+    public static final MappedRegistry<String, CruxPlugin> PLUGIN = new SimpleMappedRegistry<>(){
         @Override
         public @NotNull CruxPlugin register(@NotNull CruxPlugin object) {
             return register(object.getName(), object);
@@ -29,7 +30,7 @@ public class CruxRegistries {
 
     public static final CruxModuleRegistry MODULES = new CruxModuleRegistry();
 
-    public static final KeyedRegistry<CruxTick> TICKS = new SimpleKeyedRegistry<>();
+    public static final KeyedRegistry<CruxTick> TICK = new SimpleKeyedRegistry<>();
 
     public static final MappedRegistry<String, Boolean> BOOLEAN_MAPPED = SimpleMappedRegistry.fromHashMap();
 
@@ -40,6 +41,8 @@ public class CruxRegistries {
     public static final KeyedRegistry<ItemTag> ITEM_TAG = new SimpleKeyedRegistry<>();
     public static final KeyedRegistry<BlockTag> BLOCK_TAG = new SimpleKeyedRegistry<>();
     public static final MappedRegistry<Key, CreateBlockSoundGroup> BLOCK_SOUND_GROUP = new SimpleMappedRegistry<>();
+
+    public static final MappedRegistry<String, DataComponentType<?>> DATA_COMPONENT_TYPE = new SimpleMappedRegistry<>();
 
     public static final Registry<PersistentDataType<?, ?>> PERSISTENT_DATA_TYPE = SimpleRegistry.fromSet(
         PersistentDataType.BYTE,

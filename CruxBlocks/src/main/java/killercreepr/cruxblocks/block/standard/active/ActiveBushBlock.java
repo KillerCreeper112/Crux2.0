@@ -2,8 +2,8 @@ package killercreepr.cruxblocks.block.standard.active;
 
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlockImpl;
-import killercreepr.cruxblocks.block.standard.BushBlock;
-import killercreepr.cruxblocks.block.standard.BushType;
+import killercreepr.cruxblocks.block.component.BushBlock;
+import killercreepr.cruxblocks.block.component.BushType;
 import killercreepr.cruxblocks.registeries.CruxBlocksRegistries;
 import killercreepr.cruxblocks.user.Miner;
 import org.bukkit.block.Block;

@@ -1,8 +1,10 @@
 package killercreepr.cruxblocks.block.standard;
 
 import killercreepr.cruxblocks.block.CruxBlock;
-import killercreepr.cruxblocks.block.GenericBlock;
+import killercreepr.cruxblocks.block.SimpleBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
+import killercreepr.cruxblocks.block.component.BushBlock;
+import killercreepr.cruxblocks.block.component.BushType;
 import killercreepr.cruxblocks.block.context.BlockContext;
 import killercreepr.cruxblocks.block.standard.active.ActiveBushBlock;
 import killercreepr.cruxblocks.block.texture.TextureData;
@@ -12,7 +14,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 
-public class SimpleBushBlock extends GenericBlock implements BushBlock {
+public class SimpleBushBlock extends SimpleBlock implements BushBlock {
     protected final @NotNull BushType bushType;
     public SimpleBushBlock(@NotNull Key key, @NotNull TextureData textureData, @NotNull BushType bushType) {
         super(key, textureData);

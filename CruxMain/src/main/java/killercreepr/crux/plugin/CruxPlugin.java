@@ -18,7 +18,7 @@ public abstract class CruxPlugin extends JavaPlugin implements CruxModule {
     public final void onEnable() {
         super.onEnable();
 
-        CruxRegistries.PLUGINS.register(this);
+        CruxRegistries.PLUGIN.register(this);
 
         enabled();
     }
@@ -39,7 +39,7 @@ public abstract class CruxPlugin extends JavaPlugin implements CruxModule {
     public final void onDisable() {
         super.onDisable();
         HandlerList.unregisterAll((Plugin) this);
-        CruxRegistries.PLUGINS.unregister(this);
+        CruxRegistries.PLUGIN.unregister(this);
         disabled();
     }
 
