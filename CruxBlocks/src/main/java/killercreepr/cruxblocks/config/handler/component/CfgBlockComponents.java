@@ -19,7 +19,11 @@ public class CfgBlockComponents {
         registry.register("directional_block", new FileDataComponentType<DirectionalBlock>() {
             @Override
             public @Nullable TypedDataComponent<DirectionalBlock> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
-                BlockFace direction = ctx.getRegistry().deserializeFromFile(BlockFace.class, e.get("direction"));
+                BlockFace direction;
+                try{
+                    direction = ctx.getRegistry().deserializeFromFile(BlockFace.class, e.get("direction"));
+                }catch (ClassCastException ignored){ direction = null; }
+
                 if(direction==null){
                     Axis axis = ctx.getRegistry().deserializeFromFile(Axis.class, e.get("direction"));
                     if(axis == null) return null;

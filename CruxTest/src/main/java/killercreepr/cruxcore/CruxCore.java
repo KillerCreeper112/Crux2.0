@@ -40,7 +40,7 @@ public class CruxCore extends CruxPlugin implements Listener {
     protected final CruxAttributesModule CRUX_ATTRIBUTES = new CruxAttributesModule();
     protected final CruxEntitiesModule CRUX_ENTITIES = new CruxEntitiesModule();
     protected final CruxEnchantsModule CRUX_ENCHANTS = new CruxEnchantsModule();
-    protected final CruxBlocksModule CRUX_BLOCKS = new CruxBlocksModule(CruxBlocksRegistries.BLOCKS);
+    protected final CruxBlocksModule CRUX_BLOCKS = new CruxBlocksModule(CruxBlocksRegistries.BLOCK);
     protected final CruxStructuresModule CRUX_STRUCTURES = new CruxStructuresModule();
     protected final CruxExternalModule CRUX_EXTERNAL = new CruxExternalModule();
     protected final CruxAdvancementsModule CRUX_ADVANCEMENTS = new CruxAdvancementsModule();

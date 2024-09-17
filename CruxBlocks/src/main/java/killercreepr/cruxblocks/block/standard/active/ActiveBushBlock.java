@@ -34,14 +34,14 @@ public class ActiveBushBlock extends ActiveCruxBlockImpl {
         switch (getBushType()){
             case BOTTOM, MIDDLE ->{
                 Block above = block.getRelative(BlockFace.UP);
-                CruxBlock cruxAbove = CruxBlocksRegistries.BLOCKS.getByBlock(above);
+                CruxBlock cruxAbove = CruxBlocksRegistries.BLOCK.getByBlock(above);
                 if(cruxAbove == null || !cruxBlock.getGroup().containsBlock(cruxAbove)) return false;
             }
         }
         Block ground = block.getRelative(BlockFace.DOWN);
         if(getBushType() == BushType.BOTTOM) return ground.isSolid();
 
-        CruxBlock active = CruxBlocksRegistries.BLOCKS.getByBlock(ground);
+        CruxBlock active = CruxBlocksRegistries.BLOCK.getByBlock(ground);
 
         if(active == null) return false;
         return cruxBlock.getGroup().containsBlock(active);

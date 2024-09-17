@@ -1,5 +1,5 @@
 package killercreepr.cruxblocks.registries;
 
 public class CruxBlocksRegistries {
-    public static final CruxBlockRegistry BLOCKS = new CruxBlockRegistry();
+    public static final CruxBlockRegistry BLOCK = new CruxBlockRegistry();
 }

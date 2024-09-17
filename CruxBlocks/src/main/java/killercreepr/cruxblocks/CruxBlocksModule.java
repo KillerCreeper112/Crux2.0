@@ -64,7 +64,7 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
     }
 
     public CruxBlocksModule() {
-        this(CruxBlocksRegistries.BLOCKS);
+        this(CruxBlocksRegistries.BLOCK);
     }
 
     protected final Map<Block, ActiveCruxBlock> activeBlocks = new HashMap<>();
@@ -102,8 +102,8 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
         Crux.handlers().setBlock(this);
         plugin.registerListeners(
             new CustomBlocksListener(plugin, this),
-            new NoteBlockSoundsListener(plugin, CruxBlocksRegistries.BLOCKS),
-            new CustomBlockClientSyncListener(plugin, CruxBlocksRegistries.BLOCKS)
+            new NoteBlockSoundsListener(plugin, CruxBlocksRegistries.BLOCK),
+            new CustomBlockClientSyncListener(plugin, CruxBlocksRegistries.BLOCK)
         );
 
         EntityMemory.registerFunction(plugin, e ->{

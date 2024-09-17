@@ -28,7 +28,7 @@ public class CruxBlockTagType implements PersistentDataType<String, CruxBlock> {
     @Override
     public @NotNull CruxBlock fromPrimitive(@NotNull String primitive, @NotNull PersistentDataAdapterContext context) {
         return Objects.requireNonNull(
-            CruxBlocksRegistries.BLOCKS.get(Crux.key(primitive))
+            CruxBlocksRegistries.BLOCK.get(Crux.key(primitive))
         );
     }
 }

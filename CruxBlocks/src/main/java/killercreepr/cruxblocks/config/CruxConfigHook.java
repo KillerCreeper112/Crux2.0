@@ -37,7 +37,7 @@ public class CruxConfigHook {
                                                                    @Nullable Key key,
                                                                    @NotNull Object value, @NotNull TextParserContext ctx) {
                 Key groupKey = Crux.key(ctx.deserializeString(value.toString()));
-                CruxBlocksPersistTags.CRUX_BLOCK_GROUP.set(to, CruxBlocksRegistries.BLOCKS.getGroup(groupKey));
+                CruxBlocksPersistTags.CRUX_BLOCK_GROUP.set(to, CruxBlocksRegistries.BLOCK.getGroup(groupKey));
             }
 
             @Override
@@ -45,7 +45,7 @@ public class CruxConfigHook {
                                                                                                                           @NotNull Object value, @NotNull TextParserContext ctx) {
                 Key groupKey = Crux.key(ctx.deserializeString(value.toString()));
                 return DynamicPersistentTag.ParseResult.result(
-                    CruxBlocksPersistence.CRUX_BLOCK_GROUP, CruxBlocksRegistries.BLOCKS.getGroup(groupKey)
+                    CruxBlocksPersistence.CRUX_BLOCK_GROUP, CruxBlocksRegistries.BLOCK.getGroup(groupKey)
                 );
             }
         });
@@ -87,7 +87,7 @@ public class CruxConfigHook {
                     ctx, FileElement.fromYaml(value), Crux.key(key)
                 );
                 if(item == null) return;
-                CruxBlocksRegistries.BLOCKS.registerGroup(item);
+                CruxBlocksRegistries.BLOCK.registerGroup(item);
                 plugin.getLogger().info("Registered block group: " + item.key());
             });
         }
@@ -105,7 +105,7 @@ public class CruxConfigHook {
         if(!CruxFolder.hasFileExtension(f, "yml")) return;
         CruxBlockGroup item = loadCfgBlockGroup(new CruxConfig(f));
         if(item == null) return;
-        CruxBlocksRegistries.BLOCKS.registerGroup(item);
+        CruxBlocksRegistries.BLOCK.registerGroup(item);
         plugin.getLogger().info("Registered block group: " + item.key());
     }
 

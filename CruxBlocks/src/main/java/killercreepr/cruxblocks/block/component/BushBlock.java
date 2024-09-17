@@ -29,7 +29,7 @@ public interface BushBlock extends CruxBlockComponent {
         Block b = ctx.getBlock();
         Block ground = b.getRelative(BlockFace.DOWN);
 
-        CruxBlock active = CruxBlocksRegistries.BLOCKS.getByBlock(ground);
+        CruxBlock active = CruxBlocksRegistries.BLOCK.getByBlock(ground);
 
         if(active == null) return false;
         return block.getGroup().containsBlock(active);

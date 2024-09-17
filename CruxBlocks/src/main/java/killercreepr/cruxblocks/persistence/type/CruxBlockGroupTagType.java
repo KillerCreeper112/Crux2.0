@@ -28,7 +28,7 @@ public class CruxBlockGroupTagType implements PersistentDataType<String, CruxBlo
     @Override
     public @NotNull CruxBlockGroup fromPrimitive(@NotNull String primitive, @NotNull PersistentDataAdapterContext context) {
         return Objects.requireNonNull(
-            CruxBlocksRegistries.BLOCKS.getGroup(Crux.key(primitive))
+            CruxBlocksRegistries.BLOCK.getGroup(Crux.key(primitive))
         );
     }
 }

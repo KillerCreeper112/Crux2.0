@@ -17,7 +17,7 @@ import java.util.concurrent.CompletableFuture;
 public class CruxBlockGroupArgument implements CustomArgumentType.Converted<CruxBlockGroup, Key> {
     @Override
     public @NotNull CruxBlockGroup convert(@NotNull Key nativeType) {
-        return Objects.requireNonNull(CruxBlocksRegistries.BLOCKS.getGroup(nativeType));
+        return Objects.requireNonNull(CruxBlocksRegistries.BLOCK.getGroup(nativeType));
     }
 
     @Override
@@ -27,7 +27,7 @@ public class CruxBlockGroupArgument implements CustomArgumentType.Converted<Crux
 
     @Override
     public @NotNull <S> CompletableFuture<Suggestions> listSuggestions(@NotNull CommandContext<S> context, @NotNull SuggestionsBuilder builder) {
-        for(CruxBlockGroup p : CruxBlocksRegistries.BLOCKS.getGroups()){
+        for(CruxBlockGroup p : CruxBlocksRegistries.BLOCK.getGroups()){
             builder.suggest(p.key().asMinimalString());
         }
         return builder.buildFuture();
