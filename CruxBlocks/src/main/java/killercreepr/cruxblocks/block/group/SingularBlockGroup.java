@@ -1,5 +1,6 @@
 package killercreepr.cruxblocks.block.group;
 
+import killercreepr.crux.component.DataComponentHandler;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.block.context.PlaceBlockContext;
@@ -13,17 +14,19 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 
-public abstract class SingularBlockGroup implements CruxBlockGroup{
+public class SingularBlockGroup implements CruxBlockGroup{
     protected final @NotNull Key key;
     protected final @NotNull CruxBlock block;
-    public SingularBlockGroup(@NotNull Key key, @NotNull CruxBlock block) {
+    protected final @NotNull DataComponentHandler components;
+    public SingularBlockGroup(@NotNull Key key, @NotNull CruxBlock block, @NotNull DataComponentHandler components) {
         this.key = key;
         this.block = block;
+        this.components = components;
         block.setGroup(this);
     }
 
-    public SingularBlockGroup(@NotNull CruxBlock block) {
-        this(block.key(), block);
+    public SingularBlockGroup(@NotNull CruxBlock block, @NotNull DataComponentHandler components) {
+        this(block.key(), block, components);
     }
 
     @Override
@@ -81,5 +84,10 @@ public abstract class SingularBlockGroup implements CruxBlockGroup{
     @Override
     public @NotNull Key key() {
         return key;
+    }
+
+    @Override
+    public @NotNull DataComponentHandler getComponents() {
+        return components;
     }
 }

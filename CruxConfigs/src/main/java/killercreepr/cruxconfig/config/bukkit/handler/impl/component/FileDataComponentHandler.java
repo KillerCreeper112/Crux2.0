@@ -20,7 +20,7 @@ public class FileDataComponentHandler implements FileObjectHandler<DataComponent
     @Override
     public @Nullable DataComponentHandler deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
         Collection<TypedDataComponent<?>> list = ctx.getRegistry().deserializeFromFile(
-            new TypeToken<Collection<TypedDataComponent<?>>>(){}.getType(), e
+            new TypeToken<Collection<TypedDataComponent>>(){}.getType(), e
         );
         return DataComponentHandler.simple(list);
     }
