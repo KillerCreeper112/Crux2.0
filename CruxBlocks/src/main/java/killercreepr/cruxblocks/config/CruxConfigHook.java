@@ -11,7 +11,7 @@ import killercreepr.cruxblocks.block.texture.TextureData;
 import killercreepr.cruxblocks.config.handler.*;
 import killercreepr.cruxblocks.persistence.CruxBlocksPersistTags;
 import killercreepr.cruxblocks.persistence.CruxBlocksPersistence;
-import killercreepr.cruxblocks.registeries.CruxBlocksRegistries;
+import killercreepr.cruxblocks.registries.CruxBlocksRegistries;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.FileGenericEnum;

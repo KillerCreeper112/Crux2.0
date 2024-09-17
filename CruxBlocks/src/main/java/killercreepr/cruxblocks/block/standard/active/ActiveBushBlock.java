@@ -2,9 +2,8 @@ package killercreepr.cruxblocks.block.standard.active;
 
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlockImpl;
-import killercreepr.cruxblocks.block.component.BushBlock;
 import killercreepr.cruxblocks.block.component.BushType;
-import killercreepr.cruxblocks.registeries.CruxBlocksRegistries;
+import killercreepr.cruxblocks.registries.CruxBlocksRegistries;
 import killercreepr.cruxblocks.user.Miner;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -15,10 +14,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 public class ActiveBushBlock extends ActiveCruxBlockImpl {
-    protected final @NotNull BushBlock bush;
-    public ActiveBushBlock(@NotNull Block block, @NotNull BushBlock cruxBlock) {
+    protected final @NotNull BushType bushType;
+    public ActiveBushBlock(@NotNull Block block, @NotNull CruxBlock cruxBlock, @NotNull BushType bushType) {
         super(block, cruxBlock);
-        this.bush = cruxBlock;
+        this.bushType = bushType;
     }
 
     @Override
@@ -49,6 +48,6 @@ public class ActiveBushBlock extends ActiveCruxBlockImpl {
     }
 
     public @NotNull BushType getBushType(){
-        return bush.getBushType();
+        return bushType;
     }
 }

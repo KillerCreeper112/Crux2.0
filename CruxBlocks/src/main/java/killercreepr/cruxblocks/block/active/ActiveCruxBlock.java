@@ -131,6 +131,9 @@ public interface ActiveCruxBlock {
     }
 
     default boolean canHarvest(@Nullable Miner miner){
+        boolean requiresCorrectToolForDrops = getCruxBlock().getComponents().getOrDefault(CruxBlockComponents.REQUIRES_CORRECT_TOOL_FOR_DROPS, false);
+        if(!requiresCorrectToolForDrops) return true;
+
         Tooled tooled;
         if(miner instanceof Tooled m) tooled = m;
         else tooled = null;

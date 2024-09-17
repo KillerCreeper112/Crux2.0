@@ -1,5 +1,6 @@
 package killercreepr.cruxblocks.block.component;
 
+import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.block.context.BlockContext;
 import killercreepr.cruxblocks.block.context.PlaceBlockContext;
@@ -14,5 +15,9 @@ public interface CruxBlockGroupComponent {
 
     default @Nullable ActiveCruxBlock placeBlock(@NotNull PlaceBlockContext ctx, boolean applyPhysics, @NotNull CruxBlockGroup group) {
         return null;
+    }
+
+    default void onRegistered(@NotNull CruxBlock block, @NotNull CruxBlockGroup group){
+
     }
 }

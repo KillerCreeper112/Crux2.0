@@ -7,7 +7,7 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
 import killercreepr.cruxblocks.block.CruxBlock;
-import killercreepr.cruxblocks.registeries.CruxBlocksRegistries;
+import killercreepr.cruxblocks.registries.CruxBlocksRegistries;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 

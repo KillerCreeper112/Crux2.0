@@ -24,6 +24,7 @@ import killercreepr.cruxblocks.block.wrapper.CruxBlockCruxWrapper;
 import killercreepr.cruxblocks.block.wrapper.CruxGroupBlockWrapper;
 import killercreepr.cruxblocks.command.CruxBlocksCommands;
 import killercreepr.cruxblocks.config.CruxConfigHook;
+import killercreepr.cruxblocks.config.handler.component.CfgBlockComponents;
 import killercreepr.cruxblocks.data.entity.MinerHolder;
 import killercreepr.cruxblocks.item.CruxItemsItemProvider;
 import killercreepr.cruxblocks.item.KeyedItemProvider;
@@ -31,8 +32,9 @@ import killercreepr.cruxblocks.listener.CustomBlockClientSyncListener;
 import killercreepr.cruxblocks.listener.CustomBlocksListener;
 import killercreepr.cruxblocks.listener.NoteBlockSoundsListener;
 import killercreepr.cruxblocks.manager.CruxBlockManager;
-import killercreepr.cruxblocks.registeries.CruxBlockRegistry;
-import killercreepr.cruxblocks.registeries.CruxBlocksRegistries;
+import killercreepr.cruxblocks.registries.CruxBlockRegistry;
+import killercreepr.cruxblocks.registries.CruxBlocksRegistries;
+import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Material;
 import org.bukkit.Registry;
@@ -89,6 +91,7 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
 
     @Override
     public void onLoad(@NotNull CruxPlugin plugin) {
+        CfgBlockComponents.register(BukkitCfgHandlers.TYPED_DATA_COMPONENT.typeHandlers());
         if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS)){
             CruxConfigHook.register();
         }

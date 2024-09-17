@@ -10,13 +10,13 @@ import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
-public interface BushGroup extends CruxBlockGroupComponent {
+public interface BushGroup extends CruxBlockGroupComponent, Iterable<CruxBlock> {
     @Nullable
     CruxBlock getBlock(@NotNull BushType type);
-
-    Map<BushType, CruxBlock> getBushTypeToBlock();
 
     @Override
     default @Nullable Boolean canPlace(@NotNull BlockContext ctx, @NotNull CruxBlockGroup group) {
@@ -50,5 +50,27 @@ public interface BushGroup extends CruxBlockGroupComponent {
         }
         top.placeBlock(ctx.withBlock(current), applyPhysics);
         return active;
+    }
+
+    class Simple implements BushGroup{
+        protected final @NotNull Map<BushType, CruxBlock> bushTypeToBlock = new HashMap<>();
+
+        @Override
+        public void onRegistered(@NotNull CruxBlock block, @NotNull CruxBlockGroup group) {
+            BushBlock bush = block.getComponents().get(CruxBlockComponents.BUSH_BLOCK);
+            if(bush==null) return;
+            bushTypeToBlock.put(bush.getBushType(), block);
+        }
+
+        @Override
+        public @Nullable CruxBlock getBlock(@NotNull BushType type) {
+            return bushTypeToBlock.get(type);
+        }
+
+        @NotNull
+        @Override
+        public Iterator<CruxBlock> iterator() {
+            return bushTypeToBlock.values().iterator();
+        }
     }
 }

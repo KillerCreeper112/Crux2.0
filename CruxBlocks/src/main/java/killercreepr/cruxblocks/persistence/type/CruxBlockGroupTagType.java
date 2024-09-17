@@ -2,7 +2,7 @@ package killercreepr.cruxblocks.persistence.type;
 
 import killercreepr.crux.Crux;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
-import killercreepr.cruxblocks.registeries.CruxBlocksRegistries;
+import killercreepr.cruxblocks.registries.CruxBlocksRegistries;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;

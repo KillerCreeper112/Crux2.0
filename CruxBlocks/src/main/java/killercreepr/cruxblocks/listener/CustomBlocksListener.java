@@ -9,6 +9,7 @@ import killercreepr.crux.util.CruxLoc;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxInteractable;
+import killercreepr.cruxblocks.block.component.CruxBlockComponents;
 import killercreepr.cruxblocks.block.context.PlaceBlockContext;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.data.entity.MinerHolder;
@@ -40,9 +41,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Set;
 
-//todo the block breaking speed is wack
+//todo the block breaking speed is a little wack
 public class CustomBlocksListener implements Listener {
     protected final @NotNull Plugin plugin;
     protected final @NotNull CruxBlockManager manager;
@@ -57,11 +59,11 @@ public class CustomBlocksListener implements Listener {
 
     private static final Collection<Material> REPLACE = Set.of(Material.AIR, Material.CAVE_AIR, Material.VOID_AIR,
             Material.SHORT_GRASS, Material.SEAGRASS, Material.WATER, Material.LAVA, Material.TALL_GRASS);
-    private final static Map<UUID, Long> interactCooldowns = new HashMap<>();
+    //private final static Map<UUID, Long> interactCooldowns = new HashMap<>();
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        interactCooldowns.remove(event.getPlayer().getUniqueId());
+        //interactCooldowns.remove(event.getPlayer().getUniqueId());
     }
 
     @EventHandler
@@ -100,7 +102,7 @@ public class CustomBlocksListener implements Listener {
 
         CruxBlock crux = active.getCruxBlock();
         Collection<ItemStack> drops = active.getDrops(Miner.entity(p.getInventory().getItemInMainHand(), p));
-        CreateBlockSoundGroup soundGroup = crux.getSoundGroup();
+        CreateBlockSoundGroup soundGroup = crux.getComponents().get(CruxBlockComponents.BLOCK_SOUND_GROUP);
         if(soundGroup != null){
             CreateSound sound = soundGroup.getBreakSound();
             if(sound != null){

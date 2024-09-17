@@ -1,10 +1,13 @@
 package killercreepr.cruxblocks.block;
 
+import killercreepr.crux.component.DataComponentHandler;
 import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.crux.data.communication.CreateSound;
 import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.cruxblocks.CruxBlocksModule;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
+import killercreepr.cruxblocks.block.active.ActiveCruxBlockImpl;
+import killercreepr.cruxblocks.block.component.CruxBlockComponent;
 import killercreepr.cruxblocks.block.component.CruxBlockComponents;
 import killercreepr.cruxblocks.block.context.BlockContext;
 import killercreepr.cruxblocks.block.context.PlaceBlockContext;
@@ -22,13 +25,23 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 public interface CruxBlock extends Keyed, CruxBlockData {
-    @NotNull ActiveCruxBlock createActive(@NotNull Block block);
+    default @NotNull ActiveCruxBlock createActive(@NotNull Block block){
+        for(CruxBlockComponent c : getComponents().getAllOfType(CruxBlockComponent.class)){
+            ActiveCruxBlock x = c.createActive(block, this);
+            if(x != null) return x;
+        }
+        return new ActiveCruxBlockImpl(block, this);
+    }
     @NotNull TextureData getTextureData();
     @Nullable CruxBlockGroup getGroup();
     void setGroup(@Nullable CruxBlockGroup group);
 
     @Override
     default boolean canPlace(@NotNull BlockContext ctx){
+        for(CruxBlockComponent c : getComponents().getAllOfType(CruxBlockComponent.class)){
+            Boolean x = c.canPlace(ctx, this);
+            if(x != null) return x;
+        }
         CruxBlockGroup group = getGroup();
         Objects.requireNonNull(group, "CruxBlock canPlace method has not been overridden and does not have a group set!");
         return group.canPlace(ctx);
@@ -79,5 +92,12 @@ public interface CruxBlock extends Keyed, CruxBlockData {
     default void setBlock(@NotNull LimitedRegion region, int x, int y, int z){
         TextureData data = getTextureData();
         data.setBlock(region, x, y, z);
+    }
+
+    @Override
+    default @NotNull DataComponentHandler getComponents(){
+        CruxBlockGroup group = getGroup();
+        if(group == null) throw new UnsupportedOperationException(this + " must override getComponents() because group is not set!");
+        return group.getComponents();
     }
 }

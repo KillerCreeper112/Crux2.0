@@ -8,7 +8,7 @@ import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.cruxadvancements.CruxAdvancementsModule;
 import killercreepr.cruxattributes.CruxAttributesModule;
 import killercreepr.cruxblocks.CruxBlocksModule;
-import killercreepr.cruxblocks.registeries.CruxBlocksRegistries;
+import killercreepr.cruxblocks.registries.CruxBlocksRegistries;
 import killercreepr.cruxconfig.CruxConfigsModule;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;

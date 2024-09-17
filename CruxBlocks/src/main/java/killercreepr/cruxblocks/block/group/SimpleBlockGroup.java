@@ -2,13 +2,13 @@ package killercreepr.cruxblocks.block.group;
 
 import com.google.common.base.Preconditions;
 import killercreepr.crux.component.DataComponentHandler;
-import killercreepr.crux.registry.KeyedRegistry;
-import killercreepr.crux.registry.SimpleKeyedRegistry;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.block.component.CruxBlockGroupComponent;
 import killercreepr.cruxblocks.block.context.BlockContext;
 import killercreepr.cruxblocks.block.context.PlaceBlockContext;
+import killercreepr.cruxblocks.registry.BlockGroupBlocksRegistry;
+import killercreepr.cruxblocks.registry.SimpleBlockGroupBlocksRegistry;
 import net.kyori.adventure.key.Key;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -16,12 +16,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.function.Predicate;
 
-public abstract class SimpleBlockGroup implements CruxBlockGroup{
+public class SimpleBlockGroup implements CruxBlockGroup{
     protected final @NotNull Key key;
-    protected final @NotNull KeyedRegistry<CruxBlock> group = new SimpleKeyedRegistry<>(new LinkedHashMap<>());
+    protected final @NotNull BlockGroupBlocksRegistry<CruxBlock> group = new SimpleBlockGroupBlocksRegistry<>(this);
     protected final @NotNull CruxBlock baseBlock;
     protected final @NotNull DataComponentHandler components;
     public SimpleBlockGroup(@NotNull Key key, @NotNull CruxBlock... blocks) {

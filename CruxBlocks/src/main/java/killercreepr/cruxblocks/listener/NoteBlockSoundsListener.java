@@ -5,7 +5,8 @@ import killercreepr.crux.data.communication.CreateSound;
 import killercreepr.crux.util.CruxEntity;
 import killercreepr.crux.util.CruxWorldUtil;
 import killercreepr.cruxblocks.block.CruxBlock;
-import killercreepr.cruxblocks.registeries.CruxBlockRegistry;
+import killercreepr.cruxblocks.block.component.CruxBlockComponents;
+import killercreepr.cruxblocks.registries.CruxBlockRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.GameEvent;
 import org.bukkit.Location;
@@ -53,7 +54,7 @@ public class NoteBlockSoundsListener implements Listener {
         CruxBlock crux = registry.getByBlock(block);
         if(crux==null) return;
 
-        CreateBlockSoundGroup sounds = crux.getSoundGroup();
+        CreateBlockSoundGroup sounds = crux.getComponents().get(CruxBlockComponents.BLOCK_SOUND_GROUP);
         if(sounds==null) return;
 
         CreateSound sound;
@@ -82,7 +83,7 @@ public class NoteBlockSoundsListener implements Listener {
         Block placed = event.getBlockPlaced();
         CruxBlock crux = registry.getByBlock(placed);
         if(crux==null) return;
-        CreateBlockSoundGroup sounds = crux.getSoundGroup();
+        CreateBlockSoundGroup sounds = crux.getComponents().get(CruxBlockComponents.BLOCK_SOUND_GROUP);
         if(sounds==null) return;
         CreateSound sound = sounds.getPlaceSound();
         if(sound==null) return;
@@ -101,7 +102,7 @@ public class NoteBlockSoundsListener implements Listener {
 
         CruxBlock crux = registry.getByBlock(block);
         if(crux==null) return;
-        CreateBlockSoundGroup sounds = crux.getSoundGroup();
+        CreateBlockSoundGroup sounds = crux.getComponents().get(CruxBlockComponents.BLOCK_SOUND_GROUP);
         if(sounds==null) return;
         CreateSound sound = sounds.getBreakSound();
         if(sound==null) return;
@@ -126,7 +127,7 @@ public class NoteBlockSoundsListener implements Listener {
         if(crux==null) return;
         Location location = block.getLocation().toCenterLocation();
 
-        CreateBlockSoundGroup soundGroup = crux.getSoundGroup();
+        CreateBlockSoundGroup soundGroup = crux.getComponents().get(CruxBlockComponents.BLOCK_SOUND_GROUP);
         if(soundGroup==null) return;
         CreateSound sound = soundGroup.getHitSound();
         if(sound==null) return;

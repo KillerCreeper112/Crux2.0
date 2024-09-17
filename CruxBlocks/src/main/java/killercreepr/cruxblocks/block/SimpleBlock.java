@@ -1,27 +1,23 @@
 package killercreepr.cruxblocks.block;
 
 import killercreepr.crux.component.DataComponentHandler;
-import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
-import killercreepr.cruxblocks.block.active.ActiveCruxBlockImpl;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.block.texture.TextureData;
 import net.kyori.adventure.key.Key;
-import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 public class SimpleBlock implements CruxBlock {
     protected final @NotNull Key key;
     protected final @NotNull TextureData textureData;
+    protected final @Nullable DataComponentHandler components;
     protected @Nullable CruxBlockGroup group;
-    public SimpleBlock(@NotNull Key key, @NotNull TextureData textureData) {
+    public SimpleBlock(@NotNull Key key, @NotNull TextureData textureData, @Nullable DataComponentHandler components) {
         this.key = key;
         this.textureData = textureData;
-    }
-
-    @Override
-    public @NotNull ActiveCruxBlock createActive(@NotNull Block block) {
-        return new ActiveCruxBlockImpl(block, this);
+        this.components = components;
     }
 
     @Override
@@ -46,6 +42,6 @@ public class SimpleBlock implements CruxBlock {
 
     @Override
     public @NotNull DataComponentHandler getComponents() {
-        return group == null ? DataComponentHandler.empty() : group.getComponents();
+        return group == null ? Objects.requireNonNull(components, this + " does not have a group or a DataComponentHandler set!") : group.getComponents();
     }
 }

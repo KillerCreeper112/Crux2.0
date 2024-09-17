@@ -1,33 +1,26 @@
 package killercreepr.crux.component;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
-public interface DataComponentAccessor extends Iterable<DataComponentType<?>> {
+public interface DataComponentAccessor extends Iterable<TypedDataComponent<?>> {
     @Nullable
     <T> T get(DataComponentType<? extends T> type);
 
     Set<DataComponentType<?>> keySet();
 
     default <T> Collection<T> getAllOfType(Class<T> type){
+        if(isEmpty()) return Set.of();
         Collection<T> list = new HashSet<>();
-        for(DataComponentType<?> componentType : this){
-            Object o = get(componentType);
+        for(TypedDataComponent<?> typed : this){
+            Object o = typed.getValue();
             if(o == null) continue;
             if(type.isAssignableFrom(o.getClass())) list.add(type.cast(o));
         }
         return list;
-    }
-
-    @NotNull
-    @Override
-    default Iterator<DataComponentType<?>> iterator(){
-        return keySet().iterator();
     }
 
     default boolean has(DataComponentType<?> type) {

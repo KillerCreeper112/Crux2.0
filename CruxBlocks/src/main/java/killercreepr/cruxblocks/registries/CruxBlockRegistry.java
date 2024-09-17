@@ -1,4 +1,4 @@
-package killercreepr.cruxblocks.registeries;
+package killercreepr.cruxblocks.registries;
 
 import killercreepr.crux.registry.KeyedRegistry;
 import killercreepr.crux.registry.MappedRegistry;

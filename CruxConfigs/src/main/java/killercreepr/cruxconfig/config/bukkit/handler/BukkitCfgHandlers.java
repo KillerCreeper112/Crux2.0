@@ -2,6 +2,8 @@ package killercreepr.cruxconfig.config.bukkit.handler;
 
 import io.papermc.paper.registry.RegistryKey;
 import killercreepr.crux.block.CruxBlockWrapper;
+import killercreepr.crux.component.DataComponentHandler;
+import killercreepr.crux.component.TypedDataComponent;
 import killercreepr.crux.data.tag.block.BlockTag;
 import killercreepr.crux.data.tag.item.ItemTag;
 import killercreepr.crux.block.predicate.BlockPredicate;
@@ -26,6 +28,9 @@ import killercreepr.crux.loot.item.ItemLootPoolObject;
 import killercreepr.crux.loot.item.ItemLootTable;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.*;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileTypedDataComponent;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileDataComponentHandler;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.component.StandardCfgDataComponentTypes;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.FileDynamicItem;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.FileDynamicPersistentTag;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.*;
@@ -81,6 +86,8 @@ public class BukkitCfgHandlers {
     public static final FileBlockTag BLOCK_TAG = new FileBlockTag();
     public static final FileBlockPredicate BLOCK_PREDICATE = new FileBlockPredicate();
     public static final FileCruxBlockWrapper CRUX_BLOCK_WRAPPER = new FileCruxBlockWrapper();
+    public static final FileTypedDataComponent TYPED_DATA_COMPONENT = new FileTypedDataComponent();
+    public static final FileDataComponentHandler DATA_COMPONENT_HANDLER = new FileDataComponentHandler();
 
     public static void initStandard(){
         CfgRegistries.FILE.forEach(BukkitCfgHandlers::init);
@@ -116,6 +123,10 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(BlockTag.class, BLOCK_TAG);
         registry.registerFileHandler(BlockPredicate.class, BLOCK_PREDICATE);
         registry.registerFileHandler(CruxBlockWrapper.class, CRUX_BLOCK_WRAPPER);
+
+        StandardCfgDataComponentTypes.register(TYPED_DATA_COMPONENT.typeHandlers());
+        registry.registerFileHandler(TypedDataComponent.class, TYPED_DATA_COMPONENT);
+        registry.registerFileHandler(DataComponentHandler.class, DATA_COMPONENT_HANDLER);
 
         StandardFileLootConditions.register(LOOT_CONDITION);
         StandardFileLootFunctions.register(ITEM_LOOT_FUNCTION);

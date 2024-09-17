@@ -1,14 +1,10 @@
 package killercreepr.cruxblocks.config.handler;
 
 import com.google.common.reflect.TypeToken;
-import killercreepr.crux.data.communication.CreateBlockSoundGroup;
+import killercreepr.crux.component.DataComponentHandler;
 import killercreepr.cruxblocks.block.CruxBlock;
-import killercreepr.cruxblocks.block.CruxBlockDirectional;
-import killercreepr.cruxblocks.block.component.BushBlock;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
-import killercreepr.cruxblocks.config.block.CfgBushBlockGroup;
-import killercreepr.cruxblocks.config.block.CfgDirectionalBlockGroup;
-import killercreepr.cruxblocks.config.block.SimpleCfgBlockGroup;
+import killercreepr.cruxblocks.block.group.SimpleBlockGroup;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -43,21 +39,10 @@ public class FileCruxBlockGroup implements FileObjectHandler<CruxBlockGroup> {
 
         CruxBlock[] blocksArray = blocks.toArray(new CruxBlock[0]);
 
-        float hardness = o.getOrDefaultObject(Float.class, "hardness", 1f);
-        CreateBlockSoundGroup soundGroup = registry.deserializeFromFile(CreateBlockSoundGroup.class, o.get("sound_group"));
-        CruxBlock first = blocks.getFirst();
-        if(first instanceof CruxBlockDirectional){
-            boolean orientable = o.getOrDefaultObject(Boolean.class, "orientable", false);
-            return new CfgDirectionalBlockGroup(
-                key,orientable, hardness, soundGroup, blocksArray
-            );
-        }
-        if(first instanceof BushBlock){
-            return new CfgBushBlockGroup(key, hardness, soundGroup, blocksArray);
-        }
-        return new SimpleCfgBlockGroup(
-            key, hardness, soundGroup,
-            o.getObject(Boolean.class, "require_correct_tool_for_harvest", false),
+        DataComponentHandler dataComponents  = registry.deserializeFromFile(DataComponentHandler.class, o.get("components"));
+        if(dataComponents == null) dataComponents = DataComponentHandler.simple();
+        return new SimpleBlockGroup(
+            key, dataComponents,
             blocksArray
         );
     }
