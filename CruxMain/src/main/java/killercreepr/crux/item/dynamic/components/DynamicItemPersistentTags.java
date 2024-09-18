@@ -2,14 +2,15 @@ package killercreepr.crux.item.dynamic.components;
 
 import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.item.dynamic.DynamicItemComponent;
+import killercreepr.crux.item.dynamic.components.persistence.TypedDynamicPersistentTag;
 import killercreepr.crux.util.CruxItem;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
+import java.util.Collection;
 
 public class DynamicItemPersistentTags implements DynamicItemComponent {
-    protected final @NotNull Map<Object, DynamicPersistentTag> tags;
-    public DynamicItemPersistentTags(@NotNull Map<Object, DynamicPersistentTag> tags) {
+    protected final @NotNull Collection<TypedDynamicPersistentTag> tags;
+    public DynamicItemPersistentTags(@NotNull Collection<TypedDynamicPersistentTag> tags) {
         this.tags = tags;
     }
 
@@ -18,12 +19,12 @@ public class DynamicItemPersistentTags implements DynamicItemComponent {
         return "persistent_tags";
     }
 
-    public @NotNull Map<Object, DynamicPersistentTag> getTags() {
+    public @NotNull Collection<TypedDynamicPersistentTag> getTags() {
         return tags;
     }
 
     @Override
     public void apply(@NotNull CruxItem item, @NotNull TextParserContext context) {
-        tags.forEach((keyObject, tag) -> item.editMeta(meta -> tag.apply(meta, context)));
+        tags.forEach(tag -> item.editMeta(meta -> tag.apply(meta, context)));
     }
 }

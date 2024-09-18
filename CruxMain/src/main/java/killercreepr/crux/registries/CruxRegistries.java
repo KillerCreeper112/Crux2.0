@@ -15,6 +15,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
+
 public class CruxRegistries {
     public static final MappedRegistry<String, CruxPlugin> PLUGIN = new SimpleMappedRegistry<>(){
         @Override

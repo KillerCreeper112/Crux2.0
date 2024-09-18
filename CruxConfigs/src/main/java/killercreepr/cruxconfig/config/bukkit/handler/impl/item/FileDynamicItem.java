@@ -1,13 +1,15 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.item;
 
+import com.google.common.reflect.TypeToken;
 import killercreepr.crux.item.dynamic.BukkitDynamicItem;
 import killercreepr.crux.item.dynamic.DynamicItem;
 import killercreepr.crux.item.dynamic.DynamicItemComponent;
 import killercreepr.crux.item.dynamic.components.*;
+import killercreepr.crux.item.dynamic.components.DynamicItemPersistentTags;
+import killercreepr.crux.item.dynamic.components.persistence.TypedDynamicPersistentTag;
 import killercreepr.crux.registry.MappedRegistry;
 import killercreepr.crux.registry.SimpleMappedRegistry;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.FileDynamicItemComponent;
-import killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.FileDynamicPersistentTag;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.FileGenericSingleDynamicComponent;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
@@ -277,31 +279,15 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
             @Override
             public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull DynamicItemPersistentTags object) {
                 FileRegistry registry = context.getRegistry();
-                FileObject o = new FileObject();
-                object.getTags().forEach((key, value) -> o.add(key.toString(), registry.serializeToFile(value)));
-                return o;
+                return registry.serializeToFile(object.getTags());
             }
 
             @Override
-            public @Nullable DynamicItemPersistentTags deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
-                if(!(e instanceof FileObject o)){
-                    if(!(e instanceof FileArray a)) return null;
-                    Map<Object, DynamicPersistentTag> tags = new HashMap<>();
-                    a.forEach(ele ->{
-                        DynamicPersistentTag tag = context.getRegistry().deserializeFromFile(DynamicPersistentTag.class, ele);
-                        if(tag==null) return;
-                        tags.put(tag.getKey(), tag);
-                    });
-                    if(tags.isEmpty()) return null;
-                    return new DynamicItemPersistentTags(tags);
-                }
-                Map<Object, DynamicPersistentTag> tags = new HashMap<>();
-                o.forEach((key, value) ->{
-                    DynamicPersistentTag tag = FileDynamicPersistentTag.deserialize(value, key);
-                    if(tag==null) return;
-                    tags.put(key, tag);
-                });
-                if(tags.isEmpty()) return null;
+            public @Nullable DynamicItemPersistentTags deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
+                Collection<TypedDynamicPersistentTag> tags = ctx.getRegistry().deserializeFromFile(
+                    new TypeToken<Collection<TypedDynamicPersistentTag>>(){}.getType(), e
+                );
+                if(tags == null || tags.isEmpty()) return null;
                 return new DynamicItemPersistentTags(tags);
             }
         });

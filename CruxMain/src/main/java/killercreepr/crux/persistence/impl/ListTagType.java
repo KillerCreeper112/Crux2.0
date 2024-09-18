@@ -1,6 +1,7 @@
 package killercreepr.crux.persistence.impl;
 
 import com.google.common.collect.Lists;
+import net.minecraft.nbt.ListTag;
 import org.bukkit.persistence.ListPersistentDataType;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataType;
@@ -9,6 +10,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class ListTagType<P, C> implements ListPersistentDataType<P, C> {
+    public static ListTagType<?, ?> listUnchecked(@NotNull PersistentDataType<?,  ?> typeType){
+        return new ListTagType<>(typeType);
+    }
+
     protected final @NotNull PersistentDataType<P, C> tagType;
     public ListTagType(@NotNull PersistentDataType<P, C> tagType) {
         this.tagType = tagType;

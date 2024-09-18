@@ -1,6 +1,9 @@
 package killercreepr.cruxconfig.config.registry;
 
+import killercreepr.crux.registry.KeyedRegistry;
+import killercreepr.crux.registry.SimpleKeyedRegistry;
 import killercreepr.crux.registry.SimpleRegistry;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.persistence.FileDynamicPersistTagParser;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.json.registry.JsonRegistry;
 import killercreepr.cruxconfig.config.common.json.registry.SimpleJsonRegistry;
@@ -23,4 +26,6 @@ public class CfgRegistries {
     public static final YamlRegistry YAML = YAML_REGISTRY.register(SIMPLE_REGISTRY.register(FILE.register(new SimpleYamlRegistry())));
 
     public static final TaggedJsonRegistry JSON_TAGGED = JSON_REGISTRY.register(FILE.register(new TaggedJsonRegistry()));
+
+    public static final KeyedRegistry<FileDynamicPersistTagParser<?>> DYNAMIC_PERSIST_TAG_PARSER = new SimpleKeyedRegistry<>();
 }

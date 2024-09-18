@@ -1,9 +1,6 @@
 package killercreepr.crux;
 
 import killercreepr.crux.data.entity.EntityMemory;
-import killercreepr.crux.item.dynamic.components.DynamicPersistentTag;
-import killercreepr.crux.item.dynamic.components.TagContainerPersistTagHandler;
-import killercreepr.crux.item.dynamic.components.ToolComponentPersistTagHandler;
 import killercreepr.crux.listener.EntitySpawnListener;
 import killercreepr.crux.listener.PlayerDataListener;
 import killercreepr.crux.module.CruxModule;
@@ -23,13 +20,6 @@ public class CruxMainModule implements CruxModule {
         for(EntityMemory data : EntityMemory.REGISTRY){
             data.removeDataHolders(data.value());
         }
-    }
-
-    @Override
-    public void onLoad(@NotNull CruxPlugin plugin) {
-        DynamicPersistentTag.HANDLERS.register("tag_container", new TagContainerPersistTagHandler());
-        DynamicPersistentTag.HANDLERS.register("tool_component", new ToolComponentPersistTagHandler());
-
     }
 
     @Override

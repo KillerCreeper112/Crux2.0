@@ -18,7 +18,7 @@ import killercreepr.crux.data.communication.MsgContainer;
 import killercreepr.crux.item.ItemHolder;
 import killercreepr.crux.item.StoredItem;
 import killercreepr.crux.item.dynamic.BukkitDynamicItem;
-import killercreepr.crux.item.dynamic.components.DynamicPersistentTag;
+import killercreepr.crux.item.dynamic.components.persistence.TypedDynamicPersistentTag;
 import killercreepr.crux.item.predicate.ItemPredicate;
 import killercreepr.crux.loot.conditions.LootCondition;
 import killercreepr.crux.loot.impl.item.SimpleItemLootObject;
@@ -111,7 +111,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(Instant.class, INSTANT);
         registry.registerFileHandler(EntityType.class, ENTITY_TYPE);
         registry.registerFileHandler(StoredItem.class, STORED_ITEM);
-        registry.registerFileHandler(DynamicPersistentTag.class, DYNAMIC_PERSISTENT_TAG);
+        registry.registerFileHandler(TypedDynamicPersistentTag.class, DYNAMIC_PERSISTENT_TAG);
         registry.registerFileHandler(ItemLootTable.class, ITEM_LOOT_TABLE);
         registry.registerFileHandler(ItemLootPool.class, ITEM_LOOT_POOL);
         registry.registerFileHandler(LootCondition.class, LOOT_CONDITION);

@@ -1,16 +1,11 @@
 package killercreepr.cruxblocks.config;
 
 import killercreepr.crux.Crux;
-import killercreepr.crux.context.TextParserContext;
-import killercreepr.crux.item.dynamic.components.DynamicPersistTagHandler;
-import killercreepr.crux.item.dynamic.components.DynamicPersistentTag;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.component.BushType;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.block.texture.TextureData;
 import killercreepr.cruxblocks.config.handler.*;
-import killercreepr.cruxblocks.persistence.CruxBlocksPersistTags;
-import killercreepr.cruxblocks.persistence.CruxBlocksPersistence;
 import killercreepr.cruxblocks.registries.CruxBlocksRegistries;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
@@ -20,8 +15,6 @@ import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
-import net.kyori.adventure.key.Key;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -31,24 +24,6 @@ import java.util.Map;
 
 public class CruxConfigHook {
     public static void register(){
-        DynamicPersistentTag.HANDLERS.register("block_group", new DynamicPersistTagHandler() {
-            @Override
-            public <T extends PersistentDataContainer> void handle(@NotNull DynamicPersistentTag tag, @NotNull T to,
-                                                                   @Nullable Key key,
-                                                                   @NotNull Object value, @NotNull TextParserContext ctx) {
-                Key groupKey = Crux.key(ctx.deserializeString(value.toString()));
-                CruxBlocksPersistTags.CRUX_BLOCK_GROUP.set(to, CruxBlocksRegistries.BLOCK.getGroup(groupKey));
-            }
-
-            @Override
-            public <T extends PersistentDataContainer> DynamicPersistentTag.ParseResult<?> parseObject(@NotNull T object,
-                                                                                                                          @NotNull Object value, @NotNull TextParserContext ctx) {
-                Key groupKey = Crux.key(ctx.deserializeString(value.toString()));
-                return DynamicPersistentTag.ParseResult.result(
-                    CruxBlocksPersistence.CRUX_BLOCK_GROUP, CruxBlocksRegistries.BLOCK.getGroup(groupKey)
-                );
-            }
-        });
         registerHandlers();
     }
 
