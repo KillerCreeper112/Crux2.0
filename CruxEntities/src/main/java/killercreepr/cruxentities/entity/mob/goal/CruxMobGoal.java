@@ -111,22 +111,22 @@ public class CruxMobGoal extends CruxGoalBase implements Goal<Mob>, ICruxMobGoal
         mob.setTarget(null);
     }
 
-    protected double getSquaredDistance(){
+    protected double getSquaredDistanceFromTarget(){
         if(target != null && target.getWorld().equals(mob.getWorld())) return mob.getLocation().distanceSquared(target.getLocation());
         return 0D;
     }
 
-    protected double getDistance(){
+    protected double getDistanceFromTarget(){
         if(target != null && target.getWorld().equals(mob.getWorld())) return mob.getLocation().distance(target.getLocation());
         return 0D;
     }
 
-    protected boolean isWithinSquared(double distance, double range){
+    protected boolean isWithinSquaredDistance(double distance, double range){
         return distance <= (range*range);
     }
 
-    protected boolean isWithinSquared(double range){
-        return getSquaredDistance() <= (range*range);
+    protected boolean isWithinSquaredDistanceFromTarget(double range){
+        return getSquaredDistanceFromTarget() <= (range*range);
     }
 
     @Override
@@ -140,7 +140,7 @@ public class CruxMobGoal extends CruxGoalBase implements Goal<Mob>, ICruxMobGoal
     protected void targetLogic(){
         super.targetLogic();
         if(target == null) return;
-        double distance = getDistance();
+        double distance = getDistanceFromTarget();
         if(distance > getForgetTargetDistance()){
             setTarget(null);
             return;
