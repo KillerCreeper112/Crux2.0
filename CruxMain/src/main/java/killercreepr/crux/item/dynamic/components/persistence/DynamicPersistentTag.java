@@ -5,6 +5,7 @@ import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.persistence.CruxPersistence;
 import killercreepr.crux.persistence.impl.ListTagType;
 import killercreepr.crux.util.CruxMath;
+import killercreepr.crux.util.CruxString;
 import net.kyori.adventure.key.Key;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -16,6 +17,12 @@ import java.util.List;
 import java.util.function.Function;
 
 public interface DynamicPersistentTag<E, S> {
+    DynamicPersistentTag<Object, Boolean> BOOLEAN = new SimpleDynamicPersistentTag<>(PersistentDataType.BOOLEAN) {
+        @Override
+        public @Nullable <T extends PersistentDataContainer> Boolean parse(@NotNull T to, @NotNull TextParserContext ctx, @NotNull Object value) {
+            return CruxString.parseBoolean(ctx.deserializeString(value.toString()));
+        }
+    };
     DynamicPersistentTag<Object, String> STRING = new SimpleDynamicPersistentTag<>(PersistentDataType.STRING) {
         @Override
         public @Nullable <T extends PersistentDataContainer> String parse(@NotNull T to, @NotNull TextParserContext ctx, @NotNull Object value) {

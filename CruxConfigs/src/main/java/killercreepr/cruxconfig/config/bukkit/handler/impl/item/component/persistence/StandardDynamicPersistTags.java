@@ -33,6 +33,22 @@ public class StandardDynamicPersistTags {
                 return DynamicPersistentTag.STRING;
             }
         });
+        registry.register(new BaseSimplePersistentParser<>(Crux.key("boolean")) {
+            @Override
+            public @NotNull FileElement serializeTypedValue(@NotNull FileContext<?> ctx, @NotNull Object object) {
+                return new FileGeneric(object.toString());
+            }
+
+            @Override
+            public @Nullable String parseObject(@NotNull FileContext<?> ctx, @NotNull FileObject base, @NotNull FileElement e) {
+                return e.getAsString();
+            }
+
+            @Override
+            public @NotNull DynamicPersistentTag<Object, Boolean> getDynamicTag(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
+                return DynamicPersistentTag.BOOLEAN;
+            }
+        });
         registry.register(new BaseSimplePersistentParser<>(Crux.key("key")) {
             @Override
             public @NotNull FileElement serializeTypedValue(@NotNull FileContext<?> ctx, @NotNull Object object) {
