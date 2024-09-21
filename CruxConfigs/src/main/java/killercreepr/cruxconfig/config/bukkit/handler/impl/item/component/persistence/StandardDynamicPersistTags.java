@@ -33,6 +33,22 @@ public class StandardDynamicPersistTags {
                 return DynamicPersistentTag.STRING;
             }
         });
+        registry.register(new BaseSimplePersistentParser<>(Crux.key("key")) {
+            @Override
+            public @NotNull FileElement serializeTypedValue(@NotNull FileContext<?> ctx, @NotNull Object object) {
+                return new FileGeneric(object.toString());
+            }
+
+            @Override
+            public @Nullable String parseObject(@NotNull FileContext<?> ctx, @NotNull FileObject base, @NotNull FileElement e) {
+                return e.getAsString();
+            }
+
+            @Override
+            public @NotNull DynamicPersistentTag<Object, Key> getDynamicTag(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
+                return DynamicPersistentTag.KEY;
+            }
+        });
         registry.register(number(Crux.key("integer"), DynamicPersistentTag.INTEGER, Number::intValue));
         registry.register(number(Crux.key("double"), DynamicPersistentTag.DOUBLE, Number::doubleValue));
         registry.register(number(Crux.key("short"), DynamicPersistentTag.SHORT, Number::shortValue));

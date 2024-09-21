@@ -1,8 +1,11 @@
 package killercreepr.crux.item.dynamic.components.persistence;
 
+import killercreepr.crux.Crux;
 import killercreepr.crux.context.TextParserContext;
+import killercreepr.crux.persistence.CruxPersistence;
 import killercreepr.crux.persistence.impl.ListTagType;
 import killercreepr.crux.util.CruxMath;
+import net.kyori.adventure.key.Key;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
@@ -17,6 +20,12 @@ public interface DynamicPersistentTag<E, S> {
         @Override
         public @Nullable <T extends PersistentDataContainer> String parse(@NotNull T to, @NotNull TextParserContext ctx, @NotNull Object value) {
             return ctx.deserializeString(value.toString());
+        }
+    };
+    DynamicPersistentTag<Object, Key> KEY = new SimpleDynamicPersistentTag<>(CruxPersistence.CRUX_KEY) {
+        @Override
+        public @Nullable <T extends PersistentDataContainer> Key parse(@NotNull T to, @NotNull TextParserContext ctx, @NotNull Object value) {
+            return Crux.key(ctx.deserializeString(value.toString()));
         }
     };
     DynamicPersistentTag<Object, Double> DOUBLE = number(PersistentDataType.DOUBLE, Number::doubleValue);

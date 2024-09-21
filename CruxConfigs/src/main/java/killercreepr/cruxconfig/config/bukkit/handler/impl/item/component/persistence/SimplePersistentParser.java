@@ -22,10 +22,15 @@ public interface SimplePersistentParser<T> extends FileDynamicPersistTagParser<T
 
     @Nullable FileElement serializeTypedValue(@NotNull FileContext<?> ctx, @NotNull Object object);
 
+    default @Nullable String defaultTagKey(){
+        return null;
+    }
+
     default @Nullable
     TypedDynamicPersistentTag<?> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e){
         if(!(e instanceof FileObject o)) return null;
         String tagKey = o.getObject(String.class, "key");
+        if(tagKey == null) tagKey = defaultTagKey();
         if(tagKey==null) return null;
         FileElement value = o.get("value");
         if(value == null) return null;

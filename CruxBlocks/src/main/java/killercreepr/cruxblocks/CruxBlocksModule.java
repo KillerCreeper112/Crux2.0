@@ -9,7 +9,6 @@ import killercreepr.crux.data.entity.PlayerMemory;
 import killercreepr.crux.data.tick.ManagedTicked;
 import killercreepr.crux.handler.BlockHandler;
 import killercreepr.crux.item.dynamic.components.persistence.DynamicPersistentTag;
-import killercreepr.crux.item.dynamic.components.persistence.TypedDynamicPersistentTag;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.module.StandardModules;
 import killercreepr.crux.plugin.CruxPlugin;
@@ -25,6 +24,7 @@ import killercreepr.cruxblocks.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.block.wrapper.CruxBlockCruxWrapper;
 import killercreepr.cruxblocks.block.wrapper.CruxGroupBlockWrapper;
 import killercreepr.cruxblocks.command.CruxBlocksCommands;
+import killercreepr.cruxblocks.components.persistence.BlocksDynamicPersistence;
 import killercreepr.cruxblocks.config.CruxConfigHook;
 import killercreepr.cruxblocks.config.handler.component.CfgBlockComponents;
 import killercreepr.cruxblocks.data.entity.MinerHolder;
@@ -38,9 +38,9 @@ import killercreepr.cruxblocks.registries.CruxBlockRegistry;
 import killercreepr.cruxblocks.registries.CruxBlocksRegistries;
 import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.persistence.BaseSimplePersistentParser;
-import killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.persistence.FileDynamicPersistTagParser;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
+import killercreepr.cruxconfig.config.common.element.FileGeneric;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import net.kyori.adventure.key.Key;
@@ -102,8 +102,28 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
         CfgBlockComponents.register(BukkitCfgHandlers.TYPED_DATA_COMPONENT.typeHandlers());
         if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS)){
             CruxConfigHook.register();
-        }
+            CfgRegistries.DYNAMIC_PERSIST_TAG_PARSER.register(new BaseSimplePersistentParser<>(Crux.key("block_group")) {
+                @Override
+                public @NotNull FileElement serializeTypedValue(@NotNull FileContext<?> ctx, @NotNull Object object) {
+                    return new FileGeneric(object.toString());
+                }
 
+                @Override
+                public @Nullable String parseObject(@NotNull FileContext<?> ctx, @NotNull FileObject base, @NotNull FileElement e) {
+                    return e.getAsString();
+                }
+
+                @Override
+                public @NotNull DynamicPersistentTag<Object, Key> getDynamicTag(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
+                    return BlocksDynamicPersistence.BLOCK_GROUP;
+                }
+
+                @Override
+                public @NotNull String defaultTagKey() {
+                    return "block_group";
+                }
+            });
+        }
     }
 
     @Override
