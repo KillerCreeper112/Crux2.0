@@ -8,6 +8,8 @@ import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.crux.data.entity.PlayerMemory;
 import killercreepr.crux.data.tick.ManagedTicked;
 import killercreepr.crux.handler.BlockHandler;
+import killercreepr.crux.item.dynamic.components.persistence.DynamicPersistentTag;
+import killercreepr.crux.item.dynamic.components.persistence.TypedDynamicPersistentTag;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.module.StandardModules;
 import killercreepr.crux.plugin.CruxPlugin;
@@ -35,6 +37,12 @@ import killercreepr.cruxblocks.manager.CruxBlockManager;
 import killercreepr.cruxblocks.registries.CruxBlockRegistry;
 import killercreepr.cruxblocks.registries.CruxBlocksRegistries;
 import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.persistence.BaseSimplePersistentParser;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.persistence.FileDynamicPersistTagParser;
+import killercreepr.cruxconfig.config.common.FileContext;
+import killercreepr.cruxconfig.config.common.element.FileElement;
+import killercreepr.cruxconfig.config.common.element.FileObject;
+import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Material;
 import org.bukkit.Registry;
@@ -95,6 +103,7 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
         if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS)){
             CruxConfigHook.register();
         }
+
     }
 
     @Override

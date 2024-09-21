@@ -14,22 +14,22 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FilePersistentContainerDynamicPersistTag extends BaseSimplePersistentParser<List<TypedDynamicPersistentTag>>{
+public class FilePersistentContainerDynamicPersistTag extends BaseSimplePersistentParser<List<TypedDynamicPersistentTag<?>>>{
     public FilePersistentContainerDynamicPersistTag(@NotNull Key key) {
         super(key);
     }
 
     @Override
-    public @NotNull FileElement serializeToFile(@NotNull FileContext<?> ctx, @NotNull TypedDynamicPersistentTag object) {
-        return null;
+    public @Nullable FileElement serializeTypedValue(@NotNull FileContext<?> ctx, @NotNull Object object) {
+        return null;//todo
     }
 
     @Override
-    public @Nullable List<TypedDynamicPersistentTag> parseObject(@NotNull FileContext<?> ctx, @NotNull FileObject base, @NotNull FileElement e) {
+    public @Nullable List<TypedDynamicPersistentTag<?>> parseObject(@NotNull FileContext<?> ctx, @NotNull FileObject base, @NotNull FileElement e) {
         if(!(e instanceof FileArray a)) return null;
-        List<TypedDynamicPersistentTag> list = new ArrayList<>();
+        List<TypedDynamicPersistentTag<?>> list = new ArrayList<>();
         a.forEach(ele ->{
-            TypedDynamicPersistentTag tag = ctx.getRegistry().deserializeFromFile(TypedDynamicPersistentTag.class, ele);
+            TypedDynamicPersistentTag<?> tag = ctx.getRegistry().deserializeFromFile(TypedDynamicPersistentTag.class, ele);
             if(tag==null) return;
             list.add(tag);
         });
@@ -37,7 +37,7 @@ public class FilePersistentContainerDynamicPersistTag extends BaseSimplePersiste
     }
 
     @Override
-    public @NotNull DynamicPersistentTag<List<TypedDynamicPersistentTag>, PersistentDataContainer> getDynamicTag(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
+    public @NotNull DynamicPersistentTag<List<TypedDynamicPersistentTag<?>>, PersistentDataContainer> getDynamicTag(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
         return DynamicPersistentTag.TAG_CONTAINER;
     }
 }

@@ -11,9 +11,9 @@ import org.jetbrains.annotations.Nullable;
 
 public interface FileDynamicPersistTagParser<T> extends Keyed {
     @NotNull
-    FileElement serializeToFile(@NotNull FileContext<?> ctx, @NotNull TypedDynamicPersistentTag object);
+    FileElement serializeToFile(@NotNull FileContext<?> ctx, @NotNull TypedDynamicPersistentTag<?> object);
     @Nullable
-    TypedDynamicPersistentTag deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e);
+    TypedDynamicPersistentTag<?> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e);
 
     @Nullable T parseObject(@NotNull FileContext<?> ctx, @NotNull FileObject base, @NotNull FileElement e);
 

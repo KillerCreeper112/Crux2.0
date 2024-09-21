@@ -1,7 +1,6 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.persistence;
 
 import killercreepr.crux.item.dynamic.components.persistence.DynamicPersistentTag;
-import killercreepr.crux.item.dynamic.components.persistence.TypedDynamicPersistentTag;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileArray;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -20,8 +19,8 @@ public class FileListDynamicPersistTag extends BaseSimplePersistentParser<List<?
     }
 
     @Override
-    public @NotNull FileElement serializeToFile(@NotNull FileContext<?> ctx, @NotNull TypedDynamicPersistentTag object) {
-        return null;
+    public @Nullable FileElement serializeTypedValue(@NotNull FileContext<?> ctx, @NotNull Object object) {
+        return null;//todo
     }
 
     @Override

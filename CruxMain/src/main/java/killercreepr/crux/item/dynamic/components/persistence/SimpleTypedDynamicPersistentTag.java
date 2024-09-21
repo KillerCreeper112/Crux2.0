@@ -6,7 +6,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SimpleTypedDynamicPersistentTag<E> implements TypedDynamicPersistentTag {
+public class SimpleTypedDynamicPersistentTag<E> implements TypedDynamicPersistentTag<E> {
     protected final @NotNull DynamicPersistentTag<E, ?> tag;
     protected final @NotNull String tagKey;
     protected final @Nullable E value;
@@ -28,5 +28,16 @@ public class SimpleTypedDynamicPersistentTag<E> implements TypedDynamicPersisten
     @Override
     public @NotNull String getTagKey() {
         return tagKey;
+    }
+
+    @Override
+    public @NotNull DynamicPersistentTag<E, ?> getTag() {
+        return tag;
+    }
+
+    @Override
+    @Nullable
+    public E getValue() {
+        return value;
     }
 }

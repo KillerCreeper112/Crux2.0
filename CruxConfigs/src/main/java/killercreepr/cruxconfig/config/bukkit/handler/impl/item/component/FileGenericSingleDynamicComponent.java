@@ -13,7 +13,9 @@ public abstract class FileGenericSingleDynamicComponent<T extends DynamicSingleV
 
     @Override
     public @Nullable T deserialize(@NotNull FileContext<?> context, @NotNull FileElement value) {
-        return deserialize(context.getRegistry().deserializeObjectFromFile(value));
+        Object o = context.getRegistry().deserializeObjectFromFile(value);
+        if(o == null) return null;
+        return deserialize(o);
     }
 
     public abstract @Nullable T deserialize(@NotNull Object object);

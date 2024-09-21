@@ -5,7 +5,6 @@ import killercreepr.crux.item.dynamic.BukkitDynamicItem;
 import killercreepr.crux.item.dynamic.DynamicItem;
 import killercreepr.crux.item.dynamic.DynamicItemComponent;
 import killercreepr.crux.item.dynamic.components.*;
-import killercreepr.crux.item.dynamic.components.DynamicItemPersistentTags;
 import killercreepr.crux.item.dynamic.components.persistence.TypedDynamicPersistentTag;
 import killercreepr.crux.registry.MappedRegistry;
 import killercreepr.crux.registry.SimpleMappedRegistry;

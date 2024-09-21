@@ -2,23 +2,25 @@ package killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.persis
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.item.dynamic.components.persistence.DynamicPersistentTag;
-import killercreepr.crux.item.dynamic.components.persistence.TypedDynamicPersistentTag;
 import killercreepr.crux.registry.KeyedRegistry;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
+import killercreepr.cruxconfig.config.common.element.FileGeneric;
 import killercreepr.cruxconfig.config.common.element.FileObject;
+import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Function;
 
 public class StandardDynamicPersistTags {
     public static void register(KeyedRegistry<FileDynamicPersistTagParser<?>> registry){
         registry.register(new FilePersistentContainerDynamicPersistTag(Crux.key("tag_container")));
         registry.register(new FileListDynamicPersistTag(Crux.key("list")));
         registry.register(new BaseSimplePersistentParser<>(Crux.key("string")) {
-
             @Override
-            public @NotNull FileElement serializeToFile(@NotNull FileContext<?> ctx, @NotNull TypedDynamicPersistentTag object) {
-                return null;
+            public @NotNull FileElement serializeTypedValue(@NotNull FileContext<?> ctx, @NotNull Object object) {
+                return new FileGeneric(object.toString());
             }
 
             @Override
@@ -27,9 +29,38 @@ public class StandardDynamicPersistTags {
             }
 
             @Override
-            public @NotNull DynamicPersistentTag getDynamicTag(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
+            public @NotNull DynamicPersistentTag<Object, String> getDynamicTag(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
                 return DynamicPersistentTag.STRING;
             }
         });
+        registry.register(number(Crux.key("integer"), DynamicPersistentTag.INTEGER, Number::intValue));
+        registry.register(number(Crux.key("double"), DynamicPersistentTag.DOUBLE, Number::doubleValue));
+        registry.register(number(Crux.key("short"), DynamicPersistentTag.SHORT, Number::shortValue));
+        registry.register(number(Crux.key("float"), DynamicPersistentTag.FLOAT, Number::floatValue));
+        registry.register(number(Crux.key("long"), DynamicPersistentTag.LONG, Number::longValue));
+        registry.register(number(Crux.key("byte"), DynamicPersistentTag.BYTE, Number::longValue));
+    }
+
+    private static <T extends Number> FileDynamicPersistTagParser<Object> number(
+        @NotNull Key key,
+        @NotNull DynamicPersistentTag<Object, ?> persistentTag,
+        @NotNull Function<Number, T> parser
+        ){
+        return new BaseSimplePersistentParser<>(key) {
+            @Override
+            public @NotNull FileElement serializeTypedValue(@NotNull FileContext<?> ctx, @NotNull Object object) {
+                return new FileGeneric(object);
+            }
+
+            @Override
+            public @Nullable T parseObject(@NotNull FileContext<?> ctx, @NotNull FileObject base, @NotNull FileElement e) {
+                return parser.apply(e.getAsNumber());
+            }
+
+            @Override
+            public @NotNull DynamicPersistentTag<Object, ?> getDynamicTag(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
+                return persistentTag;
+            }
+        };
     }
 }
