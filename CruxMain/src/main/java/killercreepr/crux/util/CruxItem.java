@@ -1,7 +1,8 @@
 package killercreepr.crux.util;
 
 import killercreepr.crux.Crux;
-import killercreepr.crux.item.component.ItemStackComponentHandler;
+import killercreepr.crux.component.serialzation.PersistHolderComponentHandler;
+import killercreepr.crux.persistence.CruxPersist;
 import killercreepr.crux.tags.context.FormatParserContext;
 import killercreepr.crux.tags.format.FormatSerializer;
 import killercreepr.crux.tags.provider.StringTagProvider;
@@ -17,13 +18,15 @@ import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
 
-public class CruxItem implements Cloneable, ItemStackComponentHandler {
+public class CruxItem implements Cloneable, PersistHolderComponentHandler {
     public static boolean isEmpty(@Nullable ItemStack i){
         //pre 1.20.5
         //return i == null || i.getType().isEmpty();
@@ -333,7 +336,14 @@ public class CruxItem implements Cloneable, ItemStackComponentHandler {
     }
 
     @Override
-    public @NotNull ItemStack getItem() {
-        return item();
+    public @NotNull PersistentDataHolder getComponentsPersistentHolder() {
+        return item.getItemMeta();
+    }
+
+    @Override
+    public void onComponentsPersistentContainerChanged(@NotNull PersistentDataContainer data) {
+        PersistentDataHolder item = getComponentsPersistentHolder();
+        CruxPersist.COMPONENTS.set(item, data.isEmpty() ? null : data);
+        item().setItemMeta((ItemMeta) item);
     }
 }
