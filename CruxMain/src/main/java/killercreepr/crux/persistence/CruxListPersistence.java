@@ -1,6 +1,6 @@
 package killercreepr.crux.persistence;
 
-import killercreepr.crux.item.ToolComponent;
+import killercreepr.crux.item.component.ToolComponent;
 import killercreepr.crux.persistence.impl.ListTagType;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Location;
@@ -13,4 +13,5 @@ public class CruxListPersistence {
     public final ListTagType<PersistentDataContainer, Location> LOCATION = new ListTagType<>(CruxPersistence.LOCATION);
     public final ListTagType<PersistentDataContainer, ToolComponent> TOOL_COMPONENT = new ListTagType<>(CruxPersistence.TOOL_COMPONENT);
     public final ListTagType<String, Key> KEY = new ListTagType<>(CruxPersistence.CRUX_KEY);
+    public final ListTagType<PersistentDataContainer, ToolComponent.Rule> TOOL_COMPONENT_RULE = new ListTagType<>(CruxPersistence.TOOL_COMPONENT_RULE);
 }

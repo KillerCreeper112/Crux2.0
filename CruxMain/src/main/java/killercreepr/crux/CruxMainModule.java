@@ -1,5 +1,6 @@
 package killercreepr.crux;
 
+import killercreepr.crux.component.CruxComponents;
 import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.crux.listener.EntitySpawnListener;
 import killercreepr.crux.listener.PlayerDataListener;
@@ -13,6 +14,11 @@ public class CruxMainModule implements CruxModule {
     @Override
     public @NotNull String name() {
         return NAMESPACE;
+    }
+
+    @Override
+    public void onLoad(@NotNull CruxPlugin plugin) {
+        CruxComponents.register();
     }
 
     @Override

@@ -44,7 +44,7 @@ public class CruxRegistries {
     public static final KeyedRegistry<BlockTag> BLOCK_TAG = new SimpleKeyedRegistry<>();
     public static final MappedRegistry<Key, CreateBlockSoundGroup> BLOCK_SOUND_GROUP = new SimpleMappedRegistry<>();
 
-    public static final MappedRegistry<String, DataComponentType<?>> DATA_COMPONENT_TYPE = new SimpleMappedRegistry<>();
+    public static final MappedRegistry<Key, DataComponentType<?>> DATA_COMPONENT_TYPE = new SimpleMappedRegistry<>();
 
     public static final Registry<PersistentDataType<?, ?>> PERSISTENT_DATA_TYPE = SimpleRegistry.fromSet(
         PersistentDataType.BYTE,

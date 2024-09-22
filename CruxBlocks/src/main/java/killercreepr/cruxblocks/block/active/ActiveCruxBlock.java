@@ -4,9 +4,8 @@ import killercreepr.crux.Crux;
 import killercreepr.crux.component.CruxComponents;
 import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.crux.data.communication.CreateSound;
-import killercreepr.crux.item.ToolComponent;
-import killercreepr.crux.persistence.CruxPersistence;
-import killercreepr.crux.util.CruxTag;
+import killercreepr.crux.item.component.ToolComponent;
+import killercreepr.crux.util.CruxItem;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.component.CruxBlockComponents;
 import killercreepr.cruxblocks.block.context.BlockContext;
@@ -142,8 +141,10 @@ public interface ActiveCruxBlock {
         Tooled tooled;
         if(miner instanceof Tooled m) tooled = m;
         else tooled = null;
+        if(tooled == null || tooled.getTool() == null) return false;
 
-        ToolComponent toolComponent = CruxTag.get(tooled == null ? null : tooled.getTool(), "tool", CruxPersistence.TOOL_COMPONENT, null);
+        CruxItem cruxItem = CruxItem.create(tooled.getTool());
+        ToolComponent toolComponent = cruxItem.get(CruxComponents.TOOL);
         if(toolComponent == null) return false;
         ToolComponent.Result result = toolComponent.test(Objects.requireNonNull(
             Crux.handlers().block().getBlock(getBlock())
@@ -166,7 +167,10 @@ public interface ActiveCruxBlock {
         if(miner instanceof Tooled m) tooled = m;
         else tooled = null;
 
-        ToolComponent toolComponent = CruxTag.get(tooled == null ? null : tooled.getTool(), "tool", CruxPersistence.TOOL_COMPONENT, null);
+        if(tooled == null || tooled.getTool() == null) return 1f;
+
+        CruxItem cruxItem = CruxItem.create(tooled.getTool());
+        ToolComponent toolComponent = cruxItem.get(CruxComponents.TOOL);
         if(toolComponent == null) return 1f;
         ToolComponent.Result result = toolComponent.test(Objects.requireNonNull(
             Crux.handlers().block().getBlock(getBlock())

@@ -1,6 +1,7 @@
 package killercreepr.crux.util;
 
 import killercreepr.crux.Crux;
+import killercreepr.crux.item.component.ItemStackComponentHandler;
 import killercreepr.crux.tags.context.FormatParserContext;
 import killercreepr.crux.tags.format.FormatSerializer;
 import killercreepr.crux.tags.provider.StringTagProvider;
@@ -22,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class CruxItem implements Cloneable {
+public class CruxItem implements Cloneable, ItemStackComponentHandler {
     public static boolean isEmpty(@Nullable ItemStack i){
         //pre 1.20.5
         //return i == null || i.getType().isEmpty();
@@ -39,6 +40,18 @@ public class CruxItem implements Cloneable {
         if(!(i.getItemMeta() instanceof Damageable d)) return 0;
         if(d.hasMaxDamage()) return d.getMaxDamage();
         return i.getType().getMaxDurability();
+    }
+
+    public static CruxItem create(@NotNull ItemStack item){
+        return new CruxItem(item);
+    }
+
+    public static CruxItem create(@NotNull Material item){
+        return new CruxItem(item);
+    }
+
+    public static CruxItem create(@NotNull FormatSerializer format, @NotNull ItemStack item){
+        return new CruxItem(format, item);
     }
 
     public static final @NotNull Component NO_ITALICS = Component.empty().decoration(TextDecoration.ITALIC, false);
@@ -317,5 +330,10 @@ public class CruxItem implements Cloneable {
 
     public @NotNull FormatSerializer getFormat() {
         return format;
+    }
+
+    @Override
+    public @NotNull ItemStack getItem() {
+        return item();
     }
 }
