@@ -3,16 +3,16 @@ package killercreepr.cruxmenus.core.menu.module.standard;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileObject;
+import killercreepr.cruxmenus.api.menu.config.handler.FileMenuHolder;
 import killercreepr.cruxmenus.api.menu.holder.MenuItems;
 import killercreepr.cruxmenus.api.menu.module.MenuModule;
-import killercreepr.cruxmenus.core.menu.config.handlers.SimpleFileMenuHolder;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class SimpleFilePagedCfg extends FilePagedCfg{
     protected final @NotNull Key key;
-    public SimpleFilePagedCfg(@NotNull SimpleFileMenuHolder menuModule, @NotNull Key key) {
+    public SimpleFilePagedCfg(@NotNull FileMenuHolder<?> menuModule, @NotNull Key key) {
         super(menuModule);
         this.key = key;
     }
