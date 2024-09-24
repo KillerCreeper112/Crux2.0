@@ -27,10 +27,19 @@ import java.util.logging.Logger;
 
 //todo maybe eventually separate bukkit/paper and crux
 public final class Crux {
+    public static String namespace(){
+        return NAMESPACE;
+    }
     public static final String NAMESPACE = "crux";
+    public static TagParser tags(){
+        return TAGS;
+    }
     public static final TagParser TAGS = TagParser.builder()
         .addTags(CruxStandardTags.buildObjectTags())
         .build();
+    public static FormatSerializer format(){
+        return FORMAT;
+    }
     public static final FormatSerializer FORMAT = FormatSerializer.builder()
         .miniMessage(MiniMessage.builder()
             .tags(TagResolver.builder()
