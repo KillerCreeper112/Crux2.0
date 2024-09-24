@@ -1,7 +1,7 @@
 package killercreepr.crux.block.predicate;
 
-import killercreepr.crux.data.tag.Tag;
 import killercreepr.crux.block.CruxedBlock;
+import killercreepr.crux.data.tag.Tag;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 

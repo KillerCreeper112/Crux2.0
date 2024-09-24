@@ -1,7 +1,7 @@
 package killercreepr.crux.block.predicate;
 
-import killercreepr.crux.data.tag.Tag;
 import killercreepr.crux.block.CruxedBlock;
+import killercreepr.crux.data.tag.Tag;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 

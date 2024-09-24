@@ -1,12 +1,14 @@
 package killercreepr.crux.external.placeholderapi;
 
-import killercreepr.crux.tags.container.StringTagContainer;
+import killercreepr.crux.tags.container.TagContainer;
 import killercreepr.crux.tags.context.FormatParserContext;
 import killercreepr.crux.tags.format.FormatArgs;
 import killercreepr.crux.tags.format.FormatSerializer;
+import killercreepr.crux.tags.hook.HookedObjectContainer;
 import killercreepr.crux.tags.hook.ObjectTag;
-import killercreepr.crux.tags.hook.impl.StringHookedObjectContainer;
+import killercreepr.crux.tags.hook.impl.StringHookedObjectTag;
 import killercreepr.crux.tags.resolver.StringResolver;
+import killercreepr.crux.tags.resolver.TagResolver;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -39,14 +41,14 @@ public class TagsExpansionHook /*extends PlaceholderExpansion */{
         return "1.0";
     }
 
-    public @Nullable StringResolver findResolver(@NotNull StringTagContainer container,
+    public @Nullable StringResolver findResolver(@NotNull TagContainer<?> container,
                                                  @NotNull ObjectTag<OfflinePlayer> tag,
                                                  @NotNull String objectIdentifier,
                                                  @NotNull String hookIdentifier){
-        for(StringResolver resolver : container){
+        for(TagResolver<?> resolver : container){
             if(!noUnderscore(tag.defaultPrefix().buildPrefix(resolver)).equalsIgnoreCase(objectIdentifier)) continue;
             if(!noUnderscore(resolver.identifier()).equalsIgnoreCase(hookIdentifier)) continue;
-            return resolver;
+            return (StringResolver) resolver;
         }
         return null;
     }
@@ -65,13 +67,13 @@ public class TagsExpansionHook /*extends PlaceholderExpansion */{
         FormatArgs hookArgs = new FormatArgs(argsList.toArray(new String[0]));
         for(ObjectTag<OfflinePlayer> tag : format.tags().locateTags(player)){
             //test offline player tags
-            StringTagContainer container = tag.requestStrings(player, format.tags());
+            TagContainer<StringResolver> container = tag.requestStrings(player, format.tags());
             if(container != null){
                 StringResolver resolver = findResolver(container, tag, objectIdentifier, hookIdentifier);
                 if(resolver != null) return resolver.resolve(hookArgs, new FormatParserContext.Builder(format).viewer(player).build());
             }
 
-            StringHookedObjectContainer hookedContainer = tag.hookStrings(player, format.tags());
+            HookedObjectContainer<StringHookedObjectTag<?>> hookedContainer = tag.hookStrings(player, format.tags());
             if(hookedContainer != null){
                 StringResolver resolver = findResolver(hookedContainer.toTags(format.tags()), tag, objectIdentifier, hookIdentifier);
                 if(resolver != null) return resolver.resolve(hookArgs, new FormatParserContext.Builder(format).viewer(player).build());

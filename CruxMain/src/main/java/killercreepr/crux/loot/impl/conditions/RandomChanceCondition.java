@@ -2,7 +2,6 @@ package killercreepr.crux.loot.impl.conditions;
 
 import killercreepr.crux.loot.LootContext;
 import killercreepr.crux.loot.conditions.LootCondition;
-import killercreepr.crux.util.CruxMath;
 import org.jetbrains.annotations.NotNull;
 
 public class RandomChanceCondition implements LootCondition {

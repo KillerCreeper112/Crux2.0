@@ -1,9 +1,9 @@
 package killercreepr.crux.registries;
 
 import killercreepr.crux.component.DataComponentType;
+import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.crux.data.tag.block.BlockTag;
 import killercreepr.crux.data.tag.item.ItemTag;
-import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.crux.data.tick.CruxTick;
 import killercreepr.crux.loot.LootTable;
 import killercreepr.crux.persistence.CruxPersistence;
@@ -14,8 +14,6 @@ import net.kyori.adventure.key.Key;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Map;
 
 public class CruxRegistries {
     public static final MappedRegistry<String, CruxPlugin> PLUGIN = new SimpleMappedRegistry<>(){

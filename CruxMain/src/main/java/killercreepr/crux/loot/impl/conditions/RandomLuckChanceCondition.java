@@ -1,7 +1,6 @@
 package killercreepr.crux.loot.impl.conditions;
 
 import killercreepr.crux.loot.LootContext;
-import killercreepr.crux.util.CruxMath;
 import org.jetbrains.annotations.NotNull;
 
 public class RandomLuckChanceCondition extends RandomChanceCondition {

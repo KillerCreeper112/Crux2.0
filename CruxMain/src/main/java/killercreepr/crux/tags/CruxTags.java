@@ -1,9 +1,6 @@
 package killercreepr.crux.tags;
 
-import killercreepr.crux.tags.container.MergedTagContainer;
-import killercreepr.crux.tags.container.SimpleMergedTagContainer;
-import killercreepr.crux.tags.container.StringListTagContainer;
-import killercreepr.crux.tags.container.StringTagContainer;
+import killercreepr.crux.tags.container.*;
 import killercreepr.crux.tags.context.FormatPrefix;
 import killercreepr.crux.tags.hook.HookedObjectContainer;
 import killercreepr.crux.tags.hook.ObjectTag;
@@ -11,6 +8,8 @@ import killercreepr.crux.tags.hook.impl.StringHookedObjectContainer;
 import killercreepr.crux.tags.hook.impl.StringHookedObjectTag;
 import killercreepr.crux.tags.hook.impl.StringListHookedObjectContainer;
 import killercreepr.crux.tags.hook.impl.StringListHookedObjectTag;
+import killercreepr.crux.tags.resolver.StringListResolver;
+import killercreepr.crux.tags.resolver.StringResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,11 +42,11 @@ public class CruxTags implements TagParser {
     public <T> @Nullable StringTagContainer buildStringTags(@NotNull T object, @Nullable TagsPrefixBuilder prefixBuilder){
         StringTagContainer tag = new StringTagContainer(this);
         locateTags(object).forEach(objectTag ->{
-            StringTagContainer tags = objectTag.requestStrings(object, this);
+            TagContainer<StringResolver> tags = objectTag.requestStrings(object, this);
             FormatPrefix prefix = prefixBuilder == null ? objectTag.defaultPrefix() : prefixBuilder.buildPrefix(objectTag, object, tags);
             tag.addAll(tags, prefix);
 
-            StringHookedObjectContainer hookedTags = objectTag.hookStrings(object, this);
+            HookedObjectContainer<StringHookedObjectTag<?>> hookedTags = objectTag.hookStrings(object, this);
             if(hookedTags != null){
                 hookedTags.getHookedObjects().forEach(hooked ->{
                     FormatPrefix pre = prefixBuilder == null ? hooked.getObjectTag().defaultPrefix() : prefixBuilder.buildHookedPrefix(
@@ -64,12 +63,12 @@ public class CruxTags implements TagParser {
     public <T> @NotNull StringHookedObjectContainer hookStrings(@NotNull T object, @Nullable FormatPrefix prefix){
         StringHookedObjectContainer container = HookedObjectContainer.string();
         locateTags(object).forEach(objectTag ->{
-            StringTagContainer tags = objectTag.requestStrings(object, this);
+            TagContainer<StringResolver> tags = objectTag.requestStrings(object, this);
             if(tags != null){
                 container.add(new StringHookedObjectTag<>(object, objectTag, tags, prefix));
             }
 
-            StringHookedObjectContainer hookedTags = objectTag.hookStrings(object, this);
+            HookedObjectContainer<StringHookedObjectTag<?>> hookedTags = objectTag.hookStrings(object, this);
             if(hookedTags != null){
                 hookedTags.addAll(container);
                 container.addAll(hookedTags);
@@ -86,11 +85,11 @@ public class CruxTags implements TagParser {
     public <T> @Nullable StringListTagContainer buildStringListTags(@NotNull T object, @Nullable TagsPrefixBuilder prefixBuilder){
         StringListTagContainer tag = new StringListTagContainer(this);
         locateTags(object).forEach(objectTag ->{
-            StringListTagContainer tags = objectTag.requestStringLists(object, this);
+            TagContainer<StringListResolver> tags = objectTag.requestStringLists(object, this);
             FormatPrefix prefix = prefixBuilder == null ? objectTag.defaultPrefix() : prefixBuilder.buildPrefix(objectTag, object, tags);
             tag.addAll(tags, prefix);
 
-            StringListHookedObjectContainer hookedTags = objectTag.hookStringLists(object, this);
+            HookedObjectContainer<StringListHookedObjectTag<?>> hookedTags = objectTag.hookStringLists(object, this);
             if(hookedTags != null){
                 hookedTags.getHookedObjects().forEach(hooked ->{
                     FormatPrefix pre = prefixBuilder == null ? hooked.getObjectTag().defaultPrefix() : prefixBuilder.buildHookedPrefix(
@@ -107,12 +106,12 @@ public class CruxTags implements TagParser {
     public <T> @NotNull StringListHookedObjectContainer hookStringLists(@NotNull T object, @Nullable FormatPrefix prefix){
         StringListHookedObjectContainer container = HookedObjectContainer.stringList();
         locateTags(object).forEach(objectTag ->{
-            StringListTagContainer tags = objectTag.requestStringLists(object, this);
+            TagContainer<StringListResolver> tags = objectTag.requestStringLists(object, this);
             if(tags != null){
                 container.add(new StringListHookedObjectTag<>(object, objectTag, tags, prefix));
             }
 
-            StringListHookedObjectContainer hookedTags = objectTag.hookStringLists(object, this);
+            HookedObjectContainer<StringListHookedObjectTag<?>> hookedTags = objectTag.hookStringLists(object, this);
             if(hookedTags != null){
                 hookedTags.addAll(container);
                 hookedTags.getHookedObjects().forEach(container::add);

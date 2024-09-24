@@ -7,8 +7,6 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
 public class CruxedBoundingBox {
     public static @NotNull CruxedBoundingBox wrap(@NotNull BoundingBox box){
         return new CruxedBoundingBox(box);

@@ -1,7 +1,6 @@
 package killercreepr.crux.block;
 
 import killercreepr.crux.Crux;
-import killercreepr.crux.data.Holder;
 import killercreepr.crux.data.world.CruxPosition;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Location;

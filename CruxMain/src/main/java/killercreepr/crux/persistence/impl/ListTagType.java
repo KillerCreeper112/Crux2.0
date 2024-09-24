@@ -1,7 +1,6 @@
 package killercreepr.crux.persistence.impl;
 
 import com.google.common.collect.Lists;
-import net.minecraft.nbt.ListTag;
 import org.bukkit.persistence.ListPersistentDataType;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataType;
