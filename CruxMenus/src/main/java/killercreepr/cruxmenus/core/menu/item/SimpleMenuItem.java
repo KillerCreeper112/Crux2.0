@@ -1,0 +1,166 @@
+package killercreepr.cruxmenus.core.menu.item;
+
+import killercreepr.crux.item.dynamic.DynamicItem;
+import killercreepr.crux.registry.Registry;
+import killercreepr.crux.tags.container.MergedTagContainer;
+import killercreepr.crux.tags.container.TagContainer;
+import killercreepr.crux.tags.context.FormatParserContext;
+import killercreepr.crux.tags.format.FormatSerializer;
+import killercreepr.crux.util.CruxItem;
+import killercreepr.crux.util.CruxMath;
+import killercreepr.crux.util.CruxString;
+import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.cruxmenus.api.event.MenuItemClickEvent;
+import killercreepr.cruxmenus.api.menu.action.MenuAction;
+import killercreepr.cruxmenus.api.menu.action.click.ClickActions;
+import killercreepr.cruxmenus.api.menu.contex.ActionContext;
+import killercreepr.cruxmenus.api.menu.contex.MenuContext;
+import killercreepr.cruxmenus.api.menu.holder.MenuItemHolder;
+import killercreepr.cruxmenus.api.menu.item.MenuItem;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class SimpleMenuItem implements MenuItem {
+    protected final @NotNull MenuItemHolder base;
+    protected final @NotNull MenuContext inputtedContext;
+    protected final @NotNull MenuContext evaluatedContext;
+    public SimpleMenuItem(@NotNull MenuItemHolder base, @NotNull MenuContext inputtedContext, @NotNull MenuContext evaluatedContext) {
+        this.base = base;
+        this.inputtedContext = inputtedContext;
+        this.evaluatedContext = evaluatedContext;
+    }
+
+    public @NotNull FormatSerializer getFormat(){
+        return evaluatedContext.getMenu().getHolder().getRegistry().getFormat();
+    }
+
+
+    public @NotNull Optional<Integer> getSlot(){
+        NumberProvider provider = base.info().getObject("slot", NumberProvider.class).orElse(null);
+        if(provider != null) return Optional.of(
+                provider.sample(this::setPlaceholders).intValue()
+        );
+        return Optional.empty();
+    }
+
+    public boolean canDisplay(){
+        String viewRequirement = base.info().getObject("view_requirement", String.class).orElse(null);
+        if(viewRequirement == null) return true;
+        return CruxString.parseBoolean(
+            CruxMath.evaluateEvalEx(setPlaceholders(viewRequirement))
+        );
+    }
+
+    public @NotNull String setPlaceholders(@NotNull String text){
+        return getFormat().deserializeString(text, buildTags());
+    }
+
+    public @NotNull MergedTagContainer buildTags(){
+        MergedTagContainer resolvers = TagContainer.merged(evaluatedContext.getResolvers().getTagParser());
+
+        resolvers.addAll(inputtedContext.getResolvers());
+
+        resolvers.hookAll(evaluatedContext.getMenu().getHolder().info());
+        resolvers.addAll(evaluatedContext.getMenu().buildTags());
+
+        resolvers.hook(base);
+        resolvers.hook(SimpleMenuItem.this);
+
+        resolvers.hookAll(base.info());
+        resolvers.hookAll(inputtedContext.info());
+        resolvers.hookAll(evaluatedContext.info());
+        return resolvers;
+    }
+
+    public @Nullable ItemStack buildItem(@NotNull Player p){
+        DynamicItem item = base.getItem().value();
+        if(item == null) return null;
+        item = item.clone();
+        MergedTagContainer tags = buildTags();
+
+        FormatParserContext context = new FormatParserContext.Builder(getFormat())
+            .viewer(p)
+            .tags(tags)
+            .build();
+        return item.buildItem(context);
+    }
+
+    public @NotNull CompletableFuture<CruxItem> buildItemCompletely(@NotNull Player p){
+        DynamicItem item = base.getItem().value();
+        if(item == null) return CompletableFuture.completedFuture(null);
+        item = item.clone();
+        MergedTagContainer tags = buildTags();
+
+        FormatParserContext context = new FormatParserContext.Builder(getFormat())
+            .viewer(p)
+            .tags(tags)
+            .build();
+        return item.buildCompletely(context);
+    }
+
+    public @NotNull MenuItemClickEvent click(@NotNull Player p, @NotNull InventoryClickEvent event){
+        ActionContext actionInfo = ActionContext.context(
+            evaluatedContext.getMenu(),
+            inputtedContext.info().append(evaluatedContext.info()),
+            buildTags(), this, event
+        );
+        MenuItemClickEvent clickEvent = new MenuItemClickEvent(p, actionInfo.getMenu(), this, actionInfo, base.getClickActions());
+        if(!clickEvent.callEvent()) return clickEvent;
+
+        ClickActions actions = clickEvent.getClickActions();
+        if(actions == null) return clickEvent;
+
+        ActionContext context = clickEvent.getContext();
+        actions.clickOrDefault(event, List.of()).forEach(s -> performAction(p, s, context));
+        return clickEvent;
+    }
+
+    public static final Pattern ACTION_PATTERN = Pattern.compile("\\[(.*?)]");
+    private static @Nullable String extractAction(@NotNull String input) {
+        Matcher matcher = ACTION_PATTERN.matcher(input);
+        if (matcher.find()) {
+            return matcher.group(1).trim();
+        }
+        return null;
+    }
+
+    public boolean performAction(@NotNull Player p, @NotNull String action, @NotNull ActionContext actionInfo){
+        return performAction(p, action, actionInfo, evaluatedContext.getMenu().getHolder().getRegistry().menuActions());
+    }
+
+    public boolean performAction(@NotNull Player p, @NotNull String action,
+                                 @NotNull ActionContext actionInfo, @NotNull Registry<MenuAction> actions){
+        String actionName = extractAction(action);
+        if(actionName == null) return false;
+        String result = getFormat().deserializeString(action.replaceFirst("\\[.*?]\\s*", ""),
+                actionInfo.getAllMergedResolvers());
+        for(MenuAction a : actions){
+            if(!a.has(actionName)) continue;
+            String[] args = CruxString.quoteSplit(result, " ");
+            if(a.execute(p, actionInfo, args)) return true;
+        }
+        return false;
+    }
+
+    public @NotNull MenuItemHolder getBase() {
+        return base;
+    }
+
+
+    public @NotNull MenuContext getInputtedContext() {
+        return inputtedContext;
+    }
+
+    public @NotNull MenuContext getEvaluatedContext() {
+        return evaluatedContext;
+    }
+}

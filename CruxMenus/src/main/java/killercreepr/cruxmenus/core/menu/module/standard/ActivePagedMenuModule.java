@@ -1,0 +1,86 @@
+package killercreepr.cruxmenus.core.menu.module.standard;
+
+import killercreepr.crux.data.NotNullHolder;
+import killercreepr.crux.tags.TagParser;
+import killercreepr.crux.tags.container.MergedTagContainer;
+import killercreepr.crux.tags.container.SimpleMergedTagContainer;
+import killercreepr.crux.tags.resolver.Tag;
+import killercreepr.crux.util.CruxMath;
+import killercreepr.cruxmenus.api.menu.Menu;
+import killercreepr.cruxmenus.api.menu.module.MenuModule;
+import killercreepr.cruxmenus.core.menu.module.SimpleActiveMenuModule;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+
+public abstract class ActivePagedMenuModule<T> extends SimpleActiveMenuModule {
+    protected final @NotNull List<Integer> indexes;
+    protected final @NotNull NotNullHolder<List<T>> values;
+    protected int page = 0;
+    public ActivePagedMenuModule(@NotNull String id,
+                                 @NotNull MenuModule module,
+                                 @NotNull List<Integer> indexes,
+                                 @NotNull NotNullHolder<List<T>> values) {
+        super(id, module);
+        this.indexes = indexes;
+        this.values = values;
+    }
+
+    public ActivePagedMenuModule<T> addPage(int amount){
+        return setPage(page+amount);
+    }
+
+    public ActivePagedMenuModule<T> setPage(int amount){
+        page = CruxMath.wrap(amount, 0, calculateMaxPages());
+        return this;
+    }
+
+    @Override
+    public @Nullable MergedTagContainer buildTags(@NotNull Menu menu, @NotNull TagParser tagParser) {
+        MergedTagContainer tags = new SimpleMergedTagContainer(tagParser);
+        tags.addAll(super.buildTags(menu, tagParser));
+        String prefix = MenuModule.buildTagPrefix(id);
+        tags.add(Tag.parsed(prefix + "page", page+""));
+        tags.add(Tag.parsed(prefix + "max_page", calculateMaxPages()+""));
+        return tags;
+    }
+
+    public void openPage(@NotNull Menu menu, int page){
+        page = CruxMath.clamp(page, 0, calculateMaxPages());
+        List<T> list = values.value();
+        int index = -1;
+        int addon = indexes.size() * page;
+        for(int i : indexes){
+            index++;
+            int listIndex = index + addon;
+            if(listIndex >= list.size()) setEmptyItem(menu, i, index);
+            else setPagedItem(menu, i, index, listIndex, list.get(listIndex));
+        }
+    }
+
+    public abstract void setPagedItem(@NotNull Menu menu, int slot, int index,int listIndex, @NotNull T value);
+    public abstract void setEmptyItem(@NotNull Menu menu, int slot, int index);
+
+    public int calculateMaxPages(){
+        return Math.max((int) Math.ceil((double) values.value().size() / indexes.size())-1, 0);
+    }
+
+    @Override
+    public void refresh(@NotNull Menu menu) {
+        super.refresh(menu);
+        openPage(menu, page);
+    }
+
+    public @NotNull List<Integer> getIndexes() {
+        return indexes;
+    }
+
+    public @NotNull NotNullHolder<List<T>> getValues() {
+        return values;
+    }
+
+    public int getPage() {
+        return page;
+    }
+}

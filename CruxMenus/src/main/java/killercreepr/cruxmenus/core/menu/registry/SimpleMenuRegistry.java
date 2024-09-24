@@ -1,0 +1,90 @@
+package killercreepr.cruxmenus.core.menu.registry;
+
+import killercreepr.crux.data.DataExchange;
+import killercreepr.crux.registry.*;
+import killercreepr.crux.tags.format.FormatSerializer;
+import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
+import killercreepr.cruxconfig.config.common.FileRegistry;
+import killercreepr.cruxmenus.api.menu.action.MenuAction;
+import killercreepr.cruxmenus.api.menu.config.FileDataProvider;
+import killercreepr.cruxmenus.api.menu.config.handler.FileMenuHolder;
+import killercreepr.cruxmenus.api.menu.data.ItemDataParser;
+import killercreepr.cruxmenus.api.menu.holder.MenuHolder;
+import killercreepr.cruxmenus.api.menu.holder.MenuItems;
+import killercreepr.cruxmenus.api.menu.item.MenuItem;
+import killercreepr.cruxmenus.api.menu.module.config.MenuModuleBuilder;
+import killercreepr.cruxmenus.api.menu.registry.MenuRegistry;
+import killercreepr.cruxmenus.core.menu.config.handlers.*;
+import killercreepr.cruxmenus.core.menu.config.loader.MenusCfgLoader;
+import net.kyori.adventure.key.Key;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.HashSet;
+
+public class SimpleMenuRegistry implements MenuRegistry {
+    private final KeyedRegistry<MenuHolder> MENU_HOLDERS = new SimpleKeyedRegistry<>(new HashMap<>()){
+        @Override
+        public @NotNull MenuHolder register(@NotNull Key key, @NotNull MenuHolder value) {
+            value.setRegistry(SimpleMenuRegistry.this);
+            return super.register(key, value);
+        }
+    };
+    private final Registry<MenuAction> MENU_ACTIONS = new SimpleRegistry<>(new HashSet<>());
+    private final KeyedPriorityRegistry<ItemDataParser> ITEM_DATA_PARSERS = new KeyedPriorityRegistry<>();
+
+    protected final @NotNull FormatSerializer format;
+    protected final @NotNull FileMenuHolder<?> menuModule;
+    protected final @NotNull MenusCfgLoader cfgLoader;
+    public SimpleMenuRegistry(@NotNull FormatSerializer format, @NotNull FileMenuHolder<?> menuModule) {
+        this.format = format;
+        this.menuModule = menuModule;
+        this.cfgLoader = new MenusCfgLoader(MENU_HOLDERS, menuModule);
+    }
+
+    public SimpleMenuRegistry(@NotNull FormatSerializer format, @NotNull KeyedRegistry<MenuModuleBuilder> menuModuleBuilders) {
+        this(format, new SimpleFileMenuHolder());
+        menuModule.setFileMenuItem(new FileMenuItem(menuModule));
+        menuModule.setFileMenuActions(new FileMenuActions(menuModule));
+        menuModule.setFileMenuItems(new FileMenuItems(menuModule));
+        menuModule.setFileDataExchange(new FileDataExchange(menuModule));
+        menuModule.setFileDynamicItem(BukkitCfgHandlers.DYNAMIC_ITEM);
+        menuModule.setFileMenuModule(new FileMenuMenuModule(menuModule, menuModuleBuilders));
+
+        menuModule.getFileDataExchange().getDataTypes().register("slot", FileDataProvider.generic(NumberProvider.class));
+    }
+    @Override
+    public @NotNull FormatSerializer getFormat() {
+        return format;
+    }
+    @Override
+    public void register(@NotNull FileRegistry registry){
+        registry.registerFileHandler(MenuHolder.class, menuModule);
+        registry.registerFileHandler(DataExchange.class, menuModule.getFileDataExchange());
+        registry.registerFileHandler(MenuItem.class, menuModule.getFileMenuItem());
+        registry.registerFileHandler(MenuItems.class, menuModule.getFileMenuItems());
+    }
+
+    @Override
+    public void loadConfiguration(@NotNull File folder){
+        cfgLoader.loadConfiguration(folder);
+    }
+
+    public KeyedRegistry<MenuHolder> menuHolders() {
+        return MENU_HOLDERS;
+    }
+
+    public Registry<MenuAction> menuActions() {
+        return MENU_ACTIONS;
+    }
+
+    public KeyedPriorityRegistry<ItemDataParser> itemDataParsers() {
+        return ITEM_DATA_PARSERS;
+    }
+
+    public @NotNull FileMenuHolder<?>  menuModule() {
+        return menuModule;
+    }
+}
