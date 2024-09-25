@@ -5,10 +5,7 @@ import killercreepr.crux.context.InputContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class UniformNumberArray implements NumberProvider {
     protected final @NotNull NumberProvider @NotNull[] numbers;
@@ -44,6 +41,15 @@ public class UniformNumberArray implements NumberProvider {
     }
 
     @Override
+    public @NotNull List<Number> sampleList(@NotNull Random random, @Nullable InputContext ev){
+        List<Number> list = new ArrayList<>();
+        for(NumberProvider x : numbers){
+            list.add(x.sample(random, ev));
+        }
+        return Collections.unmodifiableList(list);
+    }
+
+    @Override
     public @NotNull Number getMinValue() {
         Number min = numbers[0].value();
         for (NumberProvider num : numbers) {
@@ -55,7 +61,7 @@ public class UniformNumberArray implements NumberProvider {
 
     @Override
     public @NotNull Number getMaxValue() {
-        Number max = numbers[0].value();;
+        Number max = numbers[0].value();
         for (NumberProvider num : numbers) {
             double x = num.value().doubleValue();
             if (x > max.doubleValue()) max = x;

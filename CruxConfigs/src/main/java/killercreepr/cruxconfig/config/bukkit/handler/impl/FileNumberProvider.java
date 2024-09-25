@@ -3,10 +3,7 @@ package killercreepr.cruxconfig.config.bukkit.handler.impl;
 import killercreepr.crux.valueproviders.number.*;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
-import killercreepr.cruxconfig.config.common.element.FileArray;
-import killercreepr.cruxconfig.config.common.element.FileElement;
-import killercreepr.cruxconfig.config.common.element.FileGeneric;
-import killercreepr.cruxconfig.config.common.element.FileObject;
+import killercreepr.cruxconfig.config.common.element.*;
 import killercreepr.cruxconfig.config.common.handler.SimpleFileHandler;
 import killercreepr.cruxconfig.config.common.json.annotation.JsonSerializer;
 import org.jetbrains.annotations.NotNull;
@@ -47,7 +44,8 @@ public class FileNumberProvider extends SimpleFileHandler<NumberProvider> {
         FileRegistry registry = context.getRegistry();
         if(e instanceof FileGeneric g){
             if(g.isNumber()) return new ConstantNumber(g.getAsNumber());
-            return new EquationNumber(g.getAsString());
+            String text = g.getAsString();
+            return NumberProvider.parseFromString(text);
         }
         if(e instanceof FileObject map){
             FileElement value = map.get("value");

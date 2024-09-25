@@ -172,7 +172,14 @@ public class Format implements FormatSerializer{
                 placeholder, new FormatArgs(optionalParameter == null ? new String[0] : optionalParameter.split(":")));
             if(addons != null){
                 List<String> first = addons.getFirst();
-                if(first != null) addon.addAll(first);
+                if(first != null){
+                    first.forEach(s ->{
+                        addon.add(
+                            text.replace("{" + placeholder + (optionalParameter == null ? "" : ":" + optionalParameter) + "}", s)
+                        );
+                    });
+                    //addon.addAll(first);
+                }
                 found = true;
             }
         }

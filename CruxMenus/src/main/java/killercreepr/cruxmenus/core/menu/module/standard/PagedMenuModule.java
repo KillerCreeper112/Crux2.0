@@ -1,14 +1,9 @@
 package killercreepr.cruxmenus.core.menu.module.standard;
 
-import killercreepr.crux.context.DummyInputContext;
-import killercreepr.crux.context.InputContext;
-import killercreepr.crux.context.SimpleInputContext;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.NotNullHolder;
 import killercreepr.crux.tags.resolver.Tag;
 import killercreepr.crux.valueproviders.number.NumberProvider;
-import killercreepr.crux.valueproviders.number.UniformNumber;
-import killercreepr.crux.valueproviders.number.UniformNumberArray;
 import killercreepr.cruxmenus.api.menu.CfgMenu;
 import killercreepr.cruxmenus.api.menu.Menu;
 import killercreepr.cruxmenus.api.menu.contex.MenuContext;
@@ -18,7 +13,6 @@ import killercreepr.cruxmenus.api.menu.module.MenuModule;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class PagedMenuModule<T> implements MenuModule {
@@ -35,7 +29,7 @@ public abstract class PagedMenuModule<T> implements MenuModule {
 
     public abstract @NotNull NotNullHolder<List<T>> getValues(@NotNull Menu menu);
 
-    public @NotNull List<Integer> parseIndexes(@NotNull Menu menu){
+    /*public @NotNull NumberProvider parseIndexes(@NotNull Menu menu){
         List<Integer> list = new ArrayList<>();
         InputContext ctx;
         if(menu instanceof CfgMenu cfg){
@@ -56,11 +50,11 @@ public abstract class PagedMenuModule<T> implements MenuModule {
         }
         list.add(indexes.sample(ctx).intValue());
         return list;
-    }
+    }*/
 
     @Override
     public @Nullable ActiveMenuModule build(@NotNull Menu menu) {
-        return new ActivePagedMenuModule<T>(id, this, parseIndexes(menu), getValues(menu)) {
+        return new ActivePagedMenuModule<T>(id, this, indexes, getValues(menu)) {
             @Override
             public void setPagedItem(@NotNull Menu menu, int slot, int index, int listIndex, @NotNull T value) {
                 if(valueItems == null) return;

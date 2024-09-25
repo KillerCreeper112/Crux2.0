@@ -6,6 +6,7 @@ import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.crux.tags.container.SimpleMergedTagContainer;
 import killercreepr.crux.tags.resolver.Tag;
 import killercreepr.crux.util.CruxMath;
+import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxmenus.api.menu.Menu;
 import killercreepr.cruxmenus.api.menu.module.MenuModule;
 import killercreepr.cruxmenus.core.menu.module.SimpleActiveMenuModule;
@@ -15,12 +16,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public abstract class ActivePagedMenuModule<T> extends SimpleActiveMenuModule {
-    protected final @NotNull List<Integer> indexes;
+    protected final @NotNull NumberProvider indexes;
     protected final @NotNull NotNullHolder<List<T>> values;
     protected int page = 0;
     public ActivePagedMenuModule(@NotNull String id,
                                  @NotNull MenuModule module,
-                                 @NotNull List<Integer> indexes,
+                                 @NotNull NumberProvider indexes,
                                  @NotNull NotNullHolder<List<T>> values) {
         super(id, module);
         this.indexes = indexes;
@@ -50,8 +51,10 @@ public abstract class ActivePagedMenuModule<T> extends SimpleActiveMenuModule {
         page = CruxMath.clamp(page, 0, calculateMaxPages());
         List<T> list = values.value();
         int index = -1;
+        List<Number> indexes = this.indexes.sampleList();
         int addon = indexes.size() * page;
-        for(int i : indexes){
+        for(Number number : indexes){
+            int i = number.intValue();
             index++;
             int listIndex = index + addon;
             if(listIndex >= list.size()) setEmptyItem(menu, i, index);
@@ -63,6 +66,7 @@ public abstract class ActivePagedMenuModule<T> extends SimpleActiveMenuModule {
     public abstract void setEmptyItem(@NotNull Menu menu, int slot, int index);
 
     public int calculateMaxPages(){
+        List<Number> indexes = this.indexes.sampleList();
         return Math.max((int) Math.ceil((double) values.value().size() / indexes.size())-1, 0);
     }
 
@@ -72,7 +76,7 @@ public abstract class ActivePagedMenuModule<T> extends SimpleActiveMenuModule {
         openPage(menu, page);
     }
 
-    public @NotNull List<Integer> getIndexes() {
+    public @NotNull NumberProvider getIndexes() {
         return indexes;
     }
 
