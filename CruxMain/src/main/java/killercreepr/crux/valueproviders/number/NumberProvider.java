@@ -29,13 +29,6 @@ public interface NumberProvider extends NumberHolder {
         return new UniformNumberArray(array);
     }
 
-    static @NotNull NumberProvider range(@NotNull Number min, @NotNull Number max){
-        return new RangeNumber(min, max);
-    }
-    static @NotNull NumberProvider range(@NotNull NumberProvider min, @NotNull NumberProvider max){
-        return new RangeNumber(min, max);
-    }
-
     static @NotNull NumberProvider parseFromString(@NotNull String text){
         try{
             return NumberProvider.constant(Double.parseDouble(text));
@@ -51,15 +44,9 @@ public interface NumberProvider extends NumberHolder {
             return NumberProvider.uniformArray(array.toArray(new NumberProvider[0]));
         }
 
-        String[] split = text.split(";");
+        String[] split = text.split(",");
         if(split.length > 1){
             return NumberProvider.uniform(
-                NumberProvider.parseFromString(split[0]), NumberProvider.parseFromString(split[1])
-            );
-        }
-        split = text.split(",");
-        if(split.length > 1){
-            return NumberProvider.range(
                 NumberProvider.parseFromString(split[0]), NumberProvider.parseFromString(split[1])
             );
         }

@@ -4,6 +4,7 @@ import killercreepr.crux.context.InputContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -20,20 +21,70 @@ public class UniformNumber implements NumberProvider {
     }
 
     public @NotNull Number sample(@NotNull Random random, @NotNull Number minInclusive, @NotNull Number maxInclusive) {
-        if (maxInclusive instanceof Integer) return random.nextInt((int) maxInclusive - (int) minInclusive + 1) + (int) minInclusive;
-        if (maxInclusive instanceof Double) return random.nextDouble() * ((double) maxInclusive - (double) minInclusive) + (double) minInclusive;
-        if (maxInclusive instanceof Float) return random.nextFloat() * ((float) maxInclusive - (float) minInclusive) + (float) minInclusive;
-        if (maxInclusive instanceof Long) return random.nextLong() % ((long) maxInclusive - (long) minInclusive + 1) + (long) minInclusive;
-        if (maxInclusive instanceof Short) return (short) (random.nextInt((short) maxInclusive - (short) minInclusive + 1) + (short) minInclusive);
-        throw new UnsupportedOperationException("Unsupported Number type " + maxInclusive.getClass().getSimpleName() + " / " + minInclusive.getClass().getSimpleName());
+        return switch (maxInclusive) {
+            case Integer v -> random.nextInt((int) maxInclusive - (int) minInclusive + 1) + (int) minInclusive;
+            case Double v ->
+                random.nextDouble() * ((double) maxInclusive - (double) minInclusive) + (double) minInclusive;
+            case Float v -> random.nextFloat() * ((float) maxInclusive - (float) minInclusive) + (float) minInclusive;
+            case Long v -> random.nextLong() % ((long) maxInclusive - (long) minInclusive + 1) + (long) minInclusive;
+            case Short v ->
+                (short) (random.nextInt((short) maxInclusive - (short) minInclusive + 1) + (short) minInclusive);
+            default ->
+                throw new UnsupportedOperationException("Unsupported Number type " + maxInclusive.getClass().getSimpleName() + " / " + minInclusive.getClass().getSimpleName());
+        };
     }
 
     @Override
     public @NotNull List<Number> sampleList(@NotNull Random random, @Nullable InputContext ev){
-        return List.of(
-            minInclusive.sample(random, ev),
-            maxInclusive.sample(random, ev)
-        );
+        List<Number> list = new ArrayList<>();
+
+        Number minInclusive = this.minInclusive.sample(random, ev);
+        Number maxInclusive = this.maxInclusive.sample(random, ev);
+        switch (maxInclusive) {
+            case Integer v -> {
+                int min = minInclusive.intValue();
+                int max = maxInclusive.intValue();
+                for (int i = min; i <= max; i++) {
+                    list.add(i);
+                }
+                return list;
+            }
+            case Double v -> {
+                double min = minInclusive.doubleValue();
+                double max = maxInclusive.doubleValue();
+                for (double i = min; i <= max; i++) {
+                    list.add(i);
+                }
+                return list;
+            }
+            case Float v -> {
+                float min = minInclusive.floatValue();
+                float max = maxInclusive.floatValue();
+                for (float i = min; i <= max; i++) {
+                    list.add(i);
+                }
+                return list;
+            }
+            case Long v -> {
+                long min = minInclusive.intValue();
+                long max = maxInclusive.intValue();
+                for (long i = min; i <= max; i++) {
+                    list.add(i);
+                }
+                return list;
+            }
+            case Short v -> {
+                short min = minInclusive.shortValue();
+                short max = maxInclusive.shortValue();
+                for (short i = min; i <= max; i++) {
+                    list.add(i);
+                }
+                return list;
+            }
+            default -> {
+            }
+        }
+        throw new UnsupportedOperationException("Unsupported Number type " + maxInclusive.getClass().getSimpleName() + " / " + minInclusive.getClass().getSimpleName());
     }
 
     @Override
