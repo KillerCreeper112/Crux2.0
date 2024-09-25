@@ -19,7 +19,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.lang.reflect.Type;
 
-public class CruxJson extends CruxFolder implements ICruxJson, DataFile {
+public class CruxJson extends CruxFolder implements DataFile, ICruxJson {
     protected final @NotNull JsonRegistry jsonRegistry;
     protected JsonObject json;
     protected FileReader reader;
@@ -197,5 +197,15 @@ public class CruxJson extends CruxFolder implements ICruxJson, DataFile {
     @Override
     public void setPathSeparator(char separator) {
         this.pathSeparator = separator;
+    }
+
+    @Override
+    public void close() {
+        ICruxJson.super.close();
+    }
+
+    @Override
+    public boolean save() {
+        return ICruxJson.super.save();
     }
 }

@@ -338,4 +338,8 @@ public class CruxConfig extends CruxFolder implements IYamlCfg<MemoryConfigurati
         this.pathSeparator = separator;
         cfg.options().pathSeparator(separator);
     }
+
+    @Override
+    public void close() {
+    }
 }

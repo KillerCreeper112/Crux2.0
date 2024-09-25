@@ -3,6 +3,7 @@ package killercreepr.cruxconfig.config.bukkit.handler.impl;
 import killercreepr.crux.item.StoredItem;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
+import killercreepr.cruxconfig.config.common.element.FileGeneric;
 import killercreepr.cruxconfig.config.common.element.FilePrimitive;
 import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
 import org.bukkit.inventory.ItemStack;
@@ -21,7 +22,7 @@ public class FileStoredItem implements FileObjectHandler<StoredItem> {
 
     @Override
     public @Nullable StoredItem deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
-        if(!(e instanceof FilePrimitive p) || !p.isString()) return null;
+        if(!(e instanceof FileGeneric p)) return null;
         String string = p.getAsString();
         byte[] bytes;
         try{

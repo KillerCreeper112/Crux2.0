@@ -16,4 +16,6 @@ public interface DataFile extends ICruxFile{
     @NotNull FileRegistry fileRegistry();
     char getPathSeparator();
     void setPathSeparator(char separator);
+    void close();
+    boolean save();
 }
