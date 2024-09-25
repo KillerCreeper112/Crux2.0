@@ -28,6 +28,7 @@ public class FileStoredItem implements FileObjectHandler<StoredItem> {
         try{
             bytes = Base64.getDecoder().decode(string);
         }catch (IllegalArgumentException ignored){
+            ignored.printStackTrace();
             return null;
         }
         return new StoredItem(ItemStack.deserializeBytes(bytes));

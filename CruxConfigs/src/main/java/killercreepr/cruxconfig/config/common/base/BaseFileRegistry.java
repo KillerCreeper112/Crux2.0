@@ -266,7 +266,9 @@ public class BaseFileRegistry implements FileRegistry {
 
     @Override
     public <T> @Nullable T deserializeFromFile(@NotNull Type type, @Nullable FileElement o, @NotNull FileContext<?> context) {
-        return null;
+        if(o==null) return null;
+        Object object = deserializeObject(type, o, context);
+        return (T) object;
     }
 
     @Override
