@@ -16,6 +16,7 @@ public class SimpleCreateSound implements CreateSound {
         this(sound, Sound.Source.MASTER, volume, pitch);
     }
 
+
     public SimpleCreateSound(@NotNull org.bukkit.Sound sound, float pitch) {
         this(sound, 2f, pitch);
     }
@@ -26,6 +27,11 @@ public class SimpleCreateSound implements CreateSound {
 
     public SimpleCreateSound(@NotNull org.bukkit.Sound sound, @NotNull Sound.Source source, float volume, float pitch) {
         this.sound = Sound.sound(sound.getKey(), source, volume, pitch);
+    }
+
+    @Override
+    public String toString() {
+        return "SimpleCreateSound{" + "sound=" + sound + "}";
     }
 
     public @NotNull Sound getSound() { return sound; }

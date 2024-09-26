@@ -44,7 +44,7 @@ public class UniformNumberArray implements NumberProvider {
     public @NotNull List<Number> sampleList(@NotNull Random random, @Nullable InputContext ev){
         List<Number> list = new ArrayList<>();
         for(NumberProvider x : numbers){
-            list.add(x.sample(random, ev));
+            list.addAll(x.sampleList(random, ev));
         }
         return Collections.unmodifiableList(list);
     }

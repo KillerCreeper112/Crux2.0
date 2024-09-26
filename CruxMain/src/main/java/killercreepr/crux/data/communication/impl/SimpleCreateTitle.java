@@ -22,6 +22,11 @@ public class SimpleCreateTitle implements CreateTitle {
     }
 
     @Override
+    public String toString() {
+        return "SimpleCreateTitle{title=" + title + ", subTitle=" + subTitle + ", times=" + times + "}";
+    }
+
+    @Override
     public @NotNull Title build(@Nullable OfflinePlayer placeholders, @Nullable StringTagProvider tags){
         return Title.title(
             deserialize(placeholders, title, tags),

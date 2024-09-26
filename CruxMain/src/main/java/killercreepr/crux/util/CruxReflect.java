@@ -168,7 +168,8 @@ public class CruxReflect {
                         field.setAccessible(true);
                         field.set(object, value);
                         field.setAccessible(x);
-                    } catch (NoSuchFieldException | IllegalAccessException ignored) {}
+                    } catch (NoSuchFieldException | IllegalAccessException ignored) {
+                    }
                 });
                 return object;
             }catch (InvocationTargetException | InstantiationException |

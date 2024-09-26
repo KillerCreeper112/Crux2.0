@@ -232,7 +232,7 @@ public class Format implements FormatSerializer{
                     placeholder = placeholder.replace(entry.getKey(), entry.getValue());
                 }
 
-                String[] parts = placeholder.split(":");
+                String[] parts = placeholder.split(":(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
                 placeholder = parts[0];
 
                 if(already.contains(placeholder)) continue;
@@ -243,7 +243,11 @@ public class Format implements FormatSerializer{
                 System.arraycopy(parts, 1, arguments, 0, parts.length - 1);
 
                 for(int i = 0; i < arguments.length; i++){
-                    arguments[i] = processPlaceholders(arguments[i], tags);
+                    String arg = arguments[i];
+                    if(arg.startsWith("\"") && arg.endsWith("\"")){
+                        arg = arg.substring(1, arg.length()-1);
+                    }
+                    arguments[i] = processPlaceholders(arg, tags);
                 }
 
                 //Bukkit.broadcastMessage("placeholder: " + placeholder + " - " + Arrays.toString(arguments));

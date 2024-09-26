@@ -23,7 +23,8 @@ public class CruxStandardTags {
             new StringFormatResolver(),
             new CruxSpacingResolver(),
             new NumberFormatResolver(),
-            new MathsResolver()
+            new MathsResolver(),
+            new DateFormatResolver()
         );
     }
 

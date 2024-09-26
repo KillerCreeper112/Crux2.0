@@ -27,6 +27,11 @@ public class MsgContainer implements Communicator {
         this.sound = sound;
     }
 
+    @Override
+    public String toString() {
+        return "MsgContainer{chat=" + chat + ", actionBar=" + actionBar + ", title=" + title + ", sound=" + sound + ", broadcast=" + broadcast + "}";
+    }
+
     public MsgContainer(@Nullable String chat, @Nullable String actionBar, @Nullable CreateTitle title, @Nullable CreateSound sound){
         this(chat == null ? null : List.of(chat), actionBar, title, sound);
     }

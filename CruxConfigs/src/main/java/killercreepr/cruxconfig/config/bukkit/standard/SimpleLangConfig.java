@@ -67,6 +67,7 @@ public class SimpleLangConfig extends LangConfig implements LangProvider {
         if(!file.exists()){
             setDefaults(langClass).save();
         }
+        super.reload();
         populate(lang());
     }
 
