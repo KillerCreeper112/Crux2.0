@@ -1,6 +1,6 @@
 package killercreepr.cruxmenus.core.menu.module.standard;
 
-import killercreepr.crux.data.NotNullHolder;
+import killercreepr.crux.data.Holder;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxmenus.api.menu.CfgMenu;
 import killercreepr.cruxmenus.api.menu.Menu;
@@ -21,12 +21,12 @@ public abstract class SimplePagedMenuModule<T> extends PagedMenuModule<T>{
     }
 
     @Override
-    public @NotNull NotNullHolder<List<T>> getValues(@NotNull Menu menu) {
+    public @NotNull Holder<List<T>> getValues(@NotNull Menu menu) {
         if(!(menu instanceof CfgMenu c)) throw new RuntimeException();
         return getValues(c);
     }
 
-    public abstract @NotNull NotNullHolder<List<T>> getValues(@NotNull CfgMenu menu);
+    public abstract @NotNull Holder<List<T>> getValues(@NotNull CfgMenu menu);
 
     @Override
     public @NotNull Key key() {
