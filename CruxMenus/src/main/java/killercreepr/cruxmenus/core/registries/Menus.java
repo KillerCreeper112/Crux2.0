@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class Menus {
     public static final MappedRegistry<UUID, Menu> OPENED = new SimpleMappedRegistry<>();
@@ -17,5 +18,23 @@ public class Menus {
 
     public static @Nullable Menu getOpened(@NotNull Entity user){
         return getOpened(user.getUniqueId());
+    }
+
+    public static @Nullable Menu refresh(@NotNull Entity user){
+        return refresh(user.getUniqueId());
+    }
+
+    public static @Nullable Menu refresh(@NotNull UUID user){
+        Menu menu = getOpened(user);
+        if(menu == null) return null;
+        menu.refresh();
+        return menu;
+    }
+
+    public static @Nullable Menu apply(@NotNull UUID user, @NotNull Consumer<Menu> consumer){
+        Menu menu = getOpened(user);
+        if(menu == null) return null;
+        consumer.accept(menu);
+        return menu;
     }
 }

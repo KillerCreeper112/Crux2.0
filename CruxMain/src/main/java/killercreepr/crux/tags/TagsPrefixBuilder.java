@@ -59,6 +59,30 @@ public interface TagsPrefixBuilder {
         };
     }
 
+    static @NotNull TagsPrefixBuilder overwriteBase(@NotNull String prefix){
+        return new TagsPrefixBuilder() {
+            @Override
+            public <T> @NotNull FormatPrefix buildPrefix(@NotNull ObjectTag<T> tag, @NotNull T object, @Nullable TagContainer<?> tags) {
+                return new FormatPrefix() {
+                    @Override
+                    public @NotNull String buildPrefix(@NotNull TagResolver<?> resolver) {
+                        return prefix;
+                    }
+                };
+            }
+
+            @Override
+            public <T> @NotNull FormatPrefix buildHookedPrefix(@NotNull ObjectTag<T> baseTag, @NotNull T baseObject, @NotNull HookedObjectTag<?, ?> tag) {
+                return new FormatPrefix() {
+                    @Override
+                    public @NotNull String buildPrefix(@NotNull TagResolver<?> resolver) {
+                        return prefix + tag.getObjectTag().defaultPrefix().buildPrefix(resolver);
+                    }
+                };
+            }
+        };
+    }
+
     <T> @Nullable FormatPrefix buildPrefix(@NotNull ObjectTag<T> tag, @NotNull T object, @Nullable TagContainer<?> tags);
     <T> @Nullable FormatPrefix buildHookedPrefix(@NotNull ObjectTag<T> baseTag, @NotNull T baseObject, @NotNull HookedObjectTag<?, ?> tag);
 }
