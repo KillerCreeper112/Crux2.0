@@ -1,9 +1,9 @@
 package killercreepr.cruxmenus.core.menu.module.standard;
 
-import killercreepr.crux.data.NotNullHolder;
+import killercreepr.crux.data.Holder;
 import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.container.MergedTagContainer;
-import killercreepr.crux.tags.container.SimpleMergedTagContainer;
+import killercreepr.crux.tags.container.TagContainer;
 import killercreepr.crux.tags.resolver.Tag;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.crux.valueproviders.number.NumberProvider;
@@ -17,12 +17,12 @@ import java.util.List;
 
 public abstract class ActivePagedMenuModule<T> extends SimpleActiveMenuModule {
     protected final @NotNull NumberProvider indexes;
-    protected final @NotNull NotNullHolder<List<T>> values;
+    protected final @NotNull Holder<List<T>> values;
     protected int page = 0;
     public ActivePagedMenuModule(@NotNull String id,
                                  @NotNull MenuModule module,
                                  @NotNull NumberProvider indexes,
-                                 @NotNull NotNullHolder<List<T>> values) {
+                                 @NotNull Holder<List<T>> values) {
         super(id, module);
         this.indexes = indexes;
         this.values = values;
@@ -39,7 +39,7 @@ public abstract class ActivePagedMenuModule<T> extends SimpleActiveMenuModule {
 
     @Override
     public @Nullable MergedTagContainer buildTags(@NotNull Menu menu, @NotNull TagParser tagParser) {
-        MergedTagContainer tags = new SimpleMergedTagContainer(tagParser);
+        MergedTagContainer tags = TagContainer.merged(tagParser);
         tags.addAll(super.buildTags(menu, tagParser));
         String prefix = MenuModule.buildTagPrefix(id);
         tags.add(Tag.parsed(prefix + "page", page+""));
@@ -80,7 +80,7 @@ public abstract class ActivePagedMenuModule<T> extends SimpleActiveMenuModule {
         return indexes;
     }
 
-    public @NotNull NotNullHolder<List<T>> getValues() {
+    public @NotNull Holder<List<T>> getValues() {
         return values;
     }
 

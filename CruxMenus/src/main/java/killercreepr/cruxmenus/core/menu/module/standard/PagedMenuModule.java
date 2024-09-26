@@ -1,7 +1,7 @@
 package killercreepr.cruxmenus.core.menu.module.standard;
 
 import killercreepr.crux.data.DataExchange;
-import killercreepr.crux.data.NotNullHolder;
+import killercreepr.crux.data.Holder;
 import killercreepr.crux.tags.resolver.Tag;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxmenus.api.menu.CfgMenu;
@@ -27,7 +27,7 @@ public abstract class PagedMenuModule<T> implements MenuModule {
         this.emptyItems = emptyItems;
     }
 
-    public abstract @NotNull NotNullHolder<List<T>> getValues(@NotNull Menu menu);
+    public abstract @NotNull Holder<List<T>> getValues(@NotNull Menu menu);
 
     /*public @NotNull NumberProvider parseIndexes(@NotNull Menu menu){
         List<Integer> list = new ArrayList<>();
