@@ -31,6 +31,10 @@ public class Menus {
         return menu;
     }
 
+    public static @Nullable Menu apply(@NotNull Entity user, @NotNull Consumer<Menu> consumer){
+        return apply(user.getUniqueId(), consumer);
+    }
+
     public static @Nullable Menu apply(@NotNull UUID user, @NotNull Consumer<Menu> consumer){
         Menu menu = getOpened(user);
         if(menu == null) return null;
