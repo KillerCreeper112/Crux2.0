@@ -1,5 +1,6 @@
 package killercreepr.crux.data;
 
+import killercreepr.crux.data.world.CruxPosition;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -27,6 +28,10 @@ public class StoredChunk extends StoredWorld {
         int chunkX = locationX >> 4;
         int chunkZ = locationZ >> 4;
         return new StoredChunk(worldUUID, chunkX, chunkZ);
+    }
+
+    public static @NotNull StoredChunk from(@NotNull StoredWorld world, @NotNull CruxPosition position){
+        return fromWorldPosition(world.worldUUID(), position.blockX(), position.blockZ());
     }
 
     protected final int chunkX;
@@ -72,6 +77,11 @@ public class StoredChunk extends StoredWorld {
         World world = toBukkitWorld();
         if(world==null) return null;
         return world.getChunkAt(chunkX, chunkZ);
+    }
+
+    @Override
+    public String toString() {
+        return "StoredChunk{worldUUID=" + worldUUID + ", chunkX=" + chunkX + ", chunkZ=" + chunkZ + "}";
     }
 
     @Override
