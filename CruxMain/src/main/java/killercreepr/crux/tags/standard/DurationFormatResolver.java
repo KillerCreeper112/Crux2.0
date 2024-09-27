@@ -56,9 +56,9 @@ public class DurationFormatResolver implements StringResolver {
         if(!hasMinutes(excluded)) minutes %= 60;
         if(!hasHours(excluded)) hours %= 24;
 
-        return format.replace("%d", String.valueOf(days))
-            .replace("%h", String.valueOf(hours))
-            .replace("%m", String.valueOf(minutes))
-            .replace("%s", String.valueOf(seconds));
+        return format.replace("%d", days == 0 ? "" : String.valueOf(days))
+            .replace("%h", hours == 0 ? "" : String.valueOf(hours))
+            .replace("%m", minutes == 0 ? "" : String.valueOf(minutes))
+            .replace("%s", seconds == 0 ? "" : String.valueOf(seconds));
     }
 }
