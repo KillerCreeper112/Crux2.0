@@ -7,6 +7,7 @@ import killercreepr.crux.tags.context.FormatPrefix;
 import killercreepr.crux.tags.hook.ObjectTag;
 import killercreepr.crux.tags.hook.impl.StringHookedObjectContainer;
 import killercreepr.crux.tags.hook.impl.StringListHookedObjectContainer;
+import killercreepr.crux.tags.hook.prefix.HookedPrefixBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,16 +42,16 @@ public interface TagParser {
     <T> @Nullable MergedTagContainer buildTags(@NotNull T object);
 
     default <T> @NotNull StringHookedObjectContainer hookStrings(@NotNull T object){
-        return hookStrings(object, null);
+        return hookStrings(object, HookedPrefixBuilder.empty());
     }
 
-    <T> @NotNull StringHookedObjectContainer hookStrings(@NotNull T object, @Nullable FormatPrefix prefix);
+    <T> @NotNull StringHookedObjectContainer hookStrings(@NotNull T object, @NotNull HookedPrefixBuilder prefix);
 
     default <T> @NotNull StringListHookedObjectContainer hookStringLists(@NotNull T object){
-        return hookStringLists(object, null);
+        return hookStringLists(object, HookedPrefixBuilder.empty());
     }
 
-    <T> @NotNull StringListHookedObjectContainer hookStringLists(@NotNull T object, @Nullable FormatPrefix prefix);
+    <T> @NotNull StringListHookedObjectContainer hookStringLists(@NotNull T object, @NotNull HookedPrefixBuilder prefix);
 
     interface Builder{
         Builder addTag(@NotNull ObjectTag<?> tag);

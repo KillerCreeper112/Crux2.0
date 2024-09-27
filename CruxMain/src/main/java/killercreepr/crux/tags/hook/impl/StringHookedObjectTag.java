@@ -4,6 +4,7 @@ import killercreepr.crux.tags.container.TagContainer;
 import killercreepr.crux.tags.context.FormatPrefix;
 import killercreepr.crux.tags.hook.HookedObjectTag;
 import killercreepr.crux.tags.hook.ObjectTag;
+import killercreepr.crux.tags.hook.prefix.HookedPrefixBuilder;
 import killercreepr.crux.tags.resolver.StringResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,9 +13,9 @@ public class StringHookedObjectTag<T> implements HookedObjectTag<T, StringResolv
     protected final @NotNull T object;
     protected final @NotNull ObjectTag<T> tagProvider;
     protected final @NotNull TagContainer<StringResolver> tags;
-    protected final @Nullable FormatPrefix prefix;
+    protected final @NotNull HookedPrefixBuilder prefix;
 
-    public StringHookedObjectTag(@NotNull T object, @NotNull ObjectTag<T> tagProvider, @NotNull TagContainer<StringResolver> tags, @Nullable FormatPrefix prefix) {
+    public StringHookedObjectTag(@NotNull T object, @NotNull ObjectTag<T> tagProvider, @NotNull TagContainer<StringResolver> tags, @NotNull HookedPrefixBuilder prefix) {
         this.object = object;
         this.tagProvider = tagProvider;
         this.tags = tags;
@@ -25,7 +26,7 @@ public class StringHookedObjectTag<T> implements HookedObjectTag<T, StringResolv
         return tagProvider;
     }
 
-    public @Nullable FormatPrefix getPrefix() {
+    public @NotNull HookedPrefixBuilder getPrefix() {
         return prefix;
     }
 
