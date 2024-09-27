@@ -18,7 +18,7 @@ public class DateFormatResolver implements StringResolver {
 
     @Override
     public @Nullable String resolve(@NotNull FormatArgs args, @NotNull TextParserContext ctx) {
-        long milliseconds = Long.parseLong(ctx.deserializeString(args.get(0)));
+        long milliseconds = (long) Double.parseDouble(ctx.deserializeString(args.get(0)));
         String format;
         if(args.has(1)){
             format = args.get(1);

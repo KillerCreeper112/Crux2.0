@@ -24,7 +24,8 @@ public class CruxStandardTags {
             new CruxSpacingResolver(),
             new NumberFormatResolver(),
             new MathsResolver(),
-            new DateFormatResolver()
+            new DateFormatResolver(),
+            new DurationFormatResolver()
         );
     }
 
