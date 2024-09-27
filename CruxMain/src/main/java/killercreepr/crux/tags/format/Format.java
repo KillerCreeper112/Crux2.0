@@ -172,8 +172,11 @@ public class Format implements FormatSerializer{
                 placeholder, new FormatArgs(optionalParameter == null ? new String[0] : optionalParameter.split(":")));
             if(addons != null){
                 List<String> first = addons.getFirst();
+                //Bukkit.broadcastMessage("first=" + first);
                 if(first != null){
                     first.forEach(s ->{
+                        //Bukkit.broadcastMessage("replacing=" + "{" + placeholder + (optionalParameter == null ? "" : ":" + optionalParameter) + "}");
+                        //Bukkit.broadcastMessage("reaplcing_WITH=" + s);
                         addon.add(
                             text.replace("{" + placeholder + (optionalParameter == null ? "" : ":" + optionalParameter) + "}", s)
                         );
@@ -190,6 +193,7 @@ public class Format implements FormatSerializer{
                                                           @NotNull String placeholder,
                                                           @NotNull FormatArgs args) {
         StringListResolver resolver = container.get(placeholder);
+        //Bukkit.broadcastMessage("resolver=" + resolver + ", from= " + placeholder );
         if(resolver == null) return null;
         TextParserContext context = new FormatParserContext.Builder(this)
             .build();

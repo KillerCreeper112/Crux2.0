@@ -23,6 +23,10 @@ public abstract class SimpleTagContainer<T extends TagResolver<?>> implements Ta
         return this;
     }
 
+    public Map<String, T> getTags() {
+        return tags;
+    }
+
     @Override
     public SimpleTagContainer<T>  add(@NotNull T resolver, @Nullable FormatPrefix prefix) {
         if(prefix==null){

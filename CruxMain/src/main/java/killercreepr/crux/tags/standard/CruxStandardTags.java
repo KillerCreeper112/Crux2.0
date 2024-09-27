@@ -38,7 +38,8 @@ public class CruxStandardTags {
     }
 
     public static @NotNull Pattern buildLorePattern(){
-        return Pattern.compile("\\{(\\w+)(?::([^{}]+))?}");
+        return Pattern.compile("\\{([^{}:/]+(?:/[^{}:/]+)*)?(?::([^{}]+))?}");
+         //Pattern.compile("\\{(\\w+)(?::([^{}]+))?}");
     }
 
     public static @NotNull Pattern buildEquationPattern(){
