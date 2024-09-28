@@ -18,7 +18,6 @@ import killercreepr.crux.tags.standard.NumberFormatResolver;
 import killercreepr.crux.util.CruxMath;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.Bukkit;
 import org.codehaus.plexus.util.FastMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -180,8 +179,6 @@ public class Format implements FormatSerializer{
                 }
                 arguments[i] = arg;
             }
-            Bukkit.broadcastMessage("matched=" + matched + ", placeholder=" + placeholder + ", arguments=" + Arrays.toString(arguments));
-
             FormatArgs args = new FormatArgs(arguments);
             Pair<List<String>, Boolean> addons = processListPlaceholder(container,
                 placeholder, args);
