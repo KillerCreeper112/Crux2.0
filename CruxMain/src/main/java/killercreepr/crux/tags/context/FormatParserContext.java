@@ -3,7 +3,9 @@ package killercreepr.crux.tags.context;
 import killercreepr.crux.Crux;
 import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.tags.container.MergedTagContainer;
+import killercreepr.crux.tags.container.TagContainer;
 import killercreepr.crux.tags.format.FormatSerializer;
+import killercreepr.crux.tags.provider.StringTagProvider;
 import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
@@ -13,19 +15,19 @@ import java.util.Collection;
 import java.util.List;
 
 public class FormatParserContext implements TextParserContext {
-    @Deprecated(since = "Use TextParserContext")
+    @Deprecated(since = "Use TextParserContext", forRemoval = true)
     public static @NotNull Builder builder(){
         return builder(Crux.FORMAT);
     }
-    @Deprecated(since = "Use TextParserContext")
+    @Deprecated(since = "Use TextParserContext", forRemoval = true)
     public static @NotNull Builder builder(@NotNull FormatSerializer format){
         return new Builder(format);
     }
-    @Deprecated(since = "Use TextParserContext")
+    @Deprecated(since = "Use TextParserContext", forRemoval = true)
     public static @NotNull FormatParserContext empty(@NotNull FormatSerializer format){
         return new FormatParserContext(format, null, null, null);
     }
-    @Deprecated(since = "Use TextParserContext")
+    @Deprecated(since = "Use TextParserContext", forRemoval = true)
     public static @NotNull FormatParserContext empty(){
         return empty(Crux.FORMAT);
     }
@@ -53,22 +55,46 @@ public class FormatParserContext implements TextParserContext {
 
     @Override
     public @NotNull Component deserialize(@NotNull String text) {
-        return format.deserialize(text, tags);
+        return deserialize(text, tags);
     }
 
     @Override
     public @NotNull String deserializeString(@NotNull String text) {
-        return format.deserializeString(text, tags);
+        return deserializeString(text, null);
     }
 
     @Override
     public @NotNull List<Component> deserializeList(@NotNull Collection<String> list) {
-        return format.deserializeList(list, tags);
+        return deserializeList(list, null);
     }
 
     @Override
     public @NotNull List<String> deserializeStringList(@NotNull Collection<String> list) {
-        return format.deserializeStringList(list, tags);
+        return deserializeStringList(list, null);
+    }
+
+    @Override
+    public @NotNull Component deserialize(@NotNull String text, @Nullable StringTagProvider tags) {
+        return format.deserialize(text, StringTagProvider.merge(this.tags, tags));
+    }
+
+    @Override
+    public @NotNull String deserializeString(@NotNull String text, @Nullable StringTagProvider tags) {
+        return format.deserializeString(text, StringTagProvider.merge(this.tags, tags));
+    }
+
+    @Override
+    public @NotNull List<Component> deserializeList(@NotNull Collection<String> list, @Nullable MergedTagContainer tags) {
+        return format.deserializeList(list, TagContainer.merged(this.format.tags())
+            .addAll(this.tags)
+            .addAll(tags));
+    }
+
+    @Override
+    public @NotNull List<String> deserializeStringList(@NotNull Collection<String> list, @Nullable MergedTagContainer tags) {
+        return format.deserializeStringList(list, TagContainer.merged(this.format.tags())
+            .addAll(this.tags)
+            .addAll(tags));
     }
 
     @Override

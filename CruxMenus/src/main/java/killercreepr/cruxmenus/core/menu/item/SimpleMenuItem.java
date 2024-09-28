@@ -53,7 +53,7 @@ public class SimpleMenuItem implements MenuItem {
     }
 
     public boolean canDisplay(){
-        String viewRequirement = base.info().getObject("view_requirement", String.class).orElse(null);
+        String viewRequirement = base.info().get("view_requirement", String.class);
         if(viewRequirement == null) return true;
         return CruxString.parseBoolean(
             CruxMath.evaluateEvalEx(setPlaceholders(viewRequirement))

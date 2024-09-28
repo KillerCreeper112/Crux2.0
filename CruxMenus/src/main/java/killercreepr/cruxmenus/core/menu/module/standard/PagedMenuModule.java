@@ -1,5 +1,7 @@
 package killercreepr.cruxmenus.core.menu.module.standard;
 
+import killercreepr.crux.Crux;
+import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.Holder;
 import killercreepr.crux.tags.resolver.Tag;
@@ -18,11 +20,13 @@ import java.util.List;
 public abstract class PagedMenuModule<T> implements MenuModule {
     protected final @NotNull String id;
     protected final @NotNull NumberProvider indexes;
+    protected final @Nullable String valueFilter;
     protected final @Nullable MenuItems valueItems;
     protected final @Nullable MenuItems emptyItems;
-    public PagedMenuModule(@NotNull String id, @NotNull NumberProvider indexes, @Nullable MenuItems valueItems, @Nullable MenuItems emptyItems) {
+    public PagedMenuModule(@NotNull String id, @NotNull NumberProvider indexes, @Nullable String valueFilter, @Nullable MenuItems valueItems, @Nullable MenuItems emptyItems) {
         this.id = id;
         this.indexes = indexes;
+        this.valueFilter = valueFilter;
         this.valueItems = valueItems;
         this.emptyItems = emptyItems;
     }
@@ -54,7 +58,7 @@ public abstract class PagedMenuModule<T> implements MenuModule {
 
     @Override
     public @Nullable ActiveMenuModule build(@NotNull Menu menu) {
-        return new ActivePagedMenuModule<T>(id, this, indexes, getValues(menu)) {
+        return new ActivePagedMenuModule<>(id, this, indexes, valueFilter, getValues(menu)) {
             @Override
             public void setPagedItem(@NotNull Menu menu, int slot, int index, int listIndex, @NotNull T value) {
                 if(valueItems == null) return;
@@ -69,6 +73,17 @@ public abstract class PagedMenuModule<T> implements MenuModule {
                 ));
 
                 cfg.setItems(valueItems, menuContext);
+            }
+
+            @Override
+            public TextParserContext buildContext(@NotNull Menu menu) {
+                if(!(menu instanceof CfgMenu cfg)) return super.buildContext(menu);
+                return TextParserContext.builder()
+                    .tags(
+                        cfg.buildTags().addAll(buildTags(
+                            menu, cfg.getHolder().getRegistry().getFormat().tags()
+                        ))
+                    ).build();
             }
 
             @Override

@@ -60,19 +60,22 @@ public abstract class FilePagedCfg extends SimpleFileMenuModuled<MenuModule> imp
         NumberProvider indexes = parsePageIndexes(ctx, e, menuContext);
         if(indexes==null) return null;
 
+        String valuesFilter = o.getObject(String.class, "filter");
+
         MenuItems valueItems = parseValueItems(ctx, e, menuContext, id);
         MenuItems emptyItems = parseEmptyItems(ctx, e, menuContext, id);
 
-        return parsePaged(ctx, o, menuContext, id, indexes, valueItems, emptyItems);
+        return parsePaged(ctx, o, menuContext, id, indexes, valuesFilter, valueItems, emptyItems);
     }
 
     public abstract @Nullable MenuModule parsePaged(@NotNull FileContext<?> ctx,
-                                           @NotNull FileObject o,
-                                           @Nullable FileObject menuContext,
-                                           @NotNull String id,
-                                           @NotNull NumberProvider indexes,
-                                           @Nullable MenuItems valueItems,
-                                           @Nullable MenuItems emptyItems);
+                                                    @NotNull FileObject o,
+                                                    @Nullable FileObject menuContext,
+                                                    @NotNull String id,
+                                                    @NotNull NumberProvider indexes,
+                                                    @Nullable String valuesFilter,
+                                                    @Nullable MenuItems valueItems,
+                                                    @Nullable MenuItems emptyItems);
 
     public @Nullable NumberProvider parsePageIndexes(@NotNull FileContext<?> ctx,
                                                      @NotNull FileElement e,

@@ -14,9 +14,10 @@ import java.util.List;
 
 public abstract class SimplePagedMenuModule<T> extends PagedMenuModule<T>{
     protected final @NotNull MenuModuleBuilder builder;
-    public SimplePagedMenuModule(@NotNull String id, @NotNull NumberProvider indexes, @Nullable MenuItems valueItems,
+    public SimplePagedMenuModule(@NotNull String id, @NotNull NumberProvider indexes, @Nullable String valueFilter,
+                                 @Nullable MenuItems valueItems,
                                  @Nullable MenuItems emptyItems, @NotNull MenuModuleBuilder builder) {
-        super(id, indexes, valueItems, emptyItems);
+        super(id, indexes, valueFilter, valueItems, emptyItems);
         this.builder = builder;
     }
 

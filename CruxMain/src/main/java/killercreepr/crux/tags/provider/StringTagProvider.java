@@ -1,11 +1,14 @@
 package killercreepr.crux.tags.provider;
 
 import killercreepr.crux.Crux;
+import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.container.TagContainer;
 import killercreepr.crux.tags.resolver.StringResolver;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 public interface StringTagProvider {
     @Contract("null -> null")
@@ -19,6 +22,17 @@ public interface StringTagProvider {
             return () -> second;
         }
         return () -> first.addAll(second);
+    }
+
+    static @Nullable StringTagProvider merge(@Nullable StringTagProvider first, @Nullable StringTagProvider second){
+        if(first == null && second == null) return null;
+        if(first == null) return second;
+        if(second == null) return first;
+        TagParser tagParser = first.getStringTags().getTagParser();
+
+        TagContainer<StringResolver> container = TagContainer.string(tagParser);
+        container.addAll(first.getStringTags());
+        return () -> container;
     }
 
     static @Nullable StringTagProvider merge(@Nullable StringTagProvider first, @Nullable TagContainer<StringResolver> second){

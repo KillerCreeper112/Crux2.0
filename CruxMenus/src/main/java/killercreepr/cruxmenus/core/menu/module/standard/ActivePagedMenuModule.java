@@ -1,11 +1,15 @@
 package killercreepr.cruxmenus.core.menu.module.standard;
 
+import killercreepr.crux.Crux;
+import killercreepr.crux.context.InputContext;
+import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.data.Holder;
 import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.crux.tags.container.TagContainer;
 import killercreepr.crux.tags.resolver.Tag;
 import killercreepr.crux.util.CruxMath;
+import killercreepr.crux.util.CruxString;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxmenus.api.menu.Menu;
 import killercreepr.cruxmenus.api.menu.module.MenuModule;
@@ -13,19 +17,34 @@ import killercreepr.cruxmenus.core.menu.module.SimpleActiveMenuModule;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ActivePagedMenuModule<T> extends SimpleActiveMenuModule {
     protected final @NotNull NumberProvider indexes;
+    protected final @Nullable String valueFilter;
     protected final @NotNull Holder<List<T>> values;
     protected int page = 0;
     public ActivePagedMenuModule(@NotNull String id,
                                  @NotNull MenuModule module,
-                                 @NotNull NumberProvider indexes,
+                                 @NotNull NumberProvider indexes, @Nullable String valueFilter,
                                  @NotNull Holder<List<T>> values) {
         super(id, module);
         this.indexes = indexes;
+        this.valueFilter = valueFilter;
         this.values = values;
+    }
+
+    public @NotNull List<T> buildValues(@NotNull TextParserContext ctx){
+        List<T> value = new ArrayList<>(values.value());
+        return filterValues(value, ctx);
+    }
+
+    public @NotNull List<T> filterValues(@NotNull List<T> value, @NotNull TextParserContext ctx){
+        if(valueFilter == null) return value;
+        return value.stream().filter(v -> CruxString.parseBoolean(
+            CruxMath.evaluateEvalEx(ctx.deserializeString(valueFilter, TagContainer.merged().hook(v)))
+        )).toList();
     }
 
     public ActivePagedMenuModule<T> addPage(int amount){
@@ -47,9 +66,15 @@ public abstract class ActivePagedMenuModule<T> extends SimpleActiveMenuModule {
         return tags;
     }
 
+    public TextParserContext buildContext(@NotNull Menu menu){
+        return TextParserContext.builder()
+            .tags(buildTags(menu, Crux.TAGS))
+            .build();
+    }
+
     public void openPage(@NotNull Menu menu, int page){
-        page = CruxMath.clamp(page, 0, calculateMaxPages());
-        List<T> list = values.value();
+        List<T> list = buildValues(buildContext(menu));
+        page = CruxMath.clamp(page, 0, calculateMaxPages(list.size()));
         int index = -1;
         List<Number> indexes = this.indexes.sampleList();
         int addon = indexes.size() * page;
@@ -66,8 +91,12 @@ public abstract class ActivePagedMenuModule<T> extends SimpleActiveMenuModule {
     public abstract void setEmptyItem(@NotNull Menu menu, int slot, int index);
 
     public int calculateMaxPages(){
+        return calculateMaxPages(values.value().size());
+    }
+
+    public int calculateMaxPages(int valuesSize){
         List<Number> indexes = this.indexes.sampleList();
-        return Math.max((int) Math.ceil((double) values.value().size() / indexes.size())-1, 0);
+        return Math.max((int) Math.ceil((double) valuesSize / indexes.size())-1, 0);
     }
 
     @Override

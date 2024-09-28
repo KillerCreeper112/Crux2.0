@@ -1,5 +1,6 @@
 package killercreepr.cruxitems.item.plugin;
 
+import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.item.dynamic.DynamicItem;
 import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.crux.tags.context.FormatParserContext;
@@ -19,7 +20,7 @@ public class CfgPluginItem extends GenericPluginItem{
 
     @Override
     public @NotNull CruxedItem build(@Nullable Entity holder, @Nullable MergedTagContainer tags) {
-        ItemStack built = item.buildItem(FormatParserContext.builder().tags(tags).build());
+        ItemStack built = item.buildItem(TextParserContext.builder().tags(tags).build());
         if(built == null) throw new IllegalStateException(key + " plugin item returned NULL!");
         return new CruxedItem(built);
     }

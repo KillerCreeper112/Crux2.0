@@ -5,6 +5,8 @@ import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.crux.tags.context.FormatParserContext;
 import killercreepr.crux.tags.context.FormatPrefix;
 import killercreepr.crux.tags.format.FormatSerializer;
+import killercreepr.crux.tags.provider.StringListTagProvider;
+import killercreepr.crux.tags.provider.StringTagProvider;
 import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.List;
 
-public interface TextParserContext {
+public interface TextParserContext extends InputContext {
     static @NotNull Builder builder(){
         return builder(Crux.FORMAT);
     }
@@ -29,6 +31,11 @@ public interface TextParserContext {
         return empty(Crux.FORMAT);
     }
 
+    @Override
+    default @NotNull String input(@NotNull String text){
+        return deserializeString(text);
+    }
+
     @NotNull String serialize(@NotNull Component component);
     @NotNull Component deserialize(@NotNull String text);
 
@@ -37,6 +44,14 @@ public interface TextParserContext {
     @NotNull List<Component> deserializeList(@NotNull Collection<String> list);
 
     @NotNull List<String> deserializeStringList(@NotNull Collection<String> list);
+
+    @NotNull Component deserialize(@NotNull String text, @Nullable StringTagProvider tags);
+
+    @NotNull String deserializeString(@NotNull String text, @Nullable StringTagProvider tags);
+
+    @NotNull List<Component> deserializeList(@NotNull Collection<String> list, @Nullable MergedTagContainer tags);
+
+    @NotNull List<String> deserializeStringList(@NotNull Collection<String> list, @Nullable MergedTagContainer tags);
 
     @NotNull
     FormatSerializer getFormat();

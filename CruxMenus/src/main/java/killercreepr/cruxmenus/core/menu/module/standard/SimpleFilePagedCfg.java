@@ -23,13 +23,15 @@ public abstract class SimpleFilePagedCfg extends FilePagedCfg{
                                            @Nullable FileObject menuContext,
                                            @NotNull String id,
                                            @NotNull NumberProvider indexes,
+                                           @Nullable String valuesFilter,
                                            @Nullable MenuItems valueItems,
                                            @Nullable MenuItems emptyItems) {
-        return parsePaged(id, indexes, valueItems, emptyItems);
+        return parsePaged(id, indexes, valuesFilter, valueItems, emptyItems);
     }
 
     public abstract @Nullable MenuModule parsePaged(@NotNull String id,
                                            @NotNull NumberProvider indexes,
+                                           @Nullable String valuesFilter,
                                            @Nullable MenuItems valueItems,
                                            @Nullable MenuItems emptyItems);
 
