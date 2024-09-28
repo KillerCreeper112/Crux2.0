@@ -18,6 +18,7 @@ import killercreepr.crux.tags.standard.NumberFormatResolver;
 import killercreepr.crux.util.CruxMath;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Bukkit;
 import org.codehaus.plexus.util.FastMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -164,7 +165,41 @@ public class Format implements FormatSerializer{
         Matcher matcher = LORE_PATTERN.matcher(text);
         List<String> addon = new ArrayList<>();
         boolean found = false;
-        while (matcher.find()) {
+        while(matcher.find()){
+            String matched = matcher.group(1);
+            String[] parts = matched.split(placeholderSplit);
+            String placeholder = parts[0];
+
+            String[] arguments = new String[parts.length - 1];
+            System.arraycopy(parts, 1, arguments, 0, parts.length - 1);
+
+            for(int i = 0; i < arguments.length; i++){
+                String arg = arguments[i];
+                if(arg.startsWith("\"") && arg.endsWith("\"")){
+                    arg = arg.substring(1, arg.length()-1);
+                }
+                arguments[i] = arg;
+            }
+            Bukkit.broadcastMessage("matched=" + matched + ", placeholder=" + placeholder + ", arguments=" + Arrays.toString(arguments));
+
+            FormatArgs args = new FormatArgs(arguments);
+            Pair<List<String>, Boolean> addons = processListPlaceholder(container,
+                placeholder, args);
+
+            if(addons != null){
+                List<String> first = addons.getFirst();
+                if(first != null){
+                    first.forEach(s ->{
+                        addon.add(
+                            text.replace("{" + placeholder + (args.isEmpty() ? "" : ":" + String.join(":", args.getArgs())) + "}", s)
+                        );
+                    });
+                }
+                found = true;
+            }
+        }
+
+        /*while (matcher.find()) {
             String placeholder = matcher.group(1);
             String optionalParameter = matcher.group(2);
 
@@ -185,7 +220,7 @@ public class Format implements FormatSerializer{
                 }
                 found = true;
             }
-        }
+        }*/
         return found ? addon : null;
     }
 
@@ -212,6 +247,7 @@ public class Format implements FormatSerializer{
     //
     //... its not fine );
     //todo FIXED IT :D
+    private static final String placeholderSplit = ":(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
     public @NotNull String processPlaceholders(@NotNull String text, @NotNull TagContainer<StringResolver> tags) {
         StringTagContainer resolvers = new StringTagContainer(this.tags);
         resolvers.addAll(STRING_RESOLVERS.values());
@@ -236,7 +272,7 @@ public class Format implements FormatSerializer{
                     placeholder = placeholder.replace(entry.getKey(), entry.getValue());
                 }
 
-                String[] parts = placeholder.split(":(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+                String[] parts = placeholder.split(placeholderSplit);
                 placeholder = parts[0];
 
                 if(already.contains(placeholder)) continue;

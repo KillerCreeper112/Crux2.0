@@ -31,6 +31,11 @@ public class CruxMath {
         }
     }
 
+    public static int floorBlock(double num) {
+        int floor = (int)num;
+        return (double)floor == num ? floor : floor - (int)(Double.doubleToRawLongBits(num) >>> 63);
+    }
+
     public static CruxNumberFormat buildOrGetDecimalFormat(int decimalPlaces){
         return switch (decimalPlaces){
             case 0 -> DECIMAL_FORMAT_0;

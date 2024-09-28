@@ -1,6 +1,7 @@
 package killercreepr.crux.data;
 
 import killercreepr.crux.data.world.CruxPosition;
+import killercreepr.crux.util.CruxMath;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
@@ -49,17 +50,17 @@ public class LocationPos implements CruxPosition {
 
     @Override
     public int blockX() {
-        return (int) x;
+        return CruxMath.floorBlock(x);
     }
 
     @Override
     public int blockY() {
-        return (int) y;
+        return CruxMath.floorBlock(y);
     }
 
     @Override
     public int blockZ() {
-        return (int) z;
+        return CruxMath.floorBlock(z);
     }
 
     @Override
