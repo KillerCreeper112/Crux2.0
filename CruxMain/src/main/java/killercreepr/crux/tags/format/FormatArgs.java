@@ -24,6 +24,10 @@ public class FormatArgs {
         return v==null?defaultValue:v;
     }
 
+    public int size(){
+        return args.length;
+    }
+
     public @Nullable String getSafely(int index){
         return index < 0 || index >= args.length ? null : args[index];
     }
