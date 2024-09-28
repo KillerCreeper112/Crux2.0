@@ -191,7 +191,7 @@ public class Format implements FormatSerializer{
                 if(first != null){
                     first.forEach(s ->{
                         addon.add(
-                            text.replace("{" + placeholder + (args.isEmpty() ? "" : ":" + String.join(":", args.getArgs())) + "}", s)
+                            text.replace("{" + matched + "}", s)
                         );
                     });
                 }
