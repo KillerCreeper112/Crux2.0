@@ -33,29 +33,6 @@ public abstract class PagedMenuModule<T> implements MenuModule {
 
     public abstract @NotNull Holder<List<T>> getValues(@NotNull Menu menu);
 
-    /*public @NotNull NumberProvider parseIndexes(@NotNull Menu menu){
-        List<Integer> list = new ArrayList<>();
-        InputContext ctx;
-        if(menu instanceof CfgMenu cfg){
-            ctx = new SimpleInputContext(cfg.getHolder().getRegistry().getFormat(), cfg.buildTags());
-        }else ctx = new DummyInputContext();
-
-        if(indexes instanceof UniformNumberArray array){
-            for(NumberProvider p : array.getNumbers()){
-                list.add(p.sample(ctx).intValue());
-            }
-            return list;
-        }
-        if(indexes instanceof UniformNumber random){
-            for(int i = random.getMinInclusive().sample(ctx).intValue(); i <= random.getMaxInclusive().sample(ctx).intValue(); i++){
-                list.add(i);
-            }
-            return list;
-        }
-        list.add(indexes.sample(ctx).intValue());
-        return list;
-    }*/
-
     @Override
     public @Nullable ActiveMenuModule build(@NotNull Menu menu) {
         return new ActivePagedMenuModule<>(id, this, indexes, valueFilter, getValues(menu)) {

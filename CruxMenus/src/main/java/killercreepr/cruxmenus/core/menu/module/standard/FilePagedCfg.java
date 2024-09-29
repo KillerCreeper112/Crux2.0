@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Function;
 
 public abstract class FilePagedCfg extends SimpleFileMenuModuled<MenuModule> implements MenuModuleBuilder {
-    public FilePagedCfg(@NotNull FileMenuHolder menuModule) {
+    public FilePagedCfg(@NotNull FileMenuHolder<?> menuModule) {
         super(menuModule);
     }
 

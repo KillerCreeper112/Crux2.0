@@ -1,5 +1,6 @@
 package killercreepr.cruxmenus.core.menu.item;
 
+import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.item.dynamic.DynamicItem;
 import killercreepr.crux.registry.Registry;
 import killercreepr.crux.tags.container.MergedTagContainer;
@@ -17,6 +18,7 @@ import killercreepr.cruxmenus.api.menu.contex.ActionContext;
 import killercreepr.cruxmenus.api.menu.contex.MenuContext;
 import killercreepr.cruxmenus.api.menu.holder.MenuItemHolder;
 import killercreepr.cruxmenus.api.menu.item.MenuItem;
+import killercreepr.cruxmenus.api.menu.item.requirement.ViewCondition;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -53,11 +55,14 @@ public class SimpleMenuItem implements MenuItem {
     }
 
     public boolean canDisplay(){
-        String viewRequirement = base.info().get("view_requirement", String.class);
-        if(viewRequirement == null) return true;
-        return CruxString.parseBoolean(
+        ViewCondition viewCondition = base.info().getAny(ViewCondition.class, "view_requirement", "view_requirements", "view_condition", "view_conditions");
+        if(viewCondition == null) return true;
+        return viewCondition.test(TextParserContext.builder(getFormat())
+            .tags(buildTags())
+            .build());
+        /*return CruxString.parseBoolean(
             CruxMath.evaluateEvalEx(setPlaceholders(viewRequirement))
-        );
+        );*/
     }
 
     public @NotNull String setPlaceholders(@NotNull String text){

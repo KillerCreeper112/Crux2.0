@@ -7,6 +7,7 @@ import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registry.KeyedRegistry;
 import killercreepr.crux.registry.SimpleKeyedRegistry;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.FileLootCondition;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import killercreepr.cruxmenus.api.menu.module.config.MenuModuleBuilder;
 import killercreepr.cruxmenus.api.menu.registry.MenuRegistry;
@@ -15,6 +16,7 @@ import killercreepr.cruxmenus.core.command.argument.CruxMenuHolderArgument;
 import killercreepr.cruxmenus.core.command.argument.CruxMenusArguments;
 import killercreepr.cruxmenus.core.listener.MenuListener;
 import killercreepr.cruxmenus.core.menu.action.standard.StandardMenuActions;
+import killercreepr.cruxmenus.core.menu.config.handlers.FileViewCondition;
 import killercreepr.cruxmenus.core.tags.MenuItemHolderHook;
 import org.jetbrains.annotations.NotNull;
 

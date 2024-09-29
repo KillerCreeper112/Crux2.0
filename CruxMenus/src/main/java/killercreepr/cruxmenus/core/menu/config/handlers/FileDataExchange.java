@@ -11,6 +11,7 @@ import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxmenus.api.menu.config.FileDataProvider;
 import killercreepr.cruxmenus.api.menu.config.handler.FileMenuHolder;
 import killercreepr.cruxmenus.api.menu.holder.MenuItemHolder;
+import killercreepr.cruxmenus.api.menu.item.requirement.ViewCondition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,7 +29,7 @@ public class FileDataExchange extends SimpleFileMenuModuled<DataExchange> {
     }
 
     @Override
-    public @Nullable DataExchange deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e, @Nullable FileObject menuContext) {
+    public @Nullable DataExchange deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e, @Nullable FileObject menuContext) {
         if(!(e instanceof FileObject o)) return null;
         DataExchange.Builder builder = DataExchange.builder();
         o.forEach((s, element) ->{
@@ -39,17 +40,24 @@ public class FileDataExchange extends SimpleFileMenuModuled<DataExchange> {
                     if(!(element instanceof FileObject subSection)) return;
                     subSection.forEach((ss, subElement) ->{
                         MenuItemHolder menuItem = menuModule.getFileMenuItem().deserializeFromFile(
-                                context, subElement, menuContext
+                                ctx, subElement, menuContext
                         );
                         items.put(ss, menuItem);
                     });
                     if(!items.isEmpty()) builder.put(s.toLowerCase(), Holder.directObject(items));
                     return;
                 }
+                case "view_requirement", "view_requirements", "view_condition", "view_conditions" ->{
+                    ViewCondition viewCondition = ctx.getRegistry().deserializeFromFile(ViewCondition.class, element);
+                    if(viewCondition != null){
+                        builder.put(s, Holder.direct(viewCondition));
+                        return;
+                    }
+                }
             }
             FileDataProvider provider = DATA_TYPES.get(s);
             if(provider != null){
-                Object object = provider.deserialize(context, e, menuContext, element);
+                Object object = provider.deserialize(ctx, e, menuContext, element);
                 if(object != null) builder.put(s, Holder.directObject(object));
                 return;
             }

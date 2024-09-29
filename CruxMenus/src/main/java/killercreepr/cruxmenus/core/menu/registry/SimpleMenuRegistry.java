@@ -13,6 +13,7 @@ import killercreepr.cruxmenus.api.menu.data.ItemDataParser;
 import killercreepr.cruxmenus.api.menu.holder.MenuHolder;
 import killercreepr.cruxmenus.api.menu.holder.MenuItems;
 import killercreepr.cruxmenus.api.menu.item.MenuItem;
+import killercreepr.cruxmenus.api.menu.item.requirement.ViewCondition;
 import killercreepr.cruxmenus.api.menu.module.config.MenuModuleBuilder;
 import killercreepr.cruxmenus.api.menu.registry.MenuRegistry;
 import killercreepr.cruxmenus.core.menu.config.handlers.*;
@@ -65,6 +66,7 @@ public class SimpleMenuRegistry implements MenuRegistry {
         registry.registerFileHandler(DataExchange.class, menuModule.getFileDataExchange());
         registry.registerFileHandler(MenuItem.class, menuModule.getFileMenuItem());
         registry.registerFileHandler(MenuItems.class, menuModule.getFileMenuItems());
+        registry.registerFileHandler(ViewCondition.class, new FileViewCondition());
     }
 
     @Override

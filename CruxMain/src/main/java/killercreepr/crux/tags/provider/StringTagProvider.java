@@ -31,7 +31,7 @@ public interface StringTagProvider {
         TagParser tagParser = first.getStringTags().getTagParser();
 
         TagContainer<StringResolver> container = TagContainer.string(tagParser);
-        container.addAll(first.getStringTags());
+        container.addAll(first.getStringTags()).addAll(second.getStringTags());
         return () -> container;
     }
 
