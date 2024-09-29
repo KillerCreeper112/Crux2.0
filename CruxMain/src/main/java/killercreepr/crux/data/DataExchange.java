@@ -73,14 +73,14 @@ public interface DataExchange extends Iterable<Holder<?>> {
 
     default <T> @Nullable T getAny(@NotNull Class<T> find, @NotNull String... ids){
         for(String i : ids){
-            T v = getAny(find, i);
+            T v = get(i, find);
             if(v != null) return v;
         }
         return null;
     }
     default @Nullable Object getAny(@NotNull String... ids){
         for(String i : ids){
-            Object v = getAny(i);
+            Object v = get(i);
             if(v != null) return v;
         }
         return null;
