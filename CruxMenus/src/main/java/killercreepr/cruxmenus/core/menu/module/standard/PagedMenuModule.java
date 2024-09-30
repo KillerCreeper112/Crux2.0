@@ -1,6 +1,5 @@
 package killercreepr.cruxmenus.core.menu.module.standard;
 
-import killercreepr.crux.Crux;
 import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.Holder;

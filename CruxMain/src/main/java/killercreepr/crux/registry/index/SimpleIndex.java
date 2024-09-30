@@ -3,7 +3,9 @@ package killercreepr.crux.registry.index;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
 
 public class SimpleIndex<K, V> implements Index<K, V> {
     private final Map<K, V> keyToValue;

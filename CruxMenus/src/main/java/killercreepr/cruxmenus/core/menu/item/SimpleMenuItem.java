@@ -8,7 +8,6 @@ import killercreepr.crux.tags.container.TagContainer;
 import killercreepr.crux.tags.context.FormatParserContext;
 import killercreepr.crux.tags.format.FormatSerializer;
 import killercreepr.crux.util.CruxItem;
-import killercreepr.crux.util.CruxMath;
 import killercreepr.crux.util.CruxString;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxmenus.api.event.MenuItemClickEvent;

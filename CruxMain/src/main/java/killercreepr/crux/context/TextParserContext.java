@@ -5,7 +5,6 @@ import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.crux.tags.context.FormatParserContext;
 import killercreepr.crux.tags.context.FormatPrefix;
 import killercreepr.crux.tags.format.FormatSerializer;
-import killercreepr.crux.tags.provider.StringListTagProvider;
 import killercreepr.crux.tags.provider.StringTagProvider;
 import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;

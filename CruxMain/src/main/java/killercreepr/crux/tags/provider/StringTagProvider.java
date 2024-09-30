@@ -8,8 +8,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
 public interface StringTagProvider {
     @Contract("null -> null")
     static @Nullable StringTagProvider build(@Nullable TagContainer<StringResolver> tags){

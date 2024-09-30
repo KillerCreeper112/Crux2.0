@@ -6,7 +6,6 @@ import eu.endercentral.crazy_advancements.advancement.AdvancementVisibility;
 import killercreepr.crux.Crux;
 import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.item.dynamic.DynamicItem;
-import killercreepr.crux.tags.context.FormatParserContext;
 import killercreepr.cruxadvancements.advancement.icon.CruxAdvancementIcon;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Material;

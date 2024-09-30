@@ -3,7 +3,6 @@ package killercreepr.crux.tags;
 import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.crux.tags.container.StringListTagContainer;
 import killercreepr.crux.tags.container.StringTagContainer;
-import killercreepr.crux.tags.context.FormatPrefix;
 import killercreepr.crux.tags.hook.ObjectTag;
 import killercreepr.crux.tags.hook.impl.StringHookedObjectContainer;
 import killercreepr.crux.tags.hook.impl.StringListHookedObjectContainer;

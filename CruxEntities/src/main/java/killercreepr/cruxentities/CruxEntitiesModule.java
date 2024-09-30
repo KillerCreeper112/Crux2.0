@@ -1,6 +1,5 @@
 package killercreepr.cruxentities;
 
-import com.ticxo.modelengine.api.events.ModelDismountEvent;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.module.StandardModules;
 import killercreepr.crux.plugin.CruxPlugin;

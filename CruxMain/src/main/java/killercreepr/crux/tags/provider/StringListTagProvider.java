@@ -5,12 +5,9 @@ import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.container.StringListTagContainer;
 import killercreepr.crux.tags.container.TagContainer;
 import killercreepr.crux.tags.resolver.StringListResolver;
-import killercreepr.crux.tags.resolver.StringResolver;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
 
 public interface StringListTagProvider {
     @Contract("null -> null")

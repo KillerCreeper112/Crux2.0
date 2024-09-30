@@ -1,13 +1,11 @@
 package killercreepr.crux.tags.hook.impl;
 
 import killercreepr.crux.tags.container.TagContainer;
-import killercreepr.crux.tags.context.FormatPrefix;
 import killercreepr.crux.tags.hook.HookedObjectTag;
 import killercreepr.crux.tags.hook.ObjectTag;
 import killercreepr.crux.tags.hook.prefix.HookedPrefixBuilder;
 import killercreepr.crux.tags.resolver.StringResolver;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class StringHookedObjectTag<T> implements HookedObjectTag<T, StringResolver> {
     protected final @NotNull T object;

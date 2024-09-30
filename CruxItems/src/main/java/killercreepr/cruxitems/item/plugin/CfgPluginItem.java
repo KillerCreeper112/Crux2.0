@@ -3,7 +3,6 @@ package killercreepr.cruxitems.item.plugin;
 import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.item.dynamic.DynamicItem;
 import killercreepr.crux.tags.container.MergedTagContainer;
-import killercreepr.crux.tags.context.FormatParserContext;
 import killercreepr.cruxitems.item.CruxedItem;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Entity;
