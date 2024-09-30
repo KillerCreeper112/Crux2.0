@@ -2,13 +2,17 @@ package killercreepr.crux.command.argument;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.registries.CruxRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 public class CruxModuleArgument implements CustomArgumentType.Converted<CruxModule, String> {
     /**
@@ -32,5 +36,20 @@ public class CruxModuleArgument implements CustomArgumentType.Converted<CruxModu
     @Override
     public @NotNull ArgumentType<String> getNativeType() {
         return StringArgumentType.string();
+    }
+
+    /**
+     * Provides a list of suggestions to show to the client.
+     *
+     * @param context command context
+     * @param builder suggestion builder
+     * @return suggestions
+     */
+    @Override
+    public @NotNull <S> CompletableFuture<Suggestions> listSuggestions(@NotNull CommandContext<S> context, @NotNull SuggestionsBuilder builder) {
+        for(CruxModule m : CruxRegistries.MODULES){
+            builder.suggest(m.name());
+        }
+        return builder.buildFuture();
     }
 }
