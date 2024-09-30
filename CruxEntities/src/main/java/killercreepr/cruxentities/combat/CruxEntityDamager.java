@@ -3,18 +3,23 @@ package killercreepr.cruxentities.combat;
 import killercreepr.crux.Crux;
 import killercreepr.crux.event.CruxEntityDamageEvent;
 import killercreepr.crux.event.CruxEntityDeathEvent;
+import killercreepr.crux.persistence.CruxPersist;
 import killercreepr.cruxattributes.attribute.CruxAttribute;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Projectile;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.UUID;
+
 //todo make crux interface for this
 public class CruxEntityDamager {
     private Entity damager;
@@ -30,6 +35,18 @@ public class CruxEntityDamager {
         this.damager = damager;
         this.target = target;
         if(damager != null) hitPosition = damager.getLocation();
+    }
+
+    public static @Nullable Entity getShooter(@NotNull Entity base){
+        if(base instanceof Projectile p){
+            if(p.getShooter() instanceof Entity e) return e;
+            return null;
+        }
+        UUID ownerUUID = CruxPersist.OWNER.get(base);
+        if(ownerUUID != null){
+            return Crux.getServer().getEntity(ownerUUID);
+        }
+        return null;
     }
 
     public @Nullable Location getHitPosition() {

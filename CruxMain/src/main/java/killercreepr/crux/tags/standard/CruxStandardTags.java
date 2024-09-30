@@ -46,10 +46,12 @@ public class CruxStandardTags {
     }
 
     public static @NotNull Pattern buildEquationPattern(){
+        //return Pattern.compile("\\{\\{(.+?)}(?:\\[(\\d+)])?(.*?)}");
         return Pattern.compile("\\{\\{(.+?)}(?:\\[(\\d+)])?}");
     }
 
     public static @NotNull Pattern buildBEquationPattern(){
+        //return Pattern.compile("\\{e\\{(.+?)}(?:\\[(\\d+)])?(.*?)}");
         return Pattern.compile("\\{e\\{(.+?)}(?:\\[(\\d+)])?}");
         //return Pattern.compile("\\{e\\{(.+?)\\}\\}");
     }

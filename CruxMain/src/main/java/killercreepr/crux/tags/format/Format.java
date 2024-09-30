@@ -365,6 +365,7 @@ public class Format implements FormatSerializer{
         StringBuilder result = new StringBuilder();
         while (matcher.find()) {
             String expression = matcher.group(1);
+
             String evaluatedValue;
 
             Integer decimalPlaces = null;

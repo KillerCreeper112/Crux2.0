@@ -32,4 +32,9 @@ public class TranslateMsg implements StringIdentifiable {
     public @NotNull String id() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return "TranslateMsg={id=" + id + ", defaultValue=" + defaultValue + "}";
+    }
 }

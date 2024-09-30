@@ -15,7 +15,7 @@ public class SimpleMappedRegistry<K, V> implements MappedRegistry<K, V> {
         return new SimpleMappedRegistry<>(new ConcurrentHashMap<>());
     }
 
-    private final Map<K, V> map;
+    protected final Map<K, V> map;
     public SimpleMappedRegistry(@NotNull Map<K, V> map) {
         this.map = map;
     }

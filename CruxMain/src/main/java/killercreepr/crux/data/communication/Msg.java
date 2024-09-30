@@ -47,4 +47,9 @@ public class Msg extends TranslateMsg implements Communicator {
     public Communicator playAt(@NotNull Entity entity) {
         return langHolder.value().playAt(id, entity);
     }
+
+    @Override
+    public String toString() {
+        return "Msg={id=" + id + ", defaultValue=" + defaultValue + ", langHolder=" + langHolder + ", langHolderValue=" + langHolder.value().get(id) + "}";
+    }
 }

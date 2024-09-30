@@ -56,7 +56,8 @@ public class DataHolderRegistry extends SimpleKeyedRegistry<DataHolder> {
     public void removeTickedIf(@NotNull Predicate<TickedDataHolder> predicate){
         tickedHolders.values().removeIf(holder ->{
             if(predicate.test(holder)){
-                unregister(holder);
+                //unregister(holder);
+                map.remove(holder.key());
                 return true;
             }
             return false;
