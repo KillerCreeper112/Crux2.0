@@ -7,6 +7,7 @@ import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.FileDynamicItem;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
+import killercreepr.cruxconfig.config.common.element.FileArray;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.SimpleFileHandler;
@@ -58,6 +59,11 @@ public class SimpleFileMenuHolder extends SimpleFileHandler<MenuHolder> implemen
         Collection<MenuModule> modules = new HashSet<>();
         if(o.get("modules") instanceof FileObject mods){
             mods.forEach((string, ele) ->{
+                MenuModule module = fileMenuModule.deserializeFromFile(context, ele, o);
+                if(module != null) modules.add(module);
+            });
+        }else if(o.get("modules") instanceof FileArray mods){
+            mods.forEach(ele ->{
                 MenuModule module = fileMenuModule.deserializeFromFile(context, ele, o);
                 if(module != null) modules.add(module);
             });
