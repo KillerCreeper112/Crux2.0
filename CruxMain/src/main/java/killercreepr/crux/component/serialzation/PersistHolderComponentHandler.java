@@ -5,13 +5,16 @@ import killercreepr.crux.persistence.PersistenceComponentHandler;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataHolder;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface PersistHolderComponentHandler extends PersistenceComponentHandler {
-    @NotNull PersistentDataHolder getComponentsPersistentHolder();
+    @Nullable
+    PersistentDataHolder getComponentsPersistentHolder();
 
     @Override
-    default @NotNull PersistentDataContainer getComponentsPersistentContainer() {
+    default @Nullable PersistentDataContainer getComponentsPersistentContainer() {
         PersistentDataHolder item = getComponentsPersistentHolder();
+        if(item == null) return null;
         PersistentDataContainer container = CruxPersist.COMPONENTS.get(item, null);
         if(container == null) container = item.getPersistentDataContainer().getAdapterContext().newPersistentDataContainer();
         return container;

@@ -167,9 +167,11 @@ public interface ActiveCruxBlock {
         if(miner instanceof Tooled m) tooled = m;
         else tooled = null;
 
-        if(tooled == null || tooled.getTool() == null) return 1f;
+        if(tooled == null) return 1f;
+        ItemStack tool = tooled.getTool();
+        if(tool == null) return 1f;
 
-        CruxItem cruxItem = CruxItem.create(tooled.getTool());
+        CruxItem cruxItem = CruxItem.create(tool);
         ToolComponent toolComponent = cruxItem.get(CruxComponents.TOOL);
         if(toolComponent == null) return 1f;
         ToolComponent.Result result = toolComponent.test(Objects.requireNonNull(

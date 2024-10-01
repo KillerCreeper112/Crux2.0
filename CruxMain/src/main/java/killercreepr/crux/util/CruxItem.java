@@ -336,7 +336,7 @@ public class CruxItem implements Cloneable, PersistHolderComponentHandler {
     }
 
     @Override
-    public @NotNull PersistentDataHolder getComponentsPersistentHolder() {
+    public @Nullable PersistentDataHolder getComponentsPersistentHolder() {
         return item.getItemMeta();
     }
 

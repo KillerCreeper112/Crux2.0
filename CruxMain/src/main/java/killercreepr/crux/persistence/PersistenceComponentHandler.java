@@ -15,7 +15,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 public interface PersistenceComponentHandler extends DataComponentHandler {
-    @NotNull
+    @Nullable
     PersistentDataContainer getComponentsPersistentContainer();
 
     void onComponentsPersistentContainerChanged(@NotNull PersistentDataContainer data);
@@ -24,13 +24,17 @@ public interface PersistenceComponentHandler extends DataComponentHandler {
     default  <T> @Nullable T get(DataComponentType<? extends T> type) {
         ComponentSerializer<?, ? extends T> serializer = type.serializer();
         if(serializer == null) return null;
-        return serializer.decodeUnchecked(getComponentsPersistentContainer());
+        PersistentDataContainer components = getComponentsPersistentContainer();
+        if(components == null) return null;
+        return serializer.decodeUnchecked(components);
     }
 
     @Override
     default Set<DataComponentType<?>> keySet() {
-        Set<DataComponentType<?>> types = new HashSet<>();
         PersistentDataContainer container = getComponentsPersistentContainer();
+        if(container == null) return Set.of();
+
+        Set<DataComponentType<?>> types = new HashSet<>();
         for(NamespacedKey key : container.getKeys()){
             DataComponentType<?> type = CruxRegistries.DATA_COMPONENT_TYPE.get(key);
             if(type != null) types.add(type);
@@ -52,8 +56,10 @@ public interface PersistenceComponentHandler extends DataComponentHandler {
     default <T> @Nullable T set(DataComponentType<? super T> type, @Nullable T value) {
         ComponentSerializer<?, ? super T> serializer = type.serializer();
         if(serializer == null) return null;
-        Object previousValue = get(type);
         PersistentDataContainer container = getComponentsPersistentContainer();
+        if(container == null) return null;
+
+        Object previousValue = get(type);
         serializer.encodeUnchecked(container, value);
         onComponentsPersistentContainerChanged(container);
         return (T) previousValue;
