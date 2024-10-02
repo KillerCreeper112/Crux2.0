@@ -33,9 +33,11 @@ public class MenusCfgLoader extends CfgLoader {
                 return;
             }
 
+            FileContext<?> ctx = new FileContext<>(cfg.fileRegistry());
             table = fileMenuHolder.deserializeFromFile(
                 new FileContext<>(cfg.fileRegistry()), root, Crux.key(path)
             );
+            if(table != null) table = cfg.fileRegistry().getParsedObjectRegistry().parse(root, ctx, table);
         }
         if(table == null) return;
         Crux.log(Level.INFO, "Registered crux menu: " + table.key());

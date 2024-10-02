@@ -8,6 +8,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public interface NumberProvider extends NumberHolder {
     static @NotNull NumberProvider constant(@NotNull Number number){
@@ -51,8 +53,67 @@ public interface NumberProvider extends NumberHolder {
             );
         }
 
+        if(text.startsWith("~")){
+            int ticks = parseDurationInTicks(text.substring(1));
+            return constant(ticks);
+        }
+        if(text.startsWith("dur=")){
+            int ticks = parseDurationInTicks(text.substring(4));
+            return constant(ticks);
+        }
+
         return new EquationNumber(text);
     }
+
+    Pattern DURATION_PATTERN = Pattern.compile("(\\d+(\\.\\d+)?)([dhmst]|days?|hours?|minutes?|seconds?|ticks?)");
+    private static int parseDurationInTicks(String durationStr) {
+        durationStr = durationStr.replaceAll(" ", "");
+        Matcher matcher = DURATION_PATTERN.matcher(durationStr);
+
+        double totalTicks = 0;
+
+        // Loop through each match
+        while (matcher.find()) {
+            double value = (int) Double.parseDouble(matcher.group(1));
+            String unit = matcher.group(2);
+
+            // Convert the value to seconds based on the unit
+            switch (unit) {
+                case "d":
+                case "day":
+                case "days":
+                    totalTicks += value * 1728000D; // 1 day = 1728000 ticks
+                    break;
+                case "h":
+                case "hour":
+                case "hours":
+                    totalTicks += value * 72000D;  // 1 hour = 72000 ticks
+                    break;
+                case "m":
+                case "min":
+                case "minute":
+                case "minutes":
+                    totalTicks += value * 1200D;     // 1 minute = 1200 ticks
+                    break;
+                case "s":
+                case "sec":
+                case "second":
+                case "seconds":
+                    totalTicks += value * 20D;          // 1 second = 20 ticks
+                    break;
+                case "t":
+                case "tick":
+                case "ticks":
+                case "tic":
+                    totalTicks += value; //ticks
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid time unit: " + unit);
+            }
+        }
+        return (int) totalTicks;
+    }
+
     private static List<String> parseElements(@NotNull String input) {
         List<String> elements = new ArrayList<>();
         StringBuilder currentElement = new StringBuilder();
