@@ -52,9 +52,8 @@ public class FileNumberProvider extends SimpleFileHandler<NumberProvider> {
         }
         if(e instanceof FileObject map){
             FileElement value = map.get("value");
-            if(value instanceof FileGeneric g){
-                if(g.isNumber()) new ConstantNumber(value.getAsNumber());
-                return new EquationNumber(value.getAsString());
+            if(value != null){
+                return registry.deserializeFromFile(NumberProvider.class, value);
             }
             FileElement min = map.get("min");
             FileElement max = map.get("max");

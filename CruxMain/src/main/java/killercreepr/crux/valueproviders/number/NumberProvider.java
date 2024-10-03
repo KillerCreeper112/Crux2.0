@@ -75,7 +75,7 @@ public interface NumberProvider extends NumberHolder {
         // Loop through each match
         while (matcher.find()) {
             double value = (int) Double.parseDouble(matcher.group(1));
-            String unit = matcher.group(2);
+            String unit = matcher.group(3);
 
             // Convert the value to seconds based on the unit
             switch (unit) {
@@ -135,7 +135,7 @@ public interface NumberProvider extends NumberHolder {
         }
 
         // Add the last element if any
-        if (currentElement.length() > 0) {
+        if (!currentElement.isEmpty()) {
             elements.add(currentElement.toString().trim());
         }
 
