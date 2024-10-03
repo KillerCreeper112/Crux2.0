@@ -1,13 +1,17 @@
 package killercreepr.cruxstructures.config;
 
 import com.google.common.reflect.TypeToken;
+import killercreepr.crux.Crux;
 import killercreepr.crux.loot.LootTable;
+import killercreepr.crux.registry.MappedRegistry;
+import killercreepr.crux.registry.SimpleMappedRegistry;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.FileSimpleLootTable;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileArray;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
+import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
 import killercreepr.cruxconfig.config.common.handler.PureYamlFileHandler;
 import killercreepr.cruxstructures.CruxStructuresModule;
 import killercreepr.cruxstructures.structure.generation.StructureGenerator;
@@ -22,13 +26,27 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
 
 public class FileCfgStructureGen extends PureYamlFileHandler<StructureGenerator> {
     protected static final @NotNull FileSimpleLootTable<Key> fileSimpleLootTable = CruxStructuresModule.fileSimpleLootTable;
+    private final MappedRegistry<String, FileObjectHandler<? extends StructureGenerator>> TYPE_HANDLERS = new SimpleMappedRegistry<>();
+    public MappedRegistry<String, FileObjectHandler<? extends StructureGenerator>> typeHandlers(){
+        return TYPE_HANDLERS;
+    }
     @Override
     public @Nullable StructureGenerator deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = context.getRegistry();
+
+        String type = o.getObject(String.class, "generator");
+        if(type != null){
+            FileObjectHandler<? extends StructureGenerator> handler = typeHandlers().get(type);
+            if(handler != null){
+                return handler.deserializeFromFile(context, e);
+            }else Crux.log(Level.WARNING, "FileCfgStructureGen TYPE_HANDLER of " + type + " not found!. Attempting to parse default..");
+        }
+
         StructureCenter center = registry.deserializeFromFile(StructureCenter.class, o.get("center"));
         if(center==null){
             throw new RuntimeException("StructureCenter type not found!");

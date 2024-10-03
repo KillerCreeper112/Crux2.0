@@ -34,6 +34,7 @@ public class CruxStructuresModule implements CruxModule {
         return NAMESPACE;
     }
 
+    protected final FileCfgStructureGen fileCfgStructureGen = new FileCfgStructureGen();
     protected final FileStructureCenter fileStructureCenter = new FileStructureCenter();
     protected final FileStructureRequirement fileStructureRequirement = new FileStructureRequirement();
     protected final FileStructureChunkRequirement fileStructureChunkRequirement = new FileStructureChunkRequirement();
@@ -41,6 +42,10 @@ public class CruxStructuresModule implements CruxModule {
     public final FileCfgFAWEStructure fileCfgFAWEStructure = new FileCfgFAWEStructure();
 
     protected final FileLocationFinder fileLocationFinder = new FileLocationFinder();
+
+    public FileCfgStructureGen getFileCfgStructureGen() {
+        return fileCfgStructureGen;
+    }
 
     public FileLocationFinder getFileLocationFinder() {
         return fileLocationFinder;
@@ -73,7 +78,7 @@ public class CruxStructuresModule implements CruxModule {
     @Override
     public void onLoad(@NotNull CruxPlugin plugin) {
         CfgRegistries.SIMPLE_REGISTRY.forEach(registry -> {
-            registry.registerFileHandler(StructureGenerator.class, new FileCfgStructureGen());
+            registry.registerFileHandler(StructureGenerator.class, fileCfgStructureGen);
             registry.registerFileHandler(StructureCenter.class, fileStructureCenter);
             registry.registerFileHandler(StructureRequirement.class, fileStructureRequirement);
             registry.registerFileHandler(StructureChunkRequirement.class, fileStructureChunkRequirement);
@@ -115,5 +120,8 @@ public class CruxStructuresModule implements CruxModule {
 
         fileLocationFinder.TYPE_HANDLERS.register("nearby_solid_block", new FileNearbySolidBlockFinder());
         fileLocationFinder.TYPE_HANDLERS.register("dummy", new FileDummyLocationFinder());
+
+        //CfgStructure
+        fileCfgStructureGen.typeHandlers().register("set_location", new FileLocationSetStructureGen());
     }
 }

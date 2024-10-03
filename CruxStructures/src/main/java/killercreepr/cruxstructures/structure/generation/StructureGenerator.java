@@ -1,7 +1,7 @@
 package killercreepr.cruxstructures.structure.generation;
 
-import killercreepr.cruxstructures.structure.GenerateResult;
 import killercreepr.cruxstructures.structure.Structure;
+import killercreepr.cruxstructures.structure.result.GenerateResult;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
