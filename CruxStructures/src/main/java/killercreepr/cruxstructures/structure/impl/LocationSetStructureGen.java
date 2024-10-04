@@ -50,7 +50,6 @@ public class LocationSetStructureGen implements StructureGenerator {
         Collection<Pos2D> list = new HashSet<>();
 
         int minDistanceSquared = minDistance * minDistance;
-        int attempts = 0;
         while (amount > 0) {
             Pos2D pos;
             boolean isValidPosition;
@@ -69,8 +68,6 @@ public class LocationSetStructureGen implements StructureGenerator {
                             break;
                         }
                     }
-                    attempts++;
-                    if(attempts > 128) break;
                 } while (!isValidPosition); // Repeat until a valid position is found
             }else pos = Pos2D.at(CruxMath.random(-rangeX, rangeX), CruxMath.random(-rangeZ, rangeZ));
 

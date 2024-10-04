@@ -1,10 +1,13 @@
 package killercreepr.crux.util;
 
+import killercreepr.crux.Crux;
 import killercreepr.crux.data.world.CruxPosition;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
 
 public class CruxWorldUtil {
     public static boolean isLoaded(@NotNull World world, int x, int z) {
@@ -27,4 +30,27 @@ public class CruxWorldUtil {
         return loc.getWorld() != null && isLoaded(loc.getWorld(), loc);
     }
 
+    public static boolean deleteWorld(@NotNull World world){
+        if(Crux.getServer().isTickingWorlds()){
+            throw new IllegalStateException("Cannot unload world while Bukkit.isTickingWorlds is true!");
+        }
+        Crux.getServer().unloadWorld(world, false);
+        return deleteWorld(world.getName());
+    }
+
+    public static boolean deleteWorld(@NotNull String name){
+        for(File f : Crux.getServer().getWorldContainer().listFiles()){
+            if(!f.getName().equals(name) || !f.isDirectory()) continue;
+            boolean foundLevel = false;
+            for(File folderF : f.listFiles()){
+                if(folderF.getName().equals("level.dat")){
+                    foundLevel = true;
+                    break;
+                }
+            }
+            if(foundLevel) return f.delete();
+            break;
+        }
+        return false;
+    }
 }
