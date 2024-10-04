@@ -1,4 +1,4 @@
-package killercreepr.crux.tags.standard;
+package killercreepr.crux.tags.standard.object;
 
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;

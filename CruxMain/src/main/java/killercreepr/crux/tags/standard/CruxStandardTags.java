@@ -3,6 +3,10 @@ package killercreepr.crux.tags.standard;
 import killercreepr.crux.tags.hook.ObjectTag;
 import killercreepr.crux.tags.resolver.StringListResolver;
 import killercreepr.crux.tags.resolver.StringResolver;
+import killercreepr.crux.tags.standard.object.ItemStackTags;
+import killercreepr.crux.tags.standard.object.OfflinePlayerTags;
+import killercreepr.crux.tags.standard.object.WorldBorderTags;
+import killercreepr.crux.tags.standard.object.WorldTags;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -13,7 +17,9 @@ public class CruxStandardTags {
     public static @NotNull Collection<ObjectTag<?>> buildObjectTags(){
         return Set.of(
             new OfflinePlayerTags(),
-            new ItemStackTags()
+            new ItemStackTags(),
+            new WorldTags(),
+            new WorldBorderTags()
         );
     }
 

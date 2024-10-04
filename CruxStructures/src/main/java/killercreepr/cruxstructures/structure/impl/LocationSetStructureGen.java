@@ -36,12 +36,13 @@ public class LocationSetStructureGen implements StructureGenerator {
     }
 
     public Collection<Pos2D> generateSetChunks(@NotNull World world){
-        int amount = structureAmount.value().intValue();
+        InputContext ctx = InputContext.simple(TagContainer.string().hook(world));
+        int amount = structureAmount.sample(ctx).intValue();
         if(amount < 1) return null;
         int rangeX = chunkRangeX == null ? (int) world.getWorldBorder().getSize() :
-            chunkRangeX.sample(InputContext.simple(TagContainer.string().hook(world))).intValue();
+            chunkRangeX.sample(ctx).intValue();
         int rangeZ = chunkRangeZ == null ? (int) world.getWorldBorder().getSize() :
-            chunkRangeZ.sample(InputContext.simple(TagContainer.string().hook(world))).intValue();
+            chunkRangeZ.sample(ctx).intValue();
         Collection<Pos2D> list = new HashSet<>();
         while(amount > 0){
             amount--;
