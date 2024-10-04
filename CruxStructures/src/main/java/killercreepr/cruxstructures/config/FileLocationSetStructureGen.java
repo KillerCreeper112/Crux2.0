@@ -27,6 +27,8 @@ public class FileLocationSetStructureGen extends PureYamlFileHandler<LocationSet
         NumberProvider chunkRangeZ = registry.deserializeFromFile(NumberProvider.class, o.get("chunk_range_z"));
         if(chunkRangeX == null) chunkRangeX = chunkRange;
         if(chunkRangeZ == null) chunkRangeZ = chunkRange;
-        return new LocationSetStructureGen(generators, structureAmount, chunkRangeX, chunkRangeZ);
+        NumberProvider minDistanceApart = registry.deserializeFromFile(NumberProvider.class, o.get("minimum_distance_apart"));
+        if(minDistanceApart == null) minDistanceApart = registry.deserializeFromFile(NumberProvider.class, o.get("min_distance_apart"));
+        return new LocationSetStructureGen(generators, structureAmount, chunkRangeX, chunkRangeZ, minDistanceApart);
     }
 }
