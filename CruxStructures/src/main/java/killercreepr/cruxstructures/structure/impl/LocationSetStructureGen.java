@@ -103,4 +103,28 @@ public class LocationSetStructureGen implements StructureGenerator {
     public @NotNull GenerateResult generate(@NotNull Structure structure, @NotNull Location at) {
         throw new UnsupportedOperationException();
     }
+
+    public @NotNull LootTable<StructureGenerator> getStructurePool() {
+        return structurePool;
+    }
+
+    public @NotNull NumberProvider getStructureAmount() {
+        return structureAmount;
+    }
+
+    public @Nullable NumberProvider getChunkRangeX() {
+        return chunkRangeX;
+    }
+
+    public @Nullable NumberProvider getChunkRangeZ() {
+        return chunkRangeZ;
+    }
+
+    public @Nullable NumberProvider getMinDistanceApart() {
+        return minDistanceApart;
+    }
+
+    public Collection<Pos2D> getSetChunks() {
+        return setChunks;
+    }
 }

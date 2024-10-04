@@ -124,5 +124,6 @@ public class CruxStructuresModule implements CruxModule {
 
         //CfgStructure
         fileCfgStructureGen.typeHandlers().register("set_location", new FileLocationSetStructureGen());
+        fileCfgStructureGen.typeHandlers().register("instant_set_location", new FileInstantLocationSetStructureGen());
     }
 }
