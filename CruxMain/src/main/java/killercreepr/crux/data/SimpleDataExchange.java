@@ -164,6 +164,17 @@ public class SimpleDataExchange implements DataExchange {
     public static class Builder implements DataExchange.Builder {
         protected final Map<String, Holder<?>> data = new HashMap<>();
 
+        @Override
+        public <T> T getOrDefault(Class<T> type, T fallback) {
+            for(Holder<?> holder : data.values()){
+                Object o = holder.value();
+                if(o == null) continue;
+                if(!type.isAssignableFrom(o.getClass())) continue;
+                return type.cast(o);
+            }
+            return fallback;
+        }
+
         public DataExchange.Builder putAll(@Nullable Object direct, @NotNull String... ids) {
             return putAll(Holder.direct(direct), ids);
         }

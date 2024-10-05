@@ -13,9 +13,13 @@ dependencies {
     paperweight.paperDevBundle(libs.versions.paper)
     compileOnly(project(":CruxMain"))
     compileOnly(project(":CruxConfigs"))
+    compileOnly(project(":CruxMenus"))
     compileOnly("com.github.ZockerAxel", "CrazyAdvancementsAPI", "2.1.19")
 
     compileOnly(fileTree("libs") {
         include("*.jar")
     })
+}
+tasks.getByName<JavaCompile>("compileJava") {
+    dependsOn(":CruxMain:shadowJar")
 }

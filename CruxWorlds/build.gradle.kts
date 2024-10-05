@@ -9,3 +9,6 @@ dependencies {
     compileOnly(project(":CruxMain"))
 }
 paperweight.reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.MOJANG_PRODUCTION
+tasks.getByName<JavaCompile>("compileJava") {
+    dependsOn(":CruxMain:shadowJar")
+}

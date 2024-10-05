@@ -115,6 +115,8 @@ public interface DataExchange extends Iterable<Holder<?>> {
     }
 
     interface Builder {
+        <T> T getOrDefault(Class<T> type, T fallback);
+
         Builder putAll(@Nullable Object direct, @NotNull String... ids);
 
         Builder put(@NotNull String id, @Nullable Object direct);

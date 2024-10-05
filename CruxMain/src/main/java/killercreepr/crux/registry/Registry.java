@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 /**
  * Represents a registered collection of objects.
  */
-public interface Registry<T> extends Iterable<T>{
+public interface Registry<T> extends Iterable<T> {
     @NotNull Stream<T> stream();
     <E extends T> E register(@NotNull E object);
     boolean unregister(@NotNull T object);

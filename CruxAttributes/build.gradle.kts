@@ -9,3 +9,6 @@ dependencies {
     paperweight.paperDevBundle(libs.versions.paper)
     compileOnly(project(":CruxMain"))
 }
+tasks.getByName<JavaCompile>("compileJava") {
+    dependsOn(":CruxMain:shadowJar")
+}

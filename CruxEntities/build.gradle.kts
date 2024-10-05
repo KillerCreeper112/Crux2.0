@@ -17,3 +17,6 @@ dependencies {
         include("*.jar")
     })
 }
+tasks.getByName<JavaCompile>("compileJava") {
+    dependsOn(":CruxMain:shadowJar")
+}

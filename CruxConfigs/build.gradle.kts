@@ -16,3 +16,6 @@ dependencies {
     //    <artifactId>annotations</artifactId>
     //    <version>16.0.1</version>
 }
+tasks.getByName<JavaCompile>("compileJava") {
+    dependsOn(":CruxMain:shadowJar")
+}
