@@ -40,6 +40,12 @@ public class FileCrazyAdvancement implements FileObjectHandler<CrazyAdvancement>
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = ctx.getRegistry();
         Key key = registry.deserializeFromFile(Key.class, o.get("key"));
+        if(key == null) return null;
+        return deserializeFromFile(ctx, e, key);
+    }
+    public @Nullable CrazyAdvancement deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e, @NotNull Key key){
+        if(!(e instanceof FileObject o)) return null;
+        FileRegistry registry = ctx.getRegistry();
         Key parentKey = registry.deserializeFromFile(Key.class, o.get("parent"));
         CruxCriteria criteria = registry.deserializeFromFile(CruxCriteria.class, o.get("criteria"));
         CrazyAdvancementDisplay display = registry.deserializeFromFile(CrazyAdvancementDisplay.class, o.get("display"));

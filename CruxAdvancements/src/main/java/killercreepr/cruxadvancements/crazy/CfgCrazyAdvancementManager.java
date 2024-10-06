@@ -11,8 +11,6 @@ import killercreepr.cruxadvancements.advancement.progression.CruxAdvancementProg
 import killercreepr.cruxadvancements.config.CruxConfigHook;
 import killercreepr.cruxadvancements.config.handler.FileCruxAdvancementProgress;
 import killercreepr.cruxadvancements.config.handler.FileSimpleObjectiveProgression;
-import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
-import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxconfig.config.bukkit.file.CruxJson;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.json.context.JsonContext;
@@ -22,10 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdvancement> {
@@ -39,20 +34,22 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
         this.plugin = plugin;
     }
 
-    public @NotNull CruxFolder getAdvancementsFolder(@NotNull Plugin plugin){
+    /*public @NotNull CruxFolder getAdvancementsFolder(@NotNull Plugin plugin){
         return new CruxFolder(plugin, "advancements/" + key.asString().replace(":", "_"));
-    }
+    }*/
 
     public @NotNull CruxJson getSaveFile(@NotNull Plugin plugin, @NotNull UUID player){
-        return new CruxJson(plugin, "advancements/" + key.asString().replace(":", "_") +
-            "/data/" + player);
+        return new CruxJson(plugin, "data/cruxadvancements/" + key.asString().replace(":", "_") +
+            "/" + player);
     }
 
-    public @NotNull Collection<CrazyAdvancement>  parseAdvancements(@NotNull Plugin plugin){
-        File[] files = getAdvancementsFolder(plugin).file().listFiles();
+    /*public @NotNull Collection<CrazyAdvancement> parseAdvancements(@NotNull File folder){
+        File[] files = folder.listFiles();
         if(files==null) return Set.of();
         Collection<CrazyAdvancement> list = new HashSet<>();
         for(File f : files){
+            if(!BukkitDataFile.isSupported(f)) continue;
+            DataFile dataFile = BukkitDataFile.parse()
             if(!CruxFolder.hasFileExtension(f, "yml")) continue;
             CruxConfig cfg = new CruxConfig(f);
             CrazyAdvancement advancement = cfg.deserialize(CrazyAdvancement.class, "");
@@ -60,7 +57,7 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
             list.add(advancement);
         }
         return list;
-    }
+    }*/
 
     @Override
     public void save(@NotNull Plugin plugin) {
@@ -86,10 +83,10 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
 
     @Override
     public void load(@NotNull Plugin plugin) {
-        for(CrazyAdvancement a : parseAdvancements(plugin)){
+        /*for(CrazyAdvancement a : parseAdvancements(plugin)){
             registerAdvancement(a);
             //a.load(getAdvancementSaveFile(plugin, a).file());
-        }
+        }*/
         loadAllCrazyAdvancements();
     }
 
