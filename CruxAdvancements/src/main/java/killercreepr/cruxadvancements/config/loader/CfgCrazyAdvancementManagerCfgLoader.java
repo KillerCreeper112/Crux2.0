@@ -38,7 +38,6 @@ public class CfgCrazyAdvancementManagerCfgLoader {
     }
 
     public void load(){
-        loadConfiguration(CruxFolder.file(plugin, "advancements"));
         advancementManagers.values().forEach(c ->{
             c.load(plugin);
             c.loadAllCrazyAdvancements();
@@ -46,6 +45,7 @@ public class CfgCrazyAdvancementManagerCfgLoader {
     }
 
     public void refresh(){
+        loadConfiguration(CruxFolder.file(plugin, "advancements"));
         advancementManagers.values().forEach(c -> c.refresh(plugin));
     }
 
@@ -63,7 +63,7 @@ public class CfgCrazyAdvancementManagerCfgLoader {
             AdvancementRegistries.ADVANCEMENT_MANAGERS.register(manager);
             Crux.log(Level.INFO, "Registered CfgCrazyAdvancementManager: " + manager.key());
 
-            manager.load(plugin);
+            //manager.load(plugin);
         }
     }
 
