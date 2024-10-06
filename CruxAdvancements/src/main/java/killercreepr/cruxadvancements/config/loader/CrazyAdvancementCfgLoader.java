@@ -2,7 +2,6 @@ package killercreepr.cruxadvancements.config.loader;
 
 import killercreepr.crux.Crux;
 import killercreepr.cruxadvancements.crazy.CrazyAdvancement;
-import killercreepr.cruxadvancements.crazy.CrazyAdvancementManager;
 import killercreepr.cruxadvancements.crazy.CrazyAdvancementsHook;
 import killercreepr.cruxconfig.config.bukkit.loader.CfgLoader;
 import killercreepr.cruxconfig.config.common.FileContext;
@@ -11,12 +10,12 @@ import killercreepr.cruxconfig.config.common.file.DataFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.logging.Level;
+import java.util.function.Consumer;
 
 public class CrazyAdvancementCfgLoader extends CfgLoader {
-    protected final @NotNull CrazyAdvancementManager<CrazyAdvancement> manager;
-    public CrazyAdvancementCfgLoader(@NotNull CrazyAdvancementManager<CrazyAdvancement> manager) {
-        this.manager = manager;
+    protected final Consumer<CrazyAdvancement> loaded;
+    public CrazyAdvancementCfgLoader(Consumer<CrazyAdvancement> loaded) {
+        this.loaded = loaded;
     }
 
     @Override
@@ -34,7 +33,6 @@ public class CrazyAdvancementCfgLoader extends CfgLoader {
             if(table != null) table = cfg.fileRegistry().getParsedObjectRegistry().parse(root, ctx, table);
         }
         if(table == null) return;
-        manager.registerAdvancement(table);
-        Crux.log(Level.INFO, "Registered crazy crux advancement: " + manager.key() + " -> " + table.key());
+        loaded.accept(table);
     }
 }

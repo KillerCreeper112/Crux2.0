@@ -14,9 +14,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
-public class CfgCrazyAdvancementCfgLoader {
+public class CfgCrazyAdvancementManagerCfgLoader {
     protected final CruxPlugin plugin;
-    public CfgCrazyAdvancementCfgLoader(CruxPlugin plugin) {
+    public CfgCrazyAdvancementManagerCfgLoader(CruxPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -38,6 +38,7 @@ public class CfgCrazyAdvancementCfgLoader {
     }
 
     public void load(){
+        loadConfiguration(CruxFolder.file(plugin, "advancements"));
         advancementManagers.values().forEach(c ->{
             c.load(plugin);
             c.loadAllCrazyAdvancements();
@@ -54,13 +55,13 @@ public class CfgCrazyAdvancementCfgLoader {
         if(files == null) return;
         for(File f : files){
             if(!f.isDirectory()) continue;
-            Key key = plugin.key(CruxFolder.withoutFileExtension(folder.getName().toLowerCase()));
-            CfgCrazyAdvancementManager manager = advancementManagers.getOrDefault(key, CfgCrazyAdvancementManager.createNew(key, plugin));
+            Key key = plugin.key(CruxFolder.withoutFileExtension(f.getName()));
+            if(advancementManagers.containsKey(key)) continue;
+
+            CfgCrazyAdvancementManager manager = CfgCrazyAdvancementManager.createNew(key, plugin);
             advancementManagers.put(manager.key(), manager);
             AdvancementRegistries.ADVANCEMENT_MANAGERS.register(manager);
             Crux.log(Level.INFO, "Registered CfgCrazyAdvancementManager: " + manager.key());
-
-            new CrazyAdvancementCfgLoader(manager).loadConfiguration(folder);
 
             manager.load(plugin);
         }
