@@ -1,6 +1,5 @@
 package killercreepr.cruxitems.config.handler;
 
-import killercreepr.crux.item.dynamic.BukkitDynamicItem;
 import killercreepr.crux.item.dynamic.DynamicItem;
 import killercreepr.crux.registry.KeyedRegistry;
 import killercreepr.crux.registry.SimpleKeyedRegistry;
@@ -45,7 +44,7 @@ public class FilePluginItem implements FileObjectHandler<PluginItem> {
     public @Nullable PluginItem deserialize(@NotNull FileContext<?> ctx, @NotNull FileElement e, @NotNull Key key) {
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = ctx.getRegistry();
-        DynamicItem dynamic = registry.deserializeFromFile(BukkitDynamicItem.class, o.get("item"));
+        DynamicItem dynamic = registry.deserializeFromFile(DynamicItem.class, o.get("item"));
         if(dynamic==null) return null;
 
         Key type = registry.deserializeFromFile(Key.class, o.get("type"));

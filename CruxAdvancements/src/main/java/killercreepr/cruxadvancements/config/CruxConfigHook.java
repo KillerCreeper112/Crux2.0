@@ -4,6 +4,7 @@ import killercreepr.crux.loot.conditions.LootCondition;
 import killercreepr.cruxadvancements.advancement.criteria.CruxCriteria;
 import killercreepr.cruxadvancements.advancement.objective.impl.BreakBlockObjective;
 import killercreepr.cruxadvancements.advancement.objective.impl.KillEntityObjective;
+import killercreepr.cruxadvancements.advancement.objective.impl.PlaceBlockObjective;
 import killercreepr.cruxadvancements.advancement.objective.progress.NumberObjectiveProgress;
 import killercreepr.cruxadvancements.advancement.objective.progress.ObjectiveProgress;
 import killercreepr.cruxadvancements.advancement.objective.progress.SimpleObjectiveProgression;
@@ -56,10 +57,24 @@ public class CruxConfigHook {
             public @Nullable BreakBlockObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String criterion, @Nullable LootCondition conditions) {
                 Integer maxProgress = e.getObject(Integer.class, "amount");
                 if(maxProgress==null) maxProgress = 1;
-                Material material = ctx.getRegistry().deserializeFromFile(Material.class, e.get("block_type"));
-                return new BreakBlockObjective(criterion, conditions, maxProgress, material);
+                return new BreakBlockObjective(criterion, conditions, maxProgress);
             }
         });
+
+        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<PlaceBlockObjective>() {
+            @Override
+            public @NotNull String getType() {
+                return "place_block";
+            }
+
+            @Override
+            public @Nullable PlaceBlockObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String criterion, @Nullable LootCondition conditions) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new PlaceBlockObjective(criterion, conditions, maxProgress);
+            }
+        });
+
         FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<KillEntityObjective>() {
             @Override
             public @NotNull String getType() {

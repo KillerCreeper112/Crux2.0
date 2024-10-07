@@ -133,13 +133,16 @@ public class BukkitDynamicItem implements DynamicItem{
         }
     }
 
-    public static class Builder{
+    public static class Builder implements DynamicItem.Builder{
         private @NotNull String material;
-        private @Nullable String amount;
+        private @Nullable String amount = "1";
         private final Map<String, DynamicItemComponent> components = new HashMap<>();
 
         public Builder(@NotNull String material) {
             this.material = material;
+        }
+
+        public Builder() {
         }
 
         public Builder material(@NotNull String material) {
@@ -167,6 +170,12 @@ public class BukkitDynamicItem implements DynamicItem{
             return this;
         }
 
+        @Override
+        public Builder addComponents(@Nullable DynamicItemComponent... components) {
+            if(components==null) return this;
+            return addComponents(Arrays.asList(components));
+        }
+
         public Builder components(@Nullable Map<String, DynamicItemComponent> components){
             this.components.clear();
             return addComponents(components);
@@ -177,7 +186,13 @@ public class BukkitDynamicItem implements DynamicItem{
             return addComponents(components);
         }
 
+        @Override
+        public Builder components(@Nullable DynamicItemComponent... components) {
+            return components(components == null ? null : Arrays.asList(components));
+        }
+
         public @NotNull BukkitDynamicItem build(){
+            Objects.requireNonNull(material, "Material cannot be null!");
             return new BukkitDynamicItem(material, amount, components.isEmpty()?null:components);
         }
     }

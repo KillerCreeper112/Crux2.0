@@ -5,6 +5,7 @@ import killercreepr.crux.loot.impl.SimpleLootContext;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.FishHook;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -12,6 +13,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerFishEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -103,6 +105,26 @@ public interface LootContext {
             .location(block.getLocation())
             .looter(player)
             .looted(block)
+            ;
+    }
+
+    static Builder builder(@NotNull PlayerFishEvent event){
+        Entity caught = event.getCaught();
+        Player player = event.getPlayer();
+        FishHook hook = event.getHook();
+        return builder()
+            .info(
+                DataExchange.builder()
+                    .putAll(event.getState(), "state")
+                    .putAll(player, "player")
+                    .putAll(event.getExpToDrop(), "exp", "exp_to_drop")
+                    .putAll(hook, "hook", "fish_hook")
+                    .putAll(event.getHand(), "hand")
+                    .build()
+            )
+            .location(event.getHook().getLocation())
+            .looter(player)
+            .looted(caught)
             ;
     }
 

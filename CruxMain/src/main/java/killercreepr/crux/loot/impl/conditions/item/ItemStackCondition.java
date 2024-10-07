@@ -12,6 +12,7 @@ import killercreepr.crux.util.CruxMath;
 import killercreepr.crux.util.CruxString;
 import net.kyori.adventure.key.Key;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
@@ -34,6 +35,7 @@ public class ItemStackCondition extends BaseCondition {
     @Override
     public boolean test(@NotNull LootContext ctx) {
         ItemStack item = ctx.info().get(target, ItemStack.class);
+        if(item == null && ctx.info().get(target) instanceof Item it) item = it.getItemStack();
         if(item==null) return false;
         if(itemPredicate != null){
             if(!itemPredicate.test(item)) return false;

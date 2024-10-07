@@ -23,12 +23,15 @@ public interface TextParserContext extends InputContext {
         return new FormatParserContext.Builder(format);
     }
     static @NotNull TextParserContext empty(@NotNull FormatSerializer format){
+        if(format.equals(Crux.FORMAT)) return EMPTY_CRUX; //optimize
         return new FormatParserContext(format, null, null, null);
     }
 
     static @NotNull TextParserContext empty(){
-        return empty(Crux.FORMAT);
+        return EMPTY_CRUX;
     }
+
+    TextParserContext EMPTY_CRUX = new FormatParserContext(Crux.FORMAT, null, null, null);
 
     @Override
     default @NotNull String input(@NotNull String text){

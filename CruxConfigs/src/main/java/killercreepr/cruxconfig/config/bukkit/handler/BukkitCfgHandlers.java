@@ -17,7 +17,7 @@ import killercreepr.crux.data.tag.block.BlockTag;
 import killercreepr.crux.data.tag.item.ItemTag;
 import killercreepr.crux.item.ItemHolder;
 import killercreepr.crux.item.StoredItem;
-import killercreepr.crux.item.dynamic.BukkitDynamicItem;
+import killercreepr.crux.item.dynamic.DynamicItem;
 import killercreepr.crux.item.dynamic.components.persistence.TypedDynamicPersistentTag;
 import killercreepr.crux.item.predicate.ItemPredicate;
 import killercreepr.crux.loot.conditions.LootCondition;
@@ -103,7 +103,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(Material.class, MATERIAL);
         registry.registerFileHandler(Component.class, COMPONENT);
         //registry.registerHandler(ItemStack.class, ITEM_STACK);
-        registry.registerFileHandler(BukkitDynamicItem.class, DYNAMIC_ITEM);
+        registry.registerFileHandler(DynamicItem.class, DYNAMIC_ITEM);
         registry.registerFileHandler(UUID.class, UUID);
         registry.registerFileHandler(Color.class, COLOR);
         registry.registerFileHandler(Key.class, KEY);

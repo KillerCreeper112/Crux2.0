@@ -1,6 +1,7 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 
 import com.google.common.reflect.TypeToken;
+import killercreepr.crux.block.predicate.BlockPredicate;
 import killercreepr.crux.item.predicate.ItemPredicate;
 import killercreepr.crux.loot.conditions.LootCondition;
 import killercreepr.crux.loot.impl.conditions.*;
@@ -61,8 +62,8 @@ public class StandardFileLootConditions {
             @Override
             public @NotNull BlockCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 FileRegistry registry = ctx.getRegistry();
-                Key blockType = registry.deserializeFromFile(Key.class, e.get("block_type"));
-                return new BlockCondition(target, blockType);
+                BlockPredicate blockPredicate = registry.deserializeFromFile(BlockPredicate.class, e.get("block_predicate"));
+                return new BlockCondition(target, blockPredicate);
             }
         });
         file.registerCustomHandler(new CustomFileLootCondition<>() {
