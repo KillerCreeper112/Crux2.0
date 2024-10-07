@@ -19,7 +19,10 @@ public class FileAdvancementVisibility implements FileObjectHandler<AdvancementV
 
     @Override
     public @Nullable AdvancementVisibility deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
-        if(!(e instanceof FileObject o)) return null;
+        if(!(e instanceof FileObject o)){
+            AdvancementVisibility vis = AdvancementVisibility.parseVisibility(e.getAsString());
+            return vis;
+        }
         FileRegistry registry = ctx.getRegistry();
         String type = o.getObject(String.class, "type");
         if(type==null) return null;

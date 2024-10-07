@@ -2,9 +2,7 @@ package killercreepr.cruxadvancements.config;
 
 import killercreepr.crux.loot.conditions.LootCondition;
 import killercreepr.cruxadvancements.advancement.criteria.CruxCriteria;
-import killercreepr.cruxadvancements.advancement.objective.impl.BreakBlockObjective;
-import killercreepr.cruxadvancements.advancement.objective.impl.KillEntityObjective;
-import killercreepr.cruxadvancements.advancement.objective.impl.PlaceBlockObjective;
+import killercreepr.cruxadvancements.advancement.objective.impl.*;
 import killercreepr.cruxadvancements.advancement.objective.progress.NumberObjectiveProgress;
 import killercreepr.cruxadvancements.advancement.objective.progress.ObjectiveProgress;
 import killercreepr.cruxadvancements.advancement.objective.progress.SimpleObjectiveProgression;
@@ -86,6 +84,34 @@ public class CruxConfigHook {
                 Integer maxProgress = e.getObject(Integer.class, "amount");
                 if(maxProgress==null) maxProgress = 1;
                 return new KillEntityObjective(criterion, conditions, maxProgress);
+            }
+        });
+
+        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<FishObjective>() {
+            @Override
+            public @NotNull String getType() {
+                return "fish";
+            }
+
+            @Override
+            public @Nullable FishObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String criterion, @Nullable LootCondition conditions) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new FishObjective(criterion, conditions, maxProgress);
+            }
+        });
+
+        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<CatchFishObjective>() {
+            @Override
+            public @NotNull String getType() {
+                return "catch_fish";
+            }
+
+            @Override
+            public @Nullable CatchFishObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String criterion, @Nullable LootCondition conditions) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new CatchFishObjective(criterion, conditions, maxProgress);
             }
         });
     }

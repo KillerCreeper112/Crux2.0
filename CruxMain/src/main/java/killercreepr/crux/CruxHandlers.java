@@ -1,6 +1,7 @@
 package killercreepr.crux;
 
 import killercreepr.crux.handler.BlockHandler;
+import killercreepr.crux.handler.EntityHandler;
 import killercreepr.crux.handler.ItemHandler;
 import killercreepr.crux.handler.SkullProvider;
 import org.jetbrains.annotations.NotNull;
@@ -12,6 +13,11 @@ public interface CruxHandlers {
     void setItem(@NotNull ItemHandler item);
 
     @NotNull
+    EntityHandler entity();
+
+    void setEntity(@NotNull EntityHandler entity);
+
+    @NotNull
     SkullProvider skullProvider();
     void setSkullProvider(@NotNull SkullProvider provider);
 
@@ -19,6 +25,7 @@ public interface CruxHandlers {
         protected @NotNull ItemHandler item = new ItemHandler.Dummy();
         protected @NotNull BlockHandler block = new BlockHandler.Dummy();
         protected @NotNull SkullProvider skullProvider = new SkullProvider.Dummy();
+        protected @NotNull EntityHandler entity = new EntityHandler.Dummy();
 
         public @NotNull BlockHandler block() {
             return block;
@@ -34,6 +41,16 @@ public interface CruxHandlers {
 
         public void setItem(@NotNull ItemHandler item) {
             this.item = item;
+        }
+
+        @Override
+        public @NotNull EntityHandler entity() {
+            return entity;
+        }
+
+        @Override
+        public void setEntity(@NotNull EntityHandler entity) {
+            this.entity = entity;
         }
 
         @Override

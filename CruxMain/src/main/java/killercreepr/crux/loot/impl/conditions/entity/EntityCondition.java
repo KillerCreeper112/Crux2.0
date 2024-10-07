@@ -1,5 +1,6 @@
 package killercreepr.crux.loot.impl.conditions.entity;
 
+import killercreepr.crux.entity.predicate.EntityPredicate;
 import killercreepr.crux.loot.LootContext;
 import killercreepr.crux.loot.conditions.LootCondition;
 import killercreepr.crux.loot.impl.conditions.BaseCondition;
@@ -15,12 +16,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 
 public class EntityCondition extends BaseCondition {
-    protected final @Nullable Key entityType;
+    protected final @Nullable EntityPredicate entityPredicate;
     protected final @Nullable String worldName;
     protected final @Nullable Map<EquipmentSlot, LootCondition> slots;
-    public EntityCondition(@NotNull String target, @Nullable Key entityType, @Nullable String worldName, @Nullable Map<EquipmentSlot, LootCondition> slots) {
+    public EntityCondition(@NotNull String target, @Nullable EntityPredicate entityPredicate, @Nullable String worldName, @Nullable Map<EquipmentSlot, LootCondition> slots) {
         super(target);
-        this.entityType = entityType;
+        this.entityPredicate = entityPredicate;
         this.worldName = worldName;
         this.slots = slots;
     }
@@ -29,7 +30,7 @@ public class EntityCondition extends BaseCondition {
     public boolean test(@NotNull LootContext ctx) {
         Entity e = ctx.info().get(target, Entity.class);
         if(e==null) return false;
-        if(entityType != null && !e.getType().key().equals(entityType)) return false;
+        if(entityPredicate != null && !entityPredicate.test(e)) return false;
         if(worldName != null && !e.getWorld().getName().equals(worldName)) return false;
         if(slots != null){
             EntityEquipment equipment = e instanceof LivingEntity dd ? dd.getEquipment() : null;

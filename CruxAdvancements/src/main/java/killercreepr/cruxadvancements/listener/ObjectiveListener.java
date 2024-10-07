@@ -1,11 +1,9 @@
 package killercreepr.cruxadvancements.listener;
 
 import killercreepr.crux.data.entity.EntityMemory;
-import killercreepr.cruxadvancements.advancement.objective.impl.BreakBlockObjective;
-import killercreepr.cruxadvancements.advancement.objective.impl.FishObjective;
-import killercreepr.cruxadvancements.advancement.objective.impl.KillEntityObjective;
-import killercreepr.cruxadvancements.advancement.objective.impl.PlaceBlockObjective;
+import killercreepr.cruxadvancements.advancement.objective.impl.*;
 import killercreepr.cruxadvancements.data.entity.AdvancementHolder;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -48,6 +46,16 @@ public class ObjectiveListener implements Listener {
         holder.getAdvancementTracker().apply(FishObjective.class, (manager, advancement, objective) -> {
             objective.trigger(p.getUniqueId(), manager, advancement, event);
         });
+
+        PlayerFishEvent.State state = event.getState();
+        if(state == PlayerFishEvent.State.CAUGHT_FISH){
+            Entity caught = event.getCaught();
+            if(caught != null){
+                holder.getAdvancementTracker().apply(CatchFishObjective.class, (manager, advancement, objective) -> {
+                    objective.trigger(p.getUniqueId(), manager, advancement, event);
+                });
+            }
+        }
     }
 
 

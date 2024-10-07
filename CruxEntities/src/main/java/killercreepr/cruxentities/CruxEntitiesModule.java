@@ -1,9 +1,11 @@
 package killercreepr.cruxentities;
 
+import killercreepr.crux.Crux;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.module.StandardModules;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.cruxentities.command.CruxEntitiesCommands;
+import killercreepr.cruxentities.handler.CruxEntitiesEntityHandler;
 import killercreepr.cruxentities.listener.CustomEntitySoundsListener;
 import killercreepr.cruxentities.listener.EntityManager;
 import org.jetbrains.annotations.NotNull;
@@ -13,6 +15,11 @@ public class CruxEntitiesModule implements CruxModule {
     @Override
     public @NotNull String name() {
         return NAMESPACE;
+    }
+
+    @Override
+    public void onLoad(@NotNull CruxPlugin plugin) {
+        Crux.handlers().setEntity(new CruxEntitiesEntityHandler());
     }
 
     @Override

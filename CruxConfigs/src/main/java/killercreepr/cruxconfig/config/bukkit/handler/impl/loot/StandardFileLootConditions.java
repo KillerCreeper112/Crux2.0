@@ -1,12 +1,15 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 
 import com.google.common.reflect.TypeToken;
+import killercreepr.crux.Crux;
 import killercreepr.crux.block.predicate.BlockPredicate;
+import killercreepr.crux.entity.predicate.EntityPredicate;
 import killercreepr.crux.item.predicate.ItemPredicate;
 import killercreepr.crux.loot.conditions.LootCondition;
 import killercreepr.crux.loot.impl.conditions.*;
 import killercreepr.crux.loot.impl.conditions.block.BlockCondition;
 import killercreepr.crux.loot.impl.conditions.entity.EntityCondition;
+import killercreepr.crux.loot.impl.conditions.evaluation.EvaluationCondition;
 import killercreepr.crux.loot.impl.conditions.item.ItemStackCondition;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
@@ -75,13 +78,13 @@ public class StandardFileLootConditions {
             @Override
             public @NotNull EntityCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 FileRegistry registry = ctx.getRegistry();
-                Key entityType = registry.deserializeFromFile(Key.class, e.get("entity_type"));
+                EntityPredicate entityPredicate = registry.deserializeFromFile(EntityPredicate.class, e.get("entity_predicate"));
                 String worldName = registry.deserializeFromFile(String.class, e.get("world"));
                 Map<EquipmentSlot, LootCondition> slots = registry.deserializeFromFile(
                     new TypeToken<Map<EquipmentSlot, LootCondition>>(){}.getType(), e.get("slots")
                 );
                 return new EntityCondition(
-                    target, entityType, worldName, slots
+                    target, entityPredicate, worldName, slots
                 );
             }
         });
@@ -168,6 +171,22 @@ public class StandardFileLootConditions {
                 Float luckMultiplier = e.getObject(Float.class, "luck_multiplier");
                 if(luckMultiplier==null) return null;
                 return new RandomLuckChanceCondition(chance, luckMultiplier);
+            }
+        });
+
+        file.registerCustomHandler(new CustomFileLootCondition<>() {
+            @Override
+            public @NotNull String getType() {
+                return "evaluation";
+            }
+
+            @Override
+            public @Nullable EvaluationCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                String eva = e.getObject(String.class, "check");
+                Map<String, String> prefixes = ctx.getRegistry().deserializeFromFile(
+                    new TypeToken<Map<String, String>>(){}.getType(), e.get("prefixes")
+                );
+                return new EvaluationCondition(target, eva, prefixes);
             }
         });
     }

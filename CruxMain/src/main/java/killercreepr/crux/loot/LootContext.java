@@ -120,6 +120,7 @@ public interface LootContext {
                     .putAll(event.getExpToDrop(), "exp", "exp_to_drop")
                     .putAll(hook, "hook", "fish_hook")
                     .putAll(event.getHand(), "hand")
+                    .putAll(caught, "caught")
                     .build()
             )
             .location(event.getHook().getLocation())

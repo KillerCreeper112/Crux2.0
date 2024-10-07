@@ -15,6 +15,7 @@ import killercreepr.crux.data.communication.CreateTitle;
 import killercreepr.crux.data.communication.MsgContainer;
 import killercreepr.crux.data.tag.block.BlockTag;
 import killercreepr.crux.data.tag.item.ItemTag;
+import killercreepr.crux.entity.predicate.EntityPredicate;
 import killercreepr.crux.item.ItemHolder;
 import killercreepr.crux.item.StoredItem;
 import killercreepr.crux.item.dynamic.DynamicItem;
@@ -85,6 +86,7 @@ public class BukkitCfgHandlers {
     public static final FileItemPredicate ITEM_PREDICATE = new FileItemPredicate();
     public static final FileBlockTag BLOCK_TAG = new FileBlockTag();
     public static final FileBlockPredicate BLOCK_PREDICATE = new FileBlockPredicate();
+    public static final FileEntityPredicate ENTITY_PREDICATE = new FileEntityPredicate();
     public static final FileCruxBlockWrapper CRUX_BLOCK_WRAPPER = new FileCruxBlockWrapper();
     public static final FileTypedDataComponent TYPED_DATA_COMPONENT = new FileTypedDataComponent();
     public static final FileDataComponentHandler DATA_COMPONENT_HANDLER = new FileDataComponentHandler();
@@ -122,6 +124,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(ItemPredicate.class, ITEM_PREDICATE);
         registry.registerFileHandler(BlockTag.class, BLOCK_TAG);
         registry.registerFileHandler(BlockPredicate.class, BLOCK_PREDICATE);
+        registry.registerFileHandler(EntityPredicate.class, ENTITY_PREDICATE);
         registry.registerFileHandler(CruxBlockWrapper.class, CRUX_BLOCK_WRAPPER);
 
         StandardCfgDataComponentTypes.register(TYPED_DATA_COMPONENT.typeHandlers());
