@@ -1,6 +1,7 @@
 package killercreepr.crux.context;
 
 import killercreepr.crux.Crux;
+import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.crux.tags.format.FormatSerializer;
 import killercreepr.crux.tags.provider.StringTagProvider;
 import org.jetbrains.annotations.NotNull;
@@ -8,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 public interface InputContext {
     static @NotNull InputContext simple(){
-        return simple((StringTagProvider) null);
+        return simple((MergedTagContainer) null);
     }
 
     static @NotNull InputContext simple(@Nullable StringTagProvider tags){

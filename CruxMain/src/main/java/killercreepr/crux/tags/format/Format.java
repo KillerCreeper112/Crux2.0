@@ -10,7 +10,6 @@ import killercreepr.crux.tags.container.StringListTagContainer;
 import killercreepr.crux.tags.container.StringTagContainer;
 import killercreepr.crux.tags.container.TagContainer;
 import killercreepr.crux.tags.context.FormatParserContext;
-import killercreepr.crux.tags.provider.StringListTagProvider;
 import killercreepr.crux.tags.provider.StringTagProvider;
 import killercreepr.crux.tags.resolver.StringListResolver;
 import killercreepr.crux.tags.resolver.StringResolver;
@@ -119,7 +118,7 @@ public class Format implements FormatSerializer{
     }
 
     @Override
-    public @NotNull List<String> deserializeStringList(@NotNull Collection<String> list, @Nullable StringListTagProvider tagProvider) {
+    public @NotNull List<String> deserializeStringList(@NotNull Collection<String> list, @Nullable MergedTagContainer tagProvider) {
         List<String> formated = new ArrayList<>();
         StringListTagContainer container = new StringListTagContainer(tags);
         container.addAll(STRING_LIST_RESOLVERS.values());
@@ -129,8 +128,11 @@ public class Format implements FormatSerializer{
             formated.addAll(list);
             return formated;
         }*/
+        TextParserContext ctx = TextParserContext.builder(this)
+            .tags(tagProvider)
+            .build();
         for(String s : list){
-            List<String> found = matchStringList(s, container);
+            List<String> found = matchStringList(s, container, ctx);
             if(found==null){
                 formated.add(s);
                 continue;
@@ -147,7 +149,10 @@ public class Format implements FormatSerializer{
 
     @Override
     public @Nullable List<String> parseStringList(@NotNull String text, @Nullable MergedTagContainer tagProvider) {
-        return matchStringList(text, new StringListTagContainer(tags).addAll(tagProvider==null?null:tagProvider.getStringListTags()));
+        TextParserContext ctx = TextParserContext.builder(this)
+            .tags(tagProvider)
+            .build();
+        return matchStringList(text, new StringListTagContainer(tags).addAll(tagProvider==null?null:tagProvider.getStringListTags()), ctx);
     }
 
     @Override
@@ -160,7 +165,8 @@ public class Format implements FormatSerializer{
         return STRING_LIST_RESOLVERS;
     }
 
-    public @Nullable List<String> matchStringList(@NotNull String text, @NotNull StringListTagContainer container){
+    public @Nullable List<String> matchStringList(@NotNull String text, @NotNull StringListTagContainer container,
+                                                  @NotNull TextParserContext context){
         Matcher matcher = LORE_PATTERN.matcher(text);
         List<String> addon = new ArrayList<>();
         boolean found = false;
@@ -181,7 +187,7 @@ public class Format implements FormatSerializer{
             }
             FormatArgs args = new FormatArgs(arguments);
             Pair<List<String>, Boolean> addons = processListPlaceholder(container,
-                placeholder, args);
+                placeholder, args, context);
 
             if(addons != null){
                 List<String> first = addons.getFirst();
@@ -223,12 +229,10 @@ public class Format implements FormatSerializer{
 
     private @Nullable Pair<List<String>, Boolean> processListPlaceholder(@NotNull StringListTagContainer container,
                                                           @NotNull String placeholder,
-                                                          @NotNull FormatArgs args) {
+                                                          @NotNull FormatArgs args, @NotNull TextParserContext context) {
         StringListResolver resolver = container.get(placeholder);
         //Bukkit.broadcastMessage("resolver=" + resolver + ", from= " + placeholder );
         if(resolver == null) return null;
-        TextParserContext context = new FormatParserContext.Builder(this)
-            .build();
         return new Pair<>(resolver.resolve(args, context), true);
     }
 

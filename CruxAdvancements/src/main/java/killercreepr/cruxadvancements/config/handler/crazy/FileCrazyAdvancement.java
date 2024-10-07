@@ -63,6 +63,7 @@ public class FileCrazyAdvancement implements FileObjectHandler<CrazyAdvancement>
         if(o.get("objectives") instanceof FileObject oo){
             oo.forEach((objectiveKey, value) ->{
                 AdvancementObjective objective = FileAdvancementObjective.deserializeFromFile(ctx, value, objectiveKey);
+                if(objective != null) objective = registry.getParsedObjectRegistry().parse(value, ctx, objective);
                 if(objective==null) return;
                 objectives.put(objectiveKey, objective);
             });

@@ -11,6 +11,7 @@ import killercreepr.crux.loot.impl.conditions.block.BlockCondition;
 import killercreepr.crux.loot.impl.conditions.entity.EntityCondition;
 import killercreepr.crux.loot.impl.conditions.evaluation.EvaluationCondition;
 import killercreepr.crux.loot.impl.conditions.item.ItemStackCondition;
+import killercreepr.crux.loot.impl.conditions.world.WorldCondition;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileObject;
@@ -105,6 +106,23 @@ public class StandardFileLootConditions {
                 );
                 return new ItemStackCondition(
                     target, itemType, amount, enchants
+                );
+            }
+        });
+
+        file.registerCustomHandler(new CustomFileLootCondition<>() {
+            @Override
+            public @NotNull String getType() {
+                return "world";
+            }
+
+            @Override
+            public @NotNull WorldCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                FileRegistry registry = ctx.getRegistry();
+                String name = e.getObject(String.class, "name");
+                String dimension = e.getObject(String.class, "dimension");
+                return new WorldCondition(
+                    target, name, dimension
                 );
             }
         });

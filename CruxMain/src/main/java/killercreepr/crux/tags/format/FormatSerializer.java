@@ -3,7 +3,6 @@ package killercreepr.crux.tags.format;
 import killercreepr.crux.registry.Registry;
 import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.container.MergedTagContainer;
-import killercreepr.crux.tags.provider.StringListTagProvider;
 import killercreepr.crux.tags.provider.StringTagProvider;
 import killercreepr.crux.tags.resolver.StringListResolver;
 import killercreepr.crux.tags.resolver.StringResolver;
@@ -32,7 +31,7 @@ public interface FormatSerializer {
     @NotNull List<Component> deserializeList(@NotNull Collection<String> list, @Nullable MergedTagContainer tagProvider);
 
     @NotNull List<String> deserializeStringList(@NotNull Collection<String> list);
-    @NotNull List<String> deserializeStringList(@NotNull Collection<String> list, @Nullable StringListTagProvider tagProvider);
+    @NotNull List<String> deserializeStringList(@NotNull Collection<String> list, @Nullable MergedTagContainer tagProvider);
 
     @Nullable List<String> parseStringList(@NotNull String text);
     @Nullable List<String> parseStringList(@NotNull String text, @Nullable MergedTagContainer tagProvider);

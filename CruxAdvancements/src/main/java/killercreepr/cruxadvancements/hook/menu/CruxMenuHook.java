@@ -46,12 +46,14 @@ public class CruxMenuHook {
                                                    @Nullable MenuItems valueItems,
                                                    @Nullable MenuItems emptyItems) {
                 Key advancementManagerKey = ctx.getRegistry().deserializeFromFile(Key.class, o.get("advancement_manager"));
-                if(advancementManagerKey == null) return null;
                 return new SimplePagedMenuModule<CruxAdvancement>(id, indexes, valuesFilter, valueItems, emptyItems, this) {
                     @Override
                     public @NotNull Holder<List<CruxAdvancement>> getValues(@NotNull CfgMenu menu) {
                         return () ->{
-                            CruxAdvancementManager<?> manager = AdvancementRegistries.ADVANCEMENT_MANAGERS.get(advancementManagerKey);
+                            CruxAdvancementManager<?> manager;
+                            if(advancementManagerKey == null){
+                                manager = menu.info().getOrThrow(CruxAdvancementManager.class);
+                            }else manager = AdvancementRegistries.ADVANCEMENT_MANAGERS.get(advancementManagerKey);
                             if(manager == null){
                                 Crux.log(Level.WARNING, "Cannot find advancement manager of " + advancementManagerKey + "!");
                                 return List.of();

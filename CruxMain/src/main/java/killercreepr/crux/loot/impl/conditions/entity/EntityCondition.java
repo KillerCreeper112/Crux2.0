@@ -4,7 +4,6 @@ import killercreepr.crux.entity.predicate.EntityPredicate;
 import killercreepr.crux.loot.LootContext;
 import killercreepr.crux.loot.conditions.LootCondition;
 import killercreepr.crux.loot.impl.conditions.BaseCondition;
-import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EntityEquipment;

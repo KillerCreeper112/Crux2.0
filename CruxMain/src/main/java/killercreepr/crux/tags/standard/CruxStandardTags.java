@@ -37,7 +37,9 @@ public class CruxStandardTags {
     }
 
     public static @NotNull Collection<StringListResolver> buildGlobalStringListTags(){
-        return Set.of();
+        return Set.of(
+            new DescriptionLoreResolver()
+        );
     }
 
     public static @NotNull Pattern buildStringPattern(){

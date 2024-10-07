@@ -3,6 +3,7 @@ package killercreepr.crux.loot;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.loot.impl.SimpleLootContext;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.FishHook;
@@ -13,7 +14,10 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -126,6 +130,42 @@ public interface LootContext {
             .location(event.getHook().getLocation())
             .looter(player)
             .looted(caught)
+            ;
+    }
+
+    static Builder builder(@NotNull PlayerItemConsumeEvent event){
+        Player player = event.getPlayer();
+        ItemStack item = event.getItem();
+        ItemStack replacement = event.getReplacement();
+        return builder()
+            .info(
+                DataExchange.builder()
+                    .putAll(player, "player")
+                    .putAll(item, "consumable", "consumed", "item")
+                    .putAll(replacement, "replacement")
+                    .putAll(event.getHand(), "hand")
+                    .build()
+            )
+            .location(player.getLocation())
+            .looter(player)
+            .looted(item)
+            ;
+    }
+
+    static Builder builder(@NotNull PlayerChangedWorldEvent event){
+        Player player = event.getPlayer();
+        World world = event.getFrom();
+        return builder()
+            .info(
+                DataExchange.builder()
+                    .putAll(player, "player")
+                    .putAll(player.getWorld(), "world", "to")
+                    .putAll(world, "from")
+                    .build()
+            )
+            .location(player.getLocation())
+            .looter(player)
+            .looted(player.getWorld())
             ;
     }
 

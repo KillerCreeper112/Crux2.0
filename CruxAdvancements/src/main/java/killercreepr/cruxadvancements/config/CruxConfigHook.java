@@ -6,7 +6,6 @@ import killercreepr.cruxadvancements.advancement.objective.impl.*;
 import killercreepr.cruxadvancements.advancement.objective.progress.NumberObjectiveProgress;
 import killercreepr.cruxadvancements.advancement.objective.progress.ObjectiveProgress;
 import killercreepr.cruxadvancements.advancement.objective.progress.SimpleObjectiveProgression;
-import killercreepr.cruxadvancements.advancement.progression.CruxAdvancementProgress;
 import killercreepr.cruxadvancements.advancement.progression.ListAdvancementProgress;
 import killercreepr.cruxadvancements.advancement.progression.NumberAdvancementProgress;
 import killercreepr.cruxadvancements.advancement.progression.SimpleCriterionProgress;
@@ -113,6 +112,34 @@ public class CruxConfigHook {
                 return new CatchFishObjective(data, maxProgress);
             }
         });
+
+        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<ConsumeItemObjective>() {
+            @Override
+            public @NotNull String getType() {
+                return "consume_item";
+            }
+
+            @Override
+            public @Nullable ConsumeItemObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new ConsumeItemObjective(data, maxProgress);
+            }
+        });
+
+        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<TravelToWorldObjective>() {
+            @Override
+            public @NotNull String getType() {
+                return "travel_to_world";
+            }
+
+            @Override
+            public @Nullable TravelToWorldObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new TravelToWorldObjective(data, maxProgress);
+            }
+        });
     }
 
     public static void registerHandlers(){
@@ -125,7 +152,7 @@ public class CruxConfigHook {
     public static void registerHandlers(@NotNull FileRegistry registry){
         registry.registerFileHandler(CruxCriteria.class, new FileCruxCriteria());
         registry.registerFileHandler(SimpleCriterionProgress.class, new FileSimpleCriterionProgress());
-        registry.registerFileHandler(CruxAdvancementProgress.class, CRUX_ADVANCEMENT_PROGRESS);
+        //registry.registerFileHandler(CruxAdvancementProgress.class, CRUX_ADVANCEMENT_PROGRESS);
         //register the inheritors objects so the config registry doesn't pick a random handler
         registry.registerFileHandler(ListAdvancementProgress.class, CRUX_ADVANCEMENT_PROGRESS);
         registry.registerFileHandler(NumberAdvancementProgress.class, CRUX_ADVANCEMENT_PROGRESS);

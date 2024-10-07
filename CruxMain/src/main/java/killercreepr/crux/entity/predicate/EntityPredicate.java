@@ -1,12 +1,9 @@
 package killercreepr.crux.entity.predicate;
 
-import killercreepr.crux.block.predicate.BlockAllPredicate;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.function.Predicate;
 
 public interface EntityPredicate extends Predicate<Entity> {

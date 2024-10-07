@@ -17,6 +17,7 @@ import killercreepr.cruxadvancements.listener.AdvancementGrantListener;
 import killercreepr.cruxadvancements.listener.ObjectiveListener;
 import killercreepr.cruxadvancements.tags.CrazyAdvancementTags;
 import killercreepr.cruxadvancements.tags.CruxAdvancementIconTags;
+import killercreepr.cruxadvancements.tags.CruxAdvancementManagerTags;
 import killercreepr.cruxmenus.CruxMenusModule;
 import org.jetbrains.annotations.NotNull;
 
@@ -58,7 +59,8 @@ public class CruxAdvancementsModule implements CruxModule {
     public void registerTags(TagParser tags){
         tags.register(
             new CrazyAdvancementTags(),
-            new CruxAdvancementIconTags()
+            new CruxAdvancementIconTags(),
+            new CruxAdvancementManagerTags()
         );
     }
 }

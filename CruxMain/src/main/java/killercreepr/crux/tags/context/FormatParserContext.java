@@ -47,6 +47,10 @@ public class FormatParserContext implements TextParserContext {
         this.tags = tags;
     }
 
+    @Override
+    public String toString() {
+        return "FormatParserContext{format=" + format + ", viewer=" + viewer + ", tagsPrefix=" + tagsPrefix + ", tags=" + tags + "}";
+    }
 
     @Override
     public @NotNull String serialize(@NotNull Component component) {

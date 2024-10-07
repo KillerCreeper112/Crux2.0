@@ -17,6 +17,12 @@ public abstract class SimpleTagContainer<T extends TagResolver<?>> implements Ta
     public SimpleTagContainer(@NotNull TagParser tagParser) {
         this.tagParser = tagParser;
     }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{tagParser=" + tagParser + ", tags=" + tags + "}";
+    }
+
     @Override
     public SimpleTagContainer<T>  add(@NotNull T resolver) {
         tags.put(resolver.identifier(), resolver);

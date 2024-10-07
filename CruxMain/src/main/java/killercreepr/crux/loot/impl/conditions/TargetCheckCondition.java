@@ -2,6 +2,7 @@ package killercreepr.crux.loot.impl.conditions;
 
 import killercreepr.crux.loot.LootContext;
 import killercreepr.crux.loot.conditions.LootCondition;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
@@ -52,6 +53,9 @@ public class TargetCheckCondition extends BaseCondition{
             }
             case "item" ->{
                 if(object instanceof Item) return true;
+            }
+            case "world" ->{
+                if(object instanceof World) return true;
             }
         }
         return object.getClass().getSimpleName().equalsIgnoreCase(targetType);

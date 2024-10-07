@@ -30,6 +30,17 @@ public interface MergedTagContainer extends StringTagProvider, StringListTagProv
         return createNew(tags).addAll(resolvers);
     }
 
+    static @Nullable MergedTagContainer merge(@Nullable MergedTagContainer first, @Nullable MergedTagContainer second){
+        if(first == null && second == null) return null;
+        if(first == null) return second;
+        if(second == null) return first;
+        TagParser tagParser = first.getStringTags().getTagParser();
+
+        MergedTagContainer container = TagContainer.merged(tagParser);
+        container.addAll(first.getStringTags()).addAll(second.getStringTags());
+        return container;
+    }
+
     static @Nullable MergedTagContainer merge(@Nullable MergedTagContainer container, @Nullable TagContainer<?> tags){
         if(container == null && tags == null) return null;
         return new SimpleMergedTagContainer(container==null? Crux.TAGS:container.getStringTags().getTagParser())

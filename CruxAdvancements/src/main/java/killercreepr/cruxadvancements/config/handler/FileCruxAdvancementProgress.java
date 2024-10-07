@@ -44,7 +44,7 @@ public class FileCruxAdvancementProgress implements FileObjectHandler<CruxAdvanc
 
     @Override
     public @Nullable CruxAdvancementProgress deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("unsupported");
     }
 
     public static @Nullable CruxAdvancementProgress deserialize(@NotNull FileContext<?> ctx, @NotNull FileElement e, @NotNull CruxCriteria criteria){

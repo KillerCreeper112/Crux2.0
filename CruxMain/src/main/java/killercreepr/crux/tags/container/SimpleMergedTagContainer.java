@@ -29,6 +29,11 @@ public class SimpleMergedTagContainer implements MergedTagContainer {
     }
 
     @Override
+    public String toString() {
+        return "SimpleMergedTagContainer{tags=" + tags + ", strings=" + strings + ", stringLists=" + stringLists + "}";
+    }
+
+    @Override
     public @NotNull TagContainer<StringListResolver> getStringListTags() {
         return stringLists;
     }

@@ -25,6 +25,11 @@ public class SimpleStringTagProvider implements StringTagContainProvider {
     }
 
     @Override
+    public String toString() {
+        return "SimpleStringTagProvider{tags=" + tags + ", strings=" + strings + "}";
+    }
+
+    @Override
     public StringTagContainProvider hook(@Nullable Object info) {
         strings.hook(info);
         return this;
