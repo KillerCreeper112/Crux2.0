@@ -4,6 +4,7 @@ import killercreepr.crux.loot.conditions.LootCondition;
 import killercreepr.crux.registry.MappedRegistry;
 import killercreepr.crux.registry.SimpleMappedRegistry;
 import killercreepr.cruxadvancements.advancement.objective.AdvancementObjective;
+import killercreepr.cruxadvancements.advancement.objective.ObjectiveCommonData;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
@@ -43,7 +44,7 @@ public class FileAdvancementObjective implements FileObjectHandler<AdvancementOb
 
         LootCondition conditions = ctx.getRegistry().deserializeFromFile(LootCondition.class, base.get("conditions"));
 
-        return handler.deserializeFromFile(ctx, o, criterion, conditions);
+        return handler.deserializeFromFile(ctx, o, new ObjectiveCommonData(criterion, conditions));
     }
 
     @Override

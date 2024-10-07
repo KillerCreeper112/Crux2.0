@@ -60,7 +60,7 @@ public class AdvancementTracker {
     }
 
     public void apply(@NotNull BiConsumer<CruxAdvancementManager<?>, ObjectiveAdvancement> consumer){
-        for(TrackedAdvancement a : trackedAdvancements){
+        for(TrackedAdvancement a : new HashSet<>(trackedAdvancements)){
             consumer.accept(
                 a.getManager(),
                 a.getAdvancementOrThrow(ObjectiveAdvancement.class)
@@ -70,7 +70,7 @@ public class AdvancementTracker {
 
     public <T extends AdvancementObjective> void apply(@NotNull Class<T> type,
                                                        @NotNull ObjectiveConsumer<T> consumer){
-        for(TrackedAdvancement a : trackedAdvancements){
+        for(TrackedAdvancement a : new HashSet<>(trackedAdvancements)){
             CruxAdvancementManager<?> manager = a.getManager();
             ObjectiveAdvancement advancement = a.getObjective();
             a.getAdvancementOrThrow(ObjectiveAdvancement.class).getObjectives(type).forEach((criterion, objective) ->{

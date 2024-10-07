@@ -1,7 +1,7 @@
 package killercreepr.cruxadvancements.config;
 
-import killercreepr.crux.loot.conditions.LootCondition;
 import killercreepr.cruxadvancements.advancement.criteria.CruxCriteria;
+import killercreepr.cruxadvancements.advancement.objective.ObjectiveCommonData;
 import killercreepr.cruxadvancements.advancement.objective.impl.*;
 import killercreepr.cruxadvancements.advancement.objective.progress.NumberObjectiveProgress;
 import killercreepr.cruxadvancements.advancement.objective.progress.ObjectiveProgress;
@@ -18,7 +18,6 @@ import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
-import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,10 +51,10 @@ public class CruxConfigHook {
             }
 
             @Override
-            public @Nullable BreakBlockObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String criterion, @Nullable LootCondition conditions) {
+            public @Nullable BreakBlockObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
                 Integer maxProgress = e.getObject(Integer.class, "amount");
                 if(maxProgress==null) maxProgress = 1;
-                return new BreakBlockObjective(criterion, conditions, maxProgress);
+                return new BreakBlockObjective(data, maxProgress);
             }
         });
 
@@ -66,10 +65,10 @@ public class CruxConfigHook {
             }
 
             @Override
-            public @Nullable PlaceBlockObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String criterion, @Nullable LootCondition conditions) {
+            public @Nullable PlaceBlockObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
                 Integer maxProgress = e.getObject(Integer.class, "amount");
                 if(maxProgress==null) maxProgress = 1;
-                return new PlaceBlockObjective(criterion, conditions, maxProgress);
+                return new PlaceBlockObjective(data, maxProgress);
             }
         });
 
@@ -80,10 +79,10 @@ public class CruxConfigHook {
             }
 
             @Override
-            public @Nullable KillEntityObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String criterion, @Nullable LootCondition conditions) {
+            public @Nullable KillEntityObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
                 Integer maxProgress = e.getObject(Integer.class, "amount");
                 if(maxProgress==null) maxProgress = 1;
-                return new KillEntityObjective(criterion, conditions, maxProgress);
+                return new KillEntityObjective(data, maxProgress);
             }
         });
 
@@ -94,10 +93,10 @@ public class CruxConfigHook {
             }
 
             @Override
-            public @Nullable FishObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String criterion, @Nullable LootCondition conditions) {
+            public @Nullable FishObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
                 Integer maxProgress = e.getObject(Integer.class, "amount");
                 if(maxProgress==null) maxProgress = 1;
-                return new FishObjective(criterion, conditions, maxProgress);
+                return new FishObjective(data, maxProgress);
             }
         });
 
@@ -108,10 +107,10 @@ public class CruxConfigHook {
             }
 
             @Override
-            public @Nullable CatchFishObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String criterion, @Nullable LootCondition conditions) {
+            public @Nullable CatchFishObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
                 Integer maxProgress = e.getObject(Integer.class, "amount");
                 if(maxProgress==null) maxProgress = 1;
-                return new CatchFishObjective(criterion, conditions, maxProgress);
+                return new CatchFishObjective(data, maxProgress);
             }
         });
     }

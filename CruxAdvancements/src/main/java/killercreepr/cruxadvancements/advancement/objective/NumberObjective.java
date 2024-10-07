@@ -1,20 +1,19 @@
 package killercreepr.cruxadvancements.advancement.objective;
 
 import killercreepr.crux.loot.LootContext;
-import killercreepr.crux.loot.conditions.LootCondition;
 import killercreepr.cruxadvancements.advancement.ObjectiveAdvancement;
+import killercreepr.cruxadvancements.advancement.criteria.NumberCriteria;
 import killercreepr.cruxadvancements.advancement.objective.progress.NumberObjectiveProgress;
 import killercreepr.cruxadvancements.advancement.objective.progress.ObjectiveProgress;
 import killercreepr.cruxadvancements.manager.CruxAdvancementManager;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
 public class NumberObjective extends SimpleAdvancementObjective {
     protected final int maxProgress;
-    public NumberObjective(@NotNull String criterion, @Nullable LootCondition conditions, int maxProgress) {
-        super(criterion, conditions);
+    public NumberObjective(@NotNull ObjectiveCommonData data, int maxProgress) {
+        super(data);
         this.maxProgress = maxProgress;
     }
 
@@ -38,7 +37,7 @@ public class NumberObjective extends SimpleAdvancementObjective {
                               @NotNull ObjectiveAdvancement advancement,
                               int amount){
         addToProgress(who, manager, advancement,
-            advancement.getObjectiveProgress(who).getProgress(criterion).toType(NumberObjectiveProgress.class),
+            advancement.getObjectiveProgress(who).getProgress(getCriterion()).toType(NumberObjectiveProgress.class),
             amount
         );
     }
@@ -51,8 +50,10 @@ public class NumberObjective extends SimpleAdvancementObjective {
                               int amount){
         NumberObjectiveProgress p = progress.toType(NumberObjectiveProgress.class);
         p.setProgress(p.getProgress()+amount);
-        if(shouldUpdateAdvancement(p)){
-            manager.grantCriteria(who, advancement, criterion);
+        if(shouldUpdateAdvancement(advancement,p)){
+            if(advancement.getCriteria() instanceof NumberCriteria){
+                manager.setCriteriaProgress(who, advancement, p.getProgress());
+            }else manager.grantCriteria(who, advancement, getCriterion());
             if(advancement.isGranted(who)){
                 //clean up objective data since it isn't needed anymore.
                 advancement.setObjectiveProgress(who, null);
@@ -66,7 +67,11 @@ public class NumberObjective extends SimpleAdvancementObjective {
     }
 
     @Override
-    public boolean shouldUpdateAdvancement(@NotNull ObjectiveProgress progress) {
+    public boolean shouldUpdateAdvancement(@NotNull ObjectiveAdvancement advancement, @NotNull ObjectiveProgress progress) {
+        if(advancement.getCriteria() instanceof NumberCriteria){
+            if(advancement.getUpdateAdvancementPeriod() == 0) return true;
+            return progress.toType(NumberObjectiveProgress.class).getProgress() % advancement.getUpdateAdvancementPeriod() == 0;
+        }
         return isDone(progress);
     }
 

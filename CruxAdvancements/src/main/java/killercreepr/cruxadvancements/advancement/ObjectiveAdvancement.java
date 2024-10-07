@@ -19,13 +19,19 @@ import java.util.function.BiConsumer;
 public class ObjectiveAdvancement extends SimpleAdvancement{
     protected final @NotNull Map<String, AdvancementObjective> objectives;
     protected final @NotNull Map<String, ObjectiveProgression> objectiveProgress = new HashMap<>();
+    protected final int updateAdvancementPeriod;
     public ObjectiveAdvancement(@NotNull Key key, @Nullable Key parentKey,
                                 @NotNull CruxAdvancementIcon icon,
                                 @NotNull CruxCriteria criteria,
                                 @Nullable CruxAdvanceReward reward,
-                                @NotNull Map<String, AdvancementObjective> objectives) {
+                                @NotNull Map<String, AdvancementObjective> objectives, int updateAdvancementPeriod) {
         super(key, parentKey, icon, criteria, reward);
         this.objectives = Collections.unmodifiableMap(objectives);
+        this.updateAdvancementPeriod = updateAdvancementPeriod;
+    }
+
+    public int getUpdateAdvancementPeriod() {
+        return updateAdvancementPeriod;
     }
 
     public <T extends AdvancementObjective> void accept(@NotNull Class<T> type, @NotNull BiConsumer<String, T> consumer){

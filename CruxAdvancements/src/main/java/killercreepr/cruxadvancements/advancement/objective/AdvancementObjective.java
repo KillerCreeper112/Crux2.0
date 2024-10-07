@@ -2,6 +2,7 @@ package killercreepr.cruxadvancements.advancement.objective;
 
 import killercreepr.crux.loot.LootContext;
 import killercreepr.crux.loot.conditions.LootCondition;
+import killercreepr.cruxadvancements.advancement.ObjectiveAdvancement;
 import killercreepr.cruxadvancements.advancement.objective.progress.ObjectiveProgress;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,7 +17,7 @@ public interface AdvancementObjective {
     @NotNull
     String getCriterion();
     boolean isDone(@NotNull ObjectiveProgress progress);
-    boolean shouldUpdateAdvancement(@NotNull ObjectiveProgress progress);
+    boolean shouldUpdateAdvancement(@NotNull ObjectiveAdvancement advancement, @NotNull ObjectiveProgress progress);
     @NotNull ObjectiveProgress createNewProgress();
     @Nullable
     LootCondition getConditions();

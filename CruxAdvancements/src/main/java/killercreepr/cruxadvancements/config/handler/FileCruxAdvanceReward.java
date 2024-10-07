@@ -24,7 +24,7 @@ public class FileCruxAdvanceReward implements FileObjectHandler<CruxAdvanceRewar
     public @Nullable CruxAdvanceReward deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
         if(!(e instanceof FileObject base)) return null;
 
-        String type = base.getObject(String.class, "type");
+        String type = base.getObject(String.class, "reward");
         if(type==null) return null;
         type = type.toLowerCase();
         CustomFileCruxAdvanceReward<?> handler = CUSTOM_HANDLERS.get(type);

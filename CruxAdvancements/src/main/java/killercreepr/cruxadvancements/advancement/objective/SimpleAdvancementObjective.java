@@ -5,20 +5,17 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class SimpleAdvancementObjective implements AdvancementObjective {
-    protected final @NotNull String criterion;
-    protected final @Nullable LootCondition conditions;
-    public SimpleAdvancementObjective(@NotNull String criterion, @Nullable LootCondition conditions) {
-        this.criterion = criterion;
-        this.conditions = conditions;
+    protected final @NotNull ObjectiveCommonData data;
+    public SimpleAdvancementObjective(@NotNull ObjectiveCommonData data) {
+        this.data = data;
     }
-
     @Override
     public @NotNull String getCriterion() {
-        return criterion;
+        return data.getCriterion();
     }
 
     @Override
     public @Nullable LootCondition getConditions() {
-        return conditions;
+        return data.getConditions();
     }
 }

@@ -23,10 +23,10 @@ public class FileCruxCriteria implements FileObjectHandler<CruxCriteria> {
         FileObject o = new FileObject();
         FileRegistry registry = ctx.getRegistry();
         if(object instanceof ListCriteria c){
-            o.addProperty("type", "list");
+            o.addProperty("criteria", "list");
             o.add("requirements", registry.serializeToFile(c.getRequirements()));
         }else if(object instanceof NumberCriteria c){
-            o.addProperty("type", "number");
+            o.addProperty("criteria", "number");
             o.addProperty("requirements", c.getMaxProgress());
         }else throw new IllegalArgumentException(object + " is not a supported CruxCriteria!");
         return o;
@@ -36,7 +36,7 @@ public class FileCruxCriteria implements FileObjectHandler<CruxCriteria> {
     public @Nullable CruxCriteria deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = ctx.getRegistry();
-        String type = o.getObject(String.class, "type");
+        String type = o.getObject(String.class, "criteria");
         if(type==null) return null;
         switch (type.toLowerCase()){
             case "list" ->{

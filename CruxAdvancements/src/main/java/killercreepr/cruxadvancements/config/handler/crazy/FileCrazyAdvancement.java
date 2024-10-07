@@ -68,9 +68,11 @@ public class FileCrazyAdvancement implements FileObjectHandler<CrazyAdvancement>
             });
         }
 
-        return new CrazyAdvancement(
-            key, parentKey, display, criteria, reward, flagsParsed, objectives
+        Integer updateAdvancementPeriod = o.getObject(Integer.class, "update_advancement_period");
+        if(updateAdvancementPeriod == null) updateAdvancementPeriod = 0;
 
+        return new CrazyAdvancement(
+            key, parentKey, display, criteria, reward, flagsParsed, objectives, updateAdvancementPeriod
         );
     }
 

@@ -20,8 +20,8 @@ public class CrazyAdvancement extends ObjectiveAdvancement {
                             @NotNull CrazyAdvancementDisplay display,
                             @NotNull CruxCriteria criteria,
                             @Nullable CruxAdvanceReward reward, @NotNull AdvancementFlag[] flags,
-                            @NotNull Map<String, AdvancementObjective> objectives) {
-        super(key, parentKey, display, criteria, reward, objectives);
+                            @NotNull Map<String, AdvancementObjective> objectives, int updateAdvancementPeriod) {
+        super(key, parentKey, display, criteria, reward, objectives, updateAdvancementPeriod);
         this.display = display;
         this.flags = flags;
     }
