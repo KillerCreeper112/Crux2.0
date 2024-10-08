@@ -7,7 +7,6 @@ import killercreepr.crux.tags.hook.prefix.HookedPrefixBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.Objects;
 
 public class PrefixAddHookedPrefixBuilder implements HookedPrefixBuilder {

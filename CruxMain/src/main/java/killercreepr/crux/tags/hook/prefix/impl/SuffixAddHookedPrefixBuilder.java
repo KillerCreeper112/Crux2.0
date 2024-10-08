@@ -14,7 +14,6 @@ public class SuffixAddHookedPrefixBuilder implements HookedPrefixBuilder {
     public SuffixAddHookedPrefixBuilder(@Nullable FormatPrefix suffix) {
         this.suffix = suffix;
     }
-
     @Override
     public @Nullable FormatPrefix buildPrefix(@NotNull HookedObjectTag<?, ?> hookedObjectTag, @Nullable FormatPrefix builtPrefix,
                                               @Nullable TagsPrefixBuilder prefixBuilder) {

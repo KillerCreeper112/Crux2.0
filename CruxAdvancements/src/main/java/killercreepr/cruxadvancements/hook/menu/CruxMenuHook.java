@@ -7,6 +7,7 @@ import killercreepr.crux.registry.KeyedRegistry;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxadvancements.advancement.CruxAdvancement;
 import killercreepr.cruxadvancements.data.AdvancementTracker;
+import killercreepr.cruxadvancements.data.TrackedAdvancement;
 import killercreepr.cruxadvancements.data.entity.AdvancementHolder;
 import killercreepr.cruxadvancements.hook.menu.data.AdvancementMenuDataParser;
 import killercreepr.cruxadvancements.manager.CruxAdvancementManager;
@@ -144,23 +145,22 @@ public class CruxMenuHook {
                                                    @Nullable MenuItems valueItems,
                                                    @Nullable MenuItems emptyItems) {
                 String advancementManagerKeyUnparsed = ctx.getRegistry().deserializeFromFile(String.class, o.get("advancement_manager"));
-                return new SimplePagedMenuModule<CruxAdvancement>(id, indexes, valuesFilter, valueItems, emptyItems, this) {
+                return new SimplePagedMenuModule<TrackedAdvancement>(id, indexes, valuesFilter, valueItems, emptyItems, this) {
                     @Override
-                    public @NotNull Holder<List<CruxAdvancement>> getValues(@NotNull CfgMenu menu) {
+                    public @NotNull Holder<List<TrackedAdvancement>> getValues(@NotNull CfgMenu menu) {
                         return () ->{
                             Player p = menu.info().getOrThrow("viewer", Player.class);
                             AdvancementHolder holder = EntityMemory.getOrCreateDataHolder(p, AdvancementHolder.class);
                             if(holder==null) return List.of();
                             AdvancementTracker tracker = holder.getAdvancementTracker();
-                            List<CruxAdvancement> list = new ArrayList<>();
+                            List<TrackedAdvancement> list = new ArrayList<>();
                             Key advancementManagerKey = advancementManagerKeyUnparsed == null ? null :
                                 Crux.key(
                                     menu.getHolder().getRegistry().getFormat().deserializeString(advancementManagerKeyUnparsed, menu.buildTags())
                                 );
                             tracker.getTrackedAdvancements().forEach(tracked ->{
                                 if(advancementManagerKey != null && !tracked.getManagerKey().equals(advancementManagerKey)) return;
-                                CruxAdvancement a = tracked.getAdvancement();
-                                if(a != null) list.add(a);
+                                list.add(tracked);
                             });
                             return list;
                         };

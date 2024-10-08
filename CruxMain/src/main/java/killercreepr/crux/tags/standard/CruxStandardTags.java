@@ -32,7 +32,8 @@ public class CruxStandardTags {
             new MathsResolver(),
             new DateFormatResolver(),
             new DurationFormatResolver(),
-            new CurrentTimeResolver()
+            new CurrentTimeResolver(),
+            new ProgressBarResolver()
         );
     }
 

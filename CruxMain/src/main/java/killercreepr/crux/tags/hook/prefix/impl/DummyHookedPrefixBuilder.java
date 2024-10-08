@@ -25,4 +25,5 @@ public class DummyHookedPrefixBuilder implements HookedPrefixBuilder {
         if(!(obj instanceof DummyHookedPrefixBuilder)) return false;
         return true;
     }
+
 }

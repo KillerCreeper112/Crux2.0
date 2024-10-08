@@ -1,5 +1,6 @@
 package killercreepr.crux.tags.format;
 
+import killercreepr.crux.util.CruxMath;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,7 +49,7 @@ public class FormatArgs {
     }
 
     public double parseDouble(int index){
-        return Double.parseDouble(get(index));
+        return CruxMath.evaluate(get(index));
     }
 
     public int parseInt(int index){

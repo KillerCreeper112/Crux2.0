@@ -37,6 +37,18 @@ public class AdvancementPlayerTags implements ObjectTag<Player> {
                 Key advancement = Crux.key(ctx.deserializeString(args.get(1)));
                 return tracker.isTracking(manager, advancement) + "";
             }))
+            .add(Tag.string("tracked_advancements", (args, ctx) ->{
+                AdvancementHolder holder = EntityMemory.getOrCreateDataHolder(p, AdvancementHolder.class);
+                if(holder == null) return "0";
+                AdvancementTracker tracker = holder.getAdvancementTracker();
+                return tracker.getTrackedAdvancements().size() + "";
+            }))
+            .add(Tag.string("tracked_advancements_max", (args, ctx) ->{
+                AdvancementHolder holder = EntityMemory.getOrCreateDataHolder(p, AdvancementHolder.class);
+                if(holder == null) return "0";
+                AdvancementTracker tracker = holder.getAdvancementTracker();
+                return "3";//todo
+            }))
             ;
     }
 }

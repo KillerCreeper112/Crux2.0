@@ -10,17 +10,22 @@ import killercreepr.crux.tags.hook.impl.StringListHookedObjectTag;
 import killercreepr.crux.tags.hook.prefix.HookedPrefixBuilder;
 import killercreepr.crux.tags.resolver.StringResolver;
 import killercreepr.crux.tags.resolver.Tag;
+import killercreepr.cruxadvancements.advancement.ObjectiveAdvancement;
+import killercreepr.cruxadvancements.advancement.objective.NumberObjective;
+import killercreepr.cruxadvancements.advancement.objective.progress.NumberObjectiveProgress;
+import killercreepr.cruxadvancements.advancement.objective.progress.ObjectiveProgress;
+import killercreepr.cruxadvancements.advancement.objective.progress.ObjectiveProgression;
 import killercreepr.cruxadvancements.advancement.progression.CruxAdvancementProgress;
-import killercreepr.cruxadvancements.crazy.CrazyAdvancement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
 import java.util.UUID;
 
-public class CrazyAdvancementTags implements ObjectTag<CrazyAdvancement> {
+public class CrazyAdvancementTags implements ObjectTag<ObjectiveAdvancement> {
     @Override
-    public @NotNull Class<CrazyAdvancement> getObjectType() {
-        return CrazyAdvancement.class;
+    public @NotNull Class<ObjectiveAdvancement> getObjectType() {
+        return ObjectiveAdvancement.class;
     }
 
     @Override
@@ -29,7 +34,7 @@ public class CrazyAdvancementTags implements ObjectTag<CrazyAdvancement> {
     }
 
     @Override
-    public @Nullable TagContainer<StringResolver> requestStrings(@NotNull CrazyAdvancement object, @NotNull TagParser tags) {
+    public @Nullable TagContainer<StringResolver> requestStrings(@NotNull ObjectiveAdvancement object, @NotNull TagParser tags) {
         return TagContainer.string(tags)
             .add(Tag.string("key", (args, ctx) -> object.key().asString()))
             .add(Tag.string("parent", (args, ctx) -> object.parent() + ""))
@@ -38,16 +43,61 @@ public class CrazyAdvancementTags implements ObjectTag<CrazyAdvancement> {
                 CruxAdvancementProgress progress = object.getProgressIfPresent(uuid);
                 return (progress != null && progress.isDone()) + "";
             })))
+            .add(Tag.string("objective_progress_percent", (args, ctx) ->{
+                UUID uuid = UUID.fromString(ctx.deserializeString(args.get(0)));
+                ObjectiveProgression progression = object.getObjectiveProgressIfPresent(uuid);
+                if(progression == null) return "0";
+                int maxProgress = 0;
+                int currentProgress = 0;
+                for(Map.Entry<String, ObjectiveProgress> entry : progression.getProgressMap().entrySet()){
+                    ObjectiveProgress progress = entry.getValue();
+                    String criteria = entry.getKey();
+                    if(progress instanceof NumberObjectiveProgress p){
+                        currentProgress += p.getProgress();
+                    }
+                    if(object.getObjective(criteria) instanceof NumberObjective num){
+                        maxProgress += num.getMaxProgress();
+                    }
+                }
+                float x = (float) currentProgress / (float) maxProgress;
+                return x + "";
+            }))
+            .add(Tag.string("objective_progress", (args, ctx) ->{
+                UUID uuid = UUID.fromString(ctx.deserializeString(args.get(0)));
+                ObjectiveProgression progression = object.getObjectiveProgressIfPresent(uuid);
+                if(progression == null) return "0";
+                int currentProgress = 0;
+                for(Map.Entry<String, ObjectiveProgress> entry : progression.getProgressMap().entrySet()){
+                    ObjectiveProgress progress = entry.getValue();
+                    if(progress instanceof NumberObjectiveProgress p){
+                        currentProgress += p.getProgress();
+                    }
+                }
+                return currentProgress + "";
+            }))
+            .add(Tag.string("objective_progress_max", (args, ctx) ->{
+                UUID uuid = UUID.fromString(ctx.deserializeString(args.get(0)));
+                ObjectiveProgression progression = object.getObjectiveProgressIfPresent(uuid);
+                if(progression == null) return "0";
+                int maxProgress = 0;
+                for(Map.Entry<String, ObjectiveProgress> entry : progression.getProgressMap().entrySet()){
+                    String criteria = entry.getKey();
+                    if(object.getObjective(criteria) instanceof NumberObjective num){
+                        maxProgress += num.getMaxProgress();
+                    }
+                }
+                return maxProgress + "";
+            }))
             ;
 
     }
 
     @Override
-    public @Nullable HookedObjectContainer<StringListHookedObjectTag<?>> hookStringLists(@NotNull CrazyAdvancement object, @NotNull TagParser tags) {
+    public @Nullable HookedObjectContainer<StringListHookedObjectTag<?>> hookStringLists(@NotNull ObjectiveAdvancement object, @NotNull TagParser tags) {
         return HookedObjectContainer.stringList()
-            .addAll(tags.hookStringLists(object.getDisplay(), HookedPrefixBuilder.overwrite(
+            /*.addAll(tags.hookStringLists(object.getDisplay(), HookedPrefixBuilder.overwrite(
                 FormatPrefix.simple("advancement_display/")
-            )))
+            )))*/
             .addAll(tags.hookStringLists(object.getIcon(), HookedPrefixBuilder.overwrite(
                 FormatPrefix.simple("advancement_icon/")
             )))
@@ -55,11 +105,11 @@ public class CrazyAdvancementTags implements ObjectTag<CrazyAdvancement> {
     }
 
     @Override
-    public @Nullable HookedObjectContainer<StringHookedObjectTag<?>> hookStrings(@NotNull CrazyAdvancement object, @NotNull TagParser tags) {
+    public @Nullable HookedObjectContainer<StringHookedObjectTag<?>> hookStrings(@NotNull ObjectiveAdvancement object, @NotNull TagParser tags) {
         return HookedObjectContainer.string()
-            .addAll(tags.hookStrings(object.getDisplay(), HookedPrefixBuilder.overwrite(
+            /*.addAll(tags.hookStrings(object.getDisplay(), HookedPrefixBuilder.overwrite(
                 FormatPrefix.simple("advancement_display/")
-            )))
+            )))*/
             .addAll(tags.hookStrings(object.getIcon(), HookedPrefixBuilder.overwrite(
                 FormatPrefix.simple("advancement_icon/")
             )))
