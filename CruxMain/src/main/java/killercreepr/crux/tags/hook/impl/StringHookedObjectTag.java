@@ -20,6 +20,11 @@ public class StringHookedObjectTag<T> implements HookedObjectTag<T, StringResolv
         this.prefix = prefix;
     }
 
+    public StringHookedObjectTag<T> withAddedPrefix(@NotNull HookedPrefixBuilder prefix){
+        HookedPrefixBuilder result = HookedPrefixBuilder.add(prefix, this.prefix);
+        return new StringHookedObjectTag<>(object, tagProvider, tags, result);
+    }
+
     public @NotNull ObjectTag<T> getTagProvider() {
         return tagProvider;
     }

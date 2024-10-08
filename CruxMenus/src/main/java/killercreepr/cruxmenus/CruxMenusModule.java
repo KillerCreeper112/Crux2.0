@@ -15,6 +15,7 @@ import killercreepr.cruxmenus.core.command.argument.CruxMenuHolderArgument;
 import killercreepr.cruxmenus.core.command.argument.CruxMenusArguments;
 import killercreepr.cruxmenus.core.listener.MenuListener;
 import killercreepr.cruxmenus.core.menu.action.standard.StandardMenuActions;
+import killercreepr.cruxmenus.core.menu.module.standard.StandardMenuModules;
 import killercreepr.cruxmenus.core.tags.MenuItemHolderHook;
 import org.jetbrains.annotations.NotNull;
 
@@ -50,6 +51,7 @@ public class CruxMenusModule implements CruxModule {
     public void onLoad(@NotNull CruxPlugin plugin) {
         menuRegistry.register(CfgRegistries.YAML);
         menuRegistry.register(CfgRegistries.JSON);
+        StandardMenuModules.buildModules(menuRegistry).forEach(menuModuleRegistry::register);
     }
 
     @Override

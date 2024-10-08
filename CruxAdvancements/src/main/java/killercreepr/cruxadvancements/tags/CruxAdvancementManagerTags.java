@@ -3,7 +3,11 @@ package killercreepr.cruxadvancements.tags;
 import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.container.TagContainer;
 import killercreepr.crux.tags.context.FormatPrefix;
+import killercreepr.crux.tags.hook.HookedObjectContainer;
 import killercreepr.crux.tags.hook.ObjectTag;
+import killercreepr.crux.tags.hook.impl.StringHookedObjectTag;
+import killercreepr.crux.tags.hook.impl.StringListHookedObjectTag;
+import killercreepr.crux.tags.hook.prefix.HookedPrefixBuilder;
 import killercreepr.crux.tags.resolver.StringResolver;
 import killercreepr.crux.tags.resolver.Tag;
 import killercreepr.cruxadvancements.advancement.CruxAdvancement;
@@ -25,6 +29,13 @@ public class CruxAdvancementManagerTags implements ObjectTag<CruxAdvancementMana
         return FormatPrefix.simple("advancement_manager_");
     }
 
+    public CruxAdvancement getRoot(CruxAdvancementManager<?> object){
+        for(CruxAdvancement a : object){
+            if(a.parent() == null) return a;
+        }
+        return null;
+    }
+
     @Override
     public @Nullable TagContainer<StringResolver> requestStrings(@NotNull CruxAdvancementManager<?> object, @NotNull TagParser tags) {
         return TagContainer.string(tags)
@@ -39,6 +50,24 @@ public class CruxAdvancementManagerTags implements ObjectTag<CruxAdvancementMana
                 }
                 return amount + "";
             }))
+            ;
+    }
+
+    @Override
+    public @Nullable HookedObjectContainer<StringHookedObjectTag<?>> hookStrings(@NotNull CruxAdvancementManager<?> object, @NotNull TagParser tags) {
+        return HookedObjectContainer.string()
+            .addAll(tags.hookStrings(getRoot(object), HookedPrefixBuilder.overwrite(
+                FormatPrefix.simple("advancement_manager_first/")
+            )))
+            ;
+    }
+
+    @Override
+    public @Nullable HookedObjectContainer<StringListHookedObjectTag<?>> hookStringLists(@NotNull CruxAdvancementManager<?> object, @NotNull TagParser tags) {
+        return HookedObjectContainer.stringList()
+            .addAll(tags.hookStringLists(getRoot(object), HookedPrefixBuilder.overwrite(
+                FormatPrefix.simple("advancement_manager_first/")
+            )))
             ;
     }
 }

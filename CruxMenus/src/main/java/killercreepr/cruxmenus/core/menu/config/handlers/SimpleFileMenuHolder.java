@@ -19,8 +19,8 @@ import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.TreeMap;
 
 public class SimpleFileMenuHolder extends SimpleFileHandler<MenuHolder> implements FileMenuHolder<MenuHolder> {
@@ -56,7 +56,7 @@ public class SimpleFileMenuHolder extends SimpleFileHandler<MenuHolder> implemen
         MenuItems menuItems = getFileMenuItems().deserializeFromFile(context, o.get("items"), o);
         if(menuItems == null) menuItems = MenuItems.items(new TreeMap<>());
 
-        Collection<MenuModule> modules = new HashSet<>();
+        Collection<MenuModule> modules = new ArrayList<>();
         if(o.get("modules") instanceof FileObject mods){
             mods.forEach((string, ele) ->{
                 MenuModule module = fileMenuModule.deserializeFromFile(context, ele, o);

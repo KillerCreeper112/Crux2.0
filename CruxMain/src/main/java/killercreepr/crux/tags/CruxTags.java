@@ -72,7 +72,11 @@ public class CruxTags implements TagParser {
             HookedObjectContainer<StringHookedObjectTag<?>> hookedTags = objectTag.hookStrings(object, this);
             if(hookedTags != null){
                 hookedTags.addAll(container);
-                container.addAll(hookedTags);
+                hookedTags.getHookedObjects().forEach(hooked ->{
+                    container.add(hooked.withAddedPrefix(prefix));
+                });
+
+                //container.addAll(hookedTags);
             }
         });
         return container;
@@ -115,7 +119,10 @@ public class CruxTags implements TagParser {
             HookedObjectContainer<StringListHookedObjectTag<?>> hookedTags = objectTag.hookStringLists(object, this);
             if(hookedTags != null){
                 hookedTags.addAll(container);
-                hookedTags.getHookedObjects().forEach(container::add);
+                hookedTags.getHookedObjects().forEach(hooked ->{
+                    container.add(hooked.withAddedPrefix(prefix));
+                });
+                //hookedTags.getHookedObjects().forEach(container::add);
             }
         });
         return container;

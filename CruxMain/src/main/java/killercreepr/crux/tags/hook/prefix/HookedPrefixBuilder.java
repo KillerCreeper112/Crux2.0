@@ -3,42 +3,41 @@ package killercreepr.crux.tags.hook.prefix;
 import killercreepr.crux.tags.TagsPrefixBuilder;
 import killercreepr.crux.tags.context.FormatPrefix;
 import killercreepr.crux.tags.hook.HookedObjectTag;
+import killercreepr.crux.tags.hook.prefix.impl.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface HookedPrefixBuilder {
-    HookedPrefixBuilder EMPTY = (hooked, built, builder) -> built;
+    HookedPrefixBuilder EMPTY = new DummyHookedPrefixBuilder();
     static HookedPrefixBuilder empty(){
         return EMPTY;
     }
-    HookedPrefixBuilder NOTHING = (hooked, built, builder) ->{
-        if(builder == null) return null;
-        return built;
-    };
+    HookedPrefixBuilder NOTHING = new NothingHookedPrefixBuilder();
     static HookedPrefixBuilder nothing(){
         return NOTHING;
     }
 
     static HookedPrefixBuilder prefix(@Nullable FormatPrefix prefix){
-        return (hooked, builtPrefix, builder) -> FormatPrefix.add(prefix, builtPrefix);
+        return new PrefixAddHookedPrefixBuilder(prefix);
     }
 
     static HookedPrefixBuilder suffix(@Nullable FormatPrefix suffix){
-        return (hooked, builtPrefix, builder) -> FormatPrefix.add(builtPrefix, suffix);
+        return new SuffixAddHookedPrefixBuilder(suffix);
     }
 
     static HookedPrefixBuilder overwrite(@Nullable FormatPrefix value){
-        return (hooked, builtPrefix, builder) ->{
-            if(builder == null) return value;
-            return FormatPrefix.add(value, builtPrefix);
-        };
+        return new OverwriteHookedPrefixBuilder(value);
+    }
+
+    static HookedPrefixBuilder add(@NotNull HookedPrefixBuilder first, @NotNull HookedPrefixBuilder second){
+        if(first.equals(second)) return first;
+        return new AddonHookedPrefixBuilder(first, second);
     }
 
     //complete
-    //These disregard any prefix builders.
-    HookedPrefixBuilder COMPLETE_NOTHING = (hooked, built, builder) -> null;
+    //These disregard any prefix builders. Probably should never to be used tbh...
     static HookedPrefixBuilder completeNothing(){
-        return COMPLETE_NOTHING;
+        return (hooked, built, builder) -> null;
     }
 
     static HookedPrefixBuilder completeOverwrite(@Nullable FormatPrefix value){
