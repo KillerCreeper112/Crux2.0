@@ -143,7 +143,7 @@ public class CruxMenuHook {
                                                    @Nullable String valuesFilter,
                                                    @Nullable MenuItems valueItems,
                                                    @Nullable MenuItems emptyItems) {
-                Key advancementManagerKey = ctx.getRegistry().deserializeFromFile(Key.class, o.get("advancement_manager"));
+                String advancementManagerKeyUnparsed = ctx.getRegistry().deserializeFromFile(String.class, o.get("advancement_manager"));
                 return new SimplePagedMenuModule<CruxAdvancement>(id, indexes, valuesFilter, valueItems, emptyItems, this) {
                     @Override
                     public @NotNull Holder<List<CruxAdvancement>> getValues(@NotNull CfgMenu menu) {
@@ -153,6 +153,10 @@ public class CruxMenuHook {
                             if(holder==null) return List.of();
                             AdvancementTracker tracker = holder.getAdvancementTracker();
                             List<CruxAdvancement> list = new ArrayList<>();
+                            Key advancementManagerKey = advancementManagerKeyUnparsed == null ? null :
+                                Crux.key(
+                                    menu.getHolder().getRegistry().getFormat().deserializeString(advancementManagerKeyUnparsed, menu.buildTags())
+                                );
                             tracker.getTrackedAdvancements().forEach(tracked ->{
                                 if(advancementManagerKey != null && !tracked.getManagerKey().equals(advancementManagerKey)) return;
                                 CruxAdvancement a = tracked.getAdvancement();
