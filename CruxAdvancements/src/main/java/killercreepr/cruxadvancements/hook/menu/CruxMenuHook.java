@@ -2,9 +2,12 @@ package killercreepr.cruxadvancements.hook.menu;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.Holder;
+import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.crux.registry.KeyedRegistry;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxadvancements.advancement.CruxAdvancement;
+import killercreepr.cruxadvancements.data.AdvancementTracker;
+import killercreepr.cruxadvancements.data.entity.AdvancementHolder;
 import killercreepr.cruxadvancements.hook.menu.data.AdvancementMenuDataParser;
 import killercreepr.cruxadvancements.manager.CruxAdvancementManager;
 import killercreepr.cruxadvancements.registries.AdvancementRegistries;
@@ -20,11 +23,11 @@ import killercreepr.cruxmenus.api.menu.registry.MenuRegistry;
 import killercreepr.cruxmenus.core.menu.module.standard.SimpleFilePagedCfg;
 import killercreepr.cruxmenus.core.menu.module.standard.SimplePagedMenuModule;
 import net.kyori.adventure.key.Key;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
@@ -119,6 +122,42 @@ public class CruxMenuHook {
                                 }
                             });
 
+                            return list;
+                        };
+                    }
+                };
+            }
+
+            @Override
+            public @Nullable MenuModule parsePaged(@NotNull String id, @NotNull NumberProvider indexes, @Nullable String valuesFilter, @Nullable MenuItems valueItems, @Nullable MenuItems emptyItems) {
+                return null;
+            }
+        });
+
+        registry.register(new SimpleFilePagedCfg(fileMenuHolder, Crux.key("tracked_advancements")) {
+            @Override
+            public @Nullable MenuModule parsePaged(@NotNull FileContext<?> ctx, @NotNull FileObject o,
+                                                   @Nullable FileObject menuContext,
+                                                   @NotNull String id,
+                                                   @NotNull NumberProvider indexes,
+                                                   @Nullable String valuesFilter,
+                                                   @Nullable MenuItems valueItems,
+                                                   @Nullable MenuItems emptyItems) {
+                Key advancementManagerKey = ctx.getRegistry().deserializeFromFile(Key.class, o.get("advancement_manager"));
+                return new SimplePagedMenuModule<CruxAdvancement>(id, indexes, valuesFilter, valueItems, emptyItems, this) {
+                    @Override
+                    public @NotNull Holder<List<CruxAdvancement>> getValues(@NotNull CfgMenu menu) {
+                        return () ->{
+                            Player p = menu.info().getOrThrow("viewer", Player.class);
+                            AdvancementHolder holder = EntityMemory.getOrCreateDataHolder(p, AdvancementHolder.class);
+                            if(holder==null) return List.of();
+                            AdvancementTracker tracker = holder.getAdvancementTracker();
+                            List<CruxAdvancement> list = new ArrayList<>();
+                            tracker.getTrackedAdvancements().forEach(tracked ->{
+                                if(advancementManagerKey != null && !tracked.getManagerKey().equals(advancementManagerKey)) return;
+                                CruxAdvancement a = tracked.getAdvancement();
+                                if(a != null) list.add(a);
+                            });
                             return list;
                         };
                     }
