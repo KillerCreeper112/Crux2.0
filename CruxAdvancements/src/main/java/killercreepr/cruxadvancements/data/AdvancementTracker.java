@@ -19,6 +19,14 @@ public class AdvancementTracker {
         trackedAdvancements.addAll(advancements);
     }
 
+    public boolean isTracking(TrackedAdvancement a){
+        return trackedAdvancements.contains(a);
+    }
+
+    public boolean isTracking(Key manager, Key advancement){
+        return isTracking(new TrackedAdvancement(manager, advancement));
+    }
+
     public Collection<TrackedAdvancement> getTrackedAdvancements() {
         return trackedAdvancements;
     }

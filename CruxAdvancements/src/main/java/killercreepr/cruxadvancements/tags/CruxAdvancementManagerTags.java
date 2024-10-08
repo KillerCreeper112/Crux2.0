@@ -39,6 +39,7 @@ public class CruxAdvancementManagerTags implements ObjectTag<CruxAdvancementMana
     @Override
     public @Nullable TagContainer<StringResolver> requestStrings(@NotNull CruxAdvancementManager<?> object, @NotNull TagParser tags) {
         return TagContainer.string(tags)
+            .add(Tag.string("key", (args, ctx) -> object.key().asString()))
             .add(Tag.string("advancements", (args, ctx) -> object.getAdvancements().values().size() + ""))
             .add(Tag.string("advancements_completed", (args, ctx) ->{
                 UUID uuid = UUID.fromString(ctx.deserializeString(args.get(0)));

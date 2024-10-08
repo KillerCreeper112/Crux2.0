@@ -9,9 +9,13 @@ import killercreepr.crux.tags.hook.impl.StringHookedObjectTag;
 import killercreepr.crux.tags.hook.impl.StringListHookedObjectTag;
 import killercreepr.crux.tags.hook.prefix.HookedPrefixBuilder;
 import killercreepr.crux.tags.resolver.StringResolver;
+import killercreepr.crux.tags.resolver.Tag;
+import killercreepr.cruxadvancements.advancement.progression.CruxAdvancementProgress;
 import killercreepr.cruxadvancements.crazy.CrazyAdvancement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.UUID;
 
 public class CrazyAdvancementTags implements ObjectTag<CrazyAdvancement> {
     @Override
@@ -26,7 +30,15 @@ public class CrazyAdvancementTags implements ObjectTag<CrazyAdvancement> {
 
     @Override
     public @Nullable TagContainer<StringResolver> requestStrings(@NotNull CrazyAdvancement object, @NotNull TagParser tags) {
-        return ObjectTag.super.requestStrings(object, tags);
+        return TagContainer.string(tags)
+            .add(Tag.string("key", (args, ctx) -> object.key().asString()))
+            .add(Tag.string("parent", (args, ctx) -> object.parent() + ""))
+            .add(Tag.string("is_granted", ((args, ctx) -> {
+                UUID uuid = UUID.fromString(ctx.deserializeString(args.get(0)));
+                CruxAdvancementProgress progress = object.getProgressIfPresent(uuid);
+                return (progress != null && progress.isDone()) + "";
+            })))
+            ;
 
     }
 
