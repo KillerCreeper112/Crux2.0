@@ -57,7 +57,7 @@ public class CruxAdvancementManagerTags implements ObjectTag<CruxAdvancementMana
     public @Nullable HookedObjectContainer<StringHookedObjectTag<?>> hookStrings(@NotNull CruxAdvancementManager<?> object, @NotNull TagParser tags) {
         return HookedObjectContainer.string()
             .addAll(tags.hookStrings(getRoot(object), HookedPrefixBuilder.overwrite(
-                FormatPrefix.simple("advancement_manager_first/")
+                FormatPrefix.simple("advancement_manager/root/")
             )))
             ;
     }
@@ -66,7 +66,7 @@ public class CruxAdvancementManagerTags implements ObjectTag<CruxAdvancementMana
     public @Nullable HookedObjectContainer<StringListHookedObjectTag<?>> hookStringLists(@NotNull CruxAdvancementManager<?> object, @NotNull TagParser tags) {
         return HookedObjectContainer.stringList()
             .addAll(tags.hookStringLists(getRoot(object), HookedPrefixBuilder.overwrite(
-                FormatPrefix.simple("advancement_manager_first/")
+                FormatPrefix.simple("advancement_manager/root/")
             )))
             ;
     }

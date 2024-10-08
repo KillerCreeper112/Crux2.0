@@ -24,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -59,6 +61,65 @@ public class CruxMenuHook {
                                 return List.of();
                             }
                             return new ArrayList<>(manager.getAdvancements().values());
+                        };
+                    }
+                };
+            }
+
+            @Override
+            public @Nullable MenuModule parsePaged(@NotNull String id, @NotNull NumberProvider indexes, @Nullable String valuesFilter, @Nullable MenuItems valueItems, @Nullable MenuItems emptyItems) {
+                return null;
+            }
+        });
+
+        registry.register(new SimpleFilePagedCfg(fileMenuHolder, Crux.key("paged_advancements_sorted")) {
+            @Override
+            public @Nullable MenuModule parsePaged(@NotNull FileContext<?> ctx, @NotNull FileObject o,
+                                                   @Nullable FileObject menuContext,
+                                                   @NotNull String id,
+                                                   @NotNull NumberProvider indexes,
+                                                   @Nullable String valuesFilter,
+                                                   @Nullable MenuItems valueItems,
+                                                   @Nullable MenuItems emptyItems) {
+                Key advancementManagerKey = ctx.getRegistry().deserializeFromFile(Key.class, o.get("advancement_manager"));
+                return new SimplePagedMenuModule<CruxAdvancement>(id, indexes, valuesFilter, valueItems, emptyItems, this) {
+                    @Override
+                    public @NotNull Holder<List<CruxAdvancement>> getValues(@NotNull CfgMenu menu) {
+                        return () ->{
+                            CruxAdvancementManager<?> manager;
+                            if(advancementManagerKey == null){
+                                manager = menu.info().getOrThrow(CruxAdvancementManager.class);
+                            }else manager = AdvancementRegistries.ADVANCEMENT_MANAGERS.get(advancementManagerKey);
+                            if(manager == null){
+                                Crux.log(Level.WARNING, "Cannot find advancement manager of " + advancementManagerKey + "!");
+                                return List.of();
+                            }
+
+                            List<CruxAdvancement> list = new ArrayList<>(manager.getAdvancements().values());
+                            list.removeIf(d -> d.parent() == null);
+                            list.sort(new Comparator<>() {
+                                @Override
+                                public int compare(CruxAdvancement k1, CruxAdvancement k2) {
+                                    int level1 = getLevel(k1);
+                                    int level2 = getLevel(k2);
+
+                                    return Integer.compare(level1, level2);
+                                }
+
+                                private int getLevel(CruxAdvancement key) {
+                                    int level = 0;
+                                    CruxAdvancement advancement = key;
+                                    while (advancement != null && advancement.parent() != null) {
+                                        level++;
+                                        Key parentKey = key.parent();
+                                        if(parentKey == null) break;
+                                        advancement = manager.getAdvancement(parentKey);
+                                    }
+                                    return level;
+                                }
+                            });
+
+                            return list;
                         };
                     }
                 };
