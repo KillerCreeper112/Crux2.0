@@ -15,10 +15,7 @@ import killercreepr.cruxadvancements.data.entity.AdvancementHolder;
 import killercreepr.cruxadvancements.hook.menu.CruxMenuHook;
 import killercreepr.cruxadvancements.listener.AdvancementGrantListener;
 import killercreepr.cruxadvancements.listener.ObjectiveListener;
-import killercreepr.cruxadvancements.tags.AdvancementPlayerTags;
-import killercreepr.cruxadvancements.tags.CrazyAdvancementTags;
-import killercreepr.cruxadvancements.tags.CruxAdvancementIconTags;
-import killercreepr.cruxadvancements.tags.CruxAdvancementManagerTags;
+import killercreepr.cruxadvancements.tags.*;
 import killercreepr.cruxmenus.CruxMenusModule;
 import org.jetbrains.annotations.NotNull;
 
@@ -62,7 +59,8 @@ public class CruxAdvancementsModule implements CruxModule {
             new CrazyAdvancementTags(),
             new CruxAdvancementIconTags(),
             new CruxAdvancementManagerTags(),
-            new AdvancementPlayerTags()
+            new AdvancementPlayerTags(),
+            new TrackedAdvancementTags()
         );
     }
 }
