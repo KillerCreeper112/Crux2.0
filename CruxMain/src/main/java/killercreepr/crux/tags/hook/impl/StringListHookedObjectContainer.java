@@ -9,14 +9,17 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 public class StringListHookedObjectContainer implements HookedObjectContainer<StringListHookedObjectTag<?>> {
-    protected final Map<ObjectTag<?>, StringListHookedObjectTag<?>> hookedObjects = new HashMap<>();
+    protected final Map<ObjectTag<?>, Collection<StringListHookedObjectTag<?>>> hookedObjects = new HashMap<>();
 
     @Override
     public @NotNull Collection<StringListHookedObjectTag<?>> getHookedObjects() {
-        return hookedObjects.values();
+        Collection<StringListHookedObjectTag<?>> list = new HashSet<>();
+        hookedObjects.values().forEach(list::addAll);
+        return list;
     }
 
     @Override
@@ -35,7 +38,8 @@ public class StringListHookedObjectContainer implements HookedObjectContainer<St
     @Override
     public StringListHookedObjectContainer add(@Nullable StringListHookedObjectTag<?> hooked) {
         if(hooked==null) return this;
-        hookedObjects.put(hooked.getObjectTag(), hooked);
+        hookedObjects.computeIfAbsent(hooked.getObjectTag(), (e) -> new HashSet<>()).add(hooked);
+        //hookedObjects.put(hooked.getObjectTag(), hooked);
         return this;
     }
 

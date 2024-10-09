@@ -49,11 +49,11 @@ public class TrackedAdvancementTags implements ObjectTag<TrackedAdvancement> {
     @Override
     public @Nullable HookedObjectContainer<StringHookedObjectTag<?>> hookStrings(@NotNull TrackedAdvancement object, @NotNull TagParser tags) {
         return HookedObjectContainer.string()
-            .addAll(tags.hookStrings(object.getManager(), HookedPrefixBuilder.overwrite(
-                FormatPrefix.simple("tracked_advancement/manager/")
-            )))
             .addAll(tags.hookStrings(object.getAdvancementOrThrow(), HookedPrefixBuilder.overwrite(
                 FormatPrefix.simple("tracked_advancement/advance/")
+            )))
+            .addAll(tags.hookStrings(object.getManager(), HookedPrefixBuilder.overwrite(
+                FormatPrefix.simple("tracked_advancement/manager/")
             )))
             ;
     }
