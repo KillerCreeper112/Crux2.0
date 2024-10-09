@@ -1,5 +1,7 @@
 package killercreepr.cruxconfig.config.common.element;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 import killercreepr.crux.util.CruxObjects;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlGeneric;
@@ -22,6 +24,15 @@ public class FileGeneric extends FileElement {
     @Override
     public @NotNull YamlElement toYaml() {
         return new YamlGeneric(value);
+    }
+
+    @Override
+    public @NotNull JsonElement toJson() {
+        if(value instanceof String s) return new JsonPrimitive(s);
+        if(value instanceof Boolean s) return new JsonPrimitive(s);
+        if(value instanceof Number s) return new JsonPrimitive(s);
+        if(value instanceof Character s) return new JsonPrimitive(s);
+        return super.toJson();
     }
 
     @Override

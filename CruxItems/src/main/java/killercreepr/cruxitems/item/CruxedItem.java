@@ -15,6 +15,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 public class CruxedItem extends CruxItem {
+    public static CruxedItem cruxed(@NotNull ItemStack item){
+        return new CruxedItem(item);
+    }
+
     public CruxedItem(@NotNull Material material) {
         super(material);
     }

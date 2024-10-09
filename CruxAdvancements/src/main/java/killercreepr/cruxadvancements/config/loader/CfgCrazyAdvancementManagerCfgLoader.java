@@ -30,7 +30,7 @@ public class CfgCrazyAdvancementManagerCfgLoader {
         });
     }
 
-    public void saveAndUnload(Collection<Player> p){
+    public void saveAndUnload(Collection<? extends Player> p){
         p.forEach(this::saveAndUnload);
     }
 
