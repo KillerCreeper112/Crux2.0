@@ -3,6 +3,7 @@ package killercreepr.crux.registries;
 import killercreepr.crux.component.DataComponentType;
 import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.crux.data.tag.block.BlockTag;
+import killercreepr.crux.data.tag.entity.EntityTag;
 import killercreepr.crux.data.tag.item.ItemTag;
 import killercreepr.crux.data.tick.CruxTick;
 import killercreepr.crux.loot.LootTable;
@@ -40,6 +41,7 @@ public class CruxRegistries {
 
     public static final KeyedRegistry<ItemTag> ITEM_TAG = new SimpleKeyedRegistry<>();
     public static final KeyedRegistry<BlockTag> BLOCK_TAG = new SimpleKeyedRegistry<>();
+    public static final KeyedRegistry<EntityTag> ENTITY_TAG = new SimpleKeyedRegistry<>();
     public static final MappedRegistry<Key, CreateBlockSoundGroup> BLOCK_SOUND_GROUP = new SimpleMappedRegistry<>();
 
     public static final MappedRegistry<Key, DataComponentType<?>> DATA_COMPONENT_TYPE = new SimpleMappedRegistry<>();

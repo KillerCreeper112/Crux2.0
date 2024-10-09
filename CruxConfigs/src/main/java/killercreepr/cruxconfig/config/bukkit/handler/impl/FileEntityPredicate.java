@@ -1,8 +1,10 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
+import com.google.common.reflect.TypeToken;
 import killercreepr.crux.Crux;
-import killercreepr.crux.block.predicate.BlockPredicate;
 import killercreepr.crux.data.tag.block.BlockTag;
+import killercreepr.crux.entity.predicate.EntityAllPredicate;
+import killercreepr.crux.entity.predicate.EntityAnyPredicate;
 import killercreepr.crux.entity.predicate.EntityPredicate;
 import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.cruxconfig.config.common.FileContext;
@@ -38,34 +40,34 @@ public class FileEntityPredicate extends SimpleFileHandler<EntityPredicate> {
             return EntityPredicate.fromType(Crux.key(key));
         }
         if(e instanceof FileArray a){
-            Collection<BlockPredicate> children = new ArrayList<>();
+            Collection<EntityPredicate> children = new ArrayList<>();
             a.forEach(ele ->{
-                BlockPredicate predicate = registry.deserializeFromFile(BlockPredicate.class, ele, ctx);
+                EntityPredicate predicate = registry.deserializeFromFile(EntityPredicate.class, ele, ctx);
                 if(predicate==null) return;
                 children.add(predicate);
             });
-            //todo return EntityPredicate.fromAllOf(children);
+            return EntityPredicate.fromAllOf(children);
         }
         if(!(e instanceof FileObject o)) return null;
         String type = o.getObject(String.class, "type");
         if(type == null) return null;
         return switch (type.toLowerCase()){
-            /*todo case "any_of" ->{
-                Collection<BlockPredicate> values = registry.deserializeFromFile(
-                    new TypeToken<Collection<BlockPredicate>>(){}.getType(),
+            case "any_of" ->{
+                Collection<EntityPredicate> values = registry.deserializeFromFile(
+                    new TypeToken<Collection<EntityPredicate>>(){}.getType(),
                     o.get("values")
                 );
                 if(values==null) yield null;
                 yield new EntityAnyPredicate(values);
             }
             case "all_of" ->{
-                Collection<BlockPredicate> values = registry.deserializeFromFile(
-                    new TypeToken<Collection<BlockPredicate>>(){}.getType(),
+                Collection<EntityPredicate> values = registry.deserializeFromFile(
+                    new TypeToken<Collection<EntityPredicate>>(){}.getType(),
                     o.get("values")
                 );
                 if(values==null) yield null;
                 yield new EntityAllPredicate(values);
-            }*/
+            }
             default ->{
                 Crux.log(Level.WARNING, "No entity predicate of " + type + " exists!");
                 yield null;
