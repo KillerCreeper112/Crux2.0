@@ -5,7 +5,11 @@ import io.papermc.paper.registry.RegistryKey;
 import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.container.StringTagContainer;
 import killercreepr.crux.tags.context.FormatPrefix;
+import killercreepr.crux.tags.hook.HookedObjectContainer;
 import killercreepr.crux.tags.hook.ObjectTag;
+import killercreepr.crux.tags.hook.impl.StringHookedObjectTag;
+import killercreepr.crux.tags.hook.impl.StringListHookedObjectTag;
+import killercreepr.crux.tags.hook.prefix.HookedPrefixBuilder;
 import killercreepr.crux.tags.resolver.Tag;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Material;
@@ -118,5 +122,29 @@ public class OfflinePlayerTags implements ObjectTag<OfflinePlayer> {
                 return online.hasResourcePack() + "";
             }))
             ;
+    }
+
+    @Override
+    public @Nullable HookedObjectContainer<StringHookedObjectTag<?>> hookStrings(@NotNull OfflinePlayer object, @NotNull TagParser tags) {
+        HookedObjectContainer<StringHookedObjectTag<?>> hooks = HookedObjectContainer.string();
+        Player p = object.getPlayer();
+        if(p != null){
+            hooks.addAll(tags.hookStrings(p.getWorld(), HookedPrefixBuilder.overwrite(
+                FormatPrefix.simple("player_world/")
+            )));
+        }
+        return hooks;
+    }
+
+    @Override
+    public @Nullable HookedObjectContainer<StringListHookedObjectTag<?>> hookStringLists(@NotNull OfflinePlayer object, @NotNull TagParser tags) {
+        HookedObjectContainer<StringListHookedObjectTag<?>> hooks = HookedObjectContainer.stringList();
+        Player p = object.getPlayer();
+        if(p != null){
+            hooks.addAll(tags.hookStringLists(p.getWorld(), HookedPrefixBuilder.overwrite(
+                FormatPrefix.simple("player_world/")
+            )));
+        }
+        return hooks;
     }
 }
