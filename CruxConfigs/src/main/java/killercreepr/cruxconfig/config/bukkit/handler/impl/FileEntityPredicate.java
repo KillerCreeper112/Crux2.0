@@ -2,7 +2,7 @@ package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
 import com.google.common.reflect.TypeToken;
 import killercreepr.crux.Crux;
-import killercreepr.crux.data.tag.block.BlockTag;
+import killercreepr.crux.data.tag.entity.EntityTag;
 import killercreepr.crux.entity.predicate.EntityAllPredicate;
 import killercreepr.crux.entity.predicate.EntityAnyPredicate;
 import killercreepr.crux.entity.predicate.EntityPredicate;
@@ -33,9 +33,9 @@ public class FileEntityPredicate extends SimpleFileHandler<EntityPredicate> {
         if(e instanceof FileGeneric g){
             String key = g.getAsString();
             if(key.startsWith("#")){
-                BlockTag tag = CruxRegistries.BLOCK_TAG.get(Crux.key(key.substring(1)));
+                EntityTag tag = CruxRegistries.ENTITY_TAG.get(Crux.key(key.substring(1)));
                 if(tag==null) return null;
-                //todo return EntityPredicate.fromTag(tag);
+                return EntityPredicate.fromTag(tag);
             }
             return EntityPredicate.fromType(Crux.key(key));
         }

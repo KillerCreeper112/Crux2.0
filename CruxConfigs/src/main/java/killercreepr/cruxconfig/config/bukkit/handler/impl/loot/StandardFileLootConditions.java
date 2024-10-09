@@ -1,7 +1,6 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 
 import com.google.common.reflect.TypeToken;
-import killercreepr.crux.Crux;
 import killercreepr.crux.block.predicate.BlockPredicate;
 import killercreepr.crux.entity.predicate.EntityPredicate;
 import killercreepr.crux.item.predicate.ItemPredicate;

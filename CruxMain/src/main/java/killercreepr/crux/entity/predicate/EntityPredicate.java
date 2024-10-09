@@ -1,6 +1,6 @@
 package killercreepr.crux.entity.predicate;
 
-import killercreepr.crux.block.predicate.BlockAllPredicate;
+import killercreepr.crux.data.tag.Tag;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +18,9 @@ public interface EntityPredicate extends Predicate<Entity> {
     }
     static EntityPredicate fromAllOf(@NotNull EntityPredicate... children){
         return new EntityAllPredicate(Arrays.asList(children));
+    }
+    static EntityPredicate fromTag(@NotNull Tag<Entity> tag){
+        return new EntityTagPredicate(tag);
     }
     boolean test(@NotNull Entity entity);
 }

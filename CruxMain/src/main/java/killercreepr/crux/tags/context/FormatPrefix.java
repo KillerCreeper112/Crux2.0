@@ -6,9 +6,6 @@ import killercreepr.crux.tags.resolver.TagResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Objects;
-
 public interface FormatPrefix {
     static @NotNull FormatPrefix simple(@NotNull String constantPrefix){
         return new ConstantFormatPrefix(constantPrefix);

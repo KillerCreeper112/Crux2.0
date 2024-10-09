@@ -15,7 +15,6 @@ import killercreepr.cruxadvancements.data.entity.AdvancementHolder;
 import killercreepr.cruxadvancements.manager.CruxAdvancementManager;
 import killercreepr.cruxadvancements.registries.AdvancementRegistries;
 import net.kyori.adventure.key.Key;
-import org.bukkit.Keyed;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -1,7 +1,6 @@
 package killercreepr.crux.tags.hook;
 
 import killercreepr.crux.tags.container.TagContainer;
-import killercreepr.crux.tags.hook.impl.StringHookedObjectTag;
 import killercreepr.crux.tags.hook.prefix.HookedPrefixBuilder;
 import killercreepr.crux.tags.resolver.TagResolver;
 import org.jetbrains.annotations.NotNull;

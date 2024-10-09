@@ -1,6 +1,5 @@
 package killercreepr.cruxadvancements.config.loader;
 
-import killercreepr.crux.Crux;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.cruxadvancements.crazy.CrazyAdvancement;
 import killercreepr.cruxadvancements.crazy.CrazyAdvancementsHook;

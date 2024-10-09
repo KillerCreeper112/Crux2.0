@@ -13,7 +13,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.TreeMap;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class FileMenuItems extends SimpleFileMenuModuled<MenuItems> {
     public FileMenuItems(@NotNull FileMenuHolder<?> menuModule) {
