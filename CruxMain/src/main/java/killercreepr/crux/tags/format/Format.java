@@ -17,7 +17,6 @@ import killercreepr.crux.tags.standard.NumberFormatResolver;
 import killercreepr.crux.util.CruxMath;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.Bukkit;
 import org.codehaus.plexus.util.FastMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -254,7 +253,6 @@ public class Format implements FormatSerializer{
         StringTagContainer resolvers = new StringTagContainer(this.tags);
         resolvers.addAll(STRING_RESOLVERS.values());
         resolvers.addAll(tags);
-        Bukkit.broadcastMessage(resolvers.asMap() + "");
 
         //Bukkit.broadcastMessage("before(p): " + text);
         TextParserContext context = new FormatParserContext.Builder(this)
