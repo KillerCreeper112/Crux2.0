@@ -19,7 +19,7 @@ public class PagedAddAction extends SimpleMenuAction {
         String id = args[0];
         CfgMenu menu = ctx.getMenu();
         if(!(menu.getModules().getByID(id) instanceof ActivePagedMenuModule<?> paged))
-            throw new UnsupportedOperationException("CfgMenu does not have a PagedMenuModule!");
+            throw new UnsupportedOperationException("CfgMenu does not have a PagedMenuModule! " + id);
 
         int amount;
         if(args.length > 1) amount = (int) CruxMath.evaluate(args[1]);

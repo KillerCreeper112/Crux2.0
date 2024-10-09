@@ -95,9 +95,6 @@ public class CrazyAdvancementTags implements ObjectTag<ObjectiveAdvancement> {
     @Override
     public @Nullable HookedObjectContainer<StringListHookedObjectTag<?>> hookStringLists(@NotNull ObjectiveAdvancement object, @NotNull TagParser tags) {
         return HookedObjectContainer.stringList()
-            /*.addAll(tags.hookStringLists(object.getDisplay(), HookedPrefixBuilder.overwrite(
-                FormatPrefix.simple("advancement_display/")
-            )))*/
             .addAll(tags.hookStringLists(object.getIcon(), HookedPrefixBuilder.overwrite(
                 FormatPrefix.simple("advancement_icon/")
             )))
@@ -107,9 +104,6 @@ public class CrazyAdvancementTags implements ObjectTag<ObjectiveAdvancement> {
     @Override
     public @Nullable HookedObjectContainer<StringHookedObjectTag<?>> hookStrings(@NotNull ObjectiveAdvancement object, @NotNull TagParser tags) {
         return HookedObjectContainer.string()
-            /*.addAll(tags.hookStrings(object.getDisplay(), HookedPrefixBuilder.overwrite(
-                FormatPrefix.simple("advancement_display/")
-            )))*/
             .addAll(tags.hookStrings(object.getIcon(), HookedPrefixBuilder.overwrite(
                 FormatPrefix.simple("advancement_icon/")
             )))

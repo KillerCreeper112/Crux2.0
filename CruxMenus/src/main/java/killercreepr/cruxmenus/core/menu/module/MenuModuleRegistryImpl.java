@@ -1,8 +1,5 @@
 package killercreepr.cruxmenus.core.menu.module;
 
-import killercreepr.crux.registry.SimpleKeyedRegistry;
-import killercreepr.crux.registry.SimpleStringIdentifiableRegistry;
-import killercreepr.crux.registry.StringIdentifiableRegistry;
 import killercreepr.cruxmenus.api.menu.CfgMenu;
 import killercreepr.cruxmenus.api.menu.Menu;
 import killercreepr.cruxmenus.api.menu.module.ActiveMenuModule;
@@ -12,10 +9,11 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
+import java.util.*;
 
-public class MenuModuleRegistryImpl extends SimpleKeyedRegistry<ActiveMenuModule> implements MenuModuleRegistry {
-    protected final @NotNull StringIdentifiableRegistry<ActiveMenuModule> byID = new SimpleStringIdentifiableRegistry<>();
+public class MenuModuleRegistryImpl implements MenuModuleRegistry {
+    protected final @NotNull Map<Key, Map<String, ActiveMenuModule>> registry = new LinkedHashMap<>();
+    protected final @NotNull Map<String, ActiveMenuModule> byID = new HashMap<>();
     protected final @NotNull Menu menu;
     public MenuModuleRegistryImpl(@NotNull Menu menu) {
         this.menu = menu;
@@ -30,32 +28,27 @@ public class MenuModuleRegistryImpl extends SimpleKeyedRegistry<ActiveMenuModule
                 register(module);
             });
         }
-        new HashSet<>(this.values()).forEach(m -> m.load(menu));
+        this.forEach(m -> m.load(menu));
     }
 
     @Override
     public void refresh() {
-        new HashSet<>(this.values()).forEach(m -> m.refresh(menu));
-    }
-
-    @Override
-    public @NotNull ActiveMenuModule register(@NotNull ActiveMenuModule object) {
-        return super.register(object);
+        this.forEach(m -> m.refresh(menu));
     }
 
     @Override
     public void onUpdate() {
-        new HashSet<>(this.values()).forEach(m -> m.onUpdate(menu));
+        this.forEach(m -> m.onUpdate(menu));
     }
 
     @Override
     public void onClose(@NotNull Player p) {
-        new HashSet<>(this.values()).forEach(m -> m.onClose(p, menu));
+        this.forEach(m -> m.onClose(p, menu));
     }
 
     @Override
     public void onOpen(@NotNull Player p) {
-        new HashSet<>(this.values()).forEach(m -> m.onOpen(p, menu));
+        this.forEach(m -> m.onOpen(p, menu));
     }
 
     @Override
@@ -69,41 +62,36 @@ public class MenuModuleRegistryImpl extends SimpleKeyedRegistry<ActiveMenuModule
     }
 
     @Override
+    public @Nullable Collection<ActiveMenuModule> get(@NotNull Key key) {
+        var got = registry.get(key);
+        return got == null ? null : got.values();
+    }
+
+    @Override
+    public <T extends ActiveMenuModule> T register(@NotNull T module) {
+        registry.computeIfAbsent(module.key(), (d) -> new LinkedHashMap<>()).put(module.id(), module);
+        byID.put(module.id(), module);
+        return module;
+    }
+
+    @Override
     public @Nullable ActiveMenuModule unregister(@NotNull Key key) {
-        return remove(key);
+        return null;
     }
 
     @Override
     public @Nullable ActiveMenuModule unregisterByID(@NotNull String id) {
         ActiveMenuModule removed = byID.remove(id);
         if(removed == null) return null;
-        return unregister(removed.key());
+        unregister(removed.key());
+        return removed;
     }
 
+    @NotNull
     @Override
-    public boolean unregister(@NotNull ActiveMenuModule object) {
-        boolean x = super.unregister(object);
-        if(x) byID.unregister(object);
-        return x;
-    }
-
-    @Override
-    public @NotNull ActiveMenuModule register(@NotNull Key key, @NotNull ActiveMenuModule value) {
-        byID.register(value);
-        return super.register(key, value);
-    }
-
-    @Override
-    public @Nullable ActiveMenuModule remove(@NotNull Key key) {
-        ActiveMenuModule module = super.remove(key);
-        if(module != null) byID.unregister(module);
-        return module;
-    }
-
-    @Override
-    public boolean remove(@NotNull Key key, @NotNull ActiveMenuModule value) {
-        boolean x = super.remove(key, value);
-        if(!x) byID.unregister(value);
-        return x;
+    public Iterator<ActiveMenuModule> iterator() {
+        List<ActiveMenuModule> list = new ArrayList<>();
+        registry.values().forEach(d -> list.addAll(d.values()));
+        return list.iterator();
     }
 }

@@ -1,7 +1,5 @@
 package killercreepr.cruxmenus.core.menu.module.standard.container;
 
-import killercreepr.crux.data.Holder;
-import killercreepr.crux.valueproviders.number.EquationNumber;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileArray;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -16,10 +14,7 @@ import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.function.Function;
 
 public class ItemsContainerMenuModuleBuilder extends SimpleFileMenuModuled<MenuModule> implements MenuModuleBuilder {
@@ -32,28 +27,6 @@ public class ItemsContainerMenuModuleBuilder extends SimpleFileMenuModuled<MenuM
     @Override
     public @Nullable MenuModule build(@NotNull FileContext<?> ctx, @NotNull FileElement e, @Nullable FileObject menuContext) {
         return deserializeFromFile(ctx, e, menuContext);
-    }
-
-    public @Nullable Function<MenuItemHolder, MenuItemHolder> itemsFunction(@NotNull String id){
-        return item ->{
-            if(item.info().has("slot")) return item;
-            return MenuItemHolder.holder(
-                item.getItem(),
-                item.info().append("slot", Holder.directObject(new EquationNumber("<"+MenuModule.buildTag(id, "slot") + ">"))),
-                item.getClickActions()
-            );
-        };
-    }
-
-    public @Nullable MenuItems parseItems(@NotNull FileContext<?> ctx,
-                                               @NotNull FileElement e, @Nullable FileObject menuContext,
-                                               @NotNull String id){
-        if(!(e instanceof FileObject o)) return null;
-
-
-
-        return menuModule.getFileMenuItems().deserializeFromFile(ctx, o.get("items"), menuContext,
-            itemsFunction(id));
     }
 
     @Override
@@ -76,7 +49,7 @@ public class ItemsContainerMenuModuleBuilder extends SimpleFileMenuModuled<MenuM
     public @Nullable MenuModule deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e, @Nullable FileObject menuCtx) {
         if(!(e instanceof FileObject o)) return null;
         String id = o.getObject(String.class, "id");
-        if(id==null) id = "none";
+        if(id==null) id = UUID.randomUUID().toString();
         String baseItemsString = o.getObject(String.class, "base_items");
         //todo make it possible to configure multiple base items
         MenuItemHolder defaultBaseItem = menuModule.getFileMenuItem().deserializeFromFile(

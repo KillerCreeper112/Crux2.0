@@ -23,7 +23,6 @@ public class ActiveItemsContainerMenuModule extends SimpleActiveMenuModule {
             cfg.info(), cfg.buildTags().addAll(buildTags(
                 menu, cfg.getHolder().getRegistry().getFormat().tags()
             )));
-
         cfg.setItems(menuItems, menuContext);
     }
     @Override
