@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import eu.endercentral.crazy_advancements.advancement.Advancement;
 import eu.endercentral.crazy_advancements.manager.AdvancementManager;
 import killercreepr.crux.Crux;
+import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.cruxadvancements.advancement.ObjectiveAdvancement;
 import killercreepr.cruxadvancements.advancement.objective.progress.ObjectiveProgression;
 import killercreepr.cruxadvancements.advancement.objective.progress.SimpleObjectiveProgression;
@@ -30,12 +31,12 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdvancement> {
-    public static CfgCrazyAdvancementManager createNew(@NotNull Key key, @NotNull Plugin plugin){
+    public static CfgCrazyAdvancementManager createNew(@NotNull Key key, @NotNull CruxPlugin plugin){
         return new CfgCrazyAdvancementManager(key, new AdvancementManager(CrazyUtil.toNameKey(key)), plugin);
     }
 
-    protected final @NotNull Plugin plugin;
-    public CfgCrazyAdvancementManager(@NotNull Key key, @NotNull AdvancementManager crazyManager, @NotNull Plugin plugin) {
+    protected final @NotNull CruxPlugin plugin;
+    public CfgCrazyAdvancementManager(@NotNull Key key, @NotNull AdvancementManager crazyManager, @NotNull CruxPlugin plugin) {
         super(key, crazyManager);
         this.plugin = plugin;
     }
@@ -51,7 +52,7 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
 
     public @NotNull Collection<CrazyAdvancement> parseAdvancements(@NotNull File folder){
         Collection<CrazyAdvancement> list = new HashSet<>();
-        new CrazyAdvancementCfgLoader(list::add).loadConfiguration(folder);
+        new CrazyAdvancementCfgLoader(plugin, list::add).loadConfiguration(folder, key().value());
         return list;
     }
 

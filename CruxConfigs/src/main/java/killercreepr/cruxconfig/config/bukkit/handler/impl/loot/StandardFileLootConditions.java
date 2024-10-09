@@ -11,6 +11,7 @@ import killercreepr.crux.loot.impl.conditions.block.BlockCondition;
 import killercreepr.crux.loot.impl.conditions.entity.EntityCondition;
 import killercreepr.crux.loot.impl.conditions.evaluation.EvaluationCondition;
 import killercreepr.crux.loot.impl.conditions.item.ItemStackCondition;
+import killercreepr.crux.loot.impl.conditions.world.LocationCondition;
 import killercreepr.crux.loot.impl.conditions.world.WorldCondition;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
@@ -123,6 +124,24 @@ public class StandardFileLootConditions {
                 String dimension = e.getObject(String.class, "dimension");
                 return new WorldCondition(
                     target, name, dimension
+                );
+            }
+        });
+
+        file.registerCustomHandler(new CustomFileLootCondition<>() {
+            @Override
+            public @NotNull String getType() {
+                return "location";
+            }
+
+            @Override
+            public @NotNull LocationCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                FileRegistry registry = ctx.getRegistry();
+                String worldName = e.getObject(String.class, "world_name");
+                String worldDimension = e.getObject(String.class, "world_dimension");
+                Key biome = registry.deserializeFromFile(Key.class, e.get("biome"));
+                return new LocationCondition(
+                    target, worldName, worldDimension, biome
                 );
             }
         });

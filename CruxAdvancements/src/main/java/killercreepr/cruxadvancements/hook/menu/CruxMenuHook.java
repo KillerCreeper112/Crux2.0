@@ -110,13 +110,13 @@ public class CruxMenuHook {
                                     return Integer.compare(level1, level2);
                                 }
 
-                                private int getLevel(CruxAdvancement key) {
+                                private int getLevel(CruxAdvancement advance) {
                                     int level = 0;
-                                    CruxAdvancement advancement = key;
-                                    while (advancement != null && advancement.parent() != null) {
+                                    CruxAdvancement advancement = advance;
+                                    while (advancement != null) {
+                                        Key parentKey = advancement.parent();
+                                        if(parentKey == null || parentKey.equals(advancement.key())) break;
                                         level++;
-                                        Key parentKey = key.parent();
-                                        if(parentKey == null) break;
                                         advancement = manager.getAdvancement(parentKey);
                                     }
                                     return level;

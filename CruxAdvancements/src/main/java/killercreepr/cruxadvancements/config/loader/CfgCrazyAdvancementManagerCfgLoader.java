@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -27,6 +28,10 @@ public class CfgCrazyAdvancementManagerCfgLoader {
             advancementManager.loadProgress(p.getUniqueId());
             advancementManager.getCrazyManager().addPlayer(p);
         });
+    }
+
+    public void saveAndUnload(Collection<Player> p){
+        p.forEach(this::saveAndUnload);
     }
 
     public void saveAndUnload(Player p){

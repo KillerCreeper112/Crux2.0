@@ -1,6 +1,7 @@
 package killercreepr.cruxadvancements.config.loader;
 
 import killercreepr.crux.Crux;
+import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.cruxadvancements.crazy.CrazyAdvancement;
 import killercreepr.cruxadvancements.crazy.CrazyAdvancementsHook;
 import killercreepr.cruxconfig.config.bukkit.loader.CfgLoader;
@@ -13,8 +14,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Consumer;
 
 public class CrazyAdvancementCfgLoader extends CfgLoader {
+    protected final CruxPlugin plugin;
     protected final Consumer<CrazyAdvancement> loaded;
-    public CrazyAdvancementCfgLoader(Consumer<CrazyAdvancement> loaded) {
+    public CrazyAdvancementCfgLoader(CruxPlugin plugin, Consumer<CrazyAdvancement> loaded) {
+        this.plugin = plugin;
         this.loaded = loaded;
     }
 
@@ -23,15 +26,19 @@ public class CrazyAdvancementCfgLoader extends CfgLoader {
         CrazyAdvancement table;
         if(path == null) table = cfg.deserialize("", CrazyAdvancement.class);
         else{
-            if(!(cfg.getRoot() instanceof FileObject root)) return;
+            if(!(cfg.getRoot() instanceof FileObject root)){
+                cfg.close();
+                return;
+            }
 
             FileContext<?> ctx = new FileContext<>(cfg.fileRegistry());
             table = CrazyAdvancementsHook.FILE_CRAZY_ADVANCEMENT.deserializeFromFile(
-                ctx, root, Crux.key(path)
+                ctx, root, plugin.key(path)
             );
 
             if(table != null) table = cfg.fileRegistry().getParsedObjectRegistry().parse(root, ctx, table);
         }
+        cfg.close();
         if(table == null) return;
         loaded.accept(table);
     }
