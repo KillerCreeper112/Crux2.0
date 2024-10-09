@@ -2,6 +2,7 @@ package killercreepr.crux.tags.standard.object;
 
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
+import killercreepr.crux.Crux;
 import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.container.StringTagContainer;
 import killercreepr.crux.tags.context.FormatPrefix;
@@ -44,7 +45,7 @@ public class ItemStackTags implements ObjectTag<ItemStack> {
                 if(!(item.getItemMeta() instanceof Damageable meta)) return "0";
                 return (CruxItem.getMaxDurability(item) - meta.getDamage()) + "";
             }))
-            .add(Tag.string("type", (args, context) -> item.getType().key().asString()))
+            .add(Tag.string("type", (args, context) -> Crux.handlers().item().getType(item).asString()))
             .add(Tag.string("custom_model_data", (args, context) ->{
                 ItemMeta meta = item.getItemMeta();
                 if(meta==null) return "0";
