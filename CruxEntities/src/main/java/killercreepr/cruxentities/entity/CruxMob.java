@@ -4,6 +4,7 @@ import io.papermc.paper.tag.EntitySetTag;
 import io.papermc.paper.tag.EntityTags;
 import killercreepr.crux.loot.LootContext;
 import killercreepr.crux.loot.LootTable;
+import killercreepr.crux.loot.bukkit.EventLootContexts;
 import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.crux.util.CruxString;
 import killercreepr.cruxentities.persistence.CruxEntitiesPersist;
@@ -95,7 +96,7 @@ public interface CruxMob extends Keyed {
             key.namespace(), "entity/" + key.value()
         ));
         if(lootTable==null) return;
-        LootContext ctx = LootContext.builder(event).build();
+        LootContext ctx = EventLootContexts.builder(event).build();
         event.getDrops().addAll(lootTable.populateLoot(ctx));
     }
 
