@@ -11,7 +11,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -60,16 +60,15 @@ public class ObjectiveListener implements Listener {
         }
     }
 
-
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        if(!(event.getEntity() instanceof LivingEntity victim)) return;
-        if(!(event.getDamager() instanceof Player dmger)) return;
-        AdvancementHolder holder = holder(dmger);
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onEntityDeath(EntityDeathEvent event) {
+        LivingEntity victim = event.getEntity();
+        Player killer = victim.getKiller();
+        if(killer == null) return;
+        AdvancementHolder holder = holder(killer);
         if(holder==null) return;
-
         holder.getAdvancementTracker().apply(KillEntityObjective.class, (manager, advancement, objective) -> {
-            objective.trigger(dmger.getUniqueId(), manager, advancement, event);
+            objective.trigger(killer.getUniqueId(), manager, advancement, event);
         });
     }
 
