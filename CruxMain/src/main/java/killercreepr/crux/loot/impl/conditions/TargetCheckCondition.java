@@ -4,6 +4,8 @@ import killercreepr.crux.loot.LootContext;
 import killercreepr.crux.loot.conditions.LootCondition;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -56,6 +58,12 @@ public class TargetCheckCondition extends BaseCondition{
             }
             case "world" ->{
                 if(object instanceof World) return true;
+            }
+            case "block_state" ->{
+                if(object instanceof BlockState) return true;
+            }
+            case "block_data" ->{
+                if(object instanceof BlockData) return true;
             }
         }
         return object.getClass().getSimpleName().equalsIgnoreCase(targetType);

@@ -1,6 +1,7 @@
 package killercreepr.cruxadvancements.config;
 
 import killercreepr.cruxadvancements.advancement.criteria.CruxCriteria;
+import killercreepr.cruxadvancements.advancement.objective.AdvancementObjective;
 import killercreepr.cruxadvancements.advancement.objective.ObjectiveCommonData;
 import killercreepr.cruxadvancements.advancement.objective.impl.*;
 import killercreepr.cruxadvancements.advancement.objective.progress.NumberObjectiveProgress;
@@ -54,6 +55,20 @@ public class CruxConfigHook {
                 Integer maxProgress = e.getObject(Integer.class, "amount");
                 if(maxProgress==null) maxProgress = 1;
                 return new BreakBlockObjective(data, maxProgress);
+            }
+        });
+
+        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<BreakBlockDropObjective>() {
+            @Override
+            public @NotNull String getType() {
+                return "break_block_drop";
+            }
+
+            @Override
+            public @Nullable BreakBlockDropObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new BreakBlockDropObjective(data, maxProgress);
             }
         });
 
@@ -138,6 +153,76 @@ public class CruxConfigHook {
                 Integer maxProgress = e.getObject(Integer.class, "amount");
                 if(maxProgress==null) maxProgress = 1;
                 return new TravelToWorldObjective(data, maxProgress);
+            }
+        });
+
+        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<BreedEntityObjective>() {
+            @Override
+            public @NotNull String getType() {
+                return "breed_entity";
+            }
+
+            @Override
+            public @Nullable BreedEntityObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new BreedEntityObjective(data, maxProgress);
+            }
+        });
+
+        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<ResurrectObjective>() {
+            @Override
+            public @NotNull String getType() {
+                return "resurrect";
+            }
+
+            @Override
+            public @Nullable ResurrectObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new ResurrectObjective(data, maxProgress);
+            }
+        });
+
+        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<>() {
+            @Override
+            public @NotNull String getType() {
+                return "shear_block";
+            }
+
+            @Override
+            public @Nullable AdvancementObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new ShearBlockObjective(data, maxProgress);
+            }
+        });
+
+        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<>() {
+            @Override
+            public @NotNull String getType() {
+                return "shear_entity";
+            }
+
+            @Override
+            public @Nullable AdvancementObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new ShearEntityObjective(data, maxProgress);
+            }
+        });
+
+        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<>() {
+            @Override
+            public @NotNull String getType() {
+                return "tame_entity";
+            }
+
+            @Override
+            public @Nullable AdvancementObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new TameEntityObjective(data, maxProgress);
             }
         });
     }

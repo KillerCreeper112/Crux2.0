@@ -7,6 +7,7 @@ import net.kyori.adventure.key.Key;
 import org.bukkit.Material;
 import org.bukkit.Registry;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,6 +24,7 @@ public interface BlockHandler {
 
     @Nullable
     CruxedBlock getBlock(@NotNull Block block);
+    @NotNull Key getType(@NotNull BlockData block);
 
     class Dummy implements BlockHandler {
 
@@ -47,6 +49,11 @@ public interface BlockHandler {
         @Override
         public @Nullable CruxedBlock getBlock(@NotNull Block block) {
             return new BukkitCruxedBlock(block);
+        }
+
+        @Override
+        public @NotNull Key getType(@NotNull BlockData block) {
+            return block.getMaterial().key();
         }
     }
 }

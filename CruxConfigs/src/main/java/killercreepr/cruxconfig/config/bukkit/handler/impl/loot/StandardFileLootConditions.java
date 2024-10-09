@@ -7,6 +7,7 @@ import killercreepr.crux.item.predicate.ItemPredicate;
 import killercreepr.crux.loot.conditions.LootCondition;
 import killercreepr.crux.loot.impl.conditions.*;
 import killercreepr.crux.loot.impl.conditions.block.BlockCondition;
+import killercreepr.crux.loot.impl.conditions.block.BlockStateCondition;
 import killercreepr.crux.loot.impl.conditions.entity.EntityCondition;
 import killercreepr.crux.loot.impl.conditions.evaluation.EvaluationCondition;
 import killercreepr.crux.loot.impl.conditions.item.ItemStackCondition;
@@ -68,6 +69,19 @@ public class StandardFileLootConditions {
                 FileRegistry registry = ctx.getRegistry();
                 BlockPredicate blockPredicate = registry.deserializeFromFile(BlockPredicate.class, e.get("block_predicate"));
                 return new BlockCondition(target, blockPredicate);
+            }
+        });
+        file.registerCustomHandler(new CustomFileLootCondition<>() {
+            @Override
+            public @NotNull String getType() {
+                return "block_state";
+            }
+
+            @Override
+            public @NotNull BlockStateCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                FileRegistry registry = ctx.getRegistry();
+                Key type = registry.deserializeFromFile(Key.class, e.get("block"));
+                return new BlockStateCondition(target, type);
             }
         });
         file.registerCustomHandler(new CustomFileLootCondition<>() {

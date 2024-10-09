@@ -1,6 +1,7 @@
 package killercreepr.cruxadvancements.advancement.objective.impl;
 
 import killercreepr.crux.loot.LootContext;
+import killercreepr.crux.loot.bukkit.EventLootContexts;
 import killercreepr.cruxadvancements.advancement.ObjectiveAdvancement;
 import killercreepr.cruxadvancements.advancement.objective.NumberObjective;
 import killercreepr.cruxadvancements.advancement.objective.ObjectiveCommonData;
@@ -20,7 +21,7 @@ public class KillEntityObjective extends NumberObjective {
                            @NotNull CruxAdvancementManager manager,
                            @NotNull ObjectiveAdvancement advancement,
                            @NotNull EntityDeathEvent event){
-        LootContext ctx = LootContext.builder(event).build();
+        LootContext ctx = EventLootContexts.builder(event).build();
         return trigger(
             who, manager, advancement, ctx
         );
@@ -30,7 +31,7 @@ public class KillEntityObjective extends NumberObjective {
                            @NotNull CruxAdvancementManager manager,
                            @NotNull ObjectiveAdvancement advancement,
                            @NotNull EntityDamageByEntityEvent event){
-        LootContext ctx = LootContext.builder(event).build();
+        LootContext ctx = EventLootContexts.builder(event).build();
         return trigger(
             who, manager, advancement, ctx
         );

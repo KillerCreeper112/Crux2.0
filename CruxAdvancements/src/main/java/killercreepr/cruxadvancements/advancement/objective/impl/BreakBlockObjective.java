@@ -1,27 +1,18 @@
 package killercreepr.cruxadvancements.advancement.objective.impl;
 
 import killercreepr.crux.loot.LootContext;
-import killercreepr.cruxadvancements.advancement.ObjectiveAdvancement;
-import killercreepr.cruxadvancements.advancement.objective.NumberObjective;
+import killercreepr.crux.loot.bukkit.EventLootContexts;
 import killercreepr.cruxadvancements.advancement.objective.ObjectiveCommonData;
-import killercreepr.cruxadvancements.manager.CruxAdvancementManager;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.UUID;
-
-public class BreakBlockObjective extends NumberObjective {
+public class BreakBlockObjective extends GenericEventObjective<BlockBreakEvent> {
     public BreakBlockObjective(@NotNull ObjectiveCommonData data, int maxProgress) {
         super(data, maxProgress);
     }
 
-    public boolean trigger(@NotNull UUID who,
-                           @NotNull CruxAdvancementManager manager,
-                           @NotNull ObjectiveAdvancement advancement,
-                           @NotNull BlockBreakEvent event){
-        LootContext ctx = LootContext.builder(event).build();
-        return trigger(
-            who, manager, advancement, ctx
-        );
+    @Override
+    protected LootContext buildContext(BlockBreakEvent event) {
+        return EventLootContexts.builder(event).build();
     }
 }

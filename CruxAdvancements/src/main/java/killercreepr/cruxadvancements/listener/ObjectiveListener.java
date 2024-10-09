@@ -1,5 +1,6 @@
 package killercreepr.cruxadvancements.listener;
 
+import io.papermc.paper.event.block.PlayerShearBlockEvent;
 import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.cruxadvancements.advancement.objective.impl.*;
 import killercreepr.cruxadvancements.data.entity.AdvancementHolder;
@@ -10,14 +11,86 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class ObjectiveListener implements Listener {
+    /*todo when Paper PR merges https://github.com/PaperMC/Paper/pull/5736 @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPiglinBarter(PiglinBarterEvent event) {
+    }*/
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onEntityBreed(EntityBreedEvent event) {
+        if(!(event.getBreeder() instanceof Player p)) return;
+        AdvancementHolder holder = holder(p);
+        if(holder==null) return;
+        holder.getAdvancementTracker().apply(BreedEntityObjective.class, (manager, advancement, objective) -> {
+            objective.trigger(p.getUniqueId(), manager, advancement, event);
+        });
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerShearEntity(PlayerShearEntityEvent event) {
+        Player p = event.getPlayer();
+        AdvancementHolder holder = holder(p);
+        if(holder==null) return;
+        holder.getAdvancementTracker().apply(ShearEntityObjective.class, (manager, advancement, objective) -> {
+            objective.trigger(p.getUniqueId(), manager, advancement, event);
+        });
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerShearBlock(PlayerShearBlockEvent event) {
+        Player p = event.getPlayer();
+        AdvancementHolder holder = holder(p);
+        if(holder==null) return;
+
+        holder.getAdvancementTracker().apply(ShearBlockObjective.class, (manager, advancement, objective) -> {
+            objective.trigger(p.getUniqueId(), manager, advancement, event);
+        });
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onBlockDropItem(BlockDropItemEvent event) {
+        if(event.getItems().isEmpty()) return;
+        Player p = event.getPlayer();
+        AdvancementHolder holder = holder(p);
+        if(holder==null) return;
+
+        holder.getAdvancementTracker().apply(BreakBlockDropObjective.class, (manager, advancement, objective) -> {
+            objective.trigger(p.getUniqueId(), manager, advancement, event);
+        });
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onEntityResurrect(EntityResurrectEvent event) {
+        if(!(event.getEntity() instanceof Player p)) return;
+        AdvancementHolder holder = holder(p);
+        if(holder==null) return;
+
+        holder.getAdvancementTracker().apply(ResurrectObjective.class, (manager, advancement, objective) -> {
+            objective.trigger(p.getUniqueId(), manager, advancement, event);
+        });
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onEntityTame(EntityTameEvent event) {
+        if(!(event.getEntity() instanceof Player p)) return;
+        AdvancementHolder holder = holder(p);
+        if(holder==null) return;
+
+        holder.getAdvancementTracker().apply(TameEntityObjective.class, (manager, advancement, objective) -> {
+            objective.trigger(p.getUniqueId(), manager, advancement, event);
+        });
+    }
+
+
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onBlockBreak(BlockBreakEvent event) {
         Player p = event.getPlayer();
