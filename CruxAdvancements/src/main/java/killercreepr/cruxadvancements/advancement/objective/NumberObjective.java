@@ -5,6 +5,7 @@ import killercreepr.cruxadvancements.advancement.ObjectiveAdvancement;
 import killercreepr.cruxadvancements.advancement.criteria.NumberCriteria;
 import killercreepr.cruxadvancements.advancement.objective.progress.NumberObjectiveProgress;
 import killercreepr.cruxadvancements.advancement.objective.progress.ObjectiveProgress;
+import killercreepr.cruxadvancements.event.objective.NumberObjectiveProgressChangeEvent;
 import killercreepr.cruxadvancements.manager.CruxAdvancementManager;
 import org.jetbrains.annotations.NotNull;
 
@@ -49,7 +50,14 @@ public class NumberObjective extends SimpleAdvancementObjective {
                               @NotNull ObjectiveProgress progress,
                               int amount){
         NumberObjectiveProgress p = progress.toType(NumberObjectiveProgress.class);
-        p.setProgress(p.getProgress()+amount);
+
+        NumberObjectiveProgressChangeEvent event = new NumberObjectiveProgressChangeEvent(
+            who, manager, advancement, this, p, p.getProgress()+amount, p.getProgress()
+        );
+        if(!event.callEvent()) return;
+
+        p.setProgress(event.getNewProgress());
+
         if(shouldUpdateAdvancement(advancement,p)){
             if(advancement.getCriteria() instanceof NumberCriteria){
                 manager.setCriteriaProgress(who, advancement, p.getProgress());

@@ -1,7 +1,7 @@
 package killercreepr.cruxadvancements.crazy;
 
 import eu.endercentral.crazy_advancements.advancement.AdvancementFlag;
-import killercreepr.cruxadvancements.advancement.ObjectiveAdvancement;
+import killercreepr.cruxadvancements.advancement.SimpleObjectiveAdvancement;
 import killercreepr.cruxadvancements.advancement.criteria.CruxCriteria;
 import killercreepr.cruxadvancements.advancement.objective.AdvancementObjective;
 import killercreepr.cruxadvancements.advancement.reward.CruxAdvanceReward;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-public class CrazyAdvancement extends ObjectiveAdvancement {
+public class CrazyAdvancement extends SimpleObjectiveAdvancement {
     protected final @NotNull CrazyAdvancementDisplay display;
     protected final @NotNull AdvancementFlag[] flags;
 
