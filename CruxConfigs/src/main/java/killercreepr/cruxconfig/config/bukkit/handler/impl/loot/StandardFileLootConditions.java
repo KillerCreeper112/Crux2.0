@@ -4,6 +4,7 @@ import com.google.common.reflect.TypeToken;
 import killercreepr.crux.block.predicate.BlockPredicate;
 import killercreepr.crux.entity.predicate.EntityPredicate;
 import killercreepr.crux.item.predicate.ItemPredicate;
+import killercreepr.crux.loot.LootContext;
 import killercreepr.crux.loot.conditions.LootCondition;
 import killercreepr.crux.loot.impl.conditions.*;
 import killercreepr.crux.loot.impl.conditions.block.BlockCondition;
@@ -237,6 +238,24 @@ public class StandardFileLootConditions {
                     new TypeToken<Map<String, String>>(){}.getType(), e.get("prefixes")
                 );
                 return new EvaluationCondition(target, eva, prefixes);
+            }
+        });
+
+        file.registerCustomHandler(new CustomFileLootCondition<>() {
+            @Override
+            public @NotNull String getType() {
+                return "list";
+            }
+
+            @Override
+            public @Nullable CollectionCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                LootCondition condition = ctx.getRegistry().deserializeFromFile(
+                    LootCondition.class, e.get("term")
+                );
+                if(condition == null) return null;
+                String type = e.getObject(String.class, "type");
+                if(type == null) type = "all_of";
+                return new CollectionCondition(target, condition, type);
             }
         });
     }
