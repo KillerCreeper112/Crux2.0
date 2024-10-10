@@ -4,6 +4,7 @@ import io.papermc.paper.event.block.PlayerShearBlockEvent;
 import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.cruxadvancements.advancement.objective.impl.*;
 import killercreepr.cruxadvancements.data.entity.AdvancementHolder;
+import killercreepr.cruxadvancements.event.PlayerCraftItemEvent;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
@@ -182,4 +183,15 @@ public class ObjectiveListener implements Listener {
             objective.trigger(p.getUniqueId(), manager, advancement, event);
         });
     }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerCraftItem(PlayerCraftItemEvent event) {
+        if(!(event.getWhoClicked() instanceof Player p)) return;
+        AdvancementHolder holder = holder(p);
+        if(holder==null) return;
+        holder.getAdvancementTracker().apply(CraftItemObjective.class, (manager, advancement, objective) -> {
+            objective.trigger(p.getUniqueId(), manager, advancement, event);
+        });
+    }
+
 }

@@ -21,9 +21,16 @@ public abstract class GenericEventObjective<T extends Event> extends NumberObjec
                            @NotNull CruxAdvancementManager manager,
                            @NotNull ObjectiveAdvancement advancement,
                            @NotNull T event){
+        return trigger(who, manager, advancement, event, 1);
+    }
+
+    public boolean trigger(@NotNull UUID who,
+                           @NotNull CruxAdvancementManager manager,
+                           @NotNull ObjectiveAdvancement advancement,
+                           @NotNull T event, int amount){
         LootContext ctx = buildContext(event);
         return trigger(
-            who, manager, advancement, ctx
+            who, manager, advancement, ctx, amount
         );
     }
 }

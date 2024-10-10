@@ -28,8 +28,15 @@ public class NumberObjective extends SimpleAdvancementObjective {
                            @NotNull CruxAdvancementManager manager,
                            @NotNull ObjectiveAdvancement advancement,
                            @NotNull LootContext ctx){
+        return trigger(who, manager, advancement, ctx, 1);
+    }
+
+    public boolean trigger(@NotNull UUID who,
+                           @NotNull CruxAdvancementManager manager,
+                           @NotNull ObjectiveAdvancement advancement,
+                           @NotNull LootContext ctx, int amount){
         if(isDone(who, advancement) || !canTrigger(ctx)) return false;
-        addToProgress(who, manager, advancement,1);
+        addToProgress(who, manager, advancement,amount);
         return true;
     }
 

@@ -15,6 +15,7 @@ import killercreepr.cruxadvancements.data.entity.AdvancementHolder;
 import killercreepr.cruxadvancements.hook.menu.CruxMenuHook;
 import killercreepr.cruxadvancements.listener.AdvancementGrantListener;
 import killercreepr.cruxadvancements.listener.ObjectiveListener;
+import killercreepr.cruxadvancements.listener.PlayerCraftItemListener;
 import killercreepr.cruxadvancements.tags.*;
 import killercreepr.cruxmenus.CruxMenusModule;
 import org.jetbrains.annotations.NotNull;
@@ -50,7 +51,8 @@ public class CruxAdvancementsModule implements CruxModule {
     public void onEnable(@NotNull CruxPlugin plugin) {
         plugin.registerListeners(
             new ObjectiveListener(),
-            new AdvancementGrantListener()
+            new AdvancementGrantListener(),
+            new PlayerCraftItemListener()
         );
     }
 
