@@ -33,7 +33,7 @@ public class FileBlockPredicate extends SimpleFileHandler<BlockPredicate> {
         if(e instanceof FileGeneric g){
             String key = g.getAsString();
             if(key.startsWith("#")){
-                BlockTag tag = CruxRegistries.BLOCK_TAG.get(Crux.key(key.substring(1)));
+                BlockTag tag = registry.deserializeFromFile(BlockTag.class, e);
                 if(tag==null) return null;
                 return BlockPredicate.fromTag(tag);
             }
