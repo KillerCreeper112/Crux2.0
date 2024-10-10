@@ -11,6 +11,7 @@ import killercreepr.crux.tags.hook.prefix.HookedPrefixBuilder;
 import killercreepr.crux.tags.resolver.StringResolver;
 import killercreepr.crux.tags.resolver.Tag;
 import killercreepr.cruxadvancements.advancement.ObjectiveAdvancement;
+import killercreepr.cruxadvancements.advancement.objective.AdvancementObjective;
 import killercreepr.cruxadvancements.advancement.objective.NumberObjective;
 import killercreepr.cruxadvancements.advancement.objective.progress.NumberObjectiveProgress;
 import killercreepr.cruxadvancements.advancement.objective.progress.ObjectiveProgress;
@@ -49,7 +50,18 @@ public class CrazyAdvancementTags implements ObjectTag<ObjectiveAdvancement> {
                 if(progression == null) return "0";
                 int maxProgress = 0;
                 int currentProgress = 0;
-                for(Map.Entry<String, ObjectiveProgress> entry : progression.getProgressMap().entrySet()){
+                for(AdvancementObjective obj : object.getObjectives().values()){
+                    if(obj instanceof NumberObjective num){
+                        maxProgress += num.getMaxProgress();
+                    }
+
+                    ObjectiveProgress progress = progression.getProgressIfPresent(obj.getCriterion());
+                    if(progress == null) continue;
+                    if(progress instanceof NumberObjectiveProgress p){
+                        currentProgress += p.getProgress();
+                    }
+                }
+                /*for(Map.Entry<String, ObjectiveProgress> entry : progression.getProgressMap().entrySet()){
                     ObjectiveProgress progress = entry.getValue();
                     String criteria = entry.getKey();
                     if(progress instanceof NumberObjectiveProgress p){
@@ -58,7 +70,7 @@ public class CrazyAdvancementTags implements ObjectTag<ObjectiveAdvancement> {
                     if(object.getObjective(criteria) instanceof NumberObjective num){
                         maxProgress += num.getMaxProgress();
                     }
-                }
+                }*/
                 float x = (float) currentProgress / (float) maxProgress;
                 return x + "";
             }))
