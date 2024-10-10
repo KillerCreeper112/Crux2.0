@@ -5,6 +5,7 @@ import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.cruxadvancements.advancement.objective.impl.*;
 import killercreepr.cruxadvancements.data.entity.AdvancementHolder;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,6 +25,19 @@ public class ObjectiveListener implements Listener {
     /*todo when Paper PR merges https://github.com/PaperMC/Paper/pull/5736 @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPiglinBarter(PiglinBarterEvent event) {
     }*/
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onEntityPickupItem(EntityPickupItemEvent event) {
+        if(!(event.getEntity() instanceof Player p)) return;
+        Item item = event.getItem();
+        if(p.getUniqueId().equals(item.getThrower())) return;
+
+        AdvancementHolder holder = holder(p);
+        if(holder==null) return;
+        holder.getAdvancementTracker().apply(PickupItemObjective.class, (manager, advancement, objective) -> {
+            objective.trigger(p.getUniqueId(), manager, advancement, event);
+        });
+    }
+
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEntityBreed(EntityBreedEvent event) {

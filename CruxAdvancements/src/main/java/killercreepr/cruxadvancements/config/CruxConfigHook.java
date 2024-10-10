@@ -225,6 +225,20 @@ public class CruxConfigHook {
                 return new TameEntityObjective(data, maxProgress);
             }
         });
+
+        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<>() {
+            @Override
+            public @NotNull String getType() {
+                return "pickup_item";
+            }
+
+            @Override
+            public @Nullable AdvancementObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new PickupItemObjective(data, maxProgress);
+            }
+        });
     }
 
     public static void registerHandlers(){

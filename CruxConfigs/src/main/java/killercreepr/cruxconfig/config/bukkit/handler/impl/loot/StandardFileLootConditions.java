@@ -82,7 +82,8 @@ public class StandardFileLootConditions {
             public @NotNull BlockStateCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 FileRegistry registry = ctx.getRegistry();
                 Key type = registry.deserializeFromFile(Key.class, e.get("block"));
-                return new BlockStateCondition(target, type);
+                Integer age = registry.deserializeFromFile(Integer.class, e.get("age"));
+                return new BlockStateCondition(target, type, age);
             }
         });
         file.registerCustomHandler(new CustomFileLootCondition<>() {

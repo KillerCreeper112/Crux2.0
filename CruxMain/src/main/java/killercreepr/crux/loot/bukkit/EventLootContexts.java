@@ -276,4 +276,21 @@ public interface EventLootContexts {
             .looted(tamed)
             ;
     }
+
+    static LootContext.Builder builder(@NotNull EntityPickupItemEvent event){
+        LivingEntity e = event.getEntity();
+        Item item = event.getItem();
+        return builder()
+            .info(
+                DataExchange.builder()
+                    .putAll(e, "entity")
+                    .putAll(item, "item", "picked_up")
+                    .putAll(event.getRemaining(), "remaining", "remaining_amount")
+                    .build()
+            )
+            .location(item.getLocation())
+            .looter(e)
+            .looted(item)
+            ;
+    }
 }
