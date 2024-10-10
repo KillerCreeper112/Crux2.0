@@ -8,9 +8,11 @@ import killercreepr.crux.tags.hook.ObjectTag;
 import killercreepr.crux.tags.hook.impl.StringHookedObjectTag;
 import killercreepr.crux.tags.hook.impl.StringListHookedObjectTag;
 import killercreepr.crux.tags.hook.prefix.HookedPrefixBuilder;
+import killercreepr.crux.tags.resolver.StringListResolver;
 import killercreepr.crux.tags.resolver.StringResolver;
 import killercreepr.crux.tags.resolver.Tag;
 import killercreepr.cruxadvancements.advancement.ObjectiveAdvancement;
+import killercreepr.cruxadvancements.advancement.icon.CriterionDisplay;
 import killercreepr.cruxadvancements.advancement.objective.AdvancementObjective;
 import killercreepr.cruxadvancements.advancement.objective.NumberObjective;
 import killercreepr.cruxadvancements.advancement.objective.progress.NumberObjectiveProgress;
@@ -20,6 +22,8 @@ import killercreepr.cruxadvancements.advancement.progression.CruxAdvancementProg
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -32,6 +36,38 @@ public class CrazyAdvancementTags implements ObjectTag<ObjectiveAdvancement> {
     @Override
     public @NotNull FormatPrefix defaultPrefix() {
         return FormatPrefix.simple("advancement_");
+    }
+
+    @Override
+    public @Nullable TagContainer<StringListResolver> requestStringLists(@NotNull ObjectiveAdvancement object, @NotNull TagParser tags) {
+        return TagContainer.stringList(tags)
+            .add(Tag.stringList("objective_progress", (args, ctx) ->{
+                UUID uuid = UUID.fromString(ctx.deserializeString(args.get(0)));
+                ObjectiveProgression progression = object.getObjectiveProgressIfPresent(uuid);
+                CriterionDisplay display = object.getIcon().getCriterionDisplay();
+                List<String> list = new ArrayList<>();
+                list.add(ctx.deserializeString(args.get(1)));
+                if(display == null){
+                    return list;
+                }
+                list.add("");
+                display.getFormat().forEach((criterion, format) ->{
+                    AdvancementObjective obj = object.getObjective(criterion);
+                    if(!(obj instanceof NumberObjective num)) return;
+                    int max = num.getMaxProgress();
+                    ObjectiveProgress progress = progression == null ? null : progression.getProgressIfPresent(criterion);
+                    int progressNum = progress == null ? 0 : progress.toType(NumberObjectiveProgress.class).getProgress();
+                    var tagContainer = TagContainer.string(tags)
+                        .add(Tag.parsed("max", max+""))
+                        .add(Tag.parsed("progress", progressNum + ""));
+
+                    list.add(ctx.deserializeString(args.get(2), tagContainer.add(
+                        Tag.parsed("format", ctx.deserializeString(format, tagContainer))
+                    )));
+                });
+                return list;
+            }))
+            ;
     }
 
     @Override
@@ -106,11 +142,12 @@ public class CrazyAdvancementTags implements ObjectTag<ObjectiveAdvancement> {
 
     @Override
     public @Nullable HookedObjectContainer<StringListHookedObjectTag<?>> hookStringLists(@NotNull ObjectiveAdvancement object, @NotNull TagParser tags) {
-        return HookedObjectContainer.stringList()
+        var hooks = HookedObjectContainer.stringList()
             .addAll(tags.hookStringLists(object.getIcon(), HookedPrefixBuilder.overwrite(
                 FormatPrefix.simple("advancement_icon/")
             )))
             ;
+        return hooks;
     }
 
     @Override

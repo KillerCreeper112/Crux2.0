@@ -165,13 +165,37 @@ public class Format implements FormatSerializer{
         return STRING_LIST_RESOLVERS;
     }
 
+    public static List<String> extractAllBracedStrings(String input) {
+        List<String> results = new ArrayList<>();
+        int braceCount = 0;
+        int startIndex = -1;
+
+        for (int i = 0; i < input.length(); i++) {
+            char currentChar = input.charAt(i);
+
+            if (currentChar == '{') {
+                if (braceCount == 0) {
+                    startIndex = i; // Mark the start of the first brace
+                }
+                braceCount++;
+            } else if (currentChar == '}') {
+                braceCount--;
+                if (braceCount == 0 && startIndex != -1) {
+                    results.add(input.substring(startIndex + 1, i)); // Add the content without braces
+                    startIndex = -1; // Reset for the next match
+                }
+            }
+        }
+
+        return results; // Return the list of found braced strings
+    }
+
     public @Nullable List<String> matchStringList(@NotNull String text, @NotNull StringListTagContainer container,
                                                   @NotNull TextParserContext context){
-        Matcher matcher = LORE_PATTERN.matcher(text);
+        //Matcher matcher = LORE_PATTERN.matcher(text);
         List<String> addon = new ArrayList<>();
         boolean found = false;
-        while(matcher.find()){
-            String matched = matcher.group(1);
+        for(String matched : extractAllBracedStrings(text)){
             String[] parts = matched.split(placeholderSplit);
             String placeholder = parts[0];
 
@@ -201,6 +225,37 @@ public class Format implements FormatSerializer{
                 found = true;
             }
         }
+        /*while(matcher.find()){
+            String matched = matcher.group(1);
+            String[] parts = matched.split(placeholderSplit);
+            String placeholder = parts[0];
+
+            String[] arguments = new String[parts.length - 1];
+            System.arraycopy(parts, 1, arguments, 0, parts.length - 1);
+
+            for(int i = 0; i < arguments.length; i++){
+                String arg = arguments[i];
+                if(arg.startsWith("\"") && arg.endsWith("\"")){
+                    arg = arg.substring(1, arg.length()-1);
+                }
+                arguments[i] = arg;
+            }
+            FormatArgs args = new FormatArgs(arguments);
+            Pair<List<String>, Boolean> addons = processListPlaceholder(container,
+                placeholder, args, context);
+
+            if(addons != null){
+                List<String> first = addons.getFirst();
+                if(first != null){
+                    first.forEach(s ->{
+                        addon.add(
+                            text.replace("{" + matched + "}", s)
+                        );
+                    });
+                }
+                found = true;
+            }
+        }*/
 
         /*while (matcher.find()) {
             String placeholder = matcher.group(1);

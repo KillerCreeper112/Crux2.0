@@ -38,4 +38,6 @@ public interface ObjectiveAdvancement extends CruxAdvancement{
     @NotNull Map<String, AdvancementObjective> getObjectives();
 
     @NotNull Map<String, ObjectiveProgression> getObjectiveProgress();
+
+    int getTotalProgress(@NotNull UUID who);
 }

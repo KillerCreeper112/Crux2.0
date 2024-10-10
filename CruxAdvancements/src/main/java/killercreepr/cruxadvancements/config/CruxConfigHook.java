@@ -1,6 +1,7 @@
 package killercreepr.cruxadvancements.config;
 
 import killercreepr.cruxadvancements.advancement.criteria.CruxCriteria;
+import killercreepr.cruxadvancements.advancement.icon.CriterionDisplay;
 import killercreepr.cruxadvancements.advancement.objective.AdvancementObjective;
 import killercreepr.cruxadvancements.advancement.objective.ObjectiveCommonData;
 import killercreepr.cruxadvancements.advancement.objective.impl.*;
@@ -276,5 +277,7 @@ public class CruxConfigHook {
         registry.registerFileHandler(SimpleObjectiveProgression.class, SIMPLE_OBJECTIVE_PROGRESSION);
 
         registry.registerFileHandler(TrackedAdvancement.class, new FileTrackedAdvancement());
+
+        registry.registerFileHandler(CriterionDisplay.class, new FileCriterionDisplay());
     }
 }

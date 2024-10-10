@@ -3,6 +3,9 @@ package killercreepr.cruxadvancements.advancement;
 import killercreepr.cruxadvancements.advancement.criteria.CruxCriteria;
 import killercreepr.cruxadvancements.advancement.icon.CruxAdvancementIcon;
 import killercreepr.cruxadvancements.advancement.objective.AdvancementObjective;
+import killercreepr.cruxadvancements.advancement.objective.NumberObjective;
+import killercreepr.cruxadvancements.advancement.objective.progress.NumberObjectiveProgress;
+import killercreepr.cruxadvancements.advancement.objective.progress.ObjectiveProgress;
 import killercreepr.cruxadvancements.advancement.objective.progress.ObjectiveProgression;
 import killercreepr.cruxadvancements.advancement.objective.progress.SimpleObjectiveProgression;
 import killercreepr.cruxadvancements.advancement.reward.CruxAdvanceReward;
@@ -75,5 +78,20 @@ public class SimpleObjectiveAdvancement extends SimpleAdvancement implements Obj
 
     public @NotNull Map<String, ObjectiveProgression> getObjectiveProgress() {
         return objectiveProgress;
+    }
+
+    @Override
+    public int getTotalProgress(@NotNull UUID who){
+        int total = 0;
+        ObjectiveProgression progression = getObjectiveProgressIfPresent(who);
+        if(progression == null) return total;
+
+        for(AdvancementObjective obj : getObjectives().values()){
+            if(!(obj instanceof NumberObjective numberObjective)) continue;
+            ObjectiveProgress progress = progression.getProgressIfPresent(obj.getCriterion());
+            if(!(progress instanceof NumberObjectiveProgress pro)) continue;
+            total += pro.getProgress();
+        }
+        return total;
     }
 }

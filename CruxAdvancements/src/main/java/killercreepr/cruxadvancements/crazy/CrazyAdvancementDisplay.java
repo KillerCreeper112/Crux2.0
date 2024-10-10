@@ -6,6 +6,7 @@ import eu.endercentral.crazy_advancements.advancement.AdvancementVisibility;
 import killercreepr.crux.Crux;
 import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.item.dynamic.DynamicItem;
+import killercreepr.cruxadvancements.advancement.icon.CriterionDisplay;
 import killercreepr.cruxadvancements.advancement.icon.CruxAdvancementIcon;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Material;
@@ -27,8 +28,9 @@ public class CrazyAdvancementDisplay implements CruxAdvancementIcon {
     protected final float x;
     protected final float y;
     protected final @Nullable Key positionOrigin;
+    protected final @Nullable CriterionDisplay criterionDisplay;
 
-    public CrazyAdvancementDisplay(@NotNull DynamicItem icon, @NotNull String title, @NotNull String description, @NotNull AdvancementDisplay.AdvancementFrame frame, @NotNull AdvancementVisibility visibility, @Nullable String backgroundTexture, float x, float y, @Nullable Key positionOrigin) {
+    public CrazyAdvancementDisplay(@NotNull DynamicItem icon, @NotNull String title, @NotNull String description, @NotNull AdvancementDisplay.AdvancementFrame frame, @NotNull AdvancementVisibility visibility, @Nullable String backgroundTexture, float x, float y, @Nullable Key positionOrigin, @Nullable CriterionDisplay criterionDisplay) {
         this.icon = icon;
         this.title = title;
         this.description = description;
@@ -38,6 +40,7 @@ public class CrazyAdvancementDisplay implements CruxAdvancementIcon {
         this.x = x;
         this.y = y;
         this.positionOrigin = positionOrigin;
+        this.criterionDisplay = criterionDisplay;
     }
 
     public @NotNull DynamicItem getIcon() {
@@ -101,6 +104,11 @@ public class CrazyAdvancementDisplay implements CruxAdvancementIcon {
         return item;
     }
 
+    @Override
+    public @Nullable CriterionDisplay getCriterionDisplay() {
+        return criterionDisplay;
+    }
+
     public static final class Builder {
         private @NotNull DynamicItem icon;
         private @NotNull String title;
@@ -111,6 +119,7 @@ public class CrazyAdvancementDisplay implements CruxAdvancementIcon {
         private float x;
         private float y;
         private @Nullable Key positionOrigin;
+        private @Nullable CriterionDisplay criterionDisplay;
 
         public Builder icon(@NotNull DynamicItem icon) {
             this.icon = icon;
@@ -157,8 +166,13 @@ public class CrazyAdvancementDisplay implements CruxAdvancementIcon {
             return this;
         }
 
+        public Builder criterionDisplay(@Nullable CriterionDisplay criterionDisplay) {
+            this.criterionDisplay = criterionDisplay;
+            return this;
+        }
+
         public CrazyAdvancementDisplay build() {
-            return new CrazyAdvancementDisplay(icon, title, description, frame, visibility, backgroundTexture, x, y, positionOrigin);
+            return new CrazyAdvancementDisplay(icon, title, description, frame, visibility, backgroundTexture, x, y, positionOrigin, criterionDisplay);
         }
     }
 }

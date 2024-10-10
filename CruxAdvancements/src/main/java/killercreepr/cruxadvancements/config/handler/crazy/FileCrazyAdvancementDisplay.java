@@ -4,6 +4,7 @@ import eu.endercentral.crazy_advancements.advancement.AdvancementDisplay;
 import eu.endercentral.crazy_advancements.advancement.AdvancementVisibility;
 import killercreepr.crux.item.dynamic.DynamicItem;
 import killercreepr.crux.util.CruxObjects;
+import killercreepr.cruxadvancements.advancement.icon.CriterionDisplay;
 import killercreepr.cruxadvancements.crazy.CrazyAdvancementDisplay;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
@@ -52,10 +53,11 @@ public class FileCrazyAdvancementDisplay implements FileObjectHandler<CrazyAdvan
         Key positionOrigin = registry.deserializeFromFile(Key.class, o.get("position_origin"));
 
         if(CruxObjects.checkNull(icon)) return null;
+        CriterionDisplay criterionDisplay = registry.deserializeFromFile(CriterionDisplay.class, o.get("criterion_display"));
 
         return new CrazyAdvancementDisplay(
             icon, title, description, frame, visibility, backgroundTexture,
-            x, y, positionOrigin
+            x, y, positionOrigin, criterionDisplay
         );
     }
 

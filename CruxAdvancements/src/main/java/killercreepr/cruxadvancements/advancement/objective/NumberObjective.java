@@ -7,6 +7,7 @@ import killercreepr.cruxadvancements.advancement.objective.progress.NumberObject
 import killercreepr.cruxadvancements.advancement.objective.progress.ObjectiveProgress;
 import killercreepr.cruxadvancements.advancement.objective.progress.ObjectiveProgression;
 import killercreepr.cruxadvancements.event.objective.NumberObjectiveProgressChangeEvent;
+import killercreepr.cruxadvancements.event.objective.PostNumberObjectiveProgressChangeEvent;
 import killercreepr.cruxadvancements.manager.CruxAdvancementManager;
 import org.jetbrains.annotations.NotNull;
 
@@ -68,27 +69,17 @@ public class NumberObjective extends SimpleAdvancementObjective {
 
         if(shouldUpdateAdvancement(advancement,p)){
             if(advancement.getCriteria() instanceof NumberCriteria){
-                manager.setCriteriaProgress(who, advancement, getTotalProgress(who, advancement));
+                manager.setCriteriaProgress(who, advancement, advancement.getTotalProgress(who));
             }else manager.grantCriteria(who, advancement, getCriterion());
             if(advancement.isGranted(who)){
                 //clean up objective data since it isn't needed anymore.
                 advancement.setObjectiveProgress(who, null);
             }
         }
-    }
 
-    public int getTotalProgress(@NotNull UUID who, @NotNull ObjectiveAdvancement advancement){
-        int total = 0;
-        ObjectiveProgression progression = advancement.getObjectiveProgressIfPresent(who);
-        if(progression == null) return total;
-
-        for(AdvancementObjective obj : advancement.getObjectives().values()){
-            if(!(obj instanceof NumberObjective numberObjective)) continue;
-            ObjectiveProgress progress = progression.getProgressIfPresent(obj.getCriterion());
-            if(!(progress instanceof NumberObjectiveProgress pro)) continue;
-            total += pro.getProgress();
-        }
-        return total;
+        new PostNumberObjectiveProgressChangeEvent(
+            who, manager, advancement, this, p, Math.min(event.getNewProgress(), maxProgress), p.getProgress()
+        ).callEvent();
     }
 
     public boolean isDone(@NotNull UUID who, @NotNull ObjectiveAdvancement advancement){
