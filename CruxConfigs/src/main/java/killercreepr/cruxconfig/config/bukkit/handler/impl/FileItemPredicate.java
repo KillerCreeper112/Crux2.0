@@ -34,7 +34,7 @@ public class FileItemPredicate extends SimpleFileHandler<ItemPredicate> {
         if(e instanceof FileGeneric g){
             String key = g.getAsString();
             if(key.startsWith("#")){
-                ItemTag tag = CruxRegistries.ITEM_TAG.get(Crux.key(key.substring(1)));
+                ItemTag tag = registry.deserializeFromFile(ItemTag.class, g, ctx);
                 if(tag==null) return null;
                 return ItemPredicate.fromTag(tag);
             }

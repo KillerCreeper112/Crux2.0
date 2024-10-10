@@ -12,6 +12,10 @@ import killercreepr.cruxconfig.config.common.element.FileGeneric;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.SimpleFileHandler;
 import net.kyori.adventure.key.Key;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Tag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,8 +29,30 @@ public class FileBlockTag extends SimpleFileHandler<BlockTag> {
         throw new UnsupportedOperationException("unsupported");
     }
 
+    private BlockTag reference(@NotNull FileContext<?> ctx, @NotNull FileElement e){
+        if(e instanceof FileGeneric single){
+            String itemKey = single.getAsString();
+            if(itemKey.startsWith("#")){
+                //minecraft:blocks/planks
+                Key tagKey = Crux.key(itemKey.substring(1));
+                if(tagKey.namespace().equalsIgnoreCase("minecraft") && tagKey.value().contains("/")){
+                    String[] parts = tagKey.value().split("/", 2);
+                    if(parts.length > 1){
+                        Tag<Material> tag = Bukkit.getTag(parts[0], NamespacedKey.minecraft(parts[1]), Material.class);
+                        if(tag == null) throw new NullPointerException("Vanilla tag of " + parts[0] + "/" + parts[1] + " does not exist!");
+                        return BlockTag.blockTag(tag);
+                    }
+                }
+                return CruxRegistries.BLOCK_TAG.get(Crux.key(itemKey.substring(1)));
+            }
+        }
+        return null;
+    }
+
     @Override
     public @Nullable BlockTag deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
+        BlockTag tag = reference(ctx, e);
+        if(tag != null) return tag;
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = ctx.getRegistry();
         Key key = registry.deserializeFromFile(Key.class, o.get("key"));
@@ -44,7 +70,7 @@ public class FileBlockTag extends SimpleFileHandler<BlockTag> {
         if(e instanceof FileGeneric single){
             String itemKey = single.getAsString();
             if(itemKey.startsWith("#")){
-                return CruxRegistries.BLOCK_TAG.get(Crux.key(itemKey.substring(1)));
+                return reference(ctx, e);
             }
             return BlockTag.blockTag(key, Crux.key(itemKey));
         }

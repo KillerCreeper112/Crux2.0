@@ -13,6 +13,7 @@ import killercreepr.cruxconfig.config.common.element.FileGeneric;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.SimpleFileHandler;
 import net.kyori.adventure.key.Key;
+import org.bukkit.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,8 +27,30 @@ public class FileItemTag extends SimpleFileHandler<ItemTag> {
         throw new UnsupportedOperationException("unsupported");
     }
 
+    private ItemTag reference(@NotNull FileContext<?> ctx, @NotNull FileElement e){
+        if(e instanceof FileGeneric single){
+            String itemKey = single.getAsString();
+            if(itemKey.startsWith("#")){
+                //minecraft:blocks/planks
+                Key tagKey = Crux.key(itemKey.substring(1));
+                if(tagKey.namespace().equalsIgnoreCase("minecraft") && tagKey.value().contains("/")){
+                    String[] parts = tagKey.value().split("/", 2);
+                    if(parts.length > 1){
+                        Tag<Material> tag = Bukkit.getTag(parts[0], NamespacedKey.minecraft(parts[1]), Material.class);
+                        if(tag == null) throw new NullPointerException("Vanilla tag of " + parts[0] + "/" + parts[1] + " does not exist!");
+                        return ItemTag.itemTag(tag);
+                    }
+                }
+                return CruxRegistries.ITEM_TAG.get(Crux.key(itemKey.substring(1)));
+            }
+        }
+        return null;
+    }
+
     @Override
     public @Nullable ItemTag deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
+        ItemTag tag = reference(ctx, e);
+        if(tag != null) return tag;
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = ctx.getRegistry();
         Key key = registry.deserializeFromFile(Key.class, o.get("key"));
@@ -45,7 +68,7 @@ public class FileItemTag extends SimpleFileHandler<ItemTag> {
         if(e instanceof FileGeneric single){
             String itemKey = single.getAsString();
             if(itemKey.startsWith("#")){
-                return CruxRegistries.ITEM_TAG.get(Crux.key(itemKey.substring(1)));
+                return reference(ctx, e);
             }
             return ItemTag.itemTag(key, Crux.key(itemKey));
         }
