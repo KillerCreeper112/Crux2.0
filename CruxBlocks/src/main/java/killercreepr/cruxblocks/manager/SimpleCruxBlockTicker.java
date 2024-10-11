@@ -47,8 +47,7 @@ public class SimpleCruxBlockTicker extends SimpleStatutable implements CruxBlock
             if(hasTickedBlock(b)) return;
             ActiveCruxBlock active = getActiveBlock(b);
             if(active instanceof ManagedTicked ticked){
-                this.active.put(active.getBlock(), active);
-                this.chunkToActive.computeIfAbsent(chunk.getChunkKey(), (l) -> new ArrayList<>()).add(active);
+                addActive(active, chunk);
                 ticked.started();
             }
         });
@@ -69,6 +68,15 @@ public class SimpleCruxBlockTicker extends SimpleStatutable implements CruxBlock
         });
     }
 
+    private void addActive(ActiveCruxBlock active){
+        addActive(active, active.getBlock().getChunk());
+    }
+
+    private void addActive(ActiveCruxBlock active, Chunk chunk){
+        this.active.put(active.getBlock(), active);
+        this.chunkToActive.computeIfAbsent(chunk.getChunkKey(), (l) -> new ArrayList<>()).add(active);
+    }
+
     @Override
     public @Nullable ActiveCruxBlock getActiveBlock(@NotNull Block at, @NotNull BlockData data) {
         if(hasTickedBlock(at)) return active.get(at);
@@ -77,7 +85,7 @@ public class SimpleCruxBlockTicker extends SimpleStatutable implements CruxBlock
         ActiveCruxBlock active = block.createActive(at);
 
         if(active instanceof ManagedTicked ticked){
-            this.active.put(active.getBlock(), active);
+            addActive(active);
             ticked.started();
         }
 
