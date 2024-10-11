@@ -31,20 +31,29 @@ public class FileMenuActions extends SimpleFileMenuModuled<ClickActions> {
     }
 
     public @Nullable ClickActions deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e, @Nullable Collection<MenuItemHolder> base) {
-        if (!(e instanceof FileObject o)) return null;
+        if (!(e instanceof FileObject o)){
+            if(base != null) {
+                Map<ClickType, Collection<String>> map = new HashMap<>();
+                base.forEach(b ->{
+                    ClickActions actions = b.getClickActions();
+                    if(actions==null) return;
+                    map.putAll(actions.getActions());
+                });
+                return new SimpleClickActions(map);
+            }
+            return null;
+        }
         FileRegistry registry = context.getRegistry();
 
-        Map<ClickType, Collection<String>> map;
-        if(base == null || base.isEmpty()){
-            map = new HashMap<>();
-        }else{
-            map = new HashMap<>();
+        Map<ClickType, Collection<String>> map = new HashMap<>();
+        if(base != null) {
             base.forEach(b ->{
                 ClickActions actions = b.getClickActions();
                 if(actions==null) return;
                 map.putAll(actions.getActions());
             });
         }
+        Crux.log(Level.WARNING, "CLICK_TYPE=" + base);
 
         /*Map<ClickType, Collection<String>> map = base == null || base.getClickActions() == null ?
             new HashMap<>() : new HashMap<>(base.getClickActions().getActions());*/
@@ -60,7 +69,7 @@ public class FileMenuActions extends SimpleFileMenuModuled<ClickActions> {
             }else type = null;
             Collection<String> actions = registry.deserializeFromFile(
                 new TypeToken<Collection<String>>(){}.getType(), o.get(key));
-            if (actions == null || !actions.isEmpty()) map.put(type, actions);
+            if (actions != null) map.put(type, actions);
         });
         return map.isEmpty() ? null : new SimpleClickActions(map);
     }

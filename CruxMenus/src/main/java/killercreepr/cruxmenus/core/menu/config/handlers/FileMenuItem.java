@@ -34,9 +34,9 @@ public class FileMenuItem extends SimpleFileMenuModuled<MenuItemHolder> {
         FileRegistry registry = context.getRegistry();
         List<MenuItemHolder> base = new ArrayList<>();
         if(defaultBase != null) base.addAll(defaultBase);
-        if(menuContext != null){
+        if(menuContext != null) {
             String baseID = o.getObject(String.class, "base");
-            if(baseID != null){
+            if (baseID != null) {
                 /*String[] checkBase = path.split("\\.");
                 if(checkBase.length > 0 && checkBase[checkBase.length-1].contains(baseID)){
                     CCrux.log(Level.WARNING, "Menu item has the same base ID as its own ID! (" + path + ") Base = (" + baseID + "). Ignoring...");
@@ -49,7 +49,7 @@ public class FileMenuItem extends SimpleFileMenuModuled<MenuItemHolder> {
                 MenuItemHolder possibleBase = menuModule.getFileMenuItem().deserializeFromFile(
                     context, menuContext.get("items").getAsFileObject().get(baseID), menuContext
                 );
-                if(possibleBase != null){
+                if (possibleBase != null) {
                     base.add(possibleBase);
                 }
             }
@@ -69,7 +69,6 @@ public class FileMenuItem extends SimpleFileMenuModuled<MenuItemHolder> {
             if(baseClone != null) baseClone = baseClone.clone();
             i = menuModule.getFileDynamicItem().deserializeFromYaml(context, o.get("item"), baseClone);
         }
-
         ClickActions clickActions = menuModule.getFileMenuActions().deserializeFromFile(
             context, o.get("actions"), base
         );
