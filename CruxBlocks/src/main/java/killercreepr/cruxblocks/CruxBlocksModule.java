@@ -6,15 +6,12 @@ import killercreepr.crux.block.CruxBlockWrapper;
 import killercreepr.crux.block.CruxedBlock;
 import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.crux.data.entity.PlayerMemory;
-import killercreepr.crux.data.tick.ManagedTicked;
 import killercreepr.crux.handler.BlockHandler;
 import killercreepr.crux.item.dynamic.components.persistence.DynamicPersistentTag;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.module.StandardModules;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registries.CruxRegistries;
-import killercreepr.crux.util.CruxEntity;
-import killercreepr.crux.util.CruxLoc;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.CruxCruxedBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
@@ -34,6 +31,7 @@ import killercreepr.cruxblocks.listener.CustomBlockClientSyncListener;
 import killercreepr.cruxblocks.listener.CustomBlocksListener;
 import killercreepr.cruxblocks.listener.NoteBlockSoundsListener;
 import killercreepr.cruxblocks.manager.CruxBlockManager;
+import killercreepr.cruxblocks.manager.CruxBlockTicker;
 import killercreepr.cruxblocks.registries.CruxBlockRegistry;
 import killercreepr.cruxblocks.registries.CruxBlocksRegistries;
 import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
@@ -46,18 +44,11 @@ import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Material;
 import org.bukkit.Registry;
-import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
 
 public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHandler {
     public static final String NAMESPACE = StandardModules.CRUX_BLOCKS;
@@ -67,20 +58,17 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
     }
 
     protected final @NotNull CruxBlockRegistry blockRegistry;
-    public CruxBlocksModule(@NotNull CruxBlockRegistry blockRegistry) {
+    protected final @NotNull CruxBlockTicker blockTicker;
+    public CruxBlocksModule(@NotNull CruxBlockRegistry blockRegistry, @NotNull CruxBlockTicker blockTicker) {
         this.blockRegistry = blockRegistry;
+        this.blockTicker = blockTicker;
     }
 
-    public CruxBlocksModule() {
-        this(CruxBlocksRegistries.BLOCK);
+    public CruxBlocksModule(@NotNull CruxBlockTicker blockTicker) {
+        this(CruxBlocksRegistries.BLOCK, blockTicker);
     }
 
-    protected final Map<Block, ActiveCruxBlock> activeBlocks = new HashMap<>();
     protected @Nullable KeyedItemProvider keyedItemProvider;
-
-    public Map<Block, ActiveCruxBlock> getActiveBlocks() {
-        return activeBlocks;
-    }
 
     public @Nullable KeyedItemProvider getKeyedItemProvider() {
         return keyedItemProvider;
@@ -129,6 +117,7 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
     @Override
     public void onEnable(@NotNull CruxPlugin plugin) {
         Crux.handlers().setBlock(this);
+        blockTicker.setStarted();
         plugin.registerListeners(
             new CustomBlocksListener(plugin, this),
             new NoteBlockSoundsListener(plugin, CruxBlocksRegistries.BLOCK),
@@ -142,7 +131,7 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
 
         CruxBlocksCommands.register(plugin);
 
-        if(CruxRegistries.MODULES.containsKey("CruxItems")){
+        if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_ITEMS)){
             keyedItemProvider = new CruxItemsItemProvider();
         }else keyedItemProvider = null;
     }
@@ -150,11 +139,7 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
     @Override
     public void onDisable(@NotNull CruxPlugin plugin) {
         CruxModule.super.onDisable(plugin);
-        activeBlocks.values().forEach(b ->{
-            if(!(b instanceof ManagedTicked ticked)) return;
-            ticked.stopped();
-        });
-        activeBlocks.clear();
+        blockTicker.setStopped();
     }
 
     public @NotNull CruxBlockRegistry getBlockRegistry() {
@@ -168,65 +153,17 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
 
     @Override
     public @Nullable ActiveCruxBlock getActiveBlock(@NotNull Block at, @NotNull BlockData data) {
-        if(hasTickedBlock(at)) return activeBlocks.get(at);
-        CruxBlock block = blockRegistry.getByBlockData(data);
-        if(block==null) return null;
-        ActiveCruxBlock active = block.createActive(at);
-
-        if(active instanceof ManagedTicked ticked){
-            activeBlocks.put(active.getBlock(), active);
-            ticked.started();
-        }
-
-        return active;
+        return blockTicker.getActiveBlock(at, data);
     }
 
     @Override
     public boolean hasTickedBlock(@NotNull Block at){
-        return activeBlocks.containsKey(at);
+        return blockTicker.hasTickedBlock(at);
     }
 
     @Override
     public @Nullable ActiveCruxBlock getTickedBlock(@NotNull Block at){
-        return activeBlocks.get(at);
-    }
-
-    public @NotNull BukkitRunnable buildBlockTickTask(@NotNull Server server){
-        return new BukkitRunnable() {
-            private int checkBlocks = 40;
-            @Override
-            public void run() {
-                if(checkBlocks > 0){
-                    checkBlocks--;
-                    if(checkBlocks <= 0){
-                        checkBlocks = 40;
-                        for(Player p : server.getOnlinePlayers()){
-                            if(!p.getChunk().isLoaded()) continue;
-                            for(Block b : CruxLoc.getNearbyBlocks(p.getLocation().getBlock(), 24)){
-                                if(!b.getChunk().isLoaded()) continue;
-                                if(hasTickedBlock(b)) continue;
-                                ActiveCruxBlock active = getActiveBlock(b);
-                                if(active instanceof ManagedTicked ticked){
-                                    activeBlocks.put(active.getBlock(), active);
-                                    ticked.started();
-                                }
-                            }
-                        }
-                    }
-                }
-
-                for(ActiveCruxBlock a : new HashSet<>(activeBlocks.values())){
-                    if(!(a instanceof ManagedTicked t)) continue;
-                    if(!a.isValid() || t.shouldStop() || !a.getBlock().getChunk().isLoaded() ||
-                        CruxEntity.getEntityAmountNearChunk(a.getBlock().getChunk(), 3, e -> e instanceof Player) < 1){
-                        t.stopped();
-                        activeBlocks.remove(a.getBlock());
-                        continue;
-                    }
-                    t.tick();
-                }
-            }
-        };
+        return blockTicker.getTickedBlock(at);
     }
 
     @Override

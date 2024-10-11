@@ -23,6 +23,7 @@
 package killercreepr.cruxblocks.block.data;
 
 import killercreepr.crux.Crux;
+import killercreepr.crux.data.BlockPos;
 import killercreepr.crux.persistence.CruxPersistence;
 import killercreepr.cruxblocks.block.data.events.CustomBlockDataRemoveEvent;
 import killercreepr.cruxblocks.block.data.listeners.BlockDataListener;
@@ -59,6 +60,12 @@ import java.util.stream.Collectors;
  * For more information about this please see {@link #registerListener(Plugin)}.
  */
 public class CustomBlockData implements PersistentDataContainer {
+    public static CustomBlockData wrap(@NotNull Block block){
+        return new CustomBlockData(block);
+    }
+    public static CustomBlockData wrap(@NotNull Block block, @NotNull Plugin plugin){
+        return new CustomBlockData(block, plugin);
+    }
     /**
      * Set of "dirty block positions", that is blocks that have been modified and need to be saved to the chunk
      */
@@ -232,6 +239,18 @@ public class CustomBlockData implements PersistentDataContainer {
         return chunk.getBlock(x, y, z);
     }
 
+    @Nullable
+    public static BlockPos getBlockPosFromKey(final NamespacedKey key) {
+        final Matcher matcher = KEY_REGEX.matcher(key.getKey());
+        if (!matcher.matches()) return null;
+        final int x = Integer.parseInt(matcher.group(1));
+        final int y = Integer.parseInt(matcher.group(2));
+        final int z = Integer.parseInt(matcher.group(3));
+        if ((x < CHUNK_MIN_XZ || x > CHUNK_MAX_XZ) || (z < CHUNK_MIN_XZ || z > CHUNK_MAX_XZ))
+            return null;
+        return BlockPos.at(x, y, z);
+    }
+
     /**
      * Returns the given {@link World}'s minimum build height, or 0 if not supported in this Bukkit version
      */
@@ -300,7 +319,7 @@ public class CustomBlockData implements PersistentDataContainer {
      * @return A {@link Set} containing all blocks in this chunk containing Custom Block Data created by the given plugin
      */
     @NotNull
-    private static Set<Block> getBlocksWithCustomData(final @NotNull Chunk chunk, final @NotNull NamespacedKey namespace) {
+    public static Set<Block> getBlocksWithCustomData(final @NotNull Chunk chunk, final @NotNull NamespacedKey namespace) {
         final PersistentDataContainer chunkPDC = chunk.getPersistentDataContainer();
         return chunkPDC.getKeys().stream().filter(key -> key.getNamespace().equals(namespace.getNamespace()))
                 .map(key -> getBlockFromKey(key, chunk))
