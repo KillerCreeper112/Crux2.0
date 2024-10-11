@@ -58,9 +58,11 @@ public class CruxConfigHook {
         if(cfg.getAsYamlObject("") instanceof YamlObject o){
             YamlContext ctx = new YamlContext(cfg.yamlRegistry());
             o.forEach((key, value) ->{
+                FileElement fileElement = FileElement.fromYaml(value);
                 CruxBlockGroup item = FileCruxBlockGroup.deserialize(
-                    ctx, FileElement.fromYaml(value), Crux.key(key)
+                    ctx, fileElement, Crux.key(key)
                 );
+                if(item != null) item = ctx.getRegistry().getParsedObjectRegistry().parse(fileElement, ctx, item);
                 if(item == null) return;
                 CruxBlocksRegistries.BLOCK.registerGroup(item);
                 plugin.getLogger().info("Registered block group: " + item.key());
