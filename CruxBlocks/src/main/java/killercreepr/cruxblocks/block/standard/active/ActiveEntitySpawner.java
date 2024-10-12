@@ -1,5 +1,6 @@
 package killercreepr.cruxblocks.block.standard.active;
 
+import killercreepr.crux.Crux;
 import killercreepr.crux.data.tick.ManagedTicked;
 import killercreepr.crux.data.world.CruxPosition;
 import killercreepr.cruxblocks.block.CruxBlock;
@@ -7,6 +8,7 @@ import killercreepr.cruxblocks.block.active.ActiveCruxBlockImpl;
 import killercreepr.cruxblocks.block.standard.component.EntitySpawnerComponent;
 import killercreepr.cruxworlds.world.entity.NaturalEntitySpawner;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class ActiveEntitySpawner extends ActiveCruxBlockImpl implements ManagedTicked {
@@ -18,16 +20,51 @@ public class ActiveEntitySpawner extends ActiveCruxBlockImpl implements ManagedT
         this.spawner = spawner;
     }
 
-    protected int tick = 0;
+    protected final Runnable task = new Runnable() {
+        @Override
+        public void run() {
+            if(!isActive()) return;
+            spawner.navigate(block.getWorld(), CruxPosition.block(block));
+        }
+    };
     protected int delay = 0;
     @Override
     public void tick() {
-        tick++;
+        if(delay < 0) return;
         if(delay > 0){
             delay--;
             return;
         }
         delay = data.spawnDelay.value().intValue();
-        spawner.navigate(block.getWorld(), CruxPosition.block(block));
+        Crux.getServer().getScheduler().runTask(Crux.getMainPlugin(), task);
+    }
+
+    public boolean isActive(){
+        double range = data.requiredPlayerRange.value().doubleValue();
+
+        if(data.ignoreCreativePlayers){
+            return !block.getWorld().getNearbyEntitiesByType(Player.class, block.getLocation(), range, e -> switch (e.getGameMode()){
+                case CREATIVE, SPECTATOR -> false;
+                default -> true;
+            }).isEmpty();
+        }
+
+        return !block.getWorld().getNearbyEntitiesByType(Player.class, block.getLocation(), range).isEmpty();
+    }
+
+    public @NotNull EntitySpawnerComponent getData() {
+        return data;
+    }
+
+    public @NotNull NaturalEntitySpawner getSpawner() {
+        return spawner;
+    }
+
+    public int getDelay() {
+        return delay;
+    }
+
+    public void setDelay(int delay) {
+        this.delay = delay;
     }
 }

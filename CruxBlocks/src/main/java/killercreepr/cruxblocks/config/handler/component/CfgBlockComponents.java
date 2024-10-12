@@ -13,7 +13,6 @@ import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxworlds.world.entity.NaturalEntitySpawnGroup;
-import killercreepr.cruxworlds.world.entity.NaturalEntitySpawner;
 import org.bukkit.Axis;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
@@ -106,18 +105,23 @@ public class CfgBlockComponents {
                 );
                 if(spawns == null || spawns.isEmpty()) return null;
 
-                NumberProvider spawnDelay = num(registry, e, "spawn_delay", NumberProvider.constant(400));
-                NumberProvider spawnRange = num(registry, e, "spawn_range", NumberProvider.constant(8));
-                NumberProvider spawnCount = num(registry, e, "spawn_count", NumberProvider.uniform(4, 10));
+                NumberProvider spawnDelay = num(registry, e, "spawn_delay", NumberProvider.uniform(200, 800));
+                NumberProvider spawnRange = num(registry, e, "spawn_range", NumberProvider.constant(4));
+                NumberProvider innerSpawnDistance = num(registry, e, "inner_spawn_distance", NumberProvider.constant(0));
+                NumberProvider spawnCount = num(registry, e, "spawn_count", NumberProvider.constant(4));
                 NumberProvider requiredPlayerRange = num(registry, e, "required_player_range", NumberProvider.constant(16));
                 NumberProvider maxSpawnAttempts = num(registry, e, "max_spawn_attempts", NumberProvider.constant(8));
-                NumberProvider groupSpawnAmount = num(registry, e, "group_spawn_amount", NumberProvider.constant(1));
+                NumberProvider groupSpawnAmount = num(registry, e, "group_spawn_count", NumberProvider.constant(1));
+                NumberProvider yCheck = num(registry, e, "y_check", NumberProvider.uniform(1, 3));
+                boolean ignoreCreativePlayers = e.getObject(Boolean.class, "ignore_creative_players", true);
 
                 return TypedDataComponent.create(
                     CruxBlockComponents.ENTITY_SPAWNER,
                     new EntitySpawnerComponent(
-                        spawnDelay, spawnRange, spawnCount, requiredPlayerRange,
-                        maxSpawnAttempts, groupSpawnAmount, spawns
+                        spawnDelay, spawnRange, innerSpawnDistance,
+                        spawnCount, requiredPlayerRange, maxSpawnAttempts,
+                        groupSpawnAmount, yCheck, spawns,
+                        ignoreCreativePlayers
                     )
                 );
             }

@@ -19,31 +19,38 @@ import java.util.Collection;
 public class EntitySpawnerComponent implements CruxBlockComponent {
     public final @NotNull NumberProvider spawnDelay;
     public final @NotNull NumberProvider spawnRange;
+    public final @NotNull NumberProvider innerSpawnDistance;
     public final @NotNull NumberProvider spawnCount;
     public final @NotNull NumberProvider requiredPlayerRange;
     public final @NotNull NumberProvider maxSpawnAttempts;
     public final @NotNull NumberProvider groupSpawnAmount;
+    public final @NotNull NumberProvider yCheck;
     public final @NotNull Collection<NaturalEntitySpawnGroup> spawns;
     public final @NotNull NaturalEntitySpawner spawner;
+    public final boolean ignoreCreativePlayers;
 
     public EntitySpawnerComponent(@NotNull NumberProvider spawnDelay,
-                                  @NotNull NumberProvider spawnRange,
+                                  @NotNull NumberProvider spawnRange, @NotNull NumberProvider innerSpawnDistance,
                                   @NotNull NumberProvider spawnCount,
-                                  @NotNull NumberProvider requiredPlayerRange, @NotNull NumberProvider maxSpawnAttempts, @NotNull NumberProvider groupSpawnAmount,
-                                  @NotNull Collection<NaturalEntitySpawnGroup> spawns) {
+                                  @NotNull NumberProvider requiredPlayerRange, @NotNull NumberProvider maxSpawnAttempts,
+                                  @NotNull NumberProvider groupSpawnAmount, @NotNull NumberProvider yCheck,
+                                  @NotNull Collection<NaturalEntitySpawnGroup> spawns, boolean ignoreCreativePlayers) {
         this.spawnDelay = spawnDelay;
         this.spawnRange = spawnRange;
+        this.innerSpawnDistance = innerSpawnDistance;
         this.spawnCount = spawnCount;
         this.requiredPlayerRange = requiredPlayerRange;
         this.maxSpawnAttempts = maxSpawnAttempts;
         this.groupSpawnAmount = groupSpawnAmount;
+        this.yCheck = yCheck;
         this.spawns = spawns;
+        this.ignoreCreativePlayers = ignoreCreativePlayers;
         spawner = new SimpleNaturalEntitySpawner(
             Crux.getMainPlugin(), CruxMath.RANDOM, spawns,
             spawnRange,
-            NumberProvider.constant(0),
+            innerSpawnDistance,
             spawnCount, maxSpawnAttempts,
-            groupSpawnAmount
+            groupSpawnAmount, yCheck
         );
     }
 
