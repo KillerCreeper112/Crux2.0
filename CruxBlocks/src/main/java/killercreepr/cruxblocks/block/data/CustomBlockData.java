@@ -47,7 +47,6 @@ import java.lang.annotation.Target;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * Represents a {@link PersistentDataContainer} for a specific {@link Block}. Also provides some static utility methods
@@ -321,10 +320,20 @@ public class CustomBlockData implements PersistentDataContainer {
     @NotNull
     public static Set<Block> getBlocksWithCustomData(final @NotNull Chunk chunk, final @NotNull NamespacedKey namespace) {
         final PersistentDataContainer chunkPDC = chunk.getPersistentDataContainer();
-        return chunkPDC.getKeys().stream().filter(key -> key.getNamespace().equals(namespace.getNamespace()))
+        Set<Block> list = new HashSet<>();
+        for(NamespacedKey key : chunkPDC.getKeys()){
+            PersistentDataContainer pdc = chunkPDC.get(key, PersistentDataType.TAG_CONTAINER);
+            if(pdc == null) continue;
+            Block b = getBlockFromKey(key, chunk);
+            if(b == null) continue;
+            if(!pdc.has(namespace)) continue;
+            list.add(b);
+        }
+        return list;
+        /*return chunkPDC.getKeys().stream().filter(key -> key.getNamespace().equals(namespace.getNamespace()))
                 .map(key -> getBlockFromKey(key, chunk))
                 .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toSet());*/
     }
 
     /**

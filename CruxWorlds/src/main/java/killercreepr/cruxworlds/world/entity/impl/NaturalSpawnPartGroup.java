@@ -1,8 +1,8 @@
-package killercreepr.cruxworlds.world.entity.entity.impl;
+package killercreepr.cruxworlds.world.entity.impl;
 
-import killercreepr.crux.util.CruxEntity;
-import killercreepr.cruxworlds.world.entity.entity.NaturalEntityGroupPart;
-import killercreepr.cruxworlds.world.entity.entity.NaturalEntitySpawn;
+import killercreepr.crux.util.CruxEntityUtil;
+import killercreepr.cruxworlds.world.entity.NaturalEntityGroupPart;
+import killercreepr.cruxworlds.world.entity.NaturalEntitySpawn;
 import org.bukkit.Chunk;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +30,7 @@ public abstract class NaturalSpawnPartGroup extends SimpleNaturalEntitySpawnGrou
      * @return NaturalEntitySpawns must implement NaturalEntityGroupPart for this to function as intended.
      */
     protected int getEntityAmountNearChunk(@NotNull Chunk chunk, int radius, @Nullable Predicate<Entity> predicate){
-        return CruxEntity.getEntityAmountNearChunk(chunk, radius, e ->{
+        return CruxEntityUtil.getEntityAmountNearChunk(chunk, radius, e ->{
             if(predicate != null && !predicate.test(e)) return false;
             for(NaturalEntitySpawn s : spawns){
                 if(!(s instanceof NaturalEntityGroupPart mob)) continue;

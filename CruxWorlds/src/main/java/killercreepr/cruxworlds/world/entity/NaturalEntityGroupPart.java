@@ -1,4 +1,4 @@
-package killercreepr.cruxworlds.world.entity.entity;
+package killercreepr.cruxworlds.world.entity;
 
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;

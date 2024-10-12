@@ -7,6 +7,7 @@ plugins {
 dependencies {
     paperweight.paperDevBundle(libs.versions.paper)
     compileOnly(project(":CruxMain"))
+    compileOnly(project(":CruxConfigs"))
 }
 paperweight.reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.MOJANG_PRODUCTION
 tasks.getByName<JavaCompile>("compileJava") {

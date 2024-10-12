@@ -4,7 +4,7 @@ import killercreepr.crux.Crux;
 import killercreepr.crux.data.tick.Ticked;
 import killercreepr.crux.data.world.CruxPosition;
 import killercreepr.crux.util.CruxMath;
-import killercreepr.cruxworlds.world.entity.entity.NaturalEntitySpawner;
+import killercreepr.cruxworlds.world.entity.NaturalEntityWorldSpawner;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -21,14 +21,14 @@ import java.util.logging.Level;
 
 public class NaturalEntitySpawnManager implements Ticked, Listener {
     protected final @NotNull CruxWorld world;
-    protected final @NotNull NaturalEntitySpawner naturalEntitySpawner;
+    protected final @NotNull NaturalEntityWorldSpawner naturalEntitySpawner;
 
     protected int naturalSpawnTick = 0;
     protected final Collection<CruxPosition> recentlyCheckedMobSpawns = new HashSet<>();
 
     protected int lastMobAmount;
     protected long lastCheckedMobAmount;
-    public NaturalEntitySpawnManager(@NotNull CruxWorld world, @NotNull NaturalEntitySpawner naturalEntitySpawner) {
+    public NaturalEntitySpawnManager(@NotNull CruxWorld world, @NotNull NaturalEntityWorldSpawner naturalEntitySpawner) {
         this.world = world;
         this.naturalEntitySpawner = naturalEntitySpawner;
     }

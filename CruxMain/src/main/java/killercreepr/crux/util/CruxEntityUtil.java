@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
 
-public class CruxEntity {
+public class CruxEntityUtil {
     private static final @NotNull EquipmentSlot[] GENERAL_SLOTS = new EquipmentSlot[]{
         EquipmentSlot.HEAD,
         EquipmentSlot.CHEST,

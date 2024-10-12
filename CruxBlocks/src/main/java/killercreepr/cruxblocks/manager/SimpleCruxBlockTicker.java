@@ -44,12 +44,7 @@ public class SimpleCruxBlockTicker extends SimpleStatutable implements CruxBlock
     public void onChunkLoad(ChunkLoadEvent event) {
         Chunk chunk = event.getChunk();
         CustomBlockData.getBlocksWithCustomData(chunk, ActiveCruxTickedBlock.CUSTOM_TICKED_KEY).forEach(b ->{
-            if(hasTickedBlock(b)) return;
-            ActiveCruxBlock active = getActiveBlock(b);
-            if(active instanceof ManagedTicked ticked){
-                addActive(active, chunk);
-                ticked.started();
-            }
+            getActiveBlock(b);
         });
     }
 
@@ -139,12 +134,23 @@ public class SimpleCruxBlockTicker extends SimpleStatutable implements CruxBlock
         chunkToActive.clear();
     }
 
+    protected void removeFromChunk(ActiveCruxBlock b){
+        chunkToActive.computeIfPresent(b.getBlock().getChunk().getChunkKey(), (key, list) ->{
+            list.remove(b);
+            return list.isEmpty() ? null : list;
+        });
+    }
+
     @Override
     public void tick() {
         active.values().removeIf(a ->{
-            if(!(a instanceof ManagedTicked t)) return true;
+            if(!(a instanceof ManagedTicked t)){
+                removeFromChunk(a);
+                return true;
+            }
             if(!a.isValid() || t.shouldStop() || !a.getBlock().getChunk().isLoaded()){
                 t.stopped();
+                removeFromChunk(a);
                 return true;
             }
             t.tick();

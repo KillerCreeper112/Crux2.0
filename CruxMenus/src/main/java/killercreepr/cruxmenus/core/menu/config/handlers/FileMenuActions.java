@@ -53,7 +53,6 @@ public class FileMenuActions extends SimpleFileMenuModuled<ClickActions> {
                 map.putAll(actions.getActions());
             });
         }
-        Crux.log(Level.WARNING, "CLICK_TYPE=" + base);
 
         /*Map<ClickType, Collection<String>> map = base == null || base.getClickActions() == null ?
             new HashMap<>() : new HashMap<>(base.getClickActions().getActions());*/

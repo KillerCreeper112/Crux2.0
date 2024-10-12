@@ -1,4 +1,4 @@
-package killercreepr.cruxworlds.world.entity.entity;
+package killercreepr.cruxworlds.world.entity;
 
 import killercreepr.crux.loot.WeightedObject;
 import org.bukkit.entity.Entity;

@@ -1,18 +1,25 @@
 package killercreepr.cruxblocks.config.handler.component;
 
+import com.google.common.reflect.TypeToken;
 import killercreepr.crux.component.TypedDataComponent;
 import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.crux.registry.MappedRegistry;
 import killercreepr.crux.util.CruxDirection;
+import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxblocks.block.component.*;
+import killercreepr.cruxblocks.block.standard.component.EntitySpawnerComponent;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileDataComponentType;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileObject;
+import killercreepr.cruxworlds.world.entity.NaturalEntitySpawnGroup;
+import killercreepr.cruxworlds.world.entity.NaturalEntitySpawner;
 import org.bukkit.Axis;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
 
 public class CfgBlockComponents {
     public static void register(@NotNull MappedRegistry<String, FileDataComponentType<?>> registry){
@@ -89,5 +96,37 @@ public class CfgBlockComponents {
                 );
             }
         });
+
+        registry.register("entity_spawner", new FileDataComponentType<EntitySpawnerComponent>() {
+            @Override
+            public @Nullable TypedDataComponent<EntitySpawnerComponent> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
+                FileRegistry registry = ctx.getRegistry();
+                Collection<NaturalEntitySpawnGroup> spawns = registry.deserializeFromFile(
+                    new TypeToken<Collection<NaturalEntitySpawnGroup>>(){}.getType(), e.get("spawns")
+                );
+                if(spawns == null || spawns.isEmpty()) return null;
+
+                NumberProvider spawnDelay = num(registry, e, "spawn_delay", NumberProvider.constant(400));
+                NumberProvider spawnRange = num(registry, e, "spawn_range", NumberProvider.constant(8));
+                NumberProvider spawnCount = num(registry, e, "spawn_count", NumberProvider.uniform(4, 10));
+                NumberProvider requiredPlayerRange = num(registry, e, "required_player_range", NumberProvider.constant(16));
+                NumberProvider maxSpawnAttempts = num(registry, e, "max_spawn_attempts", NumberProvider.constant(8));
+                NumberProvider groupSpawnAmount = num(registry, e, "group_spawn_amount", NumberProvider.constant(1));
+
+                return TypedDataComponent.create(
+                    CruxBlockComponents.ENTITY_SPAWNER,
+                    new EntitySpawnerComponent(
+                        spawnDelay, spawnRange, spawnCount, requiredPlayerRange,
+                        maxSpawnAttempts, groupSpawnAmount, spawns
+                    )
+                );
+            }
+        });
+    }
+
+    private static NumberProvider num(FileRegistry registry, FileObject o, String x, NumberProvider fallback){
+        NumberProvider v = registry.deserializeFromFile(NumberProvider.class, o.get(x));
+        if(v == null) return fallback;
+        return v;
     }
 }

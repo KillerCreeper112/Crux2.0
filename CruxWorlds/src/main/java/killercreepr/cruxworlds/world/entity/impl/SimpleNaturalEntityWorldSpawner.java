@@ -1,13 +1,14 @@
-package killercreepr.cruxworlds.world.entity.entity.impl;
+package killercreepr.cruxworlds.world.entity.impl;
 
 import killercreepr.crux.data.world.CruxPosition;
 import killercreepr.crux.persistence.CruxPersist;
 import killercreepr.crux.registry.Registry;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.crux.util.CruxWeightedSupplier;
-import killercreepr.cruxworlds.world.entity.entity.NaturalEntitySpawnGroup;
-import killercreepr.cruxworlds.world.entity.entity.NaturalEntitySpawner;
-import killercreepr.cruxworlds.world.entity.entity.SpawnContext;
+import killercreepr.cruxworlds.world.entity.NaturalEntitySpawnGroup;
+import killercreepr.cruxworlds.world.entity.NaturalEntitySpawner;
+import killercreepr.cruxworlds.world.entity.NaturalEntityWorldSpawner;
+import killercreepr.cruxworlds.world.entity.SpawnContext;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -25,14 +26,14 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class SimpleNaturalEntitySpawner implements NaturalEntitySpawner {
+public class SimpleNaturalEntityWorldSpawner implements NaturalEntityWorldSpawner {
     protected final @NotNull Plugin plugin;
     protected final @NotNull Random random;
     protected final @NotNull Registry<NaturalEntitySpawnGroup> registry;
 
-    public SimpleNaturalEntitySpawner(@NotNull Plugin plugin,
-                                      @NotNull Random random,
-                                      @NotNull Registry<NaturalEntitySpawnGroup> registry, int globalMobLimit, int radius, int innerRadius) {
+    public SimpleNaturalEntityWorldSpawner(@NotNull Plugin plugin,
+                                           @NotNull Random random,
+                                           @NotNull Registry<NaturalEntitySpawnGroup> registry, int globalMobLimit, int radius, int innerRadius) {
         this.plugin = plugin;
         this.random = random;
         this.registry = registry;
@@ -159,9 +160,9 @@ public class SimpleNaturalEntitySpawner implements NaturalEntitySpawner {
                     amount--;
                     if(amount < 1) break;
                 }
-                if(blocks.isEmpty() || (canContinue != null && !canContinue.test(SimpleNaturalEntitySpawner.this))){
+                if(blocks.isEmpty() || (canContinue != null && !canContinue.test(SimpleNaturalEntityWorldSpawner.this))){
                     cancel();
-                    if(onFinish != null) onFinish.accept(SimpleNaturalEntitySpawner.this);
+                    if(onFinish != null) onFinish.accept(SimpleNaturalEntityWorldSpawner.this);
                 }
             }
         }.runTaskTimerAsynchronously(plugin, 0L, 1L);

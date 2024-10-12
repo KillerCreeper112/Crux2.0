@@ -2,7 +2,7 @@ package killercreepr.cruxblocks.listener;
 
 import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.crux.data.communication.CreateSound;
-import killercreepr.crux.util.CruxEntity;
+import killercreepr.crux.util.CruxEntityUtil;
 import killercreepr.crux.util.CruxWorldUtil;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.component.CruxBlockComponents;
@@ -45,7 +45,7 @@ public class NoteBlockSoundsListener implements Listener {
         if (!CruxWorldUtil.isLoaded(entity.getLocation())) return;
 
         GameEvent gameEvent = event.getEvent();
-        Block block = CruxEntity.getBlockStandingOn(entity);
+        Block block = CruxEntityUtil.getBlockStandingOn(entity);
         EntityDamageEvent cause = entity.getLastDamageCause();
 
         if (gameEvent == GameEvent.HIT_GROUND && cause != null && cause.getCause() != EntityDamageEvent.DamageCause.FALL) return;

@@ -1,10 +1,17 @@
 package killercreepr.cruxentities.handler;
 
+import killercreepr.crux.entity.BukkitEntitySnapshot;
+import killercreepr.crux.entity.CruxEntitySnapshot;
 import killercreepr.crux.handler.EntityHandler;
 import killercreepr.cruxentities.entity.CruxMob;
+import killercreepr.cruxentities.entity.CruxMobSnapshot;
+import killercreepr.cruxentities.registries.CruxEntityRegistries;
 import net.kyori.adventure.key.Key;
+import org.bukkit.Registry;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class CruxEntitiesEntityHandler implements EntityHandler {
     @Override
@@ -12,5 +19,16 @@ public class CruxEntitiesEntityHandler implements EntityHandler {
         Key key = CruxMob.getKey(entity);
         if(key != null) return key;
         return entity.getType().key();
+    }
+
+    @Override
+    public @Nullable CruxEntitySnapshot createEntitySnapshot(@NotNull Key type) {
+        CruxMob mob = CruxEntityRegistries.ENTITIES.get(type);
+        if(mob == null){
+            EntityType t = Registry.ENTITY_TYPE.get(type);
+            if(t == null) return null;
+            return new BukkitEntitySnapshot(t);
+        }
+        return new CruxMobSnapshot(mob);
     }
 }
