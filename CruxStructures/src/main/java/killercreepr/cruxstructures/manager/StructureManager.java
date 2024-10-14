@@ -2,7 +2,6 @@ package killercreepr.cruxstructures.manager;
 
 import com.google.common.reflect.TypeToken;
 import killercreepr.crux.Crux;
-import killercreepr.crux.data.communication.MsgContainer;
 import killercreepr.crux.data.world.ChunkBlockStorage;
 import killercreepr.crux.data.world.CruxPosition;
 import killercreepr.crux.data.world.MultiVerseWorldStorage;
@@ -140,12 +139,7 @@ public class StructureManager implements Listener {
         return new BukkitRunnable(){
             @Override
             public void run() {
-                active.getData().values().forEach(worldChunk ->{
-                    new MsgContainer.Builder().actionBar(
-                        worldChunk.getData().size() + ""
-                    ).broadcast(true).build().broadcast(null);
-                    tick(worldChunk);
-                });
+                active.getData().values().forEach(worldChunk -> tick(worldChunk));
             }
         };
     }
@@ -300,7 +294,7 @@ public class StructureManager implements Listener {
                 file.close();
                 file.file().delete();
             }else{
-                file.save(true);//todo don't need pretty
+                file.save(false);
             }
         });
 
