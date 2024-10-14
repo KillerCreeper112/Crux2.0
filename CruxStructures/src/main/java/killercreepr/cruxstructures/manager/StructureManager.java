@@ -237,16 +237,20 @@ public class StructureManager implements Listener {
 
 
     public @NotNull CruxFolder createWorldFolder(@NotNull UUID worldUUID){
-        return new CruxFolder(plugin, "saved_structures/" + worldUUID);
+        return new CruxFolder(plugin, "data/cruxstructures/structures/" + worldUUID);
     }
 
     public @NotNull StorageChunkFile createChunkFile(@NotNull UUID worldUUID, long chunkKey){
-        return new StorageChunkFile(plugin, "saved_structures/" + worldUUID + "/" + chunkKey);
+        return new StorageChunkFile(plugin, "data/cruxstructures/structures/" + worldUUID + "/" + chunkKey);
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onWorldLoad(WorldLoadEvent event) {
         World world = event.getWorld();
+        onWorldLoaded(world);
+    }
+
+    public void onWorldLoaded(World world){
         UUID worldUUID = world.getUID();
         CruxFolder folder = createWorldFolder(worldUUID);
         File[] files = folder.file().listFiles();
@@ -262,9 +266,13 @@ public class StructureManager implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onWorldUnload(WorldUnloadEvent event) {
         World world = event.getWorld();
+        onWorldUnloaded(world);
+    }
+
+    public void onWorldUnloaded(World world){
         saveWorld(world);
     }
 
@@ -333,44 +341,6 @@ public class StructureManager implements Listener {
             //todo maybe addCache(block);
         });
     }
-
-    /*@EventHandler(ignoreCancelled = true)
-    public void onChunkLoad(ChunkLoadEvent event) {
-        Chunk chunk = event.getChunk();
-        UUID worldUUID = chunk.getWorld().getUID();
-        long key = chunk.getChunkKey();
-        WorldChunkStorage<StoredStructure> stored = this.stored.get(worldUUID);
-        if(stored==null) return;
-
-        stored.getData().values().forEach(structures ->{
-            structures.getData().values().forEach(st ->{
-                ActiveStructure active = st.buildActive(chunk);
-                if(active==null) return;
-                this.active.add(
-                    worldUUID, key, active
-                );
-            });
-        });
-    }
-
-    @EventHandler(ignoreCancelled = true)
-    public void onChunkUnload(ChunkUnloadEvent event) {
-        Chunk chunk = event.getChunk();
-        UUID worldUUID = chunk.getWorld().getUID();
-        long key = chunk.getChunkKey();
-        WorldChunkStorage<ActiveStructure> active = this.active.get(worldUUID);
-        if(active==null) return;
-
-        active.getData().values().forEach(structures ->{
-            structures.getData().values().forEach(a ->{
-                StoredStructure data = a.save();
-                BlockPos center = a.getData().getBlockPos();
-                if(data == null) stored.remove(chunk.getWorld().getUID(), key, center);
-                else stored.add(chunk.getWorld().getUID(), key, data);
-            });
-        });
-        this.active.remove(worldUUID, key);
-    }*/
 
     public @NotNull Plugin getPlugin() {
         return plugin;

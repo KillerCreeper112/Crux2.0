@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import killercreepr.crux.data.world.CruxPosition;
 import killercreepr.cruxconfig.config.bukkit.file.CruxJson;
 import killercreepr.cruxconfig.config.common.json.registry.JsonRegistry;
+import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import killercreepr.cruxstructures.structure.stored.StoredStructure;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -31,19 +32,19 @@ public class StorageChunkFile extends CruxJson {
     }
 
     public StorageChunkFile(@NotNull File file, boolean reloadIfExists) {
-        super(file, reloadIfExists);
+        super(file, CfgRegistries.JSON_TAGGED, reloadIfExists);
     }
 
     public StorageChunkFile(@NotNull Plugin plugin, @NotNull String path, boolean reloadIfExists) {
-        super(plugin, path, reloadIfExists);
+        super(plugin, path, CfgRegistries.JSON_TAGGED, reloadIfExists);
     }
 
     public StorageChunkFile(@NotNull File file) {
-        super(file);
+        super(file, CfgRegistries.JSON_TAGGED);
     }
 
     public StorageChunkFile(@NotNull Plugin plugin, @NotNull String path) {
-        super(plugin, path);
+        super(plugin, path, CfgRegistries.JSON_TAGGED);
     }
 
     public @NotNull Map<CruxPosition, StoredStructure> structures(){
