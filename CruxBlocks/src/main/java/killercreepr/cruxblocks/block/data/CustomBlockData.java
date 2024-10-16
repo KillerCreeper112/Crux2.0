@@ -113,7 +113,7 @@ public class CustomBlockData implements PersistentDataContainer {
     /**
      * The Chunk PDC belonging to this CustomBlockData object
      */
-    private final PersistentDataContainer pdc;
+    private PersistentDataContainer pdc;
 
     /**
      * The Chunk this CustomBlockData object belongs to
@@ -371,6 +371,10 @@ public class CustomBlockData implements PersistentDataContainer {
         return world.getBlockAt(vector.getBlockX(), vector.getBlockY(), vector.getBlockZ());
     }
 
+    public PersistentDataContainer getData(){
+        return pdc;
+    }
+
     /**
      * Gets the PersistentDataContainer associated with this block.
      *
@@ -412,6 +416,16 @@ public class CustomBlockData implements PersistentDataContainer {
     public void clear() {
         pdc.getKeys().forEach(pdc::remove);
         save();
+    }
+
+    public void setData(PersistentDataContainer data){
+        setDirty(plugin, blockEntry);
+        if(data == null){
+            chunk.getPersistentDataContainer().remove(key);
+        } else{
+            chunk.getPersistentDataContainer().set(key, PersistentDataType.TAG_CONTAINER, data);
+        }
+        pdc = getPersistentDataContainer();
     }
 
     /**
