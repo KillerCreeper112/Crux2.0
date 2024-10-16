@@ -1,5 +1,6 @@
 package killercreepr.cruxblocks.block.texture;
 
+import killercreepr.crux.Crux;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -64,7 +65,7 @@ public class MaterialTextureData implements TextureData {
 
     @Override
     public void setBlock(@NotNull Block block, boolean applyPhysics) {
-        block.setType(material, applyPhysics);
+        Crux.handlers().block().setType(block, material, applyPhysics, true);
         applyToBlock(block, applyPhysics);
     }
 

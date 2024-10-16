@@ -18,6 +18,7 @@ public interface BlockHandler {
 
     @NotNull Block setType(@NotNull Block b, @NotNull Material m, boolean applyPhysics, boolean removeTags);
     @NotNull Key getType(@NotNull Block block);
+    void removeTags(@NotNull Block b);
 
     @Nullable
     CruxBlockWrapper getBlockWrapper(@NotNull Key key);
@@ -37,6 +38,11 @@ public interface BlockHandler {
         @Override
         public @NotNull Key getType(@NotNull Block block) {
             return block.getType().key();
+        }
+
+        @Override
+        public void removeTags(@NotNull Block b) {
+
         }
 
         @Override

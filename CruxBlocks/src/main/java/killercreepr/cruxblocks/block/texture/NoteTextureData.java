@@ -1,5 +1,6 @@
 package killercreepr.cruxblocks.block.texture;
 
+import killercreepr.crux.Crux;
 import org.bukkit.Instrument;
 import org.bukkit.Material;
 import org.bukkit.Note;
@@ -88,7 +89,7 @@ public class NoteTextureData implements TextureData{
 
     @Override
     public void setBlock(@NotNull Block block, boolean applyPhysics) {
-        block.setType(Material.NOTE_BLOCK, false);
+        Crux.handlers().block().setType(block, Material.NOTE_BLOCK, applyPhysics, true);
         applyToBlock(block, applyPhysics);
     }
 

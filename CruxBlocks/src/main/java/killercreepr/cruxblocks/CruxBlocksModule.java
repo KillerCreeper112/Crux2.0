@@ -170,9 +170,7 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
     public @NotNull Block setType(@NotNull Block b, @NotNull Material m, boolean applyPhysics, boolean removeTags) {
         b.setType(m, applyPhysics);
         if(removeTags){
-            if(callRemoveBlockDataEvent(b, null)){
-                new CustomBlockData(b, Crux.getMainPlugin()).clear();
-            }
+            removeTags(b);
         }
         return b;
     }
@@ -182,6 +180,13 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
         CruxBlock cruxBlock = getBlockRegistry().getByBlock(block);
         if(cruxBlock == null) return block.getType().key();
         return cruxBlock.key();
+    }
+
+    @Override
+    public void removeTags(@NotNull Block b) {
+        if(callRemoveBlockDataEvent(b, null)){
+            new CustomBlockData(b, Crux.getMainPlugin()).clear();
+        }
     }
 
     @Override

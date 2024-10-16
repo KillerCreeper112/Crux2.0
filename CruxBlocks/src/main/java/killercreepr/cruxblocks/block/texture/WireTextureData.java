@@ -1,5 +1,6 @@
 package killercreepr.cruxblocks.block.texture;
 
+import killercreepr.crux.Crux;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -125,7 +126,7 @@ public class WireTextureData implements TextureData {
 
     @Override
     public void setBlock(@NotNull Block block, boolean applyPhysics) {
-        block.setType(Material.TRIPWIRE, false);
+        Crux.handlers().block().setType(block, Material.TRIPWIRE, applyPhysics, true);
         applyToBlock(block, applyPhysics);
     }
 
