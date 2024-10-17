@@ -1,6 +1,7 @@
 package killercreepr.cruxstructures.structure.impl;
 
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
+import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.block.BlockState;
 import killercreepr.crux.data.BlockPos;
@@ -32,13 +33,17 @@ public class CfgStoredBlocksStructure extends CfgFAWEStructure{
         this.blocks = calculateBlocks();
     }
 
+    public void onForEachBlock(Collection<BlockPos> list, BlockVector3 block, BlockState state){
+        if(state.isAir()) return;
+        list.add(new BlockPos(block.x(), block.y(), block.z()));
+    }
+
     public @NotNull Collection<BlockPos> calculateBlocks(){
         Collection<BlockPos> list = new HashSet<>();
         Clipboard clipboard = holder.getClipboards().getFirst();
         clipboard.forEach(block ->{
             BlockState state = clipboard.getBlock(block);
-            if(state.isAir()) return;
-            list.add(new BlockPos(block.x(), block.y(), block.z()));
+            onForEachBlock(list, block, state);
         });
         return list;
     }

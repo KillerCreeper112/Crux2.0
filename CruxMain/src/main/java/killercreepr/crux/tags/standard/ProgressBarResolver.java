@@ -25,7 +25,7 @@ public class ProgressBarResolver implements StringResolver {
         //6 - min value
         int totalBars = args.parseInt(1);
         float current = args.parseFloat(4);
-        float max = args.parseFloat(5);
+        float max = args.has(5) ? args.parseFloat(5) : 1f;
         float min = args.has(6) ? args.parseFloat(6) : 0f;
 
         if(current < min) current = min;

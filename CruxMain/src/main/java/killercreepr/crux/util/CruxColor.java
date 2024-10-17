@@ -45,4 +45,21 @@ public class CruxColor {
         }catch (IllegalStateException ignored){ }
         return defaultValue;
     }
+
+    public static Color hsbToBukkitColor(float hue, float saturation, float brightness){
+        java.awt.Color cc = hsbToColor(hue, saturation, brightness);
+        return Color.fromRGB(cc.getRed(), cc.getGreen(), cc.getBlue());
+    }
+
+    public static java.awt.Color hsbToColor(float hue, float saturation, float brightness){
+
+        float h = Math.max( 0, Math.min( 360, hue ) );
+        float s = Math.max( 0, Math.min( 100, saturation ) );
+        float v = Math.max( 0, Math.min( 100, brightness ) );
+        h /= 360;
+        s /= 100;
+        v /= 100;
+
+        return java.awt.Color.getHSBColor( h, s, v );
+    }
 }

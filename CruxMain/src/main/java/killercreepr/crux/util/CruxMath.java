@@ -17,6 +17,9 @@ import java.util.Random;
 
 public class CruxMath {
     public static final Random RANDOM = new Random();
+    public static Random random(){
+        return RANDOM;
+    }
     public static final CruxNumberFormat DECIMAL_FORMAT_0 = new CruxNumberFormat(0);
     public static final CruxNumberFormat DECIMAL_FORMAT_1 = new CruxNumberFormat(1);
     public static final CruxNumberFormat DECIMAL_FORMAT_2 = new CruxNumberFormat(2);
