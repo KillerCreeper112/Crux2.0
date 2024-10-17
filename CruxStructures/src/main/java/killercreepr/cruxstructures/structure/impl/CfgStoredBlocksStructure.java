@@ -33,6 +33,10 @@ public class CfgStoredBlocksStructure extends CfgFAWEStructure{
         this.blocks = calculateBlocks();
     }
 
+    public @NotNull Collection<BlockPos> getBlocks() {
+        return blocks;
+    }
+
     public void onForEachBlock(Collection<BlockPos> list, BlockVector3 block, BlockState state){
         if(state.isAir()) return;
         list.add(new BlockPos(block.x(), block.y(), block.z()));
