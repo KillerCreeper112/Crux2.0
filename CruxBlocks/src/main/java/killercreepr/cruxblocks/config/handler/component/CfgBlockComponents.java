@@ -1,6 +1,7 @@
 package killercreepr.cruxblocks.config.handler.component;
 
 import com.google.common.reflect.TypeToken;
+import killercreepr.crux.component.DataComponentType;
 import killercreepr.crux.component.TypedDataComponent;
 import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.crux.registry.MappedRegistry;
@@ -96,34 +97,15 @@ public class CfgBlockComponents {
             }
         });
 
-        registry.register("entity_spawner", new FileDataComponentType<EntitySpawnerComponent>() {
+        registry.register("entity_spawner", new FileEntitySpawnerComponent<EntitySpawnerComponent>() {
             @Override
-            public @Nullable TypedDataComponent<EntitySpawnerComponent> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
-                FileRegistry registry = ctx.getRegistry();
-                Collection<NaturalEntitySpawnGroup> spawns = registry.deserializeFromFile(
-                    new TypeToken<Collection<NaturalEntitySpawnGroup>>(){}.getType(), e.get("spawns")
-                );
-                if(spawns == null || spawns.isEmpty()) return null;
+            public EntitySpawnerComponent createSpawner(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
+                return createGenericSpawner(ctx, e);
+            }
 
-                NumberProvider spawnDelay = num(registry, e, "spawn_delay", NumberProvider.uniform(200, 800));
-                NumberProvider spawnRange = num(registry, e, "spawn_range", NumberProvider.constant(4));
-                NumberProvider innerSpawnDistance = num(registry, e, "inner_spawn_distance", NumberProvider.constant(0));
-                NumberProvider spawnCount = num(registry, e, "spawn_count", NumberProvider.constant(4));
-                NumberProvider requiredPlayerRange = num(registry, e, "required_player_range", NumberProvider.constant(16));
-                NumberProvider maxSpawnAttempts = num(registry, e, "max_spawn_attempts", NumberProvider.constant(8));
-                NumberProvider groupSpawnAmount = num(registry, e, "group_spawn_count", NumberProvider.constant(1));
-                NumberProvider yCheck = num(registry, e, "y_check", NumberProvider.uniform(1, 3));
-                boolean ignoreCreativePlayers = e.getObject(Boolean.class, "ignore_creative_players", true);
-
-                return TypedDataComponent.create(
-                    CruxBlockComponents.ENTITY_SPAWNER,
-                    new EntitySpawnerComponent(
-                        spawnDelay, spawnRange, innerSpawnDistance,
-                        spawnCount, requiredPlayerRange, maxSpawnAttempts,
-                        groupSpawnAmount, yCheck, spawns,
-                        ignoreCreativePlayers
-                    )
-                );
+            @Override
+            public DataComponentType<EntitySpawnerComponent> componentType() {
+                return CruxBlockComponents.ENTITY_SPAWNER;
             }
         });
     }
