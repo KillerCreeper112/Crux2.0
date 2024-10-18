@@ -1,6 +1,5 @@
 package killercreepr.cruxblocks.config.handler.component;
 
-import com.google.common.reflect.TypeToken;
 import killercreepr.crux.component.DataComponentType;
 import killercreepr.crux.component.TypedDataComponent;
 import killercreepr.crux.data.communication.CreateBlockSoundGroup;
@@ -13,13 +12,10 @@ import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileDataComp
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileObject;
-import killercreepr.cruxworlds.world.entity.NaturalEntitySpawnGroup;
 import org.bukkit.Axis;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
 
 public class CfgBlockComponents {
     public static void register(@NotNull MappedRegistry<String, FileDataComponentType<?>> registry){
@@ -106,6 +102,16 @@ public class CfgBlockComponents {
             @Override
             public DataComponentType<EntitySpawnerComponent> componentType() {
                 return CruxBlockComponents.ENTITY_SPAWNER;
+            }
+        });
+
+        registry.register("explosion_resistance", new FileDataComponentType<Float>() {
+            @Override
+            public @Nullable TypedDataComponent<Float> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
+                return TypedDataComponent.create(
+                    CruxBlockComponents.EXPLOSION_RESISTANCE,
+                    e.getObject(Float.class, "explosion_resistance", 0f)
+                );
             }
         });
     }

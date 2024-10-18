@@ -34,13 +34,15 @@ public class ActiveEntitySpawner extends ActiveCruxBlockImpl implements ManagedT
         data.set("delay", PersistentDataType.INTEGER, delay);
     }
 
-    protected final Runnable task = new Runnable() {
-        @Override
-        public void run() {
-            if(!isActive()) return;
-            spawner.navigate(block.getWorld(), CruxPosition.block(block));
-        }
+    protected final Runnable task = () -> {
+        if(!isActive()) return;
+        navigateSpawner();
     };
+
+    public void navigateSpawner(){
+        spawner.navigate(block.getWorld(), CruxPosition.block(block));
+    }
+
     protected int delay = 0;
     @Override
     public void tick() {

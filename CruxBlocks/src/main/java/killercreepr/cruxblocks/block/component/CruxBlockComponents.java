@@ -23,6 +23,8 @@ public class CruxBlockComponents {
 
     public static final DataComponentType<Boolean> REQUIRES_CORRECT_TOOL_FOR_DROPS = register("requires_correct_tool_for_drops",
         builder -> builder);
+    public static final DataComponentType<Float> EXPLOSION_RESISTANCE = register("explosion_resistance",
+        builder -> builder);
     public static final DataComponentType<EntitySpawnerComponent> ENTITY_SPAWNER = register("entity_spawner",
         builder -> builder);
 

@@ -1,5 +1,6 @@
 package killercreepr.cruxblocks.listener;
 
+import com.destroystokyo.paper.MaterialTags;
 import io.papermc.paper.event.block.BlockBreakBlockEvent;
 import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.crux.data.communication.CreateSound;
@@ -22,17 +23,18 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Orientable;
 import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.type.Snow;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerAnimationType;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -66,6 +68,47 @@ public class CustomBlocksListener implements Listener {
         //interactCooldowns.remove(event.getPlayer().getUniqueId());
     }
 
+    public float getExplosionPower(BlockState b, float fallBack){
+        Material m = b.getType();
+        if(m == Material.RESPAWN_ANCHOR || MaterialTags.BEDS.isTagged(m)) return 5f;
+        if(m == Material.TNT) return 4f;
+        return fallBack;
+    }
+
+    public float getExplosionPower(Entity e, float fallBack){
+        if(e instanceof Creeper c) return c.getExplosionRadius();
+        if(e instanceof Explosive c) return c.getYield();
+        if(e instanceof Wither) return 7f;
+        if(e instanceof EnderCrystal) return 6f;
+        return fallBack;
+    }
+
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    public void onBlockExplode(BlockExplodeEvent event) {
+        float power = getExplosionPower(event.getExplodedBlockState(), 4f);
+        event.blockList().removeIf(block ->{
+            ActiveCruxBlock crux = manager.getActiveBlock(block);
+            if(crux == null) return false;
+            if(!crux.getCruxBlock().getComponents().has(CruxBlockComponents.EXPLOSION_RESISTANCE)) return false;
+            float x = power - crux.getCruxBlock().getComponents().get(CruxBlockComponents.EXPLOSION_RESISTANCE);
+            return x <= 0f;
+        });
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    public void onEntityExplode(EntityExplodeEvent event) {
+        float power = getExplosionPower(event.getEntity(), 4f);
+        event.blockList().removeIf(block ->{
+            ActiveCruxBlock crux = manager.getActiveBlock(block);
+            if(crux == null) return false;
+            if(!crux.getCruxBlock().getComponents().has(CruxBlockComponents.EXPLOSION_RESISTANCE)) return false;
+            float x = power - crux.getCruxBlock().getComponents().get(CruxBlockComponents.EXPLOSION_RESISTANCE);
+            return x <= 0f;
+        });
+    }
+
+
     @EventHandler
     private void onNotePlay(NotePlayEvent event){
         event.setCancelled(true);
@@ -88,7 +131,6 @@ public class CustomBlocksListener implements Listener {
             crux.breakBlock(Miner.block(event.getBlock()));
         }
     }
-
 
     @EventHandler
     private void blockDropItem(BlockDropItemEvent event){
