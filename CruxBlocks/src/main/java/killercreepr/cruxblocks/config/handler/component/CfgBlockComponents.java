@@ -114,6 +114,16 @@ public class CfgBlockComponents {
                 );
             }
         });
+
+        registry.register("piston_immovable", new FileDataComponentType<Boolean>() {
+            @Override
+            public @Nullable TypedDataComponent<Boolean> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
+                return TypedDataComponent.create(
+                    CruxBlockComponents.PISTON_IMMOVABLE,
+                    e.getObject(Boolean.class, "piston_immovable", false)
+                );
+            }
+        });
     }
 
     private static NumberProvider num(FileRegistry registry, FileObject o, String x, NumberProvider fallback){

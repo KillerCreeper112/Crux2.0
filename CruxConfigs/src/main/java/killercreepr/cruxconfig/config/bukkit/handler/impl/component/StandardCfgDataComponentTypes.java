@@ -19,5 +19,14 @@ public class StandardCfgDataComponentTypes {
                 );
             }
         });
+        registry.register("unbreakable", new FileDataComponentType<Boolean>() {
+            @Override
+            public @Nullable TypedDataComponent<Boolean> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
+                return TypedDataComponent.create(
+                    CruxComponents.UNBREAKABLE,
+                    e.getObject(Boolean.class, "unbreakable", false)
+                );
+            }
+        });
     }
 }

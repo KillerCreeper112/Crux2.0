@@ -1,6 +1,7 @@
 package killercreepr.cruxblocks.data.entity;
 
 import killercreepr.crux.Crux;
+import killercreepr.crux.component.CruxComponents;
 import killercreepr.crux.data.entity.PlayerMemory;
 import killercreepr.crux.data.entity.PlayerTickedDataHolder;
 import killercreepr.crux.util.CruxMath;
@@ -71,7 +72,8 @@ public class MinerHolder extends PlayerTickedDataHolder {
 
     public void onMine(@NotNull Player p, @NotNull ActiveCruxBlock block){
         lastMine = System.currentTimeMillis();
-        float mineSpeed = block.getMineSpeed(Miner.entity(p.getInventory().getItemInMainHand(), p), true);
+        float mineSpeed = block.getCruxBlock().getComponents().getOrDefault(CruxComponents.UNBREAKABLE, false) ?
+            0f : block.getMineSpeed(Miner.entity(p.getInventory().getItemInMainHand(), p), true);
         if(lastBreakSpeed == null){
             lastBreakSpeed = p.getAttribute(Attribute.PLAYER_BLOCK_BREAK_SPEED).getBaseValue();
         }

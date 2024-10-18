@@ -2,6 +2,7 @@ package killercreepr.cruxblocks.listener;
 
 import com.destroystokyo.paper.MaterialTags;
 import io.papermc.paper.event.block.BlockBreakBlockEvent;
+import killercreepr.crux.component.CruxComponents;
 import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.crux.data.communication.CreateSound;
 import killercreepr.crux.data.entity.EntityMemory;
@@ -122,8 +123,42 @@ public class CustomBlocksListener implements Listener {
         block.update();
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onBlockPistonExtend(BlockPistonExtendEvent event) {
+        for(Block b : event.getBlocks()){
+            ActiveCruxBlock crux = manager.getActiveBlock(b);
+            if(crux==null) continue;
+            if(crux.getCruxBlock().getComponents().getOrDefault(CruxBlockComponents.PISTON_IMMOVABLE, false)){
+                event.setCancelled(true);
+                return;
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onBlockPistonRetract(BlockPistonRetractEvent event) {
+        for(Block b : event.getBlocks()){
+            ActiveCruxBlock crux = manager.getActiveBlock(b);
+            if(crux==null) continue;
+            if(crux.getCruxBlock().getComponents().getOrDefault(CruxBlockComponents.PISTON_IMMOVABLE, false)){
+                event.setCancelled(true);
+                return;
+            }
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onBlockPistonExtendTripWireBreak(BlockPistonExtendEvent event) {
+        for(Block b : event.getBlocks()){
+            if(b.getType() != Material.TRIPWIRE) continue;
+            ActiveCruxBlock crux = manager.getActiveBlock(b);
+            if(crux==null) continue;
+            crux.breakBlock(Miner.block(event.getBlock()));
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onBlockPistonRetractTripWireBreak(BlockPistonRetractEvent event) {
         for(Block b : event.getBlocks()){
             if(b.getType() != Material.TRIPWIRE) continue;
             ActiveCruxBlock crux = manager.getActiveBlock(b);
@@ -170,6 +205,7 @@ public class CustomBlocksListener implements Listener {
         data.onMine(p);
     }
 
+
     @EventHandler(ignoreCancelled = true)
     public void onBlockDamage(BlockDamageEvent event) {
         Player p = event.getPlayer();
@@ -183,6 +219,11 @@ public class CustomBlocksListener implements Listener {
         Block b = event.getBlock();
         ActiveCruxBlock active = manager.getActiveBlock(b);
         if(active==null) return;
+        if(active.getCruxBlock().getComponents().getOrDefault(CruxComponents.UNBREAKABLE, false)){
+            event.setCancelled(true);
+            return;
+        }
+
         Player p = event.getPlayer();
         active.breakBlock(Miner.entity(p.getInventory().getItemInMainHand(), p), true, p.getGameMode() == GameMode.CREATIVE);
     }

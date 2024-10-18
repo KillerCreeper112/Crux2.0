@@ -25,6 +25,8 @@ public class CruxBlockComponents {
         builder -> builder);
     public static final DataComponentType<Float> EXPLOSION_RESISTANCE = register("explosion_resistance",
         builder -> builder);
+    public static final DataComponentType<Boolean> PISTON_IMMOVABLE = register("piston_immovable",
+        builder -> builder);
     public static final DataComponentType<EntitySpawnerComponent> ENTITY_SPAWNER = register("entity_spawner",
         builder -> builder);
 
