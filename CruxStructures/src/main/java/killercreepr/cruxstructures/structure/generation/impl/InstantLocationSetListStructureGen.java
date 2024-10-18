@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 public class InstantLocationSetListStructureGen extends LocationSetListStructureGen {
     protected final @NotNull String id;
@@ -36,6 +37,7 @@ public class InstantLocationSetListStructureGen extends LocationSetListStructure
         List<Pos2D> listChunks = new ArrayList<>(setChunks);
         World world = at.getWorld();
 
+        Crux.log(Level.INFO, world.getName() + " - Instant set location list is now processing. " + id);
         new BukkitRunnable(){
             int index = -1;
             @Override
@@ -44,6 +46,7 @@ public class InstantLocationSetListStructureGen extends LocationSetListStructure
                 Pos2D pos = listChunks.get(index);
                 if((index+1) >= listChunks.size()){
                     cancel();
+                    Crux.log(Level.INFO, world.getName() + " - Instant set location list has finished. " + id);
                 }
 
                 if(world.isChunkGenerated(pos.x(), pos.z()) && !(at.getX() == pos.x() && at.getZ() == pos.z())) return;

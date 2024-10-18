@@ -16,10 +16,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
-public class InstantLocationSetStructureGen extends LocationSetTableStructureGen {
+public class InstantLocationSetTableStructureGen extends LocationSetTableStructureGen {
     protected final @NotNull String id;
-    public InstantLocationSetStructureGen(@NotNull LootTable<StructureGenerator> structurePool, @NotNull NumberProvider structureAmount, @Nullable NumberProvider chunkRangeX, @Nullable NumberProvider chunkRangeZ, @Nullable NumberProvider minDistanceApart, @NotNull String id) {
+    public InstantLocationSetTableStructureGen(@NotNull LootTable<StructureGenerator> structurePool, @NotNull NumberProvider structureAmount, @Nullable NumberProvider chunkRangeX, @Nullable NumberProvider chunkRangeZ, @Nullable NumberProvider minDistanceApart, @NotNull String id) {
         super(structurePool, structureAmount, chunkRangeX, chunkRangeZ, minDistanceApart);
         this.id = id;
     }
@@ -37,6 +38,7 @@ public class InstantLocationSetStructureGen extends LocationSetTableStructureGen
         List<Pos2D> listChunks = new ArrayList<>(setChunks);
         World world = at.getWorld();
 
+        Crux.log(Level.INFO, world.getName() + " - Instant set location table is now processing. " + id);
         new BukkitRunnable(){
             int index = -1;
             @Override
@@ -45,6 +47,7 @@ public class InstantLocationSetStructureGen extends LocationSetTableStructureGen
                 Pos2D pos = listChunks.get(index);
                 if((index+1) >= listChunks.size()){
                     cancel();
+                    Crux.log(Level.INFO, world.getName() + " - Instant set location table has finished. " + id);
                 }
 
                 if(world.isChunkGenerated(pos.x(), pos.z()) && !(at.getX() == pos.x() && at.getZ() == pos.z())) return;
