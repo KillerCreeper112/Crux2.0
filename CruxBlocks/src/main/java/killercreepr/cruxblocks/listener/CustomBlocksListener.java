@@ -13,6 +13,8 @@ import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxInteractable;
 import killercreepr.cruxblocks.block.component.CruxBlockComponents;
 import killercreepr.cruxblocks.block.context.PlaceBlockContext;
+import killercreepr.cruxblocks.block.flag.BlockBreakFlag;
+import killercreepr.cruxblocks.block.flag.BlockBreakFlags;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.data.entity.MinerHolder;
 import killercreepr.cruxblocks.manager.CruxBlockManager;
@@ -227,7 +229,9 @@ public class CustomBlocksListener implements Listener {
             }
         }
 
-        active.breakBlock(Miner.entity(p.getInventory().getItemInMainHand(), p), true, p.getGameMode() == GameMode.CREATIVE);
+        BlockBreakFlags flags = BlockBreakFlags.flags();
+        if(p.getGameMode() == GameMode.CREATIVE) flags.add(BlockBreakFlag.DISABLE_DROPS);
+        active.breakBlock(Miner.entity(p.getInventory().getItemInMainHand(), p), flags);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -235,7 +239,7 @@ public class CustomBlocksListener implements Listener {
         Block b = event.getBlock();
         ActiveCruxBlock active = manager.getActiveBlock(b);
         if(active==null) return;
-        active.breakBlock(new BlockMiner(event.getSource()), true, false);
+        active.breakBlock(new BlockMiner(event.getSource()));
     }
 
     @EventHandler(ignoreCancelled = true)

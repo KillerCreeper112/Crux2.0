@@ -1,5 +1,6 @@
 package killercreepr.cruxblocks.block.active;
 
+import com.destroystokyo.paper.ParticleBuilder;
 import killercreepr.crux.Crux;
 import killercreepr.crux.component.CruxComponents;
 import killercreepr.crux.data.communication.CreateBlockSoundGroup;
@@ -9,6 +10,8 @@ import killercreepr.crux.util.CruxItem;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.component.CruxBlockComponents;
 import killercreepr.cruxblocks.block.context.BlockContext;
+import killercreepr.cruxblocks.block.flag.BlockBreakFlag;
+import killercreepr.cruxblocks.block.flag.BlockBreakFlags;
 import killercreepr.cruxblocks.event.CruxBlockBreakEvent;
 import killercreepr.cruxblocks.user.EntityMiner;
 import killercreepr.cruxblocks.user.Miner;
@@ -16,7 +19,9 @@ import killercreepr.cruxblocks.user.Tooled;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
@@ -43,11 +48,11 @@ public interface ActiveCruxBlock {
     CruxBlock getCruxBlock();
 
     default @NotNull CruxBlockBreakEvent breakBlock(@Nullable Miner miner){
-        return breakBlock(miner, true, false);
+        return breakBlock(miner, BlockBreakFlags.standard());
     }
 
     //todo add block flags inside of booleans for display effects and display drops
-    default @NotNull CruxBlockBreakEvent breakBlock(@Nullable Miner miner, boolean displayEffects, boolean disableDrops){
+    default @NotNull CruxBlockBreakEvent breakBlock(@Nullable Miner miner, @NotNull BlockBreakFlags flags){
         Block block = getBlock();
         Collection<ItemStack> drops;
         Entity entityMiner;
@@ -62,9 +67,10 @@ public interface ActiveCruxBlock {
         if(!event.callEvent()) return event;
         drops = event.getDrops();
 
-        Crux.handlers().block().setType(getBlock(), Material.AIR);
+        BlockData data = block.getBlockData();
+        Crux.handlers().block().setType(block, Material.AIR);
 
-        if(displayEffects){
+        if(!flags.hasFlag(BlockBreakFlag.DISABLE_SOUND)){
             CruxBlock custom = getCruxBlock();
             CreateBlockSoundGroup soundGroup = custom.getComponents().getOrDefault(
                 CruxBlockComponents.BLOCK_SOUND_GROUP, custom.getGroup().getComponents().get(CruxBlockComponents.BLOCK_SOUND_GROUP)
@@ -75,18 +81,19 @@ public interface ActiveCruxBlock {
                     sound.playAt(block.getLocation().toCenterLocation());
                 }
             }
-
-            /*new ParticleBuilder(Particle.BLOCK)
+        }
+        if(!flags.hasFlag(BlockBreakFlag.DISABLE_PARTICLES)){
+            new ParticleBuilder(Particle.BLOCK)
                 .count(10)
                 .offset(.3, .3, .3)
                 .extra(.1)
                 .data(data)
                 .location(block.getLocation().toCenterLocation().subtract(0, .5, 0))
                 .spawn()
-            ;*/
+            ;
         }
 
-        if(drops != null){
+        if(drops != null && !flags.hasFlag(BlockBreakFlag.DISABLE_DROPS)){
             Location x = block.getLocation().toCenterLocation().subtract(0, .5, 0);
             for(ItemStack i : drops){
                 block.getWorld().dropItem(x, i);
@@ -109,7 +116,7 @@ public interface ActiveCruxBlock {
     }
 
     default @NotNull CruxBlockBreakEvent breakBlock(@Nullable ItemStack tool){
-        return breakBlock(Miner.item(tool), true, false);
+        return breakBlock(Miner.item(tool), BlockBreakFlags.standard());
     }
 
     /**
