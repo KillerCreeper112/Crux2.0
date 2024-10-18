@@ -13,6 +13,11 @@ import org.jetbrains.annotations.Nullable;
 
 public class FileStructureModule extends PureYamlFileHandler<StructureModule> {
     public final MappedRegistry<String, FileObjectHandler<? extends StructureModule>> TYPE_HANDLERS = new SimpleMappedRegistry<>();
+
+    public MappedRegistry<String, FileObjectHandler<? extends StructureModule>> typeHandlers() {
+        return TYPE_HANDLERS;
+    }
+
     @Override
     public @Nullable StructureModule deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;

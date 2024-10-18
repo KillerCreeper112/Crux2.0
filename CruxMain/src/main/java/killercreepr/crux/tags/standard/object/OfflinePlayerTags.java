@@ -121,6 +121,7 @@ public class OfflinePlayerTags implements ObjectTag<OfflinePlayer> {
                 if(online==null) return "false";
                 return online.hasResourcePack() + "";
             }))
+            .add(Tag.string("is_op", (args, ctx) -> p.isOp() + ""))
             ;
     }
 

@@ -25,6 +25,7 @@ import killercreepr.cruxblocks.components.persistence.BlocksDynamicPersistence;
 import killercreepr.cruxblocks.config.CruxConfigHook;
 import killercreepr.cruxblocks.config.handler.component.CfgBlockComponents;
 import killercreepr.cruxblocks.data.entity.MinerHolder;
+import killercreepr.cruxblocks.hook.CruxStructuresHook;
 import killercreepr.cruxblocks.item.CruxItemsItemProvider;
 import killercreepr.cruxblocks.item.KeyedItemProvider;
 import killercreepr.cruxblocks.listener.CustomBlockClientSyncListener;
@@ -111,6 +112,9 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
                     return "block_group";
                 }
             });
+        }
+        if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_STRUCTURES)){
+            CruxStructuresHook.register();
         }
     }
 
