@@ -1,10 +1,7 @@
-package killercreepr.cruxstructures.structure.impl;
+package killercreepr.cruxstructures.structure.generation.impl;
 
 import killercreepr.crux.context.InputContext;
-import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.Pos2D;
-import killercreepr.crux.loot.LootContext;
-import killercreepr.crux.loot.LootTable;
 import killercreepr.crux.tags.container.TagContainer;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.crux.valueproviders.number.NumberProvider;
@@ -21,17 +18,13 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-public class LocationSetStructureGen implements StructureGenerator {
-    protected final @NotNull LootTable<StructureGenerator> structurePool;
-    protected final @NotNull NumberProvider structureAmount;
+public abstract class LocationSetStructureGen implements StructureGenerator {
     protected final @Nullable NumberProvider chunkRangeX;
     protected final @Nullable NumberProvider chunkRangeZ;
     protected final @Nullable NumberProvider minDistanceApart;
 
     protected Collection<Pos2D> setChunks = null;
-    public LocationSetStructureGen(@NotNull LootTable<StructureGenerator> structurePool, @NotNull NumberProvider structureAmount, @Nullable NumberProvider chunkRangeX, @Nullable NumberProvider chunkRangeZ, @Nullable NumberProvider minDistanceApart) {
-        this.structurePool = structurePool;
-        this.structureAmount = structureAmount;
+    public LocationSetStructureGen(@Nullable NumberProvider chunkRangeX, @Nullable NumberProvider chunkRangeZ, @Nullable NumberProvider minDistanceApart) {
         this.chunkRangeX = chunkRangeX;
         this.chunkRangeZ = chunkRangeZ;
         this.minDistanceApart = minDistanceApart;
@@ -39,7 +32,7 @@ public class LocationSetStructureGen implements StructureGenerator {
 
     public Collection<Pos2D> generateSetChunks(@NotNull World world, int minDistance){
         InputContext ctx = InputContext.simple(TagContainer.string().hook(world));
-        int amount = structureAmount.sample(ctx).intValue();
+        int amount = getGenerateStructureAmount(ctx);
         if (amount < 1) return null;
 
         int rangeX = chunkRangeX == null ? (int) world.getWorldBorder().getSize() :
@@ -87,12 +80,14 @@ public class LocationSetStructureGen implements StructureGenerator {
         if(setChunks == null) setChunks = generateSetChunks(at.getWorld(), minDistanceApart == null ? 0 : minDistanceApart.value().intValue());
         if(setChunks == null) return GenerateResult.empty();
         if(!setChunks.contains(Pos2D.at(at.getX(), at.getZ()))) return GenerateResult.empty();
-        List<StructureGenerator> populated = structurePool.populateLoot(LootContext.builder()
-            .info(DataExchange.builder().put("chunk", at).build()).build());
+        List<StructureGenerator> populated = populateLoot(at);
         if(populated.isEmpty()) return GenerateResult.empty();
         StructureGenerator gen = populated.getFirst();
         return gen.generate(at);
     }
+
+    public abstract List<StructureGenerator> populateLoot(@NotNull Chunk at);
+    public abstract int getGenerateStructureAmount(@NotNull InputContext ctx);
 
     @Override
     public @NotNull GenerateResult generate(@NotNull Location at) {
@@ -102,14 +97,6 @@ public class LocationSetStructureGen implements StructureGenerator {
     @Override
     public @NotNull GenerateResult generate(@NotNull Structure structure, @NotNull Location at) {
         throw new UnsupportedOperationException();
-    }
-
-    public @NotNull LootTable<StructureGenerator> getStructurePool() {
-        return structurePool;
-    }
-
-    public @NotNull NumberProvider getStructureAmount() {
-        return structureAmount;
     }
 
     public @Nullable NumberProvider getChunkRangeX() {

@@ -123,7 +123,10 @@ public class CruxStructuresModule implements CruxModule {
         fileLocationFinder.TYPE_HANDLERS.register("dummy", new FileDummyLocationFinder());
 
         //CfgStructure
-        fileCfgStructureGen.typeHandlers().register("set_location", new FileLocationSetStructureGen());
-        fileCfgStructureGen.typeHandlers().register("instant_set_location", new FileInstantLocationSetStructureGen());
+        fileCfgStructureGen.typeHandlers().register("set_location_table", new FileLocationSetTableStructureGen());
+        fileCfgStructureGen.typeHandlers().register("instant_set_location_table", new FileInstantLocationSetTableStructureGen());
+
+        fileCfgStructureGen.typeHandlers().register("set_location_list", new FileLocationSetListStructureGen());
+        fileCfgStructureGen.typeHandlers().register("instant_set_location_list", new FileInstantLocationSetListStructureGen());
     }
 }

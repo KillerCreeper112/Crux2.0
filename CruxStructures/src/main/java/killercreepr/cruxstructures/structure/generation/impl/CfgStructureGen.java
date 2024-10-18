@@ -1,4 +1,4 @@
-package killercreepr.cruxstructures.structure.impl;
+package killercreepr.cruxstructures.structure.generation.impl;
 
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.loot.LootContext;
