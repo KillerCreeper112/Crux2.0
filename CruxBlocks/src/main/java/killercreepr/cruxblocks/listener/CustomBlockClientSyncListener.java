@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockExplodeEvent;
+import org.bukkit.event.block.BlockPistonEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -46,6 +47,13 @@ public class CustomBlockClientSyncListener implements Listener {
         update(b, direction, event.getBlocks(), false);
     }
 
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    public void onBlockPistonRetract(BlockPistonRetractEvent event) {
+        BlockFace direction = event.getDirection();
+        Block b = event.getBlock();
+        update(b, direction, event.getBlocks(), true);
+    }
+
     public void update(@NotNull Block b, @NotNull BlockFace direction, @NotNull Collection<Block> blocks, boolean retract){
         CruxBlock up = blockRegistry.getByBlock(b.getRelative(BlockFace.UP));
         CruxBlock down = blockRegistry.getByBlock(b.getRelative(BlockFace.DOWN));
@@ -73,12 +81,5 @@ public class CustomBlockClientSyncListener implements Listener {
     public void updateAllVertical(@NotNull Block b){
         update(b, BlockFace.UP);
         update(b.getRelative(BlockFace.DOWN), BlockFace.DOWN);
-    }
-
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-    public void onBlockPistonRetract(BlockPistonRetractEvent event) {
-        BlockFace direction = event.getDirection();
-        Block b = event.getBlock();
-        update(b, direction, event.getBlocks(), true);
     }
 }

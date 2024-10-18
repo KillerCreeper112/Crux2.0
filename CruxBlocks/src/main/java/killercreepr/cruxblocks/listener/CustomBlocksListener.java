@@ -219,12 +219,14 @@ public class CustomBlocksListener implements Listener {
         Block b = event.getBlock();
         ActiveCruxBlock active = manager.getActiveBlock(b);
         if(active==null) return;
-        if(active.getCruxBlock().getComponents().getOrDefault(CruxComponents.UNBREAKABLE, false)){
-            event.setCancelled(true);
-            return;
+        Player p = event.getPlayer();
+        if(p.getGameMode() != GameMode.CREATIVE){
+            if(active.getCruxBlock().getComponents().getOrDefault(CruxComponents.UNBREAKABLE, false)){
+                event.setCancelled(true);
+                return;
+            }
         }
 
-        Player p = event.getPlayer();
         active.breakBlock(Miner.entity(p.getInventory().getItemInMainHand(), p), true, p.getGameMode() == GameMode.CREATIVE);
     }
 
