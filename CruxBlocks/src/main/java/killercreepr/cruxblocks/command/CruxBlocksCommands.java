@@ -5,15 +5,24 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
+import io.papermc.paper.command.brigadier.argument.resolvers.BlockPositionResolver;
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.EntitySelectorArgumentResolver;
+import io.papermc.paper.math.BlockPosition;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import killercreepr.crux.data.communication.MsgContainer;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.util.CruxMath;
+import killercreepr.cruxblocks.block.CruxBlock;
+import killercreepr.cruxblocks.block.context.BlockContext;
+import killercreepr.cruxblocks.block.context.PlaceBlockContext;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.command.argument.CruxBlocksArguments;
 import killercreepr.cruxblocks.persistence.CruxBlocksPersistTags;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -52,9 +61,76 @@ public class CruxBlocksCommands {
                                 ))
                         )
                 )
+        ).then(
+            Commands.literal("place")
+                .then(
+                    Commands.argument("location", ArgumentTypes.blockPosition())
+                        .then(
+                            Commands.argument("block", CruxBlocksArguments.cruxBlockGroup())
+                                .executes(ctx ->{
+                                    CommandSender sender = getExecutor(ctx.getSource());
+                                    World world = getWorld(ctx.getSource());
+                                    if(world == null) return -1;
+                                    BlockPosition pos = ctx.getArgument("location", BlockPositionResolver.class)
+                                        .resolve(ctx.getSource());
+                                    CruxBlockGroup group = ctx.getArgument("block", CruxBlockGroup.class);
+                                    Block block = pos.toLocation(world).getBlock();
+                                    group.placeBlock(PlaceBlockContext.context(block, null, BlockFace.DOWN));
+                                    sender.sendMessage("Placed group, " + group.key() + ", " + pos.blockX() + ", " + pos.blockY() + ", " + pos.blockZ() + ".");
+                                    return 1;
+                                })
+                        )
+                )
+        ).then(
+            Commands.literal("set")
+                .then(
+                    Commands.argument("location", ArgumentTypes.blockPosition())
+                        .then(
+                            Commands.argument("block", CruxBlocksArguments.cruxBlock())
+                                .executes(ctx ->{
+                                    CommandSender sender = getExecutor(ctx.getSource());
+                                    World world = getWorld(ctx.getSource());
+                                    if(world == null) return -1;
+                                    BlockPosition pos = ctx.getArgument("location", BlockPositionResolver.class)
+                                        .resolve(ctx.getSource());
+                                    CruxBlock group = ctx.getArgument("block", CruxBlock.class);
+                                    Block block = pos.toLocation(world).getBlock();
+                                    group.setBlock(BlockContext.context(block, null), true);
+                                    sender.sendMessage("Set crux block, " + group.key() + ", " + pos.blockX() + ", " + pos.blockY() + ", " + pos.blockZ() + ".");
+                                    return 1;
+                                })
+                        )
+                )
+        ).then(
+            Commands.literal("placeblock")
+                .then(
+                    Commands.argument("location", ArgumentTypes.blockPosition())
+                        .then(
+                            Commands.argument("block", CruxBlocksArguments.cruxBlock())
+                                .executes(ctx ->{
+                                    CommandSender sender = getExecutor(ctx.getSource());
+                                    World world = getWorld(ctx.getSource());
+                                    if(world == null) return -1;
+                                    BlockPosition pos = ctx.getArgument("location", BlockPositionResolver.class)
+                                        .resolve(ctx.getSource());
+                                    CruxBlock group = ctx.getArgument("block", CruxBlock.class);
+                                    Block block = pos.toLocation(world).getBlock();
+                                    group.placeBlock(PlaceBlockContext.context(block, null, BlockFace.DOWN));
+                                    sender.sendMessage("Placed crux block, " + group.key() + ", at " + pos.blockX() + ", " + pos.blockY() + ", " + pos.blockZ() + ".");
+                                    return 1;
+                                })
+                        )
+                )
         )
         ;
         return dispatcher.build();
+    }
+
+    public static World getWorld(@NotNull CommandSourceStack source){
+        CommandSender sender = getExecutor(source);
+        if(sender instanceof BlockCommandSender s) return s.getBlock().getWorld();
+        if(sender instanceof Entity s) return s.getWorld();
+        return null;
     }
 
     public static @NotNull CommandSender getExecutor(@NotNull CommandSourceStack source){
