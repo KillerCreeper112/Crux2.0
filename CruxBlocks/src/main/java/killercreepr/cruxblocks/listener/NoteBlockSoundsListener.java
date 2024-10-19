@@ -7,7 +7,6 @@ import killercreepr.crux.util.CruxWorldUtil;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.component.CruxBlockComponents;
 import killercreepr.cruxblocks.registries.CruxBlockRegistry;
-import org.bukkit.Bukkit;
 import org.bukkit.GameEvent;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -141,7 +140,7 @@ public class NoteBlockSoundsListener implements Listener {
         if(sound==null) return;
         if (breakerPlaySound.containsKey(location)) return;
 
-        BukkitTask task = Bukkit.getScheduler().runTaskTimer(plugin, () -> sound.playAt(location), 2L, 4L);
+        BukkitTask task = plugin.getServer().getScheduler().runTaskTimer(plugin, () -> sound.playAt(location), 2L, 4L);
         breakerPlaySound.put(location, task);
     }
 

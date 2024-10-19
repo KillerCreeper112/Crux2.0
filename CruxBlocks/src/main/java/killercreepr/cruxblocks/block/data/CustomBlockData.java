@@ -191,12 +191,11 @@ public class CustomBlockData implements PersistentDataContainer {
 
     /**
      * Sets this block as "dirty" and removes it from the list after the next tick
-     * @param plugin Plugin
      * @param blockEntry Block entry
      */
-    public static void setDirty(Plugin plugin, Map.Entry<UUID, BlockVector> blockEntry) {
+    public static void setDirty(Map.Entry<UUID, BlockVector> blockEntry) {
         DIRTY_BLOCKS.add(blockEntry);
-        Bukkit.getScheduler().runTask(plugin, () -> DIRTY_BLOCKS.remove(blockEntry));
+        Crux.scheduler().runTask(() -> DIRTY_BLOCKS.remove(blockEntry));
     }
 
     /**
@@ -419,7 +418,7 @@ public class CustomBlockData implements PersistentDataContainer {
     }
 
     public void setData(PersistentDataContainer data){
-        setDirty(plugin, blockEntry);
+        setDirty(blockEntry);
         if(data == null){
             chunk.getPersistentDataContainer().remove(key);
         } else{
@@ -432,7 +431,7 @@ public class CustomBlockData implements PersistentDataContainer {
      * Saves the block's {@link PersistentDataContainer} inside the chunk's PersistentDataContainer
      */
     private void save() {
-        setDirty(plugin, blockEntry);
+        setDirty(blockEntry);
         if (pdc.isEmpty()) {
             chunk.getPersistentDataContainer().remove(key);
         } else {

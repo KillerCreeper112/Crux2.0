@@ -5,6 +5,8 @@ import killercreepr.crux.data.tick.CruxTick;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.crux.registry.KeyedRegistry;
+import killercreepr.crux.scheduler.CruxScheduler;
+import killercreepr.crux.scheduler.CruxSimpleScheduler;
 import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.format.FormatSerializer;
 import killercreepr.crux.tags.standard.CruxStandardTags;
@@ -63,6 +65,15 @@ public final class Crux {
         .addGlobalStringListTags(CruxStandardTags.buildGlobalStringListTags())
         .build();
     private static final Logger log = Logger.getLogger(Crux.class.getName());
+    private static CruxScheduler scheduler = new CruxSimpleScheduler();
+
+    public static CruxScheduler scheduler() {
+        return scheduler;
+    }
+
+    public static void setScheduler(@NotNull CruxScheduler scheduler) {
+        Crux.scheduler = scheduler;
+    }
 
     private static CruxPlugin mainPlugin;
     public static CruxPlugin getMainPlugin() {
