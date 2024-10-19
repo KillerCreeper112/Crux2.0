@@ -46,7 +46,7 @@ public class EntitySpawnerComponent implements CruxBlockComponent {
         this.spawns = spawns;
         this.ignoreCreativePlayers = ignoreCreativePlayers;
         spawner = new SimpleNaturalEntitySpawner(
-            Crux.getMainPlugin(), CruxMath.RANDOM, spawns,
+            Crux.getMainPlugin(), CruxMath.random(), spawns,
             spawnRange,
             innerSpawnDistance,
             spawnCount, maxSpawnAttempts,
