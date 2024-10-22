@@ -1,5 +1,6 @@
 package killercreepr.cruxblocks.block;
 
+import killercreepr.crux.Crux;
 import killercreepr.crux.component.DataComponentHandler;
 import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.crux.data.communication.CreateSound;
@@ -15,9 +16,15 @@ import killercreepr.cruxblocks.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.block.texture.TextureData;
 import killercreepr.cruxblocks.event.CruxBlockPlaceEvent;
 import killercreepr.cruxblocks.event.CruxBlockSetEvent;
+import killercreepr.cruxblocks.user.EntityMiner;
 import net.kyori.adventure.key.Keyed;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.generator.LimitedRegion;
+import org.bukkit.inventory.EquipmentSlot;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -68,6 +75,22 @@ public interface CruxBlock extends Keyed, CruxBlockData {
         Block b = ctx.getBlock();
 
         TextureData data = getTextureData();
+        //todo add bukkit place block
+        /*if(ctx.getMiner() instanceof EntityMiner m && m.getEntity() instanceof Player p){
+            BlockState replacedState = b.getState(true);
+            data.setBlock(b, false);
+            BlockPlaceEvent bukkitPlace = new BlockPlaceEvent(b, replacedState, b.getRelative(ctx.getBlockFace()),
+                m.getTool() == null ? p.getInventory().getItemInMainHand() : m.getTool(), p, true,
+                m.getHand() == null ? EquipmentSlot.HAND : m.getHand()
+            );
+            if(!bukkitPlace.callEvent()){
+                Crux.handlers().block().setType(b, Material.AIR, false, true);
+                return null;
+            }
+        }else{
+            data.setBlock(b, false);
+        }*/
+
         data.setBlock(b, applyPhysics);
         ActiveCruxBlock active = CruxRegistries.MODULES.getModuleOrThrow(CruxBlocksModule.class)
             .getActiveBlock(ctx.getBlock());

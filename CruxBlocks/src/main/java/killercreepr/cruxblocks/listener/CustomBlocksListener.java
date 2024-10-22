@@ -42,6 +42,7 @@ import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerAnimationType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -344,12 +345,13 @@ public class CustomBlocksListener implements Listener {
         for(Entity e : clickedBlock.getWorld().getNearbyEntities(CruxBlockUtil.getBlockBox(placeBlock))){
             if(e instanceof LivingEntity) return;
         }
+        EquipmentSlot hand = event.getHand();
         plugin.getServer().getScheduler().runTask(plugin, task ->{
-            ActiveCruxBlock placed = group.placeBlock(PlaceBlockContext.context(placeBlock, Miner.entity(p.getInventory().getItemInMainHand(), p), blockFace));
+            ActiveCruxBlock placed = group.placeBlock(PlaceBlockContext.context(placeBlock, Miner.entity(item, p, hand), blockFace));
             if(placed == null) return;
 
             if(p.getGameMode() != GameMode.CREATIVE) item.setAmount(item.getAmount() - 1);
-            p.swingHand(event.getHand());
+            p.swingHand(hand);
         });
     }
 }
