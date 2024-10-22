@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -436,5 +437,12 @@ public class CruxLoc {
             loc.setDirection(difference);
         }
         return loc;
+    }
+
+    public static boolean inRegion(Location location, BoundingBox boundingBox) {
+        // Check if the location is within the bounding box
+        return location.getX() >= boundingBox.getMinX() && location.getX() <= boundingBox.getMaxX() &&
+            location.getY() >= boundingBox.getMinY() && location.getY() <= boundingBox.getMaxY() &&
+            location.getZ() >= boundingBox.getMinZ() && location.getZ() <= boundingBox.getMaxZ();
     }
 }
