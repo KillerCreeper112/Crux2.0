@@ -6,8 +6,19 @@ import net.kyori.adventure.key.Keyed;
 
 public interface MobCategory extends Keyed {
     static void register(){}
+
+    /**
+     * Represents mobs that are not aggressive in nature.
+     */
     MobCategory NEUTRAL = CruxEntityRegistries.MOB_CATEGORY.register(new SimpleMobCategory(Crux.key("neutral")));
+    /**
+     * Represents an animal-type mob such as pigs and cows.
+     */
     MobCategory ANIMAL = CruxEntityRegistries.MOB_CATEGORY.register(new SimpleMobCategory(Crux.key("animal")));
+    /**
+     * Represents mobs that are aggressive in nature.
+     */
+    MobCategory ENEMY = CruxEntityRegistries.MOB_CATEGORY.register(new SimpleMobCategory(Crux.key("enemy")));
     MobCategory MONSTER = CruxEntityRegistries.MOB_CATEGORY.register(new SimpleMobCategory(Crux.key("monster")));
     MobCategory ARTHROPOD = CruxEntityRegistries.MOB_CATEGORY.register(new SimpleMobCategory(Crux.key("arthropod")));
     MobCategory UNDEAD = CruxEntityRegistries.MOB_CATEGORY.register(new SimpleMobCategory(Crux.key("undead")));

@@ -13,6 +13,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import org.bukkit.Location;
 import org.bukkit.entity.Animals;
+import org.bukkit.entity.Enemy;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Monster;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -42,6 +43,18 @@ public interface CruxMob extends Keyed {
         return grim.key().equals(CruxEntitiesPersist.ENTITY.get(e, null));
     }
 
+    static boolean isInAllCategories(@NotNull Entity e, @NotNull MobCategory... check){
+        Collection<MobCategory> list = Arrays.asList(check);
+        return Arrays.stream(getCategories(e)).allMatch(list::contains);
+    }
+
+    static boolean isInAllCategories(@NotNull CruxMob e, @NotNull MobCategory... check){
+        MobCategory[] categories = e.getCategories();
+        if(categories==null || categories.length == 0) return false;
+        Collection<MobCategory> list = Arrays.asList(check);
+        return Arrays.stream(categories).allMatch(list::contains);
+    }
+
     static boolean isInCategory(@NotNull Entity e, @NotNull MobCategory... check){
         Collection<MobCategory> list = Arrays.asList(check);
         return Arrays.stream(getCategories(e)).anyMatch(list::contains);
@@ -63,6 +76,7 @@ public interface CruxMob extends Keyed {
 
     static @NotNull MobCategory[] getVanillaCategories(@NotNull Entity e){
         Collection<MobCategory> list = new HashSet<>();
+        if(e instanceof Enemy) list.add(MobCategory.ENEMY);
         if(e instanceof Monster) list.add(MobCategory.MONSTER);
         if(e instanceof Animals) list.add(MobCategory.ANIMAL);
         if(EntityTags.UNDEADS.isTagged(e.getType())) list.add(MobCategory.UNDEAD);
