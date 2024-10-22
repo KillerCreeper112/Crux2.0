@@ -4,6 +4,7 @@ import killercreepr.crux.data.world.CruxPosition;
 import org.bukkit.Location;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -173,6 +174,38 @@ public class CruxedBoundingBox {
             new BoundingBox(
                 box.getMinX(), box.getMinY(), box.getMinZ(),
                 box.getMaxX()+1, box.getMaxY()+1, box.getMaxZ()+1
+            )
+        );
+        return this;
+    }
+
+    private static double toRadians(double degrees) {
+        return Math.toRadians(degrees);
+    }
+
+    @ApiStatus.Experimental
+    public CruxedBoundingBox expand(double rotationAngle, double scaleFactor) {
+        // Calculate the original dimensions
+        double width = box.getWidthX();
+        double height = box.getHeight();
+        double depth = box.getWidthZ();
+
+        // Calculate the new width and height based on the rotation
+        double radians = Math.toRadians(rotationAngle);
+        double newWidth = width * scaleFactor * Math.abs(Math.cos(radians));
+        double newHeight = height * scaleFactor * Math.abs(Math.sin(radians));
+        double newDepth = depth * scaleFactor; // Assuming depth is not affected by rotation
+
+        // Calculate new min/max coordinates based on the center of the original bounding box
+        double centerX = box.getMinX() + width / 2;
+        double centerY = box.getMinY() + height / 2;
+        double centerZ = box.getMinZ() + depth / 2;
+
+        // Create the new BoundingBox
+        box(
+            new BoundingBox(
+                centerX - newWidth / 2, centerY - newHeight / 2, centerZ - newDepth / 2,
+                centerX + newWidth / 2, centerY + newHeight / 2, centerZ + newDepth / 2
             )
         );
         return this;

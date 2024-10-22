@@ -53,6 +53,7 @@ import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Instant;
@@ -94,6 +95,7 @@ public class BukkitCfgHandlers {
     public static final FileTypedDataComponent TYPED_DATA_COMPONENT = new FileTypedDataComponent();
     public static final FileDataComponentHandler DATA_COMPONENT_HANDLER = new FileDataComponentHandler();
     public static final FileCruxEntitySnapshot CRUX_ENTITY_SNAPSHOT = new FileCruxEntitySnapshot();
+    public static final FileVector VECTOR = new FileVector();
 
     public static void initStandard(){
         CfgRegistries.FILE.forEach(BukkitCfgHandlers::init);
@@ -132,6 +134,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(EntityPredicate.class, ENTITY_PREDICATE);
         registry.registerFileHandler(CruxBlockWrapper.class, CRUX_BLOCK_WRAPPER);
         registry.registerFileHandler(CruxEntitySnapshot.class, CRUX_ENTITY_SNAPSHOT);
+        registry.registerFileHandler(Vector.class, VECTOR);
 
         StandardCfgDataComponentTypes.register(TYPED_DATA_COMPONENT.typeHandlers());
         registry.registerFileHandler(TypedDataComponent.class, TYPED_DATA_COMPONENT);

@@ -21,6 +21,9 @@ dependencies {
     compileOnly((project(":CruxConfigs")))
     compileOnly((project(":CruxGeneration")))
 
+    /*compileOnly(fileTree("libs") {
+        include("*.jar")
+    })*/
     compileOnly(fileTree("libs") {
         include("*.jar")
     })
