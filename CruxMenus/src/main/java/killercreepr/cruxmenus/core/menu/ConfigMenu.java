@@ -19,10 +19,8 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public class ConfigMenu extends BukkitMenu implements CfgMenu {
     protected final @NotNull MenuHolder holder;
@@ -92,16 +90,34 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
         setItems(items, menuContext);
     }
 
-    @Override
-    public void setItems(@NotNull MenuItems items, @NotNull MenuContext menuContext) {
+    //
+    public Map<Integer, MenuItem> buildItems(@NotNull MenuItems items, @NotNull MenuContext menuContext){
         Player viewer = info.getOrThrow("viewer", Player.class);
+        Map<Integer, MenuItem> map = new HashMap<>();
         items.forEach(list -> list.forEach(menuItem ->{
             MenuItem i = menuItem.getDisplayItem(viewer, menuContext);
             Optional<Integer> slot = i.getSlot();
 
             if(slot.isEmpty() || !i.canDisplay()) return;
-            setItem(slot.get(), i, viewer);
+            map.put(slot.get(), i);
+            //setItem(slot.get(), i, viewer);
         }));
+        return map;
+    }
+
+    @Override
+    public void setItems(@NotNull MenuItems items, @NotNull MenuContext menuContext) {
+        Player viewer = info.getOrThrow("viewer", Player.class);
+        buildItems(items, menuContext).forEach((slot, item) ->{
+            setItem(slot, item, viewer);
+        });
+        /*items.forEach(list -> list.forEach(menuItem ->{
+            MenuItem i = menuItem.getDisplayItem(viewer, menuContext);
+            Optional<Integer> slot = i.getSlot();
+
+            if(slot.isEmpty() || !i.canDisplay()) return;
+            setItem(slot.get(), i, viewer);
+        }));*/
     }
 
     public @Nullable MenuItem setItem(@NotNull MenuItemHolder menuItem, @NotNull Player viewer, @NotNull MenuContext menuContext){

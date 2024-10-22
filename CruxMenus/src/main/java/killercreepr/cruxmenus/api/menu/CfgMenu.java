@@ -35,7 +35,7 @@ public interface CfgMenu extends Menu, DataInfoHolder {
             }
 
             item.buildItemCompletely(viewer).whenComplete((it, throwable) ->{
-                Crux.getServer().getScheduler().runTask(Crux.getMainPlugin(), task ->{
+                Crux.scheduler().runTask(task ->{
                     if (throwable != null) {
                         // An exception occurred
                         Crux.log(Level.WARNING, "Error occurred when building MenuItem: " + throwable.getMessage());
