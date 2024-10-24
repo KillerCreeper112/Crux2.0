@@ -136,7 +136,7 @@ public interface Menu extends CommonMenu, InventoryHolder {
         if(newItemClone.getAmount() < 1) newItemClone = slot.getSlottedItemReplacement();
         final ItemStack oldItemClone = slotItem.clone();
 
-        SlotContext ctx = SlotContext.context(newItemClone, oldItemClone);
+        SlotContext ctx = SlotContext.context(p, newItemClone, oldItemClone);
         slot.onChanged(ctx);
         if(ctx.isCancelled()) return new SlotResult(null, false);
 
@@ -195,7 +195,7 @@ public interface Menu extends CommonMenu, InventoryHolder {
 
             newItemClone = set;
 
-            SlotContext ctx = SlotContext.context(newItemClone, oldItemClone);
+            SlotContext ctx = SlotContext.context(p, newItemClone, oldItemClone);
             slot.onChanged(ctx);
             if(ctx.isCancelled()) return new SlotResult(item, false);
 
@@ -207,7 +207,7 @@ public interface Menu extends CommonMenu, InventoryHolder {
 
         newItemClone = slotItem.clone();
         newItemClone.setAmount(newItemClone.getAmount()+amountToGive);
-        SlotContext ctx = SlotContext.context(newItemClone, oldItemClone);
+        SlotContext ctx = SlotContext.context(p, newItemClone, oldItemClone);
         slot.onChanged(ctx);
         if(ctx.isCancelled()) return new SlotResult(item, false);
 
