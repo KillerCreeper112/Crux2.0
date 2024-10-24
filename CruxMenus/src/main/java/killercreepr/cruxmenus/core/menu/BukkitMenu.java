@@ -4,6 +4,7 @@ import killercreepr.cruxmenus.api.event.MenuCloseEvent;
 import killercreepr.cruxmenus.api.event.MenuOpenEvent;
 import killercreepr.cruxmenus.api.event.MenuRefreshEvent;
 import killercreepr.cruxmenus.api.menu.Menu;
+import killercreepr.cruxmenus.api.menu.SlottedMenu;
 import killercreepr.cruxmenus.api.menu.module.MenuModuleRegistry;
 import killercreepr.cruxmenus.api.menu.slot.Slot;
 import killercreepr.cruxmenus.core.menu.module.MenuModuleRegistryImpl;
@@ -22,7 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class BukkitMenu implements Menu {
+public class BukkitMenu implements SlottedMenu {
     protected final LinkedHashMap<Integer, Slot> slots = new LinkedHashMap<>();
     protected final @NotNull UUID uuid;
     protected @NotNull Inventory inventory;
@@ -42,12 +43,13 @@ public class BukkitMenu implements Menu {
         this.uuid = uuid;
         this.inventory = inventory;
     }
-
-    protected void addSlot(@NotNull Slot slot){
+    @Override
+    public void addSlot(@NotNull Slot slot){
         addSlot(slot, true);
     }
 
-    protected void addSlot(@NotNull Slot slot, boolean skipUpdate){
+    @Override
+    public void addSlot(@NotNull Slot slot, boolean skipUpdate){
         slots.put(slot.getIndex(), slot);
         if(skipUpdate) return;
         slot.setItem(slot.getSlottedItemReplacement(), true);
