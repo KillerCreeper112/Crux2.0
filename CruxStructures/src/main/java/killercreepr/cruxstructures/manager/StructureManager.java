@@ -2,6 +2,7 @@ package killercreepr.cruxstructures.manager;
 
 import com.google.common.reflect.TypeToken;
 import killercreepr.crux.Crux;
+import killercreepr.crux.data.tick.ManagedTicked;
 import killercreepr.crux.data.world.ChunkBlockStorage;
 import killercreepr.crux.data.world.CruxPosition;
 import killercreepr.crux.data.world.MultiVerseWorldStorage;
@@ -21,6 +22,7 @@ import killercreepr.cruxstructures.structure.generation.StructureGenerator;
 import killercreepr.cruxstructures.structure.impl.CfgFAWEStructure;
 import killercreepr.cruxstructures.structure.result.GenerateResult;
 import killercreepr.cruxstructures.structure.stored.StoredStructure;
+import killercreepr.cruxstructures.structure.stored.TickedStoredStructure;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -40,6 +42,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 
@@ -54,6 +57,7 @@ public class StructureManager implements Listener {
 
     protected final @NotNull MultiVerseWorldStorage<StoredStructure> stored = new MultiVerseBlockPosedStorage<>(new ConcurrentHashMap<>());
     protected final @NotNull MultiVerseWorldStorage<ActiveStructure> active = new MultiVerseBlockPosedStorage<>(new ConcurrentHashMap<>());
+    protected final @NotNull MultiVerseWorldStorage<TickedStoredStructure> storedTicked = new MultiVerseBlockPosedStorage<>(new ConcurrentHashMap<>());
 
     public @NotNull Collection<StoredStructure> getStoredAt(@NotNull Block block){
         return getStoredAt(block, null);
@@ -135,11 +139,27 @@ public class StructureManager implements Listener {
         return null;
     }
 
+    private final Predicate<ChunkBlockStorage<? extends ManagedTicked>> chunkRemoveIf = chunk ->{
+        chunk.getData().values().removeIf(a ->{
+            if(a.shouldStop()){
+                a.stopped();
+                return true;
+            }
+            a.tick();
+            return false;
+        });
+        return chunk.isEmpty();
+    };
+    private final Consumer<WorldChunkStorage<? extends ManagedTicked>> worldForEach = world ->{
+        world.getData().values().removeIf(chunkRemoveIf);
+    };
     public @NotNull BukkitRunnable buildRunnable(){
         return new BukkitRunnable(){
             @Override
             public void run() {
-                active.getData().values().forEach(worldChunk -> tick(worldChunk));
+                active.getData().values().forEach(worldForEach);
+                storedTicked.getData().values().forEach(worldForEach);
+                //active.getData().values().forEach(worldChunk -> tick(worldChunk));
             }
         };
     }
@@ -198,6 +218,22 @@ public class StructureManager implements Listener {
         loadGenerationConfiguration();
     }
 
+    public void addStoredStructure(StoredStructure stored, UUID world, long chunkKey){
+        this.stored.add(world, chunkKey, stored);
+        if(stored instanceof TickedStoredStructure ticked){
+            this.storedTicked.add(world, chunkKey, ticked);
+        }
+    }
+
+    public void addStoredStructure(StoredStructure stored, UUID world, Chunk chunk){
+        long chunkKey = chunk.getChunkKey();
+        addStoredStructure(stored, world, chunkKey);
+        ActiveStructure active = stored.buildActive(chunk);
+        if(active==null) return;
+        this.active.add(world, chunkKey, active);
+        active.started();
+    }
+
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onStructurePlace(StructurePlaceEvent event) {
         Structure structure = event.getStructure();
@@ -207,11 +243,7 @@ public class StructureManager implements Listener {
         if(stored==null) return;
         if(!stored.shouldPersist()) return;
         Chunk chunk = spawn.getChunk();
-        this.stored.add(spawn.getWorld().getUID(), chunk.getChunkKey(), stored);
-        ActiveStructure active = stored.buildActive(chunk);
-        if(active==null) return;
-        this.active.add(spawn.getWorld().getUID(), chunk.getChunkKey(), active);
-        active.started();
+        addStoredStructure(stored, spawn.getWorld().getUID(), chunk);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -261,7 +293,8 @@ public class StructureManager implements Listener {
             Map<CruxPosition, StoredStructure> values = file.structures();
             file.close();
             values.values().forEach(v ->{
-                stored.add(worldUUID, v.getChunk().getChunkKey(), v);
+                addStoredStructure(v, worldUUID, v.getChunk().getChunkKey());
+                //stored.add(worldUUID, v.getChunk().getChunkKey(), v);
             });
         }
     }
@@ -286,6 +319,7 @@ public class StructureManager implements Listener {
         Crux.log(Level.INFO, "Saving structures in world: " + world.getName());
         UUID worldUUID = world.getUID();
         WorldChunkStorage<StoredStructure> removed = stored.remove(worldUUID);
+        storedTicked.remove(worldUUID);
 
         CruxFolder folder = createWorldFolder(worldUUID);
         if(folder.file().exists()){
@@ -356,5 +390,9 @@ public class StructureManager implements Listener {
 
     public @NotNull MultiVerseWorldStorage<ActiveStructure> getActive() {
         return active;
+    }
+
+    public @NotNull MultiVerseWorldStorage<TickedStoredStructure> getStoredTicked() {
+        return storedTicked;
     }
 }
