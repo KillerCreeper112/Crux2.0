@@ -50,13 +50,14 @@ public class InstantLocationSetListStructureGen extends LocationSetListStructure
                 }
 
                 if(world.isChunkGenerated(pos.x(), pos.z()) && !(at.getX() == pos.x() && at.getZ() == pos.z())) return;
-                Chunk chunk = world.getChunkAt(pos.x(), pos.z());
-                List<StructureGenerator> populated = populateLoot(at);
-                if(populated.isEmpty()) return;
-                StructureGenerator gen = populated.getFirst();
-                gen.generate(chunk);
+                world.getChunkAtAsync(pos.x(), pos.z()).whenComplete((chunk, throwable) ->{
+                    List<StructureGenerator> populated = populateLoot(at);
+                    if(populated.isEmpty()) return;
+                    StructureGenerator gen = populated.getFirst();
+                    gen.generate(chunk);
+                });
             }
-        }.runTaskTimer(Crux.getMainPlugin(), 100L, 200L);
+        }.runTaskTimerAsynchronously(Crux.getMainPlugin(), 100L, 200L);
 
         CruxTag.set(world, "instant_location_set/" + id, PersistentDataType.BOOLEAN, true);
 
