@@ -6,7 +6,6 @@ import killercreepr.crux.block.predicate.BlockAllPredicate;
 import killercreepr.crux.block.predicate.BlockAnyPredicate;
 import killercreepr.crux.block.predicate.BlockPredicate;
 import killercreepr.crux.data.tag.block.BlockTag;
-import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileArray;

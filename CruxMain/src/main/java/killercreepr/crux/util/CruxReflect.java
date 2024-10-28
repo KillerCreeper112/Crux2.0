@@ -1,11 +1,14 @@
 package killercreepr.crux.util;
 
+import killercreepr.crux.Crux;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.logging.Level;
 
 public class CruxReflect {
     public static @NotNull Predicate<Field> NON_STATIC(@Nullable Predicate<Field> filter){
@@ -163,12 +166,20 @@ public class CruxReflect {
                 T object = (T) constructor.newInstance();
                 fields.forEach((key, value) ->{
                     try {
-                        Field field = object.getClass().getField(key);
+                        Field field = type.getField(key);
                         boolean x = field.canAccess(object);
                         field.setAccessible(true);
                         field.set(object, value);
                         field.setAccessible(x);
                     } catch (NoSuchFieldException | IllegalAccessException ignored) {
+                        try {
+                            Field field = type.getDeclaredField(key);
+                            boolean x = field.canAccess(object);
+                            field.setAccessible(true);
+                            field.set(object, value);
+                            field.setAccessible(x);
+                        } catch (NoSuchFieldException | IllegalAccessException ignoredE) {
+                        }
                     }
                 });
                 return object;

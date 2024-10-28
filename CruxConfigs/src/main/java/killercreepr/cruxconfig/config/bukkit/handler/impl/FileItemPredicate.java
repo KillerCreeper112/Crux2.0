@@ -7,7 +7,6 @@ import killercreepr.crux.item.predicate.ItemAllPredicate;
 import killercreepr.crux.item.predicate.ItemAnyPredicate;
 import killercreepr.crux.item.predicate.ItemPredicate;
 import killercreepr.crux.item.predicate.ItemTypePredicate;
-import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileArray;

@@ -53,6 +53,7 @@ import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
@@ -178,6 +179,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(BlockPos.class, new AutoFileHandler<>(BlockPos.class));
         registry.registerFileHandler(LocationPos.class, new AutoFileHandler<>(LocationPos.class));
         registry.registerFileHandler(ArmorTrim.class, new AutoFileHandler<>(ArmorTrim.class));
+        registry.registerFileHandler(BoundingBox.class, new AutoFileHandler<>(BoundingBox.class));
     }
 
     @SafeVarargs
