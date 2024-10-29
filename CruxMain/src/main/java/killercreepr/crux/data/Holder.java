@@ -10,6 +10,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public interface Holder <T>{
+    Holder<Object> EMPTY = direct(null);
     static @NotNull Direct<Object> directObject(@Nullable Object o){
         return new Direct<>(o);
     }
@@ -27,11 +28,11 @@ public interface Holder <T>{
         };
     }
     static @NotNull Holder<Object> emptyObject(){
-        return direct(null);
+        return EMPTY;
     }
 
     static <E> @NotNull Holder<E> empty(){
-        return direct(null);
+        return (Holder<E>) EMPTY;
     }
 
     static <K, E> Holder<E> registry(@NotNull K key, @NotNull MappedRegistry<K, E> registry){

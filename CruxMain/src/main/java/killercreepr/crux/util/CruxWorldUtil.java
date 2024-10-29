@@ -4,6 +4,7 @@ import killercreepr.crux.Crux;
 import killercreepr.crux.data.world.CruxPosition;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.WorldCreator;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
@@ -52,5 +53,24 @@ public class CruxWorldUtil {
             break;
         }
         return false;
+    }
+
+    public static World getOrLoadWorld(@NotNull String name){
+        World world = Crux.getServer().getWorld(name);
+        if(world != null) return world;
+        for(File f : Crux.getServer().getWorldContainer().listFiles()){
+            if(!f.getName().equals(name)) continue;
+            if(!f.isDirectory()) continue;
+            boolean foundLevel = false;
+            for(File folderF : f.listFiles()){
+                if(folderF.getName().equals("level.dat")){
+                    foundLevel = true;
+                    break;
+                }
+            }
+            if(!foundLevel) break;
+            return Crux.getServer().createWorld(new WorldCreator(name));
+        }
+        return null;
     }
 }
