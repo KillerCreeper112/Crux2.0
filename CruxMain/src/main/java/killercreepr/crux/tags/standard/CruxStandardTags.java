@@ -18,7 +18,9 @@ public class CruxStandardTags {
             new WorldTags(),
             new WorldBorderTags(),
             new BlockTags(),
-            new BlockStateTags()
+            new BlockStateTags(),
+            new CruxPositionTags(),
+            new LocationTags()
         );
     }
 
