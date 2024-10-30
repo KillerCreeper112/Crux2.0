@@ -9,6 +9,7 @@ import killercreepr.cruxblocks.block.component.CruxBlockComponents;
 import killercreepr.cruxblocks.registries.CruxBlockRegistry;
 import org.bukkit.GameEvent;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -128,6 +129,7 @@ public class NoteBlockSoundsListener implements Listener {
     public void onBlockDamage(BlockDamageEvent event) {
         if (event.getInstaBreak()) return;
         Block block = event.getBlock();
+        if(block.getType() == Material.TRIPWIRE) return;
         CruxBlock crux = registry.getByBlock(block);
         if(crux==null) return;
         Location location = block.getLocation().toCenterLocation();

@@ -35,9 +35,18 @@ public class ActiveEntitySpawner extends ActiveCruxBlockImpl implements ManagedT
     }
 
     protected final Runnable task = () -> {
-        if(!isActive()) return;
+        if(!isActive()){
+            failedNavigateSpawner();
+            return;
+        }
         navigateSpawner();
     };
+
+    public void failedNavigateSpawner(){
+        if(delay == -1){
+            delay = data.failedDelay.value().intValue();
+        }
+    }
 
     public void navigateSpawner(){
         spawner.navigate(block.getWorld(), CruxPosition.block(block));
