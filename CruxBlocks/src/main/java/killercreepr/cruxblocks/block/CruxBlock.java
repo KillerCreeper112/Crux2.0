@@ -1,6 +1,5 @@
 package killercreepr.cruxblocks.block;
 
-import killercreepr.crux.Crux;
 import killercreepr.crux.component.DataComponentHandler;
 import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.crux.data.communication.CreateSound;
@@ -12,19 +11,16 @@ import killercreepr.cruxblocks.block.component.CruxBlockComponent;
 import killercreepr.cruxblocks.block.component.CruxBlockComponents;
 import killercreepr.cruxblocks.block.context.BlockContext;
 import killercreepr.cruxblocks.block.context.PlaceBlockContext;
+import killercreepr.cruxblocks.block.data.CustomBlockData;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.block.texture.TextureData;
 import killercreepr.cruxblocks.event.CruxBlockPlaceEvent;
 import killercreepr.cruxblocks.event.CruxBlockSetEvent;
-import killercreepr.cruxblocks.user.EntityMiner;
+import killercreepr.cruxblocks.persistence.CruxBlocksPersistTags;
+import killercreepr.cruxblocks.registries.CruxBlocksRegistries;
 import net.kyori.adventure.key.Keyed;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.generator.LimitedRegion;
-import org.bukkit.inventory.EquipmentSlot;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -63,6 +59,10 @@ public interface CruxBlock extends Keyed, CruxBlockData {
 
         TextureData data = getTextureData();
         data.setBlock(ctx.getBlock(), applyPhysics);
+        if(CruxBlocksRegistries.BLOCK.getPossibleBlocks(data).size() > 1){
+            CustomBlockData blockData = CustomBlockData.wrap(ctx.getBlock());
+            CruxBlocksPersistTags.CRUX_BLOCK_KEY.set(blockData, key());
+        }
         return CruxRegistries.MODULES.getModuleOrThrow(CruxBlocksModule.class)
             .getActiveBlock(ctx.getBlock());
     }
@@ -91,7 +91,12 @@ public interface CruxBlock extends Keyed, CruxBlockData {
             data.setBlock(b, false);
         }*/
 
-        data.setBlock(b, applyPhysics);
+        data.setBlock(b, applyPhysics, true, block ->{
+            if(CruxBlocksRegistries.BLOCK.getPossibleBlocks(data).size() > 1){
+                CustomBlockData blockData = CustomBlockData.wrap(block);
+                CruxBlocksPersistTags.CRUX_BLOCK_KEY.set(blockData, key());
+            }
+        });
         ActiveCruxBlock active = CruxRegistries.MODULES.getModuleOrThrow(CruxBlocksModule.class)
             .getActiveBlock(ctx.getBlock());
         if(active != null){

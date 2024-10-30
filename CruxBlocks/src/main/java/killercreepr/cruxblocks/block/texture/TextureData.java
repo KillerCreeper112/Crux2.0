@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
+import java.util.function.Consumer;
 
 public interface TextureData {
     //todo open this up
@@ -47,6 +48,12 @@ public interface TextureData {
         return data;
     }
 
-    void setBlock(@NotNull Block block, boolean applyPhysics);
+    default void setBlock(@NotNull Block block, boolean applyPhysics){
+        setBlock(block, applyPhysics, true);
+    }
+    default void setBlock(@NotNull Block block, boolean applyPhysics, boolean removeTags){
+        setBlock(block, applyPhysics, removeTags, null);
+    }
+    void setBlock(@NotNull Block block, boolean applyPhysics, boolean removeTags, Consumer<Block> consumer);
     void setBlock(@NotNull LimitedRegion region, int x, int y, int z);
 }

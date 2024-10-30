@@ -7,6 +7,7 @@ import net.kyori.adventure.key.Key;
 import org.bukkit.Material;
 import org.bukkit.Registry;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,7 +26,8 @@ public interface BlockHandler {
 
     @Nullable
     CruxedBlock getBlock(@NotNull Block block);
-    @NotNull Key getType(@NotNull BlockData block);
+    @NotNull Key getType(@NotNull Block block, @NotNull BlockData data);
+    @NotNull Key getType(@NotNull BlockState state);
 
     class Dummy implements BlockHandler {
 
@@ -58,8 +60,13 @@ public interface BlockHandler {
         }
 
         @Override
-        public @NotNull Key getType(@NotNull BlockData block) {
-            return block.getMaterial().key();
+        public @NotNull Key getType(@NotNull Block block, @NotNull BlockData data) {
+            return data.getMaterial().key();
+        }
+
+        @Override
+        public @NotNull Key getType(@NotNull BlockState state) {
+            return state.getType().key();
         }
     }
 }

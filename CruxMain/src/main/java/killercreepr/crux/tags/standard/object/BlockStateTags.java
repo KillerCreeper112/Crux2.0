@@ -25,7 +25,7 @@ public class BlockStateTags implements ObjectTag<BlockState> {
     @Override
     public @Nullable StringTagContainer requestStrings(@NotNull BlockState item, @NotNull TagParser tags) {
         return new StringTagContainer(tags)
-            .add(Tag.string("type", (args, context) -> Crux.handlers().block().getType(item.getBlockData()).asString()))
+            .add(Tag.string("type", (args, context) -> Crux.handlers().block().getType(item).asString()))
             ;
     }
 }

@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 
 public class NoteTextureData implements TextureData{
     public static @NotNull Builder builder(){
@@ -87,9 +88,16 @@ public class NoteTextureData implements TextureData{
         return noteData;
     }
 
-    @Override
+    /*@Override
     public void setBlock(@NotNull Block block, boolean applyPhysics) {
         Crux.handlers().block().setType(block, Material.NOTE_BLOCK, applyPhysics, true);
+        applyToBlock(block, applyPhysics);
+    }*/
+
+    @Override
+    public void setBlock(@NotNull Block block, boolean applyPhysics, boolean removeTags, Consumer<Block> consumer) {
+        Crux.handlers().block().setType(block, Material.NOTE_BLOCK, applyPhysics, removeTags);
+        if(consumer != null) consumer.accept(block);
         applyToBlock(block, applyPhysics);
     }
 

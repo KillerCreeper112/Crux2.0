@@ -46,6 +46,7 @@ import net.kyori.adventure.key.Key;
 import org.bukkit.Material;
 import org.bukkit.Registry;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
@@ -194,13 +195,6 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
     }
 
     @Override
-    public @NotNull Key getType(@NotNull BlockData block) {
-        CruxBlock cruxBlock = getBlockRegistry().getByBlockData(block);
-        if(cruxBlock == null) return block.getMaterial().key();
-        return cruxBlock.key();
-    }
-
-    @Override
     public @Nullable CruxBlockWrapper getBlockWrapper(@NotNull Key key) {
         CruxBlockGroup group = blockRegistry.getGroup(key);
         if(group != null){
@@ -220,6 +214,20 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
         ActiveCruxBlock active = getActiveBlock(block);
         if(active == null) return new BukkitCruxedBlock(block);
         return new CruxCruxedBlock(active);
+    }
+
+    @Override
+    public @NotNull Key getType(@NotNull Block block, @NotNull BlockData data) {
+        CruxBlock cruxBlock = getBlockRegistry().getByBlockData(block, data);
+        if(cruxBlock == null) return data.getMaterial().key();
+        return cruxBlock.key();
+    }
+
+    @Override
+    public @NotNull Key getType(@NotNull BlockState state) {
+        CruxBlock cruxBlock = getBlockRegistry().getByBlockState(state);
+        if(cruxBlock == null) return state.getType().key();
+        return cruxBlock.key();
     }
 
     public static boolean callRemoveBlockDataEvent(@NotNull Block block, @Nullable Event bukkitEvent) {

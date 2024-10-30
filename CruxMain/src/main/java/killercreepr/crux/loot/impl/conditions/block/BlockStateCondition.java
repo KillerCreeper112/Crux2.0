@@ -30,7 +30,7 @@ public class BlockStateCondition extends BaseCondition {
         if(object instanceof BlockState s) state = s;
         else if(object instanceof Block s) state = s.getState();
         else return false;
-        if(type != null && !type.equals(Crux.handlers().block().getType(state.getBlockData()))) return false;
+        if(type != null && !type.equals(Crux.handlers().block().getType(state))) return false;
         if(age != null){
             if(!(state.getBlockData() instanceof Ageable ageable)) return false;
             if(ageable.getAge() != age) return false;

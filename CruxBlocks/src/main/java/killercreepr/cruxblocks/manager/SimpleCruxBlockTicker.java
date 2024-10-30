@@ -76,7 +76,7 @@ public class SimpleCruxBlockTicker extends SimpleStatutable implements CruxBlock
     @Override
     public @Nullable ActiveCruxBlock getActiveBlock(@NotNull Block at, @NotNull BlockData data) {
         if(hasTickedBlock(at)) return active.get(at);
-        CruxBlock block = blockRegistry.getByBlockData(data);
+        CruxBlock block = blockRegistry.getByBlockData(at, data);
         if(block==null) return null;
         ActiveCruxBlock active = block.createActive(at);
 

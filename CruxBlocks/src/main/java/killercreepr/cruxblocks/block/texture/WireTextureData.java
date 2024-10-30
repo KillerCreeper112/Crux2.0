@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 public class WireTextureData implements TextureData {
     public static @NotNull Builder builder(){
@@ -125,8 +126,9 @@ public class WireTextureData implements TextureData {
     }
 
     @Override
-    public void setBlock(@NotNull Block block, boolean applyPhysics) {
-        Crux.handlers().block().setType(block, Material.TRIPWIRE, applyPhysics, true);
+    public void setBlock(@NotNull Block block, boolean applyPhysics, boolean removeTags, Consumer<Block> consumer) {
+        Crux.handlers().block().setType(block, Material.TRIPWIRE, applyPhysics, removeTags);
+        if(consumer != null) consumer.accept(block);
         applyToBlock(block, applyPhysics);
     }
 
