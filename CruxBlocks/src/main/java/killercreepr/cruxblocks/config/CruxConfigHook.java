@@ -1,23 +1,21 @@
 package killercreepr.cruxblocks.config;
 
-import killercreepr.crux.Crux;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.component.BushType;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.block.texture.TextureData;
 import killercreepr.cruxblocks.config.handler.*;
-import killercreepr.cruxblocks.registries.CruxBlocksRegistries;
-import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
+import killercreepr.cruxblocks.config.loader.CruxBlockGroupLoader;
+import killercreepr.cruxconfig.config.bukkit.file.BukkitDataFile;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.FileGenericEnum;
+import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
-import killercreepr.cruxconfig.config.common.element.FileElement;
-import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
-import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
+import killercreepr.cruxconfig.config.common.element.FileObject;
+import killercreepr.cruxconfig.config.common.file.DataFile;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.Map;
@@ -46,14 +44,23 @@ public class CruxConfigHook {
     }
 
     public static void loadCfgBlockGroups(@NotNull Plugin plugin, @NotNull String path){
-        CruxFolder folder = new CruxFolder(plugin, path);
+        File f = new CruxFolder(plugin, path).file();
+        CruxBlockGroupLoader loader = new CruxBlockGroupLoader();
+        loader.loadConfiguration(f);
+
+        DataFile dataFile = BukkitDataFile.parseFromGeneralPath(f);
+        if(dataFile == null) return;
+        if(dataFile.getRoot() instanceof FileObject o){
+            loader.loadMultipleValues(new FileContext<>(dataFile.fileRegistry()), o);
+        }
+        /*CruxFolder folder = new CruxFolder(plugin, path);
         File[] files = folder.file().listFiles();
         if(files != null){
             for(File f : files){
                 loadCfgBlockGroups(plugin, f);
             }
-        }
-        CruxConfig cfg = new CruxConfig(plugin, path);
+        }*/
+        /*CruxConfig cfg = new CruxConfig(plugin, path);
         if(!cfg.file().exists()) return;
         if(cfg.getAsYamlObject("") instanceof YamlObject o){
             YamlContext ctx = new YamlContext(cfg.yamlRegistry());
@@ -67,10 +74,10 @@ public class CruxConfigHook {
                 CruxBlocksRegistries.BLOCK.registerGroup(item);
                 plugin.getLogger().info("Registered block group: " + item.key());
             });
-        }
+        }*/
     }
 
-    public static void loadCfgBlockGroups(@NotNull Plugin plugin, @NotNull File f){
+    /*public static void loadCfgBlockGroups(@NotNull Plugin plugin, @NotNull File f){
         if(f.isDirectory()){
             File[] files = f.listFiles();
             if(files == null) return;
@@ -88,5 +95,5 @@ public class CruxConfigHook {
 
     public static @Nullable CruxBlockGroup loadCfgBlockGroup(@NotNull CruxConfig cfg){
         return cfg.deserialize(CruxBlockGroup.class, "");
-    }
+    }*/
 }

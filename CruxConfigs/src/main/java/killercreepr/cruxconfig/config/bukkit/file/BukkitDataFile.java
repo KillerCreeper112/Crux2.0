@@ -29,6 +29,10 @@ public class BukkitDataFile {
         return dataFile;
     }
 
+    public static @Nullable DataFile parseFromGeneralPath(@NotNull File file){
+        return parseFromGeneralPath(file.getParent(), file.getName());
+    }
+
     private static DataFile attemptParse(File file){
         if(file.exists()){
             try{

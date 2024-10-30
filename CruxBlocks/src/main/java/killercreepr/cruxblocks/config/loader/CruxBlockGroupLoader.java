@@ -1,0 +1,51 @@
+package killercreepr.cruxblocks.config.loader;
+
+import killercreepr.crux.Crux;
+import killercreepr.cruxblocks.block.group.CruxBlockGroup;
+import killercreepr.cruxblocks.config.handler.FileCruxBlockGroup;
+import killercreepr.cruxblocks.registries.CruxBlocksRegistries;
+import killercreepr.cruxconfig.config.bukkit.loader.CfgLoader;
+import killercreepr.cruxconfig.config.common.FileContext;
+import killercreepr.cruxconfig.config.common.element.FileObject;
+import killercreepr.cruxconfig.config.common.file.DataFile;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.logging.Level;
+
+public class CruxBlockGroupLoader extends CfgLoader {
+    @Override
+    public void loadConfiguration(@NotNull DataFile cfg, @Nullable String path){
+        if(cfg.getElement("values") instanceof FileObject values){
+            loadMultipleValues(new FileContext<>(cfg.fileRegistry()), values);
+            return;
+        }
+
+        CruxBlockGroup table;
+        if(path == null) table = cfg.deserialize("", CruxBlockGroup.class);
+        else{
+            if(!(cfg.getRoot() instanceof FileObject root)) return;
+
+            FileContext<?> ctx = new FileContext<>(cfg.fileRegistry());
+            table = FileCruxBlockGroup.deserialize(
+                ctx, root, Crux.key(path)
+            );
+            if(table != null) table = ctx.getRegistry().getParsedObjectRegistry().parse(root, ctx, table);
+        }
+        if(table == null) return;
+        CruxBlocksRegistries.BLOCK.registerGroup(table);
+        Crux.log(Level.INFO, "Registered block group: " + table.key());
+    }
+
+    public void loadMultipleValues(@NotNull FileContext<?> ctx, @NotNull FileObject values){
+        values.forEach((key, value) ->{
+            CruxBlockGroup item = FileCruxBlockGroup.deserialize(
+                ctx, value, Crux.key(key)
+            );
+            if(item != null) item = ctx.getRegistry().getParsedObjectRegistry().parse(value, ctx, item);
+            if(item == null) return;
+            CruxBlocksRegistries.BLOCK.registerGroup(item);
+            Crux.log(Level.INFO, "Registered block group: " + item.key());
+        });
+    }
+}

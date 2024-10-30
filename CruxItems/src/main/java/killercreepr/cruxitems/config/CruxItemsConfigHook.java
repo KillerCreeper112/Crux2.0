@@ -1,20 +1,17 @@
 package killercreepr.cruxitems.config;
 
-import killercreepr.crux.Crux;
-import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
+import killercreepr.cruxconfig.config.bukkit.file.BukkitDataFile;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
+import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
-import killercreepr.cruxconfig.config.common.element.FileElement;
-import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
-import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
+import killercreepr.cruxconfig.config.common.element.FileObject;
+import killercreepr.cruxconfig.config.common.file.DataFile;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import killercreepr.cruxitems.config.handler.FilePluginItem;
-import killercreepr.cruxitems.item.plugin.CfgPluginItem;
+import killercreepr.cruxitems.config.loader.PluginItemLoader;
 import killercreepr.cruxitems.item.plugin.PluginItem;
-import killercreepr.cruxitems.registries.CruxItemRegistries;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 
@@ -35,7 +32,17 @@ public class CruxItemsConfigHook {
         registry.registerFileHandler(PluginItem.class, FILE_PLUGIN_ITEM);
     }
     public static void loadCfgPluginItems(@NotNull Plugin plugin, @NotNull String path){
-        CruxFolder folder = new CruxFolder(plugin, path);
+        File f = new CruxFolder(plugin, path).file();
+        PluginItemLoader loader = new PluginItemLoader();
+        loader.loadConfiguration(f);
+
+        DataFile dataFile = BukkitDataFile.parseFromGeneralPath(f);
+        if(dataFile == null) return;
+        if(dataFile.getRoot() instanceof FileObject o){
+            loader.loadMultipleValues(new FileContext<>(dataFile.fileRegistry()), o);
+        }
+
+        /*CruxFolder folder = new CruxFolder(plugin, path);
         File[] files = folder.file().listFiles();
         if(files != null){
             for(File f : files){
@@ -54,10 +61,10 @@ public class CruxItemsConfigHook {
                 CruxItemRegistries.ITEMS.register(item);
                 plugin.getLogger().info("Registered plugin item: " + item.key());
             });
-        }
+        }*/
     }
 
-    public static void loadCfgPluginItems(@NotNull Plugin plugin, @NotNull File f){
+    /*public static void loadCfgPluginItems(@NotNull Plugin plugin, @NotNull File f){
         if(f.isDirectory()){
             File[] files = f.listFiles();
             if(files == null) return;
@@ -75,5 +82,5 @@ public class CruxItemsConfigHook {
 
     public static @Nullable PluginItem loadCfgPluginItem(@NotNull CruxConfig cfg){
         return cfg.deserialize(CfgPluginItem.class, "");
-    }
+    }*/
 }

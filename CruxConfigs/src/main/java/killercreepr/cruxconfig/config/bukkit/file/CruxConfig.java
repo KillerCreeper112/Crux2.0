@@ -24,10 +24,8 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.regex.Pattern;
 
 public class CruxConfig extends CruxFolder implements IYamlCfg<MemoryConfiguration>, DataFile {
     protected final YamlRegistry yamlRegistry;
@@ -295,10 +293,9 @@ public class CruxConfig extends CruxFolder implements IYamlCfg<MemoryConfigurati
     public @Nullable FileElement getElement(@NotNull String path) {
         if(path.isBlank()) return getRoot();
         if(!(getRoot() instanceof FileObject o)) return null;
-
         FileObject previous = o;
         int index = 0;
-        String[] split = path.split(Character.toString(pathSeparator));
+        String[] split = path.split("\\" + pathSeparator);
         for(String s : split){
             index++;
             if(index == split.length){
