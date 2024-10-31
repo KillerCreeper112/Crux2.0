@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public abstract class WorldChunkStorage<T> implements Iterable<ChunkBlockStorage<T>> {
     protected final @NotNull Map<Long, ChunkBlockStorage<T>> data;
@@ -57,6 +58,10 @@ public abstract class WorldChunkStorage<T> implements Iterable<ChunkBlockStorage
     }
 
     public abstract @NotNull ChunkBlockStorage<T> newChunkStorage();
+
+    public boolean removeIf(Predicate<ChunkBlockStorage<T>> predicate){
+        return data.values().removeIf(predicate);
+    }
 
     @NotNull
     @Override

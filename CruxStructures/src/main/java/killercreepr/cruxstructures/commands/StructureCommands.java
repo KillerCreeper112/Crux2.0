@@ -31,9 +31,11 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -185,6 +187,23 @@ public class StructureCommands {
                                     ctx.getArgument("type", String.class)))
                         )
                 )
+        ).then(
+            Commands.literal("pos")
+                .executes(ctx ->{
+                    CommandSender sender = getExecutor(ctx.getSource());
+                    if(!(sender instanceof Player p)) return -1;
+                    Block target = p.getTargetBlockExact(10);
+
+                    StoredStructure stored = structureManager.getFirstStoredAt(StoredStructure.class, target);
+                    CruxPosition center = stored.getPosition();
+
+                    CruxPosition targetPos = CruxPosition.block(target);
+
+                    CruxPosition pos = targetPos.subtract(center);
+                    sender.sendMessage(Component.text("Relative position: " + pos.blockX() + ", " + pos.blockY() + ", " + pos.blockZ())
+                        .clickEvent(ClickEvent.copyToClipboard(pos.blockX() + " " + pos.blockY() + " " + pos.blockZ())));
+                    return 1;
+                })
         )
         ;
         return dispatcher.build();

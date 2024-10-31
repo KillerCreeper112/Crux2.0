@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public abstract class ChunkBlockStorage<T> implements Iterable<T> {
     protected final @NotNull Map<CruxPosition, T> data;
@@ -38,6 +39,10 @@ public abstract class ChunkBlockStorage<T> implements Iterable<T> {
     }
 
     public abstract @NotNull CruxPosition getBlockPos(@NotNull T object);
+
+    public boolean removeIf(Predicate<T> predicate){
+        return data.values().removeIf(predicate);
+    }
 
     @NotNull
     @Override

@@ -39,7 +39,7 @@ public class PlaceCustomBlocksModule implements StructureModule {
                 return;
             }
             for(BlockPos pos : positions){
-                CruxPosition place = center.add(pos);
+                CruxPosition place = center.add(pos).rotateAroundY(center, rotation);
                 Block block = place.getBlock(world);
                 group.placeBlock(PlaceBlockContext.context(block, null, BlockFace.DOWN));
             }

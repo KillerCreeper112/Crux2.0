@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 public abstract class MultiVerseWorldStorage<T> implements Iterable<WorldChunkStorage<T>> {
     protected final @NotNull Map<UUID, WorldChunkStorage<T>> data;
@@ -74,6 +75,10 @@ public abstract class MultiVerseWorldStorage<T> implements Iterable<WorldChunkSt
     }
 
     public abstract @NotNull WorldChunkStorage<T> newWorldStorage();
+
+    public boolean removeIf(Predicate<WorldChunkStorage<T>> predicate){
+        return data.values().removeIf(predicate);
+    }
 
     @NotNull
     @Override
