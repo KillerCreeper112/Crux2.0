@@ -19,8 +19,17 @@ public interface BlockPredicate extends Predicate<CruxedBlock> {
     static BlockPredicate fromAllOf(@NotNull Collection<BlockPredicate> children){
         return new BlockAllPredicate(children);
     }
+    static BlockPredicate fromAnyOf(@NotNull Collection<BlockPredicate> children){
+        return new BlockAnyPredicate(children);
+    }
+    static BlockPredicate fromInverted(@NotNull BlockPredicate children){
+        return new BlockInvertPredicate(children);
+    }
     static BlockPredicate fromAllOf(@NotNull BlockPredicate... children){
         return new BlockAllPredicate(Arrays.asList(children));
+    }
+    static BlockPredicate fromAnyOf(@NotNull BlockPredicate... children){
+        return new BlockAnyPredicate(Arrays.asList(children));
     }
     boolean test(@NotNull CruxedBlock block);
 }

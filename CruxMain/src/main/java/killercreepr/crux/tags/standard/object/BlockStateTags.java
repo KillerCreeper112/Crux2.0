@@ -6,7 +6,6 @@ import killercreepr.crux.tags.container.StringTagContainer;
 import killercreepr.crux.tags.context.FormatPrefix;
 import killercreepr.crux.tags.hook.ObjectTag;
 import killercreepr.crux.tags.resolver.Tag;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

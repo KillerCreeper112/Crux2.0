@@ -1,14 +1,11 @@
 package killercreepr.crux.util;
 
-import killercreepr.crux.Crux;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.logging.Level;
 
 public class CruxReflect {
     public static @NotNull Predicate<Field> NON_STATIC(@Nullable Predicate<Field> filter){

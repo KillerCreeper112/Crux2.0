@@ -4,6 +4,7 @@ import com.google.common.reflect.TypeToken;
 import killercreepr.crux.Crux;
 import killercreepr.crux.block.predicate.BlockAllPredicate;
 import killercreepr.crux.block.predicate.BlockAnyPredicate;
+import killercreepr.crux.block.predicate.BlockInvertPredicate;
 import killercreepr.crux.block.predicate.BlockPredicate;
 import killercreepr.crux.data.tag.block.BlockTag;
 import killercreepr.cruxconfig.config.common.FileContext;
@@ -57,7 +58,7 @@ public class FileBlockPredicate extends SimpleFileHandler<BlockPredicate> {
                     o.get("values")
                 );
                 if(values==null) yield null;
-                yield new BlockAnyPredicate(values);
+                yield BlockPredicate.fromAnyOf(values);
             }
             case "all_of" ->{
                 Collection<BlockPredicate> values = registry.deserializeFromFile(
@@ -65,7 +66,14 @@ public class FileBlockPredicate extends SimpleFileHandler<BlockPredicate> {
                     o.get("values")
                 );
                 if(values==null) yield null;
-                yield new BlockAllPredicate(values);
+                yield BlockPredicate.fromAllOf(values);
+            }
+            case "invert" ->{
+                BlockPredicate values = registry.deserializeFromFile(
+                    BlockPredicate.class, o.get("values")
+                );
+                if(values==null) yield null;
+                yield BlockPredicate.fromInverted(values);
             }
             default ->{
                 Crux.log(Level.WARNING, "No block predicate of " + type + " exists!");
