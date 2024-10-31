@@ -1,6 +1,8 @@
 package killercreepr.cruxstructures.config.module;
 
+import killercreepr.crux.block.predicate.BlockPredicate;
 import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.valueproviders.vector.NumberVector;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -23,7 +25,9 @@ public class FileConeVeinModule extends PureYamlFileHandler<ConeVeinModule> {
             registry.deserializeFromFile(Key.class, o.get("vein_block")),
             registry.deserializeFromFile(NumberProvider.class, o.get("radius")),
             registry.deserializeFromFile(NumberProvider.class, o.get("points")),
-            registry.deserializeFromFile(NumberProvider.class, o.get("pitch"))
+            registry.deserializeFromFile(NumberProvider.class, o.get("pitch")),
+            registry.deserializeFromFile(NumberVector.class, o.get("offset")),
+            registry.deserializeFromFile(BlockPredicate.class, o.get("replaceable"))
         );
     }
 }

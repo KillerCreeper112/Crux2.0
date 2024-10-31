@@ -30,6 +30,7 @@ import killercreepr.crux.loot.item.ItemLootPool;
 import killercreepr.crux.loot.item.ItemLootPoolObject;
 import killercreepr.crux.loot.item.ItemLootTable;
 import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.valueproviders.vector.NumberVector;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.*;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileDataComponentHandler;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileTypedDataComponent;
@@ -63,6 +64,7 @@ import java.util.UUID;
 public class BukkitCfgHandlers {
     public static final FilePotionEffect POTION_EFFECT = new FilePotionEffect();
     public static final FileNumberProvider NUMBER_PROVIDER = new FileNumberProvider();
+    public static final FileNumberVector NUMBER_VECTOR = new FileNumberVector();
     public static final FileMsgContainer MSG_CONTAINER = new FileMsgContainer();
     public static final FileCreateSound CREATE_SOUND = new FileCreateSound();
     public static final FileCreateTitle CREATE_TITLE = new FileCreateTitle();
@@ -136,6 +138,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(CruxBlockWrapper.class, CRUX_BLOCK_WRAPPER);
         registry.registerFileHandler(CruxEntitySnapshot.class, CRUX_ENTITY_SNAPSHOT);
         registry.registerFileHandler(Vector.class, VECTOR);
+        registry.registerFileHandler(NumberVector.class, NUMBER_VECTOR);
 
         StandardCfgDataComponentTypes.register(TYPED_DATA_COMPONENT.typeHandlers());
         registry.registerFileHandler(TypedDataComponent.class, TYPED_DATA_COMPONENT);

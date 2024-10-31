@@ -35,4 +35,9 @@ public class BukkitCruxedBlock implements CruxedBlock {
     public int getZ() {
         return block.getZ();
     }
+
+    @Override
+    public @NotNull Block getBlock() {
+        return block;
+    }
 }

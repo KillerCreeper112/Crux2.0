@@ -4,6 +4,7 @@ import killercreepr.crux.block.CruxedBlock;
 import killercreepr.crux.data.world.CruxPosition;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import net.kyori.adventure.key.Key;
+import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 public class CruxCruxedBlock implements CruxedBlock {
@@ -35,5 +36,10 @@ public class CruxCruxedBlock implements CruxedBlock {
     @Override
     public int getZ() {
         return block.getBlock().getZ();
+    }
+
+    @Override
+    public @NotNull Block getBlock() {
+        return block.getBlock();
     }
 }

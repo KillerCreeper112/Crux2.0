@@ -2,8 +2,11 @@ package killercreepr.cruxstructures.structure.module.standard;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.block.CruxBlockWrapper;
+import killercreepr.crux.block.CruxedBlock;
+import killercreepr.crux.block.predicate.BlockPredicate;
 import killercreepr.crux.util.CruxLoc;
 import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.valueproviders.vector.NumberVector;
 import killercreepr.cruxstructures.structure.Structure;
 import killercreepr.cruxstructures.structure.module.StructureModule;
 import net.kyori.adventure.key.Key;
@@ -11,6 +14,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -23,8 +27,10 @@ public class ConeVeinModule implements StructureModule {
     protected final @NotNull NumberProvider radius;
     protected final @NotNull NumberProvider numPoints;
     protected final @NotNull NumberProvider downwardPitch;
+    protected final @Nullable NumberVector offset;
+    protected final @Nullable BlockPredicate replaceableBlock;
 
-    public ConeVeinModule(@NotNull NumberProvider veinLength, @NotNull NumberProvider veinRotate, @NotNull NumberProvider veinRotateY, @NotNull Key veinBlock, @NotNull NumberProvider radius, @NotNull NumberProvider numPoints, @NotNull NumberProvider downwardPitch) {
+    public ConeVeinModule(@NotNull NumberProvider veinLength, @NotNull NumberProvider veinRotate, @NotNull NumberProvider veinRotateY, @NotNull Key veinBlock, @NotNull NumberProvider radius, @NotNull NumberProvider numPoints, @NotNull NumberProvider downwardPitch, @Nullable NumberVector offset, @Nullable BlockPredicate replaceableBlock) {
         this.veinLength = veinLength;
         this.veinRotate = veinRotate;
         this.veinRotateY = veinRotateY;
@@ -32,6 +38,8 @@ public class ConeVeinModule implements StructureModule {
         this.radius = radius;
         this.numPoints = numPoints;
         this.downwardPitch = downwardPitch;
+        this.offset = offset;
+        this.replaceableBlock = replaceableBlock;
     }
 
     public void generateVein(@NotNull Location start, int length, NumberProvider rotate, NumberProvider yRotate){
@@ -72,7 +80,9 @@ public class ConeVeinModule implements StructureModule {
     }
 
     public boolean isPreferredBlock(@NotNull Block block){
-        if(true) return true;//todo
+        if(replaceableBlock == null) return true;
+        return replaceableBlock.test(Crux.handlers().block().getBlock(block));
+        /*if(true) return true;//todo
         if(block.isEmpty() || block.isReplaceable()){
             Block below = block.getRelative(BlockFace.DOWN);
             if(!below.isSolid()) return false;
@@ -82,12 +92,20 @@ public class ConeVeinModule implements StructureModule {
         if(!block.isSolid()) return false;
         Block above = block.getRelative(BlockFace.UP);
         if(above.isReplaceable() || above.isEmpty()) return true;
-        return false;
+        return false;*/
     }
 
     @Override
     public void onPlaced(@NotNull Structure structure, @NotNull Location at, double rotation) {
         Location current = at.clone();
+
+        if(offset != null){
+            current.add(
+                offset.x().value().doubleValue(),
+                offset.y().value().doubleValue(),
+                offset.z().value().doubleValue()
+            );
+        }
 
         CruxLoc.getInterestingCone(
             current, radius.value().doubleValue(),
