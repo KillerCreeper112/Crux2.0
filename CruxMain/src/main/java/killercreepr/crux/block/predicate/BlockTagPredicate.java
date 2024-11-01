@@ -15,4 +15,9 @@ public class BlockTagPredicate implements BlockPredicate {
     public boolean test(@NotNull CruxedBlock item) {
         return tag.isTagged(item);
     }
+
+    @Override
+    public String toString() {
+        return "BlockTagPredicate{tag=" + tag + "}";
+    }
 }

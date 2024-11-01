@@ -15,4 +15,9 @@ public class BlockTypePredicate implements BlockPredicate {
     public boolean test(@NotNull CruxedBlock block) {
         return block.getType().equals(type);
     }
+
+    @Override
+    public String toString() {
+        return "BlockTypePredicate{type=" + type + "}";
+    }
 }

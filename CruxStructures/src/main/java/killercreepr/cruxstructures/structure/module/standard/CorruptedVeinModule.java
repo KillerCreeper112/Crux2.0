@@ -2,8 +2,11 @@ package killercreepr.cruxstructures.structure.module.standard;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.block.CruxBlockWrapper;
+import killercreepr.crux.block.predicate.BlockPredicate;
+import killercreepr.crux.data.world.CruxPosition;
 import killercreepr.crux.util.CruxLoc;
 import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.valueproviders.vector.NumberVector;
 import killercreepr.cruxstructures.structure.Structure;
 import killercreepr.cruxstructures.structure.module.StructureModule;
 import net.kyori.adventure.key.Key;
@@ -11,6 +14,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -19,12 +23,16 @@ public class CorruptedVeinModule implements StructureModule {
     protected final @NotNull NumberProvider veinRotate;
     protected final @NotNull NumberProvider veinRotateY;
     protected final @NotNull Key veinBlock;
+    protected final @Nullable NumberVector offset;
+    protected final @Nullable BlockPredicate replaceableBlock;
 
-    public CorruptedVeinModule(@NotNull NumberProvider veinLength, @NotNull NumberProvider veinRotate, @NotNull NumberProvider veinRotateY, @NotNull Key veinBlock) {
+    public CorruptedVeinModule(@NotNull NumberProvider veinLength, @NotNull NumberProvider veinRotate, @NotNull NumberProvider veinRotateY, @NotNull Key veinBlock, @Nullable NumberVector offset, @Nullable BlockPredicate replaceableBlock) {
         this.veinLength = veinLength;
         this.veinRotate = veinRotate;
         this.veinRotateY = veinRotateY;
         this.veinBlock = veinBlock;
+        this.offset = offset;
+        this.replaceableBlock = replaceableBlock;
     }
 
     public void generateVein(@NotNull Location start, int length, NumberProvider rotate, NumberProvider yRotate){
@@ -68,18 +76,27 @@ public class CorruptedVeinModule implements StructureModule {
         if(block.isEmpty() || block.isReplaceable()){
             Block below = block.getRelative(BlockFace.DOWN);
             if(!below.isSolid()) return false;
-            return true;
+            return replaceableBlock == null || replaceableBlock.test(Crux.handlers().block().getBlock(block));
         }
 
         if(!block.isSolid()) return false;
         Block above = block.getRelative(BlockFace.UP);
-        if(above.isReplaceable() || above.isEmpty()) return true;
+        if(above.isReplaceable() || above.isEmpty()) return replaceableBlock == null || replaceableBlock.test(Crux.handlers().block().getBlock(block));
         return false;
     }
 
     @Override
     public void onPlaced(@NotNull Structure structure, @NotNull Location at, double rotation) {
         Location current = at.clone();
+
+        if(offset != null){
+            CruxPosition pos = CruxPosition.location(current).add(
+                offset.x().value().doubleValue(),
+                offset.y().value().doubleValue(),
+                offset.z().value().doubleValue()
+            );
+            current = pos.rotateAroundY(CruxPosition.location(at), rotation).toLocation(current.getWorld());
+        }
 
         for(BlockFace face : BlockFace.values()){
             if(face == BlockFace.UP || face == BlockFace.DOWN) continue;

@@ -4,12 +4,15 @@ import killercreepr.crux.Crux;
 import killercreepr.crux.block.CruxBlockWrapper;
 import killercreepr.crux.block.CruxedBlock;
 import killercreepr.crux.block.predicate.BlockPredicate;
+import killercreepr.crux.data.world.CruxPosition;
 import killercreepr.crux.util.CruxLoc;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.crux.valueproviders.vector.NumberVector;
 import killercreepr.cruxstructures.structure.Structure;
 import killercreepr.cruxstructures.structure.module.StructureModule;
+import killercreepr.cruxstructures.util.CruxStructureUtil;
 import net.kyori.adventure.key.Key;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -100,11 +103,12 @@ public class ConeVeinModule implements StructureModule {
         Location current = at.clone();
 
         if(offset != null){
-            current.add(
+            CruxPosition pos = CruxPosition.location(current).add(
                 offset.x().value().doubleValue(),
                 offset.y().value().doubleValue(),
                 offset.z().value().doubleValue()
             );
+            current = pos.rotateAroundY(CruxPosition.location(at), rotation).toLocation(current.getWorld());
         }
 
         CruxLoc.getInterestingCone(

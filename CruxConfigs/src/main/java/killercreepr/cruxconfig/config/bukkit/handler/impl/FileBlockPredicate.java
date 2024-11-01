@@ -70,7 +70,7 @@ public class FileBlockPredicate extends SimpleFileHandler<BlockPredicate> {
             }
             case "invert" ->{
                 BlockPredicate values = registry.deserializeFromFile(
-                    BlockPredicate.class, o.get("values")
+                    BlockPredicate.class, o.get("value")
                 );
                 if(values==null) yield null;
                 yield BlockPredicate.fromInverted(values);
