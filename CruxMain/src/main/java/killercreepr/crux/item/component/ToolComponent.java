@@ -77,6 +77,11 @@ public interface ToolComponent {
             }
 
             @Override
+            public String toString() {
+                return "SimpleToolComponentRule{predicate=" + predicate + ", speed=" + speed + ", isCorrectToolForDrops=" + isCorrectToolForDrops + "}";
+            }
+
+            @Override
             public @Nullable Float getSpeed() {
                 return speed;
             }

@@ -220,6 +220,8 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
     public @NotNull Key getType(@NotNull Block block, @NotNull BlockData data) {
         CruxBlock cruxBlock = getBlockRegistry().getByBlockData(block, data);
         if(cruxBlock == null) return data.getMaterial().key();
+        CruxBlockGroup group = cruxBlock.getGroup();
+        if(group != null) return group.key();
         return cruxBlock.key();
     }
 

@@ -42,6 +42,12 @@ public class InstantLocationSetListStructureGen extends LocationSetListStructure
             int index = -1;
             @Override
             public void run() {
+                double tps = Crux.getServer().getTPS()[0];
+                if(tps < 15){
+                    Crux.log(Level.INFO, world.getName() + " - Instant set location list " + id +
+                        ": TPS low, skipping... " + tps);
+                    return;
+                }
                 index++;
                 Pos2D pos = listChunks.get(index);
                 if((index+1) >= listChunks.size()){
@@ -57,7 +63,7 @@ public class InstantLocationSetListStructureGen extends LocationSetListStructure
                     gen.generate(chunk);
                 });
             }
-        }.runTaskTimerAsynchronously(Crux.getMainPlugin(), 100L, 200L);
+        }.runTaskTimerAsynchronously(Crux.getMainPlugin(), 100L, 300L);
 
         CruxTag.set(world, "instant_location_set/" + id, PersistentDataType.BOOLEAN, true);
 
