@@ -3,6 +3,7 @@ package killercreepr.cruxconfig.config.bukkit.handler.impl;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
+import killercreepr.cruxconfig.config.common.element.FileGeneric;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.SimpleFileHandler;
 import killercreepr.cruxconfig.config.common.json.annotation.JsonSerializer;
@@ -22,7 +23,14 @@ public class FileUUID extends SimpleFileHandler<UUID> {
 
     @Override
     public @Nullable UUID deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
-        if(!(e instanceof FileObject o)) return null;
+        if(!(e instanceof FileObject o)){
+            if(e instanceof FileGeneric g){
+                try{
+                    return UUID.fromString(g.getAsString());
+                }catch (IllegalArgumentException ignored){}
+            }
+            return null;
+        }
         FileRegistry registry = context.getRegistry();
         Number least = registry.deserializeFromFile(Number.class, o.get("least"));
         Number most = registry.deserializeFromFile(Number.class, o.get("most"));
