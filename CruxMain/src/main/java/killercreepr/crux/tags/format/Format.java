@@ -80,7 +80,7 @@ public class Format implements FormatSerializer{
 
     @Override
     public @NotNull Component deserialize(@NotNull String text) {
-        return miniMessage.deserialize(text);
+        return deserialize(text, null);
     }
 
     @Override

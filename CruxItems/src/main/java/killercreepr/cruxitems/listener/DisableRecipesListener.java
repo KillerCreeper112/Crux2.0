@@ -2,6 +2,8 @@ package killercreepr.cruxitems.listener;
 
 import killercreepr.crux.util.CruxItem;
 import killercreepr.cruxitems.item.CruxedItem;
+import net.kyori.adventure.key.Key;
+import org.bukkit.Keyed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -17,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 public class DisableRecipesListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onPrepareItemCraft(PrepareItemCraftEvent event) {
+        if(event.getRecipe() instanceof Keyed k && !k.getKey().namespace().equalsIgnoreCase(Key.MINECRAFT_NAMESPACE)) return;
         CraftingInventory inv = event.getInventory();
         for(ItemStack item : inv.getMatrix()){
             if(check(item)){
