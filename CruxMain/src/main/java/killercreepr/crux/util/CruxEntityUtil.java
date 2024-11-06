@@ -51,6 +51,10 @@ public class CruxEntityUtil {
         return null;
     }
 
+    public static void giveOrDrop(@NotNull HumanEntity p, @NotNull Collection<ItemStack> items){
+        giveOrDrop(p, items.toArray(new ItemStack[0]));
+    }
+
     public static void giveOrDrop(@NotNull HumanEntity p, @NotNull ItemStack... items){
         for(ItemStack drop : p.getInventory().addItem(items).values()){
             p.getWorld().dropItem(p.getLocation(), drop);

@@ -1,8 +1,10 @@
 package killercreepr.crux;
 
+import killercreepr.crux.command.CruxLootCommands;
 import killercreepr.crux.component.CruxComponents;
 import killercreepr.crux.data.entity.EntityMemory;
 import killercreepr.crux.listener.EntitySpawnListener;
+import killercreepr.crux.listener.LootContainerListener;
 import killercreepr.crux.listener.PlayerDataListener;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.module.StandardModules;
@@ -19,6 +21,7 @@ public class CruxMainModule implements CruxModule {
     @Override
     public void onLoad(@NotNull CruxPlugin plugin) {
         CruxComponents.register();
+        CruxLootCommands.register(plugin);
     }
 
     @Override
@@ -32,7 +35,8 @@ public class CruxMainModule implements CruxModule {
     public void onEnable(@NotNull CruxPlugin plugin) {
         plugin.registerListeners(
             new PlayerDataListener(),
-            new EntitySpawnListener()
+            new EntitySpawnListener(),
+            new LootContainerListener()
         );
         Crux.buildTickTask().runTaskTimerAsynchronously(plugin, 20L, 1L);
     }

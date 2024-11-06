@@ -4,6 +4,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import killercreepr.crux.loot.LootTable;
+import killercreepr.crux.loot.item.ItemLootTable;
 import killercreepr.crux.registries.CruxRegistries;
 import net.kyori.adventure.key.Key;
 import org.bukkit.inventory.ItemStack;
@@ -12,11 +13,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
-public class ItemLootTableArgument implements CruxKeyedArgument<LootTable<ItemStack>> {
+public class ItemLootTableArgument implements CruxKeyedArgument<ItemLootTable> {
     @Override
-    public @NotNull LootTable<ItemStack> parse(@NotNull Key key) {
+    public @NotNull ItemLootTable parse(@NotNull Key key) {
         return Objects.requireNonNull(
-            CruxRegistries.ITEM_LOOT_TABLE.get(key),
+            (ItemLootTable) CruxRegistries.ITEM_LOOT_TABLE.get(key),
             "ItemLootTable " + key + " not found!"
         );
     }
