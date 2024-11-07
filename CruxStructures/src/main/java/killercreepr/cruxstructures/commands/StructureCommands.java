@@ -16,6 +16,7 @@ import killercreepr.crux.Crux;
 import killercreepr.crux.data.communication.MsgContainer;
 import killercreepr.crux.data.world.CruxPosition;
 import killercreepr.crux.plugin.CruxPlugin;
+import killercreepr.crux.util.CruxCollection;
 import killercreepr.crux.util.CruxMath;
 import killercreepr.crux.util.GetNear;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
@@ -230,7 +231,7 @@ public class StructureCommands {
         StoredStructure nearest;
         switch (type.toLowerCase()){
             case "random" ->{
-                nearest = CruxMath.getRandom(new ArrayList<>(near.find()));
+                nearest = CruxCollection.getRandom(near.find());
             }
             default -> nearest = near.findFirst();
         }
