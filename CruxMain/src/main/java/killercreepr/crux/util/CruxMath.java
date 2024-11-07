@@ -117,6 +117,7 @@ public class CruxMath {
         return random.nextDouble() * 100 < chance;
     }
 
+    @Deprecated(forRemoval = true, since = "See CruxCollection")
     public static <T> T getRandom(@NotNull List<T> list){
         if(list.isEmpty()) return null;
         return list.get(random(0, list.size()-1));
