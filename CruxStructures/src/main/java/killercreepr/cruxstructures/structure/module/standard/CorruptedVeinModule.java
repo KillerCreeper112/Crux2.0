@@ -98,11 +98,14 @@ public class CorruptedVeinModule implements StructureModule {
             current = pos.rotateAroundY(CruxPosition.location(at), rotation).toLocation(current.getWorld());
         }
 
-        for(BlockFace face : BlockFace.values()){
-            if(face == BlockFace.UP || face == BlockFace.DOWN) continue;
-            current.setDirection(face.getDirection());
-            generateVein(current, veinLength.sample().intValue(), veinRotate, veinRotateY);
-        }
+        Location finalCurrent = current;
+        Crux.scheduler().runTask(() ->{
+            for(BlockFace face : BlockFace.values()){
+                if(face == BlockFace.UP || face == BlockFace.DOWN) continue;
+                finalCurrent.setDirection(face.getDirection());
+                generateVein(finalCurrent, veinLength.sample().intValue(), veinRotate, veinRotateY);
+            }
+        });
     }
 
     public @NotNull NumberProvider getVeinLength() {

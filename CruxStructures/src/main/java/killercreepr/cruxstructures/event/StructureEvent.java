@@ -9,6 +9,10 @@ public abstract class StructureEvent extends Event {
     public StructureEvent(@NotNull Structure structure) {
         this.structure = structure;
     }
+    public StructureEvent(@NotNull Structure structure, boolean isAsync) {
+        super(isAsync);
+        this.structure = structure;
+    }
 
     public @NotNull Structure getStructure() {
         return structure;

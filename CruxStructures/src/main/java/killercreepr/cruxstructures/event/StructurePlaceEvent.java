@@ -17,6 +17,12 @@ public class StructurePlaceEvent extends StructureEvent implements Cancellable {
         this.rotation = rotation;
     }
 
+    public StructurePlaceEvent(@NotNull Structure structure, boolean isAsync, @NotNull Location location, double rotation) {
+        super(structure, isAsync);
+        this.location = location;
+        this.rotation = rotation;
+    }
+
     public @NotNull Location getLocation() {
         return location;
     }

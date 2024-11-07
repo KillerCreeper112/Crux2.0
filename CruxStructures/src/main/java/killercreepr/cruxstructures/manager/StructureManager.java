@@ -251,12 +251,14 @@ public class StructureManager implements Listener {
         Chunk c = event.getChunk();
         List<StructureGenerator> list = structures.get(c.getWorld().getName());
         if(list==null) return;
-        Collections.shuffle(list);
-        for(StructureGenerator gen : list){
-            GenerateResult result = gen.generate(c);
-            if(result.getPlaceEvent() == null || result.getPlaceEvent().isCancelled()) continue;
-            break;
-        }
+        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, task ->{
+            Collections.shuffle(list);
+            for(StructureGenerator gen : list){
+                GenerateResult result = gen.generate(c);
+                if(result.getPlaceEvent() == null || result.getPlaceEvent().isCancelled()) continue;
+                break;
+            }
+        });
     }
 
     public @NotNull CruxFolder createCfgFolder(){

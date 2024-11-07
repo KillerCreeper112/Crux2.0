@@ -72,4 +72,37 @@ public class CruxSimpleScheduler implements CruxScheduler{
         else task.accept(dummyTask());
         return this;
     }
+
+    @Override
+    public CruxScheduler runTaskAsync(@NotNull Runnable task) {
+        Plugin p = plugin();
+        if(p.isEnabled()) scheduler().runTaskAsynchronously(p, task);
+        else task.run();
+        return this;
+    }
+
+    @Override
+    public CruxScheduler runTaskAsync(@NotNull Consumer<? super BukkitTask> task) {
+        Plugin p = plugin();
+        if(p.isEnabled()) scheduler().runTaskAsynchronously(plugin(), task);
+        else task.accept(dummyTask());
+        return this;
+    }
+
+    @Override
+    public CruxScheduler runTaskLaterAsync(@NotNull Runnable task, long delay) {
+        Plugin p = plugin();
+        if(p.isEnabled()){
+            scheduler().runTaskLaterAsynchronously(p, task, delay);
+        }else task.run();
+        return this;
+    }
+
+    @Override
+    public CruxScheduler runTaskLaterAsync(@NotNull Consumer<? super BukkitTask> task, long delay) {
+        Plugin p = plugin();
+        if(p.isEnabled()) scheduler().runTaskLaterAsynchronously(plugin(), task, delay);
+        else task.accept(dummyTask());
+        return this;
+    }
 }

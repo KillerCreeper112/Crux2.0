@@ -13,6 +13,12 @@ public abstract class CruxBlockEvent extends Event {
         this.context = context;
     }
 
+    public CruxBlockEvent(boolean isAsync, @NotNull CruxBlock block, @NotNull BlockContext context) {
+        super(isAsync);
+        this.block = block;
+        this.context = context;
+    }
+
     public @NotNull CruxBlock getBlock() {
         return block;
     }

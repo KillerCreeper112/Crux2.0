@@ -11,6 +11,10 @@ public class CruxBlockSetEvent extends CruxBlockEvent{
         super(block, context);
     }
 
+    public CruxBlockSetEvent(boolean isAsync, @NotNull CruxBlock block, @NotNull BlockContext context) {
+        super(isAsync, block, context);
+    }
+
     @Override
     public @NotNull HandlerList getHandlers() {
         return HANDLER_LIST;

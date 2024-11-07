@@ -18,6 +18,7 @@ import killercreepr.crux.data.world.CruxPosition;
 import killercreepr.cruxstructures.event.StructurePlaceEvent;
 import killercreepr.cruxstructures.structure.Structure;
 import net.kyori.adventure.key.Key;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
@@ -84,7 +85,7 @@ public class FAWEStructure implements Structure {
 
     @Override
     public @NotNull StructurePlaceEvent place(@NotNull Location at, double rotation) {
-        StructurePlaceEvent event = new StructurePlaceEvent(this, at, rotation);
+        StructurePlaceEvent event = new StructurePlaceEvent(this, !Bukkit.isPrimaryThread(), at, rotation);
         if(!event.callEvent()) return event;
 
         pasteSchematic(at, event.getRotation(), true);

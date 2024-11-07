@@ -1,5 +1,6 @@
 package killercreepr.cruxblocks.block;
 
+import killercreepr.crux.Crux;
 import killercreepr.crux.component.DataComponentHandler;
 import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.crux.data.communication.CreateSound;
@@ -54,7 +55,7 @@ public interface CruxBlock extends Keyed, CruxBlockData {
      * Skips the can place check and event call.
      */
     default @Nullable ActiveCruxBlock setBlock(@NotNull BlockContext ctx, boolean applyPhysics){
-        CruxBlockSetEvent event = new CruxBlockSetEvent(this, ctx);
+        CruxBlockSetEvent event = new CruxBlockSetEvent(!Crux.getServer().isPrimaryThread(),this, ctx);
         if(!event.callEvent()) return null;
 
         TextureData data = getTextureData();

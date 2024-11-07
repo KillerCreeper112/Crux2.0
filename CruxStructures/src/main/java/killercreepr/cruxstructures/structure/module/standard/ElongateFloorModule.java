@@ -3,7 +3,9 @@ package killercreepr.cruxstructures.structure.module.standard;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.world.block.BlockStateHolder;
+import killercreepr.crux.Crux;
 import killercreepr.crux.block.CruxBlockWrapper;
 import killercreepr.crux.data.world.CruxPosition;
 import killercreepr.cruxstructures.structure.Structure;
@@ -56,12 +58,16 @@ public class ElongateFloorModule implements StructureModule {
         }else if(toSet instanceof CruxBlockWrapper.VanillaData d){
             state = BukkitAdapter.adapt(d.getData());
         }else {
-            while(b.isEmpty() || b.isReplaceable()){
-                toSet.setBlock(b, false);
-                b = b.getRelative(BlockFace.DOWN);
+            Block finalBlock = b;
+            Crux.scheduler().runTask(() ->{
+                Block block = finalBlock;
+                while(block.isEmpty() || block.isReplaceable()){
+                    toSet.setBlock(block, false);
+                    block = block.getRelative(BlockFace.DOWN);
 
-                if(b.getY() < minY) break;
-            }
+                    if(block.getY() < minY) break;
+                }
+            });
             return;
         }
 

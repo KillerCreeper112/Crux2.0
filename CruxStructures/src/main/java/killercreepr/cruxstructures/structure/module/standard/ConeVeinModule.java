@@ -19,6 +19,7 @@ import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Objects;
 
 public class ConeVeinModule implements StructureModule {
@@ -111,12 +112,13 @@ public class ConeVeinModule implements StructureModule {
             current = pos.rotateAroundY(CruxPosition.location(at), rotation).toLocation(current.getWorld());
         }
 
-        CruxLoc.getInterestingCone(
+        List<Location> list = CruxLoc.getInterestingCone(
             current, radius.value().doubleValue(),
             numPoints.value().intValue(),
             downwardPitch.value().intValue()
-        ).forEach(l ->{
-            generateVein(l, veinLength.sample().intValue(), veinRotate, veinRotateY);
+        );
+        Crux.scheduler().runTask(() ->{
+            list.forEach(l -> generateVein(l, veinLength.sample().intValue(), veinRotate, veinRotateY));
         });
     }
 

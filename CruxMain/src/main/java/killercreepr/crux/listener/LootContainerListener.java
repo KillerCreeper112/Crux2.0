@@ -42,7 +42,7 @@ public class LootContainerListener implements Listener {
         if(lootTable == null) return;
         Long time = CruxPersist.LOOT_GENERATED_TIME.get(data, null);
         if(time != null) return;
-        CruxPersist.LOOT_GENERATED_TIME.set(data, null);
+        CruxPersist.LOOT_GENERATED_TIME.set(data, System.currentTimeMillis());
         state.update();
 
         LootContext ctx = LootContext.builder().looted(b).location(inv.getLocation()).looter(p).build();
