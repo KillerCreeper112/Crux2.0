@@ -7,6 +7,7 @@ import killercreepr.crux.event.CruxEntityDamageEvent;
 import killercreepr.crux.location.DynamicLocation;
 import killercreepr.crux.location.EntityLocation;
 import killercreepr.crux.persistence.CruxPersist;
+import killercreepr.crux.util.CruxGoalUtil;
 import killercreepr.crux.util.GetEntityNear;
 import killercreepr.crux.util.GetNear;
 import killercreepr.cruxattributes.attribute.CruxAttribute;
@@ -57,7 +58,9 @@ public class CruxGoalBase implements ICruxGoal {
     protected int findTargetCooldown;
     protected int lostTarget;
 
-    public static @NotNull GoalKey<Mob> defaultKey(){ return GoalKey.of(Mob.class, Crux.key("crux_goal")); }
+    public static @NotNull GoalKey<Mob> defaultKey(){
+        return CruxGoalUtil.defaultKey();
+    }
 
     public CruxGoalBase(@NotNull Mob mob){
         this(defaultKey(), mob);

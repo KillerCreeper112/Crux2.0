@@ -2,6 +2,7 @@ package killercreepr.crux.util;
 
 import com.destroystokyo.paper.entity.ai.Goal;
 import com.destroystokyo.paper.entity.ai.GoalKey;
+import killercreepr.crux.Crux;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Mob;
@@ -146,7 +147,7 @@ public class CruxGoalUtil {
             Field field = clazz.getDeclaredField("KEY");
             return getOrAddGoal(mob, clazz, (GoalKey<Mob>) field.get(null), priority);
         }catch (NoSuchFieldException | IllegalAccessException ignored){
-            throw new UnsupportedOperationException(clazz.getSimpleName() + " does not have a static GoalKey<Mob> KEY variable!");
+            return getOrAddGoal(mob, clazz, defaultKey(), priority);
         }
     }
 
@@ -159,8 +160,13 @@ public class CruxGoalUtil {
             Field field = clazz.getDeclaredField("KEY");
             return getGoal(mob, clazz, (GoalKey<Mob>) field.get(null));
         }catch (NoSuchFieldException | IllegalAccessException ignored){
-            throw new UnsupportedOperationException(clazz.getSimpleName() + " does not have a static GoalKey<Mob> KEY variable!");
+            return getGoal(mob, clazz, defaultKey());
         }
+    }
+
+    private static final GoalKey<Mob> DEFAULT_KEY = GoalKey.of(Mob.class, Crux.key("crux_goal"));
+    public static @NotNull GoalKey<Mob> defaultKey() {
+        return DEFAULT_KEY;
     }
 
     public static Goal<Mob> addIfNotPresent(@NotNull Mob mob, @NotNull GoalKey<Mob> key, int priority, @NotNull Supplier<Goal<Mob>> supplier){
