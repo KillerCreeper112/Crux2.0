@@ -43,9 +43,10 @@ public class CruxConfigHook {
         registry.registerFileHandler(BushType.class, new FileGenericEnum<>(BushType.class));
     }
 
+    public static final CruxBlockGroupLoader loader = new CruxBlockGroupLoader();
     public static void loadCfgBlockGroups(@NotNull Plugin plugin, @NotNull String path){
+        loader.unregisterRegisteredGroups();
         File f = new CruxFolder(plugin, path).file();
-        CruxBlockGroupLoader loader = new CruxBlockGroupLoader();
         loader.loadConfiguration(f);
 
         DataFile dataFile = BukkitDataFile.parseFromGeneralPath(f);

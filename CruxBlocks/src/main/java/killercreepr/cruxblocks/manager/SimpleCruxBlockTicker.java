@@ -7,7 +7,7 @@ import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxTickedBlock;
 import killercreepr.cruxblocks.block.data.CustomBlockData;
-import killercreepr.cruxblocks.registries.CruxBlockRegistry;
+import killercreepr.cruxblocks.registry.CruxBlockRegistry;
 import org.bukkit.Chunk;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;

@@ -1,8 +1,6 @@
-package killercreepr.cruxblocks.registries;
+package killercreepr.cruxblocks.registry;
 
 import killercreepr.crux.Crux;
-import killercreepr.crux.data.tag.block.BlockTag;
-import killercreepr.crux.persistence.CruxPersistence;
 import killercreepr.crux.registry.KeyedRegistry;
 import killercreepr.crux.registry.MappedRegistry;
 import killercreepr.crux.registry.SimpleKeyedRegistry;
@@ -13,7 +11,6 @@ import killercreepr.cruxblocks.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.block.texture.TextureData;
 import killercreepr.cruxblocks.persistence.CruxBlocksPersistTags;
 import net.kyori.adventure.key.Key;
-import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
@@ -26,7 +23,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 
-public class CruxBlockRegistry extends SimpleKeyedRegistry<CruxBlock> {
+public class CruxBlockRegistryImpl extends SimpleKeyedRegistry<CruxBlock> implements CruxBlockRegistry {
     protected final KeyedRegistry<CruxBlockGroup> GROUPS = new SimpleKeyedRegistry<>();
     //protected final MappedRegistry<TextureData, CruxBlock> TEXTURE_DATA_TO_BLOCK = new SimpleMappedRegistry<>();
     protected final MappedRegistry<TextureData, Collection<CruxBlock>> TEXTURE_DATA_TO_BLOCK = new SimpleMappedRegistry<>();
@@ -70,7 +67,13 @@ public class CruxBlockRegistry extends SimpleKeyedRegistry<CruxBlock> {
         if(possible.size() > 1){
             Key key = CruxBlocksPersistTags.CRUX_BLOCK_KEY.get(CustomBlockData.wrap(block), null);
             if(key != null) return get(key);
-            else Crux.log(Level.WARNING, "CRUXBLOCK! " + block + " does not have a crux_block key set to it but the texture data possible amount is " + possible.size() + "!");
+            else{
+                Crux.log(Level.WARNING, "CRUXBLOCK! " + block + " does not have a crux_block key set to it but the texture data possible amount is " + possible.size() + "!");
+                for(CruxBlock b : possible){
+                    Crux.log(Level.WARNING, "CRUXBLOCK: possible=" + b.key());
+                }
+                Crux.log(Level.WARNING, "^ CRUXBLOCK: texture=" + textureData);
+            }
         }
 
         return getByTexture(TextureData.buildFromBlockData(data));
@@ -87,6 +90,15 @@ public class CruxBlockRegistry extends SimpleKeyedRegistry<CruxBlock> {
     public <T extends CruxBlockGroup> T registerGroup(@NotNull T group){
         GROUPS.register(group);
         group.forEach(this::register);
+        return group;
+    }
+
+    @Override
+    public CruxBlockGroup unregisterGroup(@NotNull Key key) {
+        CruxBlockGroup group = getGroup(key);
+        if(group == null) return null;
+        GROUPS.unregister(group);
+        group.forEach(this::unregister);
         return group;
     }
 

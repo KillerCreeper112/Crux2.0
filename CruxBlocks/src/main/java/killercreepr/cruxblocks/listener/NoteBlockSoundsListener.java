@@ -6,7 +6,7 @@ import killercreepr.crux.util.CruxEntityUtil;
 import killercreepr.crux.util.CruxWorldUtil;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.component.CruxBlockComponents;
-import killercreepr.cruxblocks.registries.CruxBlockRegistry;
+import killercreepr.cruxblocks.registry.CruxBlockRegistry;
 import org.bukkit.GameEvent;
 import org.bukkit.Location;
 import org.bukkit.Material;

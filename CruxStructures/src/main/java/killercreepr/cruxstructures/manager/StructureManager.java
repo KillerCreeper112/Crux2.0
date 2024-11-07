@@ -209,7 +209,7 @@ public class StructureManager implements Listener {
             for(String worldName : worlds){
                 structures.computeIfAbsent(worldName, e -> new ArrayList<>()).add(generator);
             }
-            Crux.log(Level.INFO, "Registered structure generator: " + cfg.file().getName());
+            Crux.log(Level.INFO, "Registered structure generator: " + cfg.file().getName() + " for worlds: " + worlds);
         }).loadConfiguration(cfgFolder.file());
     }
 
@@ -252,8 +252,9 @@ public class StructureManager implements Listener {
         List<StructureGenerator> list = structures.get(c.getWorld().getName());
         if(list==null) return;
         plugin.getServer().getScheduler().runTaskAsynchronously(plugin, task ->{
-            Collections.shuffle(list);
-            for(StructureGenerator gen : list){
+            List<StructureGenerator> newList = new ArrayList<>(list);
+            Collections.shuffle(newList);
+            for(StructureGenerator gen : newList){
                 GenerateResult result = gen.generate(c);
                 if(result.getPlaceEvent() == null || result.getPlaceEvent().isCancelled()) continue;
                 break;

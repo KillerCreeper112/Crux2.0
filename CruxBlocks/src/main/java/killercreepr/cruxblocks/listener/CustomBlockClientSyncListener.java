@@ -1,7 +1,7 @@
 package killercreepr.cruxblocks.listener;
 
 import killercreepr.cruxblocks.block.CruxBlock;
-import killercreepr.cruxblocks.registries.CruxBlockRegistry;
+import killercreepr.cruxblocks.registry.CruxBlockRegistry;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
