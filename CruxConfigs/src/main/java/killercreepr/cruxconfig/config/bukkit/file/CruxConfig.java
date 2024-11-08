@@ -254,8 +254,21 @@ public class CruxConfig extends CruxFolder implements IYamlCfg<MemoryConfigurati
     }
 
     public @Nullable YamlElement getAsYamlObject(@NotNull ConfigurationSection section, @NotNull String path){
+        if(path.isBlank()) return parseAsYamlObject(section);
         Object object = section.get(path);
         if(object == null) return null;
+        if(object instanceof ConfigurationSection sec){
+            YamlObject map = new YamlObject();
+            for(String s : sec.getKeys(false)){
+                YamlElement found = getAsYamlObject(sec, s);
+                map.add(s, found);
+            }
+            return map;
+        }
+        return yamlRegistry.serializeToYaml(object);
+    }
+
+    public @Nullable YamlElement parseAsYamlObject(@NotNull Object object){
         if(object instanceof ConfigurationSection sec){
             YamlObject map = new YamlObject();
             for(String s : sec.getKeys(false)){
