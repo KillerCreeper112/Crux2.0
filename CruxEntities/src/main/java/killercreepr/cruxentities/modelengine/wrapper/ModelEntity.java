@@ -2,13 +2,17 @@ package killercreepr.cruxentities.modelengine.wrapper;
 
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
+import killercreepr.crux.Crux;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
+import java.util.logging.Level;
 
 public class ModelEntity extends DesignEntity implements IModelEntity{
     protected @NotNull ActiveModel model;
+    protected CompletableFuture<ActiveModel> cache;
     public ModelEntity(@NotNull Entity entity, @NotNull String modelID) {
         super(entity);
         model = attemptAddModel(modelID, true).orElseThrow(()->
@@ -29,6 +33,26 @@ public class ModelEntity extends DesignEntity implements IModelEntity{
     public ModelEntity applyToModeledEntity(@NotNull Consumer<ModeledEntity> consumer){
         consumer.accept(getModeledEntity());
         return this;
+    }
+
+    @Override
+    public IModelEntity model(CompletableFuture<ActiveModel> cache) {
+        this.cache = cache;
+        cache.whenComplete((model, throwable) ->{
+            if(throwable != null) Crux.log(Level.WARNING, throwable.getMessage());
+            setModel(model);
+        });
+        return this;
+    }
+
+    @Override
+    public CompletableFuture<ActiveModel> model() {
+        return cache;
+    }
+
+    @Override
+    public ModeledEntity getModeledEntity() {
+        return model.getModeledEntity();
     }
 
     @Override
@@ -62,27 +86,5 @@ public class ModelEntity extends DesignEntity implements IModelEntity{
     @Override
     public boolean isBaseEntityVisible() {
         return getModeledEntity().isBaseEntityVisible();
-    }
-
-    @Override
-    public ModelEntity setLockPitch(boolean value) {
-        getModel().setLockPitch(value);
-        return this;
-    }
-
-    @Override
-    public ModelEntity setLockYaw(boolean value) {
-        getModel().setLockYaw(value);
-        return this;
-    }
-
-    @Override
-    public boolean isLockPitch() {
-        return getModel().isLockPitch();
-    }
-
-    @Override
-    public boolean isLockYaw() {
-        return getModel().isLockYaw();
     }
 }

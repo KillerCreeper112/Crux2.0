@@ -3,7 +3,12 @@ package killercreepr.cruxentities.modelengine.wrapper;
 import com.ticxo.modelengine.api.animation.property.IAnimationProperty;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
+import killercreepr.crux.Crux;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
+import java.util.logging.Level;
 
 public interface IModelEntity extends IDesignEntity{
     default void playAnimation(@NotNull String id, boolean force){
@@ -20,7 +25,12 @@ public interface IModelEntity extends IDesignEntity{
                                  double lerpOut,
                                  double speed,
                                  boolean force){
-        getModel().getAnimationHandler().playAnimation(id, lerpIn, lerpOut, speed, force);
+        applyModel(model ->{
+            model.getAnimationHandler().playAnimation(id, lerpIn, lerpOut, speed, force);
+        });
+        /*ActiveModel model = getModel();
+        if(model == null) return;
+        model.getAnimationHandler().playAnimation(id, lerpIn, lerpOut, speed, force);*/
     }
 
     default void stopAnimation(@NotNull String id){
@@ -28,25 +38,50 @@ public interface IModelEntity extends IDesignEntity{
     }
 
     default void stopAnimation(@NotNull String id, boolean force){
+        applyModel(model ->{
+            if(force){
+                model.getAnimationHandler().forceStopAnimation(id);
+            }else model.getAnimationHandler().stopAnimation(id);
+        });
+        /*ActiveModel model = getModel();
+        if(model == null) return;
         if(force){
-            getModel().getAnimationHandler().forceStopAnimation(id);
-        }else getModel().getAnimationHandler().stopAnimation(id);
+            model.getAnimationHandler().forceStopAnimation(id);
+        }else model.getAnimationHandler().stopAnimation(id);*/
     }
 
     default boolean isPlayingAnimation(@NotNull String id){
-        return getModel().getAnimationHandler().isPlayingAnimation(id);
+        ActiveModel model = getModel();
+        if(model == null) return false;
+        return model.getAnimationHandler().isPlayingAnimation(id);
     }
 
     default int getAnimationLengthTicks(@NotNull String id){
-        IAnimationProperty animationProperty = getModel().getAnimationHandler().getAnimation(id);
+        ActiveModel model = getModel();
+        if(model == null) return 0;
+        IAnimationProperty animationProperty = model.getAnimationHandler().getAnimation(id);
         return animationProperty == null ? 0 : (int) Math.ceil(animationProperty.getBlueprintAnimation().getLength() * 20D);
     }
 
-    default @NotNull ModeledEntity getModeledEntity(){
-        return getModel().getModeledEntity();
-    }
+    IModelEntity model(CompletableFuture<ActiveModel> cache);
+    CompletableFuture<ActiveModel> model();
+    ModeledEntity getModeledEntity();
 
-    @NotNull ActiveModel getModel();
+    ActiveModel getModel();
+    default IModelEntity applyModel(Consumer<ActiveModel> consumer){
+        ActiveModel model = getModel();
+        if(model == null){
+            CompletableFuture<ActiveModel> cache = model();
+            if(cache == null) return this;
+            cache.whenComplete((mm, throwable) ->{
+                if(throwable != null) Crux.log(Level.WARNING, throwable.getMessage());
+                consumer.accept(mm);
+            });
+            return this;
+        }
+        consumer.accept(model);
+        return this;
+    }
 
     IModelEntity setModel(@NotNull ActiveModel model);
     IModelEntity setBaseEntityVisible(boolean value);
@@ -54,8 +89,23 @@ public interface IModelEntity extends IDesignEntity{
     boolean isModelRotationLocked();
     boolean isBaseEntityVisible();
 
-    IModelEntity setLockPitch(boolean value);
-    IModelEntity setLockYaw(boolean value);
-    boolean isLockPitch();
-    boolean isLockYaw();
+    default IModelEntity setLockPitch(boolean value){
+        applyModel(model -> model.setLockPitch(value));
+        return this;
+    }
+    default IModelEntity setLockYaw(boolean value){
+        applyModel(model -> model.setLockYaw(value));
+        return this;
+    }
+
+    default boolean isLockPitch(){
+        ActiveModel model = getModel();
+        if(model == null) return false;
+        return model.isLockPitch();
+    }
+    default boolean isLockYaw(){
+        ActiveModel model = getModel();
+        if(model == null) return false;
+        return model.isLockYaw();
+    }
 }

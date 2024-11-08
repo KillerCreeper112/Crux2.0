@@ -9,6 +9,7 @@ import killercreepr.cruxentities.entity.MobCategory;
 import killercreepr.cruxentities.handler.CruxEntitiesEntityHandler;
 import killercreepr.cruxentities.listener.CustomEntitySoundsListener;
 import killercreepr.cruxentities.listener.EntityManager;
+import killercreepr.cruxentities.modelengine.ModelEngineHook;
 import org.jetbrains.annotations.NotNull;
 
 public class CruxEntitiesModule implements CruxModule {
@@ -30,6 +31,7 @@ public class CruxEntitiesModule implements CruxModule {
             new EntityManager(plugin),
             new CustomEntitySoundsListener()
         );
+        ModelEngineHook.register(plugin);
         CruxEntitiesCommands.register(plugin);
     }
 }

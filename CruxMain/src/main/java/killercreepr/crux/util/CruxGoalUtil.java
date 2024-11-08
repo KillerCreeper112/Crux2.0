@@ -169,6 +169,15 @@ public class CruxGoalUtil {
         return DEFAULT_KEY;
     }
 
+    public static <T extends Goal<Mob>> Goal<Mob> addIfNotPresent(@NotNull Mob mob, @NotNull Class<T> clazz, int priority, @NotNull Supplier<Goal<Mob>> supplier){
+        Goal<Mob> goal = getGoal(mob, clazz);
+        if(goal != null) return goal;
+        goal = supplier.get();
+        if(goal==null) return goal;
+        Bukkit.getMobGoals().addGoal(mob, priority, goal);
+        return goal;
+    }
+
     public static Goal<Mob> addIfNotPresent(@NotNull Mob mob, @NotNull GoalKey<Mob> key, int priority, @NotNull Supplier<Goal<Mob>> supplier){
         Goal<Mob> goal = Bukkit.getMobGoals().getGoal(mob, key);
         if(goal != null) return goal;

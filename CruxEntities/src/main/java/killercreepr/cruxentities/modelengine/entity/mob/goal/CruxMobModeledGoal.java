@@ -1,7 +1,10 @@
 package killercreepr.cruxentities.modelengine.entity.mob.goal;
 
 import com.destroystokyo.paper.entity.ai.GoalKey;
+import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.ActiveModel;
+import com.ticxo.modelengine.api.model.ModeledEntity;
+import killercreepr.crux.Crux;
 import killercreepr.cruxentities.entity.mob.goal.CruxMobGoal;
 import killercreepr.cruxentities.modelengine.wrapper.IModelEntity;
 import org.bukkit.entity.Entity;
@@ -9,20 +12,42 @@ import org.bukkit.entity.Mob;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
+
 public class CruxMobModeledGoal extends CruxMobGoal implements IModelEntity {
-    protected ActiveModel model;
-    public CruxMobModeledGoal(@NotNull Mob mob, ActiveModel model) {
+    private ActiveModel model;
+    private CompletableFuture<ActiveModel> cache;
+
+    public CruxMobModeledGoal(@NotNull Mob mob) {
         super(mob);
-        this.model = model;
     }
 
-    public CruxMobModeledGoal(@NotNull GoalKey<Mob> key, @NotNull Mob mob, ActiveModel model) {
+    public CruxMobModeledGoal(@NotNull GoalKey<Mob> key, @NotNull Mob mob) {
         super(key, mob);
-        this.model = model;
+    }
+
+    public CruxMobModeledGoal model(CompletableFuture<ActiveModel> cache){
+        this.cache = cache;
+        cache.whenComplete((model, throwable) ->{
+            if(throwable != null) Crux.log(Level.WARNING, throwable.getMessage());
+            setModel(model);
+        });
+        return this;
+    }
+
+    public CompletableFuture<ActiveModel> model(){
+        return cache;
     }
 
     @Override
-    public @NotNull ActiveModel getModel() {
+    public ModeledEntity getModeledEntity() {
+        if(model != null) return model.getModeledEntity();
+        return ModelEngineAPI.getOrCreateModeledEntity(mob);
+    }
+
+    @Override
+    public ActiveModel getModel() {
         return model;
     }
 
@@ -52,28 +77,6 @@ public class CruxMobModeledGoal extends CruxMobGoal implements IModelEntity {
     @Override
     public boolean isBaseEntityVisible() {
         return getModeledEntity().isBaseEntityVisible();
-    }
-
-    @Override
-    public CruxMobModeledGoal setLockPitch(boolean value) {
-        getModel().setLockPitch(value);
-        return this;
-    }
-
-    @Override
-    public CruxMobModeledGoal setLockYaw(boolean value) {
-        getModel().setLockYaw(value);
-        return this;
-    }
-
-    @Override
-    public boolean isLockPitch() {
-        return getModel().isLockPitch();
-    }
-
-    @Override
-    public boolean isLockYaw() {
-        return getModel().isLockYaw();
     }
 
     @Override
