@@ -2,6 +2,7 @@ package killercreepr.cruxblocks.listener;
 
 import com.destroystokyo.paper.MaterialTags;
 import io.papermc.paper.event.block.BlockBreakBlockEvent;
+import killercreepr.crux.Crux;
 import killercreepr.crux.component.CruxComponents;
 import killercreepr.crux.data.communication.CreateBlockSoundGroup;
 import killercreepr.crux.data.communication.CreateSound;
@@ -305,7 +306,16 @@ public class CustomBlocksListener implements Listener {
                     }
                 }
                 if(!placeBlock.canPlace(item.getType().createBlockData())) return;
+                BlockState replaced = placeBlock.getState(true);
                 placeBlock.setType(item.getType());
+                BlockPlaceEvent place = new BlockPlaceEvent(placeBlock, replaced, clickedBlock, item, p, true, event.getHand());
+                if(!place.callEvent()){
+                    event.setCancelled(true);
+                    placeBlock.setType(replaced.getType());
+                    placeBlock.setBlockData(replaced.getBlockData());
+                    return;
+                }
+                Crux.handlers().block().setType(placeBlock, item.getType());
                 if(placeBlock.getBlockData() instanceof Directional dir){
                     float pitch = p.getLocation().getPitch();
                     BlockFace face = p.getFacing().getOppositeFace();
