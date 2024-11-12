@@ -22,6 +22,48 @@ public class CruxReflect {
         return new Type[0];
     }
 
+    public static List<Class<?>> getClassInheritanceChain(Class<?> from) {
+        List<Class<?>> chain = new ArrayList<>();
+        Class<?> current = from;
+        while (current != null) {
+            chain.add(current);
+            current = current.getSuperclass();
+        }
+        return chain;
+    }
+
+    public static int calculateClassCloseness(List<Class<?>> fromInheritanceChain, Class<?> clazz) {
+        // Check if the class is part of the `from` class's inheritance chain
+        for (int i = 0; i < fromInheritanceChain.size(); i++) {
+            if (fromInheritanceChain.get(i).equals(clazz)) {
+                return i; // Return the index as the "distance" from `from`
+            }
+        }
+
+        // If no relationship, return a large number to push it to the end
+        return Integer.MAX_VALUE;
+    }
+
+    /*private static int calculateClassCloseness(Class<?> from, Class<?> clazz) {
+        if (clazz.equals(from)) {
+            return 0; // Same class, no distance
+        }
+
+        // Distance based on inheritance hierarchy
+        int distance = 0;
+        Class<?> current = clazz;
+        while (current != null) {
+            if (current.equals(from)) {
+                return distance; // Found the class in the hierarchy
+            }
+            current = current.getSuperclass();
+            distance++;
+        }
+
+        // If no relationship, return a large number to push it to the end
+        return Integer.MAX_VALUE;
+    }*/
+
     public static <T extends Map<?, ?>> Class<?> attemptGetFirstMapClass(Class<T> type){
         try{
             return getFirstMapClass(type);

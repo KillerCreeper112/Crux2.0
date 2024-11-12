@@ -48,7 +48,26 @@ public class BaseFileRegistry implements FileRegistry {
         return HANDLER_REGISTRY.get(clazz);
     }
 
-    public @NotNull Collection<FileObjectHandler<?>> findPotentialHandlers(@NotNull Class<?> from){
+    public @NotNull Collection<FileObjectHandler<?>> findPotentialHandlers(@NotNull Class<?> from) {
+        List<FileObjectHandler<?>> handlerList = new ArrayList<>();
+
+        // Collect matching handlers
+        for (Map.Entry<Class<?>, FileObjectHandler<?>> entry : HANDLER_REGISTRY.entrySet()) {
+            Class<?> clazz = entry.getKey();
+            if (from.isAssignableFrom(clazz)) {
+                handlerList.add(entry.getValue());
+            }
+        }
+
+        List<Class<?>> fromInheritanceChain = CruxReflect.getClassInheritanceChain(from);
+
+        // Sort the handlers based on their closeness to `from`
+        handlerList.sort(Comparator.comparingInt(handler -> CruxReflect.calculateClassCloseness(fromInheritanceChain, handler.getClass())));
+
+        return handlerList;
+    }
+
+    /*public @NotNull Collection<FileObjectHandler<?>> findPotentialHandlers(@NotNull Class<?> from){
         Collection<FileObjectHandler<?>> handlers = new HashSet<>();
         for(Map.Entry<Class<?>, FileObjectHandler<?>> entry : HANDLER_REGISTRY.entrySet()){
             Class<?> clazz = entry.getKey();
@@ -57,7 +76,7 @@ public class BaseFileRegistry implements FileRegistry {
             }
         }
         return handlers;
-    }
+    }*/
 
     public @Nullable FileObjectHandler<?> findObjectHandler(@NotNull Class<?> from){
         //first check if there are any exact classes
@@ -124,6 +143,16 @@ public class BaseFileRegistry implements FileRegistry {
 
         if(!(type instanceof Class<?> clazz)){
             throw new UnsupportedOperationException(type + " is not a class instance!");
+        }
+
+
+        //optimize
+        FileObjectHandler<?> firstHandler = HANDLER_REGISTRY.get(clazz);
+        if(firstHandler != null){
+            Object o = firstHandler.deserializeFromFile(context, from);
+            if(o!=null){
+                return formatObject(clazz, deserializeObject(o));
+            }
         }
 
         for(FileObjectHandler<?> handler : findPotentialHandlers(clazz)){

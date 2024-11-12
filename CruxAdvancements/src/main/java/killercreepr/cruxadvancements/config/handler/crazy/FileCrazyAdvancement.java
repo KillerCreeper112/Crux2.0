@@ -4,6 +4,7 @@ import eu.endercentral.crazy_advancements.advancement.AdvancementFlag;
 import io.leangen.geantyref.TypeToken;
 import killercreepr.crux.util.CruxObjects;
 import killercreepr.cruxadvancements.advancement.criteria.CruxCriteria;
+import killercreepr.cruxadvancements.advancement.flag.CruxAdvancementFlag;
 import killercreepr.cruxadvancements.advancement.objective.AdvancementObjective;
 import killercreepr.cruxadvancements.advancement.reward.CruxAdvanceReward;
 import killercreepr.cruxadvancements.config.handler.FileAdvancementObjective;
@@ -50,14 +51,14 @@ public class FileCrazyAdvancement implements FileObjectHandler<CrazyAdvancement>
         CruxCriteria criteria = registry.deserializeFromFile(CruxCriteria.class, o.get("criteria"));
         CrazyAdvancementDisplay display = registry.deserializeFromFile(CrazyAdvancementDisplay.class, o.get("display"));
 
-        Collection<AdvancementFlag> flags = registry.deserializeFromFile(new TypeToken<Collection<AdvancementFlag>>(){}.getType(), o.get("flags"));
+        Collection<CruxAdvancementFlag> flags = registry.deserializeFromFile(new TypeToken<Collection<CruxAdvancementFlag>>(){}.getType(), o.get("flags"));
 
         CruxAdvanceReward reward = registry.deserializeFromFile(CruxAdvanceReward.class, o.get("reward"));
         if(CruxObjects.checkNull(key, criteria, display)) return null;
 
-        AdvancementFlag[] flagsParsed;
-        if(flags == null) flagsParsed = AdvancementFlag.TOAST_AND_MESSAGE;
-        else flagsParsed = flags.toArray(new AdvancementFlag[0]);
+        CruxAdvancementFlag[] flagsParsed;
+        if(flags == null) flagsParsed = CruxAdvancementFlag.TOAST_AND_MESSAGE;
+        else flagsParsed = flags.toArray(new CruxAdvancementFlag[0]);
 
         Map<String, AdvancementObjective> objectives = new HashMap<>();
         if(o.get("objectives") instanceof FileObject oo){

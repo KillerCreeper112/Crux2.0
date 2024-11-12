@@ -160,6 +160,7 @@ public class CruxMenuHook {
                                 );
                             tracker.getTrackedAdvancements().forEach(tracked ->{
                                 if(advancementManagerKey != null && !tracked.getManagerKey().equals(advancementManagerKey)) return;
+                                if(tracked.isGlobal()) return;
                                 list.add(tracked);
                             });
                             return list;

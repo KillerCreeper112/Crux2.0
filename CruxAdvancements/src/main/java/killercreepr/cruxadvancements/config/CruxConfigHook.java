@@ -1,6 +1,8 @@
 package killercreepr.cruxadvancements.config;
 
+import eu.endercentral.crazy_advancements.advancement.AdvancementDisplay;
 import killercreepr.cruxadvancements.advancement.criteria.CruxCriteria;
+import killercreepr.cruxadvancements.advancement.flag.CruxAdvancementFlag;
 import killercreepr.cruxadvancements.advancement.icon.CriterionDisplay;
 import killercreepr.cruxadvancements.advancement.objective.AdvancementObjective;
 import killercreepr.cruxadvancements.advancement.objective.ObjectiveCommonData;
@@ -14,6 +16,7 @@ import killercreepr.cruxadvancements.advancement.progression.SimpleCriterionProg
 import killercreepr.cruxadvancements.advancement.reward.CruxAdvanceReward;
 import killercreepr.cruxadvancements.config.handler.*;
 import killercreepr.cruxadvancements.data.TrackedAdvancement;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.FileGenericEnum;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -279,5 +282,6 @@ public class CruxConfigHook {
         registry.registerFileHandler(TrackedAdvancement.class, new FileTrackedAdvancement());
 
         registry.registerFileHandler(CriterionDisplay.class, new FileCriterionDisplay());
+        registry.registerFileHandler(CruxAdvancementFlag.class, new FileGenericEnum<>(CruxAdvancementFlag.class));
     }
 }

@@ -7,6 +7,7 @@ import eu.endercentral.crazy_advancements.manager.AdvancementManager;
 import killercreepr.crux.Crux;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.cruxadvancements.advancement.ObjectiveAdvancement;
+import killercreepr.cruxadvancements.advancement.flag.CruxAdvancementFlag;
 import killercreepr.cruxadvancements.advancement.objective.progress.ObjectiveProgression;
 import killercreepr.cruxadvancements.advancement.objective.progress.SimpleObjectiveProgression;
 import killercreepr.cruxadvancements.advancement.progression.CruxAdvancementProgress;
@@ -14,6 +15,8 @@ import killercreepr.cruxadvancements.config.CruxConfigHook;
 import killercreepr.cruxadvancements.config.handler.FileCruxAdvancementProgress;
 import killercreepr.cruxadvancements.config.handler.FileSimpleObjectiveProgression;
 import killercreepr.cruxadvancements.config.loader.CrazyAdvancementCfgLoader;
+import killercreepr.cruxadvancements.data.TrackedAdvancement;
+import killercreepr.cruxadvancements.registries.AdvancementRegistries;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxconfig.config.bukkit.file.CruxJson;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -82,7 +85,14 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
     public void load(@NotNull Plugin plugin) {
         for(CrazyAdvancement a : parseAdvancements(getAdvancementsFolder(plugin).file())){
             registerAdvancement(a);
-            Crux.log(Level.INFO, "Registered CrazyAdvancement: " + key() + " -> " + a.key());
+
+            if(a.hasFlag(CruxAdvancementFlag.GLOBAL)){
+                TrackedAdvancement tracked = new TrackedAdvancement(key(), a.key(), true);
+                AdvancementRegistries.GLOBAL_ADVANCEMENTS.register(tracked);
+            }
+
+            Crux.log(Level.INFO, "Registered CrazyAdvancement: " + key() + " -> " + a.key() + (a.hasFlag(CruxAdvancementFlag.GLOBAL) ? " global" : ""));
+
             //a.load(getAdvancementSaveFile(plugin, a).file());
         }
         loadAllCrazyAdvancements();

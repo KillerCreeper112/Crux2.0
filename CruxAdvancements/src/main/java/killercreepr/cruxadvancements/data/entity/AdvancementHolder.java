@@ -6,8 +6,11 @@ import killercreepr.crux.Crux;
 import killercreepr.crux.data.Loadable;
 import killercreepr.crux.data.entity.PlayerDataHolder;
 import killercreepr.crux.data.entity.PlayerMemory;
+import killercreepr.cruxadvancements.advancement.CruxAdvancement;
 import killercreepr.cruxadvancements.data.AdvancementTracker;
 import killercreepr.cruxadvancements.data.TrackedAdvancement;
+import killercreepr.cruxadvancements.manager.CruxAdvancementManager;
+import killercreepr.cruxadvancements.registries.AdvancementRegistries;
 import killercreepr.cruxconfig.config.bukkit.file.CruxJson;
 import killercreepr.cruxconfig.config.common.json.registry.JsonRegistry;
 import net.kyori.adventure.key.Key;
@@ -56,17 +59,31 @@ public class AdvancementHolder extends PlayerDataHolder implements Loadable {
         JsonRegistry registry = cfg.jsonRegistry();
         JsonArray a = new JsonArray();
         advancementTracker.getTrackedAdvancements().forEach(tracked ->{
+            if(tracked.isGlobal()) return;
             a.add(registry.serializeToJson(tracked));
         });
         json.add("tracked_advancements", a);
         cfg.save();
     }
 
+    public void loadGlobal(){
+        AdvancementRegistries.GLOBAL_ADVANCEMENTS.forEach(tracked ->{
+            if(advancementTracker.isTracking(tracked)) return;
+            CruxAdvancement advancement = tracked.getAdvancement();
+            if(advancement == null) return;
+            if(advancement.isGranted(parent.getUUID())) return;
+            advancementTracker.track(tracked);
+        });
+    }
+
     @Override
     public void load() {
         CruxJson cfg = getSaveFile();
         JsonObject json = cfg.json();
-        if(json==null) return;
+        if(json==null){
+            loadGlobal();
+            return;
+        }
         JsonRegistry registry = cfg.jsonRegistry();
         Collection<TrackedAdvancement> tracked = new HashSet<>();
         if(json.get("tracked_advancements") instanceof JsonArray a){
@@ -78,5 +95,6 @@ public class AdvancementHolder extends PlayerDataHolder implements Loadable {
         }
         cfg.close();
         advancementTracker.setTrackedAdvancements(tracked);
+        loadGlobal();
     }
 }

@@ -102,7 +102,7 @@ public abstract class CrazyAdvancementManager<T extends CrazyAdvancement> extend
             Objects.requireNonNull(getAdvancement(parentCrux),
                 crux.key() + " does not have its parent registered! (" + parentCrux + ")")
         );
-        Advancement a = new Advancement(parent, CrazyUtil.toNameKey(crux.key()), crux.getDisplay().toCrazy(this), crux.getFlags());
+        Advancement a = new Advancement(parent, CrazyUtil.toNameKey(crux.key()), crux.getDisplay().toCrazy(this), crux.toCrazyFlags());
 
         if(crux.getCriteria() instanceof ListCriteria c){
             a.setCriteria(new Criteria(c.getActionNames(), c.getRequirements()));

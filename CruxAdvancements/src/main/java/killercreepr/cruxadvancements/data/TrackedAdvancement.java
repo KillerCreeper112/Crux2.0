@@ -12,9 +12,19 @@ import java.util.Objects;
 public class TrackedAdvancement {
     protected final @NotNull Key managerKey;
     protected final @NotNull Key advancementKey;
-    public TrackedAdvancement(@NotNull Key managerKey, @NotNull Key advancementKey) {
+    protected final boolean isGlobal;
+    public TrackedAdvancement(@NotNull Key managerKey, @NotNull Key advancementKey, boolean isGlobal) {
         this.managerKey = managerKey;
         this.advancementKey = advancementKey;
+        this.isGlobal = isGlobal;
+    }
+
+    public TrackedAdvancement(@NotNull Key managerKey, @NotNull Key advancementKey) {
+        this(managerKey, advancementKey, false);
+    }
+
+    public boolean isGlobal() {
+        return isGlobal;
     }
 
     public CruxAdvancementManager<?> getManager(){
