@@ -42,6 +42,7 @@ public final class Crux {
     public static FormatSerializer format(){
         return FORMAT;
     }
+    @Deprecated(since = "use format()")
     public static final FormatSerializer FORMAT = FormatSerializer.builder()
         .miniMessage(MiniMessage.builder()
             .tags(TagResolver.builder()
