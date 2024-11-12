@@ -1,5 +1,6 @@
 package killercreepr.cruxconfig.config.common.base;
 
+import killercreepr.crux.Crux;
 import killercreepr.crux.util.CruxObjects;
 import killercreepr.crux.util.CruxReflect;
 import killercreepr.cruxconfig.config.common.FileContext;
@@ -18,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.logging.Level;
 
 /**
  * Represents a registry specifically developed to handle YAML syntax.
@@ -153,6 +155,7 @@ public class BaseFileRegistry implements FileRegistry {
             if(o!=null){
                 return formatObject(clazz, deserializeObject(o));
             }
+            return null;
         }
 
         for(FileObjectHandler<?> handler : findPotentialHandlers(clazz)){
