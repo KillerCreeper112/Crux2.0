@@ -34,7 +34,7 @@ public class DynamicItemEnchants implements DynamicItemComponent {
             if(key==null) return;
             Enchantment enchantment = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).get(key);
             if(enchantment==null) return;
-            int level = (int) CruxMath.evaluate(context.deserializeString(keyObject.toString()));
+            int level = (int) CruxMath.evaluate(context.deserializeString(amountObject.toString()));
             item.enchant(enchantment, level);
         });
     }
