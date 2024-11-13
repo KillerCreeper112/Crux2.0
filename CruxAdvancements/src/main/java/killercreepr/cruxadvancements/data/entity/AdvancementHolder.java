@@ -6,11 +6,13 @@ import killercreepr.crux.Crux;
 import killercreepr.crux.data.Loadable;
 import killercreepr.crux.data.entity.PlayerDataHolder;
 import killercreepr.crux.data.entity.PlayerMemory;
+import killercreepr.crux.registries.CruxRegistries;
+import killercreepr.cruxadvancements.CruxAdvancementsModule;
 import killercreepr.cruxadvancements.advancement.CruxAdvancement;
 import killercreepr.cruxadvancements.data.AdvancementTracker;
 import killercreepr.cruxadvancements.data.TrackedAdvancement;
-import killercreepr.cruxadvancements.manager.CruxAdvancementManager;
 import killercreepr.cruxadvancements.registries.AdvancementRegistries;
+import killercreepr.cruxadvancements.values.ValuesProvider;
 import killercreepr.cruxconfig.config.bukkit.file.CruxJson;
 import killercreepr.cruxconfig.config.common.json.registry.JsonRegistry;
 import net.kyori.adventure.key.Key;
@@ -35,6 +37,19 @@ public class AdvancementHolder extends PlayerDataHolder implements Loadable {
     }
 
     protected final AdvancementTracker advancementTracker = new AdvancementTracker();
+    protected int maxTrackedAdvancements;
+
+    public @NotNull Plugin getPlugin() {
+        return plugin;
+    }
+
+    public void setMaxTrackedAdvancements(int maxTrackedAdvancements) {
+        this.maxTrackedAdvancements = maxTrackedAdvancements;
+    }
+
+    public int getMaxTrackedAdvancements() {
+        return maxTrackedAdvancements;
+    }
 
     public AdvancementTracker getAdvancementTracker() {
         return advancementTracker;
@@ -63,6 +78,7 @@ public class AdvancementHolder extends PlayerDataHolder implements Loadable {
             a.add(registry.serializeToJson(tracked));
         });
         json.add("tracked_advancements", a);
+        json.addProperty("max_tracked_advancements", maxTrackedAdvancements);
         cfg.save();
     }
 
@@ -76,11 +92,17 @@ public class AdvancementHolder extends PlayerDataHolder implements Loadable {
         });
     }
 
+    public int getDefaultMaxTrackedAdvancements(){
+        ValuesProvider cfg = CruxRegistries.MODULES.getModuleOrThrow(CruxAdvancementsModule.class).values();
+        return cfg.DEFAULT_MAX_TRACKED_ADVANCEMENTS().value().intValue();
+    }
+
     @Override
     public void load() {
         CruxJson cfg = getSaveFile();
         JsonObject json = cfg.json();
         if(json==null){
+            setMaxTrackedAdvancements(getDefaultMaxTrackedAdvancements());
             loadGlobal();
             return;
         }
@@ -93,7 +115,9 @@ public class AdvancementHolder extends PlayerDataHolder implements Loadable {
                 tracked.add(t);
             });
         }
+        Number maxTracked = cfg.get("max_tracked_advancements", Number.class);
         cfg.close();
+        setMaxTrackedAdvancements(maxTracked == null ? getDefaultMaxTrackedAdvancements() : maxTracked.intValue());
         advancementTracker.setTrackedAdvancements(tracked);
         loadGlobal();
     }

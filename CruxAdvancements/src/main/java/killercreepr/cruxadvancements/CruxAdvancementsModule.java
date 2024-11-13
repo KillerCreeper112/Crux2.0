@@ -9,6 +9,7 @@ import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.crux.tags.TagParser;
 import killercreepr.cruxadvancements.command.AdvancementCommands;
+import killercreepr.cruxadvancements.config.Config;
 import killercreepr.cruxadvancements.config.CruxConfigHook;
 import killercreepr.cruxadvancements.crazy.CrazyAdvancementsHook;
 import killercreepr.cruxadvancements.data.entity.AdvancementHolder;
@@ -17,6 +18,8 @@ import killercreepr.cruxadvancements.listener.AdvancementGrantListener;
 import killercreepr.cruxadvancements.listener.ObjectiveListener;
 import killercreepr.cruxadvancements.listener.PlayerCraftItemListener;
 import killercreepr.cruxadvancements.tags.*;
+import killercreepr.cruxadvancements.values.DefaultValues;
+import killercreepr.cruxadvancements.values.ValuesProvider;
 import killercreepr.cruxmenus.CruxMenusModule;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,6 +28,16 @@ public class CruxAdvancementsModule implements CruxModule {
     @Override
     public @NotNull String name() {
         return NAMESPACE;
+    }
+
+    protected ValuesProvider values;
+
+    public ValuesProvider values() {
+        return values;
+    }
+
+    public void values(@NotNull ValuesProvider values) {
+        this.values = values;
     }
 
     @Override
@@ -49,11 +62,21 @@ public class CruxAdvancementsModule implements CruxModule {
 
     @Override
     public void onEnable(@NotNull CruxPlugin plugin) {
+        boolean cruxConfigs = CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS);
+        if(cruxConfigs){
+            values(new Config(plugin, "module/advancement"));
+        }else values(new DefaultValues());
+
         plugin.registerListeners(
             new ObjectiveListener(),
             new AdvancementGrantListener(),
             new PlayerCraftItemListener()
         );
+    }
+
+    @Override
+    public void reload(@NotNull CruxPlugin plugin) {
+        values.reload(plugin);
     }
 
     public void registerTags(TagParser tags){

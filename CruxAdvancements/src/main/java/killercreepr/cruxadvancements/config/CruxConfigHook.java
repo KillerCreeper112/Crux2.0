@@ -1,6 +1,5 @@
 package killercreepr.cruxadvancements.config;
 
-import eu.endercentral.crazy_advancements.advancement.AdvancementDisplay;
 import killercreepr.cruxadvancements.advancement.criteria.CruxCriteria;
 import killercreepr.cruxadvancements.advancement.flag.CruxAdvancementFlag;
 import killercreepr.cruxadvancements.advancement.icon.CriterionDisplay;
