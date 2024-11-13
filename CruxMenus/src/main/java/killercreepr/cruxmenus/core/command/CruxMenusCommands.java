@@ -5,9 +5,12 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
+import io.papermc.paper.command.brigadier.argument.resolvers.selector.EntitySelectorArgumentResolver;
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import killercreepr.crux.data.DataExchange;
+import killercreepr.crux.data.Holder;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.cruxmenus.api.menu.holder.MenuHolder;
 import killercreepr.cruxmenus.core.command.argument.CruxMenusArguments;
@@ -42,6 +45,17 @@ public class CruxMenusCommands {
                                     ctx.getArgument("targets", PlayerSelectorArgumentResolver.class).resolve(ctx.getSource()),
                                     ctx.getArgument("menu", MenuHolder.class)
                                 ))
+                                .then(
+                                    Commands.argument("selector_target", ArgumentTypes.entity())
+                                        .executes(ctx -> open(
+                                            ctx.getArgument("targets", PlayerSelectorArgumentResolver.class).resolve(ctx.getSource()),
+                                            ctx.getArgument("menu", MenuHolder.class),
+                                            DataExchange.single("target", Holder.direct(
+                                                ctx.getArgument("selector_target",
+                                                    EntitySelectorArgumentResolver.class).resolve(ctx.getSource()).getFirst()
+                                            ))
+                                        ))
+                                )
                         )
                 )
         )
@@ -60,6 +74,16 @@ public class CruxMenusCommands {
 
     public static int open(Player p, MenuHolder menu){
         menu.open(p);
+        return 1;
+    }
+
+    public static int open(Collection<Player> pp, MenuHolder menu, DataExchange info){
+        pp.forEach(e -> open(e, menu, info));
+        return 1;
+    }
+
+    public static int open(Player p, MenuHolder menu, DataExchange info){
+        menu.open(p, info);
         return 1;
     }
 }

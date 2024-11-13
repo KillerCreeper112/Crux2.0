@@ -12,18 +12,19 @@ import killercreepr.crux.tags.hook.impl.StringListHookedObjectTag;
 import killercreepr.crux.tags.hook.prefix.HookedPrefixBuilder;
 import killercreepr.crux.tags.resolver.Tag;
 import net.kyori.adventure.key.Key;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.Registry;
+import net.minecraft.stats.Stat;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Base64;
 
 public class OfflinePlayerTags implements ObjectTag<OfflinePlayer> {
     @Override
@@ -63,6 +64,7 @@ public class OfflinePlayerTags implements ObjectTag<OfflinePlayer> {
             .add(Tag.string("level", (args, context) ->p.isOnline() ? p.getPlayer().getLevel()+"" : "0"))
             .add(Tag.string("exp_to_level", (args, context) ->p.isOnline() ? p.getPlayer().getExpToLevel()+"" : "0"))
             .add(Tag.string("no_damage_ticks", (args, context) -> p.isOnline()?p.getPlayer().getNoDamageTicks()+"":"0"))
+            .add(Tag.string("is_online", (args, ctx) -> p.isOnline() + ""))
             .add(Tag.string("attribute", (args, context) ->{
                 Player online = p.getPlayer();
                 if(online==null) return "not online";
@@ -92,7 +94,7 @@ public class OfflinePlayerTags implements ObjectTag<OfflinePlayer> {
                 if(online==null) return "not online";
                 EquipmentSlot slot = EquipmentSlot.valueOf(args.get(0).toUpperCase());
                 ItemStack item = online.getInventory().getItem(slot);
-                return item.getType().toString().toLowerCase();
+                return Base64.getEncoder().encodeToString(item.serializeAsBytes());
             }))
             .add(Tag.string("has_permission", (args, ctx) ->{
                 Player online = p.getPlayer();
@@ -122,7 +124,40 @@ public class OfflinePlayerTags implements ObjectTag<OfflinePlayer> {
                 return online.hasResourcePack() + "";
             }))
             .add(Tag.string("is_op", (args, ctx) -> p.isOp() + ""))
+            .add(Tag.string("stat", (args, ctx) ->{
+                Key key = Key.key(args.get(0));
+                Statistic statistic = getStat(key);
+                if(statistic == null) return key + " statistic not found";
+                return p.getStatistic(statistic) + "";
+            }))
+            .add(Tag.string("stat_material", (args, ctx) ->{
+                Key key = Key.key(args.get(0));
+                Key materialKey = Key.key(args.get(1));
+                Material material = Registry.MATERIAL.get(materialKey);
+                if(material == null) return materialKey + " material not found";
+                Statistic statistic = getStat(key);
+                if(statistic == null) return key + " statistic not found";
+                return p.getStatistic(statistic, material) + "";
+            }))
+            .add(Tag.string("stat_entity", (args, ctx) ->{
+                Key key = Key.key(args.get(0));
+                Key entityKey = Key.key(args.get(1));
+                EntityType entityType = Registry.ENTITY_TYPE.get(entityKey);
+                if(entityType == null) return entityKey + " entity type not found";
+                Statistic statistic = getStat(key);
+                if(statistic == null) return key + " statistic not found";
+                return p.getStatistic(statistic, entityType) + "";
+            }))
             ;
+    }
+
+    public static Statistic getStat(Key key){
+        Statistic statistic = Registry.STATISTIC.get(key);
+        if(statistic != null) return statistic;
+        if(Key.key("play_one_tick").equals(key)) return Statistic.PLAY_ONE_MINUTE;
+        if(Key.key("play_time_ticks").equals(key)) return Statistic.PLAY_ONE_MINUTE;
+        if(Key.key("play_time").equals(key)) return Statistic.PLAY_ONE_MINUTE;
+        return null;
     }
 
     @Override

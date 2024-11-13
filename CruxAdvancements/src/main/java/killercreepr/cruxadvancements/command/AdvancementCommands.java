@@ -1,5 +1,6 @@
 package killercreepr.cruxadvancements.command;
 
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -142,6 +143,69 @@ public class AdvancementCommands {
                                             Collection<CruxAdvancement> advancements = ctx.getArgument("advancements", CruxAdvancementListResolver.class)
                                                 .resolve(manager);
                                             return revoke(ctx.getSource(), targets, manager, advancements);
+                                        })
+                                )
+                        )
+                )
+        ).then(
+            Commands.literal("max_tracked")
+                .then(
+                    Commands.argument("targets", ArgumentTypes.players())
+                        .then(
+                            Commands.literal("set")
+                                .then(
+                                    Commands.argument("value", IntegerArgumentType.integer())
+                                        .executes(ctx ->{
+                                            Collection<Player> targets = ctx.getArgument("targets", PlayerSelectorArgumentResolver.class)
+                                                .resolve(ctx.getSource());
+                                            int value = ctx.getArgument("value", Integer.class);
+                                            for(Player p : targets){
+                                                AdvancementHolder holder = EntityMemory.getOrCreateDataHolder(p, AdvancementHolder.class);
+                                                if(holder == null) continue;
+                                                holder.setMaxTrackedAdvancements(value);
+                                                getExecutor(ctx.getSource()).sendMessage(
+                                                    "Set max trackable advancements to " + holder.getMaxTrackedAdvancements() + " for " + p.getName() + "."
+                                                );
+                                            }
+                                            return 1;
+                                        })
+                                )
+                        ).then(
+                            Commands.literal("add")
+                                .then(
+                                    Commands.argument("value", IntegerArgumentType.integer())
+                                        .executes(ctx ->{
+                                            Collection<Player> targets = ctx.getArgument("targets", PlayerSelectorArgumentResolver.class)
+                                                .resolve(ctx.getSource());
+                                            int value = ctx.getArgument("value", Integer.class);
+                                            for(Player p : targets){
+                                                AdvancementHolder holder = EntityMemory.getOrCreateDataHolder(p, AdvancementHolder.class);
+                                                if(holder == null) continue;
+                                                holder.setMaxTrackedAdvancements(holder.getMaxTrackedAdvancements()+value);
+                                                getExecutor(ctx.getSource()).sendMessage(
+                                                    "Set max trackable advancements to " + holder.getMaxTrackedAdvancements() + " for " + p.getName() + "."
+                                                );
+                                            }
+                                            return 1;
+                                        })
+                                )
+                        ).then(
+                            Commands.literal("remove")
+                                .then(
+                                    Commands.argument("value", IntegerArgumentType.integer())
+                                        .executes(ctx ->{
+                                            Collection<Player> targets = ctx.getArgument("targets", PlayerSelectorArgumentResolver.class)
+                                                .resolve(ctx.getSource());
+                                            int value = ctx.getArgument("value", Integer.class);
+                                            for(Player p : targets){
+                                                AdvancementHolder holder = EntityMemory.getOrCreateDataHolder(p, AdvancementHolder.class);
+                                                if(holder == null) continue;
+                                                holder.setMaxTrackedAdvancements(holder.getMaxTrackedAdvancements()-value);
+                                                getExecutor(ctx.getSource()).sendMessage(
+                                                    "Set max trackable advancements to " + holder.getMaxTrackedAdvancements() + " for " + p.getName() + "."
+                                                );
+                                            }
+                                            return 1;
                                         })
                                 )
                         )
