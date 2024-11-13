@@ -164,6 +164,10 @@ public interface NumberProvider extends NumberHolder {
         return List.of(sample(random, ev));
     }
 
+    default @NotNull List<Number> sampleList(@Nullable InputContext ev){
+        return sampleList(CruxMath.RANDOM, ev);
+    }
+
     default @NotNull Number sample(@Nullable InputContext ev){
         return sample(CruxMath.RANDOM, ev);
     }

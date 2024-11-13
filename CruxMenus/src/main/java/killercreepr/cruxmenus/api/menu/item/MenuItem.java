@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -25,7 +26,7 @@ public interface MenuItem {
     }
     @NotNull FormatSerializer getFormat();
 
-    @NotNull Optional<Integer> getSlot();
+    @NotNull Optional<List<Number>> getSlots();
 
     boolean canDisplay();
 

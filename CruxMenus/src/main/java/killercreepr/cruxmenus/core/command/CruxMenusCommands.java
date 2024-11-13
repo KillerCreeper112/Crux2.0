@@ -12,6 +12,9 @@ import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.Holder;
 import killercreepr.crux.plugin.CruxPlugin;
+import killercreepr.crux.tags.TagsPrefixBuilder;
+import killercreepr.crux.tags.container.MergedTagContainer;
+import killercreepr.crux.tags.container.TagContainer;
 import killercreepr.cruxmenus.api.menu.holder.MenuHolder;
 import killercreepr.cruxmenus.core.command.argument.CruxMenusArguments;
 import org.bukkit.command.CommandSender;
@@ -50,10 +53,11 @@ public class CruxMenusCommands {
                                         .executes(ctx -> open(
                                             ctx.getArgument("targets", PlayerSelectorArgumentResolver.class).resolve(ctx.getSource()),
                                             ctx.getArgument("menu", MenuHolder.class),
-                                            DataExchange.single("target", Holder.direct(
+                                            DataExchange.empty(), TagContainer.merged().hook(
                                                 ctx.getArgument("selector_target",
-                                                    EntitySelectorArgumentResolver.class).resolve(ctx.getSource()).getFirst()
-                                            ))
+                                                    EntitySelectorArgumentResolver.class).resolve(ctx.getSource()).getFirst(),
+                                                TagsPrefixBuilder.overwriteBase("target_")
+                                            )
                                         ))
                                 )
                         )
@@ -77,13 +81,13 @@ public class CruxMenusCommands {
         return 1;
     }
 
-    public static int open(Collection<Player> pp, MenuHolder menu, DataExchange info){
-        pp.forEach(e -> open(e, menu, info));
+    public static int open(Collection<Player> pp, MenuHolder menu, DataExchange info, MergedTagContainer tags){
+        pp.forEach(e -> open(e, menu, info, tags));
         return 1;
     }
 
-    public static int open(Player p, MenuHolder menu, DataExchange info){
-        menu.open(p, info);
+    public static int open(Player p, MenuHolder menu, DataExchange info, MergedTagContainer tags){
+        menu.open(p, info, tags);
         return 1;
     }
 }

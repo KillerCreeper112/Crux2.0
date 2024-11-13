@@ -45,11 +45,9 @@ public class SimpleMenuItem implements MenuItem {
     }
 
 
-    public @NotNull Optional<Integer> getSlot(){
+    public @NotNull Optional<List<Number>> getSlots(){
         NumberProvider provider = base.info().getObject("slot", NumberProvider.class).orElse(null);
-        if(provider != null) return Optional.of(
-                provider.sample(this::setPlaceholders).intValue()
-        );
+        if(provider != null) return Optional.of(provider.sampleList(this::setPlaceholders));
         return Optional.empty();
     }
 

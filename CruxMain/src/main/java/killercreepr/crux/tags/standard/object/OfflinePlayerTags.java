@@ -94,6 +94,7 @@ public class OfflinePlayerTags implements ObjectTag<OfflinePlayer> {
                 if(online==null) return "not online";
                 EquipmentSlot slot = EquipmentSlot.valueOf(args.get(0).toUpperCase());
                 ItemStack item = online.getInventory().getItem(slot);
+                if(item.isEmpty()) return item.getType().key().asString();
                 return Base64.getEncoder().encodeToString(item.serializeAsBytes());
             }))
             .add(Tag.string("has_permission", (args, ctx) ->{

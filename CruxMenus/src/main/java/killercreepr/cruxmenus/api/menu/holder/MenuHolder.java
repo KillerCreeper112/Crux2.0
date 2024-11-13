@@ -2,6 +2,7 @@ package killercreepr.cruxmenus.api.menu.holder;
 
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.DataInfoHolder;
+import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxmenus.api.event.MenuOpenEvent;
 import killercreepr.cruxmenus.api.menu.CfgMenu;
@@ -33,7 +34,10 @@ public interface MenuHolder extends DataInfoHolder, Keyed {
         return open(p, DataExchange.empty());
     }
 
-    @NotNull MenuOpenEvent open(@NotNull Player p, @NotNull DataExchange data);
+    default @NotNull MenuOpenEvent open(@NotNull Player p, @NotNull DataExchange data){
+        return open(p, data, null);
+    };
+    @NotNull MenuOpenEvent open(@NotNull Player p, @NotNull DataExchange data, @Nullable MergedTagContainer tags);
 
     @NotNull CfgMenu createMenu(@NotNull DataExchange data);
 

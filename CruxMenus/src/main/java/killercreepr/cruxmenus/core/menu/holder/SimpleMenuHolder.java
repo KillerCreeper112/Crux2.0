@@ -1,6 +1,7 @@
 package killercreepr.cruxmenus.core.menu.holder;
 
 import killercreepr.crux.data.DataExchange;
+import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxmenus.api.event.MenuOpenEvent;
 import killercreepr.cruxmenus.api.menu.CfgMenu;
@@ -53,21 +54,22 @@ public class SimpleMenuHolder implements MenuHolder {
         return info;
     }
 
-    public @NotNull MenuOpenEvent open(@NotNull Player p){
-        return open(p, DataExchange.empty());
-    }
-
-    public @NotNull MenuOpenEvent open(@NotNull Player p, @NotNull DataExchange data){
+    @Override
+    public @NotNull MenuOpenEvent open(@NotNull Player p, @NotNull DataExchange data, @Nullable MergedTagContainer tags) {
         DataExchange.Builder builder = DataExchange.builder().putAll(data);
         builder.put("viewer", p);
 
-        CfgMenu menu = createMenu(builder.build());
+        CfgMenu menu = createMenu(builder.build(), tags);
         menu.load();
         return menu.open(p);
     }
 
     public @NotNull CfgMenu createMenu(@NotNull DataExchange data){
         return new ConfigMenu(this, data);
+    }
+
+    public @NotNull CfgMenu createMenu(@NotNull DataExchange data, @Nullable MergedTagContainer tags){
+        return new ConfigMenu(this, data, tags);
     }
 
     public @Nullable String getTitle() {

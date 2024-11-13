@@ -5,6 +5,7 @@ import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.container.MergedTagContainer;
 import killercreepr.crux.tags.container.SimpleMergedTagContainer;
+import killercreepr.crux.tags.container.TagContainer;
 import killercreepr.crux.util.InvUtil;
 import killercreepr.cruxmenus.api.menu.CfgMenu;
 import killercreepr.cruxmenus.api.menu.contex.MenuContext;
@@ -20,7 +21,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 
 public class ConfigMenu extends BukkitMenu implements CfgMenu {
     protected final @NotNull MenuHolder holder;
@@ -35,7 +35,7 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
     public ConfigMenu(@NotNull MenuHolder holder, @NotNull DataExchange info, @Nullable MergedTagContainer tags){
         this.holder = holder;
         this.info = info;
-        this.tags = new SimpleMergedTagContainer(holder.getRegistry().getFormat().tags());
+        this.tags = TagContainer.merged(holder.getRegistry().getFormat().tags());
         if(tags != null) this.tags.addAll(tags);
     }
 
@@ -96,10 +96,11 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
         Map<Integer, MenuItem> map = new HashMap<>();
         items.forEach(list -> list.forEach(menuItem ->{
             MenuItem i = menuItem.getDisplayItem(viewer, menuContext);
-            Optional<Integer> slot = i.getSlot();
+            Optional<List<Number>> slot = i.getSlots();
 
             if(slot.isEmpty() || !i.canDisplay()) return;
-            map.put(slot.get(), i);
+            slot.get().forEach(num -> map.put(num.intValue(), i));
+            //map.put(slot.get(), i);
             //setItem(slot.get(), i, viewer);
         }));
         return map;
@@ -122,9 +123,12 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
 
     public @Nullable MenuItem setItem(@NotNull MenuItemHolder menuItem, @NotNull Player viewer, @NotNull MenuContext menuContext){
         MenuItem i = menuItem.getDisplayItem(viewer, menuContext);
-        Optional<Integer> slot = i.getSlot();
+        Optional<List<Number>> slot = i.getSlots();
         if(slot.isEmpty() || !i.canDisplay()) return i;
-        setItem(slot.get(), i, viewer);
+        slot.get().forEach(num ->{
+            setItem(num.intValue(), i, viewer);
+        });
+        //setItem(slot.get(), i, viewer);
         return i;
     }
 
@@ -153,9 +157,12 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
         MenuItem last = null;
         for(MenuItemHolder menuItem : potentialItems){
             MenuItem i = menuItem.getDisplayItem(viewer, menuContext);
-            Optional<Integer> slot = i.getSlot();
+            Optional<List<Number>> slot = i.getSlots();
             if(slot.isEmpty() || !i.canDisplay()) continue;
-            setItem(slot.get(), i, viewer);
+            slot.get().forEach(num ->{
+                setItem(num.intValue(), i, viewer);
+            });
+            //setItem(slot.get(), i, viewer);
             last = i;
         }
         return last;
