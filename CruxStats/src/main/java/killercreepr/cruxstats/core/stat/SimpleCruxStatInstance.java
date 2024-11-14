@@ -47,7 +47,7 @@ public class SimpleCruxStatInstance implements CruxStatInstance {
     }
 
     public double calculateValue(){
-        double x = 0D;
+        double x = getBaseValue();
         double multiply = 0D;
         Collection<CruxStatModifier> ADD = new ArrayList<>();
         Set<Key> SET = new HashSet<>();
