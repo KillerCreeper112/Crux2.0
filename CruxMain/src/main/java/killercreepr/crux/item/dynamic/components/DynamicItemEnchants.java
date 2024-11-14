@@ -10,6 +10,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class DynamicItemEnchants implements DynamicItemComponent {
@@ -37,5 +38,13 @@ public class DynamicItemEnchants implements DynamicItemComponent {
             int level = (int) CruxMath.evaluate(context.deserializeString(amountObject.toString()));
             item.enchant(enchantment, level);
         });
+    }
+
+    @Override
+    public @NotNull DynamicItemComponent merge(@NotNull DynamicItemComponent with) {
+        if(!(with instanceof DynamicItemEnchants w)) return this;
+        Map<Object, Object> map = new HashMap<>(enchants);
+        map.putAll(w.getEnchants());//todo maybe some way to add to the enchant's level instead of replacing the existing one. IDK
+        return new DynamicItemEnchants(map);
     }
 }

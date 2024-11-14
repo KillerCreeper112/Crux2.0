@@ -22,6 +22,8 @@ public interface DynamicItem extends Cloneable {
     @NotNull DynamicItem withType(@NotNull String material);
     @NotNull DynamicItem withAmount(@NotNull String amount);
     @NotNull DynamicItem withComponent(@NotNull DynamicItemComponent component);
+    @NotNull DynamicItem mergeComponent(@NotNull DynamicItemComponent component);
+    @NotNull DynamicItem mergeItem(@NotNull DynamicItem item);
 
     @Nullable
     CruxItem build(@NotNull TextParserContext context);

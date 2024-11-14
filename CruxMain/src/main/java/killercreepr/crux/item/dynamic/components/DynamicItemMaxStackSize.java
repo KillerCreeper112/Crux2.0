@@ -2,6 +2,7 @@ package killercreepr.crux.item.dynamic.components;
 
 import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.util.CruxItem;
+import killercreepr.crux.util.CruxMath;
 import org.jetbrains.annotations.NotNull;
 
 public class DynamicItemMaxStackSize extends DynamicSingleValueComponent{
@@ -16,6 +17,6 @@ public class DynamicItemMaxStackSize extends DynamicSingleValueComponent{
 
     @Override
     public void apply(@NotNull CruxItem item, @NotNull TextParserContext context) {
-        item.editMeta(meta -> meta.setMaxStackSize(parseInt(context)));
+        item.editMeta(meta -> meta.setMaxStackSize(CruxMath.clamp(parseInt(context), 1, 99)));
     }
 }

@@ -305,8 +305,9 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
         FileObject o = new FileObject();
         o.add("material", registry.serializeToFile(item.material()));
         o.add("amount", registry.serializeToFile(item.amount()));
-        if(item.components() != null){
-            item.components().forEach((key, value) ->{
+        Map<String, DynamicItemComponent> components = item.components();
+        if(components != null){
+            components.forEach((key, value) ->{
                 o.add(key, registry.serializeToFile(value));
             });
         }
@@ -322,7 +323,7 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
         if(e instanceof FileGeneric s){
             return new BukkitDynamicItem.Builder(s.getAsString()).build();
         }
-        if(!(e instanceof FileObject o)) return null;
+        if(!(e instanceof FileObject o)) return new BukkitDynamicItem.Builder("").build();
         if(o.get("material") instanceof FileGeneric s){
             return new BukkitDynamicItem.Builder(s.getAsString()).build();
         }
@@ -351,13 +352,18 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
             if(component == null) continue;
             stack = stack.withComponent(component);
         }
-        return stack;
 
-        /*item.editMeta(meta ->{
-            ItemRarity rarity = registry.deserialize(ItemRarity.class, o.get("rarity"));
-            if(rarity != null) meta.setRarity(rarity);
-        });
-        return item.item();*/
+        if(o.get("merge") instanceof FileObject oo){
+            for(Map.Entry<String, FileElement> entry : oo){
+                FileDynamicItemComponent<?> handler = COMPONENT_REGISTRY.get(entry.getKey());
+                if(handler == null) continue;
+                DynamicItemComponent component = handler.deserializeFromFile(context, entry.getValue());
+                if(component == null) continue;
+                stack = stack.mergeComponent(component);
+            }
+        }
+
+        return stack;
     }
 
     @Override

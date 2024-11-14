@@ -61,6 +61,26 @@ public class BukkitDynamicItem implements DynamicItem{
                 .build();
     }
 
+    @Override
+    public @NotNull DynamicItem mergeItem(@NotNull DynamicItem item) {
+        Map<String, DynamicItemComponent> components = item.components();
+        if(components == null) return this;
+        DynamicItem i = this;
+        for(DynamicItemComponent c : components.values()){
+            i = i.mergeComponent(c);
+        }
+        return i;
+    }
+
+    @Override
+    public @NotNull DynamicItem mergeComponent(@NotNull DynamicItemComponent component) {
+        return new Builder(material)
+            .amount(amount)
+            .components(components)
+            .mergeComponent(component)
+            .build();
+    }
+
     protected @Nullable Material matchMaterial(@NotNull String s){
         try{
             return Registry.MATERIAL.get(Key.key(s.toLowerCase()));
@@ -156,6 +176,12 @@ public class BukkitDynamicItem implements DynamicItem{
         public Builder addComponent(@NotNull DynamicItemComponent c){
             components.put(c.name(), c);
             return this;
+        }
+
+        public Builder mergeComponent(@NotNull DynamicItemComponent component){
+            DynamicItemComponent c = components.get(component.name());
+            if(c == null) return addComponent(component);
+            return addComponent(c.merge(component));
         }
 
         public Builder addComponents(@Nullable Map<String, DynamicItemComponent> c){

@@ -1,5 +1,6 @@
 package killercreepr.cruxmenus.core.menu.config.handlers;
 
+import com.google.common.reflect.TypeToken;
 import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.data.Holder;
 import killercreepr.crux.item.dynamic.DynamicItem;
@@ -29,29 +30,25 @@ public class FileMenuItem extends SimpleFileMenuModuled<MenuItemHolder> {
     public @Nullable MenuItemHolder deserializeFromFile(@NotNull FileContext<?> context,
                                                         @NotNull FileElement e,
                                                         @Nullable FileObject menuContext,
-                                                        @Nullable List<MenuItemHolder>  defaultBase) {
+                                                        @Nullable List<MenuItemHolder> defaultBase) {
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = context.getRegistry();
         List<MenuItemHolder> base = new ArrayList<>();
         if(defaultBase != null) base.addAll(defaultBase);
         if(menuContext != null) {
+            List<String> baseIDs = new ArrayList<>();
             String baseID = o.getObject(String.class, "base");
             if (baseID != null) {
-                /*String[] checkBase = path.split("\\.");
-                if(checkBase.length > 0 && checkBase[checkBase.length-1].contains(baseID)){
-                    CCrux.log(Level.WARNING, "Menu item has the same base ID as its own ID! (" + path + ") Base = (" + baseID + "). Ignoring...");
-                }else{
-                    base = menuModule.getYamlMenuItem().deserializeFromYaml(
-                            context, o.get(baseID), menuContext
-                    );
-                }*/
-                //Bukkit.getLogger().info("HOLDER HAS BASE: " + baseID + " ////   " + menuContext.get("items").getAsFileObject().get(baseID));
+                baseIDs.add(baseID);
+            }else{
+                baseIDs = registry.deserializeFromFile(new TypeToken<List<String>>(){}.getType(), o.get("base"));
+                if(baseIDs == null) baseIDs = List.of();
+            }
+            for(String s : baseIDs){
                 MenuItemHolder possibleBase = menuModule.getFileMenuItem().deserializeFromFile(
-                    context, menuContext.get("items").getAsFileObject().get(baseID), menuContext
+                    context, menuContext.get("items").getAsFileObject().get(s), menuContext
                 );
-                if (possibleBase != null) {
-                    base.add(possibleBase);
-                }
+                if (possibleBase != null) base.add(possibleBase);
             }
         }
 
@@ -68,6 +65,14 @@ public class FileMenuItem extends SimpleFileMenuModuled<MenuItemHolder> {
             DynamicItem baseClone = base.getLast().getItem().value();
             if(baseClone != null) baseClone = baseClone.clone();
             i = menuModule.getFileDynamicItem().deserializeFromYaml(context, o.get("item"), baseClone);
+            int size = base.size()-2;
+            while(size >= 0){
+                if(i == null) break;
+                baseClone = base.get(size).getItem().value();
+                if(baseClone != null) baseClone = baseClone.clone();
+                if(baseClone != null) i = i.mergeItem(baseClone);
+                size--;
+            }
         }
         ClickActions clickActions = menuModule.getFileMenuActions().deserializeFromFile(
             context, o.get("actions"), base
