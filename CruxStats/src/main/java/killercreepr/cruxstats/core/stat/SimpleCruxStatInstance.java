@@ -16,7 +16,7 @@ public class SimpleCruxStatInstance implements CruxStatInstance {
     protected final @NotNull Map<Key, CruxStatModifier> modifiers = new HashMap<>();
 
     protected double cache;
-    protected boolean dirty = false;
+    protected boolean dirty = true;
 
     public SimpleCruxStatInstance(@NotNull CruxStat stat, @NotNull NumberHolder base) {
         this.stat = stat;

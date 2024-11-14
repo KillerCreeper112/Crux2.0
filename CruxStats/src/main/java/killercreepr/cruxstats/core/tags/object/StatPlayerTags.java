@@ -30,7 +30,7 @@ public class StatPlayerTags implements ObjectTag<Player> {
     @Override
     public @Nullable TagContainer<StringResolver> requestStrings(@NotNull Player object, @NotNull TagParser tags) {
         return TagContainer.string(tags)
-            .add(Tag.string("stat", (args, ctx) ->{
+            .add(Tag.string("crux_stat", (args, ctx) ->{
                 Key key = Crux.key(args.get(0));
                 CruxStat stat = CruxStatRegistries.STAT.get(key);
                 if(stat == null) return key + " stat not found";
