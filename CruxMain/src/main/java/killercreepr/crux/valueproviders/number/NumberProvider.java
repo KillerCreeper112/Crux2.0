@@ -1,6 +1,7 @@
 package killercreepr.crux.valueproviders.number;
 
 import killercreepr.crux.context.InputContext;
+import killercreepr.crux.data.Holder;
 import killercreepr.crux.util.CruxMath;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,6 +13,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public interface NumberProvider extends NumberHolder {
+    static @NotNull NumberProvider holder(@NotNull Holder<Number> holder){
+        return new HolderNumber(holder);
+    }
     static @NotNull NumberProvider constant(@NotNull Number number){
         return new ConstantNumber(number);
     }
