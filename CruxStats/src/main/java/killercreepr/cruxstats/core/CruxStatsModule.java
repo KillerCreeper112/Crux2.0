@@ -1,12 +1,11 @@
 package killercreepr.cruxstats.core;
 
-import killercreepr.crux.data.entity.EntityMemory;
-import killercreepr.crux.data.entity.PlayerMemory;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.module.StandardModules;
 import killercreepr.crux.plugin.CruxPlugin;
+import killercreepr.crux.registries.CruxRegistries;
 import killercreepr.cruxstats.core.command.CruxStatsCommands;
-import killercreepr.cruxstats.core.stat.PlayerCruxStatHolder;
+import killercreepr.cruxstats.core.config.CruxConfigHook;
 import org.jetbrains.annotations.NotNull;
 
 public class CruxStatsModule implements CruxModule {
@@ -18,11 +17,9 @@ public class CruxStatsModule implements CruxModule {
 
     @Override
     public void onLoad(@NotNull CruxPlugin plugin) {
-        //todo move to cruxcore
-        EntityMemory.registerFunction(plugin, (m) ->{
-            if(!(m instanceof PlayerMemory mem)) return;
-            mem.getDataHolders().register(new PlayerCruxStatHolder(mem));
-        });
+        if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS)){
+            CruxConfigHook.register();
+        }
     }
 
     @Override
