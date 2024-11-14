@@ -1,7 +1,6 @@
 package killercreepr.cruxstats.api.stat;
 
-import killercreepr.crux.data.Holder;
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.valueproviders.number.NumberHolder;
 import killercreepr.cruxstats.core.stat.SimpleCruxStatInstance;
 import killercreepr.cruxstats.core.stat.SimpleStat;
 import net.kyori.adventure.key.Key;
@@ -14,7 +13,7 @@ public interface CruxStat extends Keyed {
         return new SimpleStat(key);
     }
 
-    static CruxStat stat(@NotNull Key key, @NotNull NumberProvider base){
+    static CruxStat stat(@NotNull Key key, @NotNull NumberHolder base){
         return new SimpleStat(key){
             @Override
             public @NotNull CruxStatInstance createNewInstance() {

@@ -12,4 +12,9 @@ public interface CruxStatHolder extends Loadable {
         if(instance == null) return 0D;
         return instance.getValue();
     }
+
+    default double getOrLoadStatValue(@NotNull CruxStat stat){
+        CruxStatInstance instance = getOrLoadStat(stat);
+        return instance.getValue();
+    }
 }

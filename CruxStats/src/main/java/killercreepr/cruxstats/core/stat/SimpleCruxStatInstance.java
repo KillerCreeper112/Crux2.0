@@ -1,6 +1,6 @@
 package killercreepr.cruxstats.core.stat;
 
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.valueproviders.number.NumberHolder;
 import killercreepr.cruxstats.api.stat.CruxStat;
 import killercreepr.cruxstats.api.stat.CruxStatInstance;
 import killercreepr.cruxstats.api.stat.CruxStatModifier;
@@ -12,13 +12,13 @@ import java.util.*;
 
 public class SimpleCruxStatInstance implements CruxStatInstance {
     protected final @NotNull CruxStat stat;
-    protected final @NotNull NumberProvider base;
+    protected final @NotNull NumberHolder base;
     protected final @NotNull Map<Key, CruxStatModifier> modifiers = new HashMap<>();
 
     protected double cache;
     protected boolean dirty = false;
 
-    public SimpleCruxStatInstance(@NotNull CruxStat stat, @NotNull NumberProvider base) {
+    public SimpleCruxStatInstance(@NotNull CruxStat stat, @NotNull NumberHolder base) {
         this.stat = stat;
         this.base = base;
     }
