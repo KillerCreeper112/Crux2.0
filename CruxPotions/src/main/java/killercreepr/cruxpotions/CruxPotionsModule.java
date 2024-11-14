@@ -75,7 +75,7 @@ public class CruxPotionsModule implements CruxModule {
 
         PotionPersistTags.register();
         //CruxPotionCommands.register(plugin);
-        Crux.TAGS.register(new PotionsLoreTag(values.potionsFormat()));
+        Crux.tags().register(new PotionsLoreTag(values.potionsFormat()));
 
         if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_ITEMS)){
             CruxItemRegistries.ITEM_UPDATERS.register(3, new PotionItemUpdater());

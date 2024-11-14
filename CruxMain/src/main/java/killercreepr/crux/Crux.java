@@ -36,13 +36,14 @@ public final class Crux {
     public static TagParser tags(){
         return TAGS;
     }
+    @Deprecated(forRemoval = true, since = "use tags()")
     public static final TagParser TAGS = TagParser.builder()
         .addTags(CruxStandardTags.buildObjectTags())
         .build();
     public static FormatSerializer format(){
         return FORMAT;
     }
-    @Deprecated(since = "use format()")
+    @Deprecated(forRemoval = true, since = "use format()")
     public static final FormatSerializer FORMAT = FormatSerializer.builder()
         .miniMessage(MiniMessage.builder()
             .tags(TagResolver.builder()

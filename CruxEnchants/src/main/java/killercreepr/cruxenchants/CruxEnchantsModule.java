@@ -36,7 +36,7 @@ public class CruxEnchantsModule implements CruxModule {
         }else values(new DefaultValues());
 
         CruxEnchantCommands.register(plugin);
-        Crux.TAGS.register(new EnchantLoreTag(values.enchantsTagFormat()));
+        Crux.tags().register(new EnchantLoreTag(values.enchantsTagFormat()));
     }
 
     @Override

@@ -6,10 +6,11 @@ import killercreepr.crux.data.entity.PlayerDataHolder;
 import killercreepr.crux.data.entity.PlayerMemory;
 import killercreepr.cruxconfig.config.bukkit.file.CruxJson;
 import killercreepr.cruxstats.api.stat.CruxStat;
-import killercreepr.cruxstats.api.stat.CruxStatHolder;
 import killercreepr.cruxstats.api.stat.CruxStatInstance;
+import killercreepr.cruxstats.api.stat.EntityStatHolder;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,7 +18,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PlayerCruxStatHolder extends PlayerDataHolder implements CruxStatHolder {
+public class PlayerCruxStatHolder extends PlayerDataHolder implements EntityStatHolder {
     public static final Key KEY = Crux.key("stat");
     protected final @NotNull Map<CruxStat, CruxStatInstance> stats = new HashMap<>();
 
@@ -69,5 +70,12 @@ public class PlayerCruxStatHolder extends PlayerDataHolder implements CruxStatHo
         data.close();
         if(stats == null) return;
         stats.forEach(stat -> this.stats.put(stat.getStat(), stat));
+    }
+
+    @Override
+    public @NotNull String getName() {
+        Player p = getPlayer();
+        if(p == null) return parent.getUUID().toString();
+        return p.getName();
     }
 }

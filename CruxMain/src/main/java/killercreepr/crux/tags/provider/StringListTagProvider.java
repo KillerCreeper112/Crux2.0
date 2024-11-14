@@ -37,14 +37,14 @@ public interface StringListTagProvider {
 
     static @Nullable StringListTagProvider merge(@Nullable StringListTagProvider first, @Nullable TagContainer<StringListResolver> second){
         if(first == null && second == null) return null;
-        TagContainer<StringListResolver> container = TagContainer.stringList(second==null? Crux.TAGS:second.getTagParser());
+        TagContainer<StringListResolver> container = TagContainer.stringList(second==null? Crux.tags():second.getTagParser());
         container.addAll(first==null?null:first.getStringListTags());
         return () -> container;
     }
 
     static @Nullable StringListTagProvider mergeHook(@Nullable StringListTagProvider first, @Nullable Object... hookObjects){
         if(first == null && hookObjects == null) return null;
-        TagContainer<StringListResolver> container = TagContainer.stringList(first==null?Crux.TAGS:first.getStringListTags().getTagParser());
+        TagContainer<StringListResolver> container = TagContainer.stringList(first==null?Crux.tags():first.getStringListTags().getTagParser());
         container.addAll(first==null?null:first.getStringListTags());
         for(Object o : hookObjects){
             if(o==null) continue;

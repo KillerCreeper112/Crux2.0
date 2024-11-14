@@ -17,14 +17,14 @@ import java.util.Map;
 
 public interface TagContainer<T extends TagResolver<?>> extends Iterable<T> {
     static StringTagContainProvider string(){
-        return string(Crux.TAGS);
+        return string(Crux.tags());
     }
     static StringTagContainProvider string(@NotNull TagParser tagParser){
         return new SimpleStringTagProvider(tagParser);
     }
 
     static StringTagContainProvider string(@Nullable StringResolver... resolvers){
-        return string(Crux.TAGS, resolvers);
+        return string(Crux.tags(), resolvers);
     }
 
     static StringTagContainProvider string(@NotNull TagParser tagParser, @Nullable StringResolver... resolvers){
@@ -32,7 +32,7 @@ public interface TagContainer<T extends TagResolver<?>> extends Iterable<T> {
     }
 
     static StringListTagContainProvider stringList(){
-        return stringList(Crux.TAGS);
+        return stringList(Crux.tags());
     }
 
     static StringListTagContainProvider stringList(@NotNull TagParser tagParser){
@@ -40,7 +40,7 @@ public interface TagContainer<T extends TagResolver<?>> extends Iterable<T> {
     }
 
     static StringListTagContainProvider stringList(@Nullable StringListResolver... resolvers){
-        return stringList(Crux.TAGS, resolvers);
+        return stringList(Crux.tags(), resolvers);
     }
 
     static StringListTagContainProvider stringList(@NotNull TagParser tagParser, @Nullable StringListResolver... resolvers){
@@ -48,7 +48,7 @@ public interface TagContainer<T extends TagResolver<?>> extends Iterable<T> {
     }
 
     static @NotNull MergedTagContainer merged(){
-        return merged(Crux.TAGS);
+        return merged(Crux.tags());
     }
     static @NotNull MergedTagContainer merged(@Nullable TagResolver<?>... resolvers){
         return merged().addAll(resolvers);

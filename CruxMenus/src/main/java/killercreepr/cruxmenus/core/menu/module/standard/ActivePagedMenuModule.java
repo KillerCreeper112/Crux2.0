@@ -67,7 +67,7 @@ public abstract class ActivePagedMenuModule<T> extends SimpleActiveMenuModule {
 
     public TextParserContext buildContext(@NotNull Menu menu){
         return TextParserContext.builder()
-            .tags(buildTags(menu, Crux.TAGS))
+            .tags(buildTags(menu, Crux.tags()))
             .build();
     }
 

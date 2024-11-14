@@ -23,6 +23,8 @@ public interface CruxStatInstance {
     double getValue();
     @NotNull
     Collection<CruxStatModifier> getModifiers();
+    @NotNull
+    Collection<CruxStatModifier> clearModifiers();
     void addModifier(@NotNull CruxStatModifier modifier);
     @Nullable CruxStatModifier
     removeModifier(@NotNull Key key);

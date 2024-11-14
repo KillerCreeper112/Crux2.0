@@ -75,6 +75,14 @@ public class SimpleCruxStatInstance implements CruxStatInstance {
     }
 
     @Override
+    public @NotNull Collection<CruxStatModifier> clearModifiers() {
+        Collection<CruxStatModifier> removed = new HashSet<>(getModifiers());
+        modifiers.clear();
+        setDirty();
+        return removed;
+    }
+
+    @Override
     public void addModifier(@NotNull CruxStatModifier modifier) {
         modifiers.put(modifier.key(), modifier);
         setDirty();

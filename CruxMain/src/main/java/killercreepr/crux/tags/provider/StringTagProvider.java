@@ -35,14 +35,14 @@ public interface StringTagProvider {
 
     static @Nullable StringTagProvider merge(@Nullable StringTagProvider first, @Nullable TagContainer<StringResolver> second){
         if(first == null && second == null) return null;
-        TagContainer<StringResolver> container = TagContainer.string(second==null?Crux.TAGS:second.getTagParser());
+        TagContainer<StringResolver> container = TagContainer.string(second==null?Crux.tags():second.getTagParser());
         container.addAll(first==null?null:first.getStringTags());
         return () -> container;
     }
 
     static @Nullable StringTagProvider mergeHook(@Nullable StringTagProvider first, @Nullable Object... hookObjects){
         if(first == null && hookObjects == null) return null;
-        TagContainer<StringResolver> container = TagContainer.string(first==null?Crux.TAGS:first.getStringTags().getTagParser());
+        TagContainer<StringResolver> container = TagContainer.string(first==null?Crux.tags():first.getStringTags().getTagParser());
         container.addAll(first==null?null:first.getStringTags());
         for(Object o : hookObjects){
             if(o==null) continue;

@@ -1,11 +1,14 @@
 package killercreepr.cruxstats.core;
 
+import killercreepr.crux.Crux;
 import killercreepr.crux.module.CruxModule;
 import killercreepr.crux.module.StandardModules;
 import killercreepr.crux.plugin.CruxPlugin;
 import killercreepr.crux.registries.CruxRegistries;
+import killercreepr.crux.tags.TagParser;
 import killercreepr.cruxstats.core.command.CruxStatsCommands;
 import killercreepr.cruxstats.core.config.CruxConfigHook;
+import killercreepr.cruxstats.core.tags.object.StatPlayerTags;
 import org.jetbrains.annotations.NotNull;
 
 public class CruxStatsModule implements CruxModule {
@@ -20,6 +23,11 @@ public class CruxStatsModule implements CruxModule {
         if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS)){
             CruxConfigHook.register();
         }
+        registerTags(Crux.tags());
+    }
+
+    public void registerTags(TagParser tags){
+        tags.register(new StatPlayerTags());
     }
 
     @Override
