@@ -323,11 +323,11 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
         if(e instanceof FileGeneric s){
             return new BukkitDynamicItem.Builder(s.getAsString()).build();
         }
-        if(!(e instanceof FileObject o)) return new BukkitDynamicItem.Builder("").build();
+        if(!(e instanceof FileObject o)) return null;
         if(o.get("material") instanceof FileGeneric s){
             return new BukkitDynamicItem.Builder(s.getAsString()).build();
         }
-        return null;
+        return o.isEmpty() ? null : new BukkitDynamicItem.Builder("").build();
     }
 
     public @Nullable DynamicItem deserializeFromYaml(@NotNull FileContext<?> context, @NotNull FileElement e, @Nullable DynamicItem stack) {

@@ -3,6 +3,7 @@ package killercreepr.crux.module;
 public class StandardModules {
     public static final String CRUX_ADVANCEMENTS = "CruxAdvancements";
     public static final String CRUX_ATTRIBUTES = "CruxAttributes";
+    public static final String CRUX_STATS = "CruxStats";
     public static final String CRUX_BLOCKS = "CruxBlocks";
     public static final String CRUX_BREWERY = "CruxBrewery";
     public static final String CRUX_CONFIGS = "CruxConfigs";

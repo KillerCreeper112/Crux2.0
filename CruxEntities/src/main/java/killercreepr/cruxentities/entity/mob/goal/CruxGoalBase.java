@@ -2,7 +2,6 @@ package killercreepr.cruxentities.entity.mob.goal;
 
 import com.destroystokyo.paper.entity.ai.GoalKey;
 import com.destroystokyo.paper.entity.ai.GoalType;
-import killercreepr.crux.Crux;
 import killercreepr.crux.event.CruxEntityDamageEvent;
 import killercreepr.crux.location.DynamicLocation;
 import killercreepr.crux.location.EntityLocation;
@@ -10,8 +9,8 @@ import killercreepr.crux.persistence.CruxPersist;
 import killercreepr.crux.util.CruxGoalUtil;
 import killercreepr.crux.util.GetEntityNear;
 import killercreepr.crux.util.GetNear;
-import killercreepr.cruxattributes.attribute.CruxAttribute;
-import killercreepr.cruxattributes.attribute.CruxAttributeInstance;
+import killercreepr.cruxattributes.api.attribute.CruxAttribute;
+import killercreepr.cruxattributes.core.attribute.CruxAttributeInstance;
 import killercreepr.cruxentities.combat.CruxEntityDamager;
 import killercreepr.cruxentities.combat.EntityHit;
 import killercreepr.cruxentities.entity.CruxMob;

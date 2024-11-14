@@ -8,6 +8,7 @@ include(
     "CruxPotions",
 
     "CruxAttributes",
+    "CruxStats",
     "CruxEnchants",
 
     "CruxItems",

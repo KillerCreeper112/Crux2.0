@@ -4,7 +4,7 @@ import killercreepr.crux.Crux;
 import killercreepr.crux.event.CruxEntityDamageEvent;
 import killercreepr.crux.event.CruxEntityDeathEvent;
 import killercreepr.crux.persistence.CruxPersist;
-import killercreepr.cruxattributes.attribute.CruxAttribute;
+import killercreepr.cruxattributes.api.attribute.CruxAttribute;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
