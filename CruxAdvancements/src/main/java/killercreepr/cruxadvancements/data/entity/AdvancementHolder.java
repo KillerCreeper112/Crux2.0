@@ -12,9 +12,11 @@ import killercreepr.cruxadvancements.advancement.CruxAdvancement;
 import killercreepr.cruxadvancements.data.AdvancementTracker;
 import killercreepr.cruxadvancements.data.TrackedAdvancement;
 import killercreepr.cruxadvancements.registries.AdvancementRegistries;
+import killercreepr.cruxadvancements.stat.AdvancementStats;
 import killercreepr.cruxadvancements.values.ValuesProvider;
 import killercreepr.cruxconfig.config.bukkit.file.CruxJson;
 import killercreepr.cruxconfig.config.common.json.registry.JsonRegistry;
+import killercreepr.cruxstats.api.bukkit.BukkitStatHolder;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
@@ -37,18 +39,13 @@ public class AdvancementHolder extends PlayerDataHolder implements Loadable {
     }
 
     protected final AdvancementTracker advancementTracker = new AdvancementTracker();
-    protected int maxTrackedAdvancements;
 
     public @NotNull Plugin getPlugin() {
         return plugin;
     }
 
-    public void setMaxTrackedAdvancements(int maxTrackedAdvancements) {
-        this.maxTrackedAdvancements = maxTrackedAdvancements;
-    }
-
     public int getMaxTrackedAdvancements() {
-        return maxTrackedAdvancements;
+        return (int) BukkitStatHolder.holder(parent.getUUID()).getOrLoadStatValue(AdvancementStats.MAX_TRACKABLE_ADVANCEMENTS);
     }
 
     public AdvancementTracker getAdvancementTracker() {
@@ -78,7 +75,6 @@ public class AdvancementHolder extends PlayerDataHolder implements Loadable {
             a.add(registry.serializeToJson(tracked));
         });
         json.add("tracked_advancements", a);
-        json.addProperty("max_tracked_advancements", maxTrackedAdvancements);
         cfg.save();
     }
 
@@ -102,7 +98,6 @@ public class AdvancementHolder extends PlayerDataHolder implements Loadable {
         CruxJson cfg = getSaveFile();
         JsonObject json = cfg.json();
         if(json==null){
-            setMaxTrackedAdvancements(getDefaultMaxTrackedAdvancements());
             loadGlobal();
             return;
         }
@@ -117,7 +112,6 @@ public class AdvancementHolder extends PlayerDataHolder implements Loadable {
         }
         Number maxTracked = cfg.get("max_tracked_advancements", Number.class);
         cfg.close();
-        setMaxTrackedAdvancements(maxTracked == null ? getDefaultMaxTrackedAdvancements() : maxTracked.intValue());
         advancementTracker.setTrackedAdvancements(tracked);
         loadGlobal();
     }

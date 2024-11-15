@@ -17,6 +17,7 @@ import killercreepr.cruxadvancements.hook.menu.CruxMenuHook;
 import killercreepr.cruxadvancements.listener.AdvancementGrantListener;
 import killercreepr.cruxadvancements.listener.ObjectiveListener;
 import killercreepr.cruxadvancements.listener.PlayerCraftItemListener;
+import killercreepr.cruxadvancements.stat.AdvancementStats;
 import killercreepr.cruxadvancements.tags.*;
 import killercreepr.cruxadvancements.values.DefaultValues;
 import killercreepr.cruxadvancements.values.ValuesProvider;
@@ -42,6 +43,7 @@ public class CruxAdvancementsModule implements CruxModule {
 
     @Override
     public void onLoad(@NotNull CruxPlugin plugin) {
+        AdvancementStats.register();
         AdvancementCommands.register(plugin);
         if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS)){
             CruxConfigHook.load();

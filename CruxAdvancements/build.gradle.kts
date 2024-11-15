@@ -14,6 +14,7 @@ dependencies {
     compileOnly(project(":CruxMain"))
     compileOnly(project(":CruxConfigs"))
     compileOnly(project(":CruxMenus"))
+    compileOnly(project(":CruxStats"))
     compileOnly("com.github.ZockerAxel", "CrazyAdvancementsAPI", "2.1.19")
 
     compileOnly(fileTree("libs") {

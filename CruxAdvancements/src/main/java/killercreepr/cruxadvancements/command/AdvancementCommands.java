@@ -1,6 +1,5 @@
 package killercreepr.cruxadvancements.command;
 
-import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -147,7 +146,7 @@ public class AdvancementCommands {
                                 )
                         )
                 )
-        ).then(
+        );/*.then(
             Commands.literal("max_tracked")
                 .then(
                     Commands.argument("targets", ArgumentTypes.players())
@@ -210,7 +209,7 @@ public class AdvancementCommands {
                                 )
                         )
                 )
-        );
+        );*/
         return dispatcher.build();
     }
 
