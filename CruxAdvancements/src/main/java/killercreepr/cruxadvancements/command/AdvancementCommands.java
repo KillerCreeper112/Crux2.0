@@ -288,7 +288,8 @@ public class AdvancementCommands {
                 manager.grantAdvancement(p, a);
             }
         }
-        new MsgContainer(advancements.size() + " advancements granted for " + targets.size() + " players.");
+        new MsgContainer(advancements.size() + " advancements granted for " + targets.size() + " players.")
+            .use(sender);
         return 1;
     }
 
@@ -300,7 +301,8 @@ public class AdvancementCommands {
                 manager.revokeAdvancement(p, a);
             }
         }
-        new MsgContainer(advancements.size() + " advancements revoked from " + targets.size() + " players.");
+        new MsgContainer(advancements.size() + " advancements revoked from " + targets.size() + " players.")
+            .use(sender);
         return 1;
     }
 }
