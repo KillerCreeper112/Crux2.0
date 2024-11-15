@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import killercreepr.crux.util.CruxObjects;
+import killercreepr.crux.util.CruxReflect;
 import killercreepr.crux.valueproviders.number.ConstantNumber;
 import killercreepr.crux.valueproviders.number.EquationNumber;
 import killercreepr.crux.valueproviders.number.UniformNumber;
@@ -28,9 +29,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TaggedJsonRegistry implements FileRegistry, JsonRegistry {
     public final String DESERIALIZE_METHOD_NAME = "deserializeFromJson";
@@ -135,28 +134,48 @@ public class TaggedJsonRegistry implements FileRegistry, JsonRegistry {
         };
     }
 
+    public @NotNull List<JsonObjectHandler<?>> findPotentialHandlers(@NotNull Class<?> from) {
+        List<JsonObjectHandler<?>> handlerList = new ArrayList<>();
+
+        // Collect matching handlers
+        for (Map.Entry<Class<?>, JsonObjectHandler<?>> entry : OBJECT_HANDLER_REGISTRY.entrySet()) {
+            Class<?> clazz = entry.getKey();
+            if (clazz.isAssignableFrom(from)) {
+                handlerList.add(entry.getValue());
+            }
+        }
+
+        List<Class<?>> fromInheritanceChain = CruxReflect.getClassInheritanceChain(from);
+
+        // Sort the handlers based on their closeness to `from`
+        handlerList.sort(Comparator.comparingInt(handler -> CruxReflect.calculateClassCloseness(fromInheritanceChain, handler.getClass())));
+
+        return handlerList;
+    }
+
     public @Nullable JsonObjectHandler<?> findContainerHandler(@NotNull Class<?> from){
         JsonObjectHandler<?> handler = OBJECT_HANDLER_REGISTRY.get(from);
         if(handler != null) return handler;
+        List<JsonObjectHandler<?>> list = findPotentialHandlers(from);
+        return list.isEmpty() ? null : list.getFirst();
 
-        for(Map.Entry<Class<?>, JsonObjectHandler<?>> entry : OBJECT_HANDLER_REGISTRY.entrySet()){
+        /*for(Map.Entry<Class<?>, JsonObjectHandler<?>> entry : OBJECT_HANDLER_REGISTRY.entrySet()){
             Class<?> clazz = entry.getKey();
             if(clazz.isAssignableFrom(from)){
                 return entry.getValue();
             }
         }
-        return null;
+        return null;*/
     }
 
     public @NotNull JsonElement rawSerializeObject(@NotNull Object object){
         if(object instanceof JsonSerializable s) return serialize(s);
+        JsonPrimitive ele = tryPrimitive(object);
+        if(ele != null) return ele;
+
         JsonObjectHandler<?> handler = findContainerHandler(object.getClass());
         if(handler == null){
-            JsonElement ele = tryPrimitive(object);
-            if(ele == null){
-                throw new RuntimeException("Cannot find serialization method for " + object + " (class " + object.getClass().getName() + ")");
-            }
-            return ele;
+            throw new RuntimeException("Cannot find serialization method for " + object + " (class " + object.getClass().getName() + ")");
         }
         JsonElement element = handler.attemptSerializeToJson(new JsonContext(this), object);
         if(element == null)
@@ -167,13 +186,12 @@ public class TaggedJsonRegistry implements FileRegistry, JsonRegistry {
     @Override
     public @NotNull JsonElement serializeToJson(@NotNull Object object){
         if(object instanceof JsonSerializable s) return serialize(s);
+        JsonElement ele = tryPrimitive(object);
+        if(ele != null) return ele;
+
         JsonObjectHandler<?> handler = findContainerHandler(object.getClass());
         if(handler == null){
-            JsonElement ele = tryPrimitive(object);
-            if(ele == null){
-                throw new RuntimeException("Cannot find serialization method for " + object + " (class " + object.getClass().getName() + ")");
-            }
-            return ele;
+            throw new RuntimeException("Cannot find serialization method for " + object + " (class " + object.getClass().getName() + ")");
         }
         JsonElement element = handler.attemptSerializeToJson(new JsonContext(this), object);
         if(element == null)

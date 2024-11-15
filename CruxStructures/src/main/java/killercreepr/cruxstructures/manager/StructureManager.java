@@ -244,6 +244,13 @@ public class StructureManager implements Listener {
         }
     }
 
+    protected void addStoredStructureSilently(StoredStructure stored, UUID world, long chunkKey){
+        this.stored.addSilently(world, chunkKey, stored);
+        if(stored instanceof TickedStoredStructure ticked){
+            this.storedTicked.addSilently(world, chunkKey, ticked);
+        }
+    }
+
     public void addStoredStructure(StoredStructure stored, UUID world, Chunk chunk){
         long chunkKey = chunk.getChunkKey();
         addStoredStructure(stored, world, chunkKey);
@@ -315,8 +322,7 @@ public class StructureManager implements Listener {
             Map<CruxPosition, StoredStructure> values = file.structures();
             file.close();
             values.values().forEach(v ->{
-                addStoredStructure(v, worldUUID, v.getChunk().getChunkKey());
-                //stored.add(worldUUID, v.getChunk().getChunkKey(), v);
+                addStoredStructureSilently(v, worldUUID, v.getChunk().getChunkKey());
             });
         }
     }
@@ -338,6 +344,10 @@ public class StructureManager implements Listener {
     }
 
     public void saveWorld(@NotNull World world){
+        if(!stored.isDirty()){
+            Crux.log(Level.INFO, world.getName() + " is skipping structure saving because no new changes were made.");
+            return;
+        }
         Crux.log(Level.INFO, "Saving structures in world: " + world.getName());
         UUID worldUUID = world.getUID();
         WorldChunkStorage<StoredStructure> removed = stored.remove(worldUUID);

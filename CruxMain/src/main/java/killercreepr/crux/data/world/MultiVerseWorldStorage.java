@@ -10,6 +10,15 @@ import java.util.function.Predicate;
 
 public abstract class MultiVerseWorldStorage<T> implements Iterable<WorldChunkStorage<T>> {
     protected final @NotNull Map<UUID, WorldChunkStorage<T>> data;
+    protected boolean isDirty = true;
+
+    public boolean isDirty() {
+        return isDirty;
+    }
+
+    public void setDirty() {
+        isDirty = true;
+    }
 
     public MultiVerseWorldStorage(@NotNull Map<UUID, WorldChunkStorage<T>> data) {
         this.data = data;
@@ -26,7 +35,9 @@ public abstract class MultiVerseWorldStorage<T> implements Iterable<WorldChunkSt
     }
 
     public WorldChunkStorage<T> remove(@NotNull UUID worldUUID){
-        return data.remove(worldUUID);
+        WorldChunkStorage<T> removed = data.remove(worldUUID);
+        if(removed != null) setDirty();
+        return removed;
     }
 
     public ChunkBlockStorage<T> remove(@NotNull UUID worldUUID, long chunkKey){
@@ -34,6 +45,7 @@ public abstract class MultiVerseWorldStorage<T> implements Iterable<WorldChunkSt
         if(found==null) return null;
         ChunkBlockStorage<T> removed = found.remove(chunkKey);
         if(found.isEmpty()) data.remove(worldUUID);
+        if(removed != null || found.isEmpty()) setDirty();
         return removed;
     }
 
@@ -42,6 +54,7 @@ public abstract class MultiVerseWorldStorage<T> implements Iterable<WorldChunkSt
         if(container==null) return null;
         T removed = container.remove(chunkKey, pos);
         if(container.isEmpty()) remove(worldUUID);
+        if(removed != null || container.isEmpty()) setDirty();
         return removed;
     }
 
@@ -67,6 +80,12 @@ public abstract class MultiVerseWorldStorage<T> implements Iterable<WorldChunkSt
         data.get(worldUUID).add(chunkKey, block);
         return this;*/
         data.computeIfAbsent(worldUUID, (u) -> newWorldStorage()).add(chunkKey, block);
+        setDirty();
+        return this;
+    }
+
+    public MultiVerseWorldStorage<T> addSilently(@NotNull UUID worldUUID, long chunkKey, @NotNull T block){
+        data.computeIfAbsent(worldUUID, (u) -> newWorldStorage()).add(chunkKey, block);
         return this;
     }
 
@@ -77,7 +96,9 @@ public abstract class MultiVerseWorldStorage<T> implements Iterable<WorldChunkSt
     public abstract @NotNull WorldChunkStorage<T> newWorldStorage();
 
     public boolean removeIf(Predicate<WorldChunkStorage<T>> predicate){
-        return data.values().removeIf(predicate);
+        boolean x = data.values().removeIf(predicate);
+        if(x) setDirty();
+        return x;
     }
 
     @NotNull

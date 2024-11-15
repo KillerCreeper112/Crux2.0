@@ -30,7 +30,7 @@ public class CruxMenusModule implements CruxModule {
 
     public CruxMenusModule() {
         this.menuModuleRegistry = new SimpleKeyedRegistry<>();
-        this.menuRegistry = MenuRegistry.simple(Crux.FORMAT, menuModuleRegistry);
+        this.menuRegistry = MenuRegistry.simple(Crux.format(), menuModuleRegistry);
         StandardMenuActions.buildActions().forEach(menuRegistry.menuActions()::register);
     }
 

@@ -12,7 +12,6 @@ import killercreepr.crux.tags.hook.impl.StringListHookedObjectTag;
 import killercreepr.crux.tags.hook.prefix.HookedPrefixBuilder;
 import killercreepr.crux.tags.resolver.Tag;
 import net.kyori.adventure.key.Key;
-import net.minecraft.stats.Stat;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
