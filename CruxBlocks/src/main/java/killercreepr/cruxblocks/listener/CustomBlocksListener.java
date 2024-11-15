@@ -38,7 +38,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerAnimationType;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -87,7 +89,6 @@ public class CustomBlocksListener implements Listener {
         if(e instanceof EnderCrystal) return 6f;
         return fallBack;
     }
-
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onBlockExplode(BlockExplodeEvent event) {
@@ -170,6 +171,7 @@ public class CustomBlocksListener implements Listener {
             crux.breakBlock(Miner.block(event.getBlock()));
         }
     }
+
 
     @EventHandler
     private void blockDropItem(BlockDropItemEvent event){

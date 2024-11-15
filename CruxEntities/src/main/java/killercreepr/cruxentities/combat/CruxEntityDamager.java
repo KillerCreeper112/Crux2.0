@@ -200,7 +200,7 @@ public class CruxEntityDamager {
                     return event;
                 }
             }
-            e.damage(event.getDmg());
+            e.damage(event.getDmg(), damager);
             e.setNoDamageTicks(0);
         }
         if(event.getAttackLoc() == null || (event.getKb() == 0D && event.getUpKb() == 0D)) return event;
