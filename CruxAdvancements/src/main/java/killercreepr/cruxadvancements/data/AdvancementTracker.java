@@ -13,14 +13,20 @@ import java.util.function.BiConsumer;
 
 public class AdvancementTracker {
     protected final Collection<TrackedAdvancement> trackedAdvancements = new HashSet<>();
+    protected final Collection<TrackedAdvancement> globalTracked = new HashSet<>();
 
     public void setTrackedAdvancements(@NotNull Collection<TrackedAdvancement> advancements){
         trackedAdvancements.clear();
         trackedAdvancements.addAll(advancements);
     }
 
+    public void setGlobalTrackedAdvancements(@NotNull Collection<TrackedAdvancement> advancements){
+        globalTracked.clear();
+        globalTracked.addAll(advancements);
+    }
+
     public boolean isTracking(TrackedAdvancement a){
-        return trackedAdvancements.contains(a);
+        return trackedAdvancements.contains(a) || globalTracked.contains(a);
     }
 
     public boolean isTracking(Key manager, Key advancement){
@@ -31,12 +37,21 @@ public class AdvancementTracker {
         return trackedAdvancements;
     }
 
+    public Collection<TrackedAdvancement> getGlobalTrackedAdvancements() {
+        return globalTracked;
+    }
+
     public void untrackAll(){
         trackedAdvancements.clear();
     }
 
+    public void untrackAllGlobal(){
+        globalTracked.clear();
+    }
+
     public void untrack(@NotNull TrackedAdvancement tracked){
         trackedAdvancements.remove(tracked);
+        globalTracked.remove(tracked);
     }
 
     public void untrack(@NotNull CruxAdvancementManager<?> manager, @NotNull CruxAdvancement advancement){
@@ -45,6 +60,7 @@ public class AdvancementTracker {
 
     public void untrack(@NotNull Key advancement){
         trackedAdvancements.removeIf(d -> d.getAdvancementKey().equals(advancement));
+        globalTracked.removeIf(d -> d.getAdvancementKey().equals(advancement));
     }
 
     public void untrack(@NotNull CruxAdvancement advancement){
@@ -64,11 +80,21 @@ public class AdvancementTracker {
     }
 
     public void track(@NotNull TrackedAdvancement tracked){
+        if(tracked.isGlobal()){
+            globalTracked.add(tracked);
+            return;
+        }
         trackedAdvancements.add(tracked);
     }
 
+    public Collection<TrackedAdvancement> getAllTracked(){
+        Collection<TrackedAdvancement> list = new HashSet<>(trackedAdvancements);
+        list.addAll(globalTracked);
+        return list;
+    }
+
     public void apply(@NotNull BiConsumer<CruxAdvancementManager<?>, ObjectiveAdvancement> consumer){
-        for(TrackedAdvancement a : new HashSet<>(trackedAdvancements)){
+        for(TrackedAdvancement a : getAllTracked()){
             consumer.accept(
                 a.getManager(),
                 a.getAdvancementOrThrow(ObjectiveAdvancement.class)
@@ -78,7 +104,7 @@ public class AdvancementTracker {
 
     public <T extends AdvancementObjective> void apply(@NotNull Class<T> type,
                                                        @NotNull ObjectiveConsumer<T> consumer){
-        for(TrackedAdvancement a : new HashSet<>(trackedAdvancements)){
+        for(TrackedAdvancement a : getAllTracked()){
             CruxAdvancementManager<?> manager = a.getManager();
             ObjectiveAdvancement advancement = a.getObjective();
             a.getAdvancementOrThrow(ObjectiveAdvancement.class).getObjectives(type).forEach((criterion, objective) ->{
