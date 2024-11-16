@@ -140,7 +140,7 @@ public class TaggedJsonRegistry implements FileRegistry, JsonRegistry {
         // Collect matching handlers
         for (Map.Entry<Class<?>, JsonObjectHandler<?>> entry : OBJECT_HANDLER_REGISTRY.entrySet()) {
             Class<?> clazz = entry.getKey();
-            if (clazz.isAssignableFrom(from)) {
+            if (from.isAssignableFrom(clazz) || clazz.isAssignableFrom(from)) {
                 handlerList.add(entry.getValue());
             }
         }

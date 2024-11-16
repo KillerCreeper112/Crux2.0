@@ -42,6 +42,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.logging.Level;
@@ -315,16 +316,23 @@ public class StructureManager implements Listener {
         UUID worldUUID = world.getUID();
         CruxFolder folder = createWorldFolder(worldUUID);
         File[] files = folder.file().listFiles();
-        if(files==null) return;
+        Crux.log(Level.INFO, "Loading structures in world, " + world.getName());
+        if(files==null){
+            Crux.log(Level.INFO, "No structures loaded in world, " + world.getName());
+            return;
+        }
 
+        int loaded = 0;
         for(File f : files){
             StorageChunkFile file = new StorageChunkFile(f);
             Map<CruxPosition, StoredStructure> values = file.structures();
             file.close();
-            values.values().forEach(v ->{
+            for (StoredStructure v : values.values()) {
                 addStoredStructureSilently(v, worldUUID, v.getChunk().getChunkKey());
-            });
+                loaded++;
+            }
         }
+        Crux.log(Level.INFO, "Loaded " + loaded + " structures in world, " + world.getName());
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
@@ -359,11 +367,16 @@ public class StructureManager implements Listener {
                 FileUtils.deleteDirectory(folder.file());
             }catch (IOException ignored){}
         }
-        if(removed==null) return;
+        if(removed==null){
+            Crux.log(Level.INFO, "No structures saved within world: " + world.getName());
+            return;
+        }
+        AtomicInteger saved = new AtomicInteger();
         removed.getData().forEach((key, value) ->{
             StorageChunkFile file = createChunkFile(worldUUID, key);
             file.reloadIfNeeded();
             file.structures(value.getData().values());
+            saved.addAndGet(value.getData().size());
             if(file.json().isEmpty()){
                 file.close();
                 file.file().delete();
@@ -371,6 +384,7 @@ public class StructureManager implements Listener {
                 file.save(false);
             }
         });
+        Crux.log(Level.INFO, "Saved " + saved.get() + " structures in world, " + world.getName());
 
     }
 

@@ -10,8 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-import java.util.concurrent.TimeUnit;
 
 public interface IDesignEntity extends IEntityWrapper {
     default IDesignEntity addModel(@NotNull String id, boolean overrideHitbox){

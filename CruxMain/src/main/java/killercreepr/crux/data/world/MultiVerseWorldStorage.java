@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 
 public abstract class MultiVerseWorldStorage<T> implements Iterable<WorldChunkStorage<T>> {
     protected final @NotNull Map<UUID, WorldChunkStorage<T>> data;
-    protected boolean isDirty = true;
+    protected boolean isDirty = false;
 
     public boolean isDirty() {
         return isDirty;

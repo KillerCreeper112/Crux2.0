@@ -3,7 +3,6 @@ package killercreepr.cruxstructures.structure.module.standard;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.world.block.BlockStateHolder;
 import killercreepr.crux.Crux;
 import killercreepr.crux.block.CruxBlockWrapper;
