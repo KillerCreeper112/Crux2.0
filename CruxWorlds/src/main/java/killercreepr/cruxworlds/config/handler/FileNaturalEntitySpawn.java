@@ -25,13 +25,15 @@ public class FileNaturalEntitySpawn implements FileObjectHandler<NaturalEntitySp
         if(!(e instanceof FileObject o)){
             CruxEntitySnapshot snapshot = registry.deserializeFromFile(CruxEntitySnapshot.class, e);
             if(snapshot == null) return null;
-            return new CfgNaturalEntitySpawn(1, 0f, snapshot, new SolidGroundSpawnValidator());
+            return new CfgNaturalEntitySpawn(1, 0f, snapshot, new SolidGroundSpawnValidator(), null, null);
         }
         CruxEntitySnapshot snapshot = registry.deserializeFromFile(CruxEntitySnapshot.class, o.get("entity"));
         if(snapshot == null) return null;
         int weight = o.getObject(Integer.class, "weight", 1);
         float quality = o.getObject(Float.class, "quality", 0f);
         SpawnValidator validator = registry.deserializeFromFile(SpawnValidator.class, o.get("spawn_conditions"));
-        return new CfgNaturalEntitySpawn(weight, quality, snapshot, validator);
+        Boolean persistent = o.getObject(Boolean.class, "persistent");
+        Boolean removeWhenFar = o.getObject(Boolean.class, "remove_when_far");
+        return new CfgNaturalEntitySpawn(weight, quality, snapshot, validator, persistent, removeWhenFar);
     }
 }
