@@ -9,6 +9,8 @@ import killercreepr.cruxattributes.api.attribute.CruxAttribute;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.damage.DamageSource;
+import org.bukkit.damage.DamageType;
 import org.bukkit.entity.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -200,16 +202,24 @@ public class CruxEntityDamager {
                 calculateDamage(damage), calculateKnockback(kb), calculateUpKnockback(upkb))
                 .setCause(cause);
         if(!event.callEvent()) return event;
+        double dmg = event.getDmg();
+
         if(event.getEntity() instanceof LivingEntity e){
             //death
-            if(e.getHealth() - event.getDmg() <= 0D){
+            if(e.getHealth() - dmg <= 0D){
                 CruxEntityDeathEvent deathEvent = new CruxEntityDeathEvent(event);
                 if(!deathEvent.callEvent()){
                     event.setCancelled(true);
                     return event;
                 }
             }
-            e.damage(event.getDmg(), damager);
+            DamageSource.Builder source = DamageSource.builder(damager == null ? DamageType.GENERIC : DamageType.MOB_ATTACK);
+            if(damager != null) source.withDirectEntity(damager).withCausingEntity(damager);
+            if(attackLoc == null){
+                if(damager != null) source.withDamageLocation(damager.getLocation());
+            }else source.withDamageLocation(attackLoc);
+
+            e.damage(dmg, source.build());
             e.setNoDamageTicks(0);
         }
         if(event.getAttackLoc() == null || (event.getKb() == 0D && event.getUpKb() == 0D)) return event;
