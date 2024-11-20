@@ -4,7 +4,7 @@ import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.communication.boss.ActiveBossBar;
 import killercreepr.crux.api.communication.boss.CreateBossBar;
 import killercreepr.crux.api.text.context.TextParserContext;
-import killercreepr.crux.core.data.entity.PlayerBossBarHolder;
+import killercreepr.crux.core.entity.memory.standard.PlayerBossBarHolder;
 import killercreepr.crux.api.entity.memory.EntityMemory;
 import killercreepr.crux.core.util.CruxDuration;
 import killercreepr.crux.core.util.CruxMath;
