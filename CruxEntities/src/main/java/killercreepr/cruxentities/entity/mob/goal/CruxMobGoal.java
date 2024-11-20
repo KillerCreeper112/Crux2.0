@@ -146,8 +146,18 @@ public class CruxMobGoal extends CruxGoalBase implements Goal<Mob>, ICruxMobGoal
             return;
         }
         mob.setTarget(target);
+        if(shouldConstantlyLookAtTarget()) lookAtTarget();
         moveTo();
         targetAttackLogic(distance);
+    }
+
+    public boolean shouldConstantlyLookAtTarget(){
+        return false;
+    }
+
+    public void lookAtTarget(){
+        if(target == null) return;
+        mob.lookAt(target);
     }
 
     protected void targetAttackLogic(double distance){
