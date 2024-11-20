@@ -5,7 +5,7 @@ import killercreepr.crux.core.plugin.module.CruxMainModule;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.registries.CruxModuleRegistry;
 import killercreepr.crux.core.registries.CruxRegistries;
-import killercreepr.cruxadvancements.CruxAdvancementsModule;
+import killercreepr.cruxadvancements.core.CruxAdvancementsModule;
 import killercreepr.cruxattributes.core.CruxAttributesModule;
 import killercreepr.cruxconfig.CruxConfigsModule;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;

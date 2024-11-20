@@ -1,5 +1,6 @@
 package killercreepr.crux.api.registry;
 
+import killercreepr.crux.core.registry.SimpleMappedRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,6 +14,10 @@ import java.util.function.Function;
  * Represents a registered collection of mapped objects. KEY -> OBJECT
  */
 public interface MappedRegistry<K, V> extends Registry<V> {
+    static <K, V> MappedRegistry<K, V> mappedRegistry(){
+        return new SimpleMappedRegistry<>();
+    }
+
     V getOrDefault(@NotNull K key, @Nullable V defaultValue);
     @Nullable V get(@NotNull K key);
     <E extends V> @NotNull E register(@NotNull K key, @NotNull E value);

@@ -1,0 +1,286 @@
+package killercreepr.cruxadvancements.core.config;
+
+import killercreepr.cruxadvancements.api.advancement.criteria.CruxCriteria;
+import killercreepr.cruxadvancements.api.advancement.flag.CruxAdvancementFlag;
+import killercreepr.cruxadvancements.api.advancement.icon.CriterionDisplay;
+import killercreepr.cruxadvancements.api.advancement.objective.AdvancementObjective;
+import killercreepr.cruxadvancements.core.advancement.objective.ObjectiveCommonData;
+import killercreepr.cruxadvancements.core.advancement.objective.progress.NumberObjectiveProgress;
+import killercreepr.cruxadvancements.api.advancement.objective.progress.ObjectiveProgress;
+import killercreepr.cruxadvancements.core.advancement.objective.progress.SimpleObjectiveProgression;
+import killercreepr.cruxadvancements.core.advancement.objective.standard.*;
+import killercreepr.cruxadvancements.core.advancement.progress.ListAdvancementProgress;
+import killercreepr.cruxadvancements.core.advancement.progress.NumberAdvancementProgress;
+import killercreepr.cruxadvancements.core.advancement.progress.SimpleCriterionProgress;
+import killercreepr.cruxadvancements.api.advancement.reward.CruxAdvanceReward;
+import killercreepr.cruxadvancements.core.config.handler.*;
+import killercreepr.cruxadvancements.core.data.TrackedAdvancement;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.FileGenericEnum;
+import killercreepr.cruxconfig.config.common.FileContext;
+import killercreepr.cruxconfig.config.common.FileRegistry;
+import killercreepr.cruxconfig.config.common.element.FileElement;
+import killercreepr.cruxconfig.config.common.element.FileObject;
+import killercreepr.cruxconfig.config.registry.CfgRegistries;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+public class CruxConfigHook {
+    public static void load(){
+        OBJECTIVE_PROGRESS.registerCustomHandler(NumberObjectiveProgress.class, new CustomFileObjectiveProgress<NumberObjectiveProgress>() {
+            @Override
+            public @NotNull String getType() {
+                return "number";
+            }
+
+            @Override
+            public @NotNull FileElement serializeToFile(@NotNull FileContext<?> ctx, @NotNull NumberObjectiveProgress n) {
+                return new FileObject()
+                    .addProperty("type", "number")
+                    .addProperty("progress", n.getProgress())
+                    ;
+            }
+
+            @Override
+            public @Nullable NumberObjectiveProgress deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
+                Integer progress = e.getObject(Integer.class, "progress");
+                if(progress==null) return null;
+                return new NumberObjectiveProgress(progress);
+            }
+        });
+        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<BreakBlockObjective>() {
+            @Override
+            public @NotNull String getType() {
+                return "break_block";
+            }
+
+            @Override
+            public @Nullable BreakBlockObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new BreakBlockObjective(data, maxProgress);
+            }
+        });
+
+        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<BreakBlockDropObjective>() {
+            @Override
+            public @NotNull String getType() {
+                return "break_block_drop";
+            }
+
+            @Override
+            public @Nullable BreakBlockDropObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new BreakBlockDropObjective(data, maxProgress);
+            }
+        });
+
+        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<PlaceBlockObjective>() {
+            @Override
+            public @NotNull String getType() {
+                return "place_block";
+            }
+
+            @Override
+            public @Nullable PlaceBlockObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new PlaceBlockObjective(data, maxProgress);
+            }
+        });
+
+        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<KillEntityObjective>() {
+            @Override
+            public @NotNull String getType() {
+                return "kill_entity";
+            }
+
+            @Override
+            public @Nullable KillEntityObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new KillEntityObjective(data, maxProgress);
+            }
+        });
+
+        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<FishObjective>() {
+            @Override
+            public @NotNull String getType() {
+                return "fish";
+            }
+
+            @Override
+            public @Nullable FishObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new FishObjective(data, maxProgress);
+            }
+        });
+
+        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<CatchFishObjective>() {
+            @Override
+            public @NotNull String getType() {
+                return "catch_fish";
+            }
+
+            @Override
+            public @Nullable CatchFishObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new CatchFishObjective(data, maxProgress);
+            }
+        });
+
+        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<ConsumeItemObjective>() {
+            @Override
+            public @NotNull String getType() {
+                return "consume_item";
+            }
+
+            @Override
+            public @Nullable ConsumeItemObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new ConsumeItemObjective(data, maxProgress);
+            }
+        });
+
+        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<TravelToWorldObjective>() {
+            @Override
+            public @NotNull String getType() {
+                return "travel_to_world";
+            }
+
+            @Override
+            public @Nullable TravelToWorldObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new TravelToWorldObjective(data, maxProgress);
+            }
+        });
+
+        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<BreedEntityObjective>() {
+            @Override
+            public @NotNull String getType() {
+                return "breed_entity";
+            }
+
+            @Override
+            public @Nullable BreedEntityObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new BreedEntityObjective(data, maxProgress);
+            }
+        });
+
+        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<ResurrectObjective>() {
+            @Override
+            public @NotNull String getType() {
+                return "resurrect";
+            }
+
+            @Override
+            public @Nullable ResurrectObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new ResurrectObjective(data, maxProgress);
+            }
+        });
+
+        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<>() {
+            @Override
+            public @NotNull String getType() {
+                return "shear_block";
+            }
+
+            @Override
+            public @Nullable AdvancementObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new ShearBlockObjective(data, maxProgress);
+            }
+        });
+
+        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<>() {
+            @Override
+            public @NotNull String getType() {
+                return "shear_entity";
+            }
+
+            @Override
+            public @Nullable AdvancementObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new ShearEntityObjective(data, maxProgress);
+            }
+        });
+
+        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<>() {
+            @Override
+            public @NotNull String getType() {
+                return "tame_entity";
+            }
+
+            @Override
+            public @Nullable AdvancementObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new TameEntityObjective(data, maxProgress);
+            }
+        });
+
+        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<>() {
+            @Override
+            public @NotNull String getType() {
+                return "pickup_item";
+            }
+
+            @Override
+            public @Nullable AdvancementObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new PickupItemObjective(data, maxProgress);
+            }
+        });
+
+        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<>() {
+            @Override
+            public @NotNull String getType() {
+                return "craft_item";
+            }
+
+            @Override
+            public @Nullable AdvancementObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new CraftItemObjective(data, maxProgress);
+            }
+        });
+    }
+
+    public static void registerHandlers(){
+        CfgRegistries.FILE.forEach(CruxConfigHook::registerHandlers);
+    }
+
+    public static final FileCruxAdvancementProgress CRUX_ADVANCEMENT_PROGRESS = new FileCruxAdvancementProgress();
+    public static final FileSimpleObjectiveProgression SIMPLE_OBJECTIVE_PROGRESSION = new FileSimpleObjectiveProgression();
+    public static final FileObjectiveProgress OBJECTIVE_PROGRESS = new FileObjectiveProgress();
+    public static void registerHandlers(@NotNull FileRegistry registry){
+        registry.registerFileHandler(CruxCriteria.class, new FileCruxCriteria());
+        registry.registerFileHandler(SimpleCriterionProgress.class, new FileSimpleCriterionProgress());
+        //registry.registerFileHandler(CruxAdvancementProgress.class, CRUX_ADVANCEMENT_PROGRESS);
+        //register the inheritors objects so the config registry doesn't pick a random handler
+        registry.registerFileHandler(ListAdvancementProgress.class, CRUX_ADVANCEMENT_PROGRESS);
+        registry.registerFileHandler(NumberAdvancementProgress.class, CRUX_ADVANCEMENT_PROGRESS);
+        registry.registerFileHandler(CruxAdvanceReward.class, new FileCruxAdvanceReward());
+
+        registry.registerFileHandler(ObjectiveProgress.class, OBJECTIVE_PROGRESS);
+
+        registry.registerFileHandler(SimpleObjectiveProgression.class, SIMPLE_OBJECTIVE_PROGRESSION);
+
+        registry.registerFileHandler(TrackedAdvancement.class, new FileTrackedAdvancement());
+
+        registry.registerFileHandler(CriterionDisplay.class, new FileCriterionDisplay());
+        registry.registerFileHandler(CruxAdvancementFlag.class, new FileGenericEnum<>(CruxAdvancementFlag.class));
+    }
+}

@@ -1,5 +1,6 @@
 package killercreepr.crux.api.registry;
 
+import killercreepr.crux.core.registry.SimpleKeyedRegistry;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import org.jetbrains.annotations.NotNull;
@@ -8,6 +9,10 @@ import org.jetbrains.annotations.NotNull;
  * Represents a registered collection of mapped keyed objects. NamespacedKey -> KEYED_OBJECT
  */
 public interface KeyedRegistry<T extends Keyed> extends MappedRegistry<Key,T>{
+    static <T extends Keyed> KeyedRegistry<T> keyedRegistry(){
+        return new SimpleKeyedRegistry<>();
+    }
+
     @Override
     default @NotNull <E extends T> E register(@NotNull E object){
         return register(object.key(), object);

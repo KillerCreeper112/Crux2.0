@@ -14,23 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface MergedTagContainer extends StringTagProvider, StringListTagProvider {
-    @Deprecated
-    static @NotNull MergedTagContainer standard(){
-        return createNew(Crux.tags());
-    }
-    @Deprecated
-    static @NotNull MergedTagContainer standard(@Nullable TagResolver<?>... resolvers){
-        return standard().addAll(resolvers);
-    }
-    @Deprecated
-    static @NotNull MergedTagContainer createNew(@NotNull TagParser tags){
-        return new SimpleMergedTagContainer(tags);
-    }
-    @Deprecated
-    static @NotNull MergedTagContainer createNew(@NotNull TagParser tags, @Nullable TagResolver<?> resolvers){
-        return createNew(tags).addAll(resolvers);
-    }
-
     static @Nullable MergedTagContainer merge(@Nullable MergedTagContainer first, @Nullable MergedTagContainer second){
         if(first == null && second == null) return null;
         if(first == null) return second;

@@ -11,35 +11,35 @@ import java.util.function.Function;
 import java.util.function.IntFunction;
 
 public interface Index<K, V> {
-    static <K, V> @NotNull Index<K, V> create(@NotNull Map<K, V> constant){
+    static <K, V> @NotNull Index<K, V> index(@NotNull Map<K, V> constant){
         return new SimpleIndex<>(
             Collections.unmodifiableMap(constant), Collections.unmodifiableMap(CruxMap.reverse(constant))
         );
     }
 
-    static <K, V extends Enum<V>> @NotNull Index<K, V> create(final Class<V> type, final @NotNull Function<? super V, ? extends K> keyFunction) {
-        return create(type, keyFunction, type.getEnumConstants());
+    static <K, V extends Enum<V>> @NotNull Index<K, V> index(final Class<V> type, final @NotNull Function<? super V, ? extends K> keyFunction) {
+        return index(type, keyFunction, type.getEnumConstants());
     }
 
     @SafeVarargs
-    static <K, V extends Enum<V>> @NotNull Index<K, V> create(final Class<V> type, final @NotNull Function<? super V, ? extends K> keyFunction, final @NotNull V... values) {
-        return create(values, ((length) -> new EnumMap<>(type)), keyFunction);
+    static <K, V extends Enum<V>> @NotNull Index<K, V> index(final Class<V> type, final @NotNull Function<? super V, ? extends K> keyFunction, final @NotNull V... values) {
+        return index(values, ((length) -> new EnumMap<>(type)), keyFunction);
     }
 
     @SafeVarargs
-    static <K, V> @NotNull Index<K, V> create(final @NotNull Function<? super V, ? extends K> keyFunction, final @NotNull V... values) {
-        return create(values, HashMap::new, keyFunction);
+    static <K, V> @NotNull Index<K, V> index(final @NotNull Function<? super V, ? extends K> keyFunction, final @NotNull V... values) {
+        return index(values, HashMap::new, keyFunction);
     }
 
-    static <K, V> @NotNull Index<K, V> create(final @NotNull Function<? super V, ? extends K> keyFunction, final @NotNull List<V> constants) {
-        return create(constants, HashMap::new, keyFunction);
+    static <K, V> @NotNull Index<K, V> index(final @NotNull Function<? super V, ? extends K> keyFunction, final @NotNull List<V> constants) {
+        return index(constants, HashMap::new, keyFunction);
     }
 
-    private static <K, V> @NotNull Index<K, V> create(final V[] values, final IntFunction<Map<V, K>> valueToKeyFactory, final @NotNull Function<? super V, ? extends K> keyFunction) {
-        return create(Arrays.asList(values), valueToKeyFactory, keyFunction);
+    private static <K, V> @NotNull Index<K, V> index(final V[] values, final IntFunction<Map<V, K>> valueToKeyFactory, final @NotNull Function<? super V, ? extends K> keyFunction) {
+        return index(Arrays.asList(values), valueToKeyFactory, keyFunction);
     }
 
-    private static <K, V> @NotNull Index<K, V> create(final List<V> values, final IntFunction<Map<V, K>> valueToKeyFactory, final @NotNull Function<? super V, ? extends K> keyFunction) {
+    private static <K, V> @NotNull Index<K, V> index(final List<V> values, final IntFunction<Map<V, K>> valueToKeyFactory, final @NotNull Function<? super V, ? extends K> keyFunction) {
         int length = values.size();
         Map<K, V> keyToValue = new HashMap<>(length);
         Map<V, K> valueToKey = valueToKeyFactory.apply(length);
