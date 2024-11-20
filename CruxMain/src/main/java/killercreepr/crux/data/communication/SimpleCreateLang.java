@@ -1,5 +1,6 @@
 package killercreepr.crux.data.communication;
 
+import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.tags.container.MergedTagContainer;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.Location;
@@ -13,6 +14,13 @@ import java.util.Map;
 
 public class SimpleCreateLang implements CreateLang {
     protected final @NotNull Map<String, Communicator> messages = new HashMap<>();
+
+    @Override
+    public Communicator use(@NotNull String id, @NotNull Audience a, @NotNull TextParserContext ctx) {
+        Communicator communicator = get(id);
+        return communicator == null ? null : communicator.use(a, ctx);
+    }
+
     @Override
     public Communicator use(@NotNull String id, @NotNull Audience a, @Nullable OfflinePlayer placeholders, @Nullable MergedTagContainer tags) {
         Communicator communicator = get(id);

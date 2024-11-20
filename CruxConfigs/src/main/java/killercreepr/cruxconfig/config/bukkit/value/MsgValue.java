@@ -1,5 +1,6 @@
 package killercreepr.cruxconfig.config.bukkit.value;
 
+import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.data.communication.Communicator;
 import killercreepr.crux.data.communication.MsgContainer;
 import killercreepr.crux.tags.container.MergedTagContainer;
@@ -33,6 +34,13 @@ public class MsgValue extends CommonValue<MsgContainer> implements Communicator 
     }
 
     @Override
+    public Communicator use(@NotNull Audience a, @NotNull TextParserContext ctx) {
+        MsgContainer msg = value();
+        if(msg == null) return null;
+        return msg.use(a, ctx);
+    }
+
+    @Override
     public @Nullable MsgContainer use(@NotNull Audience a, @Nullable OfflinePlayer placeholders, @Nullable MergedTagContainer tags){
         MsgContainer msg = value();
         if(msg == null) return null;
@@ -44,6 +52,13 @@ public class MsgValue extends CommonValue<MsgContainer> implements Communicator 
         MsgContainer msg = value();
         if(msg == null) return null;
         return msg.broadcast(tags);
+    }
+
+    @Override
+    public Communicator broadcast(@NotNull TextParserContext ctx) {
+        MsgContainer msg = value();
+        if(msg == null) return null;
+        return msg.broadcast(ctx);
     }
 
     @Override

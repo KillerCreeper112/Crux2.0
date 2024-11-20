@@ -1,5 +1,6 @@
 package killercreepr.crux.data.communication;
 
+import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.data.Holder;
 import killercreepr.crux.tags.container.MergedTagContainer;
 import net.kyori.adventure.audience.Audience;
@@ -29,6 +30,11 @@ public class Msg extends TranslateMsg implements Communicator {
     }
 
     @Override
+    public Communicator use(@NotNull Audience a, @NotNull TextParserContext ctx) {
+        return langHolder.value().use(id, a, ctx);
+    }
+
+    @Override
     public Communicator use(@NotNull Audience audience, @Nullable OfflinePlayer offlinePlayer, @Nullable MergedTagContainer mergedTagContainer) {
         return langHolder.value().use(id, audience, offlinePlayer, mergedTagContainer);
     }
@@ -36,6 +42,11 @@ public class Msg extends TranslateMsg implements Communicator {
     @Override
     public Communicator broadcast(@Nullable MergedTagContainer mergedTagContainer) {
         return langHolder.value().broadcast(id, mergedTagContainer);
+    }
+
+    @Override
+    public Communicator broadcast(@NotNull TextParserContext ctx) {
+        return null;
     }
 
     @Override

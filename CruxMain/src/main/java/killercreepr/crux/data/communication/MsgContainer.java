@@ -57,7 +57,7 @@ public class MsgContainer implements Communicator {
     }
 
     @Override
-    public Communicator use(@NotNull Audience a, @NotNull TextParserContext ctx) {
+    public MsgContainer use(@NotNull Audience a, @NotNull TextParserContext ctx) {
         if(isBroadcast()) return broadcast(ctx);
         if(a instanceof Player p) return use(p, false, ctx);
         if(chat != null){
@@ -69,7 +69,7 @@ public class MsgContainer implements Communicator {
     }
 
     @Override
-    public Communicator use(@NotNull Audience a, @Nullable OfflinePlayer placeholders, @Nullable MergedTagContainer tags){
+    public MsgContainer use(@NotNull Audience a, @Nullable OfflinePlayer placeholders, @Nullable MergedTagContainer tags){
         if(isBroadcast()) return broadcast(tags);
         if(a instanceof Player p) return use(p, placeholders, tags);
         if(chat != null){
@@ -80,11 +80,11 @@ public class MsgContainer implements Communicator {
         return this;
     }
 
-    public Communicator use(@NotNull Player p, @Nullable OfflinePlayer placeholders, @Nullable MergedTagContainer tags){
+    public MsgContainer use(@NotNull Player p, @Nullable OfflinePlayer placeholders, @Nullable MergedTagContainer tags){
         return use(p, placeholders, true, tags);
     }
 
-    public Communicator use(@NotNull Player p, @Nullable OfflinePlayer placeholders, boolean broadcastCheck, @Nullable MergedTagContainer tags){
+    public MsgContainer use(@NotNull Player p, @Nullable OfflinePlayer placeholders, boolean broadcastCheck, @Nullable MergedTagContainer tags){
         if(broadcastCheck && broadcast){
             return broadcast(tags);
         }
@@ -99,7 +99,7 @@ public class MsgContainer implements Communicator {
         return this;
     }
 
-    public Communicator use(@NotNull Player p, boolean broadcastCheck, @NotNull TextParserContext ctx){
+    public MsgContainer use(@NotNull Player p, boolean broadcastCheck, @NotNull TextParserContext ctx){
         if(broadcastCheck && broadcast){
             return broadcast(ctx);
         }
@@ -115,7 +115,7 @@ public class MsgContainer implements Communicator {
     }
 
     @Override
-    public Communicator broadcast(@Nullable MergedTagContainer tags){
+    public MsgContainer broadcast(@Nullable MergedTagContainer tags){
         for(Player p : Bukkit.getOnlinePlayers()){
             use(p, null, false, tags);
         }
@@ -123,7 +123,7 @@ public class MsgContainer implements Communicator {
     }
 
     @Override
-    public Communicator broadcast(@NotNull TextParserContext ctx) {
+    public MsgContainer broadcast(@NotNull TextParserContext ctx) {
         for(Player p : Bukkit.getOnlinePlayers()){
             use(p, false, ctx);
         }
