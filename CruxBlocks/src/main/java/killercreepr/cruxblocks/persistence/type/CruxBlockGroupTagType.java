@@ -1,6 +1,6 @@
 package killercreepr.cruxblocks.persistence.type;
 
-import killercreepr.crux.Crux;
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.registries.CruxBlocksRegistries;
 import org.bukkit.persistence.PersistentDataAdapterContext;

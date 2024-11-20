@@ -1,9 +1,9 @@
 package killercreepr.cruxmenus.api.menu.holder;
 
-import killercreepr.crux.data.DataExchange;
-import killercreepr.crux.data.DataInfoHolder;
-import killercreepr.crux.tags.container.MergedTagContainer;
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.api.data.DataExchange;
+import killercreepr.crux.api.data.holder.DataInfoHolder;
+import killercreepr.crux.api.text.tags.container.MergedTagContainer;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxmenus.api.event.MenuOpenEvent;
 import killercreepr.cruxmenus.api.menu.CfgMenu;
 import killercreepr.cruxmenus.api.menu.module.MenuModule;

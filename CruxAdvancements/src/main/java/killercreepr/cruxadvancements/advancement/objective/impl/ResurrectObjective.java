@@ -1,7 +1,7 @@
 package killercreepr.cruxadvancements.advancement.objective.impl;
 
-import killercreepr.crux.loot.LootContext;
-import killercreepr.crux.loot.bukkit.EventLootContexts;
+import killercreepr.crux.api.loot.LootContext;
+import killercreepr.crux.api.loot.bukkit.EventLootContexts;
 import killercreepr.cruxadvancements.advancement.objective.ObjectiveCommonData;
 import org.bukkit.event.entity.EntityResurrectEvent;
 import org.jetbrains.annotations.NotNull;

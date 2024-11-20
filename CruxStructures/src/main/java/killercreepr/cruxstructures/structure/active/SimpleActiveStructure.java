@@ -1,6 +1,6 @@
 package killercreepr.cruxstructures.structure.active;
 
-import killercreepr.crux.data.world.CruxPosition;
+import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.cruxstructures.structure.stored.StoredStructure;
 import org.bukkit.Chunk;
 import org.bukkit.block.Block;

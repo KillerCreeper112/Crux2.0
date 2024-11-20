@@ -1,6 +1,6 @@
 package killercreepr.cruxconfig.config.common.base.registry;
 
-import killercreepr.crux.registry.SimpleKeyedRegistry;
+import killercreepr.crux.core.registry.SimpleKeyedRegistry;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.base.parsed.FileParsedObjectHandler;
 import killercreepr.cruxconfig.config.common.element.FileElement;

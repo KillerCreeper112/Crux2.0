@@ -1,7 +1,7 @@
 package killercreepr.cruxadvancements.crazy;
 
 import eu.endercentral.crazy_advancements.advancement.AdvancementFlag;
-import killercreepr.crux.Crux;
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxadvancements.advancement.SimpleObjectiveAdvancement;
 import killercreepr.cruxadvancements.advancement.criteria.CruxCriteria;
 import killercreepr.cruxadvancements.advancement.flag.CruxAdvancementFlag;

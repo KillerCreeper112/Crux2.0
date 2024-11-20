@@ -1,6 +1,6 @@
 package killercreepr.cruxitems.item;
 
-import killercreepr.crux.tags.container.MergedTagContainer;
+import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;

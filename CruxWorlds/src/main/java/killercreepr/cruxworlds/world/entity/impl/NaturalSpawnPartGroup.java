@@ -1,6 +1,6 @@
 package killercreepr.cruxworlds.world.entity.impl;
 
-import killercreepr.crux.util.CruxEntityUtil;
+import killercreepr.crux.core.util.CruxEntityUtil;
 import killercreepr.cruxworlds.world.entity.NaturalEntityGroupPart;
 import killercreepr.cruxworlds.world.entity.NaturalEntitySpawn;
 import org.bukkit.Chunk;

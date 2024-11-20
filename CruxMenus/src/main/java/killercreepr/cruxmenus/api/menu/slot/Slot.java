@@ -1,6 +1,6 @@
 package killercreepr.cruxmenus.api.menu.slot;
 
-import killercreepr.crux.util.CruxItem;
+import killercreepr.crux.core.util.CruxItem;
 import killercreepr.cruxmenus.api.menu.Menu;
 import killercreepr.cruxmenus.api.menu.contex.SlotContext;
 import killercreepr.cruxmenus.core.menu.slot.SimpleFixedSlot;

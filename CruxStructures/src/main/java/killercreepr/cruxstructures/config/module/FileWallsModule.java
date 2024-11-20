@@ -1,8 +1,8 @@
 package killercreepr.cruxstructures.config.module;
 
 import com.google.common.reflect.TypeToken;
-import killercreepr.crux.loot.LootTable;
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.api.loot.LootTable;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.FileSimpleLootTable;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;

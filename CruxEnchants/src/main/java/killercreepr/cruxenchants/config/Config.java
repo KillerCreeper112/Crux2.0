@@ -1,7 +1,7 @@
 package killercreepr.cruxenchants.config;
 
-import killercreepr.crux.data.Holder;
-import killercreepr.crux.plugin.CruxPlugin;
+import killercreepr.crux.api.data.Holder;
+import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.cruxconfig.config.bukkit.file.Cfg;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.bukkit.value.CfgValue;

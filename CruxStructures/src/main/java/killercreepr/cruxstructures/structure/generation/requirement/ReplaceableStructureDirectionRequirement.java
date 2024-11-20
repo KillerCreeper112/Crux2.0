@@ -1,6 +1,6 @@
 package killercreepr.cruxstructures.structure.generation.requirement;
 
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;

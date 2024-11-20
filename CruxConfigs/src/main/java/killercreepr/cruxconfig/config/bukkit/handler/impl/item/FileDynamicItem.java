@@ -1,13 +1,13 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.item;
 
 import com.google.common.reflect.TypeToken;
-import killercreepr.crux.item.dynamic.BukkitDynamicItem;
-import killercreepr.crux.item.dynamic.DynamicItem;
-import killercreepr.crux.item.dynamic.DynamicItemComponent;
-import killercreepr.crux.item.dynamic.components.*;
-import killercreepr.crux.item.dynamic.components.persistence.TypedDynamicPersistentTag;
-import killercreepr.crux.registry.MappedRegistry;
-import killercreepr.crux.registry.SimpleMappedRegistry;
+import killercreepr.crux.core.item.dynamic.component.DynamicItemUnbreakable;
+import killercreepr.crux.core.item.dynamic.BukkitDynamicItem;
+import killercreepr.crux.api.item.dynamic.DynamicItem;
+import killercreepr.crux.api.item.dynamic.DynamicItemComponent;
+import killercreepr.crux.api.item.dynamic.component.persistence.TypedDynamicPersistentTag;
+import killercreepr.crux.api.registry.MappedRegistry;
+import killercreepr.crux.core.registry.SimpleMappedRegistry;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.FileDynamicItemComponent;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.FileGenericSingleDynamicComponent;
 import killercreepr.cruxconfig.config.common.FileContext;
@@ -36,91 +36,91 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
     }
 
     public FileDynamicItem() {
-        COMPONENT_REGISTRY.register("name", new FileGenericSingleDynamicComponent<>(DynamicItemName.class) {
+        COMPONENT_REGISTRY.register("name", new FileGenericSingleDynamicComponent<>(killercreepr.crux.core.item.dynamic.component.DynamicItemName.class) {
             @Override
             public @NotNull String jsonSerializerID() {
                 return "dynamic_item_name";
             }
 
             @Override
-            public @NotNull DynamicItemName deserialize(@NotNull Object object) {
-                return new DynamicItemName(object);
+            public @NotNull killercreepr.crux.core.item.dynamic.component.DynamicItemName deserialize(@NotNull Object object) {
+                return new killercreepr.crux.core.item.dynamic.component.DynamicItemName(object);
             }
         });
 
-        COMPONENT_REGISTRY.register("lore", new FileGenericSingleDynamicComponent<>(DynamicItemLore.class) {
+        COMPONENT_REGISTRY.register("lore", new FileGenericSingleDynamicComponent<>(killercreepr.crux.core.item.dynamic.component.DynamicItemLore.class) {
             @Override
             public @NotNull String jsonSerializerID() {
                 return "dynamic_item_lore";
             }
 
             @Override
-            public @NotNull DynamicItemLore deserialize(@NotNull Object object) {
-                return new DynamicItemLore(object);
+            public @NotNull killercreepr.crux.core.item.dynamic.component.DynamicItemLore deserialize(@NotNull Object object) {
+                return new killercreepr.crux.core.item.dynamic.component.DynamicItemLore(object);
             }
         });
 
-        COMPONENT_REGISTRY.register("custom_model_data", new FileGenericSingleDynamicComponent<>(DynamicItemCustomModelData.class) {
+        COMPONENT_REGISTRY.register("custom_model_data", new FileGenericSingleDynamicComponent<>(killercreepr.crux.core.item.dynamic.component.DynamicItemCustomModelData.class) {
             @Override
             public @NotNull String jsonSerializerID() {
                 return "dynamic_item_custom_model_data";
             }
 
             @Override
-            public @NotNull DynamicItemCustomModelData deserialize(@NotNull Object object) {
-                return new DynamicItemCustomModelData(object);
+            public @NotNull killercreepr.crux.core.item.dynamic.component.DynamicItemCustomModelData deserialize(@NotNull Object object) {
+                return new killercreepr.crux.core.item.dynamic.component.DynamicItemCustomModelData(object);
             }
         });
 
-        COMPONENT_REGISTRY.register("unbreakable", new FileGenericSingleDynamicComponent<>(DynamicItemUnbreakable.class) {
+        COMPONENT_REGISTRY.register("unbreakable", new FileGenericSingleDynamicComponent<>(killercreepr.crux.core.item.dynamic.component.DynamicItemUnbreakable.class) {
             @Override
             public @NotNull String jsonSerializerID() {
                 return "dynamic_item_unbreakable";
             }
 
             @Override
-            public @NotNull DynamicItemUnbreakable deserialize(@NotNull Object object) {
+            public @NotNull killercreepr.crux.core.item.dynamic.component.DynamicItemUnbreakable deserialize(@NotNull Object object) {
                 return new DynamicItemUnbreakable(object);
             }
         });
 
-        COMPONENT_REGISTRY.register("enchant_glint_override", new FileGenericSingleDynamicComponent<>(DynamicItemEnchantGlintOverride.class) {
+        COMPONENT_REGISTRY.register("enchant_glint_override", new FileGenericSingleDynamicComponent<>(killercreepr.crux.core.item.dynamic.component.DynamicItemEnchantGlintOverride.class) {
             @Override
             public @NotNull String jsonSerializerID() {
                 return "dynamic_item_enchant_glint_override";
             }
 
             @Override
-            public @NotNull DynamicItemEnchantGlintOverride deserialize(@NotNull Object object) {
-                return new DynamicItemEnchantGlintOverride(object);
+            public @NotNull killercreepr.crux.core.item.dynamic.component.DynamicItemEnchantGlintOverride deserialize(@NotNull Object object) {
+                return new killercreepr.crux.core.item.dynamic.component.DynamicItemEnchantGlintOverride(object);
             }
         });
 
-        COMPONENT_REGISTRY.register("max_stack_size", new FileGenericSingleDynamicComponent<>(DynamicItemMaxStackSize.class) {
+        COMPONENT_REGISTRY.register("max_stack_size", new FileGenericSingleDynamicComponent<>(killercreepr.crux.core.item.dynamic.component.DynamicItemMaxStackSize.class) {
             @Override
             public @NotNull String jsonSerializerID() {
                 return "dynamic_item_max_stack_size";
             }
 
             @Override
-            public @NotNull DynamicItemMaxStackSize deserialize(@NotNull Object object) {
-                return new DynamicItemMaxStackSize(object);
+            public @NotNull killercreepr.crux.core.item.dynamic.component.DynamicItemMaxStackSize deserialize(@NotNull Object object) {
+                return new killercreepr.crux.core.item.dynamic.component.DynamicItemMaxStackSize(object);
             }
         });
 
-        COMPONENT_REGISTRY.register("fire_resistant", new FileGenericSingleDynamicComponent<>(DynamicItemFireResistant.class) {
+        COMPONENT_REGISTRY.register("fire_resistant", new FileGenericSingleDynamicComponent<>(killercreepr.crux.core.item.dynamic.component.DynamicItemFireResistant.class) {
             @Override
             public @NotNull String jsonSerializerID() {
                 return "dynamic_item_fire_resistant";
             }
 
             @Override
-            public @NotNull DynamicItemFireResistant deserialize(@NotNull Object object) {
-                return new DynamicItemFireResistant(object);
+            public @NotNull killercreepr.crux.core.item.dynamic.component.DynamicItemFireResistant deserialize(@NotNull Object object) {
+                return new killercreepr.crux.core.item.dynamic.component.DynamicItemFireResistant(object);
             }
         });
 
-        COMPONENT_REGISTRY.register("armor_trim", new FileDynamicItemComponent<>(DynamicItemArmorTrim.class) {
+        COMPONENT_REGISTRY.register("armor_trim", new FileDynamicItemComponent<>(killercreepr.crux.core.item.dynamic.component.DynamicItemArmorTrim.class) {
             @Override
             public @NotNull String jsonSerializerID() {
                 return "dynamic_item_armor_trim";
@@ -128,7 +128,7 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
 
 
             @Override
-            public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull DynamicItemArmorTrim object) {
+            public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull killercreepr.crux.core.item.dynamic.component.DynamicItemArmorTrim object) {
                 FileRegistry registry = context.getRegistry();
                 return new FileObject()
                         .add("material", registry.serializeToFile(object.getTrimMaterial()))
@@ -137,42 +137,42 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
             }
 
             @Override
-            public @Nullable DynamicItemArmorTrim deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
+            public @Nullable killercreepr.crux.core.item.dynamic.component.DynamicItemArmorTrim deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
                 if(!(e instanceof FileObject o)) return null;
                 FileRegistry registry = context.getRegistry();
                 Object material = registry.deserializeFromFile(String.class, o.get("material"));
                 if(material==null) return null;
                 Object pattern = registry.deserializeFromFile(String.class, o.get("pattern"));
                 if(pattern==null) return null;
-                return new DynamicItemArmorTrim(material, pattern);
+                return new killercreepr.crux.core.item.dynamic.component.DynamicItemArmorTrim(material, pattern);
             }
         });
 
-        COMPONENT_REGISTRY.register("hide_tooltip", new FileGenericSingleDynamicComponent<>(DynamicItemHideTooltip.class) {
+        COMPONENT_REGISTRY.register("hide_tooltip", new FileGenericSingleDynamicComponent<>(killercreepr.crux.core.item.dynamic.component.DynamicItemHideTooltip.class) {
             @Override
             public @NotNull String jsonSerializerID() {
                 return "dynamic_item_hide_tooltip";
             }
 
             @Override
-            public @NotNull DynamicItemHideTooltip deserialize(@NotNull Object object) {
-                return new DynamicItemHideTooltip(object);
+            public @NotNull killercreepr.crux.core.item.dynamic.component.DynamicItemHideTooltip deserialize(@NotNull Object object) {
+                return new killercreepr.crux.core.item.dynamic.component.DynamicItemHideTooltip(object);
             }
         });
 
-        COMPONENT_REGISTRY.register("rarity", new FileGenericSingleDynamicComponent<>(DynamicItemRarity.class) {
+        COMPONENT_REGISTRY.register("rarity", new FileGenericSingleDynamicComponent<>(killercreepr.crux.core.item.dynamic.component.DynamicItemRarity.class) {
             @Override
             public @NotNull String jsonSerializerID() {
                 return "dynamic_item_rarity";
             }
 
             @Override
-            public @NotNull DynamicItemRarity deserialize(@NotNull Object object) {
-                return new DynamicItemRarity(object);
+            public @NotNull killercreepr.crux.core.item.dynamic.component.DynamicItemRarity deserialize(@NotNull Object object) {
+                return new killercreepr.crux.core.item.dynamic.component.DynamicItemRarity(object);
             }
         });
 
-        COMPONENT_REGISTRY.register("enchants", new FileDynamicItemComponent<>(DynamicItemEnchants.class) {
+        COMPONENT_REGISTRY.register("enchants", new FileDynamicItemComponent<>(killercreepr.crux.core.item.dynamic.component.DynamicItemEnchants.class) {
             @Override
             public @NotNull String jsonSerializerID() {
                 return "dynamic_item_enchants";
@@ -180,7 +180,7 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
 
 
             @Override
-            public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull DynamicItemEnchants object) {
+            public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull killercreepr.crux.core.item.dynamic.component.DynamicItemEnchants object) {
                 FileRegistry registry = context.getRegistry();
                 FileObject o = new FileObject();
                 object.getEnchants().forEach((key, value) -> o.add(key.toString(), registry.serializeToFile(value)));
@@ -188,7 +188,7 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
             }
 
             @Override
-            public @Nullable DynamicItemEnchants deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
+            public @Nullable killercreepr.crux.core.item.dynamic.component.DynamicItemEnchants deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
                 if(!(e instanceof FileObject o)) return null;
                 FileRegistry registry = context.getRegistry();
                 Map<Object, Object> enchants = new HashMap<>();
@@ -198,23 +198,23 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
                     enchants.put(key, level);
                 });
                 if(enchants.isEmpty()) return null;
-                return new DynamicItemEnchants(enchants);
+                return new killercreepr.crux.core.item.dynamic.component.DynamicItemEnchants(enchants);
             }
         });
 
-        COMPONENT_REGISTRY.register("color", new FileGenericSingleDynamicComponent<>(DynamicItemColor.class) {
+        COMPONENT_REGISTRY.register("color", new FileGenericSingleDynamicComponent<>(killercreepr.crux.core.item.dynamic.component.DynamicItemColor.class) {
             @Override
             public @NotNull String jsonSerializerID() {
                 return "dynamic_item_color";
             }
 
             @Override
-            public @NotNull DynamicItemColor deserialize(@NotNull Object object) {
-                return new DynamicItemColor(object);
+            public @NotNull killercreepr.crux.core.item.dynamic.component.DynamicItemColor deserialize(@NotNull Object object) {
+                return new killercreepr.crux.core.item.dynamic.component.DynamicItemColor(object);
             }
         });
 
-        COMPONENT_REGISTRY.register("flags", new FileDynamicItemComponent<>(DynamicItemFlags.class) {
+        COMPONENT_REGISTRY.register("flags", new FileDynamicItemComponent<>(killercreepr.crux.core.item.dynamic.component.DynamicItemFlags.class) {
             @Override
             public @NotNull String jsonSerializerID() {
                 return "dynamic_item_flags";
@@ -222,7 +222,7 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
 
 
             @Override
-            public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull DynamicItemFlags object) {
+            public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull killercreepr.crux.core.item.dynamic.component.DynamicItemFlags object) {
                 FileRegistry registry = context.getRegistry();
                 FileArray o = new FileArray();
                 object.getFlags().forEach(registry::serializeToFile);
@@ -230,7 +230,7 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
             }
 
             @Override
-            public @Nullable DynamicItemFlags deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
+            public @Nullable killercreepr.crux.core.item.dynamic.component.DynamicItemFlags deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
                 if(!(e instanceof FileArray o)) return null;
                 FileRegistry registry = context.getRegistry();
                 Collection<Object> flags = new HashSet<>();
@@ -240,35 +240,35 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
                     flags.add(flag);
                 });
                 if(flags.isEmpty()) return null;
-                return new DynamicItemFlags(flags);
+                return new killercreepr.crux.core.item.dynamic.component.DynamicItemFlags(flags);
             }
         });
 
-        COMPONENT_REGISTRY.register("hide_flags", new FileGenericSingleDynamicComponent<>(DynamicItemHideAllFlags.class) {
+        COMPONENT_REGISTRY.register("hide_flags", new FileGenericSingleDynamicComponent<>(killercreepr.crux.core.item.dynamic.component.DynamicItemHideAllFlags.class) {
             @Override
             public @NotNull String jsonSerializerID() {
                 return "dynamic_item_hide_flags";
             }
 
             @Override
-            public @NotNull DynamicItemHideAllFlags deserialize(@NotNull Object object) {
-                return new DynamicItemHideAllFlags(object);
+            public @NotNull killercreepr.crux.core.item.dynamic.component.DynamicItemHideAllFlags deserialize(@NotNull Object object) {
+                return new killercreepr.crux.core.item.dynamic.component.DynamicItemHideAllFlags(object);
             }
         });
 
-        COMPONENT_REGISTRY.register("head", new FileGenericSingleDynamicComponent<>(DynamicItemHead.class) {
+        COMPONENT_REGISTRY.register("head", new FileGenericSingleDynamicComponent<>(killercreepr.crux.core.item.dynamic.component.DynamicItemHead.class) {
             @Override
             public @NotNull String jsonSerializerID() {
                 return "dynamic_item_head";
             }
 
             @Override
-            public @NotNull DynamicItemHead deserialize(@NotNull Object object) {
-                return new DynamicItemHead(object);
+            public @NotNull killercreepr.crux.core.item.dynamic.component.DynamicItemHead deserialize(@NotNull Object object) {
+                return new killercreepr.crux.core.item.dynamic.component.DynamicItemHead(object);
             }
         });
 
-        COMPONENT_REGISTRY.register("persistent_tags", new FileDynamicItemComponent<>(DynamicItemPersistentTags.class) {
+        COMPONENT_REGISTRY.register("persistent_tags", new FileDynamicItemComponent<>(killercreepr.crux.core.item.dynamic.component.DynamicItemPersistentTags.class) {
             @Override
             public @NotNull String jsonSerializerID() {
                 return "dynamic_item_persistent_tags";
@@ -276,18 +276,18 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
 
 
             @Override
-            public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull DynamicItemPersistentTags object) {
+            public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull killercreepr.crux.core.item.dynamic.component.DynamicItemPersistentTags object) {
                 FileRegistry registry = context.getRegistry();
                 return registry.serializeToFile(object.getTags());
             }
 
             @Override
-            public @Nullable DynamicItemPersistentTags deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
+            public @Nullable killercreepr.crux.core.item.dynamic.component.DynamicItemPersistentTags deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
                 Collection<TypedDynamicPersistentTag> tags = ctx.getRegistry().deserializeFromFile(
                     new TypeToken<Collection<TypedDynamicPersistentTag>>(){}.getType(), e
                 );
                 if(tags == null || tags.isEmpty()) return null;
-                return new DynamicItemPersistentTags(tags);
+                return new killercreepr.crux.core.item.dynamic.component.DynamicItemPersistentTags(tags);
             }
         });
     }

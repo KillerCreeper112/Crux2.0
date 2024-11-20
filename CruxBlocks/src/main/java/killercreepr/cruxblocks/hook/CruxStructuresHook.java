@@ -1,8 +1,8 @@
 package killercreepr.cruxblocks.hook;
 
 import com.google.common.reflect.TypeToken;
-import killercreepr.crux.data.BlockPos;
-import killercreepr.crux.registries.CruxRegistries;
+import killercreepr.crux.core.math.BlockPos;
+import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxblocks.structure.modules.PlaceCustomBlocksModule;
 import killercreepr.cruxblocks.structure.modules.UpdateCustomBlocksModule;
 import killercreepr.cruxconfig.config.common.FileContext;

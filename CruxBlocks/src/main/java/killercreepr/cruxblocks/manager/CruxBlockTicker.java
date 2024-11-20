@@ -1,6 +1,6 @@
 package killercreepr.cruxblocks.manager;
 
-import killercreepr.crux.game.Statutable;
+import killercreepr.crux.api.game.Statutable;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.registries.CruxBlocksRegistries;
 import killercreepr.cruxblocks.registry.CruxBlockRegistry;

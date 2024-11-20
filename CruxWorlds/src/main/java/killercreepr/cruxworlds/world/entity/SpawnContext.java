@@ -1,6 +1,6 @@
 package killercreepr.cruxworlds.world.entity;
 
-import killercreepr.crux.data.world.CruxPosition;
+import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.cruxworlds.world.entity.impl.SimpleSpawnContext;
 import org.bukkit.World;
 import org.bukkit.block.Block;

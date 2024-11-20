@@ -1,8 +1,8 @@
 package killercreepr.cruxmenus.api.menu;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.data.DataInfoHolder;
-import killercreepr.crux.tags.container.MergedTagContainer;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.data.holder.DataInfoHolder;
+import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.cruxmenus.api.menu.contex.MenuContext;
 import killercreepr.cruxmenus.api.menu.holder.MenuHolder;
 import killercreepr.cruxmenus.api.menu.holder.MenuItemHolder;

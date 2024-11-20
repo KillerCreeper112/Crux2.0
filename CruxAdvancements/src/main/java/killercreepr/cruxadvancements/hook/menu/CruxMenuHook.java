@@ -1,10 +1,10 @@
 package killercreepr.cruxadvancements.hook.menu;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.data.Holder;
-import killercreepr.crux.data.entity.EntityMemory;
-import killercreepr.crux.registry.KeyedRegistry;
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.data.Holder;
+import killercreepr.crux.api.entity.memory.EntityMemory;
+import killercreepr.crux.api.registry.KeyedRegistry;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxadvancements.advancement.CruxAdvancement;
 import killercreepr.cruxadvancements.data.AdvancementTracker;
 import killercreepr.cruxadvancements.data.TrackedAdvancement;

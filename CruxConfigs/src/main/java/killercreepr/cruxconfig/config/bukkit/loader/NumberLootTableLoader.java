@@ -1,9 +1,9 @@
 package killercreepr.cruxconfig.config.bukkit.loader;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.loot.LootTable;
-import killercreepr.crux.registries.CruxRegistries;
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.loot.LootTable;
+import killercreepr.crux.core.registries.CruxRegistries;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.FileSimpleLootTable;
 import killercreepr.cruxconfig.config.bukkit.standard.CommonLootTableHandlers;
 import killercreepr.cruxconfig.config.common.FileContext;

@@ -1,13 +1,13 @@
 package killercreepr.crux.core.communication.boss;
 
-import killercreepr.crux.Crux;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.communication.boss.ActiveBossBar;
 import killercreepr.crux.api.communication.boss.CreateBossBar;
-import killercreepr.crux.context.TextParserContext;
+import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.crux.core.data.entity.PlayerBossBarHolder;
-import killercreepr.crux.data.entity.EntityMemory;
-import killercreepr.crux.util.CruxDuration;
-import killercreepr.crux.util.CruxMath;
+import killercreepr.crux.api.entity.memory.EntityMemory;
+import killercreepr.crux.core.util.CruxDuration;
+import killercreepr.crux.core.util.CruxMath;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.key.Key;

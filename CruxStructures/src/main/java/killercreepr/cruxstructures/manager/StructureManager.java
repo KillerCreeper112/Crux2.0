@@ -1,14 +1,14 @@
 package killercreepr.cruxstructures.manager;
 
 import com.google.common.reflect.TypeToken;
-import killercreepr.crux.Crux;
-import killercreepr.crux.data.tick.ManagedTicked;
-import killercreepr.crux.data.world.ChunkBlockStorage;
-import killercreepr.crux.data.world.CruxPosition;
-import killercreepr.crux.data.world.MultiVerseWorldStorage;
-import killercreepr.crux.data.world.WorldChunkStorage;
-import killercreepr.crux.data.world.standard.MultiVerseBlockPosedStorage;
-import killercreepr.crux.registries.CruxRegistries;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.data.tick.ManagedTicked;
+import killercreepr.crux.api.data.world.ChunkBlockStorage;
+import killercreepr.crux.api.math.CruxPosition;
+import killercreepr.crux.api.data.world.MultiVerseWorldStorage;
+import killercreepr.crux.api.data.world.WorldChunkStorage;
+import killercreepr.crux.core.data.world.MultiVerseBlockPosedStorage;
+import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxstructures.CruxStructuresModule;
 import killercreepr.cruxstructures.config.loader.StructureGeneratorLoader;

@@ -1,6 +1,6 @@
 package killercreepr.cruxworlds.world.entity;
 
-import killercreepr.crux.loot.WeightedObject;
+import killercreepr.crux.api.loot.WeightedObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;

@@ -1,6 +1,6 @@
 package killercreepr.cruxstructures.config.loader;
 
-import killercreepr.crux.Crux;
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxconfig.config.bukkit.loader.CfgLoader;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileObject;

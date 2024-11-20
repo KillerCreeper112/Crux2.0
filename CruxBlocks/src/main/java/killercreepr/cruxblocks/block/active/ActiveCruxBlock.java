@@ -1,12 +1,12 @@
 package killercreepr.cruxblocks.block.active;
 
 import com.destroystokyo.paper.ParticleBuilder;
-import killercreepr.crux.Crux;
-import killercreepr.crux.component.CruxComponents;
-import killercreepr.crux.data.communication.CreateBlockSoundGroup;
-import killercreepr.crux.data.communication.CreateSound;
-import killercreepr.crux.item.component.ToolComponent;
-import killercreepr.crux.util.CruxItem;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.component.CruxComponents;
+import killercreepr.crux.api.block.sound.CreateBlockSoundGroup;
+import killercreepr.crux.api.communication.CreateSound;
+import killercreepr.crux.api.item.component.ToolComponent;
+import killercreepr.crux.core.util.CruxItem;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.component.CruxBlockComponents;
 import killercreepr.cruxblocks.block.context.BlockContext;

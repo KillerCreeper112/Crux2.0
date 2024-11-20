@@ -1,7 +1,7 @@
 package killercreepr.cruxworlds.world.entity.impl;
 
-import killercreepr.crux.loot.impl.SimpleWeighted;
-import killercreepr.crux.util.CruxMath;
+import killercreepr.crux.core.loot.SimpleWeighted;
+import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxworlds.world.entity.NaturalEntitySpawn;
 import killercreepr.cruxworlds.world.entity.SpawnContext;
 import org.bukkit.block.Block;

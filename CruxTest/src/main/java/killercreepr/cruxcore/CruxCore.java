@@ -1,10 +1,10 @@
 package killercreepr.cruxcore;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.CruxMainModule;
-import killercreepr.crux.plugin.CruxPlugin;
-import killercreepr.crux.registries.CruxModuleRegistry;
-import killercreepr.crux.registries.CruxRegistries;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.plugin.module.CruxMainModule;
+import killercreepr.crux.core.plugin.CruxPlugin;
+import killercreepr.crux.core.registries.CruxModuleRegistry;
+import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxadvancements.CruxAdvancementsModule;
 import killercreepr.cruxattributes.core.CruxAttributesModule;
 import killercreepr.cruxconfig.CruxConfigsModule;

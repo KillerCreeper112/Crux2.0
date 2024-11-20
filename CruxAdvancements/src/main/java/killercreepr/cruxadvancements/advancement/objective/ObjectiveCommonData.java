@@ -1,6 +1,6 @@
 package killercreepr.cruxadvancements.advancement.objective;
 
-import killercreepr.crux.loot.conditions.LootCondition;
+import killercreepr.crux.api.loot.conditions.LootCondition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

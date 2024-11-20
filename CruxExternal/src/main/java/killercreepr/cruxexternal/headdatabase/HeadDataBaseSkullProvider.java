@@ -1,7 +1,7 @@
 package killercreepr.cruxexternal.headdatabase;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
-import killercreepr.crux.handler.SkullProvider;
+import killercreepr.crux.api.handler.SkullProvider;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;

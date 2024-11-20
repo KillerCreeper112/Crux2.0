@@ -1,6 +1,6 @@
 package killercreepr.cruxworlds.world.entity;
 
-import killercreepr.crux.loot.WeightedObject;
+import killercreepr.crux.api.loot.WeightedObject;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

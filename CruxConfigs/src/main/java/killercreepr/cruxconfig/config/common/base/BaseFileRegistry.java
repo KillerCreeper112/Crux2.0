@@ -1,7 +1,7 @@
 package killercreepr.cruxconfig.config.common.base;
 
-import killercreepr.crux.util.CruxObjects;
-import killercreepr.crux.util.CruxReflect;
+import killercreepr.crux.core.util.CruxObjects;
+import killercreepr.crux.core.util.CruxReflect;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.base.registry.FileObjectHandlerRegistry;

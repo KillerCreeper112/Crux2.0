@@ -1,7 +1,7 @@
 package killercreepr.cruxstructures.config.generation;
 
-import killercreepr.crux.util.CruxObjects;
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.core.util.CruxObjects;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;

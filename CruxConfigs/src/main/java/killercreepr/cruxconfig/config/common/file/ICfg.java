@@ -1,6 +1,6 @@
 package killercreepr.cruxconfig.config.common.file;
 
-import killercreepr.crux.util.CruxReflect;
+import killercreepr.crux.core.util.CruxReflect;
 import killercreepr.cruxconfig.config.common.annotations.Config;
 import killercreepr.cruxconfig.config.common.value.IConfigValue;
 import org.jetbrains.annotations.NotNull;

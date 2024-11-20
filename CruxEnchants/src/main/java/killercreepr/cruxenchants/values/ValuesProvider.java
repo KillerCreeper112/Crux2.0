@@ -1,7 +1,7 @@
 package killercreepr.cruxenchants.values;
 
-import killercreepr.crux.data.Holder;
-import killercreepr.crux.plugin.CruxPlugin;
+import killercreepr.crux.api.data.Holder;
+import killercreepr.crux.core.plugin.CruxPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

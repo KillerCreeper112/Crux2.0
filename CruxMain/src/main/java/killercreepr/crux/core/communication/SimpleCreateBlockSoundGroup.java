@@ -1,7 +1,7 @@
 package killercreepr.crux.core.communication;
 
-import killercreepr.crux.data.communication.CreateBlockSoundGroup;
-import killercreepr.crux.data.communication.CreateSound;
+import killercreepr.crux.api.block.sound.CreateBlockSoundGroup;
+import killercreepr.crux.api.communication.CreateSound;
 import org.jetbrains.annotations.Nullable;
 
 public class SimpleCreateBlockSoundGroup implements CreateBlockSoundGroup {

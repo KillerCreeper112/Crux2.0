@@ -1,7 +1,7 @@
 package killercreepr.cruxadvancements.config.handler.crazy;
 
 import io.leangen.geantyref.TypeToken;
-import killercreepr.crux.util.CruxObjects;
+import killercreepr.crux.core.util.CruxObjects;
 import killercreepr.cruxadvancements.advancement.criteria.CruxCriteria;
 import killercreepr.cruxadvancements.advancement.flag.CruxAdvancementFlag;
 import killercreepr.cruxadvancements.advancement.objective.AdvancementObjective;

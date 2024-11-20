@@ -1,6 +1,6 @@
 package killercreepr.cruxworlds.config.entity;
 
-import killercreepr.crux.entity.CruxEntitySnapshot;
+import killercreepr.crux.api.entity.CruxEntitySnapshot;
 import killercreepr.cruxworlds.world.entity.SpawnContext;
 import killercreepr.cruxworlds.world.entity.impl.SimpleNaturalEntitySpawn;
 import killercreepr.cruxworlds.world.spawning.SpawnValidator;

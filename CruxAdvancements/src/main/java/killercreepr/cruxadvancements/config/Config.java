@@ -1,7 +1,7 @@
 package killercreepr.cruxadvancements.config;
 
-import killercreepr.crux.plugin.CruxPlugin;
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.core.plugin.CruxPlugin;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxadvancements.values.DefaultValues;
 import killercreepr.cruxadvancements.values.ValuesProvider;
 import killercreepr.cruxconfig.config.bukkit.file.Cfg;

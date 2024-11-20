@@ -1,10 +1,10 @@
 package killercreepr.cruxworlds.world.entity.impl;
 
-import killercreepr.crux.data.world.CruxPosition;
-import killercreepr.crux.persistence.CruxPersist;
-import killercreepr.crux.registry.Registry;
-import killercreepr.crux.util.CruxMath;
-import killercreepr.crux.util.CruxWeightedSupplier;
+import killercreepr.crux.api.math.CruxPosition;
+import killercreepr.crux.core.persistence.CruxPersist;
+import killercreepr.crux.api.registry.Registry;
+import killercreepr.crux.core.util.CruxMath;
+import killercreepr.crux.api.util.CruxWeightedSupplier;
 import killercreepr.cruxworlds.world.entity.NaturalEntitySpawnGroup;
 import killercreepr.cruxworlds.world.entity.NaturalEntitySpawner;
 import killercreepr.cruxworlds.world.entity.NaturalEntityWorldSpawner;

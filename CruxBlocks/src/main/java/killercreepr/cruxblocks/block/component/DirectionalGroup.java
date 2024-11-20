@@ -1,6 +1,6 @@
 package killercreepr.cruxblocks.block.component;
 
-import killercreepr.crux.util.CruxDirection;
+import killercreepr.crux.core.util.CruxDirection;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.block.context.PlaceBlockContext;

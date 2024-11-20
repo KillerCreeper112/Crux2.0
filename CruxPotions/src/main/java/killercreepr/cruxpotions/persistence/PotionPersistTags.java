@@ -1,6 +1,6 @@
 package killercreepr.cruxpotions.persistence;
 
-import killercreepr.crux.persistence.PersistTag;
+import killercreepr.crux.core.persistence.PersistTag;
 
 import java.util.Collection;
 

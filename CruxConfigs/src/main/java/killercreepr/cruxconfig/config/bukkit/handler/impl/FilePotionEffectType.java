@@ -1,6 +1,6 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
-import killercreepr.crux.util.CruxKey;
+import killercreepr.crux.core.util.CruxKey;
 import killercreepr.cruxconfig.config.common.json.annotation.JsonSerializer;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Registry;

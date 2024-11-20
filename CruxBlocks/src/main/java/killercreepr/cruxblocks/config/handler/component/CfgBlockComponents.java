@@ -1,11 +1,11 @@
 package killercreepr.cruxblocks.config.handler.component;
 
-import killercreepr.crux.component.DataComponentType;
-import killercreepr.crux.component.TypedDataComponent;
-import killercreepr.crux.data.communication.CreateBlockSoundGroup;
-import killercreepr.crux.registry.MappedRegistry;
-import killercreepr.crux.util.CruxDirection;
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.api.component.DataComponentType;
+import killercreepr.crux.api.component.TypedDataComponent;
+import killercreepr.crux.api.block.sound.CreateBlockSoundGroup;
+import killercreepr.crux.api.registry.MappedRegistry;
+import killercreepr.crux.core.util.CruxDirection;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxblocks.block.component.*;
 import killercreepr.cruxblocks.block.standard.component.EntitySpawnerComponent;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileDataComponentType;

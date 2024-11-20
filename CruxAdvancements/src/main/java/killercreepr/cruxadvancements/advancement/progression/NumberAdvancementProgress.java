@@ -1,6 +1,6 @@
 package killercreepr.cruxadvancements.advancement.progression;
 
-import killercreepr.crux.util.CruxMath;
+import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxadvancements.advancement.criteria.NumberCriteria;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

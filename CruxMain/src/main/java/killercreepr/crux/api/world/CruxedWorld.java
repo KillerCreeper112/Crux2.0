@@ -1,0 +1,7 @@
+package killercreepr.crux.api.world;
+
+import org.jetbrains.annotations.ApiStatus;
+
+@ApiStatus.Experimental
+public interface CruxedWorld extends CruxedWorldAccessor {
+}

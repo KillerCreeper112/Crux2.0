@@ -1,6 +1,6 @@
 package killercreepr.cruxstructures.structure.generation.requirement;
 
-import killercreepr.crux.util.CruxMath;
+import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxstructures.structure.Structure;
 import org.bukkit.Chunk;
 import org.bukkit.Location;

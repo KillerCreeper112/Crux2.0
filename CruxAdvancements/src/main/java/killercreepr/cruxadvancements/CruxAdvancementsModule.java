@@ -1,13 +1,13 @@
 package killercreepr.cruxadvancements;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.data.entity.EntityMemory;
-import killercreepr.crux.data.entity.PlayerMemory;
-import killercreepr.crux.module.CruxModule;
-import killercreepr.crux.module.StandardModules;
-import killercreepr.crux.plugin.CruxPlugin;
-import killercreepr.crux.registries.CruxRegistries;
-import killercreepr.crux.tags.TagParser;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.entity.memory.EntityMemory;
+import killercreepr.crux.api.entity.memory.PlayerMemory;
+import killercreepr.crux.api.plugin.module.CruxModule;
+import killercreepr.crux.core.plugin.module.StandardModules;
+import killercreepr.crux.core.plugin.CruxPlugin;
+import killercreepr.crux.core.registries.CruxRegistries;
+import killercreepr.crux.api.text.tags.TagParser;
 import killercreepr.cruxadvancements.command.AdvancementCommands;
 import killercreepr.cruxadvancements.config.Config;
 import killercreepr.cruxadvancements.config.CruxConfigHook;

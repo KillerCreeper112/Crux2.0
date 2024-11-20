@@ -1,6 +1,6 @@
 package killercreepr.cruxadvancements.advancement.objective.impl;
 
-import killercreepr.crux.loot.LootContext;
+import killercreepr.crux.api.loot.LootContext;
 import killercreepr.cruxadvancements.advancement.ObjectiveAdvancement;
 import killercreepr.cruxadvancements.advancement.objective.ObjectiveCommonData;
 import killercreepr.cruxadvancements.event.PlayerCraftItemEvent;

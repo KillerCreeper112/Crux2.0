@@ -1,6 +1,6 @@
 package killercreepr.cruxadvancements.advancement.reward;
 
-import killercreepr.crux.Crux;
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxadvancements.advancement.CruxAdvancement;
 import killercreepr.cruxadvancements.manager.CruxAdvancementManager;
 import org.bukkit.entity.Player;

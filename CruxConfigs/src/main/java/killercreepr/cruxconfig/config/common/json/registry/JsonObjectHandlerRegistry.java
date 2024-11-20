@@ -1,7 +1,7 @@
 package killercreepr.cruxconfig.config.common.json.registry;
 
-import killercreepr.crux.registry.MappedRegistry;
-import killercreepr.crux.registry.SimpleMappedRegistry;
+import killercreepr.crux.api.registry.MappedRegistry;
+import killercreepr.crux.core.registry.SimpleMappedRegistry;
 import killercreepr.cruxconfig.config.common.json.handler.JsonObjectHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

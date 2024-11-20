@@ -1,8 +1,8 @@
 package killercreepr.cruxconfig.config.registry;
 
-import killercreepr.crux.registry.KeyedRegistry;
-import killercreepr.crux.registry.SimpleKeyedRegistry;
-import killercreepr.crux.registry.SimpleRegistry;
+import killercreepr.crux.api.registry.KeyedRegistry;
+import killercreepr.crux.core.registry.SimpleKeyedRegistry;
+import killercreepr.crux.core.registry.SimpleRegistry;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.persistence.FileDynamicPersistTagParser;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.json.registry.JsonRegistry;

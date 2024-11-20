@@ -1,6 +1,6 @@
 package killercreepr.cruxconfig.config.common.data;
 
-import killercreepr.crux.registry.SimpleRegistry;
+import killercreepr.crux.core.registry.SimpleRegistry;
 import killercreepr.cruxconfig.config.common.file.ICfg;
 import org.jetbrains.annotations.NotNull;
 

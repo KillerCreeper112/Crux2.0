@@ -1,6 +1,6 @@
 package killercreepr.cruxstructures.util;
 
-import killercreepr.crux.data.world.CruxPosition;
+import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.cruxstructures.structure.Structure;
 import org.jetbrains.annotations.NotNull;
 

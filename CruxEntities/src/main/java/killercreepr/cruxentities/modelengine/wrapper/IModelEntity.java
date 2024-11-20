@@ -3,7 +3,7 @@ package killercreepr.cruxentities.modelengine.wrapper;
 import com.ticxo.modelengine.api.animation.property.IAnimationProperty;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
-import killercreepr.crux.Crux;
+import killercreepr.crux.core.Crux;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;

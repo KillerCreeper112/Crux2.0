@@ -1,6 +1,6 @@
 package killercreepr.cruxpotions.persistence;
 
-import killercreepr.crux.Crux;
+import killercreepr.crux.core.Crux;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataContainer;

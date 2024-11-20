@@ -1,6 +1,6 @@
 package killercreepr.cruxconfig.config.common.yaml.registry;
 
-import killercreepr.crux.registry.SimpleMappedRegistry;
+import killercreepr.crux.core.registry.SimpleMappedRegistry;
 import killercreepr.cruxconfig.config.common.yaml.handler.YamlObjectHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

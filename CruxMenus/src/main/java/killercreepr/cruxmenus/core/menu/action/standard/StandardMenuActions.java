@@ -1,6 +1,6 @@
 package killercreepr.cruxmenus.core.menu.action.standard;
 
-import killercreepr.crux.Crux;
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxmenus.api.menu.action.MenuAction;
 import killercreepr.cruxmenus.core.menu.action.impl.*;
 import org.jetbrains.annotations.NotNull;

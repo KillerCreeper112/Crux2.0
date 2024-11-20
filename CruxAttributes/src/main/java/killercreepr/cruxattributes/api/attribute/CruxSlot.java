@@ -1,6 +1,6 @@
 package killercreepr.cruxattributes.api.attribute;
 
-import killercreepr.crux.util.CruxString;
+import killercreepr.crux.core.util.CruxString;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;

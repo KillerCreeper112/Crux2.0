@@ -1,8 +1,8 @@
 package killercreepr.cruxitems.item.plugin;
 
-import killercreepr.crux.context.TextParserContext;
-import killercreepr.crux.item.dynamic.DynamicItem;
-import killercreepr.crux.tags.container.MergedTagContainer;
+import killercreepr.crux.api.text.context.TextParserContext;
+import killercreepr.crux.api.item.dynamic.DynamicItem;
+import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.cruxitems.item.CruxedItem;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Entity;

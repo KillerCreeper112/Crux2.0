@@ -1,6 +1,6 @@
 package killercreepr.cruxpotions.item;
 
-import killercreepr.crux.Crux;
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxitems.item.CruxedItem;
 import killercreepr.cruxitems.item.CruxedItemUpdateContext;
 import killercreepr.cruxitems.item.CruxedItemUpdater;

@@ -1,6 +1,6 @@
 package killercreepr.cruxmenus.core.menu.action.impl;
 
-import killercreepr.crux.util.CruxMath;
+import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxmenus.api.menu.CfgMenu;
 import killercreepr.cruxmenus.api.menu.contex.ActionContext;
 import killercreepr.cruxmenus.core.menu.action.SimpleMenuAction;

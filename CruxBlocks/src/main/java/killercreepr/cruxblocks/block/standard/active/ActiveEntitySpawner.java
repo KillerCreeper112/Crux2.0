@@ -1,8 +1,8 @@
 package killercreepr.cruxblocks.block.standard.active;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.data.tick.ManagedTicked;
-import killercreepr.crux.data.world.CruxPosition;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.data.tick.ManagedTicked;
+import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlockImpl;
 import killercreepr.cruxblocks.block.data.CustomBlockData;

@@ -1,9 +1,9 @@
 package killercreepr.cruxmenus.core.menu.config.handlers;
 
 import com.google.common.reflect.TypeToken;
-import killercreepr.crux.data.DataExchange;
-import killercreepr.crux.data.Holder;
-import killercreepr.crux.item.dynamic.DynamicItem;
+import killercreepr.crux.api.data.DataExchange;
+import killercreepr.crux.api.data.Holder;
+import killercreepr.crux.api.item.dynamic.DynamicItem;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;

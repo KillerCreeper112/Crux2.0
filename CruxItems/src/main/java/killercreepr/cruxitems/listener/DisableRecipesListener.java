@@ -1,6 +1,6 @@
 package killercreepr.cruxitems.listener;
 
-import killercreepr.crux.util.CruxItem;
+import killercreepr.crux.core.util.CruxItem;
 import killercreepr.cruxitems.item.CruxedItem;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Keyed;

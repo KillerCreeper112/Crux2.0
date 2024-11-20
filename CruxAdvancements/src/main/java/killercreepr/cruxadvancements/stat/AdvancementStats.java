@@ -1,8 +1,8 @@
 package killercreepr.cruxadvancements.stat;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.registries.CruxRegistries;
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.registries.CruxRegistries;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxadvancements.CruxAdvancementsModule;
 import killercreepr.cruxadvancements.values.ValuesProvider;
 import killercreepr.cruxstats.api.stat.CruxStat;

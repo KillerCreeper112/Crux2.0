@@ -1,7 +1,7 @@
 package killercreepr.cruxattributes.core.registries;
 
-import killercreepr.crux.registry.KeyedRegistry;
-import killercreepr.crux.registry.SimpleKeyedRegistry;
+import killercreepr.crux.api.registry.KeyedRegistry;
+import killercreepr.crux.core.registry.SimpleKeyedRegistry;
 import killercreepr.cruxattributes.api.attribute.CruxAttribute;
 
 public class CruxAttributeRegistries {

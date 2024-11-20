@@ -1,7 +1,7 @@
 package killercreepr.cruxadvancements.loot.context;
 
-import killercreepr.crux.data.DataExchange;
-import killercreepr.crux.loot.LootContext;
+import killercreepr.crux.api.data.DataExchange;
+import killercreepr.crux.api.loot.LootContext;
 import killercreepr.cruxadvancements.event.PlayerCraftItemEvent;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;

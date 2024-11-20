@@ -1,7 +1,7 @@
 package killercreepr.cruxitems.item;
 
-import killercreepr.crux.tags.format.FormatSerializer;
-import killercreepr.crux.util.CruxItem;
+import killercreepr.crux.api.text.format.FormatSerializer;
+import killercreepr.crux.core.util.CruxItem;
 import killercreepr.cruxitems.item.plugin.PluginItem;
 import killercreepr.cruxitems.persistence.CruxItemsPersistTags;
 import killercreepr.cruxitems.registries.CruxItemRegistries;

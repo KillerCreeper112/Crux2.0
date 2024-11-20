@@ -2,7 +2,7 @@ package killercreepr.cruxconfig.config.common.element;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
-import killercreepr.crux.util.CruxObjects;
+import killercreepr.crux.core.util.CruxObjects;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlGeneric;
 import org.jetbrains.annotations.NotNull;

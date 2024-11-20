@@ -1,6 +1,6 @@
 package killercreepr.cruxitems.item.interaction;
 
-import killercreepr.crux.util.CruxItem;
+import killercreepr.crux.core.util.CruxItem;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;

@@ -1,6 +1,6 @@
 package killercreepr.cruxstats.api.stat;
 
-import killercreepr.crux.valueproviders.number.NumberHolder;
+import killercreepr.crux.api.valueproviders.number.NumberHolder;
 import killercreepr.cruxstats.core.stat.SimpleCruxStatInstance;
 import killercreepr.cruxstats.core.stat.SimpleStat;
 import net.kyori.adventure.key.Key;

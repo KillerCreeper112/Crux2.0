@@ -1,15 +1,15 @@
 package killercreepr.cruxmenus.core.menu.item;
 
-import killercreepr.crux.context.TextParserContext;
-import killercreepr.crux.item.dynamic.DynamicItem;
-import killercreepr.crux.registry.Registry;
-import killercreepr.crux.tags.container.MergedTagContainer;
-import killercreepr.crux.tags.container.TagContainer;
-import killercreepr.crux.tags.context.FormatParserContext;
-import killercreepr.crux.tags.format.FormatSerializer;
-import killercreepr.crux.util.CruxItem;
-import killercreepr.crux.util.CruxString;
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.api.text.context.TextParserContext;
+import killercreepr.crux.api.item.dynamic.DynamicItem;
+import killercreepr.crux.api.registry.Registry;
+import killercreepr.crux.api.text.tags.container.MergedTagContainer;
+import killercreepr.crux.api.text.tags.container.TagContainer;
+import killercreepr.crux.core.text.format.FormatParserContext;
+import killercreepr.crux.api.text.format.FormatSerializer;
+import killercreepr.crux.core.util.CruxItem;
+import killercreepr.crux.core.util.CruxString;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxmenus.api.event.MenuItemClickEvent;
 import killercreepr.cruxmenus.api.menu.action.MenuAction;
 import killercreepr.cruxmenus.api.menu.action.click.ClickActions;

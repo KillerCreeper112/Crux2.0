@@ -1,6 +1,6 @@
 package killercreepr.cruxstats.core.stat;
 
-import killercreepr.crux.valueproviders.number.NumberHolder;
+import killercreepr.crux.api.valueproviders.number.NumberHolder;
 import killercreepr.cruxstats.api.stat.CruxStat;
 import killercreepr.cruxstats.api.stat.CruxStatInstance;
 import killercreepr.cruxstats.api.stat.CruxStatModifier;

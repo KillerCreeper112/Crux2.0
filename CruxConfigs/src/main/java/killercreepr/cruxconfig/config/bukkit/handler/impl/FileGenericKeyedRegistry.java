@@ -2,7 +2,7 @@ package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
-import killercreepr.crux.util.CruxKey;
+import killercreepr.crux.core.util.CruxKey;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Keyed;
 import org.jetbrains.annotations.NotNull;

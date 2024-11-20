@@ -1,6 +1,6 @@
 package killercreepr.cruxmenus.api.menu.slot;
 
-import killercreepr.crux.util.CruxEntityUtil;
+import killercreepr.crux.core.util.CruxEntityUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;

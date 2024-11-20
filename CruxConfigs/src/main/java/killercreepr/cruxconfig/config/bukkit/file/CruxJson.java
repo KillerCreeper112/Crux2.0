@@ -3,7 +3,7 @@ package killercreepr.cruxconfig.config.bukkit.file;
 import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import killercreepr.crux.data.util.Pair;
+import killercreepr.crux.core.data.util.Pair;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;

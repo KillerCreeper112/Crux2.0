@@ -1,6 +1,6 @@
 package killercreepr.cruxadvancements.config.handler;
 
-import killercreepr.crux.util.CruxObjects;
+import killercreepr.crux.core.util.CruxObjects;
 import killercreepr.cruxadvancements.data.TrackedAdvancement;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;

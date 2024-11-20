@@ -1,6 +1,6 @@
 package killercreepr.cruxadvancements.registries;
 
-import killercreepr.crux.registry.SimpleKeyedRegistry;
+import killercreepr.crux.core.registry.SimpleKeyedRegistry;
 import killercreepr.cruxadvancements.advancement.CruxAdvancement;
 import killercreepr.cruxadvancements.manager.CruxAdvancementManager;
 import net.kyori.adventure.key.Key;

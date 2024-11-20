@@ -1,6 +1,6 @@
 package killercreepr.cruxattributes.core.persistence;
 
-import killercreepr.crux.registries.CruxRegistries;
+import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxattributes.core.persistence.impl.CruxAttributeContainerDataType;
 import killercreepr.cruxattributes.core.persistence.impl.CruxAttributeInstanceDataType;
 import killercreepr.cruxattributes.core.persistence.impl.CruxAttributeModifierDataType;

@@ -1,8 +1,8 @@
 package killercreepr.cruxitems.config.handler;
 
-import killercreepr.crux.item.dynamic.DynamicItem;
-import killercreepr.crux.registry.KeyedRegistry;
-import killercreepr.crux.registry.SimpleKeyedRegistry;
+import killercreepr.crux.api.item.dynamic.DynamicItem;
+import killercreepr.crux.api.registry.KeyedRegistry;
+import killercreepr.crux.core.registry.SimpleKeyedRegistry;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;

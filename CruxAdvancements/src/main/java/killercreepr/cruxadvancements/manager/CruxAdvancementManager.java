@@ -1,8 +1,8 @@
 package killercreepr.cruxadvancements.manager;
 
 import eu.endercentral.crazy_advancements.manager.AdvancementManager;
-import killercreepr.crux.data.PluginLoadable;
-import killercreepr.crux.registry.KeyedRegistry;
+import killercreepr.crux.api.data.PluginLoadable;
+import killercreepr.crux.api.registry.KeyedRegistry;
 import killercreepr.cruxadvancements.advancement.CruxAdvancement;
 import killercreepr.cruxadvancements.event.*;
 import net.kyori.adventure.key.Key;

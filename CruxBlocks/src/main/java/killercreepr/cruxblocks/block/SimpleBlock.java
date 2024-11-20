@@ -1,6 +1,6 @@
 package killercreepr.cruxblocks.block;
 
-import killercreepr.crux.component.DataComponentHandler;
+import killercreepr.crux.api.component.DataComponentHandler;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.block.texture.TextureData;
 import net.kyori.adventure.key.Key;

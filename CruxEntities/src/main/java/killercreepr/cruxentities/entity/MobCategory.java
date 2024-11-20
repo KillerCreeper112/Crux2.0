@@ -1,6 +1,6 @@
 package killercreepr.cruxentities.entity;
 
-import killercreepr.crux.Crux;
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxentities.registries.CruxEntityRegistries;
 import net.kyori.adventure.key.Keyed;
 

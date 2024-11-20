@@ -1,6 +1,6 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
-import killercreepr.crux.util.CruxColor;
+import killercreepr.crux.core.util.CruxColor;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FilePrimitive;

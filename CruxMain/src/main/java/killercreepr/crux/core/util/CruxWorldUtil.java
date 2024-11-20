@@ -1,0 +1,76 @@
+package killercreepr.crux.core.util;
+
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.math.CruxPosition;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.WorldCreator;
+import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
+
+public class CruxWorldUtil {
+    public static boolean isLoaded(@NotNull World world, int x, int z) {
+        return world.isChunkLoaded(x >> 4, z >> 4);
+    }
+
+    public static boolean isLoaded(@NotNull World world, @NotNull Location loc) {
+        return isLoaded(world, loc.getBlockX(), loc.getBlockZ());
+    }
+
+    public static boolean isLoaded(@NotNull World world, @NotNull CruxPosition loc) {
+        return isLoaded(world, loc.blockX(), loc.blockZ());
+    }
+
+    public static boolean isLoaded(@NotNull World world, @NotNull Vector loc) {
+        return isLoaded(world, loc.getBlockX(), loc.getBlockZ());
+    }
+
+    public static boolean isLoaded(@NotNull Location loc) {
+        return loc.getWorld() != null && isLoaded(loc.getWorld(), loc);
+    }
+
+    public static boolean deleteWorld(@NotNull World world){
+        if(Crux.getServer().isTickingWorlds()){
+            throw new IllegalStateException("Cannot unload world while Bukkit.isTickingWorlds is true!");
+        }
+        Crux.getServer().unloadWorld(world, false);
+        return deleteWorld(world.getName());
+    }
+
+    public static boolean deleteWorld(@NotNull String name){
+        for(File f : Crux.getServer().getWorldContainer().listFiles()){
+            if(!f.getName().equals(name) || !f.isDirectory()) continue;
+            boolean foundLevel = false;
+            for(File folderF : f.listFiles()){
+                if(folderF.getName().equals("level.dat")){
+                    foundLevel = true;
+                    break;
+                }
+            }
+            if(foundLevel) return f.delete();
+            break;
+        }
+        return false;
+    }
+
+    public static World getOrLoadWorld(@NotNull String name){
+        World world = Crux.getServer().getWorld(name);
+        if(world != null) return world;
+        for(File f : Crux.getServer().getWorldContainer().listFiles()){
+            if(!f.getName().equals(name)) continue;
+            if(!f.isDirectory()) continue;
+            boolean foundLevel = false;
+            for(File folderF : f.listFiles()){
+                if(folderF.getName().equals("level.dat")){
+                    foundLevel = true;
+                    break;
+                }
+            }
+            if(!foundLevel) break;
+            return Crux.getServer().createWorld(new WorldCreator(name));
+        }
+        return null;
+    }
+}

@@ -1,8 +1,8 @@
 package killercreepr.crux.core.communication.processor;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.data.communication.TranslateMsg;
-import killercreepr.crux.util.CruxReflect;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.communication.lang.TranslateMsg;
+import killercreepr.crux.core.util.CruxReflect;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;

@@ -1,6 +1,6 @@
 package killercreepr.cruxadvancements.values;
 
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
 
 public class DefaultValues implements ValuesProvider{

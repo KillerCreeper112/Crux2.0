@@ -1,8 +1,8 @@
 package killercreepr.cruxconfig.config.bukkit.standard;
 
-import killercreepr.crux.data.communication.Communicator;
-import killercreepr.crux.data.communication.CreateLang;
-import killercreepr.crux.data.communication.TranslateMsg;
+import killercreepr.crux.api.communication.Communicator;
+import killercreepr.crux.api.communication.lang.CreateLang;
+import killercreepr.crux.core.communication.lang.TranslateMsg;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
 import org.bukkit.configuration.ConfigurationSection;

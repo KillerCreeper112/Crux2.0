@@ -1,7 +1,7 @@
 package killercreepr.cruxentities.modelengine;
 
 import com.ticxo.modelengine.api.events.ModelRegistrationEvent;
-import killercreepr.crux.plugin.CruxPlugin;
+import killercreepr.crux.core.plugin.CruxPlugin;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 

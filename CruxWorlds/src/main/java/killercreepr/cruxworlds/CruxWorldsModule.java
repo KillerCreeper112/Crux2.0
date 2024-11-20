@@ -1,9 +1,9 @@
 package killercreepr.cruxworlds;
 
-import killercreepr.crux.module.CruxModule;
-import killercreepr.crux.module.StandardModules;
-import killercreepr.crux.plugin.CruxPlugin;
-import killercreepr.crux.registries.CruxRegistries;
+import killercreepr.crux.api.plugin.module.CruxModule;
+import killercreepr.crux.core.plugin.module.StandardModules;
+import killercreepr.crux.core.plugin.CruxPlugin;
+import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxworlds.config.CruxConfigsHook;
 import org.jetbrains.annotations.NotNull;
 

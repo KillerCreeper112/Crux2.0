@@ -1,7 +1,7 @@
 package killercreepr.cruxblocks.block.group;
 
 import com.google.common.base.Preconditions;
-import killercreepr.crux.component.DataComponentHandler;
+import killercreepr.crux.api.component.DataComponentHandler;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.block.component.CruxBlockGroupComponent;

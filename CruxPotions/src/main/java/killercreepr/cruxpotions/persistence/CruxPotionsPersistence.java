@@ -1,6 +1,6 @@
 package killercreepr.cruxpotions.persistence;
 
-import killercreepr.crux.registries.CruxRegistries;
+import killercreepr.crux.core.registries.CruxRegistries;
 
 public class CruxPotionsPersistence {
     public static void register(){}

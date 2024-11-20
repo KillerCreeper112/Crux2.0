@@ -1,6 +1,6 @@
 package killercreepr.cruxitems.config.handler;
 
-import killercreepr.crux.item.dynamic.DynamicItem;
+import killercreepr.crux.api.item.dynamic.DynamicItem;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxitems.item.plugin.PluginItem;

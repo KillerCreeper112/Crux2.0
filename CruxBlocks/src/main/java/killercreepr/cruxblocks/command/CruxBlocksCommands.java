@@ -10,9 +10,9 @@ import io.papermc.paper.command.brigadier.argument.resolvers.selector.EntitySele
 import io.papermc.paper.math.BlockPosition;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-import killercreepr.crux.data.communication.MsgContainer;
-import killercreepr.crux.plugin.CruxPlugin;
-import killercreepr.crux.util.CruxMath;
+import killercreepr.crux.core.communication.MsgContainer;
+import killercreepr.crux.core.plugin.CruxPlugin;
+import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.context.BlockContext;
 import killercreepr.cruxblocks.block.context.PlaceBlockContext;

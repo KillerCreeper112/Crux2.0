@@ -1,8 +1,8 @@
 package killercreepr.cruxpotions.data;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.data.entity.EntityMemory;
-import killercreepr.crux.data.entity.EntityTickedDataHolder;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.entity.memory.EntityMemory;
+import killercreepr.crux.core.entity.memory.EntityTickedDataHolder;
 import killercreepr.cruxpotions.event.EntityCruxPotionEvent;
 import killercreepr.cruxpotions.potions.ActivePotion;
 import killercreepr.cruxpotions.potions.CruxPotion;

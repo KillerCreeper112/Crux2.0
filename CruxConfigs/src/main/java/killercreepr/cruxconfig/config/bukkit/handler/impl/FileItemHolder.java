@@ -1,7 +1,7 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.item.ItemHolder;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.paper.ItemHolder;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

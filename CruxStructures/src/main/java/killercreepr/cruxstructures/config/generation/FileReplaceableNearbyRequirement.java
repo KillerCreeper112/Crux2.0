@@ -1,6 +1,6 @@
 package killercreepr.cruxstructures.config.generation;
 
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxstructures.structure.generation.requirement.StructureReplaceableNearbyRequirement;

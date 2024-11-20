@@ -1,6 +1,6 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.persistence;
 
-import killercreepr.crux.item.dynamic.components.persistence.TypedDynamicPersistentTag;
+import killercreepr.crux.api.item.dynamic.component.persistence.TypedDynamicPersistentTag;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;

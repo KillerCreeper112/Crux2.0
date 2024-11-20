@@ -1,7 +1,7 @@
 package killercreepr.cruxadvancements.manager;
 
-import killercreepr.crux.registry.KeyedRegistry;
-import killercreepr.crux.registry.SimpleKeyedRegistry;
+import killercreepr.crux.api.registry.KeyedRegistry;
+import killercreepr.crux.core.registry.SimpleKeyedRegistry;
 import killercreepr.cruxadvancements.advancement.CruxAdvancement;
 import killercreepr.cruxadvancements.advancement.progression.CriteriaResult;
 import killercreepr.cruxadvancements.advancement.progression.CruxAdvancementProgress;

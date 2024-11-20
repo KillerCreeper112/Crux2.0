@@ -1,9 +1,9 @@
 package killercreepr.cruxblocks.block.component;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.component.DataComponentType;
-import killercreepr.crux.data.communication.CreateBlockSoundGroup;
-import killercreepr.crux.registries.CruxRegistries;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.component.DataComponentType;
+import killercreepr.crux.api.block.sound.CreateBlockSoundGroup;
+import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxblocks.block.standard.component.EntitySpawnerComponent;
 
 import java.util.function.UnaryOperator;

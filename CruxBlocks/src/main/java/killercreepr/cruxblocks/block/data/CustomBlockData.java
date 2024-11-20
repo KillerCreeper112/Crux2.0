@@ -22,9 +22,9 @@
 
 package killercreepr.cruxblocks.block.data;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.data.BlockPos;
-import killercreepr.crux.persistence.CruxPersistence;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.math.BlockPos;
+import killercreepr.crux.core.persistence.CruxPersistence;
 import killercreepr.cruxblocks.block.data.events.CustomBlockDataRemoveEvent;
 import killercreepr.cruxblocks.block.data.listeners.BlockDataListener;
 import org.bukkit.*;

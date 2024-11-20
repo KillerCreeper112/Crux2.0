@@ -1,8 +1,8 @@
 package killercreepr.cruxadvancements.config.handler;
 
-import killercreepr.crux.registry.MappedRegistry;
-import killercreepr.crux.registry.Registry;
-import killercreepr.crux.registry.SimpleMappedRegistry;
+import killercreepr.crux.api.registry.MappedRegistry;
+import killercreepr.crux.api.registry.Registry;
+import killercreepr.crux.core.registry.SimpleMappedRegistry;
 import killercreepr.cruxadvancements.advancement.objective.progress.ObjectiveProgress;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;

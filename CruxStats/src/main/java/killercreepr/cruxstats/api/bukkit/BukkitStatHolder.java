@@ -1,6 +1,6 @@
 package killercreepr.cruxstats.api.bukkit;
 
-import killercreepr.crux.data.entity.EntityMemory;
+import killercreepr.crux.api.entity.memory.EntityMemory;
 import killercreepr.cruxstats.api.stat.CruxStatHolder;
 import killercreepr.cruxstats.core.stat.PlayerCruxStatHolder;
 import org.bukkit.entity.Player;

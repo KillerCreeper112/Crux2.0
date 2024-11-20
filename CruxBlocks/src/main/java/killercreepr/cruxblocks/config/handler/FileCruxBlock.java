@@ -1,6 +1,6 @@
 package killercreepr.cruxblocks.config.handler;
 
-import killercreepr.crux.component.DataComponentHandler;
+import killercreepr.crux.api.component.DataComponentHandler;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.SimpleBlock;
 import killercreepr.cruxblocks.block.texture.TextureData;

@@ -1,7 +1,7 @@
 package killercreepr.cruxadvancements.listener;
 
 import io.papermc.paper.event.block.PlayerShearBlockEvent;
-import killercreepr.crux.data.entity.EntityMemory;
+import killercreepr.crux.api.entity.memory.EntityMemory;
 import killercreepr.cruxadvancements.advancement.objective.impl.*;
 import killercreepr.cruxadvancements.data.entity.AdvancementHolder;
 import killercreepr.cruxadvancements.event.PlayerCraftItemEvent;

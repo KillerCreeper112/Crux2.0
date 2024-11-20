@@ -1,10 +1,10 @@
 package killercreepr.cruxentities.combat;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.event.CruxEntityDamageEvent;
-import killercreepr.crux.event.CruxEntityDeathEvent;
-import killercreepr.crux.persistence.CruxPersist;
-import killercreepr.crux.util.CruxEntityUtil;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.event.CruxEntityDamageEvent;
+import killercreepr.crux.api.event.CruxEntityDeathEvent;
+import killercreepr.crux.core.persistence.CruxPersist;
+import killercreepr.crux.core.util.CruxEntityUtil;
 import killercreepr.cruxattributes.api.attribute.CruxAttribute;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;

@@ -1,14 +1,14 @@
 package killercreepr.cruxstructures.structure.module.standard;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.data.DataExchange;
-import killercreepr.crux.data.util.Pair;
-import killercreepr.crux.data.world.CruxPosition;
-import killercreepr.crux.loot.LootContext;
-import killercreepr.crux.loot.LootTable;
-import killercreepr.crux.util.CruxBlockFace;
-import killercreepr.crux.util.CruxMath;
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.data.DataExchange;
+import killercreepr.crux.core.data.util.Pair;
+import killercreepr.crux.api.math.CruxPosition;
+import killercreepr.crux.api.loot.LootContext;
+import killercreepr.crux.api.loot.LootTable;
+import killercreepr.crux.core.util.CruxBlockFace;
+import killercreepr.crux.core.util.CruxMath;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxstructures.location.LocationFinder;
 import killercreepr.cruxstructures.registries.StructureRegistries;
 import killercreepr.cruxstructures.structure.Structure;

@@ -1,6 +1,6 @@
 package killercreepr.cruxpotions.potions;
 
-import killercreepr.crux.data.CruxKeyed;
+import killercreepr.crux.api.data.CruxKeyed;
 import killercreepr.cruxpotions.potions.inflictor.PotionInflictor;
 import org.bukkit.Color;
 import org.bukkit.entity.Entity;

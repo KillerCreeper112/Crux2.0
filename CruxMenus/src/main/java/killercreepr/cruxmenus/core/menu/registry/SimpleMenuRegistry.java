@@ -1,9 +1,12 @@
 package killercreepr.cruxmenus.core.menu.registry;
 
-import killercreepr.crux.data.DataExchange;
-import killercreepr.crux.registry.*;
-import killercreepr.crux.tags.format.FormatSerializer;
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.api.registry.KeyedRegistry;
+import killercreepr.crux.api.registry.Registry;
+import killercreepr.crux.core.registry.KeyedPriorityRegistry;
+import killercreepr.crux.core.registry.SimpleRegistry;
+import killercreepr.crux.api.data.DataExchange;
+import killercreepr.crux.api.text.format.FormatSerializer;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxmenus.api.menu.action.MenuAction;
@@ -26,15 +29,15 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class SimpleMenuRegistry implements MenuRegistry {
-    private final KeyedRegistry<MenuHolder> MENU_HOLDERS = new SimpleKeyedRegistry<>(new HashMap<>()){
+    private final killercreepr.crux.api.registry.KeyedRegistry<MenuHolder> MENU_HOLDERS = new killercreepr.crux.core.registry.SimpleKeyedRegistry<>(new HashMap<>()){
         @Override
         public @NotNull MenuHolder register(@NotNull Key key, @NotNull MenuHolder value) {
             value.setRegistry(SimpleMenuRegistry.this);
             return super.register(key, value);
         }
     };
-    private final Registry<MenuAction> MENU_ACTIONS = new SimpleRegistry<>(new HashSet<>());
-    private final KeyedPriorityRegistry<ItemDataParser> ITEM_DATA_PARSERS = new KeyedPriorityRegistry<>();
+    private final killercreepr.crux.api.registry.Registry<MenuAction> MENU_ACTIONS = new SimpleRegistry<>(new HashSet<>());
+    private final killercreepr.crux.core.registry.KeyedPriorityRegistry<ItemDataParser> ITEM_DATA_PARSERS = new killercreepr.crux.core.registry.KeyedPriorityRegistry<>();
 
     protected final @NotNull FormatSerializer format;
     protected final @NotNull FileMenuHolder<?> menuModule;
@@ -45,7 +48,7 @@ public class SimpleMenuRegistry implements MenuRegistry {
         this.cfgLoader = new MenusCfgLoader(MENU_HOLDERS, menuModule);
     }
 
-    public SimpleMenuRegistry(@NotNull FormatSerializer format, @NotNull KeyedRegistry<MenuModuleBuilder> menuModuleBuilders) {
+    public SimpleMenuRegistry(@NotNull FormatSerializer format, @NotNull killercreepr.crux.api.registry.KeyedRegistry<MenuModuleBuilder> menuModuleBuilders) {
         this(format, new SimpleFileMenuHolder());
         menuModule.setFileMenuItem(new FileMenuItem(menuModule));
         menuModule.setFileMenuActions(new FileMenuActions(menuModule));

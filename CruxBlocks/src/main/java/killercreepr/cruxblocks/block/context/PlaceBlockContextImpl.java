@@ -1,6 +1,6 @@
 package killercreepr.cruxblocks.block.context;
 
-import killercreepr.crux.data.DataExchange;
+import killercreepr.crux.api.data.DataExchange;
 import killercreepr.cruxblocks.user.Miner;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;

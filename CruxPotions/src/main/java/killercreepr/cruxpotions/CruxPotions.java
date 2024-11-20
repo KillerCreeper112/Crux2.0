@@ -1,6 +1,6 @@
 package killercreepr.cruxpotions;
 
-import killercreepr.crux.util.CruxTag;
+import killercreepr.crux.core.util.CruxTag;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;

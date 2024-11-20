@@ -1,8 +1,8 @@
 package killercreepr.cruxstructures.structure.generation.impl;
 
-import killercreepr.crux.data.DataExchange;
-import killercreepr.crux.loot.LootContext;
-import killercreepr.crux.loot.LootTable;
+import killercreepr.crux.api.data.DataExchange;
+import killercreepr.crux.api.loot.LootContext;
+import killercreepr.crux.api.loot.LootTable;
 import killercreepr.cruxstructures.registries.StructureRegistries;
 import killercreepr.cruxstructures.structure.Structure;
 import killercreepr.cruxstructures.structure.generation.StructureGenerator;

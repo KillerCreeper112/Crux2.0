@@ -1,6 +1,6 @@
 package killercreepr.cruxblocks.config.loader;
 
-import killercreepr.crux.Crux;
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.config.handler.FileCruxBlockGroup;
 import killercreepr.cruxblocks.registries.CruxBlocksRegistries;

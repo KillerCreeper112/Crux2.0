@@ -1,9 +1,9 @@
 package killercreepr.cruxblocks.config.handler.component;
 
 import com.google.common.reflect.TypeToken;
-import killercreepr.crux.component.DataComponentType;
-import killercreepr.crux.component.TypedDataComponent;
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.api.component.DataComponentType;
+import killercreepr.crux.api.component.TypedDataComponent;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxblocks.block.standard.component.EntitySpawnerComponent;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileDataComponentType;
 import killercreepr.cruxconfig.config.common.FileContext;

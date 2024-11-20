@@ -1,11 +1,11 @@
 package killercreepr.cruxpotions;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.data.entity.EntityMemory;
-import killercreepr.crux.module.CruxModule;
-import killercreepr.crux.module.StandardModules;
-import killercreepr.crux.plugin.CruxPlugin;
-import killercreepr.crux.registries.CruxRegistries;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.entity.memory.EntityMemory;
+import killercreepr.crux.api.plugin.module.CruxModule;
+import killercreepr.crux.core.plugin.module.StandardModules;
+import killercreepr.crux.core.plugin.CruxPlugin;
+import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxitems.registries.CruxItemRegistries;
 import killercreepr.cruxpotions.command.CruxPotionCommands;
 import killercreepr.cruxpotions.config.Config;

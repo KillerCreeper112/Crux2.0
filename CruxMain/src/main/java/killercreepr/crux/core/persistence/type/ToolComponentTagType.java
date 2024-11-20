@@ -1,0 +1,37 @@
+package killercreepr.crux.core.persistence.type;
+
+import killercreepr.crux.api.item.component.ToolComponent;
+import killercreepr.crux.core.persistence.CruxPersistence;
+import killercreepr.crux.core.util.CruxTag;
+import org.bukkit.persistence.PersistentDataAdapterContext;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+
+public class ToolComponentTagType implements PersistentDataType<PersistentDataContainer, ToolComponent> {
+    @Override
+    public @NotNull Class<PersistentDataContainer> getPrimitiveType() {
+        return PersistentDataContainer.class;
+    }
+
+    @Override
+    public @NotNull Class<ToolComponent> getComplexType() {
+        return ToolComponent.class;
+    }
+
+    @Override
+    public @NotNull PersistentDataContainer toPrimitive(@NotNull ToolComponent complex, @NotNull PersistentDataAdapterContext context) {
+        return null;
+    }
+
+    @Override
+    public @NotNull ToolComponent fromPrimitive(@NotNull PersistentDataContainer c, @NotNull PersistentDataAdapterContext ctx) {
+        float defaultMiningSpeed = CruxTag.get(c, "default_mining_speed", PersistentDataType.FLOAT, 1f);
+        List<ToolComponent.Rule> rules = CruxTag.get(c, "rules", CruxPersistence.LIST.TOOL_COMPONENT_RULE, null);
+        return new ToolComponent.Simple(
+            defaultMiningSpeed, rules
+        );
+    }
+}

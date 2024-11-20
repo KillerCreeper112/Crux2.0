@@ -1,7 +1,7 @@
 package killercreepr.cruxpotions.registries;
 
-import killercreepr.crux.registry.KeyedRegistry;
-import killercreepr.crux.registry.SimpleKeyedRegistry;
+import killercreepr.crux.api.registry.KeyedRegistry;
+import killercreepr.crux.core.registry.SimpleKeyedRegistry;
 import killercreepr.cruxpotions.potions.CruxPotion;
 
 public class CruxPotionRegistries {

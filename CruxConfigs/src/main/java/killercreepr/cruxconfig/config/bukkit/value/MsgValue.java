@@ -1,12 +1,11 @@
 package killercreepr.cruxconfig.config.bukkit.value;
 
-import killercreepr.crux.context.TextParserContext;
-import killercreepr.crux.data.communication.Communicator;
-import killercreepr.crux.data.communication.MsgContainer;
-import killercreepr.crux.tags.container.MergedTagContainer;
+import killercreepr.crux.api.text.context.TextParserContext;
+import killercreepr.crux.api.communication.Communicator;
+import killercreepr.crux.core.communication.MsgContainer;
+import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -38,13 +37,6 @@ public class MsgValue extends CommonValue<MsgContainer> implements Communicator 
         MsgContainer msg = value();
         if(msg == null) return null;
         return msg.use(a, ctx);
-    }
-
-    @Override
-    public @Nullable MsgContainer use(@NotNull Audience a, @Nullable OfflinePlayer placeholders, @Nullable MergedTagContainer tags){
-        MsgContainer msg = value();
-        if(msg == null) return null;
-        return msg.use(a, placeholders, tags);
     }
 
     @Override

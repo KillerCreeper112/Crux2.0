@@ -1,9 +1,9 @@
 package killercreepr.cruxmenus.api.menu.registry;
 
-import killercreepr.crux.registry.KeyedPriorityRegistry;
-import killercreepr.crux.registry.KeyedRegistry;
-import killercreepr.crux.registry.Registry;
-import killercreepr.crux.tags.format.FormatSerializer;
+import killercreepr.crux.core.registry.KeyedPriorityRegistry;
+import killercreepr.crux.api.registry.KeyedRegistry;
+import killercreepr.crux.api.registry.Registry;
+import killercreepr.crux.api.text.format.FormatSerializer;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxmenus.api.menu.action.MenuAction;
 import killercreepr.cruxmenus.api.menu.config.handler.FileMenuHolder;

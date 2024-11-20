@@ -1,10 +1,10 @@
 package killercreepr.cruxblocks.block;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.component.DataComponentHandler;
-import killercreepr.crux.data.communication.CreateBlockSoundGroup;
-import killercreepr.crux.data.communication.CreateSound;
-import killercreepr.crux.registries.CruxRegistries;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.component.DataComponentHandler;
+import killercreepr.crux.api.block.sound.CreateBlockSoundGroup;
+import killercreepr.crux.api.communication.CreateSound;
+import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxblocks.CruxBlocksModule;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlockImpl;

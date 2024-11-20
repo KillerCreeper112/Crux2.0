@@ -1,7 +1,7 @@
 package killercreepr.cruxstructures.structure.active;
 
-import killercreepr.crux.data.tick.ManagedTicked;
-import killercreepr.crux.data.world.PositionPosed;
+import killercreepr.crux.api.data.tick.ManagedTicked;
+import killercreepr.crux.api.math.PositionPosed;
 import killercreepr.cruxstructures.structure.Structure;
 import killercreepr.cruxstructures.structure.stored.StoredStructure;
 import org.bukkit.Chunk;

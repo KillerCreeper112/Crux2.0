@@ -1,6 +1,6 @@
 package killercreepr.cruxitems.item.inventory.impl;
 
-import killercreepr.crux.util.CruxItem;
+import killercreepr.crux.core.util.CruxItem;
 import killercreepr.cruxitems.item.inventory.ItemClickContext;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.ClickType;

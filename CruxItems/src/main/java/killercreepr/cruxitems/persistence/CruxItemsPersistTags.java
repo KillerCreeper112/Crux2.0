@@ -1,7 +1,7 @@
 package killercreepr.cruxitems.persistence;
 
-import killercreepr.crux.persistence.CruxPersistence;
-import killercreepr.crux.persistence.PersistTag;
+import killercreepr.crux.core.persistence.CruxPersistence;
+import killercreepr.crux.core.persistence.PersistTag;
 import net.kyori.adventure.key.Key;
 
 public class CruxItemsPersistTags {

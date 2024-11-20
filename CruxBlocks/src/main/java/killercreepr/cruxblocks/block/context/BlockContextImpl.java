@@ -1,7 +1,7 @@
 package killercreepr.cruxblocks.block.context;
 
-import killercreepr.crux.data.DataExchange;
-import killercreepr.crux.data.Holder;
+import killercreepr.crux.api.data.DataExchange;
+import killercreepr.crux.api.data.Holder;
 import killercreepr.cruxblocks.user.Miner;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;

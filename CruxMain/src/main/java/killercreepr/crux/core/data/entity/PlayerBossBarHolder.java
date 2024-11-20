@@ -1,10 +1,10 @@
 package killercreepr.crux.core.data.entity;
 
-import killercreepr.crux.Crux;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.communication.boss.ActiveBossBar;
 import killercreepr.crux.api.communication.boss.BossBarHolder;
-import killercreepr.crux.data.entity.PlayerMemory;
-import killercreepr.crux.data.entity.PlayerTickedDataHolder;
+import killercreepr.crux.api.entity.memory.PlayerMemory;
+import killercreepr.crux.core.entity.memory.PlayerTickedDataHolder;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

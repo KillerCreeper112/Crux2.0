@@ -4,7 +4,7 @@ import com.destroystokyo.paper.entity.ai.GoalKey;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
-import killercreepr.crux.Crux;
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxentities.entity.mob.goal.CruxMobGoal;
 import killercreepr.cruxentities.modelengine.wrapper.IModelEntity;
 import org.bukkit.entity.Entity;

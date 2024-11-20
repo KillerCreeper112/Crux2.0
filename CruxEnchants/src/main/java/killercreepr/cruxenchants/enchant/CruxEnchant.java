@@ -1,10 +1,10 @@
 package killercreepr.cruxenchants.enchant;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.util.CruxItem;
-import killercreepr.crux.util.CruxKey;
-import killercreepr.crux.util.CruxString;
-import killercreepr.crux.util.CruxTag;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.util.CruxItem;
+import killercreepr.crux.core.util.CruxKey;
+import killercreepr.crux.core.util.CruxString;
+import killercreepr.crux.core.util.CruxTag;
 import killercreepr.cruxenchants.registries.CruxEnchantRegistries;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;

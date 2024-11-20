@@ -1,10 +1,10 @@
 package killercreepr.cruxenchants;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.module.CruxModule;
-import killercreepr.crux.module.StandardModules;
-import killercreepr.crux.plugin.CruxPlugin;
-import killercreepr.crux.registries.CruxRegistries;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.plugin.module.CruxModule;
+import killercreepr.crux.core.plugin.module.StandardModules;
+import killercreepr.crux.core.plugin.CruxPlugin;
+import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxenchants.command.CruxEnchantCommands;
 import killercreepr.cruxenchants.config.Config;
 import killercreepr.cruxenchants.tags.EnchantLoreTag;

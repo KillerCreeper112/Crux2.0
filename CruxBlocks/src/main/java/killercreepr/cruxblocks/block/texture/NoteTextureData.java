@@ -1,6 +1,6 @@
 package killercreepr.cruxblocks.block.texture;
 
-import killercreepr.crux.Crux;
+import killercreepr.crux.core.Crux;
 import org.bukkit.Instrument;
 import org.bukkit.Material;
 import org.bukkit.Note;

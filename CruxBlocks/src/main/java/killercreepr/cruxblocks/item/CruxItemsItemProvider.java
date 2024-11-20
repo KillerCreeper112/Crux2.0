@@ -1,6 +1,6 @@
 package killercreepr.cruxblocks.item;
 
-import killercreepr.crux.tags.container.MergedTagContainer;
+import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.cruxitems.item.plugin.PluginItem;
 import killercreepr.cruxitems.registries.CruxItemRegistries;
 import net.kyori.adventure.key.Key;

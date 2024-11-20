@@ -1,7 +1,7 @@
 package killercreepr.cruxpotions.listener;
 
-import killercreepr.crux.data.entity.EntityMemory;
-import killercreepr.crux.data.entity.PlayerMemory;
+import killercreepr.crux.api.entity.memory.EntityMemory;
+import killercreepr.crux.api.entity.memory.PlayerMemory;
 import killercreepr.cruxpotions.config.PlayerDataFile;
 import killercreepr.cruxpotions.data.PotionHolder;
 import killercreepr.cruxpotions.values.ValuesProvider;

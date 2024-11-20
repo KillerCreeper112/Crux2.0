@@ -1,9 +1,9 @@
 package killercreepr.cruxmenus.api.menu.holder;
 
-import killercreepr.crux.data.DataExchange;
-import killercreepr.crux.data.DataInfoHolder;
-import killercreepr.crux.data.Holder;
-import killercreepr.crux.item.dynamic.DynamicItem;
+import killercreepr.crux.api.data.DataExchange;
+import killercreepr.crux.api.data.holder.DataInfoHolder;
+import killercreepr.crux.api.data.Holder;
+import killercreepr.crux.api.item.dynamic.DynamicItem;
 import killercreepr.cruxmenus.api.menu.action.click.ClickActions;
 import killercreepr.cruxmenus.api.menu.contex.MenuContext;
 import killercreepr.cruxmenus.api.menu.item.MenuItem;

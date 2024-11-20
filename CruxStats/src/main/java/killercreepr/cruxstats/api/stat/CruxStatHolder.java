@@ -1,6 +1,6 @@
 package killercreepr.cruxstats.api.stat;
 
-import killercreepr.crux.data.Loadable;
+import killercreepr.crux.api.data.Loadable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

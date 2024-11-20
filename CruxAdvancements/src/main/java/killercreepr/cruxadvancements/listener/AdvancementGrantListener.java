@@ -1,6 +1,6 @@
 package killercreepr.cruxadvancements.listener;
 
-import killercreepr.crux.data.entity.EntityMemory;
+import killercreepr.crux.api.entity.memory.EntityMemory;
 import killercreepr.cruxadvancements.data.entity.AdvancementHolder;
 import killercreepr.cruxadvancements.event.CruxAdvancementGrantEvent;
 import org.bukkit.event.EventHandler;

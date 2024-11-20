@@ -1,10 +1,10 @@
 package killercreepr.cruxmenus.core.menu.module.standard;
 
-import killercreepr.crux.context.TextParserContext;
-import killercreepr.crux.data.DataExchange;
-import killercreepr.crux.data.Holder;
-import killercreepr.crux.tags.resolver.Tag;
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.api.text.context.TextParserContext;
+import killercreepr.crux.api.data.DataExchange;
+import killercreepr.crux.api.data.Holder;
+import killercreepr.crux.core.text.resolver.Tag;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxmenus.api.menu.CfgMenu;
 import killercreepr.cruxmenus.api.menu.Menu;
 import killercreepr.cruxmenus.api.menu.contex.MenuContext;

@@ -1,8 +1,8 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
-import killercreepr.crux.data.communication.CreateSound;
-import killercreepr.crux.data.communication.CreateTitle;
-import killercreepr.crux.data.communication.MsgContainer;
+import killercreepr.crux.api.communication.CreateSound;
+import killercreepr.crux.api.communication.CreateTitle;
+import killercreepr.crux.core.communication.MsgContainer;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileArray;

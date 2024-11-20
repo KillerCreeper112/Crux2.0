@@ -1,7 +1,7 @@
 package killercreepr.cruxblocks.block;
 
-import killercreepr.crux.block.CruxedBlock;
-import killercreepr.crux.data.world.CruxPosition;
+import killercreepr.crux.api.block.CruxedBlock;
+import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import net.kyori.adventure.key.Key;
 import org.bukkit.block.Block;

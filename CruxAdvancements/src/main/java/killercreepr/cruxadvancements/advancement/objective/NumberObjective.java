@@ -1,6 +1,6 @@
 package killercreepr.cruxadvancements.advancement.objective;
 
-import killercreepr.crux.loot.LootContext;
+import killercreepr.crux.api.loot.LootContext;
 import killercreepr.cruxadvancements.advancement.ObjectiveAdvancement;
 import killercreepr.cruxadvancements.advancement.criteria.NumberCriteria;
 import killercreepr.cruxadvancements.advancement.objective.progress.NumberObjectiveProgress;

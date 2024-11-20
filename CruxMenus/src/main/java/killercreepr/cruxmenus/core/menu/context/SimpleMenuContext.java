@@ -1,8 +1,8 @@
 package killercreepr.cruxmenus.core.menu.context;
 
-import killercreepr.crux.data.DataExchange;
-import killercreepr.crux.tags.container.MergedTagContainer;
-import killercreepr.crux.tags.container.SimpleMergedTagContainer;
+import killercreepr.crux.api.data.DataExchange;
+import killercreepr.crux.api.text.tags.container.MergedTagContainer;
+import killercreepr.crux.core.text.container.SimpleMergedTagContainer;
 import killercreepr.cruxmenus.api.menu.CfgMenu;
 import killercreepr.cruxmenus.api.menu.contex.MenuContext;
 import org.jetbrains.annotations.NotNull;

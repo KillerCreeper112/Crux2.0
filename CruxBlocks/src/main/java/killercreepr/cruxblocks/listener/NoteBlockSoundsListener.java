@@ -1,9 +1,9 @@
 package killercreepr.cruxblocks.listener;
 
-import killercreepr.crux.data.communication.CreateBlockSoundGroup;
-import killercreepr.crux.data.communication.CreateSound;
-import killercreepr.crux.util.CruxEntityUtil;
-import killercreepr.crux.util.CruxWorldUtil;
+import killercreepr.crux.api.block.sound.CreateBlockSoundGroup;
+import killercreepr.crux.api.communication.CreateSound;
+import killercreepr.crux.core.util.CruxEntityUtil;
+import killercreepr.crux.core.util.CruxWorldUtil;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.component.CruxBlockComponents;
 import killercreepr.cruxblocks.registry.CruxBlockRegistry;

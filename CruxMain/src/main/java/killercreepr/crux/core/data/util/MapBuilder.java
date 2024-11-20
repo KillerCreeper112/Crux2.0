@@ -1,0 +1,42 @@
+package killercreepr.crux.core.data.util;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
+
+public class MapBuilder<K, V> {
+    private final Map<K, V> map;
+    public MapBuilder(Map<K, V> map) {
+        this.map = map;
+    }
+
+    public MapBuilder() {
+        this(new HashMap<>());
+    }
+
+    public MapBuilder<K, V> putAll(Map<K, V> map) {
+        this.map.putAll(map);
+        return this;
+    }
+
+    public MapBuilder<K, V> put(K key, V value) {
+        map.put(key, value);
+        return this;
+    }
+
+    public MapBuilder<K, V> apply(@NotNull Consumer<MapBuilder<K, V>> consumer){
+        consumer.accept(this);
+        return this;
+    }
+
+    public Map<K, V> build() {
+        return map;
+    }
+
+    public Map<K, V> buildUnmodifiable(){
+        return Collections.unmodifiableMap(map);
+    }
+}

@@ -1,10 +1,10 @@
 package killercreepr.cruxmenus.api.menu;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.tags.TagParser;
-import killercreepr.crux.tags.container.MergedTagContainer;
-import killercreepr.crux.tags.container.SimpleMergedTagContainer;
-import killercreepr.crux.util.CruxItem;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.text.tags.TagParser;
+import killercreepr.crux.api.text.tags.container.MergedTagContainer;
+import killercreepr.crux.core.text.container.SimpleMergedTagContainer;
+import killercreepr.crux.core.util.CruxItem;
 import killercreepr.cruxmenus.api.event.MenuCloseEvent;
 import killercreepr.cruxmenus.api.event.MenuOpenEvent;
 import killercreepr.cruxmenus.api.event.MenuRefreshEvent;

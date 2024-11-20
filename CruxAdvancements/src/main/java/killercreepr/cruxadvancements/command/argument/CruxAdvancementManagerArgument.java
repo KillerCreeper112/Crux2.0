@@ -3,7 +3,7 @@ package killercreepr.cruxadvancements.command.argument;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import killercreepr.crux.command.argument.CruxKeyedArgument;
+import killercreepr.crux.core.command.argument.CruxKeyedArgument;
 import killercreepr.cruxadvancements.manager.CruxAdvancementManager;
 import killercreepr.cruxadvancements.registries.AdvancementRegistries;
 import net.kyori.adventure.key.Key;

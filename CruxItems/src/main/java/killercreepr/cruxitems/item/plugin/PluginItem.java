@@ -1,6 +1,6 @@
 package killercreepr.cruxitems.item.plugin;
 
-import killercreepr.crux.tags.container.MergedTagContainer;
+import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.cruxitems.item.CruxedItem;
 import killercreepr.cruxitems.item.ItemBuilder;
 import killercreepr.cruxitems.persistence.CruxItemsPersistTags;

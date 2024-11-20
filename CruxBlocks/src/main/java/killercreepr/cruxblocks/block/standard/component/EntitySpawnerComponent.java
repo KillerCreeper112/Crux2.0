@@ -1,8 +1,8 @@
 package killercreepr.cruxblocks.block.standard.component;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.util.CruxMath;
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.util.CruxMath;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.block.component.CruxBlockComponent;

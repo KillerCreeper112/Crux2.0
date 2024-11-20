@@ -1,7 +1,7 @@
 package killercreepr.cruxpotions.potions;
 
 import io.netty.util.internal.UnstableApi;
-import killercreepr.crux.util.CruxMath;
+import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxpotions.persistence.StoredPotion;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;

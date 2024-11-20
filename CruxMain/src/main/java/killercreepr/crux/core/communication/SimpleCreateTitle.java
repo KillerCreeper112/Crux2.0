@@ -1,9 +1,9 @@
 package killercreepr.crux.core.communication;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.context.TextParserContext;
-import killercreepr.crux.data.communication.CreateTitle;
-import killercreepr.crux.tags.provider.StringTagProvider;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.text.context.TextParserContext;
+import killercreepr.crux.api.communication.CreateTitle;
+import killercreepr.crux.api.text.provider.StringTagProvider;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
@@ -28,15 +28,6 @@ public class SimpleCreateTitle implements CreateTitle {
     }
 
     @Override
-    public @NotNull Title build(@Nullable OfflinePlayer placeholders, @Nullable StringTagProvider tags){
-        return Title.title(
-            deserialize(placeholders, title, tags),
-            deserialize(placeholders, subTitle, tags),
-            times
-        );
-    }
-
-    @Override
     public @NotNull Title build(@NotNull TextParserContext ctx) {
         return Title.title(
             deserialize(title, ctx),
@@ -50,17 +41,6 @@ public class SimpleCreateTitle implements CreateTitle {
         a.showTitle(build(ctx));
         return this;
     }
-
-    @Override
-    public CreateTitle use(@NotNull Audience a, @Nullable OfflinePlayer placeholders, @Nullable StringTagProvider tags) {
-        a.showTitle(build(placeholders, tags));
-        return this;
-    }
-    @Override
-    public @NotNull Title build(@Nullable StringTagProvider tags){
-        return build(null, tags);
-    }
-
     protected @NotNull Component deserialize(@Nullable OfflinePlayer viewer, @Nullable String input, @Nullable StringTagProvider tags){
         if(input == null) return Component.empty();
         return Crux.format().deserialize(input, StringTagProvider.mergeHook(tags, viewer));

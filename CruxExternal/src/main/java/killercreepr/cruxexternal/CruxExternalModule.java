@@ -1,9 +1,9 @@
 package killercreepr.cruxexternal;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.module.CruxModule;
-import killercreepr.crux.module.StandardModules;
-import killercreepr.crux.plugin.CruxPlugin;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.plugin.module.CruxModule;
+import killercreepr.crux.core.plugin.module.StandardModules;
+import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.cruxexternal.headdatabase.HeadDataBaseSkullProvider;
 import org.bukkit.plugin.PluginManager;
 import org.jetbrains.annotations.NotNull;

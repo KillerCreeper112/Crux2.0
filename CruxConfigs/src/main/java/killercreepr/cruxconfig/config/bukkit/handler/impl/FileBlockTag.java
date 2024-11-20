@@ -1,9 +1,11 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.data.tag.block.BlockTag;
-import killercreepr.crux.data.tag.block.SimpleBlockTypeTag;
-import killercreepr.crux.registries.CruxRegistries;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.block.tag.BlockTag;
+import killercreepr.crux.api.item.tag.ItemTag;
+import killercreepr.crux.api.item.tag.ItemTypeTag;
+import killercreepr.crux.core.block.tag.SimpleBlockTypeTag;
+import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileArray;
@@ -79,8 +81,8 @@ public class FileBlockTag extends SimpleFileHandler<BlockTag> {
         a.forEach(ele ->{
             String itemKey = ele.getAsString();
             if(itemKey.startsWith("#")){
-                killercreepr.crux.data.tag.item.ItemTag itemTag = CruxRegistries.ITEM_TAG.get(Crux.key(itemKey.substring(1)));
-                if(itemTag instanceof killercreepr.crux.data.tag.item.ItemTypeTag tag) values.addAll(tag.getTypes());
+                ItemTag itemTag = CruxRegistries.ITEM_TAG.get(Crux.key(itemKey.substring(1)));
+                if(itemTag instanceof ItemTypeTag tag) values.addAll(tag.getTypes());
                 else Crux.log(Level.WARNING, "Could not find tag, " + itemKey + "!");
                 return;
             }

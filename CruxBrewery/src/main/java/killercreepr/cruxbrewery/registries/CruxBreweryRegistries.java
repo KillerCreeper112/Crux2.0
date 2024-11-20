@@ -1,7 +1,7 @@
 package killercreepr.cruxbrewery.registries;
 
-import killercreepr.crux.registry.KeyedRegistry;
-import killercreepr.crux.registry.SimpleKeyedRegistry;
+import killercreepr.crux.api.registry.KeyedRegistry;
+import killercreepr.crux.core.registry.SimpleKeyedRegistry;
 import killercreepr.cruxbrewery.recipe.BrewRecipe;
 import org.bukkit.inventory.BrewerInventory;
 import org.jetbrains.annotations.NotNull;

@@ -1,6 +1,6 @@
 package killercreepr.cruxpotions.values;
 
-import killercreepr.crux.data.Holder;
+import killercreepr.crux.api.data.Holder;
 import net.kyori.adventure.key.Key;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;

@@ -1,6 +1,6 @@
 package killercreepr.crux.core.communication;
 
-import killercreepr.crux.data.communication.CreateSound;
+import killercreepr.crux.api.communication.CreateSound;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;

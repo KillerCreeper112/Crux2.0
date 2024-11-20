@@ -2,7 +2,7 @@ package killercreepr.cruxconfig.config.common.json.automatic;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import killercreepr.crux.util.CruxReflect;
+import killercreepr.crux.core.util.CruxReflect;
 import killercreepr.cruxconfig.config.common.json.JsonSerializable;
 import killercreepr.cruxconfig.config.common.json.context.JsonContext;
 import killercreepr.cruxconfig.config.common.json.registry.JsonRegistry;

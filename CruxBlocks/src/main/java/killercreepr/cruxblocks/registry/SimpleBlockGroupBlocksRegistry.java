@@ -1,6 +1,6 @@
 package killercreepr.cruxblocks.registry;
 
-import killercreepr.crux.registry.SimpleKeyedRegistry;
+import killercreepr.crux.core.registry.SimpleKeyedRegistry;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.component.CruxBlockGroupComponent;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;

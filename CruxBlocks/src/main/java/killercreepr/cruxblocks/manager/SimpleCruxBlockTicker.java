@@ -1,8 +1,8 @@
 package killercreepr.cruxblocks.manager;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.data.tick.ManagedTicked;
-import killercreepr.crux.game.SimpleStatutable;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.data.tick.ManagedTicked;
+import killercreepr.crux.core.game.SimpleStatutable;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.block.active.ActiveCruxTickedBlock;

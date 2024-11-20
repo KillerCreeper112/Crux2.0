@@ -1,6 +1,6 @@
 package killercreepr.cruxblocks.config.handler;
 
-import killercreepr.crux.util.CruxObjects;
+import killercreepr.crux.core.util.CruxObjects;
 import killercreepr.cruxblocks.block.texture.NoteTextureData;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;

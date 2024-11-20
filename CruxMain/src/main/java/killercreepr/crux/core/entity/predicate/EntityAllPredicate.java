@@ -1,0 +1,22 @@
+package killercreepr.crux.core.entity.predicate;
+
+import killercreepr.crux.api.entity.predicate.EntityPredicate;
+import org.bukkit.entity.Entity;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
+
+public class EntityAllPredicate implements EntityPredicate {
+    protected final @NotNull Collection<EntityPredicate> children;
+    public EntityAllPredicate(@NotNull Collection<EntityPredicate> children) {
+        this.children = children;
+    }
+
+    @Override
+    public boolean test(@NotNull Entity block) {
+        for(EntityPredicate predicate : children){
+            if(!predicate.test(block)) return false;
+        }
+        return true;
+    }
+}

@@ -1,6 +1,6 @@
 package killercreepr.cruxmenus.core.menu.item.requirement;
 
-import killercreepr.crux.context.TextParserContext;
+import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.cruxmenus.api.menu.item.requirement.ViewCondition;
 import org.jetbrains.annotations.NotNull;
 

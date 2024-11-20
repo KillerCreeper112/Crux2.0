@@ -1,12 +1,12 @@
 package killercreepr.cruxstats.core.tags.object;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.tags.TagParser;
-import killercreepr.crux.tags.container.TagContainer;
-import killercreepr.crux.tags.context.FormatPrefix;
-import killercreepr.crux.tags.hook.ObjectTag;
-import killercreepr.crux.tags.resolver.StringResolver;
-import killercreepr.crux.tags.resolver.Tag;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.text.tags.TagParser;
+import killercreepr.crux.api.text.tags.container.TagContainer;
+import killercreepr.crux.api.text.format.FormatPrefix;
+import killercreepr.crux.api.text.hook.ObjectTag;
+import killercreepr.crux.api.text.resolver.StringResolver;
+import killercreepr.crux.core.text.resolver.Tag;
 import killercreepr.cruxstats.api.bukkit.BukkitStatHolder;
 import killercreepr.cruxstats.api.stat.CruxStat;
 import killercreepr.cruxstats.api.stat.CruxStatHolder;

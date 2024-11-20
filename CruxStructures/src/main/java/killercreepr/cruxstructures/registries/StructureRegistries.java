@@ -1,7 +1,7 @@
 package killercreepr.cruxstructures.registries;
 
-import killercreepr.crux.registry.KeyedRegistry;
-import killercreepr.crux.registry.SimpleKeyedRegistry;
+import killercreepr.crux.api.registry.KeyedRegistry;
+import killercreepr.crux.core.registry.SimpleKeyedRegistry;
 import killercreepr.cruxstructures.structure.Structure;
 
 public class StructureRegistries {

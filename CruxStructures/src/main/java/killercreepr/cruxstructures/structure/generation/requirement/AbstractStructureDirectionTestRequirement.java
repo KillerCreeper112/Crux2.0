@@ -1,6 +1,6 @@
 package killercreepr.cruxstructures.structure.generation.requirement;
 
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxstructures.structure.Structure;
 import org.bukkit.Chunk;
 import org.bukkit.Location;

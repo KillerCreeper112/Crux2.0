@@ -1,6 +1,6 @@
 package killercreepr.cruxstructures.config.module;
 
-import killercreepr.crux.block.CruxBlockWrapper;
+import killercreepr.crux.api.block.CruxBlockWrapper;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;

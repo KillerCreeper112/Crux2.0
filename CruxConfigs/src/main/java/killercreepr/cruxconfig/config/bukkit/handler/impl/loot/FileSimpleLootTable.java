@@ -1,15 +1,15 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.data.Holder;
-import killercreepr.crux.loot.LootPool;
-import killercreepr.crux.loot.LootTable;
-import killercreepr.crux.loot.impl.SimpleLootPool;
-import killercreepr.crux.loot.impl.SimpleLootPoolObject;
-import killercreepr.crux.loot.impl.SimpleLootTable;
-import killercreepr.crux.registry.KeyedRegistry;
-import killercreepr.crux.util.CruxObjects;
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.data.Holder;
+import killercreepr.crux.api.loot.LootPool;
+import killercreepr.crux.api.loot.LootTable;
+import killercreepr.crux.core.loot.SimpleLootPool;
+import killercreepr.crux.core.loot.SimpleLootPoolObject;
+import killercreepr.crux.core.loot.SimpleLootTable;
+import killercreepr.crux.api.registry.KeyedRegistry;
+import killercreepr.crux.core.util.CruxObjects;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileArray;

@@ -1,7 +1,7 @@
 package killercreepr.cruxpotions.listener;
 
 import com.destroystokyo.paper.event.entity.WitchConsumePotionEvent;
-import killercreepr.crux.data.entity.EntityMemory;
+import killercreepr.crux.api.entity.memory.EntityMemory;
 import killercreepr.cruxpotions.CruxPotions;
 import killercreepr.cruxpotions.data.PotionHolder;
 import killercreepr.cruxpotions.persistence.PotionPersistTags;

@@ -1,10 +1,10 @@
 package killercreepr.cruxblocks.components.persistence;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.context.TextParserContext;
-import killercreepr.crux.item.dynamic.components.persistence.DynamicPersistentTag;
-import killercreepr.crux.item.dynamic.components.persistence.SimpleDynamicPersistentTag;
-import killercreepr.crux.persistence.CruxPersistence;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.text.context.TextParserContext;
+import killercreepr.crux.api.item.dynamic.component.persistence.DynamicPersistentTag;
+import killercreepr.crux.core.item.dynamic.component.persistence.SimpleDynamicPersistentTag;
+import killercreepr.crux.core.persistence.CruxPersistence;
 import net.kyori.adventure.key.Key;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.NotNull;

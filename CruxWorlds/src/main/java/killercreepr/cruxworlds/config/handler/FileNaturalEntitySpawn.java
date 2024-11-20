@@ -1,6 +1,6 @@
 package killercreepr.cruxworlds.config.handler;
 
-import killercreepr.crux.entity.CruxEntitySnapshot;
+import killercreepr.crux.api.entity.CruxEntitySnapshot;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;

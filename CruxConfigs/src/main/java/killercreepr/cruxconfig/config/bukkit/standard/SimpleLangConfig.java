@@ -1,10 +1,10 @@
 package killercreepr.cruxconfig.config.bukkit.standard;
 
-import killercreepr.crux.data.Holder;
-import killercreepr.crux.data.communication.CreateLang;
-import killercreepr.crux.data.communication.LangProvider;
+import killercreepr.crux.api.data.Holder;
+import killercreepr.crux.api.communication.lang.CreateLang;
+import killercreepr.crux.api.communication.lang.LangProvider;
 import killercreepr.crux.core.communication.processor.LangProcessor;
-import killercreepr.crux.plugin.CruxPlugin;
+import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
 import org.bukkit.plugin.Plugin;

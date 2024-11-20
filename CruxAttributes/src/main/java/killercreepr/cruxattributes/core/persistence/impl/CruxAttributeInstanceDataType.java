@@ -1,8 +1,7 @@
 package killercreepr.cruxattributes.core.persistence.impl;
 
-import killercreepr.crux.util.CruxKey;
+import killercreepr.crux.core.util.CruxKey;
 import killercreepr.cruxattributes.api.attribute.CruxAttributeModifier;
-import killercreepr.cruxattributes.core.attribute.SimpleCruxAttributeModifier;
 import killercreepr.cruxattributes.core.attribute.container.CruxAttributeModData;
 import killercreepr.cruxattributes.core.persistence.CruxAttributesPersistence;
 import org.bukkit.NamespacedKey;

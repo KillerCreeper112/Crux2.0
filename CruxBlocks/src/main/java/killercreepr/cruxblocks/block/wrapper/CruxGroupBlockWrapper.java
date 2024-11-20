@@ -1,7 +1,7 @@
 package killercreepr.cruxblocks.block.wrapper;
 
-import killercreepr.crux.block.CruxBlockWrapper;
-import killercreepr.crux.data.world.CruxPosition;
+import killercreepr.crux.api.block.CruxBlockWrapper;
+import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.cruxblocks.block.context.BlockContext;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
 import org.bukkit.World;

@@ -6,7 +6,7 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxstructures.structure.Structure;
 import killercreepr.cruxstructures.structure.module.StructureModule;
 import org.bukkit.Location;

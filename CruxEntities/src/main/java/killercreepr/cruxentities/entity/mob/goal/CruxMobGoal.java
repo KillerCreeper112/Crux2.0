@@ -3,7 +3,7 @@ package killercreepr.cruxentities.entity.mob.goal;
 import com.destroystokyo.paper.entity.ai.Goal;
 import com.destroystokyo.paper.entity.ai.GoalKey;
 import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
-import killercreepr.crux.Crux;
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxentities.entity.mob.goal.sound.CruxGoalSounds;
 import killercreepr.cruxentities.entity.mob.goal.sound.SoundedMob;
 import org.bukkit.Bukkit;

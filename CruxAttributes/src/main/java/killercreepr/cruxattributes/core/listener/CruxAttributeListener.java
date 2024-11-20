@@ -1,14 +1,12 @@
 package killercreepr.cruxattributes.core.listener;
 
 import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
-import killercreepr.crux.Crux;
-import killercreepr.crux.util.CruxItem;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.util.CruxItem;
 import killercreepr.cruxattributes.api.attribute.CruxAttribute;
 import killercreepr.cruxattributes.api.attribute.CruxAttributeInstance;
 import killercreepr.cruxattributes.api.attribute.CruxAttributeModifier;
 import killercreepr.cruxattributes.api.attribute.CruxSlot;
-import killercreepr.cruxattributes.core.attribute.SimpleCruxAttributeInstance;
-import killercreepr.cruxattributes.core.attribute.SimpleCruxAttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

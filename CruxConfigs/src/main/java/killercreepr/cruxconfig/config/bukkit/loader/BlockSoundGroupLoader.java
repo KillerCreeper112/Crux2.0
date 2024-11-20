@@ -1,8 +1,8 @@
 package killercreepr.cruxconfig.config.bukkit.loader;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.data.communication.CreateBlockSoundGroup;
-import killercreepr.crux.registries.CruxRegistries;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.block.sound.CreateBlockSoundGroup;
+import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.file.DataFile;
 import net.kyori.adventure.key.Key;

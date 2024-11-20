@@ -1,7 +1,7 @@
 package killercreepr.cruxadvancements.config.loader;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.plugin.CruxPlugin;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.cruxadvancements.crazy.CfgCrazyAdvancementManager;
 import killercreepr.cruxadvancements.registries.AdvancementRegistries;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;

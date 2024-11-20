@@ -1,7 +1,7 @@
 package killercreepr.cruxblocks.config.handler;
 
 import com.google.common.reflect.TypeToken;
-import killercreepr.crux.component.DataComponentHandler;
+import killercreepr.crux.api.component.DataComponentHandler;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.block.group.SimpleBlockGroup;

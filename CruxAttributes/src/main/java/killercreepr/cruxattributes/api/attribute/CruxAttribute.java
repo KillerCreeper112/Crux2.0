@@ -1,7 +1,10 @@
 package killercreepr.cruxattributes.api.attribute;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.util.*;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.util.CruxItem;
+import killercreepr.crux.core.util.CruxKey;
+import killercreepr.crux.core.util.CruxMath;
+import killercreepr.crux.core.util.CruxString;
 import killercreepr.cruxattributes.core.attribute.GenericAttribute;
 import killercreepr.cruxattributes.core.registries.CruxAttributeRegistries;
 import net.kyori.adventure.key.Key;
@@ -70,11 +73,11 @@ public interface CruxAttribute extends Keyed {
         return value;
     }
 
-    default double round(double value){ return CruxMath.round(value, getRoundMultiple()); }
+    default double round(double value){ return killercreepr.crux.core.util.CruxMath.round(value, getRoundMultiple()); }
     default double round(double value, @NotNull RoundingMode roundingMode){ return CruxMath.round(value, getRoundMultiple(), roundingMode); }
 
     static ItemStack updateItem(@Nullable ItemStack i){
-        if(CruxItem.isEmpty(i)) return i;
+        if(killercreepr.crux.core.util.CruxItem.isEmpty(i)) return i;
         ItemMeta meta = i.getItemMeta();
         if(meta != null) i.setItemMeta(updateMeta(meta));
         return i;
@@ -116,13 +119,13 @@ public interface CruxAttribute extends Keyed {
 
     static @NotNull Collection<CruxAttributeInstance>
     getInstances(@Nullable ItemStack i){
-        if(CruxItem.isEmpty(i)) return new ArrayList<>();
+        if(killercreepr.crux.core.util.CruxItem.isEmpty(i)) return new ArrayList<>();
         return getInstances(i.getItemMeta(), (CruxSlot[]) null);
     }
 
     static @NotNull Collection<CruxAttributeInstance>
     getInstances(@Nullable ItemStack i, @Nullable CruxSlot @Nullable... slots){
-        if(CruxItem.isEmpty(i)) return new ArrayList<>();
+        if(killercreepr.crux.core.util.CruxItem.isEmpty(i)) return new ArrayList<>();
         return getInstances(i.getItemMeta(), slots);
     }
 
@@ -143,7 +146,7 @@ public interface CruxAttribute extends Keyed {
 
     static
     double get(@Nullable ItemStack i, @NotNull CruxAttribute attribute, double defaultValue, @Nullable CruxSlot @Nullable... slots){
-        if(CruxItem.isEmpty(i)) return defaultValue;
+        if(killercreepr.crux.core.util.CruxItem.isEmpty(i)) return defaultValue;
         return get(i.getItemMeta(), attribute, defaultValue, slots);
     }
 
@@ -195,14 +198,14 @@ public interface CruxAttribute extends Keyed {
     static <P extends PersistentDataHolder> P clearModifiers(@Nullable P i, @NotNull CruxAttribute attribute){
         PersistentDataContainer container = getContainer(i);
         if(container == null) return i;
-        container.remove(CruxKey.key(attribute.key()));
+        container.remove(killercreepr.crux.core.util.CruxKey.key(attribute.key()));
         if(container.isEmpty()) i.getPersistentDataContainer().remove(k("attributes"));
         else i.getPersistentDataContainer().set(k("attributes"), PersistentDataType.TAG_CONTAINER, container);
         return i;
     }
 
     static ItemStack removeModifiers(@Nullable ItemStack i, @NotNull Key @NotNull... path){
-        if(CruxItem.isEmpty(i)) return i;
+        if(killercreepr.crux.core.util.CruxItem.isEmpty(i)) return i;
         ItemMeta meta = i.getItemMeta();
         removeModifiers(meta, path);
         i.setItemMeta(meta);
@@ -227,7 +230,7 @@ public interface CruxAttribute extends Keyed {
 
     static ItemStack removeModifier(@Nullable ItemStack i, @NotNull CruxAttribute attribute,
                                                                     @NotNull Key @NotNull... path){
-        if(CruxItem.isEmpty(i)) return i;
+        if(killercreepr.crux.core.util.CruxItem.isEmpty(i)) return i;
         ItemMeta meta = i.getItemMeta();
         removeModifier(meta, attribute, path);
         i.setItemMeta(meta);
@@ -253,7 +256,7 @@ public interface CruxAttribute extends Keyed {
         for(Key pathKey : path){
             index++;
             if(index == path.length){
-                current.remove(CruxKey.key(pathKey));
+                current.remove(killercreepr.crux.core.util.CruxKey.key(pathKey));
                 break;
             }
             PersistentDataContainer found = null;
@@ -280,17 +283,17 @@ public interface CruxAttribute extends Keyed {
                     last = c;
                     continue;
                 }
-                if(last.isEmpty()) c.remove(CruxKey.key(path[index+1]));
-                else c.set(CruxKey.key(path[index+1]), PersistentDataType.TAG_CONTAINER, last);
+                if(last.isEmpty()) c.remove(killercreepr.crux.core.util.CruxKey.key(path[index+1]));
+                else c.set(killercreepr.crux.core.util.CruxKey.key(path[index+1]), PersistentDataType.TAG_CONTAINER, last);
                 last = c;
             }
             //Finally, set the whole path into the attribute container.
-            if(list.getFirst().isEmpty()) attributeContainer.remove(CruxKey.key(path[0]));
-            else attributeContainer.set(CruxKey.key(path[0]), PersistentDataType.TAG_CONTAINER, list.getFirst());
+            if(list.getFirst().isEmpty()) attributeContainer.remove(killercreepr.crux.core.util.CruxKey.key(path[0]));
+            else attributeContainer.set(killercreepr.crux.core.util.CruxKey.key(path[0]), PersistentDataType.TAG_CONTAINER, list.getFirst());
         }
 
-        if(attributeContainer.isEmpty()) container.remove(CruxKey.key(attribute.key()));
-        else container.set(CruxKey.key(attribute.key()), PersistentDataType.TAG_CONTAINER, attributeContainer);
+        if(attributeContainer.isEmpty()) container.remove(killercreepr.crux.core.util.CruxKey.key(attribute.key()));
+        else container.set(killercreepr.crux.core.util.CruxKey.key(attribute.key()), PersistentDataType.TAG_CONTAINER, attributeContainer);
 
         if(container.isEmpty()) i.getPersistentDataContainer().remove(k("attributes"));
         else i.getPersistentDataContainer().set(k("attributes"), PersistentDataType.TAG_CONTAINER, container);
@@ -299,7 +302,7 @@ public interface CruxAttribute extends Keyed {
 
     static ItemStack addModifier(@Nullable ItemStack i, @NotNull CruxAttribute attribute,
                                  @NotNull CruxAttributeModifier modifier, @NotNull Key... path){
-        if(CruxItem.isEmpty(i)) return i;
+        if(killercreepr.crux.core.util.CruxItem.isEmpty(i)) return i;
         ItemMeta meta = i.getItemMeta();
         addModifier(meta, attribute, modifier, path);
         i.setItemMeta(meta);
@@ -338,7 +341,7 @@ public interface CruxAttribute extends Keyed {
 
         //no path provided
         if(path == null || path.length < 1){
-            attributeContainer.set(CruxKey.key(modifier.key()), PersistentDataType.TAG_CONTAINER, modProvider);
+            attributeContainer.set(killercreepr.crux.core.util.CruxKey.key(modifier.key()), PersistentDataType.TAG_CONTAINER, modProvider);
         }else{
             List<PersistentDataContainer> list = new ArrayList<>();
             int index = 0;
@@ -356,7 +359,7 @@ public interface CruxAttribute extends Keyed {
                     }
                 }
                 if(found == null) found = i.getPersistentDataContainer().getAdapterContext().newPersistentDataContainer();
-                if(index == path.length) found.set(CruxKey.key(modifier.key()), PersistentDataType.TAG_CONTAINER, modProvider);
+                if(index == path.length) found.set(killercreepr.crux.core.util.CruxKey.key(modifier.key()), PersistentDataType.TAG_CONTAINER, modProvider);
                 list.add(found);
                 current = found;
             }
@@ -369,14 +372,14 @@ public interface CruxAttribute extends Keyed {
                     last = c;
                     continue;
                 }
-                c.set(CruxKey.key(path[index+1]), PersistentDataType.TAG_CONTAINER, last);
+                c.set(killercreepr.crux.core.util.CruxKey.key(path[index+1]), PersistentDataType.TAG_CONTAINER, last);
                 last = c;
             }
             //Finally, set the whole path into the attribute container.
-            attributeContainer.set(CruxKey.key(path[0]), PersistentDataType.TAG_CONTAINER, list.getFirst());
+            attributeContainer.set(killercreepr.crux.core.util.CruxKey.key(path[0]), PersistentDataType.TAG_CONTAINER, list.getFirst());
         }
 
-        container.set(CruxKey.key(attribute.key()), PersistentDataType.TAG_CONTAINER, attributeContainer);
+        container.set(killercreepr.crux.core.util.CruxKey.key(attribute.key()), PersistentDataType.TAG_CONTAINER, attributeContainer);
         i.getPersistentDataContainer().set(k("attributes"), PersistentDataType.TAG_CONTAINER, container);
         return i;
     }
@@ -491,14 +494,14 @@ public interface CruxAttribute extends Keyed {
 
     static <P extends PersistentDataHolder>
     @Nullable PersistentDataContainer getContainer(@Nullable P i){
-        return CruxTag.get(i, "attributes", PersistentDataType.TAG_CONTAINER, null);
+        return killercreepr.crux.core.util.CruxTag.get(i, "attributes", PersistentDataType.TAG_CONTAINER, null);
     }
 
     static <P extends PersistentDataHolder>
     @Nullable PersistentDataContainer  getAttributeContainer(@Nullable P i, @NotNull CruxAttribute attribute){
         PersistentDataContainer container = getContainer(i);
         if(container == null) return null;
-        try{ return container.get(CruxKey.key(attribute.key()), PersistentDataType.TAG_CONTAINER); }
+        try{ return container.get(killercreepr.crux.core.util.CruxKey.key(attribute.key()), PersistentDataType.TAG_CONTAINER); }
         catch (Exception ex){ return null; }
     }
 

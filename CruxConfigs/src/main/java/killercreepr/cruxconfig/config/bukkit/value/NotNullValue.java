@@ -1,7 +1,7 @@
 package killercreepr.cruxconfig.config.bukkit.value;
 
 import com.google.common.base.Preconditions;
-import killercreepr.crux.data.Holder;
+import killercreepr.crux.api.data.Holder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

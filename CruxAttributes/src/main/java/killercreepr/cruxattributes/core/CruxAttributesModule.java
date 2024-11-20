@@ -1,8 +1,8 @@
 package killercreepr.cruxattributes.core;
 
-import killercreepr.crux.module.CruxModule;
-import killercreepr.crux.module.StandardModules;
-import killercreepr.crux.plugin.CruxPlugin;
+import killercreepr.crux.api.plugin.module.CruxModule;
+import killercreepr.crux.core.plugin.module.StandardModules;
+import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.cruxattributes.core.command.CruxAttributeCommands;
 import killercreepr.cruxattributes.core.listener.CruxAttributeListener;
 import killercreepr.cruxattributes.core.persistence.CruxAttributesPersistence;

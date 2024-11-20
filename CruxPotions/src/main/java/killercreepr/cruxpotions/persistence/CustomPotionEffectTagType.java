@@ -1,6 +1,6 @@
 package killercreepr.cruxpotions.persistence;
 
-import killercreepr.crux.Crux;
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxpotions.potions.CruxPotion;
 import killercreepr.cruxpotions.registries.CruxPotionRegistries;
 import org.bukkit.persistence.PersistentDataAdapterContext;

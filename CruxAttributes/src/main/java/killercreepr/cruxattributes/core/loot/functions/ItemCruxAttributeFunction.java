@@ -1,9 +1,9 @@
 package killercreepr.cruxattributes.core.loot.functions;
 
-import killercreepr.crux.loot.LootContext;
-import killercreepr.crux.loot.conditions.LootCondition;
-import killercreepr.crux.loot.impl.functions.SimpleLootFunction;
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.api.loot.LootContext;
+import killercreepr.crux.api.loot.conditions.LootCondition;
+import killercreepr.crux.core.loot.functions.SimpleLootFunction;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxattributes.api.attribute.CruxAttribute;
 import killercreepr.cruxattributes.api.attribute.CruxAttributeModifier;
 import killercreepr.cruxattributes.api.attribute.CruxSlot;

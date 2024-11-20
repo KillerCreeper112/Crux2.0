@@ -3,7 +3,7 @@ package killercreepr.cruxstructures.structure.impl;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.block.BlockState;
-import killercreepr.crux.data.BlockPos;
+import killercreepr.crux.core.math.BlockPos;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 

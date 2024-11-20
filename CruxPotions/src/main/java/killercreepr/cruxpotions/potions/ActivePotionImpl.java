@@ -1,6 +1,6 @@
 package killercreepr.cruxpotions.potions;
 
-import killercreepr.crux.Crux;
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxpotions.registries.CruxPotionRegistries;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;

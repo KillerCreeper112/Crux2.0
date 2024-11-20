@@ -1,6 +1,6 @@
 package killercreepr.cruxpotions.potions.inflictor;
 
-import killercreepr.crux.data.Holder;
+import killercreepr.crux.api.data.Holder;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Block;

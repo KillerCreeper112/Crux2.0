@@ -1,8 +1,8 @@
 package killercreepr.cruxmenus.api.menu.module;
 
-import killercreepr.crux.data.StringIdentifiable;
-import killercreepr.crux.tags.TagParser;
-import killercreepr.crux.tags.container.MergedTagContainer;
+import killercreepr.crux.api.data.StringIdentifiable;
+import killercreepr.crux.api.text.tags.TagParser;
+import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.cruxmenus.api.menu.Menu;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;

@@ -1,6 +1,6 @@
 package killercreepr.cruxworlds.world.manager;
 
-import killercreepr.crux.registry.MappedRegistry;
+import killercreepr.crux.api.registry.MappedRegistry;
 import killercreepr.cruxworlds.world.CruxWorld;
 import killercreepr.cruxworlds.world.creator.CruxWorldCreator;
 import killercreepr.cruxworlds.world.creator.WorldModuleCreatorRegistry;

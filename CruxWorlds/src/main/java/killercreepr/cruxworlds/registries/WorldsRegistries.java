@@ -1,7 +1,7 @@
 package killercreepr.cruxworlds.registries;
 
-import killercreepr.crux.registry.KeyedRegistry;
-import killercreepr.crux.registry.SimpleKeyedRegistry;
+import killercreepr.crux.api.registry.KeyedRegistry;
+import killercreepr.crux.core.registry.SimpleKeyedRegistry;
 import killercreepr.cruxworlds.world.entity.KeyedNaturalEntitySpawnGroup;
 
 public class WorldsRegistries {

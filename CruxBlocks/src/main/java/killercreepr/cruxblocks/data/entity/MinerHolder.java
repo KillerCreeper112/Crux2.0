@@ -1,10 +1,10 @@
 package killercreepr.cruxblocks.data.entity;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.component.CruxComponents;
-import killercreepr.crux.data.entity.PlayerMemory;
-import killercreepr.crux.data.entity.PlayerTickedDataHolder;
-import killercreepr.crux.util.CruxMath;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.component.CruxComponents;
+import killercreepr.crux.api.entity.memory.PlayerMemory;
+import killercreepr.crux.core.entity.memory.PlayerTickedDataHolder;
+import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxblocks.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.manager.CruxBlockManager;
 import killercreepr.cruxblocks.user.Miner;

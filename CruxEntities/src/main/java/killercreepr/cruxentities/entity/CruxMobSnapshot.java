@@ -1,6 +1,6 @@
 package killercreepr.cruxentities.entity;
 
-import killercreepr.crux.entity.CruxEntitySnapshot;
+import killercreepr.crux.api.entity.CruxEntitySnapshot;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;

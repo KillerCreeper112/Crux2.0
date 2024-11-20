@@ -1,7 +1,7 @@
 package killercreepr.cruxconfig.config.bukkit.standard;
 
-import killercreepr.crux.registries.CruxRegistries;
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.core.registries.CruxRegistries;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.FileSimpleLootTable;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;

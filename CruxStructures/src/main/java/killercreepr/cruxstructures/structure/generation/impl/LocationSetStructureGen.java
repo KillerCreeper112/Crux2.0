@@ -1,10 +1,10 @@
 package killercreepr.cruxstructures.structure.generation.impl;
 
-import killercreepr.crux.context.InputContext;
-import killercreepr.crux.data.Pos2D;
-import killercreepr.crux.tags.container.TagContainer;
-import killercreepr.crux.util.CruxMath;
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.api.text.context.InputContext;
+import killercreepr.crux.api.math.Pos2D;
+import killercreepr.crux.api.text.tags.container.TagContainer;
+import killercreepr.crux.core.util.CruxMath;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxstructures.structure.Structure;
 import killercreepr.cruxstructures.structure.generation.StructureGenerator;
 import killercreepr.cruxstructures.structure.result.GenerateResult;

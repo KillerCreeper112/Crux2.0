@@ -8,7 +8,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
-import killercreepr.crux.command.argument.CruxCmdArguments;
+import killercreepr.crux.core.command.argument.CruxCmdArguments;
 import killercreepr.cruxadvancements.advancement.CruxAdvancement;
 import killercreepr.cruxadvancements.manager.CruxAdvancementManager;
 import net.kyori.adventure.key.Key;

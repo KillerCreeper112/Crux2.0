@@ -1,8 +1,8 @@
 package killercreepr.cruxconfig.config.bukkit.loader;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.data.tag.block.BlockTag;
-import killercreepr.crux.registries.CruxRegistries;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.block.tag.BlockTag;
+import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileObject;

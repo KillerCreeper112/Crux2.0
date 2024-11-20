@@ -1,7 +1,7 @@
 package killercreepr.cruxmenus.core.menu.module.standard;
 
-import killercreepr.crux.data.Holder;
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.api.data.Holder;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxmenus.api.menu.CfgMenu;
 import killercreepr.cruxmenus.api.menu.Menu;
 import killercreepr.cruxmenus.api.menu.holder.MenuItems;

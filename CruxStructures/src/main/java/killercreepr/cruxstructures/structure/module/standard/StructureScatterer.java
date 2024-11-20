@@ -1,9 +1,9 @@
 package killercreepr.cruxstructures.structure.module.standard;
 
-import killercreepr.crux.context.InputContext;
-import killercreepr.crux.util.CruxMath;
-import killercreepr.crux.util.CruxedBoundingBox;
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.api.text.context.InputContext;
+import killercreepr.crux.core.util.CruxMath;
+import killercreepr.crux.core.util.CruxedBoundingBox;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxstructures.event.StructurePlaceEvent;
 import killercreepr.cruxstructures.location.LocationFinder;
 import killercreepr.cruxstructures.structure.Structure;

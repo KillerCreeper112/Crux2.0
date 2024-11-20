@@ -1,11 +1,11 @@
 package killercreepr.cruxpotions.tags;
 
-import killercreepr.crux.data.Holder;
-import killercreepr.crux.tags.TagParser;
-import killercreepr.crux.tags.container.StringListTagContainer;
-import killercreepr.crux.tags.context.FormatPrefix;
-import killercreepr.crux.tags.hook.ObjectTag;
-import killercreepr.crux.tags.resolver.Tag;
+import killercreepr.crux.api.data.Holder;
+import killercreepr.crux.api.text.tags.TagParser;
+import killercreepr.crux.core.text.container.StringListTagContainer;
+import killercreepr.crux.api.text.format.FormatPrefix;
+import killercreepr.crux.api.text.hook.ObjectTag;
+import killercreepr.crux.core.text.resolver.Tag;
 import killercreepr.cruxpotions.persistence.PotionPersistTags;
 import killercreepr.cruxpotions.persistence.StoredPotion;
 import killercreepr.cruxpotions.potions.ActivePotion;

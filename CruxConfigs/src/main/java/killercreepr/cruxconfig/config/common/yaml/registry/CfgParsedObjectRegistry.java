@@ -1,6 +1,6 @@
 package killercreepr.cruxconfig.config.common.yaml.registry;
 
-import killercreepr.crux.registry.SimpleKeyedRegistry;
+import killercreepr.crux.core.registry.SimpleKeyedRegistry;
 import killercreepr.cruxconfig.config.common.yaml.context.YamlContext;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
 import killercreepr.cruxconfig.config.common.yaml.parsed.CfgParsedObjectHandler;

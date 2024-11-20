@@ -1,6 +1,6 @@
 package killercreepr.cruxconfig.config.common.base.registry;
 
-import killercreepr.crux.registry.SimpleMappedRegistry;
+import killercreepr.crux.core.registry.SimpleMappedRegistry;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
 import org.jetbrains.annotations.NotNull;

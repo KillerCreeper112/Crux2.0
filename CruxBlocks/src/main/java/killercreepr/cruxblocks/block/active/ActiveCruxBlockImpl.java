@@ -1,9 +1,9 @@
 package killercreepr.cruxblocks.block.active;
 
-import killercreepr.crux.data.DataExchange;
-import killercreepr.crux.loot.LootContext;
-import killercreepr.crux.loot.LootTable;
-import killercreepr.crux.registries.CruxRegistries;
+import killercreepr.crux.api.data.DataExchange;
+import killercreepr.crux.api.loot.LootContext;
+import killercreepr.crux.api.loot.LootTable;
+import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxblocks.CruxBlocksModule;
 import killercreepr.cruxblocks.block.CruxBlock;
 import killercreepr.cruxblocks.item.KeyedItemProvider;

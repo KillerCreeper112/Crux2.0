@@ -1,6 +1,6 @@
 package killercreepr.cruxmenus.core.menu.module.standard;
 
-import killercreepr.crux.Crux;
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxmenus.api.menu.module.config.MenuModuleBuilder;
 import killercreepr.cruxmenus.api.menu.registry.MenuRegistry;
 import killercreepr.cruxmenus.core.menu.module.standard.container.ItemsContainerMenuModuleBuilder;

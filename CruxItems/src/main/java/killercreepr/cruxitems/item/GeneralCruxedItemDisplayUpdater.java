@@ -1,6 +1,6 @@
 package killercreepr.cruxitems.item;
 
-import killercreepr.crux.Crux;
+import killercreepr.crux.core.Crux;
 import net.kyori.adventure.key.Key;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;

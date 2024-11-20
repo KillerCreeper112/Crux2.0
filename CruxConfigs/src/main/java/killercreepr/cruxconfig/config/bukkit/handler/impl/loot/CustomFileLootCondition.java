@@ -1,6 +1,6 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 
-import killercreepr.crux.loot.conditions.LootCondition;
+import killercreepr.crux.api.loot.conditions.LootCondition;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import org.jetbrains.annotations.NotNull;

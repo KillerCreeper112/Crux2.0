@@ -1,9 +1,9 @@
 package killercreepr.crux.api.communication.boss;
 
-import killercreepr.crux.context.TextParserContext;
+import killercreepr.crux.api.text.context.TextParserContext;
+import killercreepr.crux.api.text.provider.StringTagProvider;
+import killercreepr.crux.api.text.tags.container.TagContainer;
 import killercreepr.crux.core.communication.boss.SimpleCreateBossBar;
-import killercreepr.crux.tags.container.TagContainer;
-import killercreepr.crux.tags.provider.StringTagProvider;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
 import org.jetbrains.annotations.NotNull;

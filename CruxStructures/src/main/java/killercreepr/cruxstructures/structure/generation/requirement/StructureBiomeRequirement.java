@@ -1,6 +1,6 @@
 package killercreepr.cruxstructures.structure.generation.requirement;
 
-import killercreepr.crux.nms.biome.BiomeUtils;
+import killercreepr.crux.paper.nms.biome.BiomeUtils;
 import killercreepr.cruxstructures.structure.Structure;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Chunk;

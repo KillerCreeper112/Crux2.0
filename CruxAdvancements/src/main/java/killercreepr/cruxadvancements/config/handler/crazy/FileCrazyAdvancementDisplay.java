@@ -2,8 +2,8 @@ package killercreepr.cruxadvancements.config.handler.crazy;
 
 import eu.endercentral.crazy_advancements.advancement.AdvancementDisplay;
 import eu.endercentral.crazy_advancements.advancement.AdvancementVisibility;
-import killercreepr.crux.item.dynamic.DynamicItem;
-import killercreepr.crux.util.CruxObjects;
+import killercreepr.crux.api.item.dynamic.DynamicItem;
+import killercreepr.crux.core.util.CruxObjects;
 import killercreepr.cruxadvancements.advancement.icon.CriterionDisplay;
 import killercreepr.cruxadvancements.crazy.CrazyAdvancementDisplay;
 import killercreepr.cruxconfig.config.common.FileContext;

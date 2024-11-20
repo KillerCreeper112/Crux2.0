@@ -1,6 +1,6 @@
 package killercreepr.cruxworlds.world.creator;
 
-import killercreepr.crux.registry.SimpleMappedRegistry;
+import killercreepr.crux.core.registry.SimpleMappedRegistry;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;

@@ -1,8 +1,8 @@
 package killercreepr.cruxitems.values;
 
-import killercreepr.crux.data.Holder;
-import killercreepr.crux.data.Reloadable;
-import killercreepr.crux.plugin.CruxPlugin;
+import killercreepr.crux.api.data.Holder;
+import killercreepr.crux.api.data.Reloadable;
+import killercreepr.crux.core.plugin.CruxPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

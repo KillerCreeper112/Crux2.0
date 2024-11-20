@@ -1,7 +1,7 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.entity.CruxEntitySnapshot;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.entity.CruxEntitySnapshot;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.handler.SimpleFileHandler;

@@ -1,7 +1,7 @@
 package killercreepr.cruxconfig.config.common.value;
 
-import killercreepr.crux.data.Holder;
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.api.data.Holder;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.common.file.ICruxConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

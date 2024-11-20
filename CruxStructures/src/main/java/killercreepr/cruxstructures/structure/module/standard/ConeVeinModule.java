@@ -1,12 +1,12 @@
 package killercreepr.cruxstructures.structure.module.standard;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.block.CruxBlockWrapper;
-import killercreepr.crux.block.predicate.BlockPredicate;
-import killercreepr.crux.data.world.CruxPosition;
-import killercreepr.crux.util.CruxLoc;
-import killercreepr.crux.valueproviders.number.NumberProvider;
-import killercreepr.crux.valueproviders.vector.NumberVector;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.block.CruxBlockWrapper;
+import killercreepr.crux.api.block.predicate.BlockPredicate;
+import killercreepr.crux.api.math.CruxPosition;
+import killercreepr.crux.core.util.CruxLoc;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
+import killercreepr.crux.api.valueproviders.vector.NumberVector;
 import killercreepr.cruxstructures.structure.Structure;
 import killercreepr.cruxstructures.structure.module.StructureModule;
 import net.kyori.adventure.key.Key;

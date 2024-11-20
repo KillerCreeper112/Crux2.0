@@ -1,6 +1,6 @@
 package killercreepr.cruxmenus.core.menu.module.standard;
 
-import killercreepr.crux.valueproviders.number.NumberProvider;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxmenus.api.menu.config.handler.FileMenuHolder;

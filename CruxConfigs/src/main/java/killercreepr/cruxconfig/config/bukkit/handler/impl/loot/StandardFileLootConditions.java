@@ -1,18 +1,18 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 
 import com.google.common.reflect.TypeToken;
-import killercreepr.crux.block.predicate.BlockPredicate;
-import killercreepr.crux.entity.predicate.EntityPredicate;
-import killercreepr.crux.item.predicate.ItemPredicate;
-import killercreepr.crux.loot.conditions.LootCondition;
-import killercreepr.crux.loot.impl.conditions.*;
-import killercreepr.crux.loot.impl.conditions.block.BlockCondition;
-import killercreepr.crux.loot.impl.conditions.block.BlockStateCondition;
-import killercreepr.crux.loot.impl.conditions.entity.EntityCondition;
-import killercreepr.crux.loot.impl.conditions.evaluation.EvaluationCondition;
-import killercreepr.crux.loot.impl.conditions.item.ItemStackCondition;
-import killercreepr.crux.loot.impl.conditions.world.LocationCondition;
-import killercreepr.crux.loot.impl.conditions.world.WorldCondition;
+import killercreepr.crux.api.block.predicate.BlockPredicate;
+import killercreepr.crux.core.loot.conditions.EntityOrItemCondition;
+import killercreepr.crux.api.entity.predicate.EntityPredicate;
+import killercreepr.crux.api.item.predicate.ItemPredicate;
+import killercreepr.crux.api.loot.conditions.LootCondition;
+import killercreepr.crux.core.loot.conditions.block.BlockCondition;
+import killercreepr.crux.core.loot.conditions.block.BlockStateCondition;
+import killercreepr.crux.core.loot.conditions.entity.EntityCondition;
+import killercreepr.crux.core.loot.conditions.evaluation.EvaluationCondition;
+import killercreepr.crux.core.loot.conditions.item.ItemStackCondition;
+import killercreepr.crux.core.loot.conditions.world.LocationCondition;
+import killercreepr.crux.core.loot.conditions.world.WorldCondition;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileObject;
@@ -39,7 +39,7 @@ public class StandardFileLootConditions {
                     e.get("terms")
                 );
                 if(conditions==null||conditions.isEmpty()) return null;
-                return new AllOfCondition(conditions);
+                return new killercreepr.crux.core.loot.conditions.AllOfCondition(conditions);
             }
         });
         file.registerCustomHandler(new CustomFileLootCondition<>() {
@@ -55,7 +55,7 @@ public class StandardFileLootConditions {
                     e.get("terms")
                 );
                 if(conditions==null||conditions.isEmpty()) return null;
-                return new AnyOfCondition(conditions);
+                return new killercreepr.crux.core.loot.conditions.AnyOfCondition(conditions);
             }
         });
         file.registerCustomHandler(new CustomFileLootCondition<>() {
@@ -167,7 +167,7 @@ public class StandardFileLootConditions {
             }
 
             @Override
-            public @Nullable EntityOrItemCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+            public @Nullable killercreepr.crux.core.loot.conditions.EntityOrItemCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 FileRegistry registry = ctx.getRegistry();
                 LootCondition itemCondition = registry.deserializeFromFile(LootCondition.class, e.get("item_condition"));
                 if(itemCondition==null) return null;
@@ -185,13 +185,13 @@ public class StandardFileLootConditions {
             }
 
             @Override
-            public @Nullable TargetCheckCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+            public @Nullable killercreepr.crux.core.loot.conditions.TargetCheckCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 FileRegistry registry = ctx.getRegistry();
                 String targetType = e.getObject(String.class, "target_type");
                 if(targetType==null) return null;
                 LootCondition ifTrue = registry.deserializeFromFile(LootCondition.class, e.get("if"));
                 LootCondition ifFalse = registry.deserializeFromFile(LootCondition.class, e.get("else"));
-                return new TargetCheckCondition(target, targetType, ifTrue, ifFalse);
+                return new killercreepr.crux.core.loot.conditions.TargetCheckCondition(target, targetType, ifTrue, ifFalse);
             }
         });
 
@@ -202,10 +202,10 @@ public class StandardFileLootConditions {
             }
 
             @Override
-            public @Nullable RandomChanceCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+            public @Nullable killercreepr.crux.core.loot.conditions.RandomChanceCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 Float chance = e.getObject(Float.class, "chance");
                 if(chance==null) return null;
-                return new RandomChanceCondition(chance);
+                return new killercreepr.crux.core.loot.conditions.RandomChanceCondition(chance);
             }
         });
 
@@ -216,12 +216,12 @@ public class StandardFileLootConditions {
             }
 
             @Override
-            public @Nullable RandomChanceCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+            public @Nullable killercreepr.crux.core.loot.conditions.RandomChanceCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 Float chance = e.getObject(Float.class, "chance");
                 if(chance==null) return null;
                 Float luckMultiplier = e.getObject(Float.class, "luck_multiplier");
                 if(luckMultiplier==null) return null;
-                return new RandomLuckChanceCondition(chance, luckMultiplier);
+                return new killercreepr.crux.core.loot.conditions.RandomLuckChanceCondition(chance, luckMultiplier);
             }
         });
 
@@ -248,14 +248,14 @@ public class StandardFileLootConditions {
             }
 
             @Override
-            public @Nullable CollectionCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+            public @Nullable killercreepr.crux.core.loot.conditions.CollectionCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 LootCondition condition = ctx.getRegistry().deserializeFromFile(
                     LootCondition.class, e.get("term")
                 );
                 if(condition == null) return null;
                 String type = e.getObject(String.class, "type");
                 if(type == null) type = "all_of";
-                return new CollectionCondition(target, condition, type);
+                return new killercreepr.crux.core.loot.conditions.CollectionCondition(target, condition, type);
             }
         });
     }

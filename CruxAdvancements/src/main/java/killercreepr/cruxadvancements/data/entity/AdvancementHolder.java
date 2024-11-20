@@ -2,11 +2,11 @@ package killercreepr.cruxadvancements.data.entity;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import killercreepr.crux.Crux;
-import killercreepr.crux.data.Loadable;
-import killercreepr.crux.data.entity.PlayerDataHolder;
-import killercreepr.crux.data.entity.PlayerMemory;
-import killercreepr.crux.registries.CruxRegistries;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.data.Loadable;
+import killercreepr.crux.core.entity.memory.PlayerDataHolder;
+import killercreepr.crux.api.entity.memory.PlayerMemory;
+import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxadvancements.CruxAdvancementsModule;
 import killercreepr.cruxadvancements.advancement.CruxAdvancement;
 import killercreepr.cruxadvancements.data.AdvancementTracker;

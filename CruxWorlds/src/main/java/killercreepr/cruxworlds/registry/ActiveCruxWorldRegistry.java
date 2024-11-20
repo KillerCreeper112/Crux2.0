@@ -1,6 +1,6 @@
 package killercreepr.cruxworlds.registry;
 
-import killercreepr.crux.registry.SimpleMappedRegistry;
+import killercreepr.crux.core.registry.SimpleMappedRegistry;
 import killercreepr.cruxworlds.world.CruxWorld;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

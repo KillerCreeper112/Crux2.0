@@ -1,7 +1,7 @@
 package killercreepr.cruxworlds.world.manager;
 
-import killercreepr.crux.registry.MappedRegistry;
-import killercreepr.crux.registry.SimpleMappedRegistry;
+import killercreepr.crux.api.registry.MappedRegistry;
+import killercreepr.crux.core.registry.SimpleMappedRegistry;
 import killercreepr.cruxworlds.registry.ActiveCruxWorldRegistry;
 import killercreepr.cruxworlds.world.CruxWorld;
 import killercreepr.cruxworlds.world.SimpleWorld;

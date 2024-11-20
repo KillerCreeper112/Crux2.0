@@ -1,11 +1,11 @@
 package killercreepr.cruxmenus;
 
-import killercreepr.crux.Crux;
-import killercreepr.crux.module.CruxModule;
-import killercreepr.crux.module.StandardModules;
-import killercreepr.crux.plugin.CruxPlugin;
-import killercreepr.crux.registry.KeyedRegistry;
-import killercreepr.crux.registry.SimpleKeyedRegistry;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.plugin.module.CruxModule;
+import killercreepr.crux.core.plugin.module.StandardModules;
+import killercreepr.crux.core.plugin.CruxPlugin;
+import killercreepr.crux.api.registry.KeyedRegistry;
+import killercreepr.crux.core.registry.SimpleKeyedRegistry;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import killercreepr.cruxmenus.api.menu.module.config.MenuModuleBuilder;

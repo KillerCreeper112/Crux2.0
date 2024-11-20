@@ -1,10 +1,10 @@
 package killercreepr.cruxstructures.util;
 
-import killercreepr.crux.data.world.MultiVerseWorldStorage;
-import killercreepr.crux.data.world.WorldChunkStorage;
-import killercreepr.crux.location.LocationHolder;
-import killercreepr.crux.util.CruxMap;
-import killercreepr.crux.util.GetNear;
+import killercreepr.crux.api.data.world.MultiVerseWorldStorage;
+import killercreepr.crux.api.data.world.WorldChunkStorage;
+import killercreepr.crux.api.data.holder.LocationHolder;
+import killercreepr.crux.core.util.CruxMap;
+import killercreepr.crux.core.util.GetNear;
 import killercreepr.cruxstructures.structure.stored.StoredStructure;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;

@@ -9,11 +9,11 @@ import io.papermc.paper.command.brigadier.argument.resolvers.selector.EntitySele
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-import killercreepr.crux.data.DataExchange;
-import killercreepr.crux.plugin.CruxPlugin;
-import killercreepr.crux.tags.TagsPrefixBuilder;
-import killercreepr.crux.tags.container.MergedTagContainer;
-import killercreepr.crux.tags.container.TagContainer;
+import killercreepr.crux.api.data.DataExchange;
+import killercreepr.crux.core.plugin.CruxPlugin;
+import killercreepr.crux.api.text.tags.TagsPrefixBuilder;
+import killercreepr.crux.api.text.tags.container.MergedTagContainer;
+import killercreepr.crux.api.text.tags.container.TagContainer;
 import killercreepr.cruxmenus.api.menu.holder.MenuHolder;
 import killercreepr.cruxmenus.core.command.argument.CruxMenusArguments;
 import org.bukkit.command.CommandSender;
