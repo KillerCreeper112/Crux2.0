@@ -5,6 +5,8 @@ import killercreepr.crux.data.DataExchange;
 import killercreepr.crux.tags.TagParser;
 import killercreepr.crux.tags.TagsPrefixBuilder;
 import killercreepr.crux.tags.context.FormatPrefix;
+import killercreepr.crux.tags.provider.StringListTagProvider;
+import killercreepr.crux.tags.provider.StringTagProvider;
 import killercreepr.crux.tags.resolver.StringListResolver;
 import killercreepr.crux.tags.resolver.StringResolver;
 import killercreepr.crux.tags.resolver.TagResolver;
@@ -45,6 +47,14 @@ public interface TagContainer<T extends TagResolver<?>> extends Iterable<T> {
 
     static StringListTagContainProvider stringList(@NotNull TagParser tagParser, @Nullable StringListResolver... resolvers){
         return new SimpleStringListTagProvider(tagParser).addAll(resolvers == null ? null : Arrays.asList(resolvers));
+    }
+
+    static @Nullable MergedTagContainer merged(@Nullable StringTagProvider strings){
+        return strings == null ? null : merged().addAll(strings.getStringTags());
+    }
+
+    static @Nullable MergedTagContainer merged(@Nullable StringListTagProvider strings){
+        return strings == null ? null : merged().addAll(strings.getStringListTags());
     }
 
     static @NotNull MergedTagContainer merged(){

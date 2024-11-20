@@ -22,6 +22,11 @@ public abstract class PlayerDataHolder extends EntityDataHolder {
     public @Nullable Player getPlayer(){
         return parent.value();
     }
+    public @NotNull Player getPlayerOrThrow(){
+        Player p = parent.value();
+        if(p==null) throw new IllegalStateException(parent.getUUID() + " player is not present!");
+        return p;
+    }
 
     public @Nullable OfflinePlayer getOfflinePlayer(){
         return Bukkit.getOfflinePlayer(parent.getUUID());

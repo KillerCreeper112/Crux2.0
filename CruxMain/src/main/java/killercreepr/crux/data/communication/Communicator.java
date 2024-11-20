@@ -1,5 +1,6 @@
 package killercreepr.crux.data.communication;
 
+import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.tags.container.MergedTagContainer;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.Location;
@@ -48,14 +49,18 @@ public interface Communicator {
     default Communicator use(@NotNull Audience a){
         return use(a,  (MergedTagContainer) null);
     }
-
+    @Deprecated(forRemoval = true)
     default Communicator use(@NotNull Audience a, @Nullable OfflinePlayer placeholders){
         return use(a, placeholders, null);
     }
 
+    Communicator use(@NotNull Audience a, @NotNull TextParserContext ctx);
+
+    @Deprecated(forRemoval = true)
     Communicator use(@NotNull Audience a, @Nullable OfflinePlayer placeholders, @Nullable MergedTagContainer tags);
 
     Communicator broadcast(@Nullable MergedTagContainer tags);
+    Communicator broadcast(@NotNull TextParserContext ctx);
 
     Communicator playAt(@NotNull Location at);
     Communicator playAt(@NotNull Entity at);

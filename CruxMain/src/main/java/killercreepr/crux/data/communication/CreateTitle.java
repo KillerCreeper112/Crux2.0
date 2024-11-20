@@ -1,6 +1,7 @@
 package killercreepr.crux.data.communication;
 
-import killercreepr.crux.data.communication.impl.SimpleCreateTitle;
+import killercreepr.crux.context.TextParserContext;
+import killercreepr.crux.core.communication.SimpleCreateTitle;
 import killercreepr.crux.tags.provider.StringTagProvider;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.title.Title;
@@ -44,9 +45,12 @@ public interface CreateTitle {
         return use(a, placeholders, null);
     }
 
+    CreateTitle use(@NotNull Audience a, @NotNull TextParserContext ctx);
     CreateTitle use(@NotNull Audience a, @Nullable OfflinePlayer placeholders, @Nullable StringTagProvider tags);
 
+    @NotNull Title build(@NotNull TextParserContext ctx);
     @NotNull Title build(@Nullable StringTagProvider tags);
+    @Deprecated(forRemoval = true)
     @NotNull Title build(@Nullable OfflinePlayer placeholders, @Nullable StringTagProvider tags);
     @Nullable String getTitle();
 

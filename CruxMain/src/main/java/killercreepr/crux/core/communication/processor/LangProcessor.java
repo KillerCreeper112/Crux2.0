@@ -1,4 +1,4 @@
-package killercreepr.crux.data.communication.handler;
+package killercreepr.crux.core.communication.processor;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.data.communication.TranslateMsg;

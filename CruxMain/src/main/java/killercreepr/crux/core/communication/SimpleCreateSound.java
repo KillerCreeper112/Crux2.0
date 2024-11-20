@@ -1,4 +1,4 @@
-package killercreepr.crux.data.communication.impl;
+package killercreepr.crux.core.communication;
 
 import killercreepr.crux.data.communication.CreateSound;
 import net.kyori.adventure.sound.Sound;

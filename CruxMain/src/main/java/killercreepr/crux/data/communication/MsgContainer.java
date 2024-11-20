@@ -1,6 +1,7 @@
 package killercreepr.crux.data.communication;
 
 import killercreepr.crux.Crux;
+import killercreepr.crux.context.TextParserContext;
 import killercreepr.crux.tags.container.MergedTagContainer;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -56,7 +57,19 @@ public class MsgContainer implements Communicator {
     }
 
     @Override
-    public MsgContainer use(@NotNull Audience a, @Nullable OfflinePlayer placeholders, @Nullable MergedTagContainer tags){
+    public Communicator use(@NotNull Audience a, @NotNull TextParserContext ctx) {
+        if(isBroadcast()) return broadcast(ctx);
+        if(a instanceof Player p) return use(p, false, ctx);
+        if(chat != null){
+            for(String s : chat){
+                a.sendMessage(deserialize(s, ctx));
+            }
+        }
+        return this;
+    }
+
+    @Override
+    public Communicator use(@NotNull Audience a, @Nullable OfflinePlayer placeholders, @Nullable MergedTagContainer tags){
         if(isBroadcast()) return broadcast(tags);
         if(a instanceof Player p) return use(p, placeholders, tags);
         if(chat != null){
@@ -67,11 +80,11 @@ public class MsgContainer implements Communicator {
         return this;
     }
 
-    public MsgContainer use(@NotNull Player p, @Nullable OfflinePlayer placeholders, @Nullable MergedTagContainer tags){
+    public Communicator use(@NotNull Player p, @Nullable OfflinePlayer placeholders, @Nullable MergedTagContainer tags){
         return use(p, placeholders, true, tags);
     }
 
-    public MsgContainer use(@NotNull Player p, @Nullable OfflinePlayer placeholders, boolean broadcastCheck, @Nullable MergedTagContainer tags){
+    public Communicator use(@NotNull Player p, @Nullable OfflinePlayer placeholders, boolean broadcastCheck, @Nullable MergedTagContainer tags){
         if(broadcastCheck && broadcast){
             return broadcast(tags);
         }
@@ -86,10 +99,33 @@ public class MsgContainer implements Communicator {
         return this;
     }
 
+    public Communicator use(@NotNull Player p, boolean broadcastCheck, @NotNull TextParserContext ctx){
+        if(broadcastCheck && broadcast){
+            return broadcast(ctx);
+        }
+        if(chat != null){
+            for(String s : chat){
+                p.sendMessage(deserialize(s, ctx));
+            }
+        }
+        if(actionBar != null) p.sendActionBar(deserialize(actionBar, ctx));
+        if(title != null) title.use(p, ctx);
+        if(sound != null) sound.playFor(p);
+        return this;
+    }
+
     @Override
-    public MsgContainer broadcast(@Nullable MergedTagContainer tags){
+    public Communicator broadcast(@Nullable MergedTagContainer tags){
         for(Player p : Bukkit.getOnlinePlayers()){
             use(p, null, false, tags);
+        }
+        return this;
+    }
+
+    @Override
+    public Communicator broadcast(@NotNull TextParserContext ctx) {
+        for(Player p : Bukkit.getOnlinePlayers()){
+            use(p, false, ctx);
         }
         return this;
     }
@@ -109,6 +145,11 @@ public class MsgContainer implements Communicator {
     protected @NotNull Component deserialize(@Nullable OfflinePlayer viewer, @Nullable String input, @Nullable MergedTagContainer tags){
         if(input == null) return Component.empty();
         return Crux.format().deserialize(input, MergedTagContainer.mergeHook(tags, viewer));
+    }
+
+    protected @NotNull Component deserialize(@Nullable String input, @NotNull TextParserContext ctx){
+        if(input == null) return Component.empty();
+        return ctx.deserialize(input);
     }
 
     public @Nullable List<String> getChat() {

@@ -1,6 +1,7 @@
 package killercreepr.cruxconfig.config.bukkit.handler;
 
 import io.papermc.paper.registry.RegistryKey;
+import killercreepr.crux.api.communication.boss.CreateBossBar;
 import killercreepr.crux.block.CruxBlockWrapper;
 import killercreepr.crux.block.predicate.BlockPredicate;
 import killercreepr.crux.component.DataComponentHandler;
@@ -68,6 +69,7 @@ public class BukkitCfgHandlers {
     public static final FileMsgContainer MSG_CONTAINER = new FileMsgContainer();
     public static final FileCreateSound CREATE_SOUND = new FileCreateSound();
     public static final FileCreateTitle CREATE_TITLE = new FileCreateTitle();
+    public static final FileCreateBossBar CREATE_BOSS_BAR = new FileCreateBossBar();
     public static final FilePotionEffectType POTION_EFFECT_TYPE = new FilePotionEffectType();
     public static final FileMaterial MATERIAL = new FileMaterial();
     public static final FileEntityType ENTITY_TYPE = new FileEntityType();
@@ -110,6 +112,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(MsgContainer.class, MSG_CONTAINER);
         registry.registerFileHandler(CreateSound.class, CREATE_SOUND);
         registry.registerFileHandler(CreateTitle.class, CREATE_TITLE);
+        registry.registerFileHandler(CreateBossBar.class, CREATE_BOSS_BAR);
         registry.registerFileHandler(PotionEffectType.class, POTION_EFFECT_TYPE);
         registry.registerFileHandler(Material.class, MATERIAL);
         registry.registerFileHandler(Component.class, COMPONENT);

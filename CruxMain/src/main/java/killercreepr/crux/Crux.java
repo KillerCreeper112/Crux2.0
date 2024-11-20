@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+//todo separate API and core
 //todo maybe eventually separate bukkit/paper and crux
 public final class Crux {
     public static String namespace(){
