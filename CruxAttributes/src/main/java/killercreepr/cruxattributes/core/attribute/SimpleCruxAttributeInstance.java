@@ -1,6 +1,8 @@
 package killercreepr.cruxattributes.core.attribute;
 
 import killercreepr.cruxattributes.api.attribute.CruxAttribute;
+import killercreepr.cruxattributes.api.attribute.CruxAttributeInstance;
+import killercreepr.cruxattributes.api.attribute.CruxAttributeModifier;
 import net.kyori.adventure.key.Key;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
@@ -8,15 +10,16 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class CruxAttributeInstance {
+
+public class SimpleCruxAttributeInstance implements CruxAttributeInstance {
     private final CruxAttribute attribute;
     private final Collection<CruxAttributeModifier> modifiers = new ArrayList<>();
-    public CruxAttributeInstance(@NotNull CruxAttribute attribute, @NotNull Collection<CruxAttributeModifier> modifiers) {
+    public SimpleCruxAttributeInstance(@NotNull CruxAttribute attribute, @NotNull Collection<CruxAttributeModifier> modifiers) {
         this.attribute = attribute;
         this.modifiers.addAll(modifiers);
     }
 
-    public CruxAttributeInstance(@NotNull CruxAttribute attribute, @NotNull CruxAttributeModifier... modifiers) {
+    public SimpleCruxAttributeInstance(@NotNull CruxAttribute attribute, @NotNull CruxAttributeModifier... modifiers) {
         this.attribute = attribute;
         this.modifiers.addAll(List.of(modifiers));
     }

@@ -15,6 +15,22 @@ public interface CruxWorldManager {
     CruxWorld getWorld(@NotNull String name);
     @Nullable CruxWorld getWorld(@NotNull UUID uuid);
 
+    default <T extends CruxWorld> @Nullable T getWorldOrNull(@NotNull String name, @NotNull Class<T> type){
+        try{
+            return getWorld(name, type);
+        }catch (IllegalStateException ignored){
+            return null;
+        }
+    }
+
+    default <T extends CruxWorld> @Nullable T getWorldOrNull(@NotNull UUID uuid, @NotNull Class<T> type){
+        try{
+            return getWorld(uuid, type);
+        }catch (IllegalStateException ignored){
+            return null;
+        }
+    }
+
     default <T extends CruxWorld> @Nullable T getWorld(@NotNull String name, @NotNull Class<T> type){
         CruxWorld world = getWorld(name);
         if(world==null) return null;

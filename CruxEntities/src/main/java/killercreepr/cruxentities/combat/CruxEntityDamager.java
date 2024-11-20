@@ -4,13 +4,12 @@ import killercreepr.crux.Crux;
 import killercreepr.crux.event.CruxEntityDamageEvent;
 import killercreepr.crux.event.CruxEntityDeathEvent;
 import killercreepr.crux.persistence.CruxPersist;
+import killercreepr.crux.util.CruxEntityUtil;
 import killercreepr.cruxattributes.api.attribute.CruxAttribute;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Projectile;
+import org.bukkit.entity.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -179,7 +178,17 @@ public class CruxEntityDamager {
                 dmg *= Math.max(1D - (.1D * (resistance.getAmplifier() + 1)), 0D);
             }
         }
+        if(isDamageSourceBlocked()){
+            dmg *= .2D;
+        }
         return dmg;
+    }
+
+    public boolean isDamageSourceBlocked() {
+        if(!(damager instanceof Player d)) return false;
+        if(!d.isBlocking()) return false;
+        Location pos = damager == null ? hitPosition : damager.getLocation();
+        return CruxEntityUtil.isDamageSourceBlocked(target, pos.toVector());
     }
 
     public @Nullable CruxEntityDamageEvent attack(double damage, double kb, double upkb,

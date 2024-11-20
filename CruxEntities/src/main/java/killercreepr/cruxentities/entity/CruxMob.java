@@ -2,11 +2,15 @@ package killercreepr.cruxentities.entity;
 
 import io.papermc.paper.tag.EntitySetTag;
 import io.papermc.paper.tag.EntityTags;
+import killercreepr.crux.context.InputContext;
 import killercreepr.crux.loot.LootContext;
 import killercreepr.crux.loot.LootTable;
 import killercreepr.crux.loot.bukkit.EventLootContexts;
 import killercreepr.crux.registries.CruxRegistries;
+import killercreepr.crux.tags.container.TagContainer;
+import killercreepr.crux.util.CruxMath;
 import killercreepr.crux.util.CruxString;
+import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxentities.persistence.CruxEntitiesPersist;
 import killercreepr.cruxentities.registries.CruxEntityRegistries;
 import net.kyori.adventure.key.Key;
@@ -25,6 +29,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.function.Consumer;
 
 public interface CruxMob extends Keyed {
@@ -105,13 +110,38 @@ public interface CruxMob extends Keyed {
     default void onDeath(@NotNull Entity e, @NotNull EntityDeathEvent event){
         event.getDrops().clear();
         event.setDroppedExp(0);
+
+        LootContext ctx = null;
+
         Key key = key();
-        LootTable<ItemStack> lootTable = CruxRegistries.ITEM_LOOT_TABLE.get(Key.key(
-            key.namespace(), "entity/" + key.value()
-        ));
-        if(lootTable==null) return;
-        LootContext ctx = EventLootContexts.builder(event).build();
-        event.getDrops().addAll(lootTable.populateLoot(ctx));
+        Key lootKey = Key.key(key.namespace(), "entity/" + key.value());
+
+        LootTable<ItemStack> lootTable = CruxRegistries.ITEM_LOOT_TABLE.get(lootKey);
+        if(lootTable != null){
+            ctx = ctx == null ? EventLootContexts.builder(event).build() : ctx;
+            event.getDrops().addAll(lootTable.populateLoot(ctx));
+        }
+
+        LootTable<NumberProvider> numLoot = CruxRegistries.NUMBER_LOOT_TABLE.get(lootKey);
+        if(numLoot != null){
+            ctx = ctx == null ? EventLootContexts.builder(event).build() : ctx;
+            List<NumberProvider> result = numLoot.populateLoot(ctx);
+            if(!result.isEmpty()){
+                int value = result.getFirst().sample(InputContext.simple(TagContainer.string().hook(e)))
+                    .intValue();
+                event.setDroppedExp(value);
+            }
+        }else{
+            event.setDroppedExp(getDefaultDroppedExperience());
+        }
+    }
+
+    default int getDefaultDroppedExperience(){
+        if(isInCategory(this, MobCategory.ETERNAL, MobCategory.OBJECT, MobCategory.NEUTRAL)) return 0;
+        if(isInCategory(this, MobCategory.ENEMY)) return CruxMath.random(10, 15);
+        if(isInCategory(this, MobCategory.MONSTER)) return CruxMath.random(12, 15);
+        if(isInCategory(this, MobCategory.ANIMAL)) return CruxMath.random(1, 3);
+        return 0;
     }
 
     default @NotNull String getName(){

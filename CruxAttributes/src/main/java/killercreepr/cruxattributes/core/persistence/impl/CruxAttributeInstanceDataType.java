@@ -1,7 +1,8 @@
 package killercreepr.cruxattributes.core.persistence.impl;
 
 import killercreepr.crux.util.CruxKey;
-import killercreepr.cruxattributes.core.attribute.CruxAttributeModifier;
+import killercreepr.cruxattributes.api.attribute.CruxAttributeModifier;
+import killercreepr.cruxattributes.core.attribute.SimpleCruxAttributeModifier;
 import killercreepr.cruxattributes.core.attribute.container.CruxAttributeModData;
 import killercreepr.cruxattributes.core.persistence.CruxAttributesPersistence;
 import org.bukkit.NamespacedKey;
@@ -39,7 +40,7 @@ public class CruxAttributeInstanceDataType implements PersistentDataType<Persist
         for(NamespacedKey k : c.getKeys()){
             try{
                 CruxAttributeModData data = c.get(k, CruxAttributesPersistence.ATTRIBUTE_MODIFIER);
-                if(data != null) list.add(new CruxAttributeModifier(k, data));
+                if(data != null) list.add(CruxAttributeModifier.modifier(k, data));
             }catch (Exception ignored){}
         }
         return list;

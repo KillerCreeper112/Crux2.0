@@ -5,8 +5,8 @@ import killercreepr.crux.loot.conditions.LootCondition;
 import killercreepr.crux.loot.impl.functions.SimpleLootFunction;
 import killercreepr.crux.valueproviders.number.NumberProvider;
 import killercreepr.cruxattributes.api.attribute.CruxAttribute;
+import killercreepr.cruxattributes.api.attribute.CruxAttributeModifier;
 import killercreepr.cruxattributes.api.attribute.CruxSlot;
-import killercreepr.cruxattributes.core.attribute.CruxAttributeModifier;
 import killercreepr.cruxattributes.core.registries.CruxAttributeRegistries;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
@@ -50,7 +50,7 @@ public class ItemCruxAttributeFunction extends SimpleLootFunction<ItemStack> {
                     }
                 }
                 value += attribute.round(m.getProvider().sample(random).doubleValue());
-                CruxAttribute.addModifier(i, attribute, new CruxAttributeModifier(m.key(), value, m.getOperation(), m.getSlot()));
+                CruxAttribute.addModifier(i, attribute, CruxAttributeModifier.modifier(m.key(), value, m.getOperation(), m.getSlot()));
             }
         }
         return i;

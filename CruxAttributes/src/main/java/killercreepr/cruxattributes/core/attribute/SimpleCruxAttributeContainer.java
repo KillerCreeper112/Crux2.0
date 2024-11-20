@@ -1,6 +1,8 @@
 package killercreepr.cruxattributes.core.attribute;
 
 import killercreepr.cruxattributes.api.attribute.CruxAttribute;
+import killercreepr.cruxattributes.api.attribute.CruxAttributeContainer;
+import killercreepr.cruxattributes.api.attribute.CruxAttributeInstance;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -9,13 +11,13 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CruxAttributeContainer {
+public class SimpleCruxAttributeContainer implements CruxAttributeContainer {
     private final Set<CruxAttributeInstance> attributes = new HashSet<>();
-    public CruxAttributeContainer(@NotNull CruxAttributeInstance... attributes){
+    public SimpleCruxAttributeContainer(@NotNull CruxAttributeInstance... attributes){
         this.attributes.addAll(Arrays.asList(attributes));
     }
 
-    public CruxAttributeContainer(@NotNull Collection<CruxAttributeInstance> attributes){
+    public SimpleCruxAttributeContainer(@NotNull Collection<CruxAttributeInstance> attributes){
         this.attributes.addAll(attributes);
     }
 

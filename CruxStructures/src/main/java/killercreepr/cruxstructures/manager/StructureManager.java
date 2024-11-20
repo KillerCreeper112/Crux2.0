@@ -352,10 +352,10 @@ public class StructureManager implements Listener {
     }
 
     public void saveWorld(@NotNull World world){
-        if(!stored.isDirty()){
+        /*if(!stored.isDirty()){
             Crux.log(Level.INFO, world.getName() + " is skipping structure saving because no new changes were made.");
             return;
-        }
+        }*/
         Crux.log(Level.INFO, "Saving structures in world: " + world.getName());
         UUID worldUUID = world.getUID();
         WorldChunkStorage<StoredStructure> removed = stored.remove(worldUUID);

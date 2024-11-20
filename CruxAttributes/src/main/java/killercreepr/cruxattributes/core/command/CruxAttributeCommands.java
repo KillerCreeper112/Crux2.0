@@ -17,8 +17,8 @@ import killercreepr.crux.tags.container.TagContainer;
 import killercreepr.crux.tags.resolver.Tag;
 import killercreepr.crux.util.CruxItem;
 import killercreepr.cruxattributes.api.attribute.CruxAttribute;
+import killercreepr.cruxattributes.api.attribute.CruxAttributeModifier;
 import killercreepr.cruxattributes.api.attribute.CruxSlot;
-import killercreepr.cruxattributes.core.attribute.CruxAttributeModifier;
 import killercreepr.cruxattributes.core.command.argument.CruxAttributeArguments;
 import killercreepr.cruxattributes.core.registries.CruxAttributeRegistries;
 import net.kyori.adventure.key.Key;
@@ -67,7 +67,7 @@ public class CruxAttributeCommands {
                                                             ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
                                                             ctx.getArgument("execute_operation", String.class),
                                                             ctx.getArgument("attribute", CruxAttribute.class),
-                                                            new CruxAttributeModifier(
+                                                            CruxAttributeModifier.modifier(
                                                                 ctx.getArgument("modkey", Key.class),
                                                                 ctx.getArgument("amount", Double.class)
                                                             )
@@ -79,7 +79,7 @@ public class CruxAttributeCommands {
                                                                     ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
                                                                     ctx.getArgument("execute_operation", String.class),
                                                                     ctx.getArgument("attribute", CruxAttribute.class),
-                                                                    new CruxAttributeModifier(
+                                                                    CruxAttributeModifier.modifier(
                                                                         ctx.getArgument("modkey", Key.class),
                                                                         ctx.getArgument("amount", Double.class),
                                                                         ctx.getArgument("slot", CruxSlot.class)
@@ -92,7 +92,7 @@ public class CruxAttributeCommands {
                                                                             ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
                                                                             ctx.getArgument("execute_operation", String.class),
                                                                             ctx.getArgument("attribute", CruxAttribute.class),
-                                                                            new CruxAttributeModifier(
+                                                                            CruxAttributeModifier.modifier(
                                                                                 ctx.getArgument("modkey", Key.class),
                                                                                 ctx.getArgument("amount", Double.class),
                                                                                 ctx.getArgument("operation", CruxAttribute.Operation.class),

@@ -10,7 +10,8 @@ import killercreepr.crux.util.CruxGoalUtil;
 import killercreepr.crux.util.GetEntityNear;
 import killercreepr.crux.util.GetNear;
 import killercreepr.cruxattributes.api.attribute.CruxAttribute;
-import killercreepr.cruxattributes.core.attribute.CruxAttributeInstance;
+import killercreepr.cruxattributes.api.attribute.CruxAttributeInstance;
+import killercreepr.cruxattributes.core.attribute.SimpleCruxAttributeInstance;
 import killercreepr.cruxentities.combat.CruxEntityDamager;
 import killercreepr.cruxentities.combat.EntityHit;
 import killercreepr.cruxentities.entity.CruxMob;
@@ -21,6 +22,8 @@ import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.*;
+import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
@@ -81,7 +84,12 @@ public class CruxGoalBase implements ICruxGoal {
     public @Nullable LivingEntity getTarget(){ return target; }
     public final @NotNull Mob getMob(){ return mob; }
     @Override
-    public void setTarget(@Nullable LivingEntity newTarget){ this.target = newTarget; }
+    public void setTarget(@Nullable LivingEntity newTarget){
+        EntityTargetLivingEntityEvent event = new EntityTargetLivingEntityEvent(mob, newTarget, EntityTargetEvent.TargetReason.CUSTOM);
+        if(!event.callEvent()) return;
+
+        this.target = newTarget;
+    }
 
     @Override
     public boolean shouldUpdateTarget(){ return target == null || !isValidTarget(target); }

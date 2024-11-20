@@ -2,8 +2,10 @@ package killercreepr.cruxattributes.core.persistence.impl;
 
 import killercreepr.crux.util.CruxKey;
 import killercreepr.cruxattributes.api.attribute.CruxAttribute;
-import killercreepr.cruxattributes.core.attribute.CruxAttributeInstance;
-import killercreepr.cruxattributes.core.attribute.CruxAttributeModifier;
+import killercreepr.cruxattributes.api.attribute.CruxAttributeInstance;
+import killercreepr.cruxattributes.api.attribute.CruxAttributeModifier;
+import killercreepr.cruxattributes.core.attribute.SimpleCruxAttributeInstance;
+import killercreepr.cruxattributes.core.attribute.SimpleCruxAttributeModifier;
 import killercreepr.cruxattributes.core.persistence.CruxAttributesPersistence;
 import killercreepr.cruxattributes.core.registries.CruxAttributeRegistries;
 import org.bukkit.NamespacedKey;
@@ -43,7 +45,7 @@ public class CruxAttributeContainerDataType implements PersistentDataType<Persis
                 CruxAttribute attribute = CruxAttributeRegistries.ATTRIBUTES.get(k);
                 if(attribute == null) continue;
                 Collection<CruxAttributeModifier> modifiers = c.get(k, CruxAttributesPersistence.ATTRIBUTE_INSTANCE);
-                if(modifiers != null) list.add(new CruxAttributeInstance(attribute, modifiers));
+                if(modifiers != null) list.add(CruxAttributeInstance.instance(attribute, modifiers));
             }catch (Exception ignored){}
         }
         return list;

@@ -2,8 +2,6 @@ package killercreepr.cruxattributes.api.attribute;
 
 import killercreepr.crux.Crux;
 import killercreepr.crux.util.*;
-import killercreepr.cruxattributes.core.attribute.CruxAttributeInstance;
-import killercreepr.cruxattributes.core.attribute.CruxAttributeModifier;
 import killercreepr.cruxattributes.core.attribute.GenericAttribute;
 import killercreepr.cruxattributes.core.registries.CruxAttributeRegistries;
 import net.kyori.adventure.key.Key;
@@ -300,7 +298,7 @@ public interface CruxAttribute extends Keyed {
     }
 
     static ItemStack addModifier(@Nullable ItemStack i, @NotNull CruxAttribute attribute,
-                                        @NotNull CruxAttributeModifier modifier, @NotNull Key... path){
+                                 @NotNull CruxAttributeModifier modifier, @NotNull Key... path){
         if(CruxItem.isEmpty(i)) return i;
         ItemMeta meta = i.getItemMeta();
         addModifier(meta, attribute, modifier, path);
@@ -324,7 +322,7 @@ public interface CruxAttribute extends Keyed {
      * If a path is provided, it will nest the attribute modifier.
      */
     static <P extends PersistentDataHolder> P addModifier(@Nullable P i, @NotNull CruxAttribute attribute,
-                                                                 @NotNull CruxAttributeModifier modifier, @NotNull Key... path){
+                                                          @NotNull CruxAttributeModifier modifier, @NotNull Key... path){
         if(i == null) return null;
         PersistentDataContainer container = getContainer(i);
         if(container == null) container = i.getPersistentDataContainer().getAdapterContext().newPersistentDataContainer();
@@ -473,12 +471,12 @@ public interface CruxAttribute extends Keyed {
         if(slots != null){
             list.removeIf(e -> Arrays.stream(slots).noneMatch(x -> x == e.getSlot()));
         }
-        return new CruxAttributeInstance(attribute, list);
+        return CruxAttributeInstance.instance(attribute, list);
     }
 
     static <P extends PersistentDataHolder>
     @Nullable CruxAttributeInstance getInstance(@Nullable P i, @NotNull CruxAttribute attribute, @Nullable Collection<@Nullable CruxSlot> slots,
-                                                @Nullable Collection<@NotNull Operation> operations){
+                                                      @Nullable Collection<@NotNull Operation> operations){
         PersistentDataContainer modifierProvider = getAttributeContainer(i, attribute);
         if(modifierProvider == null) return null;
         Collection<CruxAttributeModifier> list = convertToModifiers(modifierProvider);
@@ -488,7 +486,7 @@ public interface CruxAttribute extends Keyed {
         if(operations != null){
             list.removeIf(e -> !operations.contains(e.getOperation()));
         }
-        return new CruxAttributeInstance(attribute, list);
+        return CruxAttributeInstance.instance(attribute, list);
     }
 
     static <P extends PersistentDataHolder>
@@ -558,7 +556,7 @@ public interface CruxAttribute extends Keyed {
     }
 
     static @Nullable CruxAttributeModifier convertToModifier(@Nullable PersistentDataContainer modContainer,
-                                                                    @NotNull NamespacedKey key){
+                                                                   @NotNull NamespacedKey key){
         if(modContainer == null || !modContainer.has(k("value"), PersistentDataType.DOUBLE)) return null;
         Operation o;
         try{
@@ -568,7 +566,7 @@ public interface CruxAttribute extends Keyed {
         try{
             slot = CruxSlot.valueOf(modContainer.getOrDefault(k("slot"), PersistentDataType.STRING, "").toUpperCase());
         }catch (IllegalArgumentException e) { slot = null; }
-        return new CruxAttributeModifier(key, modContainer.getOrDefault(k("value"), PersistentDataType.DOUBLE, 0D), o, slot);
+        return CruxAttributeModifier.modifier(key, modContainer.getOrDefault(k("value"), PersistentDataType.DOUBLE, 0D), o, slot);
     }
 
     static @NotNull List<PersistentDataContainer> getModifierProviders(@Nullable PersistentDataContainer attributeOrModContainer){

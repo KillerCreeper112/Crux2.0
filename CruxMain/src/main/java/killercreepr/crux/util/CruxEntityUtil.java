@@ -1,15 +1,15 @@
 package killercreepr.crux.util;
 
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BoundingBox;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,6 +25,31 @@ public class CruxEntityUtil {
     };
     public static @NotNull EquipmentSlot[] getGeneralEntitySlots(){
         return GENERAL_SLOTS;
+    }
+
+    public static Vector calculateViewVector(float pitch, float yaw) {
+        float f2 = pitch * 0.017453292F;
+        float f3 = -yaw * 0.017453292F;
+        float f4 = Mth.cos(f3);
+        float f5 = Mth.sin(f3);
+        float f6 = Mth.cos(f2);
+        float f7 = Mth.sin(f2);
+
+        return new Vector((f5 * f6), (-f7), (f4 * f6));
+    }
+
+    public static boolean isDamageSourceBlocked(@NotNull Entity entity, @NotNull Entity damager) {
+        Vector vec3d = damager.getLocation().toVector();
+        return isDamageSourceBlocked(entity, vec3d);
+    }
+
+    public static boolean isDamageSourceBlocked(@NotNull Entity entity, @NotNull Vector hit) {
+        Vector vec3d1 = CruxEntityUtil.calculateViewVector(0.0F, entity.getYaw());
+        Vector pos = entity.getLocation().toVector();
+        Vector vec3d2 = new Vector(pos.getX() - hit.getX(), pos.getY() - hit.getY(), pos.getZ() - hit.getZ());
+
+        vec3d2 = (new Vector(vec3d2.getX(), 0.0D, vec3d2.getZ())).normalize();
+        return vec3d2.dot(vec3d1) < 0.0D;
     }
 
     public static @NotNull Location getEyeOrLocation(@NotNull Entity e){
