@@ -1,7 +1,9 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
+import killercreepr.crux.api.communication.Communicator;
 import killercreepr.crux.api.communication.CreateSound;
 import killercreepr.crux.api.communication.CreateTitle;
+import killercreepr.crux.api.communication.boss.CreateBossBar;
 import killercreepr.crux.core.communication.MsgContainer;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
@@ -36,15 +38,15 @@ public class FileMsgContainer extends SimpleFileHandler<MsgContainer> {
     @Override
     public @Nullable MsgContainer deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
         if(e instanceof FileGeneric chat){
-            return new MsgContainer(chat.getAsString());
+            return (MsgContainer) Communicator.chat(chat.getAsString());
         }
         if(e instanceof FileArray a){
-            if(a.isEmpty()) return new MsgContainer(List.of());
+            if(a.isEmpty()) return (MsgContainer) Communicator.chat();
             List<String> list = new ArrayList<>();
             for(FileElement ee : a){
                 list.add(ee.getAsString());
             }
-            return new MsgContainer(list);
+            return (MsgContainer) Communicator.chat(list);
         }
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = context.getRegistry();
@@ -52,10 +54,15 @@ public class FileMsgContainer extends SimpleFileHandler<MsgContainer> {
         String actionBar = o.getObject("action_bar");
         CreateTitle title = registry.deserializeFromFile(CreateTitle.class, o.get("title"));
         CreateSound sound = registry.deserializeFromFile(CreateSound.class, o.get("sound"));
-        MsgContainer container = new MsgContainer(chat == null || chat.isEmpty() ? null : chat,
-                actionBar,
-                title, sound);
-        container.setBroadcast(o.getOrDefaultObject("broadcast", false));
+        CreateBossBar bossBar = registry.deserializeFromFile(CreateBossBar.class, o.get("boss_bar"));
+        MsgContainer container = (MsgContainer) Communicator.builder()
+            .chat(chat)
+            .actionBar(actionBar)
+            .title(title)
+            .sound(sound)
+            .bossBar(bossBar)
+            .broadcast(o.getOrDefaultObject("broadcast", false))
+            .build();
         return container.isEmpty() ? null : container;
     }
     @Override

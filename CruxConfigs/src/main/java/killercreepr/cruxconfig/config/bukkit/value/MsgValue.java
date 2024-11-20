@@ -29,7 +29,7 @@ public class MsgValue extends CommonValue<MsgContainer> implements Communicator 
      * Convenience method to do: new MsgValue(new MsgContainer(chatMessage))
      */
     public MsgValue(@Nullable String chatMessage, @NotNull String @Nullable ... comments) {
-        this(new MsgContainer(chatMessage), comments);
+        this((MsgContainer) Communicator.chat(chatMessage), comments);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class MsgValue extends CommonValue<MsgContainer> implements Communicator 
     public @Nullable MsgContainer broadcast(@Nullable MergedTagContainer tags) {
         MsgContainer msg = value();
         if(msg == null) return null;
-        return msg.broadcast(tags);
+        return (MsgContainer) msg.broadcast(tags);
     }
 
     @Override

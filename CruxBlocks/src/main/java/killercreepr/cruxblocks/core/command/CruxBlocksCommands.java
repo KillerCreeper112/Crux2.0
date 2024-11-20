@@ -10,6 +10,7 @@ import io.papermc.paper.command.brigadier.argument.resolvers.selector.EntitySele
 import io.papermc.paper.math.BlockPosition;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import killercreepr.crux.api.communication.Communicator;
 import killercreepr.crux.core.communication.MsgContainer;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.util.CruxMath;
@@ -153,7 +154,7 @@ public class CruxBlocksCommands {
             equip.setItemInMainHand(item, true);
         }
         int result = given > 0 ? 1 : -1;
-        new MsgContainer("<yellow>Set tag " + group.key() + " to " + CruxMath.format(given) + " entities.").use(getExecutor(source));
+        Communicator.chat("<yellow>Set tag " + group.key() + " to " + CruxMath.format(given) + " entities.").use(getExecutor(source));
         return result;
     }
 }

@@ -10,6 +10,7 @@ import io.papermc.paper.command.brigadier.argument.resolvers.BlockPositionResolv
 import io.papermc.paper.math.BlockPosition;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import killercreepr.crux.api.communication.Communicator;
 import killercreepr.crux.core.communication.MsgContainer;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.util.CruxMath;
@@ -83,7 +84,7 @@ public class CruxEntitiesCommands {
             i--;
             mob.spawn(spawn);
         }
-        new MsgContainer("Spawned " + amount + " " + mob.getName() + "'s at " +
+        Communicator.chat("Spawned " + amount + " " + mob.getName() + "'s at " +
             CruxMath.format(spawn.getX()) + ", " + CruxMath.format(spawn.getY()) + ", " + CruxMath.format(spawn.getZ()))
             .use(getExecutor(source));
         return 1;

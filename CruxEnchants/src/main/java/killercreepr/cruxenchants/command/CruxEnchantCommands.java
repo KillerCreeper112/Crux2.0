@@ -10,6 +10,7 @@ import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.EntitySelectorArgumentResolver;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import killercreepr.crux.api.communication.Communicator;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.communication.MsgContainer;
 import killercreepr.crux.core.plugin.CruxPlugin;
@@ -117,7 +118,7 @@ public class CruxEnchantCommands {
             if(x > 0) changed++;
             if(!(e instanceof Player)) le.getEquipment().setItemInMainHand(item);
         }
-        new MsgContainer("Removed enchant, " + enchant.getName() + " on " + changed + " entities.")
+        Communicator.chat("Removed enchant, " + enchant.getName() + " on " + changed + " entities.")
             .use(getExecutor(source));
         return changed > 0 ? 1 : -1;
     }
@@ -133,7 +134,7 @@ public class CruxEnchantCommands {
             if(x > 0) changed++;
             if(!(e instanceof Player)) le.getEquipment().setItemInMainHand(item);
         }
-        new MsgContainer("Set enchant, " + enchant.getName() + " to level " + level + " on " + changed + " entities.")
+        Communicator.chat("Set enchant, " + enchant.getName() + " to level " + level + " on " + changed + " entities.")
             .use(getExecutor(source));
         return changed > 0 ? 1 : -1;
     }

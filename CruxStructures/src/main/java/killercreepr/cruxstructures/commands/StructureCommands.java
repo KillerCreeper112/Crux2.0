@@ -12,6 +12,7 @@ import io.papermc.paper.command.brigadier.argument.resolvers.BlockPositionResolv
 import io.papermc.paper.math.BlockPosition;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import killercreepr.crux.api.communication.Communicator;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.communication.MsgContainer;
 import killercreepr.crux.api.math.CruxPosition;
@@ -261,7 +262,7 @@ public class StructureCommands {
         cfg.set("type", type);
         cfg.save();
         StructureRegistries.STRUCTURES.register(cfg.deserialize(CfgFAWEStructure.class, ""));
-        new MsgContainer("<green>Structure " + id + ", created!").use(sender);
+        Communicator.chat("<green>Structure " + id + ", created!").use(sender);
         return 1;
     }
 
@@ -269,12 +270,12 @@ public class StructureCommands {
         CommandSender sender = getExecutor(source);
         CruxConfig cfg = new CruxConfig(plugin, "structures/" + id);
         if(!cfg.file().exists()){
-            new MsgContainer("<red>Structure " + id + ", does not exist!").use(sender);
+            Communicator.chat("<red>Structure " + id + ", does not exist!").use(sender);
             return 0;
         }
         cfg.file().delete();
         StructureRegistries.STRUCTURES.remove(Crux.key(id));
-        new MsgContainer("<red>Structure " + id + ", deleted!").use(sender);
+        Communicator.chat("<red>Structure " + id + ", deleted!").use(sender);
         return 1;
     }
 }

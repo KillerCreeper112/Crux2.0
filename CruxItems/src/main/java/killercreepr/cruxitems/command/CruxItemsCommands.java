@@ -9,6 +9,7 @@ import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.EntitySelectorArgumentResolver;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import killercreepr.crux.api.communication.Communicator;
 import killercreepr.crux.core.command.argument.CruxCmdArguments;
 import killercreepr.crux.core.communication.MsgContainer;
 import killercreepr.crux.core.plugin.CruxPlugin;
@@ -161,7 +162,7 @@ public class CruxItemsCommands {
         int given = mainHandArgument(source, targets, item ->{
             item.addFlags(flag);
         });
-        new MsgContainer("Added item flag, " + flag.toString().toLowerCase() + " to main hand items of " + given + " entities.").use(getExecutor(source));
+        Communicator.chat("Added item flag, " + flag.toString().toLowerCase() + " to main hand items of " + given + " entities.").use(getExecutor(source));
         return given > 0 ? 1 : -1;
     }
 
@@ -169,7 +170,7 @@ public class CruxItemsCommands {
         int given = mainHandArgument(source, targets, item ->{
             item.removeFlags(flag);
         });
-        new MsgContainer("Removed item flag, " + flag.toString().toLowerCase() + " to main hand items of " + given + " entities.").use(getExecutor(source));
+        Communicator.chat("Removed item flag, " + flag.toString().toLowerCase() + " to main hand items of " + given + " entities.").use(getExecutor(source));
         return given > 0 ? 1 : -1;
     }
 
@@ -194,7 +195,7 @@ public class CruxItemsCommands {
         int given = mainHandArgument(source, targets, item ->{
             item.color(color);
         });
-        new MsgContainer("Changed the color of main hand items on " + given + " entities.").use(getExecutor(source));
+        Communicator.chat("Changed the color of main hand items on " + given + " entities.").use(getExecutor(source));
         return given > 0 ? 1 : -1;
     }
 
@@ -202,7 +203,7 @@ public class CruxItemsCommands {
         int given = mainHandArgument(source, targets, item ->{
             item.itemName(name);
         });
-        new MsgContainer("Changed the item name of main hand items on " + given + " entities.").use(getExecutor(source));
+        Communicator.chat("Changed the item name of main hand items on " + given + " entities.").use(getExecutor(source));
         return given > 0 ? 1 : -1;
     }
 
@@ -210,7 +211,7 @@ public class CruxItemsCommands {
         int given = mainHandArgument(source, targets, item ->{
             item.customName(name);
         });
-        new MsgContainer("Changed the custom name of main hand items on " + given + " entities.").use(getExecutor(source));
+        Communicator.chat("Changed the custom name of main hand items on " + given + " entities.").use(getExecutor(source));
         return given > 0 ? 1 : -1;
     }
 
@@ -237,7 +238,7 @@ public class CruxItemsCommands {
             given++;
         }
         int result = given > 0 ? 1 : -1;
-        new MsgContainer("Gave " + item.key() + " to " + CruxMath.format(given) + " entities.").use(getExecutor(source));
+        Communicator.chat("Gave " + item.key() + " to " + CruxMath.format(given) + " entities.").use(getExecutor(source));
         return result;
     }
 }

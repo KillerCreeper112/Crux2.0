@@ -45,6 +45,11 @@ public class SimpleCreateBossBar implements CreateBossBar {
         this.flags = flags;
     }
 
+    @Override
+    public String toString() {
+        return "SimpleCreateBossBar{key=" + key + ", title=" + title + ", progress=" + progress + ", color=" + color + ", overlay=" + overlay + ", duration=" + duration + ", flags=" + flags + "}";
+    }
+
     public BossBar.Color parseColor(@NotNull TextParserContext ctx){
         if(color == null) return BossBar.Color.WHITE;
         return BossBar.Color.NAMES.value(ctx.deserializeString(color));

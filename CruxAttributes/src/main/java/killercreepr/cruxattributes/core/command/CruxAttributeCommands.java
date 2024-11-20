@@ -10,6 +10,7 @@ import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.EntitySelectorArgumentResolver;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import killercreepr.crux.api.communication.Communicator;
 import killercreepr.crux.core.command.argument.CruxCmdArguments;
 import killercreepr.crux.core.communication.MsgContainer;
 import killercreepr.crux.core.plugin.CruxPlugin;
@@ -169,7 +170,7 @@ public class CruxAttributeCommands {
             int x = listModifier(source, from, executeOperation, a);
             if(x > highest) highest = x;
             if(x==-1){
-                new MsgContainer("<red>There are no modifiers from " + a.getName() + ".").use(getExecutor(source));
+                Communicator.chat("<red>There are no modifiers from " + a.getName() + ".").use(getExecutor(source));
             }
         }
         return highest;
@@ -200,19 +201,19 @@ public class CruxAttributeCommands {
         if(list.isEmpty()){
             return -1;
         }else{
-            new MsgContainer("<yellow>" + attribute.getName() + ":").use(sender);
+            Communicator.chat("<yellow>" + attribute.getName() + ":").use(sender);
             for(CruxAttributeModifier m : list){
                 if(m.getPath() != null){
                     int i = 0;
-                    new MsgContainer("<gray>PATH:").use(sender);
+                    Communicator.chat("<gray>PATH:").use(sender);
                     for(Key k : m.getPath()){
                         i++;
-                        new MsgContainer(" ".repeat(i) + " -> " + k.asString()).use(sender);
+                        Communicator.chat(" ".repeat(i) + " -> " + k.asString()).use(sender);
                     }
                 }
 
                 String format = "<gold><key> <dark_gray>-> <red>{amount=<amount>, slot=<slot>, operation=<operation>}";
-                new MsgContainer(format).use(sender,
+                Communicator.chat(format).use(sender,
                     TagContainer.merged(
                         Tag.parsed("key", m.key().asString()),
                         Tag.parsed("amount", m.getAmount()+""),
@@ -236,7 +237,7 @@ public class CruxAttributeCommands {
                 holder, attribute, key
             );
         }
-        new MsgContainer("Removed attribute modifier of " + key + ".")
+        Communicator.chat("Removed attribute modifier of " + key + ".")
             .use(getExecutor(source));
         return 1;
     }
@@ -266,7 +267,7 @@ public class CruxAttributeCommands {
                 holder, attribute, modifier
             );
         }
-        new MsgContainer("Added attribute modifier of " + modifier.key() + " with value " + modifier.getAmount() + " and operation " +
+        Communicator.chat("Added attribute modifier of " + modifier.key() + " with value " + modifier.getAmount() + " and operation " +
             modifier.getOperation().toString().toLowerCase() + " with slot " + modifier.getSlot() + ".")
             .use(getExecutor(source));
         return 1;

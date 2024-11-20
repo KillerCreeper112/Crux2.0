@@ -8,6 +8,7 @@ import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import killercreepr.crux.api.communication.Communicator;
 import killercreepr.crux.core.communication.MsgContainer;
 import killercreepr.crux.api.entity.memory.EntityMemory;
 import killercreepr.crux.core.plugin.CruxPlugin;
@@ -222,21 +223,21 @@ public class AdvancementCommands {
         CommandSender sender = getExecutor(source);
         CruxAdvancementProgress progress = advancement.getProgressIfPresent(player.getUniqueId());
 
-        new MsgContainer("<blue>Advancement Progress: " + progress).use(sender);
+        Communicator.chat("<blue>Advancement Progress: " + progress).use(sender);
         if(progress instanceof NumberAdvancementProgress p){
-            new MsgContainer("  <aqua>Number -> " + p.getProgress() + "/" + p.getCriteriaMaxProgress()).use(sender);
+            Communicator.chat("  <aqua>Number -> " + p.getProgress() + "/" + p.getCriteriaMaxProgress()).use(sender);
         }else if(progress instanceof ListAdvancementProgress p){
             p.getProgressMap().forEach((key, value) ->{
-                new MsgContainer("  <aqua>" + key + " -> " + value).use(sender);
+                Communicator.chat("  <aqua>" + key + " -> " + value).use(sender);
             });
-        }//else new MsgContainer("  <aqua>Unsupported progress or not present " + progress).use(sender);
+        }//else Communicator.chat()("  <aqua>Unsupported progress or not present " + progress).use(sender);
 
         if(advancement instanceof ObjectiveAdvancement objective){
             ObjectiveProgression oProgress = objective.getObjectiveProgressIfPresent(player.getUniqueId());
             if(oProgress != null){
-                new MsgContainer("<yellow>Objective Progression:").use(sender);
+                Communicator.chat("<yellow>Objective Progression:").use(sender);
                 oProgress.getProgressMap().forEach((key, value) ->{
-                    new MsgContainer("  <gold>" + key + " -> "+ value).use(sender);
+                    Communicator.chat("  <gold>" + key + " -> "+ value).use(sender);
                 });
             }
         }
@@ -287,7 +288,7 @@ public class AdvancementCommands {
                 manager.grantAdvancement(p, a);
             }
         }
-        new MsgContainer(advancements.size() + " advancements granted for " + targets.size() + " players.")
+        Communicator.chat(advancements.size() + " advancements granted for " + targets.size() + " players.")
             .use(sender);
         return 1;
     }
@@ -300,7 +301,7 @@ public class AdvancementCommands {
                 manager.revokeAdvancement(p, a);
             }
         }
-        new MsgContainer(advancements.size() + " advancements revoked from " + targets.size() + " players.")
+        Communicator.chat(advancements.size() + " advancements revoked from " + targets.size() + " players.")
             .use(sender);
         return 1;
     }

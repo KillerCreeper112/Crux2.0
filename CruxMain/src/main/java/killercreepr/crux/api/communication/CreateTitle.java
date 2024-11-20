@@ -2,12 +2,10 @@ package killercreepr.crux.api.communication;
 
 import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.crux.api.text.provider.StringTagProvider;
-import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.crux.api.text.tags.container.TagContainer;
 import killercreepr.crux.core.communication.SimpleCreateTitle;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.title.Title;
-import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

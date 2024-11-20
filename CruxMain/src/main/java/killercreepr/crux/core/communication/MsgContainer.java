@@ -1,11 +1,10 @@
 package killercreepr.crux.core.communication;
 
-import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.communication.boss.CreateBossBar;
 import killercreepr.crux.api.communication.Communicator;
 import killercreepr.crux.api.communication.CreateSound;
 import killercreepr.crux.api.communication.CreateTitle;
 import killercreepr.crux.api.text.context.TextParserContext;
-import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -22,40 +21,59 @@ public class MsgContainer implements Communicator {
     protected final String actionBar;
     protected final CreateTitle title;
     protected final CreateSound sound;
+    protected final CreateBossBar bossBar;
     protected boolean broadcast;
-    public MsgContainer(@Nullable List<String> chat, @Nullable String actionBar, @Nullable CreateTitle title, @Nullable CreateSound sound) {
+    public MsgContainer(@Nullable List<String> chat, @Nullable String actionBar, @Nullable CreateTitle title, @Nullable CreateSound sound, @Nullable CreateBossBar bossBar) {
         this.chat = chat;
         this.actionBar = actionBar;
         this.title = title;
         this.sound = sound;
+        this.bossBar = bossBar;
+    }
+
+    @Deprecated(forRemoval = true)
+    public MsgContainer(@Nullable List<String> chat, @Nullable String actionBar, @Nullable CreateTitle title, @Nullable CreateSound sound) {
+        this(chat, actionBar, title, sound, null);
+    }
+
+    @Deprecated(forRemoval = true)
+    public MsgContainer(@Nullable List<String> chat, @Nullable String actionBar, @Nullable CreateTitle title) {
+        this(chat, actionBar, title, null);
+    }
+
+    @Deprecated(forRemoval = true)
+    public MsgContainer(@Nullable List<String> chat, @Nullable String actionBar) {
+        this(chat, actionBar, null);
+    }
+
+    @Deprecated(forRemoval = true)
+    public MsgContainer(@Nullable List<String> chat) {
+        this(chat, null);
+    }
+
+    @Deprecated(forRemoval = true)
+    public MsgContainer(@Nullable String chat, @Nullable String actionBar, @Nullable CreateTitle title, @Nullable CreateSound sound) {
+        this(chat == null ? null : List.of(chat), actionBar, title, sound, null);
+    }
+
+    @Deprecated(forRemoval = true)
+    public MsgContainer(@Nullable String chat, @Nullable String actionBar, @Nullable CreateTitle title) {
+        this(chat, actionBar, title, null);
+    }
+
+    @Deprecated(forRemoval = true)
+    public MsgContainer(@Nullable String chat, @Nullable String actionBar) {
+        this(chat, actionBar, null);
+    }
+
+    @Deprecated(forRemoval = true)
+    public MsgContainer(@Nullable String chat) {
+        this(chat, null);
     }
 
     @Override
     public String toString() {
-        return "MsgContainer{chat=" + chat + ", actionBar=" + actionBar + ", title=" + title + ", sound=" + sound + ", broadcast=" + broadcast + "}";
-    }
-
-    public MsgContainer(@Nullable String chat, @Nullable String actionBar, @Nullable CreateTitle title, @Nullable CreateSound sound){
-        this(chat == null ? null : List.of(chat), actionBar, title, sound);
-    }
-    public MsgContainer(@Nullable List<String> chat, @Nullable String actionBar, @Nullable CreateTitle title) {
-        this(chat, actionBar, title, null);
-    }
-    public MsgContainer(@Nullable String chat, @Nullable String actionBar, @Nullable CreateTitle title) {
-        this(chat == null ? null : List.of(chat), actionBar, title, null);
-    }
-
-    public MsgContainer(@Nullable List<String> chat, @Nullable String actionBar) {
-        this(chat, actionBar, null);
-    }
-    public MsgContainer(@Nullable String chat, @Nullable String actionBar) {
-        this(chat == null ? null : List.of(chat), actionBar, null);
-    }
-    public MsgContainer(@Nullable List<String> chat) {
-        this(chat, null);
-    }
-    public MsgContainer(@Nullable String chat) {
-        this(chat == null ? null : List.of(chat), null);
+        return "MsgContainer{chat=" + chat + ", actionBar=" + actionBar + ", title=" + title + ", sound=" + sound + ", bossBar=" + bossBar + ", broadcast=" + broadcast + "}";
     }
 
     @Override
@@ -67,25 +85,7 @@ public class MsgContainer implements Communicator {
                 a.sendMessage(deserialize(s, ctx));
             }
         }
-        return this;
-    }
-
-    public MsgContainer use(@NotNull Player p, @Nullable MergedTagContainer tags){
-        return use(p, true, tags);
-    }
-
-    public MsgContainer use(@NotNull Player p, boolean broadcastCheck, @Nullable MergedTagContainer tags){
-        if(broadcastCheck && broadcast){
-            return broadcast(tags);
-        }
-        if(chat != null){
-            for(String s : chat){
-                p.sendMessage(deserialize(s, tags));
-            }
-        }
-        if(actionBar != null) p.sendActionBar(deserialize(actionBar, tags));
-        if(title != null) title.use(p, tags);
-        if(sound != null) sound.playFor(p);
+        if(bossBar != null) bossBar.showBossBar(a, ctx);
         return this;
     }
 
@@ -101,14 +101,7 @@ public class MsgContainer implements Communicator {
         if(actionBar != null) p.sendActionBar(deserialize(actionBar, ctx));
         if(title != null) title.use(p, ctx);
         if(sound != null) sound.playFor(p);
-        return this;
-    }
-
-    @Override
-    public MsgContainer broadcast(@Nullable MergedTagContainer tags){
-        for(Player p : Bukkit.getOnlinePlayers()){
-            use(p, false, tags);
-        }
+        if(bossBar != null) bossBar.showBossBar(p, ctx);
         return this;
     }
 
@@ -130,11 +123,6 @@ public class MsgContainer implements Communicator {
     public Communicator playAt(@NotNull Entity at) {
         if(sound != null) sound.playAt(at);
         return this;
-    }
-
-    protected @NotNull Component deserialize(@Nullable String input, @Nullable MergedTagContainer tags){
-        if(input == null) return Component.empty();
-        return Crux.format().deserialize(input, tags);
     }
 
     protected @NotNull Component deserialize(@Nullable String input, @NotNull TextParserContext ctx){
@@ -175,10 +163,11 @@ public class MsgContainer implements Communicator {
         protected String actionBar;
         protected CreateTitle title;
         protected CreateSound sound;
+        protected CreateBossBar bossBar;
         protected boolean broadcast;
 
         public @NotNull MsgContainer build(){
-            return new MsgContainer(chat, actionBar, title, sound).setBroadcast(broadcast);
+            return new MsgContainer(chat, actionBar, title, sound, bossBar).setBroadcast(broadcast);
         }
 
         public Builder chat(String chat) {
@@ -204,6 +193,12 @@ public class MsgContainer implements Communicator {
 
         public Builder sound(CreateSound sound) {
             this.sound = sound; return this;
+        }
+
+        @Override
+        public Communicator.Builder bossBar(CreateBossBar bossBar) {
+            this.bossBar = bossBar;
+            return this;
         }
     }
 }
