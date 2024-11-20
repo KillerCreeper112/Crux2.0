@@ -43,6 +43,7 @@ public class CrazyAdvancement extends SimpleObjectiveAdvancement {
     public AdvancementFlag[] toCrazyFlags(){
         List<AdvancementFlag> convert = new ArrayList<>();
         for(CruxAdvancementFlag flag : flags){
+            if(flag == CruxAdvancementFlag.GLOBAL) continue;
             try{
                 convert.add(AdvancementFlag.valueOf(flag.toString()));
             }catch (IllegalArgumentException ignored){

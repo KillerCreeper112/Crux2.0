@@ -13,7 +13,7 @@ public interface InputContext {
     }
 
     static @NotNull InputContext simple(@Nullable StringTagProvider tags){
-        return simple(Crux.FORMAT, tags);
+        return simple(Crux.format(), tags);
     }
 
     static @NotNull InputContext simple(@NotNull FormatSerializer format, @Nullable StringTagProvider tags){

@@ -81,7 +81,7 @@ public class CrazyAdvancementDisplay implements CruxAdvancementIcon {
 
     public @NotNull AdvancementDisplay toCrazy(@NotNull CrazyAdvancementManager manager){
         AdvancementDisplay display = new AdvancementDisplay(
-            icon.buildItem(TextParserContext.builder(Crux.FORMAT).build()),
+            icon.buildItem(TextParserContext.builder(Crux.format()).build()),
             title,
             description,
             frame,

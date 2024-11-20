@@ -32,6 +32,6 @@ public class EvaluationCondition extends BaseCondition {
             String prefix = targetPrefixes == null ? null : targetPrefixes.get(id);
             tags.hook(o, prefix == null ? null : TagsPrefixBuilder.overwriteBase(prefix));
         });
-        return CruxString.parseBoolean(CruxMath.evaluateEvalEx(Crux.FORMAT.deserializeString(eva, tags)));
+        return CruxString.parseBoolean(CruxMath.evaluateEvalEx(Crux.format().deserializeString(eva, tags)));
     }
 }

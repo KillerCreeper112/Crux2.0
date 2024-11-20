@@ -16,14 +16,14 @@ import java.util.List;
 
 public interface TextParserContext extends InputContext {
     static @NotNull Builder builder(){
-        return builder(Crux.FORMAT);
+        return builder(Crux.format());
     }
 
     static @NotNull Builder builder(@NotNull FormatSerializer format){
         return new FormatParserContext.Builder(format);
     }
     static @NotNull TextParserContext empty(@NotNull FormatSerializer format){
-        if(format.equals(Crux.FORMAT)) return EMPTY_CRUX; //optimize
+        if(format.equals(Crux.format())) return EMPTY_CRUX; //optimize
         return new FormatParserContext(format, null, null, null);
     }
 
@@ -31,7 +31,7 @@ public interface TextParserContext extends InputContext {
         return EMPTY_CRUX;
     }
 
-    TextParserContext EMPTY_CRUX = new FormatParserContext(Crux.FORMAT, null, null, null);
+    TextParserContext EMPTY_CRUX = new FormatParserContext(Crux.format(), null, null, null);
 
     @Override
     default @NotNull String input(@NotNull String text){

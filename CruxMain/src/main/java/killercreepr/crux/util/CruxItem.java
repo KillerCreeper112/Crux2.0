@@ -64,7 +64,7 @@ public class CruxItem implements Cloneable, PersistHolderComponentHandler {
         this(new ItemStack(material));
     }
     public CruxItem(@NotNull ItemStack item) {
-        this(Crux.FORMAT, item);
+        this(Crux.format(), item);
     }
 
     public CruxItem(@NotNull FormatSerializer format, @NotNull Material material) {

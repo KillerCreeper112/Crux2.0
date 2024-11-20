@@ -42,7 +42,7 @@ public class ItemStackCondition extends BaseCondition {
         }
         if(amount != null){
             if(!CruxString.parseBoolean(CruxMath.evaluateEvalEx(
-                Crux.FORMAT.deserializeString(amount, TagContainer.string(Tag.parsed("amount", item.getAmount()+"")).hook(item))
+                Crux.format().deserializeString(amount, TagContainer.string(Tag.parsed("amount", item.getAmount()+"")).hook(item))
             ))) return false;
         }
         if(enchants != null){
@@ -57,7 +57,7 @@ public class ItemStackCondition extends BaseCondition {
                 int level = meta == null ? 0 : meta.getEnchantLevel(enchantment);
 
                 if(!CruxString.parseBoolean(CruxMath.evaluateEvalEx(
-                    Crux.FORMAT.deserializeString(equation, TagContainer.string(Tag.parsed("level", level+"")).hook(item))
+                    Crux.format().deserializeString(equation, TagContainer.string(Tag.parsed("level", level+"")).hook(item))
                 ))) return false;
             }
         }

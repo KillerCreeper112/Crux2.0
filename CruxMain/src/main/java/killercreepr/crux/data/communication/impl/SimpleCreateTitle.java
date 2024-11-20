@@ -47,7 +47,7 @@ public class SimpleCreateTitle implements CreateTitle {
 
     protected @NotNull Component deserialize(@Nullable OfflinePlayer viewer, @Nullable String input, @Nullable StringTagProvider tags){
         if(input == null) return Component.empty();
-        return Crux.FORMAT.deserialize(input, StringTagProvider.mergeHook(tags, viewer));
+        return Crux.format().deserialize(input, StringTagProvider.mergeHook(tags, viewer));
     }
     @Override
     public @Nullable String getTitle() {

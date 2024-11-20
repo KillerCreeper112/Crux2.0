@@ -41,7 +41,7 @@ public class ActivePotionImpl implements ActivePotion, Listener, ConfigurationSe
 
     @Override
     public @Nullable Component format(){
-        return Crux.FORMAT.deserialize("<gray>" + ActivePotion.formatPotion(potion, amplifier, duration));
+        return Crux.format().deserialize("<gray>" + ActivePotion.formatPotion(potion, amplifier, duration));
     }
 
     /**

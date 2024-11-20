@@ -17,7 +17,7 @@ import java.util.List;
 public class FormatParserContext implements TextParserContext {
     @Deprecated(since = "Use TextParserContext", forRemoval = true)
     public static @NotNull Builder builder(){
-        return builder(Crux.FORMAT);
+        return builder(Crux.format());
     }
     @Deprecated(since = "Use TextParserContext", forRemoval = true)
     public static @NotNull Builder builder(@NotNull FormatSerializer format){
@@ -29,7 +29,7 @@ public class FormatParserContext implements TextParserContext {
     }
     @Deprecated(since = "Use TextParserContext", forRemoval = true)
     public static @NotNull FormatParserContext empty(){
-        return empty(Crux.FORMAT);
+        return empty(Crux.format());
     }
 
     protected final @NotNull FormatSerializer format;

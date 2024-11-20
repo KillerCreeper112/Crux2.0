@@ -14,13 +14,13 @@ import org.jetbrains.annotations.Nullable;
 public class FileComponent extends SimpleFileHandler<Component> {
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull Component object) {
-        return new FilePrimitive(Crux.FORMAT.serialize(object));
+        return new FilePrimitive(Crux.format().serialize(object));
     }
 
     @Override
     public @Nullable Component deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
         if(!(e instanceof FilePrimitive s)) return null;
-        return Crux.FORMAT.deserialize(s.getAsString());
+        return Crux.format().deserialize(s.getAsString());
     }
 
     @Override
