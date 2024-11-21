@@ -1,9 +1,9 @@
 package killercreepr.cruxpotions.item;
 
 import killercreepr.crux.core.Crux;
-import killercreepr.cruxitems.item.CruxedItem;
-import killercreepr.cruxitems.item.CruxedItemUpdateContext;
-import killercreepr.cruxitems.item.CruxedItemUpdater;
+import killercreepr.cruxitems.core.item.CruxedItem;
+import killercreepr.cruxitems.core.item.CruxedItemUpdateContext;
+import killercreepr.cruxitems.api.item.CruxedItemUpdater;
 import killercreepr.cruxpotions.persistence.PotionPersistTags;
 import killercreepr.cruxpotions.persistence.StoredPotion;
 import net.kyori.adventure.key.Key;

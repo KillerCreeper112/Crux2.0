@@ -6,7 +6,7 @@ import killercreepr.crux.api.plugin.module.CruxModule;
 import killercreepr.crux.core.plugin.module.StandardModules;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.registries.CruxRegistries;
-import killercreepr.cruxitems.registries.CruxItemRegistries;
+import killercreepr.cruxitems.core.registries.CruxItemRegistries;
 import killercreepr.cruxpotions.command.CruxPotionCommands;
 import killercreepr.cruxpotions.config.Config;
 import killercreepr.cruxpotions.data.PotionHolder;
