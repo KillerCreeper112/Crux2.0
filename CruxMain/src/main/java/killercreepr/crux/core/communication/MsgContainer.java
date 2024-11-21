@@ -155,7 +155,7 @@ public class MsgContainer implements Communicator {
     }
 
     public boolean isEmpty(){
-        return chat == null && actionBar == null && title == null && sound == null;
+        return chat == null && actionBar == null && title == null && sound == null && bossBar == null;
     }
 
     public static class Builder implements Communicator.Builder{

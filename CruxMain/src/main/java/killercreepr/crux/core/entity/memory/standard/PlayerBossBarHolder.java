@@ -6,7 +6,6 @@ import killercreepr.crux.api.communication.boss.BossBarHolder;
 import killercreepr.crux.api.entity.memory.PlayerMemory;
 import killercreepr.crux.core.entity.memory.PlayerTickedDataHolder;
 import net.kyori.adventure.key.Key;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,6 +23,11 @@ public class PlayerBossBarHolder extends PlayerTickedDataHolder implements BossB
     }
 
     protected final Map<Key, ActiveBossBar> bars = new ConcurrentHashMap<>();
+
+    @Override
+    public boolean shouldRemoveFromMemory(@Nullable Player e) {
+        return super.shouldRemoveFromMemory(e) || bars.isEmpty();
+    }
 
     @Override
     protected void onTick(@NotNull Player e) {

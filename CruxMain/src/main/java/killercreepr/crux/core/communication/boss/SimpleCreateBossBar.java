@@ -1,18 +1,16 @@
 package killercreepr.crux.core.communication.boss;
 
+import killercreepr.crux.api.communication.boss.BossBarHolder;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.communication.boss.ActiveBossBar;
 import killercreepr.crux.api.communication.boss.CreateBossBar;
 import killercreepr.crux.api.text.context.TextParserContext;
-import killercreepr.crux.core.entity.memory.standard.PlayerBossBarHolder;
-import killercreepr.crux.api.entity.memory.EntityMemory;
 import killercreepr.crux.core.util.CruxDuration;
 import killercreepr.crux.core.util.CruxMath;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -85,6 +83,11 @@ public class SimpleCreateBossBar implements CreateBossBar {
         return CruxDuration.ofTicks((int) CruxMath.evaluate(ctx.deserializeString(duration)));
     }
 
+    public @Nullable Integer parseDurationInt(@NotNull TextParserContext ctx){
+        if(duration == null) return null;
+        return (int) CruxMath.evaluate(ctx.deserializeString(duration));
+    }
+
     public @NotNull Key parseKey(@NotNull TextParserContext ctx){
         if(key == null) return Crux.key(UUID.randomUUID().toString());
         return Crux.key(ctx.deserializeString(key));
@@ -92,16 +95,25 @@ public class SimpleCreateBossBar implements CreateBossBar {
 
     @Override
     public @Nullable ActiveBossBar showBossBar(@NotNull Audience audience, @NotNull TextParserContext ctx) {
-        if(!(audience instanceof Player p)) return null;
-        PlayerBossBarHolder holder = EntityMemory.getOrCreateDataHolder(p, PlayerBossBarHolder.class);
-        if(holder == null) return null;
+        if(!BossBarHolder.isValidBossBarHolder(audience)) return null;
+        BossBarHolder holder = BossBarHolder.getIfPresent(audience);
         Key key = parseKey(ctx);
-        ActiveBossBar active = holder.getBossBar(key);
+        ActiveBossBar active = holder == null ? null : holder.getBossBar(key);
+        Integer duration = parseDurationInt(ctx);
+
+        if(duration != null && duration != -1 && duration < 1){
+            if(holder != null) holder.removeBossBar(key);
+            return null;
+        }
+
         if(active != null){
             active.resetTimer();
             active.update(ctx);
             return active;
         }
+        if(holder == null) holder = BossBarHolder.getOrAdd(audience);
+        if(holder == null) return null;
+
         ActiveBossBar bar = build(key, ctx);
         if(!holder.addBossBar(bar)) return null; //Only return the active boss bar if it was actually added.
         return bar;
