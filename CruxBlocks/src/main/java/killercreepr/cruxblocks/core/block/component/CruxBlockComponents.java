@@ -26,11 +26,11 @@ public class CruxBlockComponents {
     public static final DataComponentType<CreateBlockSoundGroup> BLOCK_SOUND_GROUP = register("block_sound_group", builder -> builder);
 
     public static final DataComponentType<Boolean> REQUIRES_CORRECT_TOOL_FOR_DROPS = register("requires_correct_tool_for_drops",
-        builder -> builder);
+        builder -> builder.textParser(Boolean.class));
     public static final DataComponentType<Float> EXPLOSION_RESISTANCE = register("explosion_resistance",
-        builder -> builder);
+        builder -> builder.textParser(Float.class));
     public static final DataComponentType<Boolean> PISTON_IMMOVABLE = register("piston_immovable",
-        builder -> builder);
+        builder -> builder.textParser(Boolean.class));
     public static final DataComponentType<EntitySpawnerComponent> ENTITY_SPAWNER = register("entity_spawner",
         builder -> builder);
 

@@ -8,7 +8,6 @@ import killercreepr.cruxitems.api.item.component.InteractableComponent;
 import killercreepr.cruxitems.api.item.interaction.InteractableItem;
 import killercreepr.cruxitems.api.item.interaction.ItemUseContext;
 import killercreepr.cruxitems.api.item.interaction.ItemUseResult;
-import killercreepr.cruxitems.core.component.CruxItemsComponents;
 import killercreepr.cruxitems.core.item.CruxedItem;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Entity;
@@ -16,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+import java.util.Collection;
 
 public class CfgPluginItem extends GenericPluginItem implements InteractableItem {
     protected final @NotNull DynamicItem item;
@@ -35,7 +34,7 @@ public class CfgPluginItem extends GenericPluginItem implements InteractableItem
     @Override
     public @NotNull ItemUseResult onUse(@NotNull ItemUseContext ctx) {
         CruxItem item = ctx.getItem();
-        List<InteractableComponent> list = item.get(CruxItemsComponents.INTERACTABLES);
+        Collection<InteractableComponent> list = item.getAllOfType(InteractableComponent.class);
         if(list == null) return ItemUseResult.empty();
         for(InteractableComponent c : list){
             if(!c.isUsable(ctx)) continue;

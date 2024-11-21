@@ -12,7 +12,6 @@ import killercreepr.cruxitems.api.item.ItemDisplayFormatter;
 import killercreepr.cruxitems.api.item.plugin.PluginItem;
 import killercreepr.cruxitems.api.values.ValuesProvider;
 import killercreepr.cruxitems.core.command.CruxItemsCommands;
-import killercreepr.cruxitems.core.component.CruxItemsComponents;
 import killercreepr.cruxitems.core.config.Config;
 import killercreepr.cruxitems.core.config.CruxItemsConfigHook;
 import killercreepr.cruxitems.core.item.CruxedItem;
@@ -58,7 +57,6 @@ public class CruxItemsModule implements CruxModule, ItemHandler {
 
     @Override
     public void onLoad(@NotNull CruxPlugin plugin) {
-        CruxItemsComponents.register();
         if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS)){
             CruxItemsConfigHook.register();
         }
