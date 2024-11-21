@@ -13,8 +13,10 @@ import java.util.function.UnaryOperator;
 public class CruxComponents {
     public static void register(){}
 
-    public static final DataComponentType<Float> HARDNESS = register("hardness", builder -> builder);
-    public static final DataComponentType<Boolean> UNBREAKABLE = register("unbreakable", builder -> builder);
+    public static final DataComponentType<Float> HARDNESS = register("hardness", builder -> builder
+        .textParser(Float.class));
+    public static final DataComponentType<Boolean> UNBREAKABLE = register("unbreakable", builder -> builder
+        .textParser(Boolean.class));
     public static final DataComponentType<ToolComponent> TOOL = register("tool",
         builder -> builder.persistent(PersistentDataSerializer.create(Crux.key(CruxPersist.TOOL.tagName()), CruxPersistence.TOOL_COMPONENT)));
 

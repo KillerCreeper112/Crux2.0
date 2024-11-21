@@ -8,6 +8,7 @@ import killercreepr.crux.api.entity.memory.EntityMemory;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.component.CruxComponents;
 import killercreepr.crux.core.util.CruxBlockUtil;
+import killercreepr.crux.core.util.CruxItem;
 import killercreepr.crux.core.util.CruxLoc;
 import killercreepr.cruxblocks.api.block.CruxBlock;
 import killercreepr.cruxblocks.api.block.active.ActiveCruxBlock;
@@ -347,7 +348,10 @@ public class CustomBlocksListener implements Listener {
         if(clickedBlock.getType().asBlockType().isInteractable() && clickedBlock.getType() != Material.NOTE_BLOCK){
             if(!p.isSneaking() || (p.isSneaking() && item == null)) return;
         }
-        CruxBlockGroup group = CruxBlocksPersistTags.CRUX_BLOCK_GROUP.get(item);
+        if(CruxItem.isEmpty(item)) return;
+        CruxItem cruxItem = CruxItem.create(item);
+
+        CruxBlockGroup group = cruxItem.get(CruxBlockComponents.BLOCK_GROUP); //CruxBlocksPersistTags.CRUX_BLOCK_GROUP.get(item);
         if(group == null) return;
         Block placeBlock = getPlaceBlock(clickedBlock, blockFace);
         if(!placeBlock.isEmpty() && !placeBlock.isReplaceable()) return;

@@ -1,6 +1,7 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.item;
 
 import com.google.common.reflect.TypeToken;
+import killercreepr.crux.core.item.dynamic.component.DynamicItemCruxComponents;
 import killercreepr.crux.core.item.dynamic.component.DynamicItemUnbreakable;
 import killercreepr.crux.core.item.dynamic.BukkitDynamicItem;
 import killercreepr.crux.api.item.dynamic.DynamicItem;
@@ -288,6 +289,18 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
                 );
                 if(tags == null || tags.isEmpty()) return null;
                 return new killercreepr.crux.core.item.dynamic.component.DynamicItemPersistentTags(tags);
+            }
+        });
+
+        COMPONENT_REGISTRY.register("crux_components", new FileGenericSingleDynamicComponent<>(DynamicItemCruxComponents.class) {
+            @Override
+            public @NotNull String jsonSerializerID() {
+                return "dynamic_item_crux_components";
+            }
+
+            @Override
+            public @NotNull DynamicItemCruxComponents deserialize(@NotNull Object object) {
+                return new DynamicItemCruxComponents(object);
             }
         });
     }

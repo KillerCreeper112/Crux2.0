@@ -1,11 +1,13 @@
 package killercreepr.crux.core.component.parser.type;
 
 import killercreepr.crux.api.component.parser.ComponentTextInputParser;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.registries.CruxRegistries;
+import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 
 public class ComponentParserTypes {
-    public static final ComponentTextInputParser<Boolean> BOOLEAN = register(new ComponentTextInputParser<>() {
+    public static final ComponentTextInputParser<Boolean> BOOLEAN = register(Boolean.class, new ComponentTextInputParser<>() {
         @Override
         public @NotNull Boolean parse(@NotNull Object object) throws IllegalArgumentException {
             String x = object.toString();
@@ -15,28 +17,35 @@ public class ComponentParserTypes {
         }
     });
 
-    public static final ComponentTextInputParser<String> STRING = register(new ComponentTextInputParser<>() {
+    public static final ComponentTextInputParser<String> STRING = register(String.class, new ComponentTextInputParser<>() {
         @Override
         public @NotNull String parse(@NotNull Object object) throws IllegalArgumentException {
             return object.toString();
         }
     });
 
-    public static final ComponentTextInputParser<Integer> INTEGER = register(new ComponentTextInputParser<>() {
+    public static final ComponentTextInputParser<Key> KEY = register(String.class, new ComponentTextInputParser<>() {
+        @Override
+        public @NotNull Key parse(@NotNull Object object) throws IllegalArgumentException {
+            return Crux.key(object.toString());
+        }
+    });
+
+    public static final ComponentTextInputParser<Integer> INTEGER = register(Integer.class, new ComponentTextInputParser<>() {
         @Override
         public @NotNull Integer parse(@NotNull Object object) throws IllegalArgumentException {
             return Integer.parseInt(object.toString());
         }
     });
 
-    public static final ComponentTextInputParser<Double> DOUBLE = register(new ComponentTextInputParser<>() {
+    public static final ComponentTextInputParser<Double> DOUBLE = register(Double.class, new ComponentTextInputParser<>() {
         @Override
         public @NotNull Double parse(@NotNull Object object) throws IllegalArgumentException {
             return Double.parseDouble(object.toString());
         }
     });
 
-    public static final ComponentTextInputParser<Float> FLOAT = register(new ComponentTextInputParser<>() {
+    public static final ComponentTextInputParser<Float> FLOAT = register(Float.class, new ComponentTextInputParser<>() {
         @Override
         public @NotNull Float parse(@NotNull Object object) throws IllegalArgumentException {
             return Float.parseFloat(object.toString());
@@ -45,7 +54,7 @@ public class ComponentParserTypes {
 
     public static void register(){}
 
-    public static <T extends ComponentTextInputParser<?>> T register(T value){
-        return CruxRegistries.DATA_COMPONENT_TEXT_PARSER_TYPE.register(value);
+    public static <T extends ComponentTextInputParser<?>> T register(Class<?> type, T value){
+        return CruxRegistries.DATA_COMPONENT_TEXT_PARSER_TYPE.register(type, value);
     }
 }
