@@ -66,15 +66,7 @@ public class TextComponentParser implements ComponentParser {
             String key = keyValue[0].trim();
             String value = keyValue[1].trim();
 
-            // If the value starts with '{', handle it as a nested map
-            if (value.startsWith("{") && value.endsWith("}")) {
-                // Parse the nested properties inside curly braces
-                Map<String, Object> nestedProperties = parseNestedProperties(value);
-                components.put(key, nestedProperties);
-            } else {
-                // Otherwise, treat the value as a simple string or number (to be parsed later)
-                components.put(key, value);
-            }
+            components.put(key, parseObject(value));
         }
 
         return components;
@@ -84,6 +76,7 @@ public class TextComponentParser implements ComponentParser {
     private static String[] customSplit(String input) {
         StringBuilder currentProperty = new StringBuilder();
         int openBraces = 0; // Keeps track of the level of nested curly braces
+        int openBrackets = 0;
         //StringBuilder result = new StringBuilder();
         List<String> result = new ArrayList<>();
 
@@ -95,7 +88,11 @@ public class TextComponentParser implements ComponentParser {
                 openBraces++;  // Increase the nested structure level when encountering '{'
             } else if (ch == '}') {
                 openBraces--;  // Decrease the nested structure level when encountering '}'
-            } else if (ch == ',' && openBraces == 0) {
+            } else if (ch == '[') {
+                openBrackets++;  // Increase the nested structure level when encountering '{'
+            } else if (ch == ']') {
+                openBrackets--;  // Decrease the nested structure level when encountering '}'
+            } else if (ch == ',' && openBraces == 0 && openBrackets == 0) {
                 // Split only when the comma is outside of any nested structure
                 if(!currentProperty.isEmpty()) result.add(currentProperty.toString());
                 //result.append(currentProperty).append(',');
@@ -109,6 +106,29 @@ public class TextComponentParser implements ComponentParser {
         // Add the last property (without trailing comma)
         if(!currentProperty.isEmpty()) result.add(currentProperty.toString());
         return result.toArray(new String[0]);
+    }
+
+    private static Object parseObject(String value){
+        if(value.startsWith("{")){
+            return parseNestedProperties(value);
+        }
+        if(value.startsWith("[")){
+            return parseListProperties(value);
+        }
+        return value;
+    }
+
+    private static List<Object> parseListProperties(String nestedProperties){
+        List<Object> map = new ArrayList<>();
+        nestedProperties = nestedProperties.substring(1, nestedProperties.length() - 1).trim();
+
+        // Split by commas to handle key-value pairs inside the curly braces
+        String[] pairs = customSplit(nestedProperties);
+        for (String pair : pairs) {
+            map.add(parseObject(pair));
+        }
+
+        return map;
     }
 
     // Parse nested key-value pairs like {sharpness:1,fortune:3}
@@ -127,12 +147,7 @@ public class TextComponentParser implements ComponentParser {
             String key = keyValue[0].trim();
             String value = keyValue[1].trim();
 
-            if(value.startsWith("{")){
-                map.put(key, parseNestedProperties(value));
-                continue;
-            }
-
-            map.put(key, value);
+            map.put(key, parseObject(value));
         }
 
         return map;

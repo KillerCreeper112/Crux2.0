@@ -23,7 +23,7 @@ public class ToolComponentTagType implements PersistentDataType<PersistentDataCo
 
     @Override
     public @NotNull PersistentDataContainer toPrimitive(@NotNull ToolComponent complex, @NotNull PersistentDataAdapterContext context) {
-        return null;
+        throw new UnsupportedOperationException("UNSUPPORTED NO!");
     }
 
     @Override
