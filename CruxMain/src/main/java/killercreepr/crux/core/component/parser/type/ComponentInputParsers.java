@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public class ComponentInputParsers {
     public static PersistentTextParser<BlockPredicate> blockPredicate(@NotNull Key key){
@@ -60,6 +61,8 @@ public class ComponentInputParsers {
         });
 
     public static final PersistentTextParser<BlockPredicate> TYPED_BLOCK_PREDICATE = PersistentTextParser.mapBuilder(BlockPredicate.class)
+        .canEncode(e -> e instanceof BlockPredicateComponent)
+        .canDecode(e -> e instanceof Map<?,?>)
         .field("type", ComponentInputField.createString(e ->{
             if(e instanceof BlockAllPredicate) return "all";
             if(e instanceof BlockAnyPredicate) return "any";

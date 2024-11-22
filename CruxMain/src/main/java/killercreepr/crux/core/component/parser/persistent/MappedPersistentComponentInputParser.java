@@ -6,7 +6,6 @@ import killercreepr.crux.api.component.parser.persistent.PersistentTextParser;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.util.CruxTag;
 import net.kyori.adventure.key.Key;
-import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -83,8 +82,6 @@ public class MappedPersistentComponentInputParser<T> extends BasePersistentTextP
     public @NotNull Map<String, Object> encodeFromObject(@NotNull T object){
         Map<String, Object> map = new HashMap<>();
         inputParsers.forEach((id, parser) ->{
-            Bukkit.broadcastMessage("encoding: " + id + ", " + object + " toooo -> " +
-                parser.textInputParser().encodeObjectUnchecked(parser.field().apply(object)));
             map.put(id, parser.textInputParser().encodeObjectUnchecked(parser.field().apply(object)));
         });
         return map;
