@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ComponentInputParsers {
-    public static PersistentTextParser<BlockPredicate> blockPredicate(@NotNull Key key){
+    /*public static PersistentTextParser<BlockPredicate> blockPredicate(@NotNull Key key){
         return PersistentTextParser.alternativeBuilder(BlockPredicate.class)
             .add(PersistentTextParser.singleBuilder(BlockPredicate.class)
                 .field(key, ComponentInputField.createList(ComponentInputField.createString(e -> e), e ->{
@@ -39,6 +39,25 @@ public class ComponentInputParsers {
             .add(TYPED_BLOCK_PREDICATE)
             .build()
             ;
+    }*/
+
+    public static PersistentTextParser<BlockPredicate> blockPredicate(@NotNull Key key){
+        return PersistentTextParser.singleBuilder(BlockPredicate.class)
+            .field(ComponentInputField.createList(ComponentInputField.createString(e -> e), e ->{
+                if(!(e instanceof BlockPredicateComponent cc)) throw new IllegalArgumentException("BlockPredicate is not component type!");
+                return cc.encodeToParser();
+            }))
+            .output(e ->{
+                Collection<BlockPredicate> predicates = new ArrayList<>();
+                e.toList().forEach(s ->{
+                    BlockPredicate predicate = SIMPLE_BLOCK_PREDICATE.decodeObject(s);
+                    predicates.add(predicate);
+                });
+                return new BlockAllPredicate(predicates);
+            })
+            .canDecode(e -> e instanceof List<?>)
+            .canEncode(e -> e instanceof BlockPredicateComponent)
+            .build();
     }
 
     public static final PersistentTextParser<BlockPredicate> SIMPLE_BLOCK_PREDICATE = PersistentTextParser.singleBuilder(BlockPredicate.class)

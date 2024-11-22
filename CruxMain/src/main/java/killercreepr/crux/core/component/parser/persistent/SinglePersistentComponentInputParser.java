@@ -37,16 +37,16 @@ public class SinglePersistentComponentInputParser<T> extends BasePersistentTextP
 
     @Override
     public @NotNull T decodeObject(@NotNull Object object) throws IllegalArgumentException {
-        ComponentParseContext ctx = new SimpleComponentParseContext<>(this, field.textInputParser().decodeObject(object));
+        ComponentParseContext ctx = new SimpleComponentParseContext<>(this, object);
         return output.apply(ctx);
     }
 
     @Override
     public @Nullable T decode(@NotNull PersistentDataContainer from) {
-        Object parsed = CruxTag.get(from, key, field.dataType(), null);
-        if(parsed == null) return null;
-        ComponentParseContext ctx = new SimpleComponentParseContext<>(this, parsed);
-        return output.apply(ctx);
+        return (T) CruxTag.get(from, key, field.dataType(), null);
+        /*if(parsed == null) return null;
+        ComponentParseContext ctx = new SimpleComponentParseContext<>(this, encodeObject((T) parsed));
+        return output.apply(ctx);*/
     }
 
     @Override

@@ -29,9 +29,7 @@ public interface ToolComponent {
     }
 
     interface Rule{
-
         PersistentTextParser<Rule> INPUT_PARSER = PersistentTextParser.mapBuilder(Rule.class)
-            .key("tool_rule")
             .field("blocks", ComponentInputField.create(ComponentInputParsers.blockPredicate(Crux.key("blocks")), Rule::getBlocks))
             .field("speed", ComponentInputField.createFloat(Rule::getSpeed))
             .field("correct_for_drops", ComponentInputField.createBool(Rule::isCorrectToolForDrops))

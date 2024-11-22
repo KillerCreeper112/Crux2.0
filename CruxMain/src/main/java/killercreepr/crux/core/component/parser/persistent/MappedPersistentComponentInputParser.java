@@ -4,8 +4,10 @@ import killercreepr.crux.api.component.parser.persistent.ComponentInputField;
 import killercreepr.crux.api.component.parser.persistent.ComponentParseContext;
 import killercreepr.crux.api.component.parser.persistent.PersistentTextParser;
 import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.persistence.type.ListTagType;
 import killercreepr.crux.core.util.CruxTag;
 import net.kyori.adventure.key.Key;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -67,15 +69,18 @@ public class MappedPersistentComponentInputParser<T> extends BasePersistentTextP
 
     @Override
     public @Nullable T decode(@NotNull PersistentDataContainer from) {
-        PersistentDataContainer c = CruxTag.get(from, key, PersistentDataType.TAG_CONTAINER, null);
+        PersistentDataContainer c = key == null ? from : CruxTag.get(from, key, PersistentDataType.TAG_CONTAINER, null);
         if(c == null) return null;
         Map<String, Object> map = new HashMap<>();
         for(NamespacedKey key : c.getKeys()){
             PersistentDataType<?, ?> type = inputParsers.get(key.value()).dataType();
             if(!c.has(key, type)) continue;
             Object value = CruxTag.get(c, key, type);
+            Bukkit.broadcastMessage("decodeData= " + key + ", value=" + value);
             map.put(key.value(), value);
         }
+        ComponentParseContext ctx = new SimpleComponentParseContext<>(this, map);
+        //return output.apply(ctx);
         return decodeObject(map);
     }
 
@@ -89,6 +94,10 @@ public class MappedPersistentComponentInputParser<T> extends BasePersistentTextP
 
     @Override
     public @Nullable T encode(@NotNull PersistentDataContainer to, @Nullable T value) {
+        if(value == null){
+            CruxTag.remove(to, key);
+            return null;
+        }
         T previousValue = decode(to);
 
         PersistentDataContainer c = to.getAdapterContext().newPersistentDataContainer();

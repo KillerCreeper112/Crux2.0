@@ -18,6 +18,7 @@ public class ComponentParserListType<T> implements ComponentTextInputParser<List
         if(!(object instanceof Collection<?> l)) throw new IllegalArgumentException(object + " is not a collection!");
         List<T> list = new ArrayList<>();
         for(Object o : l){
+            //if(o == null) continue;
             T parsed = valueParser.decodeObject(o);
             list.add(parsed);
         }

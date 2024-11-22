@@ -28,13 +28,25 @@ public class SimpleComponentParseContext<T> implements ComponentParseContext {
 
     @Override
     public <E> E decode(@NotNull Function<Object, E> function) {
+        try{
+            return (E) values;
+        }catch (ClassCastException ignored){}
         return function.apply(values);
     }
 
     @Override
     public <E> E decode(@NotNull String id) {
-        if(!(parser instanceof MappedPersistentComponentInputParser<T> m)) return null;
-        return (E) m.getInputParsers().get(id).textInputParser().decodeObject(toMap().get(id));
+        try{
+            return (E) values;
+        }catch (ClassCastException ignored){}
+        Object object = toMap().get(id);
+        try{
+            return (E) object;
+        }catch (ClassCastException ignored){}
+        if(!(parser instanceof MappedPersistentComponentInputParser<T> m)) throw new UnsupportedOperationException(
+            "Parser must be a MappedPersistentComponentInputParser!"
+        );
+        return (E) m.getInputParsers().get(id).textInputParser().decodeObject(object);
     }
 
     @Override

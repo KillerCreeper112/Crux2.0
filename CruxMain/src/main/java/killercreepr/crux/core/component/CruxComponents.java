@@ -1,17 +1,11 @@
 package killercreepr.crux.core.component;
 
-import killercreepr.crux.api.block.predicate.BlockPredicate;
-import killercreepr.crux.api.block.tag.BlockTag;
 import killercreepr.crux.api.component.DataComponentType;
 import killercreepr.crux.api.component.parser.persistent.PersistentTextParser;
 import killercreepr.crux.api.item.component.ToolComponent;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.registries.CruxRegistries;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.function.UnaryOperator;
 
 public class CruxComponents {
@@ -51,27 +45,6 @@ public class CruxComponents {
                     );
                 }
             }));*/
-
-    public static BlockPredicate parsePredicate(@NotNull String blockTag){
-        if(blockTag.startsWith("#")){
-            BlockTag tag = CruxRegistries.BLOCK_TAG.get(Crux.key(blockTag.substring(1)));
-            if(tag==null) return null;
-            return BlockPredicate.fromTag(tag);
-        }
-        return BlockPredicate.fromType(Crux.key(blockTag));
-    }
-
-    public static BlockPredicate parsePredicate(@NotNull Object text){
-        if(text instanceof List<?> list){
-            Collection<BlockPredicate> predicates = new ArrayList<>();
-            for(Object s : list){
-                BlockPredicate predicate = parsePredicate(s);
-                predicates.add(predicate);
-            }
-            return BlockPredicate.fromAllOf(predicates);
-        }
-        return parsePredicate(text.toString());
-    }
 
     private static <T> DataComponentType<T> register(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator){
         return CruxRegistries.DATA_COMPONENT_TYPE.register(Crux.key(id), builderOperator.apply(DataComponentType.builder()).build());
