@@ -7,6 +7,7 @@ import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.util.CruxTag;
 import net.kyori.adventure.key.Key;
 import org.bukkit.NamespacedKey;
+import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
@@ -14,19 +15,25 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 public class MappedPersistentComponentInputParser<T> implements PersistentComponentInputParser<T> {
+    protected final @NotNull Class<T> type;
     protected final @NotNull Key key;
     protected final @NotNull Map<String, ComponentInputField<T>> inputParsers;
     protected final @NotNull Function<ComponentParseContext, T> output;
+    protected final @NotNull PersistentDataType<?, T> dataType;
 
-    public MappedPersistentComponentInputParser(@NotNull Key key,
+    public MappedPersistentComponentInputParser(@NotNull Class<T> type, @NotNull Key key,
                                                 @NotNull Map<String, ComponentInputField<T>> inputParsers,
-                                                @NotNull Function<ComponentParseContext, T> output) {
+                                                @NotNull Function<ComponentParseContext, T> output,
+                                                @Nullable PersistentDataType<?, T> dataType) {
+        this.type = type;
         this.key = key;
         this.inputParsers = inputParsers;
         this.output = output;
+        this.dataType = Objects.requireNonNullElseGet(dataType, this::buildDataType);
     }
 
     public @NotNull Key getKey() {
@@ -89,9 +96,57 @@ public class MappedPersistentComponentInputParser<T> implements PersistentCompon
         return previousValue;
     }
 
+    public PersistentDataContainer toPrimitive(@NotNull PersistentDataContainer to, @NotNull T value){
+        PersistentDataContainer c = to.getAdapterContext().newPersistentDataContainer();
+
+        Map<String, Object> map = encodeFromObject(value);
+
+        map.forEach((id, v) ->{
+            ComponentInputField<T> field = inputParsers.get(id);
+            PersistentDataType<?, Object> dataType = (PersistentDataType<?, Object>) field.dataType();
+            CruxTag.set(c, Crux.key(id), dataType, v);
+        });
+        return c;
+    }
+
+    public @NotNull PersistentDataType<?, T> buildDataType() {
+        return new PersistentDataType<PersistentDataContainer, T>() {
+            @Override
+            public @NotNull Class<PersistentDataContainer> getPrimitiveType() {
+                return PersistentDataContainer.class;
+            }
+            @Override
+            public @NotNull Class<T> getComplexType() {
+                return type;
+            }
+
+            @Override
+            public @NotNull PersistentDataContainer toPrimitive(@NotNull T complex, @NotNull PersistentDataAdapterContext context) {
+                return MappedPersistentComponentInputParser.this.toPrimitive(
+                    context.newPersistentDataContainer(), complex
+                );
+            }
+            @Override
+            public @NotNull T fromPrimitive(@NotNull PersistentDataContainer primitive, @NotNull PersistentDataAdapterContext context) {
+                return decode(primitive);
+            }
+        };
+    }
+
+    @Override
+    public @NotNull PersistentDataType<?, T> dataType() {
+        return dataType;
+    }
+
     public static class Builder<T> implements MapBuilder<T> {
+        protected final @NotNull Class<T> type;
+        public Builder(@NotNull Class<T> type) {
+            this.type = type;
+        }
+
         protected Key key;
         protected final @NotNull Map<String, ComponentInputField<T>> inputParsers = new HashMap<>();
+        protected PersistentDataType<?, T> dataType;
         protected Function<ComponentParseContext, T> output;
         @Override
         public Builder<T> field(String id, ComponentInputField<T> field){
@@ -104,6 +159,11 @@ public class MappedPersistentComponentInputParser<T> implements PersistentCompon
             return this;
         }
         @Override
+        public Builder<T> dataType(PersistentDataType<?, T> dataType){
+            this.dataType = dataType;
+            return this;
+        }
+        @Override
         public PersistentComponentInputParser<T> apply(Function<ComponentParseContext, T> output){;
             return output(output).build();
         }
@@ -111,7 +171,7 @@ public class MappedPersistentComponentInputParser<T> implements PersistentCompon
         @Override
         public PersistentComponentInputParser<T> build() {
             return new MappedPersistentComponentInputParser<>(
-                key, inputParsers, output
+                type, key, inputParsers, output, dataType
             );
         }
     }

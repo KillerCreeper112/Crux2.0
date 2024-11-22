@@ -6,9 +6,6 @@ import killercreepr.crux.core.registries.CruxRegistries;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ComponentParserTypes {
     public static final ComponentTextInputParser<Boolean> BOOLEAN = register(Boolean.class, new ComponentTextInputParser<>() {
         @Override
@@ -24,16 +21,6 @@ public class ComponentParserTypes {
         @Override
         public @NotNull String decodeObject(@NotNull Object object) throws IllegalArgumentException {
             return object.toString();
-        }
-    });
-
-    public static final ComponentTextInputParser<List<String>> STRING_LIST = register(String.class, new ComponentTextInputParser<>() {
-        @Override
-        public @NotNull List<String> decodeObject(@NotNull Object object) throws IllegalArgumentException {
-            if(!(object instanceof List<?> list)) throw new IllegalArgumentException();
-            List<String> l = new ArrayList<>();
-            list.forEach(s -> l.add(s.toString()));
-            return l;
         }
     });
 
@@ -70,4 +57,6 @@ public class ComponentParserTypes {
     public static <T extends ComponentTextInputParser<?>> T register(Class<?> type, T value){
         return CruxRegistries.DATA_COMPONENT_TEXT_PARSER_TYPE.register(type, value);
     }
+
+    public static final ComponentParserListTypeHolder LIST = new ComponentParserListTypeHolder();
 }

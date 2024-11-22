@@ -38,6 +38,8 @@ public interface PersistentDataSerializer<T> extends ComponentSerializer<Persist
     @Nullable
     T encode(@NotNull PersistentDataContainer to, @Nullable T value);
 
+    @NotNull PersistentDataType<?, T> dataType();
+
     class Simple<T> implements PersistentDataSerializer<T>{
         protected final @NotNull Key key;
         protected final @NotNull PersistentDataType<?, T> dataType;
@@ -57,6 +59,11 @@ public interface PersistentDataSerializer<T> extends ComponentSerializer<Persist
             T previousValue = decode(to);
             CruxTag.set(to, key, dataType, value);
             return previousValue;
+        }
+
+        @Override
+        public @NotNull PersistentDataType<?, T> dataType() {
+            return dataType;
         }
     }
 }
