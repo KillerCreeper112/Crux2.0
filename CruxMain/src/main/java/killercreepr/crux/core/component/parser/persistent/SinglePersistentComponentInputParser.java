@@ -12,15 +12,18 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
+import java.util.function.Predicate;
 
-public class SinglePersistentComponentInputParser<T> implements PersistentTextParser<T> {
+public class SinglePersistentComponentInputParser<T> extends BasePersistentTextParser<T> {
     protected final @NotNull Key key;
     protected final @NotNull ComponentInputField<T> field;
     protected final @NotNull Function<ComponentParseContext, T> output;
 
-    public SinglePersistentComponentInputParser(@NotNull Key key,
-                                                @NotNull ComponentInputField<T> field,
+    public SinglePersistentComponentInputParser(@Nullable Predicate<Object> canDecode,
+                                                @Nullable Predicate<Object> canEncode,
+                                                @NotNull Key key, @NotNull ComponentInputField<T> field,
                                                 @NotNull Function<ComponentParseContext, T> output) {
+        super(canDecode, canEncode);
         this.key = key;
         this.field = field;
         this.output = output;
@@ -73,10 +76,30 @@ public class SinglePersistentComponentInputParser<T> implements PersistentTextPa
         protected Key key;
         protected ComponentInputField<T> field;
         protected Function<ComponentParseContext, T> output;
+        protected Predicate<Object> canEncode;
+        protected Predicate<Object> canDecode;
+
+        @Override
+        public SingleBuilder<T> canEncode(Predicate<Object> predicate) {
+            this.canEncode = predicate;
+            return this;
+        }
+
+        @Override
+        public SingleBuilder<T> canDecode(Predicate<Object> predicate) {
+            this.canDecode = predicate;
+            return this;
+        }
 
         @Override
         public SingleBuilder<T> field(String id, ComponentInputField<T> field) {
             return field(Crux.key(id), field);
+        }
+
+        @Override
+        public SingleBuilder<T> field(ComponentInputField<T> field) {
+            this.field = field;
+            return this;
         }
 
         @Override
@@ -99,7 +122,10 @@ public class SinglePersistentComponentInputParser<T> implements PersistentTextPa
 
         @Override
         public PersistentTextParser<T> build() {
-            return new SinglePersistentComponentInputParser<>(key, field, output);
+            return new SinglePersistentComponentInputParser<>(
+                canDecode, canEncode,
+                key, field, output
+            );
         }
     }
 }

@@ -12,6 +12,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 public interface PersistentTextParser<T> extends ComponentTextInputParser<T>, PersistentDataSerializer<T> {
     static PersistentTextParser<Boolean> createBool(@NotNull Key key){
@@ -61,6 +62,14 @@ public interface PersistentTextParser<T> extends ComponentTextInputParser<T>, Pe
         return new PrimitivePersistentComponentInputParser<>(id, field);
     }
 
+    default boolean canDecode(@NotNull Object object){
+        return true;
+    }
+
+    default boolean canEncode(@NotNull Object object){
+        return true;
+    }
+
     interface AlternativeBuilder<T>{
         AlternativeBuilder<T> add(@NotNull PersistentTextParser<T> parser);
         PersistentTextParser<T> finish(@NotNull PersistentTextParser<T> parser);
@@ -72,7 +81,10 @@ public interface PersistentTextParser<T> extends ComponentTextInputParser<T>, Pe
         //    protected final @NotNull ComponentInputField<T> field;
         //    protected final @NotNull Function<ComponentParseContext, T> output;
 
+        SingleBuilder<T> canEncode(Predicate<Object> predicate);
+        SingleBuilder<T> canDecode(Predicate<Object> predicate);
         SingleBuilder<T> field(String id, ComponentInputField<T> field);
+        SingleBuilder<T> field(ComponentInputField<T> field);
         SingleBuilder<T> field(Key id, ComponentInputField<T> field);
         SingleBuilder<T> output(Function<ComponentParseContext, T> output);
         PersistentTextParser<T> apply(Function<ComponentParseContext, T> output);
@@ -84,6 +96,8 @@ public interface PersistentTextParser<T> extends ComponentTextInputParser<T>, Pe
         default MapBuilder<T> key(String key){
             return key(Crux.key(key));
         }
+        MapBuilder<T> canEncode(Predicate<Object> predicate);
+        MapBuilder<T> canDecode(Predicate<Object> predicate);
         MapBuilder<T> key(Key key);
         MapBuilder<T> dataType(PersistentDataType<?, T> dataType);
         MapBuilder<T> field(String id, ComponentInputField<T> field);

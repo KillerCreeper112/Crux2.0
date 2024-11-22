@@ -7,18 +7,16 @@ import killercreepr.crux.api.component.parser.persistent.ComponentInputField;
 import killercreepr.crux.api.component.parser.persistent.PersistentTextParser;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.block.predicate.BlockAllPredicate;
+import killercreepr.crux.core.block.predicate.BlockAnyPredicate;
 import killercreepr.crux.core.registries.CruxRegistries;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class ComponentInputParsers {
-    //blocks:#string
-    //blocks:[#list,dirt]
-    //blocks:{type:any_of,terms:[]}
-
     public static PersistentTextParser<BlockPredicate> blockPredicate(@NotNull Key key){
         return PersistentTextParser.alternativeBuilder(BlockPredicate.class)
             .add(PersistentTextParser.singleBuilder(BlockPredicate.class)
@@ -34,13 +32,18 @@ public class ComponentInputParsers {
                     });
                     return new BlockAllPredicate(predicates);
                 })
+                .canDecode(e -> e instanceof List<?>)
+                .canEncode(e -> e instanceof BlockPredicateComponent)
                 .build())
+            .add(TYPED_BLOCK_PREDICATE)
             .build()
             ;
     }
 
     public static final PersistentTextParser<BlockPredicate> SIMPLE_BLOCK_PREDICATE = PersistentTextParser.singleBuilder(BlockPredicate.class)
-        .field("d", ComponentInputField.createString(e ->{
+        .canEncode(e -> e instanceof BlockPredicateComponent)
+        .canDecode(e -> e instanceof String)
+        .field(ComponentInputField.createString(e ->{
             for(String s : ((BlockPredicateComponent) e).encodeToParser()){
                 return s;
             }
@@ -54,22 +57,28 @@ public class ComponentInputParsers {
                 return null;
             }
             return BlockPredicate.fromType(Crux.key(string));
-        });/*PersistentTextParser.alternativeBuilder(BlockPredicate.class)
-        .add(PersistentTextParser.mapBuilder(BlockPredicate.class)
-            .field("type", ComponentInputField.createString(e ->{
-                if(e instanceof BlockAllPredicate) return "all_of";
-                if(e instanceof BlockAnyPredicate) return "any_of";
-                return "unknown";
-            }))
-            .field("terms", ComponentInputField.createList(ComponentInputField.createKey(e -> e), e -> e))
-            .apply(e ->{
-                String type = e.decode("type");
-                Collection<BlockPredicate> predicates = e.decode("terms");
-                switch (type.toLowerCase()){
-                    case "any_of" ->{
-                        return BlockPredicate.fromAnyOf()
-                    }
+        });
+
+    public static final PersistentTextParser<BlockPredicate> TYPED_BLOCK_PREDICATE = PersistentTextParser.mapBuilder(BlockPredicate.class)
+        .field("type", ComponentInputField.createString(e ->{
+            if(e instanceof BlockAllPredicate) return "all";
+            if(e instanceof BlockAnyPredicate) return "any";
+            throw new IllegalStateException();
+        }))
+        .field("terms", ComponentInputField.createList(SIMPLE_BLOCK_PREDICATE,
+            e -> ((BlockPredicateComponent)e).encodeToParser()))
+        .apply(ctx ->{
+            String type = ctx.decode("type");
+            Collection<BlockPredicate> list = ctx.decode("terms");
+
+            switch (type.toLowerCase()){
+                case "all" ->{
+                    return new BlockAllPredicate(list);
                 }
-            }))
-        .build();*/
+                case "any" ->{
+                    return new BlockAnyPredicate(list);
+                }
+            }
+            throw new IllegalStateException();
+        });
 }

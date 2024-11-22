@@ -18,18 +18,22 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
-public class MappedPersistentComponentInputParser<T> implements PersistentTextParser<T> {
+public class MappedPersistentComponentInputParser<T> extends BasePersistentTextParser<T> {
     protected final @NotNull Class<T> type;
     protected final @NotNull Key key;
     protected final @NotNull Map<String, ComponentInputField<T>> inputParsers;
     protected final @NotNull Function<ComponentParseContext, T> output;
     protected final @NotNull PersistentDataType<?, T> dataType;
 
-    public MappedPersistentComponentInputParser(@NotNull Class<T> type, @NotNull Key key,
+    public MappedPersistentComponentInputParser(
+        @Nullable Predicate<Object> canDecode, Predicate<Object> canEncode,
+        @NotNull Class<T> type, @NotNull Key key,
                                                 @NotNull Map<String, ComponentInputField<T>> inputParsers,
                                                 @NotNull Function<ComponentParseContext, T> output,
                                                 @Nullable PersistentDataType<?, T> dataType) {
+        super(canDecode, canEncode);
         this.type = type;
         this.key = key;
         this.inputParsers = inputParsers;
@@ -156,6 +160,21 @@ public class MappedPersistentComponentInputParser<T> implements PersistentTextPa
         protected final @NotNull Map<String, ComponentInputField<T>> inputParsers = new HashMap<>();
         protected PersistentDataType<?, T> dataType;
         protected Function<ComponentParseContext, T> output;
+        protected Predicate<Object> canEncode;
+        protected Predicate<Object> canDecode;
+
+        @Override
+        public Builder<T> canEncode(Predicate<Object> predicate) {
+            this.canEncode = predicate;
+            return this;
+        }
+
+        @Override
+        public Builder<T> canDecode(Predicate<Object> predicate) {
+            this.canDecode = predicate;
+            return this;
+        }
+
         @Override
         public Builder<T> field(String id, ComponentInputField<T> field){
             inputParsers.put(id, field);
@@ -186,6 +205,7 @@ public class MappedPersistentComponentInputParser<T> implements PersistentTextPa
         @Override
         public PersistentTextParser<T> build() {
             return new MappedPersistentComponentInputParser<>(
+                canDecode, canEncode,
                 type, key, inputParsers, output, dataType
             );
         }

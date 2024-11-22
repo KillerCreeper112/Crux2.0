@@ -19,6 +19,7 @@ public class AlternativePersistTextParser<T> implements PersistentTextParser<T> 
     @Override
     public @NotNull Object encodeObject(@NotNull T object){
         for(PersistentTextParser<T> parser : values){
+            if(!parser.canEncode(object)) continue;
             return parser.encodeObject(object);
         }
         throw new UnsupportedOperationException();
@@ -27,11 +28,8 @@ public class AlternativePersistTextParser<T> implements PersistentTextParser<T> 
     @Override
     public @NotNull T decodeObject(@NotNull Object object) throws IllegalArgumentException {
         for(PersistentTextParser<T> parser : values){
-            try{
-                return parser.decodeObject(object);
-            }catch (Exception ignored){
-                ignored.printStackTrace();
-            }
+            if(!parser.canDecode(object)) continue;
+            return parser.decodeObject(object);
         }
         throw new IllegalArgumentException("Cannot decode object " + object + "! Tried " + values.size() + " parsers.");
     }
@@ -43,7 +41,7 @@ public class AlternativePersistTextParser<T> implements PersistentTextParser<T> 
                 T value = parser.decode(from);
                 if(value == null) continue;
                 return value;
-            }catch (Exception ignored){}
+            }catch (IllegalArgumentException ignored){}
         }
         return null;
     }
@@ -51,9 +49,8 @@ public class AlternativePersistTextParser<T> implements PersistentTextParser<T> 
     @Override
     public @Nullable T encode(@NotNull PersistentDataContainer to, @Nullable T value) {
         for(PersistentTextParser<T> parser : values){
-            try{
-                return parser.encode(to, value);
-            }catch (Exception ignored){}
+            if(!parser.canEncode(value)) continue;
+            return parser.encode(to, value);
         }
         throw new IllegalStateException("Cannot encode object " + value + "! Tried " + values.size() + " parsers.");
     }
