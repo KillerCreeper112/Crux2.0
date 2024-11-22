@@ -1,7 +1,7 @@
 package killercreepr.crux.api.loot;
 
-import killercreepr.crux.core.loot.SimpleLootContext;
 import killercreepr.crux.api.data.DataExchange;
+import killercreepr.crux.core.loot.SimpleLootContext;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

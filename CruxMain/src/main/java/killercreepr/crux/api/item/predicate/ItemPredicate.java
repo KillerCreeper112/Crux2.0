@@ -1,9 +1,9 @@
 package killercreepr.crux.api.item.predicate;
 
+import killercreepr.crux.api.data.tag.Tag;
 import killercreepr.crux.core.item.predicate.ItemAllPredicate;
 import killercreepr.crux.core.item.predicate.ItemTagPredicate;
 import killercreepr.crux.core.item.predicate.ItemTypePredicate;
-import killercreepr.crux.api.data.tag.Tag;
 import net.kyori.adventure.key.Key;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;

@@ -1,8 +1,8 @@
 package killercreepr.crux.api.loot.bukkit;
 
 import io.papermc.paper.event.block.PlayerShearBlockEvent;
-import killercreepr.crux.api.loot.LootContext;
 import killercreepr.crux.api.data.DataExchange;
+import killercreepr.crux.api.loot.LootContext;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;

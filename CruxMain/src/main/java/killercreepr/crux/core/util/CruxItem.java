@@ -1,9 +1,9 @@
 package killercreepr.crux.core.util;
 
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.component.serialization.PersistHolderComponentHandler;
 import killercreepr.crux.api.text.format.FormatSerializer;
 import killercreepr.crux.api.text.provider.StringTagProvider;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.persistence.CruxPersist;
 import killercreepr.crux.core.text.format.FormatParserContext;
 import net.kyori.adventure.text.Component;

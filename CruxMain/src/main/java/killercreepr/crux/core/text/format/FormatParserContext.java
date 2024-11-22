@@ -1,12 +1,12 @@
 package killercreepr.crux.core.text.format;
 
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.crux.api.text.format.FormatPrefix;
 import killercreepr.crux.api.text.format.FormatSerializer;
 import killercreepr.crux.api.text.provider.StringTagProvider;
 import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.crux.api.text.tags.container.TagContainer;
+import killercreepr.crux.core.Crux;
 import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;

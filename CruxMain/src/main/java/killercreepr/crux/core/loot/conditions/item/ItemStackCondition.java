@@ -2,10 +2,10 @@ package killercreepr.crux.core.loot.conditions.item;
 
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.item.predicate.ItemPredicate;
 import killercreepr.crux.api.loot.LootContext;
 import killercreepr.crux.api.text.tags.container.TagContainer;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.loot.conditions.BaseCondition;
 import killercreepr.crux.core.text.resolver.Tag;
 import killercreepr.crux.core.util.CruxMath;

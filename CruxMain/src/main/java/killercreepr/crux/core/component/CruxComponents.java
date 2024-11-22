@@ -2,33 +2,31 @@ package killercreepr.crux.core.component;
 
 import killercreepr.crux.api.block.predicate.BlockPredicate;
 import killercreepr.crux.api.block.tag.BlockTag;
-import killercreepr.crux.api.component.parser.ComponentTextInputParser;
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.component.DataComponentType;
-import killercreepr.crux.api.component.serialization.PersistentDataSerializer;
+import killercreepr.crux.api.component.parser.persistent.PersistentTextParser;
 import killercreepr.crux.api.item.component.ToolComponent;
-import killercreepr.crux.core.component.parser.type.ComponentParserTypes;
-import killercreepr.crux.core.persistence.CruxPersist;
-import killercreepr.crux.core.persistence.CruxPersistence;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.registries.CruxRegistries;
-import killercreepr.crux.core.util.CruxMath;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.function.UnaryOperator;
 
 public class CruxComponents {
     public static void register(){}
 
     public static final DataComponentType<Float> HARDNESS = register("hardness", builder -> builder
-        .textParser(Float.class));
+        .inputParser(PersistentTextParser.createFloat("hardness")));
+
     public static final DataComponentType<Boolean> UNBREAKABLE = register("unbreakable", builder -> builder
-        .textParser(Boolean.class));
+        .inputParser(PersistentTextParser.createBool("unbreakable")));
 
     public static final DataComponentType<ToolComponent> TOOL = register("tool",
+        builder -> builder.inputParser(ToolComponent.INPUT_PARSER));
+
+    /*public static final DataComponentType<ToolComponent> TOOL = register("tool",
         builder -> builder.persistent(PersistentDataSerializer.create(Crux.key(CruxPersist.TOOL.tagName()), CruxPersistence.TOOL_COMPONENT))
             .textParser(new ComponentTextInputParser<>() {
                 @Override
@@ -52,7 +50,7 @@ public class CruxComponents {
                         rules.isEmpty() ? null : rules
                     );
                 }
-            }));
+            }));*/
 
     public static BlockPredicate parsePredicate(@NotNull String blockTag){
         if(blockTag.startsWith("#")){

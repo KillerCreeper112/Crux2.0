@@ -1,9 +1,9 @@
 package killercreepr.crux.core.item.dynamic;
 
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.item.dynamic.DynamicItem;
 import killercreepr.crux.api.item.dynamic.DynamicItemComponent;
 import killercreepr.crux.api.text.context.TextParserContext;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.util.CruxItem;
 import killercreepr.crux.paper.ItemHolder;
 import net.kyori.adventure.key.InvalidKeyException;

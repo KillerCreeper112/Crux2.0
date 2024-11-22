@@ -1,7 +1,7 @@
 package killercreepr.crux.core.entity.predicate;
 
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.entity.predicate.EntityPredicate;
+import killercreepr.crux.core.Crux;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;

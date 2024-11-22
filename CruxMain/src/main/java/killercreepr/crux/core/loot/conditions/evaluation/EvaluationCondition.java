@@ -1,10 +1,10 @@
 package killercreepr.crux.core.loot.conditions.evaluation;
 
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.loot.LootContext;
 import killercreepr.crux.api.text.tags.TagsPrefixBuilder;
 import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.crux.api.text.tags.container.TagContainer;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.loot.conditions.BaseCondition;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.crux.core.util.CruxString;

@@ -1,8 +1,8 @@
 package killercreepr.crux.core.loot.conditions;
 
+import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.loot.LootContext;
 import killercreepr.crux.api.loot.conditions.LootCondition;
-import killercreepr.crux.api.data.DataExchange;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;

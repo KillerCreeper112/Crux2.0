@@ -1,9 +1,9 @@
 package killercreepr.crux.core.communication;
 
-import killercreepr.crux.api.communication.boss.CreateBossBar;
 import killercreepr.crux.api.communication.Communicator;
 import killercreepr.crux.api.communication.CreateSound;
 import killercreepr.crux.api.communication.CreateTitle;
+import killercreepr.crux.api.communication.boss.CreateBossBar;
 import killercreepr.crux.api.text.context.TextParserContext;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;

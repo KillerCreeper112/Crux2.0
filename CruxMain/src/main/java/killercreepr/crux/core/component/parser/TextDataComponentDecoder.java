@@ -2,8 +2,8 @@ package killercreepr.crux.core.component.parser;
 
 import killercreepr.crux.api.component.DataComponentType;
 import killercreepr.crux.api.component.TypedDataComponent;
-import killercreepr.crux.api.component.parser.DataComponentDecoder;
 import killercreepr.crux.api.component.parser.ComponentTextInputParser;
+import killercreepr.crux.api.component.parser.DataComponentDecoder;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.registries.CruxRegistries;
 import org.jetbrains.annotations.NotNull;

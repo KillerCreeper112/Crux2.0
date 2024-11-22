@@ -1,7 +1,7 @@
 package killercreepr.crux.api.plugin.module;
 
-import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.api.data.Reloadable;
+import killercreepr.crux.core.plugin.CruxPlugin;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 

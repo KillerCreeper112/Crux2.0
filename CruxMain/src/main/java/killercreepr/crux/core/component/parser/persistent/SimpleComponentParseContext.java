@@ -1,28 +1,45 @@
 package killercreepr.crux.core.component.parser.persistent;
 
 import killercreepr.crux.api.component.parser.persistent.ComponentParseContext;
+import killercreepr.crux.api.component.parser.persistent.PersistentTextParser;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 public class SimpleComponentParseContext<T> implements ComponentParseContext {
-    protected final MappedPersistentComponentInputParser<T> parser;
-    protected final Map<?, ?> values;
+    protected final PersistentTextParser<T> parser;
+    protected final Object values;
 
-    public SimpleComponentParseContext(MappedPersistentComponentInputParser<T> parser, Map<?, ?> values) {
+    public SimpleComponentParseContext(PersistentTextParser<T> parser, Object values) {
         this.parser = parser;
         this.values = values;
     }
 
+    public Map<?, ?> toMap(){
+        return (Map<?, ?>) values;
+    }
+
+    public List<?> toList(){
+        return (List<?>) values;
+    }
+
+    @Override
+    public <E> E decode(@NotNull Function<Object, E> function) {
+        return function.apply(values);
+    }
+
     @Override
     public <E> E decode(@NotNull String id) {
-        return (E) parser.getInputParsers().get(id).textInputParser().decodeObject(values.get(id));
+        if(!(parser instanceof MappedPersistentComponentInputParser<T> m)) return null;
+        return (E) m.getInputParsers().get(id).textInputParser().decodeObject(toMap().get(id));
     }
 
     @Override
     public <E> @Nullable E decodeOptional(@NotNull String id) {
-        if(!values.containsKey(id)) return null;
+        if(!toMap().containsKey(id)) return null;
         return decode(id);
     }
 }

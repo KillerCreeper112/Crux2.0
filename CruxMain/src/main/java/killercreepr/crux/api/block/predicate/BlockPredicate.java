@@ -1,8 +1,8 @@
 package killercreepr.crux.api.block.predicate;
 
 import killercreepr.crux.api.block.CruxedBlock;
-import killercreepr.crux.core.block.predicate.*;
 import killercreepr.crux.api.data.tag.Tag;
+import killercreepr.crux.core.block.predicate.*;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 

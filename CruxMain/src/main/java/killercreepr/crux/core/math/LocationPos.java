@@ -1,7 +1,7 @@
 package killercreepr.crux.core.math;
 
-import killercreepr.crux.core.util.CruxMath;
 import killercreepr.crux.api.math.CruxPosition;
+import killercreepr.crux.core.util.CruxMath;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;

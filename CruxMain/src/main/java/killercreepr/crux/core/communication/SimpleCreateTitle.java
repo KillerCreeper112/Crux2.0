@@ -1,7 +1,7 @@
 package killercreepr.crux.core.communication;
 
-import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.crux.api.communication.CreateTitle;
+import killercreepr.crux.api.text.context.TextParserContext;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;

@@ -4,6 +4,7 @@ import killercreepr.crux.api.component.parser.ComponentTextInputParser;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class ComponentParserListType<T> implements ComponentTextInputParser<List<T>> {
@@ -14,7 +15,7 @@ public class ComponentParserListType<T> implements ComponentTextInputParser<List
 
     @Override
     public @NotNull List<T> decodeObject(@NotNull Object object) throws IllegalArgumentException {
-        if(!(object instanceof List<?> l)) throw new IllegalArgumentException(object + " is not a list!");
+        if(!(object instanceof Collection<?> l)) throw new IllegalArgumentException(object + " is not a collection!");
         List<T> list = new ArrayList<>();
         for(Object o : l){
             T parsed = valueParser.decodeObject(o);

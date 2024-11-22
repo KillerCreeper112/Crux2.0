@@ -1,7 +1,7 @@
 package killercreepr.crux.core.item.predicate;
 
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.item.predicate.ItemPredicate;
+import killercreepr.crux.core.Crux;
 import net.kyori.adventure.key.Key;
 import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.nullness.qual.NonNull;

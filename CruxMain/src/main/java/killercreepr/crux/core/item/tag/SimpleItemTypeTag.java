@@ -1,7 +1,7 @@
 package killercreepr.crux.core.item.tag;
 
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.item.tag.ItemTypeTag;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.paper.ItemHolder;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Material;

@@ -1,6 +1,6 @@
 package killercreepr.crux.api.text.tags.container;
 
-import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.text.format.FormatPrefix;
 import killercreepr.crux.api.text.provider.StringListTagProvider;
 import killercreepr.crux.api.text.provider.StringTagProvider;
@@ -9,10 +9,10 @@ import killercreepr.crux.api.text.resolver.StringResolver;
 import killercreepr.crux.api.text.resolver.TagResolver;
 import killercreepr.crux.api.text.tags.TagParser;
 import killercreepr.crux.api.text.tags.TagsPrefixBuilder;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.text.container.SimpleMergedTagContainer;
 import killercreepr.crux.core.text.container.SimpleStringListTagProvider;
 import killercreepr.crux.core.text.container.SimpleStringTagProvider;
-import killercreepr.crux.api.data.DataExchange;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -1,9 +1,9 @@
 package killercreepr.crux.api.text.provider;
 
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.text.resolver.StringListResolver;
 import killercreepr.crux.api.text.tags.TagParser;
 import killercreepr.crux.api.text.tags.container.TagContainer;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.text.container.StringListTagContainer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

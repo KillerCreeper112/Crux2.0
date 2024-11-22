@@ -1,8 +1,8 @@
 package killercreepr.crux.core.item.dynamic.component;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.text.context.TextParserContext;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.util.CruxBase64;
 import killercreepr.crux.core.util.CruxItem;
 import killercreepr.crux.core.util.CruxProfile;

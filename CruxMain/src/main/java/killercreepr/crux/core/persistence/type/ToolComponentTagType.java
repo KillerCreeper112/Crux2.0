@@ -3,7 +3,6 @@ package killercreepr.crux.core.persistence.type;
 import killercreepr.crux.api.item.component.ToolComponent;
 import killercreepr.crux.core.persistence.CruxPersistence;
 import killercreepr.crux.core.util.CruxTag;
-import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;

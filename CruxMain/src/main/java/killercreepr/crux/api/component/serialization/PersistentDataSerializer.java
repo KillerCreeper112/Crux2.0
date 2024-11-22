@@ -1,5 +1,6 @@
 package killercreepr.crux.api.component.serialization;
 
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.util.CruxTag;
 import net.kyori.adventure.key.Key;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -27,6 +28,28 @@ public interface PersistentDataSerializer<T> extends ComponentSerializer<Persist
         return create(key, PersistentDataType.DOUBLE);
     }
     static PersistentDataSerializer<Long> createLong(@NotNull Key key){
+        return create(key, PersistentDataType.LONG);
+    }
+    ////
+    static PersistentDataSerializer<String> createString(@NotNull String key){
+        return create(key, PersistentDataType.STRING);
+    }
+    static PersistentDataSerializer<Boolean> createBoolean(@NotNull String key){
+        return create(key, PersistentDataType.BOOLEAN);
+    }
+    static <T> PersistentDataSerializer<T> create(@NotNull String key, @NotNull PersistentDataType<?, T> dataType){
+        return create(Crux.key(key), dataType);
+    }
+    static PersistentDataSerializer<Integer> createInt(@NotNull String key){
+        return create(key, PersistentDataType.INTEGER);
+    }
+    static PersistentDataSerializer<Float> createFloat(@NotNull String key){
+        return create(key, PersistentDataType.FLOAT);
+    }
+    static PersistentDataSerializer<Double> createDouble(@NotNull String key){
+        return create(key, PersistentDataType.DOUBLE);
+    }
+    static PersistentDataSerializer<Long> createLong(@NotNull String key){
         return create(key, PersistentDataType.LONG);
     }
 

@@ -2,9 +2,7 @@ package killercreepr.crux.api.registry;
 
 import killercreepr.crux.api.data.Identifiable;
 import killercreepr.crux.api.data.StringIdentifiable;
-import killercreepr.crux.core.registry.SimpleKeyedRegistry;
 import killercreepr.crux.core.registry.SimpleStringIdentifiableRegistry;
-import net.kyori.adventure.key.Keyed;
 import org.jetbrains.annotations.NotNull;
 
 public interface IdentifiableRegistry<I, T extends Identifiable<I>> extends MappedRegistry<I, T>{

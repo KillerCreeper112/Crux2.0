@@ -1,8 +1,8 @@
 package killercreepr.crux.core.loot;
 
+import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.api.loot.LootContext;
-import killercreepr.crux.api.data.DataExchange;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;

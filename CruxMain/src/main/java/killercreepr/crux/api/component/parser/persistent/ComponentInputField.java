@@ -3,6 +3,7 @@ package killercreepr.crux.api.component.parser.persistent;
 import killercreepr.crux.api.component.parser.ComponentTextInputParser;
 import killercreepr.crux.core.component.parser.persistent.SimpleComponentInputField;
 import killercreepr.crux.core.component.parser.type.ComponentParserTypes;
+import killercreepr.crux.core.persistence.CruxPersistence;
 import killercreepr.crux.core.persistence.type.ListTagType;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
@@ -24,14 +25,14 @@ public interface ComponentInputField<T> {
             field
         );
     }
-    static <T> ComponentInputField<T> create(@NotNull PersistentComponentInputParser<?> value, @NotNull Function<T, Object> field){
+    static <T> ComponentInputField<T> create(@NotNull PersistentTextParser<?> value, @NotNull Function<T, Object> field){
         return new SimpleComponentInputField<>(
             value.dataType(),
             value,
             field
         );
     }
-    static <T> ComponentInputField<T> createList(@NotNull PersistentComponentInputParser<?> value, @NotNull Function<T, Object> field){
+    static <T> ComponentInputField<T> createList(@NotNull PersistentTextParser<?> value, @NotNull Function<T, Object> field){
         return new SimpleComponentInputField<>(
             new ListTagType<>(value.dataType()),
             ComponentTextInputParser.list(value),
@@ -70,6 +71,13 @@ public interface ComponentInputField<T> {
         return new SimpleComponentInputField<>(
             PersistentDataType.STRING,
             ComponentParserTypes.STRING,
+            field
+        );
+    }
+    static <T> ComponentInputField<T> createKey(@NotNull Function<T, Object> field){
+        return new SimpleComponentInputField<>(
+            CruxPersistence.CRUX_KEY,
+            ComponentParserTypes.KEY,
             field
         );
     }

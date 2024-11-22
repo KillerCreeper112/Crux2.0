@@ -1,14 +1,14 @@
 package killercreepr.crux.core.persistence.type;
 
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.block.predicate.BlockPredicate;
+import killercreepr.crux.api.block.tag.BlockTag;
 import killercreepr.crux.api.item.component.ToolComponent;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.block.predicate.BlockAllPredicate;
 import killercreepr.crux.core.block.predicate.BlockTagPredicate;
 import killercreepr.crux.core.block.predicate.BlockTypePredicate;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.core.util.CruxTag;
-import killercreepr.crux.api.block.tag.BlockTag;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;

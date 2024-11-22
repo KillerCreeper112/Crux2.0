@@ -1,10 +1,10 @@
 package killercreepr.crux.core.communication.boss;
 
-import killercreepr.crux.api.communication.boss.BossBarHolder;
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.communication.boss.ActiveBossBar;
+import killercreepr.crux.api.communication.boss.BossBarHolder;
 import killercreepr.crux.api.communication.boss.CreateBossBar;
 import killercreepr.crux.api.text.context.TextParserContext;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.util.CruxDuration;
 import killercreepr.crux.core.util.CruxMath;
 import net.kyori.adventure.audience.Audience;

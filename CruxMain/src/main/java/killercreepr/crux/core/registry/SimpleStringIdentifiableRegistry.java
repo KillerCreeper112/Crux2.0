@@ -1,7 +1,7 @@
 package killercreepr.crux.core.registry;
 
-import killercreepr.crux.api.registry.StringIdentifiableRegistry;
 import killercreepr.crux.api.data.StringIdentifiable;
+import killercreepr.crux.api.registry.StringIdentifiableRegistry;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;

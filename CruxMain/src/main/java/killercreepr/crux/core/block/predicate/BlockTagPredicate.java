@@ -1,12 +1,14 @@
 package killercreepr.crux.core.block.predicate;
 
 import killercreepr.crux.api.block.CruxedBlock;
-import killercreepr.crux.api.block.predicate.BlockPredicate;
+import killercreepr.crux.api.block.predicate.BlockPredicateComponent;
 import killercreepr.crux.api.data.tag.Tag;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 
-public class BlockTagPredicate implements BlockPredicate {
+import java.util.List;
+
+public class BlockTagPredicate implements BlockPredicateComponent {
     protected final @NonNull Tag<CruxedBlock> tag;
 
     public @NonNull Tag<CruxedBlock> getTag() {
@@ -25,5 +27,10 @@ public class BlockTagPredicate implements BlockPredicate {
     @Override
     public String toString() {
         return "BlockTagPredicate{tag=" + tag + "}";
+    }
+
+    @Override
+    public @NotNull List<String> encodeToParser() {
+        return List.of("#" + tag.key().asString());
     }
 }

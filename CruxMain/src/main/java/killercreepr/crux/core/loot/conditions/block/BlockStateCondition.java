@@ -1,7 +1,7 @@
 package killercreepr.crux.core.loot.conditions.block;
 
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.loot.LootContext;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.loot.conditions.BaseCondition;
 import net.kyori.adventure.key.Key;
 import org.bukkit.block.Block;

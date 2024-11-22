@@ -1,7 +1,7 @@
 package killercreepr.crux.api.item.dynamic.component.persistence;
 
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.text.context.TextParserContext;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.item.dynamic.component.persistence.SimpleDynamicPersistentTag;
 import killercreepr.crux.core.persistence.CruxPersistence;
 import killercreepr.crux.core.persistence.type.ListTagType;

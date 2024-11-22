@@ -1,17 +1,17 @@
 package killercreepr.crux.core;
 
 import killercreepr.crux.api.CruxHandlers;
+import killercreepr.crux.api.entity.memory.EntityMemory;
 import killercreepr.crux.api.registry.KeyedRegistry;
 import killercreepr.crux.api.scheduler.CruxScheduler;
 import killercreepr.crux.api.text.format.FormatSerializer;
 import killercreepr.crux.api.text.tags.TagParser;
+import killercreepr.crux.core.data.tick.CruxTick;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.core.scheduler.CruxSimpleScheduler;
 import killercreepr.crux.core.text.tags.standard.CruxStandardTags;
 import killercreepr.crux.core.text.tags.standard.minimessage.*;
-import killercreepr.crux.api.entity.memory.EntityMemory;
-import killercreepr.crux.core.data.tick.CruxTick;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Bukkit;

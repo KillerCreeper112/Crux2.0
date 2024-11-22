@@ -1,9 +1,9 @@
 package killercreepr.crux.core.loot.conditions.block;
 
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.block.CruxedBlock;
 import killercreepr.crux.api.block.predicate.BlockPredicate;
 import killercreepr.crux.api.loot.LootContext;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.loot.conditions.BaseCondition;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;

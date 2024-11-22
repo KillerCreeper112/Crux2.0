@@ -1,7 +1,7 @@
 package killercreepr.crux.core.game;
 
-import killercreepr.crux.api.game.Statutable;
 import killercreepr.crux.api.data.tick.ManagedTicked;
+import killercreepr.crux.api.game.Statutable;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class SimpleStatutable implements Statutable, ManagedTicked {

@@ -3,7 +3,8 @@ package killercreepr.crux.api.item.component;
 import killercreepr.crux.api.block.CruxedBlock;
 import killercreepr.crux.api.block.predicate.BlockPredicate;
 import killercreepr.crux.api.component.parser.persistent.ComponentInputField;
-import killercreepr.crux.api.component.parser.persistent.PersistentComponentInputParser;
+import killercreepr.crux.api.component.parser.persistent.PersistentTextParser;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.component.parser.type.ComponentInputParsers;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -11,10 +12,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public interface ToolComponent {
-    PersistentComponentInputParser<ToolComponent> INPUT_PARSER = PersistentComponentInputParser.mapBuilder(ToolComponent.class)
+    PersistentTextParser<ToolComponent> INPUT_PARSER = PersistentTextParser.mapBuilder(ToolComponent.class)
+        .key("tool")
         .field("default_mining_speed", ComponentInputField.createFloat(ToolComponent::getDefaultMiningSpeed))
         .field("rules", ComponentInputField.createList(Rule.INPUT_PARSER, ToolComponent::getRules))
-        .apply(ctx -> new Simple(ctx.decodeOptional("default_mining_speed", 1f), ctx.decodeOptional("rules", null)));
+        .apply(ctx -> new Simple(ctx.decodeOptional("default_mining_speed", 1f), ctx.decodeOptional("rules")));
 
     float getDefaultMiningSpeed();
 
@@ -28,8 +30,8 @@ public interface ToolComponent {
 
     interface Rule{
 
-        PersistentComponentInputParser<Rule> INPUT_PARSER = PersistentComponentInputParser.mapBuilder(Rule.class)
-            .field("blocks", ComponentInputField.create(ComponentInputParsers.BLOCK_PREDICATE, Rule::getBlocks))
+        PersistentTextParser<Rule> INPUT_PARSER = PersistentTextParser.mapBuilder(Rule.class)
+            .field("blocks", ComponentInputField.create(ComponentInputParsers.blockPredicate(Crux.key("blocks")), Rule::getBlocks))
             .field("speed", ComponentInputField.createFloat(Rule::getSpeed))
             .field("correct_for_drops", ComponentInputField.createBool(Rule::isCorrectToolForDrops))
             .apply(ctx -> new Simple.Rule(ctx.decode("blocks"), ctx.decode("speed"), ctx.decode("correct_for_drops")));

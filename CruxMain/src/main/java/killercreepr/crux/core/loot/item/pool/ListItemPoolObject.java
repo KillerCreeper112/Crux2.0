@@ -1,9 +1,9 @@
 package killercreepr.crux.core.loot.item.pool;
 
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.handler.ItemHandler;
 import killercreepr.crux.api.loot.conditions.LootCondition;
 import killercreepr.crux.api.loot.functions.LootFunction;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.paper.ItemHolder;
 import net.kyori.adventure.key.Key;
 import org.bukkit.inventory.ItemStack;

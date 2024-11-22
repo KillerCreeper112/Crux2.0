@@ -1,9 +1,9 @@
 package killercreepr.crux.api.text.context;
 
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.text.format.FormatSerializer;
 import killercreepr.crux.api.text.provider.StringTagProvider;
 import killercreepr.crux.api.text.tags.container.MergedTagContainer;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.text.context.DummyInputContext;
 import killercreepr.crux.core.text.context.SimpleInputContext;
 import org.jetbrains.annotations.NotNull;

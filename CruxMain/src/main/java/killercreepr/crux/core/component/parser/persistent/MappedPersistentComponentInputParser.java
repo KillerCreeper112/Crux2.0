@@ -2,10 +2,11 @@ package killercreepr.crux.core.component.parser.persistent;
 
 import killercreepr.crux.api.component.parser.persistent.ComponentInputField;
 import killercreepr.crux.api.component.parser.persistent.ComponentParseContext;
-import killercreepr.crux.api.component.parser.persistent.PersistentComponentInputParser;
+import killercreepr.crux.api.component.parser.persistent.PersistentTextParser;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.util.CruxTag;
 import net.kyori.adventure.key.Key;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -18,7 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 
-public class MappedPersistentComponentInputParser<T> implements PersistentComponentInputParser<T> {
+public class MappedPersistentComponentInputParser<T> implements PersistentTextParser<T> {
     protected final @NotNull Class<T> type;
     protected final @NotNull Key key;
     protected final @NotNull Map<String, ComponentInputField<T>> inputParsers;
@@ -57,6 +58,11 @@ public class MappedPersistentComponentInputParser<T> implements PersistentCompon
     }
 
     @Override
+    public @NotNull Object encodeObject(@NotNull T object) {
+        return object;
+    }
+
+    @Override
     public @Nullable T decode(@NotNull PersistentDataContainer from) {
         PersistentDataContainer c = CruxTag.get(from, key, PersistentDataType.TAG_CONTAINER, null);
         if(c == null) return null;
@@ -73,6 +79,8 @@ public class MappedPersistentComponentInputParser<T> implements PersistentCompon
     public @NotNull Map<String, Object> encodeFromObject(@NotNull T object){
         Map<String, Object> map = new HashMap<>();
         inputParsers.forEach((id, parser) ->{
+            Bukkit.broadcastMessage("encoding: " + id + ", " + object + " toooo -> " +
+                parser.textInputParser().encodeObjectUnchecked(parser.field().apply(object)));
             map.put(id, parser.textInputParser().encodeObjectUnchecked(parser.field().apply(object)));
         });
         return map;
@@ -153,6 +161,13 @@ public class MappedPersistentComponentInputParser<T> implements PersistentCompon
             inputParsers.put(id, field);
             return this;
         }
+
+        @Override
+        public Builder<T> key(Key key){
+            this.key = key;
+            return this;
+        }
+
         @Override
         public Builder<T> output(Function<ComponentParseContext, T> output){
             this.output = output;
@@ -164,12 +179,12 @@ public class MappedPersistentComponentInputParser<T> implements PersistentCompon
             return this;
         }
         @Override
-        public PersistentComponentInputParser<T> apply(Function<ComponentParseContext, T> output){;
+        public PersistentTextParser<T> apply(Function<ComponentParseContext, T> output){;
             return output(output).build();
         }
 
         @Override
-        public PersistentComponentInputParser<T> build() {
+        public PersistentTextParser<T> build() {
             return new MappedPersistentComponentInputParser<>(
                 type, key, inputParsers, output, dataType
             );

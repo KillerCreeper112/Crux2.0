@@ -1,22 +1,22 @@
 package killercreepr.crux.core.registries;
 
 import killercreepr.crux.api.block.sound.CreateBlockSoundGroup;
+import killercreepr.crux.api.block.tag.BlockTag;
 import killercreepr.crux.api.component.DataComponentType;
 import killercreepr.crux.api.component.parser.ComponentTextInputParser;
+import killercreepr.crux.api.entity.tag.EntityTag;
+import killercreepr.crux.api.item.tag.ItemTag;
 import killercreepr.crux.api.loot.LootTable;
 import killercreepr.crux.api.registry.KeyedRegistry;
 import killercreepr.crux.api.registry.MappedRegistry;
 import killercreepr.crux.api.registry.Registry;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
+import killercreepr.crux.core.data.tick.CruxTick;
 import killercreepr.crux.core.persistence.CruxPersistence;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.registry.SimpleKeyedRegistry;
 import killercreepr.crux.core.registry.SimpleMappedRegistry;
 import killercreepr.crux.core.registry.SimpleRegistry;
-import killercreepr.crux.api.block.tag.BlockTag;
-import killercreepr.crux.api.entity.tag.EntityTag;
-import killercreepr.crux.api.item.tag.ItemTag;
-import killercreepr.crux.core.data.tick.CruxTick;
 import net.kyori.adventure.key.Key;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
