@@ -1,7 +1,7 @@
 package killercreepr.crux.core.item.dynamic.component;
 
 import killercreepr.crux.api.component.TypedDataComponent;
-import killercreepr.crux.api.component.parser.ComponentParser;
+import killercreepr.crux.api.component.parser.DataComponentDecoder;
 import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.crux.core.util.CruxItem;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +20,7 @@ public class DynamicItemCruxComponents extends DynamicSingleValueComponent{
 
     @Override
     public void apply(@NotNull CruxItem item, @NotNull TextParserContext context) {
-        Collection<TypedDataComponent<?>> parsed = ComponentParser.componentParser().parseComponents(parseString(context));
+        Collection<TypedDataComponent<?>> parsed = DataComponentDecoder.componentDecoder().parseComponents(parseString(context));
         parsed.forEach(item::set);
     }
 }

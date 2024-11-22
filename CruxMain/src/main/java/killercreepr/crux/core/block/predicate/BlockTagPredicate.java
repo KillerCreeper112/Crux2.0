@@ -8,6 +8,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class BlockTagPredicate implements BlockPredicate {
     protected final @NonNull Tag<CruxedBlock> tag;
+
+    public @NonNull Tag<CruxedBlock> getTag() {
+        return tag;
+    }
+
     public BlockTagPredicate(@NonNull Tag<CruxedBlock> tag) {
         this.tag = tag;
     }

@@ -12,6 +12,10 @@ public class BlockTypePredicate implements BlockPredicate {
         this.type = type;
     }
 
+    public @NonNull Key getType() {
+        return type;
+    }
+
     @Override
     public boolean test(@NotNull CruxedBlock block) {
         return block.getType().equals(type);

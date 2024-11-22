@@ -31,6 +31,10 @@ public interface ToolComponent {
             this.rules = rules;
         }
 
+        public @Nullable List<ToolComponent.Rule> getRules() {
+            return rules;
+        }
+
         @Override
         public float getDefaultMiningSpeed() {
             return defaultMiningSpeed;
@@ -74,6 +78,14 @@ public interface ToolComponent {
                 this.predicate = predicate;
                 this.speed = speed;
                 this.isCorrectToolForDrops = isCorrectToolForDrops;
+            }
+
+            public @Nullable BlockPredicate getPredicate() {
+                return predicate;
+            }
+
+            public @Nullable Boolean getCorrectToolForDrops() {
+                return isCorrectToolForDrops;
             }
 
             @Override

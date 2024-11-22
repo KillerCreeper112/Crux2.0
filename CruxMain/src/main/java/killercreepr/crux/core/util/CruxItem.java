@@ -346,4 +346,9 @@ public class CruxItem implements Cloneable, PersistHolderComponentHandler {
         CruxPersist.COMPONENTS.set(item, data.isEmpty() ? null : data);
         item().setItemMeta((ItemMeta) item);
     }
+
+    @Override
+    public void clearComponents() {
+        CruxPersist.COMPONENTS.set(item, null);
+    }
 }

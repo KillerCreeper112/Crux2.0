@@ -3,6 +3,7 @@ package killercreepr.crux.core.persistence.type;
 import killercreepr.crux.api.item.component.ToolComponent;
 import killercreepr.crux.core.persistence.CruxPersistence;
 import killercreepr.crux.core.util.CruxTag;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -23,7 +24,11 @@ public class ToolComponentTagType implements PersistentDataType<PersistentDataCo
 
     @Override
     public @NotNull PersistentDataContainer toPrimitive(@NotNull ToolComponent complex, @NotNull PersistentDataAdapterContext context) {
-        throw new UnsupportedOperationException("UNSUPPORTED NO!");
+        if(!(complex instanceof ToolComponent.Simple s)) throw new IllegalArgumentException(complex.getClass().getName() + " not supported");
+        PersistentDataContainer c = context.newPersistentDataContainer();
+        CruxTag.set(c, "default_mining_speed", FLOAT, s.getDefaultMiningSpeed() == 1f ? null : s.getDefaultMiningSpeed());
+        CruxTag.set(c, "rules", CruxPersistence.LIST.TOOL_COMPONENT_RULE, s.getRules());
+        return c;
     }
 
     @Override

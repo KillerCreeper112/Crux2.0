@@ -3,6 +3,9 @@ package killercreepr.crux.core.persistence.type;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.block.predicate.BlockPredicate;
 import killercreepr.crux.api.item.component.ToolComponent;
+import killercreepr.crux.core.block.predicate.BlockAllPredicate;
+import killercreepr.crux.core.block.predicate.BlockTagPredicate;
+import killercreepr.crux.core.block.predicate.BlockTypePredicate;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.core.util.CruxTag;
 import killercreepr.crux.api.block.tag.BlockTag;
@@ -26,9 +29,35 @@ public class ToolComponentRuleTagType implements PersistentDataType<PersistentDa
         return ToolComponent.Rule.class;
     }
 
+    public List<String> predicateToString(BlockPredicate predicate){
+        if(predicate instanceof BlockAllPredicate all){
+            List<String> list = new ArrayList<>(all.getChildren().size());
+            all.getChildren().forEach(pr -> list.addAll(predicateToString(pr)));
+            return list;
+        }
+        if(predicate instanceof BlockTypePredicate t){
+            return List.of(t.getType().asString());
+        }
+        if(predicate instanceof BlockTagPredicate t){
+            return List.of("#" + t.getTag().key().asString());
+        }
+        throw new UnsupportedOperationException("BlockPredicate not supported.");
+    }
+
     @Override
     public @NotNull PersistentDataContainer toPrimitive(@NotNull ToolComponent.Rule complex, @NotNull PersistentDataAdapterContext context) {
-        return null;
+        if(!(complex instanceof ToolComponent.Simple.Rule s)) throw new IllegalArgumentException(complex.getClass().getSimpleName() + " not supported!");
+        PersistentDataContainer c = context.newPersistentDataContainer();
+        BlockPredicate predicate = s.getPredicate();
+        if(predicate != null){
+            List<String> list = predicateToString(predicate);
+            if(list.size() > 1){
+                CruxTag.set(c, "blocks", PersistentDataType.LIST.strings(), list);
+            }else if(!list.isEmpty()) CruxTag.set(c, "blocks", STRING, list.getFirst());
+        }
+        CruxTag.set(c, "speed", PersistentDataType.FLOAT, complex.getSpeed());
+        CruxTag.set(c, "correct_for_drops", PersistentDataType.BOOLEAN, s.getCorrectToolForDrops());
+        return c;
     }
 
     public BlockPredicate parsePredicate(@NotNull String blockTag){

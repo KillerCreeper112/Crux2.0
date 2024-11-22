@@ -35,6 +35,11 @@ public interface DataComponentHandler extends DataComponentAccessor, DataCompone
             return null;
         }
 
+        @Override
+        public void clearComponents() {
+
+        }
+
         /**
          * Returns an iterator over elements of type {@code T}.
          *
@@ -80,6 +85,11 @@ public interface DataComponentHandler extends DataComponentAccessor, DataCompone
             if(value == null) holder = map.remove(type);
             else holder = map.put(type, Holder.direct(value));
             return holder == null ? null : (T) holder.value();
+        }
+
+        @Override
+        public void clearComponents() {
+            map.clear();
         }
 
         public Collection<TypedDataComponent<?>> buildTypedCollection(){

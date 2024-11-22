@@ -11,6 +11,9 @@ public interface PersistentDataSerializer<T> extends ComponentSerializer<Persist
     static PersistentDataSerializer<String> createString(@NotNull Key key){
         return create(key, PersistentDataType.STRING);
     }
+    static PersistentDataSerializer<Boolean> createBoolean(@NotNull Key key){
+        return create(key, PersistentDataType.BOOLEAN);
+    }
     static <T> PersistentDataSerializer<T> create(@NotNull Key key, @NotNull PersistentDataType<?, T> dataType){
         return new Simple<>(key, dataType);
     }

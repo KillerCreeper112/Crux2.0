@@ -3,7 +3,6 @@ package killercreepr.crux.core.plugin.module;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.plugin.module.CruxModule;
 import killercreepr.crux.core.command.CruxLootCommands;
-import killercreepr.crux.core.component.parser.TextComponentParser;
 import killercreepr.crux.core.component.CruxComponents;
 import killercreepr.crux.core.component.parser.type.ComponentParserTypes;
 import killercreepr.crux.core.listener.EntitySpawnListener;
@@ -45,7 +44,5 @@ public class CruxMainModule implements CruxModule {
             new LootContainerListener()
         );
         Crux.buildTickTask().runTaskTimerAsynchronously(plugin, 20L, 1L);
-
-        new TextComponentParser().parseComponents("[damage=1,tool={test=another,more=2}]");
     }
 }

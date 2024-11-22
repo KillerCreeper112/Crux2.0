@@ -18,4 +18,5 @@ public interface DataComponentEditor {
         return set(typed.getType(), typed.getValue());
     }
 
+    void clearComponents();
 }

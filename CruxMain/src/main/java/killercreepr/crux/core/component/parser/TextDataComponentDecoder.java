@@ -2,7 +2,7 @@ package killercreepr.crux.core.component.parser;
 
 import killercreepr.crux.api.component.DataComponentType;
 import killercreepr.crux.api.component.TypedDataComponent;
-import killercreepr.crux.api.component.parser.ComponentParser;
+import killercreepr.crux.api.component.parser.DataComponentDecoder;
 import killercreepr.crux.api.component.parser.ComponentTextInputParser;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.registries.CruxRegistries;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.logging.Level;
 
-public class TextComponentParser implements ComponentParser {
+public class TextDataComponentDecoder implements DataComponentDecoder {
     @Override
     public @NotNull Collection<TypedDataComponent<?>> parseComponents(@NotNull String input){
         Collection<TypedDataComponent<?>> list = new HashSet<>();
@@ -28,7 +28,7 @@ public class TextComponentParser implements ComponentParser {
                 return;
             }
             try{
-                Object result = parser.parse(value);
+                Object result = parser.decodeObject(value);
                 TypedDataComponent<?> typed = TypedDataComponent.createUnchecked(type, result);
                 list.add(typed);
             }catch (IllegalArgumentException e){
@@ -45,6 +45,7 @@ public class TextComponentParser implements ComponentParser {
         if (componentsString.startsWith("[") && componentsString.endsWith("]")) {
             componentsString = componentsString.substring(1, componentsString.length() - 1).trim();
         }
+        if(componentsString.isEmpty()) return Map.of();
 
         // Split the components using a custom method that handles nested structures
         String[] propertyPairs = customSplit(componentsString);
@@ -121,6 +122,7 @@ public class TextComponentParser implements ComponentParser {
     private static List<Object> parseListProperties(String nestedProperties){
         List<Object> map = new ArrayList<>();
         nestedProperties = nestedProperties.substring(1, nestedProperties.length() - 1).trim();
+        if(nestedProperties.isEmpty()) return map;
 
         // Split by commas to handle key-value pairs inside the curly braces
         String[] pairs = customSplit(nestedProperties);

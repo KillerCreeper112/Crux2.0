@@ -19,4 +19,8 @@ public class BlockAllPredicate implements BlockPredicate {
         }
         return true;
     }
+
+    public @NotNull Collection<BlockPredicate> getChildren() {
+        return children;
+    }
 }

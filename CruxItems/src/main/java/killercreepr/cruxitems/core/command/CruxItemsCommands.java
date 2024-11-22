@@ -1,6 +1,7 @@
 package killercreepr.cruxitems.core.command;
 
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -10,7 +11,9 @@ import io.papermc.paper.command.brigadier.argument.resolvers.selector.EntitySele
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import killercreepr.crux.api.communication.Communicator;
+import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.crux.core.command.argument.CruxCmdArguments;
+import killercreepr.crux.core.item.dynamic.component.DynamicItemCruxComponents;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.util.CruxItem;
 import killercreepr.crux.core.util.CruxMath;
@@ -148,6 +151,32 @@ public class CruxItemsCommands {
                                 )
                         )
                 )
+        ).then(
+            Commands.literal("components")
+                .then(
+                    Commands.argument("targets", ArgumentTypes.entities())
+                        .then(
+                            Commands.literal("apply")
+                                .then(
+                                    Commands.argument("input", StringArgumentType.greedyString())
+                                        .executes(ctx -> applyComponents(
+                                            ctx.getSource(),
+                                            ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
+                                            ctx.getArgument("input", String.class)
+                                        ))
+                                )
+                        ).then(
+                            Commands.literal("clear")
+                                .then(
+                                    Commands.argument("input", StringArgumentType.greedyString())
+                                        .executes(ctx -> clearComponents(
+                                            ctx.getSource(),
+                                            ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource())
+                                        ))
+                                )
+                        )
+                )
+
         )
         ;
         return dispatcher.build();
@@ -195,6 +224,21 @@ public class CruxItemsCommands {
             item.color(color);
         });
         Communicator.chat("Changed the color of main hand items on " + given + " entities.").use(getExecutor(source));
+        return given > 0 ? 1 : -1;
+    }
+
+    public static int clearComponents(@NotNull CommandSourceStack source, @NotNull Collection<Entity> targets){
+        int given = mainHandArgument(source, targets, CruxItem::clearComponents);
+        Communicator.chat("Cleared components on main hand items from " + given + " entities.").use(getExecutor(source));
+        return given > 0 ? 1 : -1;
+    }
+
+    public static int applyComponents(@NotNull CommandSourceStack source, @NotNull Collection<Entity> targets, @NotNull String input){
+        DynamicItemCruxComponents c = new DynamicItemCruxComponents(input);
+        int given = mainHandArgument(source, targets, item ->{
+            c.apply(item, TextParserContext.empty());
+        });
+        Communicator.chat("Applied components on main hand items from " + given + " entities.").use(getExecutor(source));
         return given > 0 ? 1 : -1;
     }
 

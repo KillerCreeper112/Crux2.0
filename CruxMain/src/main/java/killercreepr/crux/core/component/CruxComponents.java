@@ -27,11 +27,12 @@ public class CruxComponents {
         .textParser(Float.class));
     public static final DataComponentType<Boolean> UNBREAKABLE = register("unbreakable", builder -> builder
         .textParser(Boolean.class));
+
     public static final DataComponentType<ToolComponent> TOOL = register("tool",
         builder -> builder.persistent(PersistentDataSerializer.create(Crux.key(CruxPersist.TOOL.tagName()), CruxPersistence.TOOL_COMPONENT))
             .textParser(new ComponentTextInputParser<>() {
                 @Override
-                public @NotNull ToolComponent parse(@NotNull Object object) throws IllegalArgumentException {
+                public @NotNull ToolComponent decodeObject(@NotNull Object object) throws IllegalArgumentException {
                     Map<?, ?> map = (Map<?, ?>) object;
                     Object defaultMiningSpeedObject = map.get("default_mining_speed");
                     float defaultMiningSpeed = (float) CruxMath.evaluate(defaultMiningSpeedObject == null ? "1" : defaultMiningSpeedObject.toString());
@@ -41,7 +42,7 @@ public class CruxComponents {
                             Map<?, ?> oo = (Map<?, ?>) o;
                             BlockPredicate predicate = oo.containsKey("blocks") ? parsePredicate(oo.get("blocks")) : null;
                             Float speed = oo.containsKey("speed") ? (float) CruxMath.evaluate(oo.get("speed").toString()) : null;
-                            Boolean isCorrect = ComponentParserTypes.BOOLEAN.attemptParse(oo.get("correct_for_drops"));
+                            Boolean isCorrect = ComponentParserTypes.BOOLEAN.attemptDecodeObject(oo.get("correct_for_drops"));
                             ToolComponent.Rule rule = new ToolComponent.Simple.Rule(predicate, speed, isCorrect);
                             rules.add(rule);
                         }

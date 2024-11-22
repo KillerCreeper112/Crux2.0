@@ -51,7 +51,7 @@ public class CruxBlockComponents {
             CruxBlocksPersistence.CRUX_BLOCK_GROUP))
             .textParserUnchecked(new ComponentTextInputParser<CruxBlockGroup>() {
                 @Override
-                public @NotNull CruxBlockGroup parse(@NotNull Object object) throws IllegalArgumentException {
+                public @NotNull CruxBlockGroup decodeObject(@NotNull Object object) throws IllegalArgumentException {
                     return Objects.requireNonNull(CruxBlocksRegistries.BLOCK.getGroup(Crux.key(object.toString())),
                         "BlockGroup of " + object + " not found!");
                 }
