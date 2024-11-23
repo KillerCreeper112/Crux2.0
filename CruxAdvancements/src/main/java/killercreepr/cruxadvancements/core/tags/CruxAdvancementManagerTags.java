@@ -1,20 +1,20 @@
 package killercreepr.cruxadvancements.core.tags;
 
-import killercreepr.crux.core.Crux;
-import killercreepr.crux.api.text.tags.TagParser;
-import killercreepr.crux.api.text.tags.container.TagContainer;
 import killercreepr.crux.api.text.format.FormatPrefix;
 import killercreepr.crux.api.text.hook.HookedObjectContainer;
+import killercreepr.crux.api.text.hook.HookedPrefixBuilder;
 import killercreepr.crux.api.text.hook.ObjectTag;
+import killercreepr.crux.api.text.resolver.StringResolver;
+import killercreepr.crux.api.text.tags.TagParser;
+import killercreepr.crux.api.text.tags.container.TagContainer;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.text.hook.StringHookedObjectTag;
 import killercreepr.crux.core.text.hook.StringListHookedObjectTag;
-import killercreepr.crux.api.text.hook.HookedPrefixBuilder;
-import killercreepr.crux.api.text.resolver.StringResolver;
 import killercreepr.crux.core.text.resolver.Tag;
 import killercreepr.cruxadvancements.api.advancement.CruxAdvancement;
+import killercreepr.cruxadvancements.api.advancement.manager.CruxAdvancementManager;
 import killercreepr.cruxadvancements.api.advancement.progress.CruxAdvancementProgress;
 import killercreepr.cruxadvancements.crazy.advancement.CrazyAdvancementDisplay;
-import killercreepr.cruxadvancements.api.advancement.manager.CruxAdvancementManager;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

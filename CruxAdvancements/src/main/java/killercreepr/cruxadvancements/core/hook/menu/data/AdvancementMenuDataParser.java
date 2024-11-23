@@ -1,8 +1,8 @@
 package killercreepr.cruxadvancements.core.hook.menu.data;
 
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.text.format.FormatSerializer;
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxadvancements.api.advancement.CruxAdvancement;
 import killercreepr.cruxadvancements.api.advancement.manager.CruxAdvancementManager;
 import killercreepr.cruxadvancements.core.registries.AdvancementRegistries;

@@ -2,11 +2,11 @@ package killercreepr.cruxadvancements.crazy.advancement;
 
 import eu.endercentral.crazy_advancements.advancement.AdvancementFlag;
 import killercreepr.crux.core.Crux;
-import killercreepr.cruxadvancements.core.advancement.objective.SimpleObjectiveAdvancement;
 import killercreepr.cruxadvancements.api.advancement.criteria.CruxCriteria;
 import killercreepr.cruxadvancements.api.advancement.flag.CruxAdvancementFlag;
 import killercreepr.cruxadvancements.api.advancement.objective.AdvancementObjective;
 import killercreepr.cruxadvancements.api.advancement.reward.CruxAdvanceReward;
+import killercreepr.cruxadvancements.core.advancement.objective.SimpleObjectiveAdvancement;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

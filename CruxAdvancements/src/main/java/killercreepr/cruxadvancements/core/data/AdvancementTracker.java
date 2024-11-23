@@ -2,8 +2,8 @@ package killercreepr.cruxadvancements.core.data;
 
 import killercreepr.cruxadvancements.api.advancement.CruxAdvancement;
 import killercreepr.cruxadvancements.api.advancement.ObjectiveAdvancement;
-import killercreepr.cruxadvancements.api.advancement.objective.AdvancementObjective;
 import killercreepr.cruxadvancements.api.advancement.manager.CruxAdvancementManager;
+import killercreepr.cruxadvancements.api.advancement.objective.AdvancementObjective;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 

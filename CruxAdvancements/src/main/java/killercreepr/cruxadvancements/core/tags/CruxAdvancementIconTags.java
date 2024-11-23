@@ -1,10 +1,10 @@
 package killercreepr.cruxadvancements.core.tags;
 
-import killercreepr.crux.api.text.tags.TagParser;
-import killercreepr.crux.api.text.tags.container.TagContainer;
 import killercreepr.crux.api.text.format.FormatPrefix;
 import killercreepr.crux.api.text.hook.ObjectTag;
 import killercreepr.crux.api.text.resolver.StringResolver;
+import killercreepr.crux.api.text.tags.TagParser;
+import killercreepr.crux.api.text.tags.container.TagContainer;
 import killercreepr.crux.core.text.resolver.Tag;
 import killercreepr.cruxadvancements.api.advancement.icon.CruxAdvancementIcon;
 import killercreepr.cruxadvancements.crazy.advancement.CrazyAdvancementDisplay;

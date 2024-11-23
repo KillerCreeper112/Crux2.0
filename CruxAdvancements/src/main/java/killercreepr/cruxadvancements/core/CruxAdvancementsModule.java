@@ -1,26 +1,26 @@
 package killercreepr.cruxadvancements.core;
 
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.entity.memory.EntityMemory;
 import killercreepr.crux.api.entity.memory.PlayerMemory;
 import killercreepr.crux.api.plugin.module.CruxModule;
-import killercreepr.crux.core.plugin.module.StandardModules;
-import killercreepr.crux.core.plugin.CruxPlugin;
-import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.api.text.tags.TagParser;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.plugin.CruxPlugin;
+import killercreepr.crux.core.plugin.module.StandardModules;
+import killercreepr.crux.core.registries.CruxRegistries;
+import killercreepr.cruxadvancements.api.values.ValuesProvider;
 import killercreepr.cruxadvancements.core.command.AdvancementCommands;
 import killercreepr.cruxadvancements.core.config.Config;
 import killercreepr.cruxadvancements.core.config.CruxConfigHook;
-import killercreepr.cruxadvancements.core.tags.*;
-import killercreepr.cruxadvancements.crazy.advancement.CrazyAdvancementsHook;
 import killercreepr.cruxadvancements.core.entity.memory.AdvancementHolder;
 import killercreepr.cruxadvancements.core.hook.menu.CruxMenuHook;
 import killercreepr.cruxadvancements.core.listener.AdvancementGrantListener;
 import killercreepr.cruxadvancements.core.listener.ObjectiveListener;
 import killercreepr.cruxadvancements.core.listener.PlayerCraftItemListener;
 import killercreepr.cruxadvancements.core.stat.AdvancementStats;
+import killercreepr.cruxadvancements.core.tags.*;
 import killercreepr.cruxadvancements.core.values.DefaultValues;
-import killercreepr.cruxadvancements.api.values.ValuesProvider;
+import killercreepr.cruxadvancements.crazy.advancement.CrazyAdvancementsHook;
 import killercreepr.cruxmenus.CruxMenusModule;
 import org.jetbrains.annotations.NotNull;
 

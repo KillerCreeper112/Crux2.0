@@ -1,7 +1,7 @@
 package killercreepr.cruxstructures.structure.stored;
 
-import killercreepr.crux.core.data.world.StoredChunk;
 import killercreepr.crux.api.math.CruxPosition;
+import killercreepr.crux.core.data.world.StoredChunk;
 import killercreepr.crux.core.util.CruxedBoundingBox;
 import killercreepr.cruxstructures.structure.Structure;
 import killercreepr.cruxstructures.structure.active.ActiveStructure;

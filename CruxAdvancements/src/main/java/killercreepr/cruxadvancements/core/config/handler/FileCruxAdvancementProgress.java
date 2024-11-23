@@ -1,9 +1,9 @@
 package killercreepr.cruxadvancements.core.config.handler;
 
 import killercreepr.cruxadvancements.api.advancement.criteria.CruxCriteria;
+import killercreepr.cruxadvancements.api.advancement.progress.CruxAdvancementProgress;
 import killercreepr.cruxadvancements.core.advancement.criteria.ListCriteria;
 import killercreepr.cruxadvancements.core.advancement.criteria.NumberCriteria;
-import killercreepr.cruxadvancements.api.advancement.progress.CruxAdvancementProgress;
 import killercreepr.cruxadvancements.core.advancement.progress.ListAdvancementProgress;
 import killercreepr.cruxadvancements.core.advancement.progress.NumberAdvancementProgress;
 import killercreepr.cruxadvancements.core.advancement.progress.SimpleCriterionProgress;

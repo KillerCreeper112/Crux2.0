@@ -1,14 +1,14 @@
 package killercreepr.cruxadvancements.core.advancement;
 
+import killercreepr.cruxadvancements.api.advancement.CruxAdvancement;
 import killercreepr.cruxadvancements.api.advancement.criteria.CruxCriteria;
-import killercreepr.cruxadvancements.core.advancement.criteria.ListCriteria;
-import killercreepr.cruxadvancements.core.advancement.criteria.NumberCriteria;
 import killercreepr.cruxadvancements.api.advancement.icon.CruxAdvancementIcon;
 import killercreepr.cruxadvancements.api.advancement.progress.CruxAdvancementProgress;
+import killercreepr.cruxadvancements.api.advancement.reward.CruxAdvanceReward;
+import killercreepr.cruxadvancements.core.advancement.criteria.ListCriteria;
+import killercreepr.cruxadvancements.core.advancement.criteria.NumberCriteria;
 import killercreepr.cruxadvancements.core.advancement.progress.ListAdvancementProgress;
 import killercreepr.cruxadvancements.core.advancement.progress.NumberAdvancementProgress;
-import killercreepr.cruxadvancements.api.advancement.reward.CruxAdvanceReward;
-import killercreepr.cruxadvancements.api.advancement.CruxAdvancement;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

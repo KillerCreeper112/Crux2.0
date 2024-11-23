@@ -1,9 +1,9 @@
 package killercreepr.cruxadvancements.core.advancement.progress;
 
-import killercreepr.cruxadvancements.core.advancement.criteria.ListCriteria;
 import killercreepr.cruxadvancements.api.advancement.progress.CriteriaResult;
 import killercreepr.cruxadvancements.api.advancement.progress.CruxAdvancementProgress;
 import killercreepr.cruxadvancements.api.advancement.progress.CruxCriterionProgress;
+import killercreepr.cruxadvancements.core.advancement.criteria.ListCriteria;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

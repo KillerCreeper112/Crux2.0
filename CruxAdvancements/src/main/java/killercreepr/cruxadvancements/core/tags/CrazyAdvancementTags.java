@@ -1,24 +1,24 @@
 package killercreepr.cruxadvancements.core.tags;
 
-import killercreepr.crux.api.text.tags.TagParser;
-import killercreepr.crux.api.text.tags.container.TagContainer;
 import killercreepr.crux.api.text.format.FormatPrefix;
 import killercreepr.crux.api.text.hook.HookedObjectContainer;
-import killercreepr.crux.api.text.hook.ObjectTag;
-import killercreepr.crux.core.text.hook.StringHookedObjectTag;
-import killercreepr.crux.core.text.hook.StringListHookedObjectTag;
 import killercreepr.crux.api.text.hook.HookedPrefixBuilder;
+import killercreepr.crux.api.text.hook.ObjectTag;
 import killercreepr.crux.api.text.resolver.StringListResolver;
 import killercreepr.crux.api.text.resolver.StringResolver;
+import killercreepr.crux.api.text.tags.TagParser;
+import killercreepr.crux.api.text.tags.container.TagContainer;
+import killercreepr.crux.core.text.hook.StringHookedObjectTag;
+import killercreepr.crux.core.text.hook.StringListHookedObjectTag;
 import killercreepr.crux.core.text.resolver.Tag;
 import killercreepr.cruxadvancements.api.advancement.ObjectiveAdvancement;
 import killercreepr.cruxadvancements.api.advancement.icon.CriterionDisplay;
 import killercreepr.cruxadvancements.api.advancement.objective.AdvancementObjective;
-import killercreepr.cruxadvancements.core.advancement.objective.NumberObjective;
-import killercreepr.cruxadvancements.core.advancement.objective.progress.NumberObjectiveProgress;
 import killercreepr.cruxadvancements.api.advancement.objective.progress.ObjectiveProgress;
 import killercreepr.cruxadvancements.api.advancement.objective.progress.ObjectiveProgression;
 import killercreepr.cruxadvancements.api.advancement.progress.CruxAdvancementProgress;
+import killercreepr.cruxadvancements.core.advancement.objective.NumberObjective;
+import killercreepr.cruxadvancements.core.advancement.objective.progress.NumberObjectiveProgress;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

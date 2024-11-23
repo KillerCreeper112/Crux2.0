@@ -1,14 +1,14 @@
 package killercreepr.cruxadvancements.core.tags;
 
-import killercreepr.crux.api.text.tags.TagParser;
-import killercreepr.crux.api.text.tags.container.TagContainer;
 import killercreepr.crux.api.text.format.FormatPrefix;
 import killercreepr.crux.api.text.hook.HookedObjectContainer;
+import killercreepr.crux.api.text.hook.HookedPrefixBuilder;
 import killercreepr.crux.api.text.hook.ObjectTag;
+import killercreepr.crux.api.text.resolver.StringResolver;
+import killercreepr.crux.api.text.tags.TagParser;
+import killercreepr.crux.api.text.tags.container.TagContainer;
 import killercreepr.crux.core.text.hook.StringHookedObjectTag;
 import killercreepr.crux.core.text.hook.StringListHookedObjectTag;
-import killercreepr.crux.api.text.hook.HookedPrefixBuilder;
-import killercreepr.crux.api.text.resolver.StringResolver;
 import killercreepr.crux.core.text.resolver.Tag;
 import killercreepr.cruxadvancements.core.data.TrackedAdvancement;
 import org.jetbrains.annotations.NotNull;

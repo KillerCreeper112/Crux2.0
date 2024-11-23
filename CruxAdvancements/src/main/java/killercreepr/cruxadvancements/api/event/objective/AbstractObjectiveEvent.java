@@ -1,8 +1,8 @@
 package killercreepr.cruxadvancements.api.event.objective;
 
 import killercreepr.cruxadvancements.api.advancement.ObjectiveAdvancement;
-import killercreepr.cruxadvancements.api.event.AbstractAdvancementEvent;
 import killercreepr.cruxadvancements.api.advancement.manager.CruxAdvancementManager;
+import killercreepr.cruxadvancements.api.event.AbstractAdvancementEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;

@@ -1,9 +1,9 @@
 package killercreepr.cruxstructures.config;
 
 import com.google.common.reflect.TypeToken;
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.loot.LootTable;
 import killercreepr.crux.api.registry.MappedRegistry;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.registry.SimpleMappedRegistry;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.FileSimpleLootTable;
 import killercreepr.cruxconfig.config.common.FileContext;

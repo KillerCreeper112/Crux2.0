@@ -1,9 +1,9 @@
 package killercreepr.cruxstructures.structure.generation.impl;
 
-import killercreepr.crux.api.text.context.InputContext;
 import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.loot.LootContext;
 import killercreepr.crux.api.loot.LootTable;
+import killercreepr.crux.api.text.context.InputContext;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxstructures.structure.generation.StructureGenerator;
 import org.bukkit.Chunk;

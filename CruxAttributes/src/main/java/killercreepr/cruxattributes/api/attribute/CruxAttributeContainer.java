@@ -1,7 +1,6 @@
 package killercreepr.cruxattributes.api.attribute;
 
 import killercreepr.cruxattributes.core.attribute.SimpleCruxAttributeContainer;
-import killercreepr.cruxattributes.core.attribute.SimpleCruxAttributeInstance;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

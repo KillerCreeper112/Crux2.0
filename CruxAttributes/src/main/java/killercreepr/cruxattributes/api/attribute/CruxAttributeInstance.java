@@ -5,7 +5,7 @@ import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Collection;
 
 public interface CruxAttributeInstance {
     static CruxAttributeInstance instance(@NotNull CruxAttribute attribute, @NotNull Collection<CruxAttributeModifier> modifiers){

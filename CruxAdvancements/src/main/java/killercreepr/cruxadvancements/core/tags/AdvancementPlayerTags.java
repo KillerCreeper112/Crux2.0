@@ -1,18 +1,18 @@
 package killercreepr.cruxadvancements.core.tags;
 
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.entity.memory.EntityMemory;
-import killercreepr.crux.api.text.tags.TagParser;
-import killercreepr.crux.api.text.tags.container.TagContainer;
 import killercreepr.crux.api.text.format.FormatPrefix;
 import killercreepr.crux.api.text.hook.ObjectTag;
 import killercreepr.crux.api.text.resolver.StringResolver;
+import killercreepr.crux.api.text.tags.TagParser;
+import killercreepr.crux.api.text.tags.container.TagContainer;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.text.resolver.Tag;
 import killercreepr.cruxadvancements.api.advancement.CruxAdvancement;
+import killercreepr.cruxadvancements.api.advancement.manager.CruxAdvancementManager;
 import killercreepr.cruxadvancements.api.advancement.progress.CruxAdvancementProgress;
 import killercreepr.cruxadvancements.core.data.AdvancementTracker;
 import killercreepr.cruxadvancements.core.entity.memory.AdvancementHolder;
-import killercreepr.cruxadvancements.api.advancement.manager.CruxAdvancementManager;
 import killercreepr.cruxadvancements.core.registries.AdvancementRegistries;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Player;

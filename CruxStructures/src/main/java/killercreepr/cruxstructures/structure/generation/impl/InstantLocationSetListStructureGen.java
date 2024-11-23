@@ -1,9 +1,9 @@
 package killercreepr.cruxstructures.structure.generation.impl;
 
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.math.Pos2D;
-import killercreepr.crux.core.util.CruxTag;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.util.CruxTag;
 import killercreepr.cruxstructures.structure.generation.StructureGenerator;
 import killercreepr.cruxstructures.structure.result.GenerateResult;
 import org.bukkit.Chunk;

@@ -1,8 +1,8 @@
 package killercreepr.cruxstructures.structure.generation.impl;
 
 import killercreepr.crux.api.text.context.InputContext;
-import killercreepr.crux.core.util.CruxMath;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
+import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxstructures.structure.generation.StructureGenerator;
 import org.bukkit.Chunk;
 import org.jetbrains.annotations.NotNull;

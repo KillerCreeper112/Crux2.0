@@ -2,13 +2,13 @@ package killercreepr.cruxadvancements.core.advancement.objective;
 
 import killercreepr.crux.api.loot.LootContext;
 import killercreepr.cruxadvancements.api.advancement.ObjectiveAdvancement;
-import killercreepr.cruxadvancements.core.advancement.criteria.NumberCriteria;
-import killercreepr.cruxadvancements.core.advancement.objective.progress.NumberObjectiveProgress;
+import killercreepr.cruxadvancements.api.advancement.manager.CruxAdvancementManager;
 import killercreepr.cruxadvancements.api.advancement.objective.progress.ObjectiveProgress;
 import killercreepr.cruxadvancements.api.advancement.objective.progress.ObjectiveProgression;
 import killercreepr.cruxadvancements.api.event.objective.NumberObjectiveProgressChangeEvent;
 import killercreepr.cruxadvancements.api.event.objective.PostNumberObjectiveProgressChangeEvent;
-import killercreepr.cruxadvancements.api.advancement.manager.CruxAdvancementManager;
+import killercreepr.cruxadvancements.core.advancement.criteria.NumberCriteria;
+import killercreepr.cruxadvancements.core.advancement.objective.progress.NumberObjectiveProgress;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;

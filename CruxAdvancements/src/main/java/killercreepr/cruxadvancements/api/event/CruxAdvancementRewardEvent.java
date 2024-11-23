@@ -1,8 +1,8 @@
 package killercreepr.cruxadvancements.api.event;
 
 import killercreepr.cruxadvancements.api.advancement.CruxAdvancement;
-import killercreepr.cruxadvancements.api.advancement.reward.CruxAdvanceReward;
 import killercreepr.cruxadvancements.api.advancement.manager.CruxAdvancementManager;
+import killercreepr.cruxadvancements.api.advancement.reward.CruxAdvanceReward;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 

@@ -2,9 +2,9 @@ package killercreepr.cruxadvancements.core.listener;
 
 import io.papermc.paper.event.block.PlayerShearBlockEvent;
 import killercreepr.crux.api.entity.memory.EntityMemory;
+import killercreepr.cruxadvancements.api.event.PlayerCraftItemEvent;
 import killercreepr.cruxadvancements.core.advancement.objective.standard.*;
 import killercreepr.cruxadvancements.core.entity.memory.AdvancementHolder;
-import killercreepr.cruxadvancements.api.event.PlayerCraftItemEvent;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;

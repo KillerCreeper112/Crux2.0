@@ -2,8 +2,8 @@ package killercreepr.cruxadvancements.core.config.loader;
 
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.plugin.CruxPlugin;
-import killercreepr.cruxadvancements.crazy.config.CfgCrazyAdvancementManager;
 import killercreepr.cruxadvancements.core.registries.AdvancementRegistries;
+import killercreepr.cruxadvancements.crazy.config.CfgCrazyAdvancementManager;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Player;

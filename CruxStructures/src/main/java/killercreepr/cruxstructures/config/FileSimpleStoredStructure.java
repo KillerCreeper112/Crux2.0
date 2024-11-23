@@ -1,7 +1,7 @@
 package killercreepr.cruxstructures.config;
 
-import killercreepr.crux.core.math.BlockPos;
 import killercreepr.crux.core.data.world.StoredChunk;
+import killercreepr.crux.core.math.BlockPos;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;

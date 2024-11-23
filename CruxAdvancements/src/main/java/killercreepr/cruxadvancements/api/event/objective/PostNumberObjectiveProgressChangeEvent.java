@@ -1,9 +1,9 @@
 package killercreepr.cruxadvancements.api.event.objective;
 
 import killercreepr.cruxadvancements.api.advancement.ObjectiveAdvancement;
+import killercreepr.cruxadvancements.api.advancement.manager.CruxAdvancementManager;
 import killercreepr.cruxadvancements.core.advancement.objective.NumberObjective;
 import killercreepr.cruxadvancements.core.advancement.objective.progress.NumberObjectiveProgress;
-import killercreepr.cruxadvancements.api.advancement.manager.CruxAdvancementManager;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
