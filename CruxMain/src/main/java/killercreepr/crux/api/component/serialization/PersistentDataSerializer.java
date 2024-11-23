@@ -58,8 +58,7 @@ public interface PersistentDataSerializer<T> extends ComponentSerializer<Persist
     T decode(@NotNull PersistentDataContainer from);
 
     @Override
-    @Nullable
-    T encode(@NotNull PersistentDataContainer to, @Nullable T value);
+    void encode(@NotNull PersistentDataContainer to, @Nullable T value);
 
     @NotNull PersistentDataType<?, T> dataType();
 
@@ -78,10 +77,8 @@ public interface PersistentDataSerializer<T> extends ComponentSerializer<Persist
         }
 
         @Override
-        public @Nullable T encode(@NotNull PersistentDataContainer to, @Nullable T value) {
-            T previousValue = decode(to);
+        public void encode(@NotNull PersistentDataContainer to, @Nullable T value) {
             CruxTag.set(to, key, dataType, value);
-            return previousValue;
         }
 
         @Override

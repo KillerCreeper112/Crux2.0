@@ -8,11 +8,11 @@ public interface ComponentSerializer<I, V> {
         return decode((I) o);
     }
 
-    default V encodeUnchecked(@NotNull Object to, @Nullable Object value){
-        return encode((I) to, (V) value);
+    default void encodeUnchecked(@NotNull Object to, @Nullable Object value){
+        encode((I) to, (V) value);
     }
 
     @Nullable
     V decode(@NotNull I from);
-    @Nullable V encode(@NotNull I to, @Nullable V value);
+    void encode(@NotNull I to, @Nullable V value);
 }

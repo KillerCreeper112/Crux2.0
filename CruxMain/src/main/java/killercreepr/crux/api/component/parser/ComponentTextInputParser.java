@@ -21,7 +21,5 @@ public interface ComponentTextInputParser<T> {
         return encodeObject((T) object);
     }
 
-    default @NotNull Object encodeObject(@NotNull T object){
-        return object;
-    }
+    @NotNull Object encodeObject(@NotNull T object);
 }
