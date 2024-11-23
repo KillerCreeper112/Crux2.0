@@ -1,21 +1,23 @@
 package killercreepr.crux.core.component.parser.type;
 
 import killercreepr.crux.api.block.predicate.BlockPredicate;
+import killercreepr.crux.api.block.predicate.BlockPredicateComponent;
 import killercreepr.crux.api.component.parser.hybrid.PersistTextInputParser;
 import killercreepr.crux.api.component.parser.hybrid.TextInputField;
 import killercreepr.crux.api.item.component.ToolComponent;
-import killercreepr.crux.core.block.predicate.BlockTypePredicate;
-import killercreepr.crux.core.component.parser.hybrid.text.ElementPersistTextInputParser;
+import killercreepr.crux.core.block.predicate.BlockAllPredicate;
 import killercreepr.crux.core.component.parser.hybrid.text.ListPersistTextInputParser;
 
 public class ComponentInputParsers {
-    public static PersistTextInputParser<BlockPredicate> BLOCK_PREDICATE = new ElementPersistTextInputParser<>(
-        TextInputField.field(PersistTextInputParser.KEY, e ->{
-            if(e instanceof BlockTypePredicate t) return t.getType();
-            throw new UnsupportedOperationException("NOOOOOOO");
-        }), ctx -> new BlockTypePredicate(ctx.get()),
-        BlockPredicate.class
-    );
+    public static PersistTextInputParser<BlockPredicate> BLOCK_PREDICATE = PersistTextInputParser.elementBuilder(BlockPredicate.class)
+        .field(TextInputField.field(PersistTextInputParser.LIST.STRING, e ->{
+            if(!(e instanceof BlockPredicateComponent all)) throw new IllegalArgumentException(
+                "BlockPredicate must be a BlockPredicateComponent! " + e
+            );
+            return all.encodeToParser();
+        }))
+        .apply(ctx -> new BlockAllPredicate(ctx.get()))
+        ;
 
     public static PersistTextInputParser<ToolComponent.Rule> TOOL_RULE = PersistTextInputParser.mapBuilder(ToolComponent.Rule.class)
         .field("blocks", TextInputField.field(BLOCK_PREDICATE, ToolComponent.Rule::getBlocks))

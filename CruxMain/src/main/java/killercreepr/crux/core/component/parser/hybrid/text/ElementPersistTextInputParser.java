@@ -5,6 +5,7 @@ import killercreepr.crux.api.component.parser.hybrid.PersistTextInputParser;
 import killercreepr.crux.api.component.parser.hybrid.TextInputField;
 import killercreepr.crux.api.component.parser.hybrid.TextInputResultParser;
 import org.bukkit.persistence.PersistentDataAdapterContext;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
@@ -84,5 +85,46 @@ public class ElementPersistTextInputParser<T> implements PersistTextInputParser<
     public @NotNull Object encodeObject(@NotNull T object) {
         Object parsed = field.parseField(object);
         return field.inputParser().encodeObjectUnchecked(parsed);
+    }
+
+    public static class Builder<T> implements PersistTextInputParser.ElementBuilder<T> {
+        protected TextInputField<T, ?> field;
+        protected TextInputResultParser<T> resultParser;
+        protected PersistentDataType<PersistentDataContainer, T> dataType;
+        protected Class<T> dataTypeClass;
+
+        @Override
+        public Builder<T> field(TextInputField<T, ?> field) {
+            this.field = field;
+            return this;
+        }
+
+        @Override
+        public Builder<T> resultParser(TextInputResultParser<T> resultParser) {
+            this.resultParser = resultParser;
+            return this;
+        }
+
+        @Override
+        public PersistTextInputParser<T> apply(TextInputResultParser<T> resultParser) {
+            return resultParser(resultParser).build();
+        }
+
+        @Override
+        public Builder<T> dataType(PersistentDataType<PersistentDataContainer, T> dataType) {
+            this.dataType = dataType;
+            return this;
+        }
+
+        @Override
+        public Builder<T> dataTypeClass(Class<T> type) {
+            return this;
+        }
+
+        @Override
+        public PersistTextInputParser<T> build() {
+            if(dataType == null) return new ElementPersistTextInputParser<>(field, resultParser, dataTypeClass);
+            return new ElementPersistTextInputParser<>(field, resultParser, dataType);
+        }
     }
 }

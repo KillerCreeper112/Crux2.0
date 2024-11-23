@@ -1,8 +1,11 @@
 package killercreepr.crux.api.component.parser.hybrid;
 
 import killercreepr.crux.api.component.parser.ComponentTextInputParser;
+import killercreepr.crux.api.component.parser.standard.ComponentParserListTypeHolder;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.component.parser.hybrid.SimplePersistInputParser;
+import killercreepr.crux.core.component.parser.hybrid.text.ElementPersistTextInputParser;
+import killercreepr.crux.core.component.parser.hybrid.text.ListPersistTextInputParser;
 import killercreepr.crux.core.component.parser.hybrid.text.MapPersistTextInputParser;
 import killercreepr.crux.core.component.parser.hybrid.text.PrimitivePersistTextInputParser;
 import killercreepr.crux.core.persistence.CruxPersistence;
@@ -10,6 +13,10 @@ import net.kyori.adventure.key.Key;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+import java.util.function.Function;
 
 public interface PersistTextInputParser<T> extends ComponentTextInputParser<T>{
     static <T> MapBuilder<T> mapBuilder(){
@@ -18,6 +25,31 @@ public interface PersistTextInputParser<T> extends ComponentTextInputParser<T>{
 
     static <T> MapBuilder<T> mapBuilder(Class<T> type){
         return new MapPersistTextInputParser.Builder<T>().dataTypeClass(type);
+    }
+
+    static <T> ElementBuilder<T> elementBuilder(){
+        return new ElementPersistTextInputParser.Builder<T>();
+    }
+
+    static <T> ElementBuilder<T> elementBuilder(Class<T> type){
+        return new ElementPersistTextInputParser.Builder<T>().dataTypeClass(type);
+    }
+
+    static <T> PersistTextInputParser<List<T>> list(@NotNull PersistTextInputParser<T> elementParser, @Nullable PersistentDataType<?, List<T>> dataType){
+        return new ListPersistTextInputParser<T>(elementParser, dataType);
+    }
+
+    static <T> PersistTextInputParser<List<T>> list(@NotNull PersistTextInputParser<T> elementParser){
+        return list(elementParser,  null);
+    }
+
+    static <T> PersistTextInputParser<T> primitive(@NotNull PersistentDataType<?, T> dataType, @NotNull Function<Object, T> resultParser){
+        return new PrimitivePersistTextInputParser<T>(dataType) {
+            @Override
+            public @NotNull T decodeObject(@NotNull Object object) throws IllegalArgumentException {
+                return resultParser.apply(object);
+            }
+        };
     }
 
     PersistTextInputParser<String> STRING = new PrimitivePersistTextInputParser<>(PersistentDataType.STRING) {
@@ -65,6 +97,8 @@ public interface PersistTextInputParser<T> extends ComponentTextInputParser<T>{
         }
     };
 
+    ComponentParserListTypeHolder LIST = new ComponentParserListTypeHolder();
+
     @NotNull
     PersistentDataType<?, T> dataType();
 
@@ -78,6 +112,15 @@ public interface PersistTextInputParser<T> extends ComponentTextInputParser<T>{
         PersistTextInputParser<T> apply(TextInputResultParser<T> resultParser);
         MapBuilder<T> dataType(PersistentDataType<PersistentDataContainer, T> dataType);
         MapBuilder<T> dataTypeClass(Class<T> type);
+        PersistTextInputParser<T> build();
+    }
+
+    interface ElementBuilder<T>{
+        ElementBuilder<T> field(TextInputField<T, ?> field);
+        ElementBuilder<T> resultParser(TextInputResultParser<T> resultParser);
+        PersistTextInputParser<T> apply(TextInputResultParser<T> resultParser);
+        ElementBuilder<T> dataType(PersistentDataType<PersistentDataContainer, T> dataType);
+        ElementBuilder<T> dataTypeClass(Class<T> type);
         PersistTextInputParser<T> build();
     }
 }

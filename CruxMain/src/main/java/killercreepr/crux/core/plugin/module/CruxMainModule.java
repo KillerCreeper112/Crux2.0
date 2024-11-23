@@ -5,7 +5,6 @@ import killercreepr.crux.api.plugin.module.CruxModule;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.command.CruxLootCommands;
 import killercreepr.crux.core.component.CruxComponents;
-import killercreepr.crux.core.component.parser.type.ComponentParserTypes;
 import killercreepr.crux.core.listener.EntitySpawnListener;
 import killercreepr.crux.core.listener.LootContainerListener;
 import killercreepr.crux.core.listener.PlayerDataListener;

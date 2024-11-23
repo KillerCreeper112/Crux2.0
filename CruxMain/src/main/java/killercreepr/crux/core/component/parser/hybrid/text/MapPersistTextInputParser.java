@@ -11,7 +11,8 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MapPersistTextInputParser<T> implements PersistTextInputParser<T> {
     protected final @NotNull Map<String, TextInputField<T, ?>> elements;
