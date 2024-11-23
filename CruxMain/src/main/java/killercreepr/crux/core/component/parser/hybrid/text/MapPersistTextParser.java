@@ -102,6 +102,7 @@ public class MapPersistTextParser<T> implements PersistTextParser<T> {
         Map<String, Object> map = new HashMap<>();
         elements.forEach((id, field) ->{
             Object parsedField = field.parseField(object);
+            if(parsedField == null) return;
             Object encoded = field.inputParser().encodeObjectUnchecked(parsedField);
             map.put(id, encoded);
         });

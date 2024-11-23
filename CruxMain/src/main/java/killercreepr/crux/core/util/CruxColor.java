@@ -12,8 +12,19 @@ public class CruxColor {
             hex = hex.substring(1);
         }
 
+        try {
+            int red = Integer.parseInt(hex.substring(0, 2), 16);
+            int green = Integer.parseInt(hex.substring(2, 4), 16);
+            int blue = Integer.parseInt(hex.substring(4, 6), 16);
+
+            // Return the Bukkit color
+            return Color.fromRGB(red, green, blue);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid hex color string. Ensure the hex values are valid: " + hex, e);
+        }
+
         // Parse the hex string into an integer
-        int rgbValue = Integer.parseInt(hex, 16);
+        /*int rgbValue = Integer.parseInt(hex, 16);
 
         // Extract individual RGB components
         int red = (rgbValue >> 16) & 0xFF;
@@ -21,7 +32,7 @@ public class CruxColor {
         int blue = rgbValue & 0xFF;
 
         // Create a Color object
-        return Color.fromRGB(red, green, blue);
+        return Color.fromRGB(red, green, blue);*/
     }
 
     public static @NotNull String colorToHex(@NotNull Color color) {
