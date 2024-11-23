@@ -1,7 +1,6 @@
 package killercreepr.crux.core.item;
 
 import killercreepr.crux.api.text.format.FormatSerializer;
-import killercreepr.crux.core.util.CruxItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -9,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Primarily used for json serialization.
  */
-public class StoredItem extends CruxItem {
+public class StoredItem extends SimpleCruxItem {
     public StoredItem(@NotNull FormatSerializer format, @NotNull ItemStack item) {
         super(format, item);
     }

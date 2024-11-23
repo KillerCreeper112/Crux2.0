@@ -1,7 +1,7 @@
 package killercreepr.cruxconfig.config.bukkit.value;
 
-import killercreepr.crux.core.valueproviders.number.ConstantNumber;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
+import killercreepr.crux.core.valueproviders.number.ConstantNumber;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -1,9 +1,9 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
 import com.google.common.reflect.TypeToken;
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.block.predicate.BlockPredicate;
 import killercreepr.crux.api.block.tag.BlockTag;
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileArray;

@@ -1,7 +1,7 @@
 package killercreepr.cruxmenus.core.menu.module.standard.fill;
 
-import killercreepr.crux.core.text.resolver.Tag;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
+import killercreepr.crux.core.text.resolver.Tag;
 import killercreepr.cruxmenus.api.menu.CfgMenu;
 import killercreepr.cruxmenus.api.menu.Menu;
 import killercreepr.cruxmenus.api.menu.contex.MenuContext;

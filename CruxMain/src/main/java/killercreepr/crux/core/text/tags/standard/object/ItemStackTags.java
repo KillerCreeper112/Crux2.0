@@ -2,13 +2,13 @@ package killercreepr.crux.core.text.tags.standard.object;
 
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
+import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.text.format.FormatPrefix;
 import killercreepr.crux.api.text.hook.ObjectTag;
 import killercreepr.crux.api.text.tags.TagParser;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.text.container.StringTagContainer;
 import killercreepr.crux.core.text.resolver.Tag;
-import killercreepr.crux.core.util.CruxItem;
 import net.kyori.adventure.key.Key;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;

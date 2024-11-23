@@ -1,9 +1,9 @@
 package killercreepr.cruxconfig.config.bukkit.value;
 
-import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.crux.api.communication.Communicator;
-import killercreepr.crux.core.communication.MsgContainer;
+import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.crux.api.text.tags.container.MergedTagContainer;
+import killercreepr.crux.core.communication.MsgContainer;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;

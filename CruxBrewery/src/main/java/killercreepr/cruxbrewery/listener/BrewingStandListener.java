@@ -1,6 +1,6 @@
 package killercreepr.cruxbrewery.listener;
 
-import killercreepr.crux.core.util.CruxItem;
+import killercreepr.crux.api.item.CruxItem;
 import killercreepr.cruxbrewery.recipe.BrewClock;
 import killercreepr.cruxbrewery.recipe.BrewRecipe;
 import killercreepr.cruxbrewery.registries.CruxBreweryRegistries;

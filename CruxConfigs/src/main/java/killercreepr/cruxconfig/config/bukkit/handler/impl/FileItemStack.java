@@ -1,6 +1,6 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
-import killercreepr.crux.core.util.CruxItem;
+import killercreepr.crux.core.item.SimpleCruxItem;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -104,7 +104,7 @@ public class FileItemStack extends SimpleFileHandler<ItemStack> {
         Material material = registry.deserializeFromFile(Material.class, o.get("material"));
         if(material != null) stack = stack.withType(material);
         int amount = o.getObject(Number.class, "amount", 1).intValue();
-        CruxItem item = new CruxItem(stack).amount(amount);
+        SimpleCruxItem item = new SimpleCruxItem(stack).amount(amount);
 
         String customName = o.getObject(String.class, "custom_name");
         String itemName = o.getObject(String.class, "item_name");

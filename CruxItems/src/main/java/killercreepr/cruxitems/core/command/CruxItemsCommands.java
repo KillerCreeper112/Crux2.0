@@ -13,9 +13,9 @@ import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import killercreepr.crux.api.communication.Communicator;
 import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.crux.core.command.argument.CruxCmdArguments;
+import killercreepr.crux.core.item.SimpleCruxItem;
 import killercreepr.crux.core.item.dynamic.component.DynamicItemCruxComponents;
 import killercreepr.crux.core.plugin.CruxPlugin;
-import killercreepr.crux.core.util.CruxItem;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxitems.api.item.plugin.PluginItem;
 import killercreepr.cruxitems.core.command.argument.CruxItemsArguments;
@@ -202,14 +202,14 @@ public class CruxItemsCommands {
         return given > 0 ? 1 : -1;
     }
 
-    public static int mainHandArgument(@NotNull CommandSourceStack source, @NotNull Collection<Entity> targets, @NotNull Consumer<CruxItem> mainHand){
+    public static int mainHandArgument(@NotNull CommandSourceStack source, @NotNull Collection<Entity> targets, @NotNull Consumer<SimpleCruxItem> mainHand){
         int given = 0;
         for(Entity entity : targets) {
             if (!(entity instanceof LivingEntity e)) continue;
 
             EntityEquipment equip = e.getEquipment();
             if (equip == null) continue;
-            CruxItem item = new CruxItem(equip.getItemInMainHand());
+            SimpleCruxItem item = new SimpleCruxItem(equip.getItemInMainHand());
             mainHand.accept(item);
             if(!(entity instanceof Player)){
                 equip.setItemInMainHand(item.item(), true);
@@ -228,7 +228,7 @@ public class CruxItemsCommands {
     }
 
     public static int clearComponents(@NotNull CommandSourceStack source, @NotNull Collection<Entity> targets){
-        int given = mainHandArgument(source, targets, CruxItem::clearComponents);
+        int given = mainHandArgument(source, targets, SimpleCruxItem::clearComponents);
         Communicator.chat("Cleared components on main hand items from " + given + " entities.").use(getExecutor(source));
         return given > 0 ? 1 : -1;
     }

@@ -1,9 +1,9 @@
 package killercreepr.cruxentities;
 
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.plugin.module.CruxModule;
-import killercreepr.crux.core.plugin.module.StandardModules;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.plugin.CruxPlugin;
+import killercreepr.crux.core.plugin.module.StandardModules;
 import killercreepr.cruxentities.command.CruxEntitiesCommands;
 import killercreepr.cruxentities.entity.MobCategory;
 import killercreepr.cruxentities.handler.CruxEntitiesEntityHandler;

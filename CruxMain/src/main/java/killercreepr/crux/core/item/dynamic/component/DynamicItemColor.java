@@ -1,8 +1,8 @@
 package killercreepr.crux.core.item.dynamic.component;
 
 import killercreepr.crux.api.text.context.TextParserContext;
+import killercreepr.crux.core.item.SimpleCruxItem;
 import killercreepr.crux.core.util.CruxColor;
-import killercreepr.crux.core.util.CruxItem;
 import org.jetbrains.annotations.NotNull;
 
 public class DynamicItemColor extends DynamicSingleValueComponent{
@@ -16,7 +16,7 @@ public class DynamicItemColor extends DynamicSingleValueComponent{
     }
 
     @Override
-    public void apply(@NotNull CruxItem item, @NotNull TextParserContext context) {
+    public void apply(@NotNull SimpleCruxItem item, @NotNull TextParserContext context) {
         item.color(CruxColor.hexToColor(parseString(context)));
     }
 }

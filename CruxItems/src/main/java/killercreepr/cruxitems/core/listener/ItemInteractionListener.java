@@ -1,6 +1,6 @@
 package killercreepr.cruxitems.core.listener;
 
-import killercreepr.crux.core.util.CruxItem;
+import killercreepr.crux.api.item.CruxItem;
 import killercreepr.cruxitems.api.item.interaction.InteractableItem;
 import killercreepr.cruxitems.api.item.interaction.ItemUseContext;
 import killercreepr.cruxitems.api.item.interaction.ItemUseResult;

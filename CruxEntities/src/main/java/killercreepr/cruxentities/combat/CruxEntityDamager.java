@@ -1,8 +1,8 @@
 package killercreepr.cruxentities.combat;
 
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.event.CruxEntityDamageEvent;
 import killercreepr.crux.api.event.CruxEntityDeathEvent;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.persistence.CruxPersist;
 import killercreepr.crux.core.util.CruxEntityUtil;
 import killercreepr.cruxattributes.api.attribute.CruxAttribute;
@@ -11,7 +11,10 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;

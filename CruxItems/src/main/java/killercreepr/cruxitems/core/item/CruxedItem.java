@@ -1,7 +1,7 @@
 package killercreepr.cruxitems.core.item;
 
 import killercreepr.crux.api.text.format.FormatSerializer;
-import killercreepr.crux.core.util.CruxItem;
+import killercreepr.crux.core.item.SimpleCruxItem;
 import killercreepr.cruxitems.api.item.plugin.PluginItem;
 import killercreepr.cruxitems.core.persistence.CruxItemsPersistTags;
 import killercreepr.cruxitems.core.registries.CruxItemRegistries;
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public class CruxedItem extends CruxItem {
+public class CruxedItem extends SimpleCruxItem {
     public static CruxedItem cruxed(@NotNull ItemStack item){
         return new CruxedItem(item);
     }

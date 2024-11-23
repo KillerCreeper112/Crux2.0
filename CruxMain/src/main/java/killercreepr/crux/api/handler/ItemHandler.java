@@ -1,6 +1,6 @@
 package killercreepr.crux.api.handler;
 
-import killercreepr.crux.core.util.CruxItem;
+import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.paper.ItemHolder;
 import killercreepr.crux.paper.item.BukkitItemHolder;
 import net.kyori.adventure.key.Key;

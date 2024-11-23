@@ -1,7 +1,7 @@
 package killercreepr.cruxattributes.api.attribute;
 
+import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.core.Crux;
-import killercreepr.crux.core.util.CruxItem;
 import killercreepr.crux.core.util.CruxKey;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.crux.core.util.CruxString;
@@ -77,7 +77,7 @@ public interface CruxAttribute extends Keyed {
     default double round(double value, @NotNull RoundingMode roundingMode){ return CruxMath.round(value, getRoundMultiple(), roundingMode); }
 
     static ItemStack updateItem(@Nullable ItemStack i){
-        if(killercreepr.crux.core.util.CruxItem.isEmpty(i)) return i;
+        if(CruxItem.isEmpty(i)) return i;
         ItemMeta meta = i.getItemMeta();
         if(meta != null) i.setItemMeta(updateMeta(meta));
         return i;
@@ -119,13 +119,13 @@ public interface CruxAttribute extends Keyed {
 
     static @NotNull Collection<CruxAttributeInstance>
     getInstances(@Nullable ItemStack i){
-        if(killercreepr.crux.core.util.CruxItem.isEmpty(i)) return new ArrayList<>();
+        if(CruxItem.isEmpty(i)) return new ArrayList<>();
         return getInstances(i.getItemMeta(), (CruxSlot[]) null);
     }
 
     static @NotNull Collection<CruxAttributeInstance>
     getInstances(@Nullable ItemStack i, @Nullable CruxSlot @Nullable... slots){
-        if(killercreepr.crux.core.util.CruxItem.isEmpty(i)) return new ArrayList<>();
+        if(CruxItem.isEmpty(i)) return new ArrayList<>();
         return getInstances(i.getItemMeta(), slots);
     }
 
@@ -146,7 +146,7 @@ public interface CruxAttribute extends Keyed {
 
     static
     double get(@Nullable ItemStack i, @NotNull CruxAttribute attribute, double defaultValue, @Nullable CruxSlot @Nullable... slots){
-        if(killercreepr.crux.core.util.CruxItem.isEmpty(i)) return defaultValue;
+        if(CruxItem.isEmpty(i)) return defaultValue;
         return get(i.getItemMeta(), attribute, defaultValue, slots);
     }
 
@@ -205,7 +205,7 @@ public interface CruxAttribute extends Keyed {
     }
 
     static ItemStack removeModifiers(@Nullable ItemStack i, @NotNull Key @NotNull... path){
-        if(killercreepr.crux.core.util.CruxItem.isEmpty(i)) return i;
+        if(CruxItem.isEmpty(i)) return i;
         ItemMeta meta = i.getItemMeta();
         removeModifiers(meta, path);
         i.setItemMeta(meta);
@@ -230,7 +230,7 @@ public interface CruxAttribute extends Keyed {
 
     static ItemStack removeModifier(@Nullable ItemStack i, @NotNull CruxAttribute attribute,
                                                                     @NotNull Key @NotNull... path){
-        if(killercreepr.crux.core.util.CruxItem.isEmpty(i)) return i;
+        if(CruxItem.isEmpty(i)) return i;
         ItemMeta meta = i.getItemMeta();
         removeModifier(meta, attribute, path);
         i.setItemMeta(meta);
@@ -302,7 +302,7 @@ public interface CruxAttribute extends Keyed {
 
     static ItemStack addModifier(@Nullable ItemStack i, @NotNull CruxAttribute attribute,
                                  @NotNull CruxAttributeModifier modifier, @NotNull Key... path){
-        if(killercreepr.crux.core.util.CruxItem.isEmpty(i)) return i;
+        if(CruxItem.isEmpty(i)) return i;
         ItemMeta meta = i.getItemMeta();
         addModifier(meta, attribute, modifier, path);
         i.setItemMeta(meta);

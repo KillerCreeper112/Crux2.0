@@ -1,7 +1,7 @@
 package killercreepr.cruxconfig.config.bukkit.loader;
 
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.block.sound.CreateBlockSoundGroup;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.file.DataFile;

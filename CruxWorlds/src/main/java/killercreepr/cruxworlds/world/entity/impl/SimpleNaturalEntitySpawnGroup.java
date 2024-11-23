@@ -1,7 +1,7 @@
 package killercreepr.cruxworlds.world.entity.impl;
 
-import killercreepr.crux.core.loot.SimpleWeighted;
 import killercreepr.crux.api.util.CruxWeightedSupplier;
+import killercreepr.crux.core.loot.SimpleWeighted;
 import killercreepr.cruxworlds.world.entity.NaturalEntitySpawn;
 import killercreepr.cruxworlds.world.entity.NaturalEntitySpawnGroup;
 import killercreepr.cruxworlds.world.entity.SpawnContext;

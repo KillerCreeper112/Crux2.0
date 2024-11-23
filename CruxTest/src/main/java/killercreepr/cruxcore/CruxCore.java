@@ -1,8 +1,8 @@
 package killercreepr.cruxcore;
 
 import killercreepr.crux.core.Crux;
-import killercreepr.crux.core.plugin.module.CruxMainModule;
 import killercreepr.crux.core.plugin.CruxPlugin;
+import killercreepr.crux.core.plugin.module.CruxMainModule;
 import killercreepr.crux.core.registries.CruxModuleRegistry;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxadvancements.core.CruxAdvancementsModule;

@@ -1,8 +1,8 @@
 package killercreepr.cruxconfig.config.bukkit.standard;
 
-import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.api.communication.lang.CreateLang;
 import killercreepr.crux.api.communication.lang.LangProvider;
+import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.core.communication.processor.LangProcessor;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;

@@ -2,8 +2,8 @@ package killercreepr.cruxbrewery;
 
 import io.netty.util.internal.UnstableApi;
 import killercreepr.crux.api.plugin.module.CruxModule;
-import killercreepr.crux.core.plugin.module.StandardModules;
 import killercreepr.crux.core.plugin.CruxPlugin;
+import killercreepr.crux.core.plugin.module.StandardModules;
 import killercreepr.cruxbrewery.listener.BrewingStandListener;
 import org.jetbrains.annotations.NotNull;
 

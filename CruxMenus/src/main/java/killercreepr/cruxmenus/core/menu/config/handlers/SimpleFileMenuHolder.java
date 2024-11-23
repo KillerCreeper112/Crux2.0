@@ -1,9 +1,9 @@
 package killercreepr.cruxmenus.core.menu.config.handlers;
 
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.data.DataExchange;
-import killercreepr.crux.core.valueproviders.number.ConstantNumber;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.valueproviders.number.ConstantNumber;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.FileDynamicItem;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;

@@ -1,9 +1,9 @@
 package killercreepr.cruxenchants;
 
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.plugin.module.CruxModule;
-import killercreepr.crux.core.plugin.module.StandardModules;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.plugin.CruxPlugin;
+import killercreepr.crux.core.plugin.module.StandardModules;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxenchants.command.CruxEnchantCommands;
 import killercreepr.cruxenchants.config.Config;

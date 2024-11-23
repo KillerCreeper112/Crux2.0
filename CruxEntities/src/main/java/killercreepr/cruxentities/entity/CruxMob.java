@@ -2,15 +2,15 @@ package killercreepr.cruxentities.entity;
 
 import io.papermc.paper.tag.EntitySetTag;
 import io.papermc.paper.tag.EntityTags;
-import killercreepr.crux.api.text.context.InputContext;
 import killercreepr.crux.api.loot.LootContext;
 import killercreepr.crux.api.loot.LootTable;
 import killercreepr.crux.api.loot.bukkit.EventLootContexts;
-import killercreepr.crux.core.registries.CruxRegistries;
+import killercreepr.crux.api.text.context.InputContext;
 import killercreepr.crux.api.text.tags.container.TagContainer;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
+import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.crux.core.util.CruxString;
-import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxentities.persistence.CruxEntitiesPersist;
 import killercreepr.cruxentities.registries.CruxEntityRegistries;
 import net.kyori.adventure.key.Key;

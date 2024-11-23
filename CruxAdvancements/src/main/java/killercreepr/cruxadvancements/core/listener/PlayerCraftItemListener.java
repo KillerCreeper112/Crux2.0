@@ -1,6 +1,6 @@
 package killercreepr.cruxadvancements.core.listener;
 
-import killercreepr.crux.core.util.CruxItem;
+import killercreepr.crux.api.item.CruxItem;
 import killercreepr.cruxadvancements.api.event.PlayerCraftItemEvent;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

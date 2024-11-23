@@ -4,7 +4,7 @@ import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import killercreepr.crux.api.item.dynamic.DynamicItemComponent;
 import killercreepr.crux.api.text.context.TextParserContext;
-import killercreepr.crux.core.util.CruxItem;
+import killercreepr.crux.core.item.SimpleCruxItem;
 import killercreepr.crux.core.util.CruxMath;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -29,7 +29,7 @@ public class DynamicItemEnchants implements DynamicItemComponent {
     }
 
     @Override
-    public void apply(@NotNull CruxItem item, @NotNull TextParserContext context) {
+    public void apply(@NotNull SimpleCruxItem item, @NotNull TextParserContext context) {
         enchants.forEach((keyObject, amountObject) ->{
             NamespacedKey key = NamespacedKey.fromString(context.deserializeString(keyObject.toString()));
             if(key==null) return;

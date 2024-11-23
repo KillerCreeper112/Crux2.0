@@ -11,12 +11,11 @@ import io.papermc.paper.command.brigadier.argument.resolvers.selector.EntitySele
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import killercreepr.crux.api.communication.Communicator;
-import killercreepr.crux.core.command.argument.CruxCmdArguments;
-import killercreepr.crux.core.communication.MsgContainer;
-import killercreepr.crux.core.plugin.CruxPlugin;
+import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.text.tags.container.TagContainer;
+import killercreepr.crux.core.command.argument.CruxCmdArguments;
+import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.text.resolver.Tag;
-import killercreepr.crux.core.util.CruxItem;
 import killercreepr.cruxattributes.api.attribute.CruxAttribute;
 import killercreepr.cruxattributes.api.attribute.CruxAttributeModifier;
 import killercreepr.cruxattributes.api.attribute.CruxSlot;

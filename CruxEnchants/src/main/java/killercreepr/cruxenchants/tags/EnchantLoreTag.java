@@ -1,10 +1,10 @@
 package killercreepr.cruxenchants.tags;
 
 import killercreepr.crux.api.data.Holder;
-import killercreepr.crux.api.text.tags.TagParser;
-import killercreepr.crux.core.text.container.StringListTagContainer;
 import killercreepr.crux.api.text.format.FormatPrefix;
 import killercreepr.crux.api.text.hook.ObjectTag;
+import killercreepr.crux.api.text.tags.TagParser;
+import killercreepr.crux.core.text.container.StringListTagContainer;
 import killercreepr.crux.core.text.resolver.Tag;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxenchants.enchant.CruxEnchant;

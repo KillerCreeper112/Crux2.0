@@ -1,11 +1,11 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
 import com.google.common.reflect.TypeToken;
-import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.item.predicate.ItemPredicate;
 import killercreepr.crux.api.item.tag.ItemTag;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.item.predicate.ItemAllPredicate;
 import killercreepr.crux.core.item.predicate.ItemAnyPredicate;
-import killercreepr.crux.api.item.predicate.ItemPredicate;
 import killercreepr.crux.core.item.predicate.ItemTypePredicate;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;

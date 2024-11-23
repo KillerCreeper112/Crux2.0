@@ -1,8 +1,8 @@
 package killercreepr.cruxworlds.world;
 
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.data.tick.Ticked;
 import killercreepr.crux.api.math.CruxPosition;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxworlds.world.entity.NaturalEntityWorldSpawner;
 import org.bukkit.GameMode;

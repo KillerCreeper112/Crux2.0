@@ -1,13 +1,12 @@
-package killercreepr.crux.core.util;
+package killercreepr.crux.core.item;
 
-import killercreepr.crux.api.component.serialization.PersistHolderComponentHandler;
+import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.text.format.FormatSerializer;
 import killercreepr.crux.api.text.provider.StringTagProvider;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.persistence.CruxPersist;
 import killercreepr.crux.core.text.format.FormatParserContext;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -17,7 +16,10 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.*;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.MapMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataHolder;
 import org.jetbrains.annotations.NotNull;
@@ -26,51 +28,20 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class CruxItem implements Cloneable, PersistHolderComponentHandler {
-    public static boolean isEmpty(@Nullable ItemStack i){
-        //pre 1.20.5
-        //return i == null || i.getType().isEmpty();
-        //post 1.20.5
-        return i == null || i.isEmpty();
-    }
-    public static int getMaxStackSize(@NotNull ItemStack i){
-        ItemMeta meta = i.getItemMeta();
-        if(meta==null) return i.getType().getMaxStackSize();
-        return meta.hasMaxStackSize() ? meta.getMaxStackSize() : i.getType().getMaxStackSize();
-    }
-
-    public static int getMaxDurability(@NotNull ItemStack i){
-        if(!(i.getItemMeta() instanceof Damageable d)) return 0;
-        if(d.hasMaxDamage()) return d.getMaxDamage();
-        return i.getType().getMaxDurability();
-    }
-
-    public static CruxItem create(@NotNull ItemStack item){
-        return new CruxItem(item);
-    }
-
-    public static CruxItem create(@NotNull Material item){
-        return new CruxItem(item);
-    }
-
-    public static CruxItem create(@NotNull FormatSerializer format, @NotNull ItemStack item){
-        return new CruxItem(format, item);
-    }
-
-    public static final @NotNull Component NO_ITALICS = Component.empty().decoration(TextDecoration.ITALIC, false);
+public class SimpleCruxItem implements CruxItem {
     protected @NotNull ItemStack item;
     protected @NotNull FormatSerializer format;
-    public CruxItem(@NotNull Material material) {
+    public SimpleCruxItem(@NotNull Material material) {
         this(new ItemStack(material));
     }
-    public CruxItem(@NotNull ItemStack item) {
+    public SimpleCruxItem(@NotNull ItemStack item) {
         this(Crux.format(), item);
     }
 
-    public CruxItem(@NotNull FormatSerializer format, @NotNull Material material) {
+    public SimpleCruxItem(@NotNull FormatSerializer format, @NotNull Material material) {
         this(format, new ItemStack(material));
     }
-    public CruxItem(@NotNull FormatSerializer format, @NotNull ItemStack item) {
+    public SimpleCruxItem(@NotNull FormatSerializer format, @NotNull ItemStack item) {
         this.format = format;
         this.item = item;
     }
@@ -87,7 +58,7 @@ public class CruxItem implements Cloneable, PersistHolderComponentHandler {
 
     private Component cNoItalics(@Nullable Component s){
         if(s==null) return null;
-        return NO_ITALICS.append(s);
+        return CruxItem.NO_ITALICS.append(s);
     }
 
     private List<Component> cNoItalics(@Nullable Collection<Component> s){
@@ -107,20 +78,20 @@ public class CruxItem implements Cloneable, PersistHolderComponentHandler {
         return Optional.ofNullable(meta());
     }
 
-    public CruxItem meta(@Nullable ItemMeta meta){
+    public SimpleCruxItem meta(@Nullable ItemMeta meta){
         item.setItemMeta(meta);
         return this;
     }
 
-    public CruxItem addFlags(@NotNull ItemFlag @NotNull... flags){
+    public SimpleCruxItem addFlags(@NotNull ItemFlag @NotNull... flags){
         return editMeta(meta -> meta.addItemFlags(flags));
     }
 
-    public CruxItem removeFlags(@NotNull ItemFlag @NotNull... flags){
+    public SimpleCruxItem removeFlags(@NotNull ItemFlag @NotNull... flags){
         return editMeta(meta -> meta.removeItemFlags(flags));
     }
 
-    public CruxItem addLoreFromString(@Nullable Collection<String> lore){
+    public SimpleCruxItem addLoreFromString(@Nullable Collection<String> lore){
         if(lore==null) return this;
         FormatParserContext context = buildFormatContext();
         return addLore(context.deserializeList(lore));
@@ -130,16 +101,16 @@ public class CruxItem implements Cloneable, PersistHolderComponentHandler {
         return new FormatParserContext(format, null, null, format.tags().buildTags(item()));
     }
 
-    public CruxItem addLoreFromString(@NotNull String @Nullable... lore){
+    public SimpleCruxItem addLoreFromString(@NotNull String @Nullable... lore){
         if(lore==null) return this;
         return addLoreFromString(Arrays.stream(lore).toList());
     }
 
-    public CruxItem addLore(@Nullable Collection<Component> lore){
+    public SimpleCruxItem addLore(@Nullable Collection<Component> lore){
         return lore == null ? this : addLore(lore.toArray(new Component[0]));
     }
 
-    public CruxItem addLore(@NotNull Component @NotNull... lore){
+    public SimpleCruxItem addLore(@NotNull Component @NotNull... lore){
         List<Component> itemLore = lore();
         if(itemLore == null) itemLore = new ArrayList<>();
         else itemLore = new ArrayList<>(itemLore);
@@ -152,7 +123,7 @@ public class CruxItem implements Cloneable, PersistHolderComponentHandler {
         return item.getType();
     }
 
-    public CruxItem material(@NotNull Material material) {
+    public SimpleCruxItem material(@NotNull Material material) {
         //pre 1.20.5 this.item.setType(material);
         //post 1.20.5
         this.item = this.item.withType(material);
@@ -165,28 +136,28 @@ public class CruxItem implements Cloneable, PersistHolderComponentHandler {
     }
 
     @Deprecated(forRemoval = true)
-    public CruxItem displayName(@Nullable String name) {
+    public SimpleCruxItem displayName(@Nullable String name) {
         return displayName(cNoItalics(name));
     }
 
     @Deprecated(forRemoval = true)
-    public CruxItem displayName(@Nullable Component name) {
+    public SimpleCruxItem displayName(@Nullable Component name) {
         return editMeta(meta -> meta.displayName(cNoItalics(name)));
     }
 
-    public CruxItem customName(@Nullable String name) {
+    public SimpleCruxItem customName(@Nullable String name) {
         return customName(c(name));
     }
 
-    public CruxItem customName(@Nullable Component name) {
+    public SimpleCruxItem customName(@Nullable Component name) {
         return editMeta(meta -> meta.displayName(name));
     }
 
-    public CruxItem itemName(@Nullable String name) {
+    public SimpleCruxItem itemName(@Nullable String name) {
         return itemName(c(name));
     }
 
-    public CruxItem itemName(@Nullable Component name) {
+    public SimpleCruxItem itemName(@Nullable Component name) {
         return editMeta(meta -> meta.itemName(name));
     }
 
@@ -195,13 +166,13 @@ public class CruxItem implements Cloneable, PersistHolderComponentHandler {
         return meta==null?null:meta.lore();
     }
 
-    public CruxItem loreFromString(@Nullable List<String> lore) {
+    public SimpleCruxItem loreFromString(@Nullable List<String> lore) {
         if(lore==null) return this;
         FormatParserContext context = buildFormatContext();
         return lore(context.deserializeList(lore));
     }
 
-    public CruxItem lore(@Nullable List<Component> lore) {
+    public SimpleCruxItem lore(@Nullable List<Component> lore) {
         return editMeta(meta -> meta.lore(cNoItalics(lore)));
     }
 
@@ -210,14 +181,14 @@ public class CruxItem implements Cloneable, PersistHolderComponentHandler {
         return meta == null ? new HashSet<>() : meta.getItemFlags();
     }
 
-    public CruxItem flags(@Nullable Collection<ItemFlag> flags) {
+    public SimpleCruxItem flags(@Nullable Collection<ItemFlag> flags) {
         return editMeta(meta ->{
             meta.removeItemFlags(ItemFlag.values());
             if(flags != null) meta.addItemFlags(flags.toArray(new ItemFlag[0]));
         });
     }
 
-    public CruxItem customModelData(@Nullable Integer data){
+    public SimpleCruxItem customModelData(@Nullable Integer data){
         return editMeta(meta -> meta.setCustomModelData(data));
     }
 
@@ -226,11 +197,11 @@ public class CruxItem implements Cloneable, PersistHolderComponentHandler {
         return meta != null && meta.isUnbreakable();
     }
 
-    public CruxItem unbreakable(boolean unbreakable) {
+    public SimpleCruxItem unbreakable(boolean unbreakable) {
         return editMeta(meta -> meta.setUnbreakable(unbreakable));
     }
 
-    public CruxItem glow(boolean value){
+    public SimpleCruxItem glow(boolean value){
         //pre 1.20.5
         /*enchant(Enchantment.DURABILITY, 1);
         addFlags(ItemFlag.HIDE_ENCHANTS);*/
@@ -240,16 +211,16 @@ public class CruxItem implements Cloneable, PersistHolderComponentHandler {
         return this;
     }
 
-    public CruxItem enchant(@NotNull Enchantment e, int level){
+    public SimpleCruxItem enchant(@NotNull Enchantment e, int level){
         return enchant(e, level, true);
     }
 
-    public CruxItem enchant(@NotNull Enchantment e, int level, boolean ignoreLevelRestriction){
+    public SimpleCruxItem enchant(@NotNull Enchantment e, int level, boolean ignoreLevelRestriction){
         editMeta(meta -> meta.addEnchant(e, level, ignoreLevelRestriction));
         return this;
     }
 
-    public CruxItem amount(int amount){
+    public SimpleCruxItem amount(int amount){
         item.setAmount(amount);
         return this;
     }
@@ -260,7 +231,7 @@ public class CruxItem implements Cloneable, PersistHolderComponentHandler {
 
     @Deprecated(since = "Mojang did weird thing and now hide_attributes does not hide base attributes" +
         " Keep in mind, this function will add a luck attribute to the item and add hide_attributes.")
-    public CruxItem hideAttributes(){
+    public SimpleCruxItem hideAttributes(){
         return editMeta(meta ->{
             meta.addAttributeModifier(Attribute.GENERIC_LUCK, new AttributeModifier(
                 Crux.key("hide"), 0D, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.HAND
@@ -269,16 +240,16 @@ public class CruxItem implements Cloneable, PersistHolderComponentHandler {
         });
     }
 
-    public CruxItem addAttribute(@NotNull Attribute attribute, @NotNull AttributeModifier modifier){
+    public SimpleCruxItem addAttribute(@NotNull Attribute attribute, @NotNull AttributeModifier modifier){
         return editMeta(meta -> meta.addAttributeModifier(attribute, modifier));
     }
 
-    public CruxItem addAttribute(@NotNull Attribute attribute, @NotNull NamespacedKey key, double amount, @NotNull AttributeModifier.Operation operation,
-                                 @Nullable EquipmentSlotGroup slot){
+    public SimpleCruxItem addAttribute(@NotNull Attribute attribute, @NotNull NamespacedKey key, double amount, @NotNull AttributeModifier.Operation operation,
+                                       @Nullable EquipmentSlotGroup slot){
         return addAttribute(attribute, new AttributeModifier(key, amount, operation, slot));
     }
 
-    public CruxItem color(@Nullable Color color){
+    public SimpleCruxItem color(@Nullable Color color){
         return editMeta(meta ->{
            if(meta instanceof LeatherArmorMeta m) m.setColor(color);
            else if(meta instanceof PotionMeta m) m.setColor(color);
@@ -295,15 +266,15 @@ public class CruxItem implements Cloneable, PersistHolderComponentHandler {
         return null;
     }
 
-    public CruxItem editMeta(@NotNull Consumer<ItemMeta> consumer){
+    public SimpleCruxItem editMeta(@NotNull Consumer<ItemMeta> consumer){
         return editMeta(ItemMeta.class, consumer);
     }
-    public CruxItem edit(@NotNull Consumer<ItemStack> consumer){
+    public SimpleCruxItem edit(@NotNull Consumer<ItemStack> consumer){
         consumer.accept(item);
         return this;
     }
 
-    public <T extends ItemMeta> CruxItem editMeta(@NotNull Class<T> clazz, @NotNull Consumer<T> consumer){
+    public <T extends ItemMeta> SimpleCruxItem editMeta(@NotNull Class<T> clazz, @NotNull Consumer<T> consumer){
         ItemMeta meta = meta();
         if(meta==null) return this;
         if(!clazz.isAssignableFrom(meta.getClass())) return this;
@@ -316,14 +287,14 @@ public class CruxItem implements Cloneable, PersistHolderComponentHandler {
         return item;
     }
 
-    public CruxItem item(@NotNull ItemStack item){
+    public SimpleCruxItem item(@NotNull ItemStack item){
         this.item = item;
         return this;
     }
 
-    public @NotNull CruxItem clone() {
+    public @NotNull SimpleCruxItem clone() {
         try {
-            CruxItem item = (CruxItem) super.clone();
+            SimpleCruxItem item = (SimpleCruxItem) super.clone();
             item.item(this.item.clone());
             return item;
         } catch (CloneNotSupportedException e) {

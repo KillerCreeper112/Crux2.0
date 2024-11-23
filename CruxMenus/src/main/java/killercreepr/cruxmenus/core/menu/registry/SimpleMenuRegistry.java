@@ -1,12 +1,12 @@
 package killercreepr.cruxmenus.core.menu.registry;
 
+import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.registry.KeyedRegistry;
 import killercreepr.crux.api.registry.Registry;
-import killercreepr.crux.core.registry.KeyedPriorityRegistry;
-import killercreepr.crux.core.registry.SimpleRegistry;
-import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.text.format.FormatSerializer;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
+import killercreepr.crux.core.registry.KeyedPriorityRegistry;
+import killercreepr.crux.core.registry.SimpleRegistry;
 import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxmenus.api.menu.action.MenuAction;

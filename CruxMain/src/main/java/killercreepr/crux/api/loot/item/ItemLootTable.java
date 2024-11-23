@@ -1,8 +1,8 @@
 package killercreepr.crux.api.loot.item;
 
+import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.loot.LootContext;
 import killercreepr.crux.api.loot.LootTable;
-import killercreepr.crux.core.util.CruxItem;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;

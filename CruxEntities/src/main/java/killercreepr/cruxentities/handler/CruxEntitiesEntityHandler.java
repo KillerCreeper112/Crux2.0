@@ -1,8 +1,8 @@
 package killercreepr.cruxentities.handler;
 
-import killercreepr.crux.core.entity.BukkitEntitySnapshot;
 import killercreepr.crux.api.entity.CruxEntitySnapshot;
 import killercreepr.crux.api.handler.EntityHandler;
+import killercreepr.crux.core.entity.BukkitEntitySnapshot;
 import killercreepr.cruxentities.entity.CruxMob;
 import killercreepr.cruxentities.entity.CruxMobSnapshot;
 import killercreepr.cruxentities.registries.CruxEntityRegistries;

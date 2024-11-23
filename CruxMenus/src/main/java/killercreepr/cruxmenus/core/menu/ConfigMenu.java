@@ -1,11 +1,11 @@
 package killercreepr.cruxmenus.core.menu;
 
-import killercreepr.crux.core.text.context.SimpleInputContext;
 import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.text.tags.TagParser;
 import killercreepr.crux.api.text.tags.container.MergedTagContainer;
-import killercreepr.crux.core.text.container.SimpleMergedTagContainer;
 import killercreepr.crux.api.text.tags.container.TagContainer;
+import killercreepr.crux.core.text.container.SimpleMergedTagContainer;
+import killercreepr.crux.core.text.context.SimpleInputContext;
 import killercreepr.crux.core.util.InvUtil;
 import killercreepr.cruxmenus.api.menu.CfgMenu;
 import killercreepr.cruxmenus.api.menu.contex.MenuContext;

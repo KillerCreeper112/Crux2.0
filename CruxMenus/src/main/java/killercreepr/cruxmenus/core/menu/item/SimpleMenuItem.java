@@ -1,15 +1,15 @@
 package killercreepr.cruxmenus.core.menu.item;
 
-import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.crux.api.item.dynamic.DynamicItem;
 import killercreepr.crux.api.registry.Registry;
+import killercreepr.crux.api.text.context.TextParserContext;
+import killercreepr.crux.api.text.format.FormatSerializer;
 import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.crux.api.text.tags.container.TagContainer;
-import killercreepr.crux.core.text.format.FormatParserContext;
-import killercreepr.crux.api.text.format.FormatSerializer;
-import killercreepr.crux.core.util.CruxItem;
-import killercreepr.crux.core.util.CruxString;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
+import killercreepr.crux.core.item.SimpleCruxItem;
+import killercreepr.crux.core.text.format.FormatParserContext;
+import killercreepr.crux.core.util.CruxString;
 import killercreepr.cruxmenus.api.event.MenuItemClickEvent;
 import killercreepr.cruxmenus.api.menu.action.MenuAction;
 import killercreepr.cruxmenus.api.menu.action.click.ClickActions;
@@ -96,7 +96,7 @@ public class SimpleMenuItem implements MenuItem {
         return item.buildItem(context);
     }
 
-    public @NotNull CompletableFuture<CruxItem> buildItemCompletely(@NotNull Player p){
+    public @NotNull CompletableFuture<SimpleCruxItem> buildItemCompletely(@NotNull Player p){
         DynamicItem item = base.getItem().value();
         if(item == null) return CompletableFuture.completedFuture(null);
         item = item.clone();

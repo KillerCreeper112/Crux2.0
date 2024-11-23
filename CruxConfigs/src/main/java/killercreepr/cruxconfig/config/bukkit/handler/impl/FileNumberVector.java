@@ -1,8 +1,8 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
-import killercreepr.crux.core.util.CruxObjects;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.api.valueproviders.vector.NumberVector;
+import killercreepr.crux.core.util.CruxObjects;
 import killercreepr.crux.core.valueproviders.vector.SimpleNumberVector;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;

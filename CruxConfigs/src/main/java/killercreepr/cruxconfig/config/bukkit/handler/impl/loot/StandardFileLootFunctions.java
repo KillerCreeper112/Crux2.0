@@ -2,11 +2,11 @@ package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 
 import com.google.common.reflect.TypeToken;
 import killercreepr.crux.api.loot.conditions.LootCondition;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.loot.item.functions.ItemAmountFunction;
 import killercreepr.crux.core.loot.item.functions.ItemEnchantFunction;
 import killercreepr.crux.core.loot.item.functions.ItemEnchantRandomlyFunction;
 import killercreepr.crux.core.util.CruxObjects;
-import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileArray;

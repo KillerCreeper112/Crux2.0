@@ -1,9 +1,9 @@
 package killercreepr.cruxmenus.api.menu.item;
 
 import killercreepr.crux.api.registry.Registry;
-import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.crux.api.text.format.FormatSerializer;
-import killercreepr.crux.core.util.CruxItem;
+import killercreepr.crux.api.text.tags.container.MergedTagContainer;
+import killercreepr.crux.core.item.SimpleCruxItem;
 import killercreepr.cruxmenus.api.event.MenuItemClickEvent;
 import killercreepr.cruxmenus.api.menu.action.MenuAction;
 import killercreepr.cruxmenus.api.menu.contex.ActionContext;
@@ -36,7 +36,7 @@ public interface MenuItem {
 
     @Nullable ItemStack buildItem(@NotNull Player p);
 
-    @NotNull CompletableFuture<CruxItem> buildItemCompletely(@NotNull Player p);
+    @NotNull CompletableFuture<SimpleCruxItem> buildItemCompletely(@NotNull Player p);
 
     @NotNull MenuItemClickEvent click(@NotNull Player p, @NotNull InventoryClickEvent event);
 

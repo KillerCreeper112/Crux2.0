@@ -3,7 +3,7 @@ package killercreepr.cruxitems.core.item.plugin;
 import killercreepr.crux.api.item.dynamic.DynamicItem;
 import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.crux.api.text.tags.container.MergedTagContainer;
-import killercreepr.crux.core.util.CruxItem;
+import killercreepr.crux.core.item.SimpleCruxItem;
 import killercreepr.cruxitems.api.item.component.InteractableComponent;
 import killercreepr.cruxitems.api.item.interaction.InteractableItem;
 import killercreepr.cruxitems.api.item.interaction.ItemUseContext;
@@ -33,7 +33,7 @@ public class CfgPluginItem extends GenericPluginItem implements InteractableItem
 
     @Override
     public @NotNull ItemUseResult onUse(@NotNull ItemUseContext ctx) {
-        CruxItem item = ctx.getItem();
+        SimpleCruxItem item = ctx.getItem();
         Collection<InteractableComponent> list = item.getAllOfType(InteractableComponent.class);
         if(list == null) return ItemUseResult.empty();
         for(InteractableComponent c : list){

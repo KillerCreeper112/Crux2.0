@@ -1,6 +1,6 @@
 package killercreepr.cruxmenus.api.menu.slot;
 
-import killercreepr.crux.core.util.CruxItem;
+import killercreepr.crux.api.item.CruxItem;
 import killercreepr.cruxmenus.api.menu.Menu;
 import killercreepr.cruxmenus.api.menu.contex.SlotContext;
 import killercreepr.cruxmenus.core.menu.slot.SimpleFixedSlot;
@@ -60,8 +60,8 @@ public interface Slot {
     }
     default int getMaxStackSize(@Nullable ItemStack item) {
         Integer maxStack = this.getMaxStackSize();
-        if(maxStack==null) return item==null?0:CruxItem.getMaxStackSize(item);
-        return Math.min(maxStack, item==null?0:CruxItem.getMaxStackSize(item));
+        if(maxStack==null) return item==null?0: CruxItem.getMaxStackSize(item);
+        return Math.min(maxStack, item==null?0: CruxItem.getMaxStackSize(item));
     }
 
     default boolean isSlottedItem(@Nullable ItemStack item){

@@ -1,8 +1,8 @@
 package killercreepr.cruxconfig;
 
 import killercreepr.crux.api.plugin.module.CruxModule;
-import killercreepr.crux.core.plugin.module.StandardModules;
 import killercreepr.crux.core.plugin.CruxPlugin;
+import killercreepr.crux.core.plugin.module.StandardModules;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.persistence.StandardDynamicPersistTags;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import org.jetbrains.annotations.NotNull;

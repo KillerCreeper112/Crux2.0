@@ -1,8 +1,8 @@
 package killercreepr.cruxmenus.core.menu.module.standard.fill;
 
 import killercreepr.crux.api.data.Holder;
-import killercreepr.crux.core.valueproviders.number.EquationNumber;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
+import killercreepr.crux.core.valueproviders.number.EquationNumber;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;

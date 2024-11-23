@@ -1,7 +1,7 @@
 package killercreepr.cruxworlds.world;
 
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.data.tick.Ticked;
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxworlds.world.creator.CruxWorldModuleCreator;
 import killercreepr.cruxworlds.world.module.WorldModule;
 import org.bukkit.World;

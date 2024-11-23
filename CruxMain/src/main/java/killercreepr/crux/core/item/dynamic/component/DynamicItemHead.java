@@ -3,8 +3,8 @@ package killercreepr.crux.core.item.dynamic.component;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.item.SimpleCruxItem;
 import killercreepr.crux.core.util.CruxBase64;
-import killercreepr.crux.core.util.CruxItem;
 import killercreepr.crux.core.util.CruxProfile;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -25,7 +25,7 @@ public class DynamicItemHead extends DynamicSingleValueComponent{
     }
 
     @Override
-    public void apply(@NotNull CruxItem item, @NotNull TextParserContext context) {
+    public void apply(@NotNull SimpleCruxItem item, @NotNull TextParserContext context) {
         item.editMeta(SkullMeta.class, meta ->{
             String parsed = parseString(context);
             try{

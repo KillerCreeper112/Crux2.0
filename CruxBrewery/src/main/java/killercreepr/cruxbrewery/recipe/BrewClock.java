@@ -1,7 +1,7 @@
 package killercreepr.cruxbrewery.recipe;
 
+import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.core.Crux;
-import killercreepr.crux.core.util.CruxItem;
 import org.bukkit.Material;
 import org.bukkit.block.BrewingStand;
 import org.bukkit.inventory.BrewerInventory;

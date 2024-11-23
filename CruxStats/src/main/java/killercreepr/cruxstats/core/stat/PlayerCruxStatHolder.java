@@ -1,9 +1,9 @@
 package killercreepr.cruxstats.core.stat;
 
 import com.google.common.reflect.TypeToken;
+import killercreepr.crux.api.entity.memory.PlayerMemory;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.entity.memory.PlayerDataHolder;
-import killercreepr.crux.api.entity.memory.PlayerMemory;
 import killercreepr.cruxconfig.config.bukkit.file.CruxJson;
 import killercreepr.cruxstats.api.stat.CruxStat;
 import killercreepr.cruxstats.api.stat.CruxStatInstance;

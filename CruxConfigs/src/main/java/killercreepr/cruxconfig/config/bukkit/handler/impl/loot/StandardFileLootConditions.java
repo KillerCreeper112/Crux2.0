@@ -2,10 +2,10 @@ package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 
 import com.google.common.reflect.TypeToken;
 import killercreepr.crux.api.block.predicate.BlockPredicate;
-import killercreepr.crux.core.loot.conditions.EntityOrItemCondition;
 import killercreepr.crux.api.entity.predicate.EntityPredicate;
 import killercreepr.crux.api.item.predicate.ItemPredicate;
 import killercreepr.crux.api.loot.conditions.LootCondition;
+import killercreepr.crux.core.loot.conditions.EntityOrItemCondition;
 import killercreepr.crux.core.loot.conditions.block.BlockCondition;
 import killercreepr.crux.core.loot.conditions.block.BlockStateCondition;
 import killercreepr.crux.core.loot.conditions.entity.EntityCondition;

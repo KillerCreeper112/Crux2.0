@@ -1,7 +1,7 @@
 package killercreepr.cruxentities.listener;
 
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.communication.CreateSound;
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxentities.entity.mob.goal.sound.CruxGoalSounds;
 import killercreepr.cruxentities.entity.mob.goal.sound.SoundedMob;
 import org.bukkit.entity.Mob;

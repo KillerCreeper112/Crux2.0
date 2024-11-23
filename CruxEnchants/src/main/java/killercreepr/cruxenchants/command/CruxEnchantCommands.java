@@ -11,10 +11,9 @@ import io.papermc.paper.command.brigadier.argument.resolvers.selector.EntitySele
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import killercreepr.crux.api.communication.Communicator;
+import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.core.Crux;
-import killercreepr.crux.core.communication.MsgContainer;
 import killercreepr.crux.core.plugin.CruxPlugin;
-import killercreepr.crux.core.util.CruxItem;
 import killercreepr.cruxenchants.command.argument.CruxEnchantArguments;
 import killercreepr.cruxenchants.enchant.CruxEnchant;
 import org.bukkit.command.CommandSender;

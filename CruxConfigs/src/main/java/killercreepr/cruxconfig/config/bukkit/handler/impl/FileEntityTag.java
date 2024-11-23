@@ -1,9 +1,9 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.api.entity.tag.EntityTag;
 import killercreepr.crux.api.item.tag.ItemTag;
 import killercreepr.crux.api.item.tag.ItemTypeTag;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;

@@ -1,8 +1,9 @@
 package killercreepr.cruxattributes.core.listener;
 
 import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
+import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.core.Crux;
-import killercreepr.crux.core.util.CruxItem;
+import killercreepr.crux.core.item.SimpleCruxItem;
 import killercreepr.cruxattributes.api.attribute.CruxAttribute;
 import killercreepr.cruxattributes.api.attribute.CruxAttributeInstance;
 import killercreepr.cruxattributes.api.attribute.CruxAttributeModifier;

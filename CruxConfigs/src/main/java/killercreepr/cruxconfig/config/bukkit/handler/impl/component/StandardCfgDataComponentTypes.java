@@ -1,8 +1,8 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.component;
 
-import killercreepr.crux.core.component.CruxComponents;
 import killercreepr.crux.api.component.TypedDataComponent;
 import killercreepr.crux.api.registry.MappedRegistry;
+import killercreepr.crux.core.component.CruxComponents;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import org.jetbrains.annotations.NotNull;
