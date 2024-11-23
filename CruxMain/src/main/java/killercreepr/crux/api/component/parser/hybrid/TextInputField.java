@@ -7,7 +7,7 @@ import java.util.function.Function;
 
 public interface TextInputField<B, T> {
     static <B, T> TextInputField<B, T> field(
-        @NotNull PersistTextInputParser<T> parser,
+        @NotNull PersistTextParser<T> parser,
         @NotNull Function<B, T> field
     ){
         return new SimpleTextInputField<>(parser, field);
@@ -15,13 +15,13 @@ public interface TextInputField<B, T> {
 
     static <B, T> TextInputField<B, T> field(
         @NotNull Class<B> baseType,
-        @NotNull PersistTextInputParser<T> parser,
+        @NotNull PersistTextParser<T> parser,
         @NotNull Function<B, T> field
     ){
         return new SimpleTextInputField<>(parser, field);
     }
 
     @NotNull
-    PersistTextInputParser<T> inputParser();
+    PersistTextParser<T> inputParser();
     T parseField(B base);
 }

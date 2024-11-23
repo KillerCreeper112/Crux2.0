@@ -1,7 +1,7 @@
 package killercreepr.crux.core.component.parser.hybrid.text;
 
 import killercreepr.crux.api.component.parser.InputDecodeContext;
-import killercreepr.crux.api.component.parser.hybrid.PersistTextInputParser;
+import killercreepr.crux.api.component.parser.hybrid.PersistTextParser;
 import killercreepr.crux.api.component.parser.hybrid.TextInputField;
 import killercreepr.crux.api.component.parser.hybrid.TextInputResultParser;
 import killercreepr.crux.core.util.CruxTag;
@@ -14,22 +14,22 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MapPersistTextInputParser<T> implements PersistTextInputParser<T> {
+public class MapPersistTextParser<T> implements PersistTextParser<T> {
     protected final @NotNull Map<String, TextInputField<T, ?>> elements;
     protected final @NotNull TextInputResultParser<T> resultParser;
     protected final @NotNull PersistentDataType<PersistentDataContainer, T> dataType;
 
-    public MapPersistTextInputParser(@NotNull Map<String, TextInputField<T, ?>> elements,
-                                     @NotNull TextInputResultParser<T> resultParser,
-                                     @NotNull PersistentDataType<PersistentDataContainer, T> dataType) {
+    public MapPersistTextParser(@NotNull Map<String, TextInputField<T, ?>> elements,
+                                @NotNull TextInputResultParser<T> resultParser,
+                                @NotNull PersistentDataType<PersistentDataContainer, T> dataType) {
         this.elements = elements;
         this.resultParser = resultParser;
         this.dataType = dataType;
     }
 
-    public MapPersistTextInputParser(@NotNull Map<String, TextInputField<T, ?>> elements,
-                                     @NotNull TextInputResultParser<T> resultParser,
-                                     @NotNull Class<T> type) {
+    public MapPersistTextParser(@NotNull Map<String, TextInputField<T, ?>> elements,
+                                @NotNull TextInputResultParser<T> resultParser,
+                                @NotNull Class<T> type) {
         this.elements = elements;
         this.resultParser = resultParser;
         this.dataType = buildDataType(type, elements);
@@ -61,7 +61,7 @@ public class MapPersistTextInputParser<T> implements PersistTextInputParser<T> {
 
                 PersistentDataContainer c = context.newPersistentDataContainer();
                 map.forEach((id, value) ->{
-                    PersistTextInputParser<Object> serializer = (PersistTextInputParser<Object>) elements.get(id).inputParser();
+                    PersistTextParser<Object> serializer = (PersistTextParser<Object>) elements.get(id).inputParser();
                     CruxTag.set(c, id, serializer.dataType(), value);
                 });
                 return c;
@@ -72,7 +72,7 @@ public class MapPersistTextInputParser<T> implements PersistTextInputParser<T> {
                 Map<String, Object> map = new HashMap<>();
                 for(NamespacedKey key : c.getKeys()){
                     String id = key.value();
-                    PersistTextInputParser<Object> serializer = (PersistTextInputParser<Object>) elements.get(id).inputParser();
+                    PersistTextParser<Object> serializer = (PersistTextParser<Object>) elements.get(id).inputParser();
                     Object value = CruxTag.get(c, id, serializer.dataType(), null);
                     if(value == null) continue;
                     //todo Make better for performance
@@ -113,7 +113,7 @@ public class MapPersistTextInputParser<T> implements PersistTextInputParser<T> {
         return dataType;
     }
 
-    public static class Builder<T> implements PersistTextInputParser.MapBuilder<T> {
+    public static class Builder<T> implements PersistTextParser.MapBuilder<T> {
         protected final Map<String, TextInputField<T, ?>> elements = new HashMap<>();
         protected TextInputResultParser<T> resultParser;
         protected PersistentDataType<PersistentDataContainer, T> dataType;
@@ -132,7 +132,7 @@ public class MapPersistTextInputParser<T> implements PersistTextInputParser<T> {
         }
 
         @Override
-        public PersistTextInputParser<T> apply(TextInputResultParser<T> resultParser) {
+        public PersistTextParser<T> apply(TextInputResultParser<T> resultParser) {
             return resultParser(resultParser).build();
         }
 
@@ -148,9 +148,9 @@ public class MapPersistTextInputParser<T> implements PersistTextInputParser<T> {
         }
 
         @Override
-        public PersistTextInputParser<T> build() {
-            if(dataType == null) return new MapPersistTextInputParser<>(elements, resultParser, dataTypeClass);
-            return new MapPersistTextInputParser<>(elements, resultParser, dataType);
+        public PersistTextParser<T> build() {
+            if(dataType == null) return new MapPersistTextParser<>(elements, resultParser, dataTypeClass);
+            return new MapPersistTextParser<>(elements, resultParser, dataType);
         }
     }
 }

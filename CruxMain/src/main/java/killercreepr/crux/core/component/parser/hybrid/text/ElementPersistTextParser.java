@@ -1,7 +1,7 @@
 package killercreepr.crux.core.component.parser.hybrid.text;
 
 import killercreepr.crux.api.component.parser.InputDecodeContext;
-import killercreepr.crux.api.component.parser.hybrid.PersistTextInputParser;
+import killercreepr.crux.api.component.parser.hybrid.PersistTextParser;
 import killercreepr.crux.api.component.parser.hybrid.TextInputField;
 import killercreepr.crux.api.component.parser.hybrid.TextInputResultParser;
 import org.bukkit.persistence.PersistentDataAdapterContext;
@@ -9,22 +9,22 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
-public class ElementPersistTextInputParser<T> implements PersistTextInputParser<T> {
+public class ElementPersistTextParser<T> implements PersistTextParser<T> {
     protected final @NotNull TextInputField<T, ?> field;
     protected final @NotNull TextInputResultParser<T> resultParser;
     protected final @NotNull PersistentDataType<?, T> dataType;
 
-    public ElementPersistTextInputParser(@NotNull TextInputField<T, ?> field,
-                                         @NotNull TextInputResultParser<T> resultParser,
-                                         @NotNull PersistentDataType<?, T> dataType) {
+    public ElementPersistTextParser(@NotNull TextInputField<T, ?> field,
+                                    @NotNull TextInputResultParser<T> resultParser,
+                                    @NotNull PersistentDataType<?, T> dataType) {
         this.field = field;
         this.resultParser = resultParser;
         this.dataType = dataType;
     }
 
-    public ElementPersistTextInputParser(@NotNull TextInputField<T, ?> field,
-                                         @NotNull TextInputResultParser<T> resultParser,
-                                         @NotNull Class<T> type) {
+    public ElementPersistTextParser(@NotNull TextInputField<T, ?> field,
+                                    @NotNull TextInputResultParser<T> resultParser,
+                                    @NotNull Class<T> type) {
         this.field = field;
         this.resultParser = resultParser;
         this.dataType = buildDataType(type, field);
@@ -87,7 +87,7 @@ public class ElementPersistTextInputParser<T> implements PersistTextInputParser<
         return field.inputParser().encodeObjectUnchecked(parsed);
     }
 
-    public static class Builder<T> implements PersistTextInputParser.ElementBuilder<T> {
+    public static class Builder<T> implements PersistTextParser.ElementBuilder<T> {
         protected TextInputField<T, ?> field;
         protected TextInputResultParser<T> resultParser;
         protected PersistentDataType<PersistentDataContainer, T> dataType;
@@ -106,7 +106,7 @@ public class ElementPersistTextInputParser<T> implements PersistTextInputParser<
         }
 
         @Override
-        public PersistTextInputParser<T> apply(TextInputResultParser<T> resultParser) {
+        public PersistTextParser<T> apply(TextInputResultParser<T> resultParser) {
             return resultParser(resultParser).build();
         }
 
@@ -122,9 +122,9 @@ public class ElementPersistTextInputParser<T> implements PersistTextInputParser<
         }
 
         @Override
-        public PersistTextInputParser<T> build() {
-            if(dataType == null) return new ElementPersistTextInputParser<>(field, resultParser, dataTypeClass);
-            return new ElementPersistTextInputParser<>(field, resultParser, dataType);
+        public PersistTextParser<T> build() {
+            if(dataType == null) return new ElementPersistTextParser<>(field, resultParser, dataTypeClass);
+            return new ElementPersistTextParser<>(field, resultParser, dataType);
         }
     }
 }

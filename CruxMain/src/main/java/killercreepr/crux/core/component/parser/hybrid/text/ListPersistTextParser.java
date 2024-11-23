@@ -1,6 +1,6 @@
 package killercreepr.crux.core.component.parser.hybrid.text;
 
-import killercreepr.crux.api.component.parser.hybrid.PersistTextInputParser;
+import killercreepr.crux.api.component.parser.hybrid.PersistTextParser;
 import killercreepr.crux.core.persistence.type.ListTagType;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class ListPersistTextInputParser<T> implements PersistTextInputParser<List<T>> {
-    protected final @NotNull PersistTextInputParser<T> elementParser;
+public class ListPersistTextParser<T> implements PersistTextParser<List<T>> {
+    protected final @NotNull PersistTextParser<T> elementParser;
     protected final @NotNull PersistentDataType<?, List<T>> dataType;
 
-    public ListPersistTextInputParser(@NotNull PersistTextInputParser<T> elementParser, @Nullable PersistentDataType<?, List<T>> dataType) {
+    public ListPersistTextParser(@NotNull PersistTextParser<T> elementParser, @Nullable PersistentDataType<?, List<T>> dataType) {
         this.elementParser = elementParser;
         this.dataType = dataType == null ? buildDataType(elementParser.dataType()) : dataType;
     }

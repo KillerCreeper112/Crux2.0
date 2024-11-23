@@ -1,13 +1,13 @@
 package killercreepr.crux.core.component.parser.hybrid.text;
 
-import killercreepr.crux.api.component.parser.hybrid.PersistTextInputParser;
+import killercreepr.crux.api.component.parser.hybrid.PersistTextParser;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class PrimitivePersistTextInputParser<T> implements PersistTextInputParser<T> {
+public abstract class PrimitivePersistTextParser<T> implements PersistTextParser<T> {
     protected final @NotNull PersistentDataType<?, T> dataType;
 
-    public PrimitivePersistTextInputParser(@NotNull PersistentDataType<?, T> dataType) {
+    public PrimitivePersistTextParser(@NotNull PersistentDataType<?, T> dataType) {
         this.dataType = dataType;
     }
 

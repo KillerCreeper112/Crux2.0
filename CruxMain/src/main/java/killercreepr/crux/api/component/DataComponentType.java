@@ -1,10 +1,8 @@
 package killercreepr.crux.api.component;
 
 import killercreepr.crux.api.component.parser.ComponentTextInputParser;
-import killercreepr.crux.api.component.parser.hybrid.PersistInputParser;
+import killercreepr.crux.api.component.parser.hybrid.PersistParser;
 import killercreepr.crux.api.component.serialization.ComponentSerializer;
-import killercreepr.crux.core.registries.CruxRegistries;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface DataComponentType<T> {
@@ -22,13 +20,10 @@ public interface DataComponentType<T> {
         DataComponentType<T> build();
         Builder<T> persistent(@Nullable ComponentSerializer<?, T> serializer);
         Builder<T> textParser(@Nullable ComponentTextInputParser<T> parser);
-        default Builder<T> persistTextParser(@Nullable PersistInputParser<T> parser){
+        default Builder<T> persistTextParser(@Nullable PersistParser<T> parser){
             return persistent(parser).textParser(parser);
         }
 
-        default Builder<T> textParser(@NotNull Class<T> type){
-            return textParserUnchecked(CruxRegistries.DATA_COMPONENT_TEXT_PARSER_TYPE.get(type));
-        }
         default Builder<T> textParserUnchecked(@Nullable ComponentTextInputParser<?> parser){
             return textParser((ComponentTextInputParser<T>) parser);
         }
