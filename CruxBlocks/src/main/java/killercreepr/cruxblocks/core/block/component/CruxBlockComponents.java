@@ -2,12 +2,9 @@ package killercreepr.cruxblocks.core.block.component;
 
 import killercreepr.crux.api.block.sound.CreateBlockSoundGroup;
 import killercreepr.crux.api.component.DataComponentType;
-import killercreepr.crux.api.component.parser.ComponentTextInputParser;
-import killercreepr.crux.api.component.serialization.ComponentSerializer;
-import killercreepr.crux.api.component.serialization.PersistentDataSerializer;
+import killercreepr.crux.api.component.parser.hybrid.PersistTextInputParser;
+import killercreepr.crux.api.component.parser.hybrid.TextInputField;
 import killercreepr.crux.core.Crux;
-import killercreepr.crux.core.persistence.CruxPersist;
-import killercreepr.crux.core.persistence.CruxPersistence;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxblocks.api.block.component.BushBlock;
 import killercreepr.cruxblocks.api.block.component.BushGroup;
@@ -15,11 +12,8 @@ import killercreepr.cruxblocks.api.block.component.DirectionalBlock;
 import killercreepr.cruxblocks.api.block.component.DirectionalGroup;
 import killercreepr.cruxblocks.api.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.core.block.component.standard.EntitySpawnerComponent;
-import killercreepr.cruxblocks.core.components.persistence.BlocksDynamicPersistence;
-import killercreepr.cruxblocks.core.persistence.CruxBlocksPersistTags;
-import killercreepr.cruxblocks.core.persistence.CruxBlocksPersistence;
 import killercreepr.cruxblocks.core.registries.CruxBlocksRegistries;
-import org.jetbrains.annotations.NotNull;
+import net.kyori.adventure.key.Keyed;
 
 import java.util.Objects;
 import java.util.function.UnaryOperator;
@@ -46,17 +40,14 @@ public class CruxBlockComponents {
     public static final DataComponentType<EntitySpawnerComponent> ENTITY_SPAWNER = register("entity_spawner",
         builder -> builder);
 
-    public static final DataComponentType<CruxBlockGroup> BLOCK_GROUP = register("block_group", builder ->
-        builder.persistent(PersistentDataSerializer.create(Crux.key(CruxBlocksPersistTags.CRUX_BLOCK_GROUP.tagName()),
-            CruxBlocksPersistence.CRUX_BLOCK_GROUP))
-        //todo make new stuff man
-            /*.textParserUnchecked(new ComponentTextInputParser<CruxBlockGroup>() {
-                @Override
-                public @NotNull CruxBlockGroup decodeObject(@NotNull Object object) throws IllegalArgumentException {
-                    return Objects.requireNonNull(CruxBlocksRegistries.BLOCK.getGroup(Crux.key(object.toString())),
-                        "BlockGroup of " + object + " not found!");
-                }
-            })*/
+    public static final DataComponentType<CruxBlockGroup> BLOCK_GROUP = register("block_group", builder -> builder
+            .persistTextParser(
+                PersistTextInputParser.elementBuilder(CruxBlockGroup.class)
+                .field(TextInputField.field(PersistTextInputParser.KEY, Keyed::key))
+                .apply(ctx -> Objects.requireNonNull(CruxBlocksRegistries.BLOCK.getGroup(ctx.get()),
+                    "BlockGroup of " + ctx.get() + " not found!"))
+                .createInput(Crux.key("block_group"))
+            )
     );
 
     private static <T> DataComponentType<T> register(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator){
