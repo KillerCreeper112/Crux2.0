@@ -3,13 +3,16 @@ package killercreepr.crux.api.component.parser.hybrid;
 import killercreepr.crux.api.component.parser.ComponentTextInputParser;
 import killercreepr.crux.api.component.parser.standard.ComponentParserListTypeHolder;
 import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.component.CruxComponents;
 import killercreepr.crux.core.component.parser.hybrid.SimplePersistParser;
 import killercreepr.crux.core.component.parser.hybrid.text.ElementPersistTextParser;
 import killercreepr.crux.core.component.parser.hybrid.text.ListPersistTextParser;
 import killercreepr.crux.core.component.parser.hybrid.text.MapPersistTextParser;
 import killercreepr.crux.core.component.parser.hybrid.text.PrimitivePersistTextParser;
 import killercreepr.crux.core.persistence.CruxPersistence;
+import killercreepr.crux.core.util.CruxColor;
 import net.kyori.adventure.key.Key;
+import org.bukkit.Color;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
@@ -96,6 +99,10 @@ public interface PersistTextParser<T> extends ComponentTextInputParser<T>{
             throw new IllegalArgumentException("Invalid boolean type: " + object);
         }
     };
+
+    PersistTextParser<Color> COLOR = elementBuilder(Color.class)
+        .field(TextInputField.field(STRING, CruxColor::colorToHex))
+        .apply(ctx -> CruxColor.hexToColor(ctx.get()));
 
     ComponentParserListTypeHolder LIST = new ComponentParserListTypeHolder();
 
