@@ -4,6 +4,7 @@ import killercreepr.crux.api.component.parser.hybrid.PersistInputParser;
 import killercreepr.crux.api.component.parser.hybrid.PersistTextInputParser;
 import killercreepr.crux.core.util.CruxTag;
 import net.kyori.adventure.key.Key;
+import org.bukkit.Bukkit;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;

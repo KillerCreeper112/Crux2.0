@@ -3,6 +3,7 @@ package killercreepr.crux.core.component;
 import killercreepr.crux.api.component.DataComponentType;
 import killercreepr.crux.api.item.component.ToolComponent;
 import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.component.parser.type.ComponentInputParsers;
 import killercreepr.crux.core.registries.CruxRegistries;
 
 import java.util.function.UnaryOperator;
@@ -14,7 +15,8 @@ public class CruxComponents {
 
     public static final DataComponentType<Boolean> UNBREAKABLE = register("unbreakable", builder -> builder);
 
-    public static final DataComponentType<ToolComponent> TOOL = register("tool", builder -> builder);
+    public static final DataComponentType<ToolComponent> TOOL = register("tool", builder -> builder
+        .persistTextParser(ComponentInputParsers.TOOL.createInput(Crux.key("tool"))));
 
     /*public static final DataComponentType<ToolComponent> TOOL = register("tool",
         builder -> builder.persistent(PersistentDataSerializer.create(Crux.key(CruxPersist.TOOL.tagName()), CruxPersistence.TOOL_COMPONENT))

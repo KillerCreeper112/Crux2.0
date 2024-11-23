@@ -20,7 +20,7 @@ public class CruxMainModule implements CruxModule {
     }
 
     static {
-        ComponentParserTypes.register();
+        //ComponentParserTypes.register();
     }
 
     @Override

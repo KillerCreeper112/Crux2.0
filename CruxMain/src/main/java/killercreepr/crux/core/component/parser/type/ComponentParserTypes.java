@@ -5,9 +5,9 @@ import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.registries.CruxRegistries;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
-
+//todo remove old deprecated
 public class ComponentParserTypes {
-    public static final ComponentTextInputParser<Boolean> BOOLEAN = register(Boolean.class, new ComponentTextInputParser<>() {
+    /*public static final ComponentTextInputParser<Boolean> BOOLEAN = register(Boolean.class, new ComponentTextInputParser<>() {
         @Override
         public @NotNull Boolean decodeObject(@NotNull Object object) throws IllegalArgumentException {
             String x = object.toString();
@@ -58,5 +58,5 @@ public class ComponentParserTypes {
         return CruxRegistries.DATA_COMPONENT_TEXT_PARSER_TYPE.register(type, value);
     }
 
-    public static final ComponentParserListTypeHolder LIST = new ComponentParserListTypeHolder();
+    public static final ComponentParserListTypeHolder LIST = new ComponentParserListTypeHolder();*/
 }

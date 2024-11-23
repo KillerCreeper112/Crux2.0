@@ -49,7 +49,15 @@ public class MapPersistTextInputParser<T> implements PersistTextInputParser<T> {
 
             @Override
             public @NotNull PersistentDataContainer toPrimitive(@NotNull T complex, @NotNull PersistentDataAdapterContext context) {
-                Map<String, Object> map = encodeObject(complex);
+                Map<String, Object> map;
+
+                try{
+                    T test =(T) complex;
+                    map = encodeObject(complex);
+                }catch (ClassCastException ignored){
+                    map = (Map<String, Object>) complex;
+                }
+
                 PersistentDataContainer c = context.newPersistentDataContainer();
                 map.forEach((id, value) ->{
                     PersistTextInputParser<Object> serializer = (PersistTextInputParser<Object>) elements.get(id).inputParser();
@@ -99,18 +107,49 @@ public class MapPersistTextInputParser<T> implements PersistTextInputParser<T> {
         return map;
     }
 
-    /*@Override
-    public @Nullable T decode(@NotNull PersistentDataContainer from) {
-        return CruxTag.get(from, key, dataType, null);
-    }
-
-    @Override
-    public void encode(@NotNull PersistentDataContainer to, @Nullable T value) {
-        CruxTag.set(to, key, dataType, value);
-    }*/
-
     @Override
     public @NotNull PersistentDataType<?, T> dataType() {
         return dataType;
+    }
+
+    public static class Builder<T> implements PersistTextInputParser.MapBuilder<T> {
+        protected final Map<String, TextInputField<T, ?>> elements = new HashMap<>();
+        protected TextInputResultParser<T> resultParser;
+        protected PersistentDataType<PersistentDataContainer, T> dataType;
+        protected Class<T> dataTypeClass;
+
+        @Override
+        public MapBuilder<T> field(String name, TextInputField<T, ?> field) {
+            elements.put(name, field);
+            return this;
+        }
+
+        @Override
+        public MapBuilder<T> resultParser(TextInputResultParser<T> resultParser) {
+            this.resultParser = resultParser;
+            return this;
+        }
+
+        @Override
+        public PersistTextInputParser<T> apply(TextInputResultParser<T> resultParser) {
+            return resultParser(resultParser).build();
+        }
+
+        @Override
+        public MapBuilder<T> dataType(PersistentDataType<PersistentDataContainer, T> dataType) {
+            this.dataType = dataType;
+            return this;
+        }
+
+        @Override
+        public MapBuilder<T> dataTypeClass(Class<T> type) {
+            return this;
+        }
+
+        @Override
+        public PersistTextInputParser<T> build() {
+            if(dataType == null) return new MapPersistTextInputParser<>(elements, resultParser, dataTypeClass);
+            return new MapPersistTextInputParser<>(elements, resultParser, dataType);
+        }
     }
 }

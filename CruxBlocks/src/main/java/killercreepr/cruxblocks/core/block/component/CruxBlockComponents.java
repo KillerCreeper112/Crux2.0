@@ -49,13 +49,14 @@ public class CruxBlockComponents {
     public static final DataComponentType<CruxBlockGroup> BLOCK_GROUP = register("block_group", builder ->
         builder.persistent(PersistentDataSerializer.create(Crux.key(CruxBlocksPersistTags.CRUX_BLOCK_GROUP.tagName()),
             CruxBlocksPersistence.CRUX_BLOCK_GROUP))
-            .textParserUnchecked(new ComponentTextInputParser<CruxBlockGroup>() {
+        //todo make new stuff man
+            /*.textParserUnchecked(new ComponentTextInputParser<CruxBlockGroup>() {
                 @Override
                 public @NotNull CruxBlockGroup decodeObject(@NotNull Object object) throws IllegalArgumentException {
                     return Objects.requireNonNull(CruxBlocksRegistries.BLOCK.getGroup(Crux.key(object.toString())),
                         "BlockGroup of " + object + " not found!");
                 }
-            })
+            })*/
     );
 
     private static <T> DataComponentType<T> register(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator){

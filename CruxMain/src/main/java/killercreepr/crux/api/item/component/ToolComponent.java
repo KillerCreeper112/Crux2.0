@@ -21,6 +21,7 @@ public interface ToolComponent {
     interface Rule{
         @Nullable Float getSpeed();
         boolean isCorrectToolForDrops();
+        @Nullable Boolean getCorrectForDrops();
         boolean test(@NotNull CruxedBlock block);
         @Nullable BlockPredicate getBlocks();
     }
@@ -105,6 +106,11 @@ public interface ToolComponent {
             @Override
             public boolean isCorrectToolForDrops() {
                 return isCorrectToolForDrops != null && isCorrectToolForDrops;
+            }
+
+            @Override
+            public @Nullable Boolean getCorrectForDrops() {
+                return isCorrectToolForDrops;
             }
 
             public boolean test(@NotNull CruxedBlock block){
