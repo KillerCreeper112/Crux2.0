@@ -1,8 +1,8 @@
 package killercreepr.crux.core.item.dynamic.component;
 
+import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.item.dynamic.DynamicItemComponent;
 import killercreepr.crux.api.text.context.TextParserContext;
-import killercreepr.crux.core.item.SimpleCruxItem;
 import org.jetbrains.annotations.NotNull;
 
 public class DynamicItemName extends DynamicSingleValueComponent{
@@ -16,7 +16,7 @@ public class DynamicItemName extends DynamicSingleValueComponent{
     }
 
     @Override
-    public void apply(@NotNull SimpleCruxItem item, @NotNull TextParserContext context) {
+    public void apply(@NotNull CruxItem item, @NotNull TextParserContext context) {
         item.itemName(parseComponent(context));
     }
 

@@ -1,7 +1,7 @@
 package killercreepr.cruxitems.core.listener;
 
 import killercreepr.crux.api.item.CruxItem;
-import killercreepr.cruxitems.core.item.CruxedItem;
+import killercreepr.cruxitems.api.item.CruxedItem;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Keyed;
 import org.bukkit.event.EventHandler;
@@ -47,7 +47,7 @@ public class DisableRecipesListener implements Listener {
 
     public boolean check(@Nullable ItemStack item){
         if(CruxItem.isEmpty(item)) return false;
-        if(new CruxedItem(item).isPluginItem()){
+        if(CruxedItem.cruxed(item).isPluginItem()){
             return true;
         }
         return false;

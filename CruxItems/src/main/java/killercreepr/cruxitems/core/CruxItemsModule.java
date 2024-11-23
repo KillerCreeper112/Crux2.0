@@ -8,13 +8,13 @@ import killercreepr.crux.core.plugin.module.StandardModules;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.paper.ItemHolder;
 import killercreepr.crux.paper.item.BukkitItemHolder;
+import killercreepr.cruxitems.api.item.CruxedItem;
 import killercreepr.cruxitems.api.item.ItemDisplayFormatter;
 import killercreepr.cruxitems.api.item.plugin.PluginItem;
 import killercreepr.cruxitems.api.values.ValuesProvider;
 import killercreepr.cruxitems.core.command.CruxItemsCommands;
 import killercreepr.cruxitems.core.config.Config;
 import killercreepr.cruxitems.core.config.CruxItemsConfigHook;
-import killercreepr.cruxitems.core.item.CruxedItem;
 import killercreepr.cruxitems.core.item.GeneralCruxedItemDisplayUpdater;
 import killercreepr.cruxitems.core.item.PluginItemHolder;
 import killercreepr.cruxitems.core.listener.DisableRecipesListener;
@@ -88,12 +88,12 @@ public class CruxItemsModule implements CruxModule, ItemHandler {
 
     @Override
     public @NotNull ItemStack update(@NotNull ItemStack item, @Nullable Entity holder) {
-        return new CruxedItem(item).update(holder).item();
+        return CruxedItem.cruxed(item).update(holder).item();
     }
 
     @Override
     public @NotNull Key getType(@NotNull ItemStack item) {
-        Key key = new CruxedItem(item).getPluginItemKey();
+        Key key = CruxedItem.cruxed(item).getPluginItemKey();
         if(key != null) return key;
         return item.getType().getKey();
     }

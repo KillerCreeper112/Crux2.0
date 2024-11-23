@@ -1,6 +1,6 @@
 package killercreepr.cruxitems.api.item.interaction;
 
-import killercreepr.crux.core.item.SimpleCruxItem;
+import killercreepr.crux.api.item.CruxItem;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -18,7 +18,7 @@ public interface ItemUseContext {
     @Nullable
     Block getBlockClicked();
     @NotNull
-    SimpleCruxItem getItem();
+    CruxItem getItem();
     @NotNull
     Action getAction();
     @Nullable

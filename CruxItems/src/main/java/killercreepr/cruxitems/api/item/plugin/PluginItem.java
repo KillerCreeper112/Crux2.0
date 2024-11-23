@@ -1,8 +1,8 @@
 package killercreepr.cruxitems.api.item.plugin;
 
 import killercreepr.crux.api.text.tags.container.MergedTagContainer;
+import killercreepr.cruxitems.api.item.CruxedItem;
 import killercreepr.cruxitems.api.item.ItemBuilder;
-import killercreepr.cruxitems.core.item.CruxedItem;
 import killercreepr.cruxitems.core.persistence.CruxItemsPersistTags;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;

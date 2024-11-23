@@ -1,6 +1,6 @@
 package killercreepr.cruxitems.core.item.interaction.impl;
 
-import killercreepr.crux.core.item.SimpleCruxItem;
+import killercreepr.crux.api.item.CruxItem;
 import killercreepr.cruxitems.api.item.interaction.ItemUseContext;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -18,7 +18,7 @@ public class ItemUseContextImpl implements ItemUseContext {
     }
 
     protected final @NotNull Player player;
-    protected final @NotNull SimpleCruxItem item;
+    protected final @NotNull CruxItem item;
     protected final @NotNull Action action;
     protected final @NotNull EquipmentSlot hand;
     protected final @Nullable Block blockClicked;
@@ -26,7 +26,7 @@ public class ItemUseContextImpl implements ItemUseContext {
     protected final @Nullable Location interactionPoint;
     protected final @Nullable Entity entityClicked;
 
-    public ItemUseContextImpl(@NotNull Player player, @NotNull SimpleCruxItem item, @NotNull Action action, @NotNull EquipmentSlot hand, @Nullable Block blockClicked, @Nullable BlockFace blockFace, @Nullable Location interactionPoint, @Nullable Entity entityClicked) {
+    public ItemUseContextImpl(@NotNull Player player, @NotNull CruxItem item, @NotNull Action action, @NotNull EquipmentSlot hand, @Nullable Block blockClicked, @Nullable BlockFace blockFace, @Nullable Location interactionPoint, @Nullable Entity entityClicked) {
         this.player = player;
         this.item = item;
         this.action = action;
@@ -48,7 +48,7 @@ public class ItemUseContextImpl implements ItemUseContext {
     }
 
     @Override
-    public @NotNull SimpleCruxItem getItem() {
+    public @NotNull CruxItem getItem() {
         return item;
     }
 
@@ -80,7 +80,7 @@ public class ItemUseContextImpl implements ItemUseContext {
 
     public static final class Builder {
         private @NotNull Player player;
-        private @NotNull SimpleCruxItem item;
+        private @NotNull CruxItem item;
         private @NotNull Action action;
         private @NotNull EquipmentSlot hand;
         private @Nullable Block blockClicked;
@@ -93,7 +93,7 @@ public class ItemUseContextImpl implements ItemUseContext {
             return this;
         }
 
-        public Builder item(SimpleCruxItem item) {
+        public Builder item(CruxItem item) {
             this.item = item;
             return this;
         }

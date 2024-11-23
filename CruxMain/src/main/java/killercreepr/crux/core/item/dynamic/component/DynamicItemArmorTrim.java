@@ -2,9 +2,9 @@ package killercreepr.crux.core.item.dynamic.component;
 
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
+import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.item.dynamic.DynamicItemComponent;
 import killercreepr.crux.api.text.context.TextParserContext;
-import killercreepr.crux.core.item.SimpleCruxItem;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
@@ -35,7 +35,7 @@ public class DynamicItemArmorTrim implements DynamicItemComponent {
     }
 
     @Override
-    public void apply(@NotNull SimpleCruxItem item, @NotNull TextParserContext context) {
+    public void apply(@NotNull CruxItem item, @NotNull TextParserContext context) {
         item.editMeta(ArmorMeta.class, meta -> meta.setTrim(parseObject(context)));
     }
 

@@ -1,6 +1,6 @@
 package killercreepr.cruxitems.core.item.inventory;
 
-import killercreepr.crux.core.item.SimpleCruxItem;
+import killercreepr.cruxitems.api.item.CruxedItem;
 import killercreepr.cruxitems.api.item.inventory.ItemClickContext;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.ClickType;
@@ -15,7 +15,7 @@ public class ItemClickContextImpl implements ItemClickContext {
     }
 
     protected final @NotNull HumanEntity whoClicked;
-    protected final @NotNull SimpleCruxItem item;
+    protected final @NotNull CruxedItem item;
     protected final @Nullable Inventory clickedInventory;
     protected final int slot;
     protected final int rawSlot;
@@ -23,7 +23,7 @@ public class ItemClickContextImpl implements ItemClickContext {
     protected final @NotNull InventoryAction action;
     protected final @NotNull ClickType clickType;
 
-    public ItemClickContextImpl(@NotNull HumanEntity whoClicked, @NotNull SimpleCruxItem item, @Nullable Inventory clickedInventory, int slot, int rawSlot, int hotbarButton, @NotNull InventoryAction action, @NotNull ClickType clickType) {
+    public ItemClickContextImpl(@NotNull HumanEntity whoClicked, @NotNull CruxedItem item, @Nullable Inventory clickedInventory, int slot, int rawSlot, int hotbarButton, @NotNull InventoryAction action, @NotNull ClickType clickType) {
         this.whoClicked = whoClicked;
         this.item = item;
         this.clickedInventory = clickedInventory;
@@ -40,7 +40,7 @@ public class ItemClickContextImpl implements ItemClickContext {
     }
 
     @Override
-    public @NotNull SimpleCruxItem getItem() {
+    public @NotNull CruxedItem getItem() {
         return item;
     }
 
@@ -76,7 +76,7 @@ public class ItemClickContextImpl implements ItemClickContext {
 
     public static final class Builder {
         private @NotNull HumanEntity whoClicked;
-        private @NotNull SimpleCruxItem item;
+        private @NotNull CruxedItem item;
         private @Nullable Inventory clickedInventory;
         private int slot;
         private int rawSlot;
@@ -96,7 +96,7 @@ public class ItemClickContextImpl implements ItemClickContext {
             return this;
         }
 
-        public Builder item(SimpleCruxItem item) {
+        public Builder item(CruxedItem item) {
             this.item = item;
             return this;
         }

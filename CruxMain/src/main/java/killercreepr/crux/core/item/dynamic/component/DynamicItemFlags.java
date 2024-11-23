@@ -1,8 +1,8 @@
 package killercreepr.crux.core.item.dynamic.component;
 
+import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.item.dynamic.DynamicItemComponent;
 import killercreepr.crux.api.text.context.TextParserContext;
-import killercreepr.crux.core.item.SimpleCruxItem;
 import org.bukkit.inventory.ItemFlag;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,7 +25,7 @@ public class DynamicItemFlags implements DynamicItemComponent {
     }
 
     @Override
-    public void apply(@NotNull SimpleCruxItem item, @NotNull TextParserContext context) {
+    public void apply(@NotNull CruxItem item, @NotNull TextParserContext context) {
         flags.forEach((flagObject) ->{
             ItemFlag flag;
             try{

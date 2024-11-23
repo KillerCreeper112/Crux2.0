@@ -1,8 +1,8 @@
 package killercreepr.cruxpotions.item;
 
+import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.core.Crux;
 import killercreepr.cruxitems.api.item.CruxedItemUpdater;
-import killercreepr.cruxitems.core.item.CruxedItem;
 import killercreepr.cruxitems.core.item.CruxedItemUpdateContext;
 import killercreepr.cruxpotions.persistence.PotionPersistTags;
 import killercreepr.cruxpotions.persistence.StoredPotion;
@@ -21,7 +21,7 @@ public class PotionItemUpdater implements CruxedItemUpdater {
     public static final Key KEY = Crux.key("crux_potions");
     @Override
     public void onUpdate(@NotNull CruxedItemUpdateContext ctx) {
-        CruxedItem crux = ctx.getItem();
+        CruxItem crux = ctx.getItem();
         ItemStack item = crux.item();
         if(!(item.getItemMeta() instanceof PotionMeta meta)) return;
 

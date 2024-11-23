@@ -1,7 +1,7 @@
 package killercreepr.crux.api.item.dynamic;
 
+import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.text.context.TextParserContext;
-import killercreepr.crux.core.item.SimpleCruxItem;
 import killercreepr.crux.core.item.dynamic.BukkitDynamicItem;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -27,18 +27,18 @@ public interface DynamicItem extends Cloneable {
     @NotNull DynamicItem mergeItem(@NotNull DynamicItem item);
 
     @Nullable
-    SimpleCruxItem build(@NotNull TextParserContext context);
+    CruxItem build(@NotNull TextParserContext context);
 
     @NotNull
-    CompletableFuture<SimpleCruxItem> buildCompletely(@NotNull TextParserContext context);
+    CompletableFuture<CruxItem> buildCompletely(@NotNull TextParserContext context);
 
     default @Nullable ItemStack buildItem(@NotNull TextParserContext context){
-        SimpleCruxItem i = build(context);
+        CruxItem i = build(context);
         return i==null?null:i.item();
     }
 
     @NotNull
-    SimpleCruxItem applyComponents(@NotNull SimpleCruxItem item, @NotNull TextParserContext context);
+    CruxItem applyComponents(@NotNull CruxItem item, @NotNull TextParserContext context);
 
     @NotNull DynamicItem clone();
 

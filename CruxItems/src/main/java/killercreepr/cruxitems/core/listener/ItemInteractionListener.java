@@ -1,12 +1,12 @@
 package killercreepr.cruxitems.core.listener;
 
 import killercreepr.crux.api.item.CruxItem;
+import killercreepr.cruxitems.api.item.CruxedItem;
 import killercreepr.cruxitems.api.item.interaction.InteractableItem;
 import killercreepr.cruxitems.api.item.interaction.ItemUseContext;
 import killercreepr.cruxitems.api.item.interaction.ItemUseResult;
 import killercreepr.cruxitems.api.item.inventory.InventoryItem;
 import killercreepr.cruxitems.api.item.inventory.ItemClickContext;
-import killercreepr.cruxitems.core.item.CruxedItem;
 import killercreepr.cruxitems.core.item.interaction.impl.ItemUseContextImpl;
 import killercreepr.cruxitems.core.item.inventory.ItemClickContextImpl;
 import org.bukkit.entity.Entity;
@@ -27,7 +27,7 @@ public class ItemInteractionListener implements Listener {
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if(!(event.getDamager() instanceof Player p)) return;
         ItemStack item = p.getInventory().getItemInMainHand();
-        CruxedItem crux = new CruxedItem(item);
+        CruxedItem crux = CruxedItem.cruxed(item);
         if(!(crux.getPluginItem() instanceof InteractableItem pluginItem)) return;
 
         ItemUseContext ctx = ItemUseContextImpl.builder()
@@ -53,7 +53,7 @@ public class ItemInteractionListener implements Listener {
         Entity rightClicked = event.getRightClicked();
         ItemStack item = p.getInventory().getItem(event.getHand());
 
-        CruxedItem crux = new CruxedItem(item);
+        CruxedItem crux = CruxedItem.cruxed(item);
         if(!(crux.getPluginItem() instanceof InteractableItem pluginItem)) return;
 
         ItemUseContext ctx = ItemUseContextImpl.builder()
@@ -78,7 +78,7 @@ public class ItemInteractionListener implements Listener {
         if(CruxItem.isEmpty(item)) return;
         EquipmentSlot hand = event.getHand();
         if(hand==null) return;
-        CruxedItem crux = new CruxedItem(item);
+        CruxedItem crux = CruxedItem.cruxed(item);
         if(!(crux.getPluginItem() instanceof InteractableItem pluginItem)) return;
 
         Player p = event.getPlayer();

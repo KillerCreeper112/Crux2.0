@@ -1,5 +1,6 @@
 package killercreepr.cruxitems.core.item;
 
+import killercreepr.cruxitems.api.item.CruxedItem;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

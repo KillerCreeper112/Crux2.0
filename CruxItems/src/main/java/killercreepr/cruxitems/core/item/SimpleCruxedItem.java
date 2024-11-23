@@ -2,6 +2,7 @@ package killercreepr.cruxitems.core.item;
 
 import killercreepr.crux.api.text.format.FormatSerializer;
 import killercreepr.crux.core.item.SimpleCruxItem;
+import killercreepr.cruxitems.api.item.CruxedItem;
 import killercreepr.cruxitems.api.item.plugin.PluginItem;
 import killercreepr.cruxitems.core.persistence.CruxItemsPersistTags;
 import killercreepr.cruxitems.core.registries.CruxItemRegistries;
@@ -14,36 +15,32 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public class CruxedItem extends SimpleCruxItem {
-    public static CruxedItem cruxed(@NotNull ItemStack item){
-        return new CruxedItem(item);
-    }
-
-    public CruxedItem(@NotNull Material material) {
+public class SimpleCruxedItem extends SimpleCruxItem implements CruxedItem {
+    public SimpleCruxedItem(@NotNull Material material) {
         super(material);
     }
 
-    public CruxedItem(@NotNull ItemStack item) {
+    public SimpleCruxedItem(@NotNull ItemStack item) {
         super(item);
     }
 
-    public CruxedItem(@NotNull FormatSerializer format, @NotNull Material material) {
+    public SimpleCruxedItem(@NotNull FormatSerializer format, @NotNull Material material) {
         super(format, material);
     }
 
-    public CruxedItem(@NotNull FormatSerializer format, @NotNull ItemStack item) {
+    public SimpleCruxedItem(@NotNull FormatSerializer format, @NotNull ItemStack item) {
         super(format, item);
     }
 
-    public CruxedItem update(){
+    public SimpleCruxedItem update(){
         return update((Entity) null);
     }
 
-    public CruxedItem update(@Nullable Entity holder){
+    public SimpleCruxedItem update(@Nullable Entity holder){
         return update(new CruxedItemUpdateContext(this, holder));
     }
 
-    public CruxedItem update(@NotNull CruxedItemUpdateContext context){
+    public SimpleCruxedItem update(@NotNull CruxedItemUpdateContext context){
         CruxItemRegistries.ITEM_UPDATERS.forEachSorted(updater -> updater.onUpdate(context));
         return this;
     }
@@ -52,7 +49,7 @@ public class CruxedItem extends SimpleCruxItem {
         return getPluginItemKey() != null;
     }
 
-    public CruxedItem setPluginItem(@Nullable Key key){
+    public SimpleCruxedItem setPluginItem(@Nullable Key key){
         CruxItemsPersistTags.ITEM.set(item, key);
         return this;
     }

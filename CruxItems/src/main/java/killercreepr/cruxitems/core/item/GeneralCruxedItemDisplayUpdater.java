@@ -1,6 +1,7 @@
 package killercreepr.cruxitems.core.item;
 
 import killercreepr.crux.core.Crux;
+import killercreepr.cruxitems.api.item.CruxedItem;
 import killercreepr.cruxitems.api.item.CruxedItemUpdater;
 import killercreepr.cruxitems.api.item.ItemDisplayFormatter;
 import net.kyori.adventure.key.Key;

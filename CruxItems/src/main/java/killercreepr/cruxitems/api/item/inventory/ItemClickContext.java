@@ -1,6 +1,6 @@
 package killercreepr.cruxitems.api.item.inventory;
 
-import killercreepr.crux.core.item.SimpleCruxItem;
+import killercreepr.cruxitems.api.item.CruxedItem;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
@@ -12,7 +12,7 @@ public interface ItemClickContext {
     @NotNull
     HumanEntity getWhoClicked();
     @NotNull
-    SimpleCruxItem getItem();
+    CruxedItem getItem();
     @Nullable
     Inventory getClickedInventory();
     int getSlot();

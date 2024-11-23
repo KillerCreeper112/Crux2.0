@@ -1,10 +1,10 @@
 package killercreepr.crux.core.item.dynamic;
 
+import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.item.dynamic.DynamicItem;
 import killercreepr.crux.api.item.dynamic.DynamicItemComponent;
 import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.crux.core.Crux;
-import killercreepr.crux.core.item.SimpleCruxItem;
 import killercreepr.crux.paper.ItemHolder;
 import net.kyori.adventure.key.InvalidKeyException;
 import net.kyori.adventure.key.Key;
@@ -117,10 +117,10 @@ public class BukkitDynamicItem implements DynamicItem {
     }
 
     @Override
-    public @Nullable SimpleCruxItem build(@NotNull TextParserContext context) {
+    public @Nullable CruxItem build(@NotNull TextParserContext context) {
         ItemStack built = buildBase(context);
         if(built==null) return null;
-        SimpleCruxItem item = new SimpleCruxItem(built);
+        CruxItem item = CruxItem.wrap(built);
         if(amount != null){
             item.amount((int) Double.parseDouble(context.deserializeString(amount)));
         }
@@ -128,12 +128,12 @@ public class BukkitDynamicItem implements DynamicItem {
     }
 
     @Override
-    public @NotNull CompletableFuture<SimpleCruxItem> buildCompletely(@NotNull TextParserContext context) {
+    public @NotNull CompletableFuture<CruxItem> buildCompletely(@NotNull TextParserContext context) {
         return CompletableFuture.supplyAsync(() -> build(context));
     }
 
     @Override
-    public @NotNull SimpleCruxItem applyComponents(@NotNull SimpleCruxItem item, @NotNull TextParserContext context) {
+    public @NotNull CruxItem applyComponents(@NotNull CruxItem item, @NotNull TextParserContext context) {
         if(components == null) return item;
         for(DynamicItemComponent component : components.values()){
             component.apply(item, context);
