@@ -5,10 +5,25 @@ import killercreepr.crux.api.block.predicate.BlockPredicateComponent;
 import killercreepr.crux.api.component.parser.hybrid.PersistTextParser;
 import killercreepr.crux.api.component.parser.hybrid.TextInputField;
 import killercreepr.crux.api.item.component.ToolComponent;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.block.predicate.BlockAllPredicate;
 import killercreepr.crux.core.component.parser.hybrid.text.ListPersistTextParser;
+import killercreepr.crux.paper.ItemHolder;
+import net.kyori.adventure.key.Key;
+
+import java.util.Objects;
 
 public class ComponentInputParsers {
+    public static PersistTextParser<ItemHolder> ITEM_HOLDER = PersistTextParser.elementBuilder(ItemHolder.class)
+        .field(TextInputField.field(PersistTextParser.KEY, ItemHolder::key))
+        .apply(ctx ->{
+            Key key = ctx.get();
+            return Objects.requireNonNull(
+                Crux.handlers().item().getItem(key),
+                "ItemHolder of " + key + " not found!"
+            );
+        });
+
     public static PersistTextParser<BlockPredicate> BLOCK_PREDICATE = PersistTextParser.elementBuilder(BlockPredicate.class)
         .field(TextInputField.field(PersistTextParser.LIST.STRING, e ->{
             if(!(e instanceof BlockPredicateComponent all)) throw new IllegalArgumentException(
@@ -16,8 +31,7 @@ public class ComponentInputParsers {
             );
             return all.encodeToParser();
         }))
-        .apply(ctx -> new BlockAllPredicate(ctx.get()))
-        ;
+        .apply(ctx -> new BlockAllPredicate(ctx.get()));
 
     public static PersistTextParser<ToolComponent.Rule> TOOL_RULE = PersistTextParser.mapBuilder(ToolComponent.Rule.class)
         .field("blocks", TextInputField.field(BLOCK_PREDICATE, ToolComponent.Rule::getBlocks))

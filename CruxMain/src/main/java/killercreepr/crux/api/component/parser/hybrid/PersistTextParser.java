@@ -3,7 +3,6 @@ package killercreepr.crux.api.component.parser.hybrid;
 import killercreepr.crux.api.component.parser.ComponentTextInputParser;
 import killercreepr.crux.api.component.parser.standard.ComponentParserListTypeHolder;
 import killercreepr.crux.core.Crux;
-import killercreepr.crux.core.component.CruxComponents;
 import killercreepr.crux.core.component.parser.hybrid.SimplePersistParser;
 import killercreepr.crux.core.component.parser.hybrid.text.ElementPersistTextParser;
 import killercreepr.crux.core.component.parser.hybrid.text.ListPersistTextParser;
