@@ -15,6 +15,9 @@ import java.util.function.UnaryOperator;
 public class CruxComponents {
     public static void register(){}
 
+    public static final DataComponentType<Boolean> INVULNERABLE = register("invulnerable", builder -> builder
+        .persistTextParser(PersistTextParser.BOOLEAN.createInput(Crux.key("invulnerable"))));
+
     public static final DataComponentType<Float> HARDNESS = register("hardness", builder -> builder
         .persistTextParser(PersistTextParser.FLOAT.createInput(Crux.key("hardness"))));
 
