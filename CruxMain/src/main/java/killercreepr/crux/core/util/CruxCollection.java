@@ -26,4 +26,11 @@ public class CruxCollection {
         if(list.isEmpty()) return null;
         return list.get(CruxMath.random(0, list.size()-1));
     }
+
+    public static <T> T getFirst(@NotNull Collection<T> list){
+        for(T t : list){
+            return t;
+        }
+        return null;
+    }
 }

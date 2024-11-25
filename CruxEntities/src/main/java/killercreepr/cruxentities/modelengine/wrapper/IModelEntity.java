@@ -89,6 +89,27 @@ public interface IModelEntity extends IDesignEntity{
     boolean isModelRotationLocked();
     boolean isBaseEntityVisible();
 
+    default IModelEntity applyPlayAnimation(String id, Consumer<IAnimationProperty> consumer){
+        applyModel((model) -> {
+            IAnimationProperty property = model.getAnimationHandler().getAnimation(id);
+            if (property == null) {
+                property = model.getAnimationHandler().playAnimation(id, 0.0, 0.0, 1.0, true);
+            }
+            if(property == null) return;
+            consumer.accept(property);
+        });
+        return this;
+    }
+
+    default IModelEntity applyAnimation(String id, Consumer<IAnimationProperty> consumer){
+        applyModel((model) -> {
+            IAnimationProperty property = model.getAnimationHandler().getAnimation(id);
+            if (property == null) return;
+            consumer.accept(property);
+        });
+        return this;
+    }
+
     default IModelEntity setLockPitch(boolean value){
         applyModel(model -> model.setLockPitch(value));
         return this;
