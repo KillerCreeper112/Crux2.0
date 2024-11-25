@@ -11,8 +11,13 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 
 public class ModelEntity extends DesignEntity implements IModelEntity{
-    protected @NotNull ActiveModel model;
+    protected ActiveModel model;
     protected CompletableFuture<ActiveModel> cache;
+
+    public ModelEntity(@NotNull Entity entity) {
+        super(entity);
+    }
+
     public ModelEntity(@NotNull Entity entity, @NotNull String modelID) {
         super(entity);
         model = attemptAddModel(modelID, true).orElseThrow(()->

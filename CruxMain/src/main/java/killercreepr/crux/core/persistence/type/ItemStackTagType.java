@@ -7,15 +7,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Base64;
 
-public class ItemStackTagType implements PersistentDataType<String, ItemStack> {
+public class ItemStackTagType implements PersistentDataType<byte[], ItemStack> {
     /**
      * Returns the primitive data type of this tag.
      *
      * @return the class
      */
     @Override
-    public @NotNull Class<String> getPrimitiveType() {
-        return String.class;
+    public @NotNull Class<byte[]> getPrimitiveType() {
+        return byte[].class;
     }
 
     /**
@@ -37,8 +37,8 @@ public class ItemStackTagType implements PersistentDataType<String, ItemStack> {
      * @return the primitive value
      */
     @Override
-    public @NotNull String toPrimitive(@NotNull ItemStack complex, @NotNull PersistentDataAdapterContext context) {
-        return Base64.getEncoder().encodeToString(complex.serializeAsBytes());
+    public @NotNull byte[] toPrimitive(@NotNull ItemStack complex, @NotNull PersistentDataAdapterContext context) {
+        return complex.serializeAsBytes();
     }
 
     /**
@@ -49,7 +49,7 @@ public class ItemStackTagType implements PersistentDataType<String, ItemStack> {
      * @return the complex object instance
      */
     @Override
-    public @NotNull ItemStack fromPrimitive(@NotNull String primitive, @NotNull PersistentDataAdapterContext context) {
-        return ItemStack.deserializeBytes(Base64.getDecoder().decode(primitive));
+    public @NotNull ItemStack fromPrimitive(byte @NotNull [] primitive, @NotNull PersistentDataAdapterContext context) {
+        return ItemStack.deserializeBytes(primitive);
     }
 }

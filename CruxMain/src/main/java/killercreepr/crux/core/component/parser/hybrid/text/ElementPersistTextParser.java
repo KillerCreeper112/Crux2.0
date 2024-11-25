@@ -90,7 +90,7 @@ public class ElementPersistTextParser<T> implements PersistTextParser<T> {
     public static class Builder<T> implements PersistTextParser.ElementBuilder<T> {
         protected TextInputField<T, ?> field;
         protected TextInputResultParser<T> resultParser;
-        protected PersistentDataType<PersistentDataContainer, T> dataType;
+        protected PersistentDataType<?, T> dataType;
         protected Class<T> dataTypeClass;
 
         @Override
@@ -111,13 +111,14 @@ public class ElementPersistTextParser<T> implements PersistTextParser<T> {
         }
 
         @Override
-        public Builder<T> dataType(PersistentDataType<PersistentDataContainer, T> dataType) {
+        public Builder<T> dataType(PersistentDataType<?, T> dataType) {
             this.dataType = dataType;
             return this;
         }
 
         @Override
         public Builder<T> dataTypeClass(Class<T> type) {
+            this.dataTypeClass = type;
             return this;
         }
 

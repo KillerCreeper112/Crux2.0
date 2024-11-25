@@ -125,7 +125,7 @@ public interface PersistTextParser<T> extends ComponentTextInputParser<T>{
         ElementBuilder<T> field(TextInputField<T, ?> field);
         ElementBuilder<T> resultParser(TextInputResultParser<T> resultParser);
         PersistTextParser<T> apply(TextInputResultParser<T> resultParser);
-        ElementBuilder<T> dataType(PersistentDataType<PersistentDataContainer, T> dataType);
+        ElementBuilder<T> dataType(PersistentDataType<?, T> dataType);
         ElementBuilder<T> dataTypeClass(Class<T> type);
         PersistTextParser<T> build();
     }
