@@ -16,6 +16,7 @@ public class ModelEntity extends DesignEntity implements IModelEntity{
 
     public ModelEntity(@NotNull Entity entity) {
         super(entity);
+        getOrCreateModeledEntity();
     }
 
     public ModelEntity(@NotNull Entity entity, @NotNull String modelID) {
@@ -57,7 +58,7 @@ public class ModelEntity extends DesignEntity implements IModelEntity{
 
     @Override
     public ModeledEntity getModeledEntity() {
-        return model.getModeledEntity();
+        return getOrCreateModeledEntity();
     }
 
     @Override
