@@ -4,6 +4,8 @@ import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.item.dynamic.DynamicItem;
 import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.crux.api.text.tags.container.MergedTagContainer;
+import killercreepr.cruxitems.api.event.CustomItemPreUseEvent;
+import killercreepr.cruxitems.api.event.InteractableComponentUseEvent;
 import killercreepr.cruxitems.api.item.CruxedItem;
 import killercreepr.cruxitems.api.item.component.InteractableComponent;
 import killercreepr.cruxitems.api.item.interaction.InteractableItem;
@@ -33,15 +35,22 @@ public class CfgPluginItem extends GenericPluginItem implements InteractableItem
 
     @Override
     public @NotNull ItemUseResult onUse(@NotNull ItemUseContext ctx) {
+        CustomItemPreUseEvent preUseEvent = new CustomItemPreUseEvent(ctx, ItemUseResult.empty());
+        if(!preUseEvent.callEvent()) return preUseEvent.getUseResult();
+
         CruxItem item = ctx.getItem();
         Collection<InteractableComponent> list = item.getAllOfType(InteractableComponent.class);
         if(list == null) return ItemUseResult.empty();
+        ItemUseResult defaultResult = preUseEvent.getUseResult();
         for(InteractableComponent c : list){
             if(!c.isUsable(ctx)) continue;
+            InteractableComponentUseEvent useEvent = new InteractableComponentUseEvent(ctx, c);
+            if(!useEvent.callEvent()) continue;
+
             ItemUseResult result = c.onUse(ctx);
             if(!result.successful()) continue;
             return result;
         }
-        return ItemUseResult.empty();
+        return defaultResult;
     }
 }
