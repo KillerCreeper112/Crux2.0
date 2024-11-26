@@ -3,15 +3,17 @@ package killercreepr.cruxitems.api.event;
 import killercreepr.crux.api.item.CruxItem;
 import killercreepr.cruxitems.api.item.interaction.ItemUseContext;
 import killercreepr.cruxitems.api.item.interaction.ItemUseResult;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-public class CustomItemPreUseEvent extends Event {
+public class CustomItemPreUseEvent extends Event implements Cancellable {
     private static final HandlerList HANDLER_LIST = new HandlerList();
 
     protected final @NotNull ItemUseContext context;
     protected @NotNull ItemUseResult useResult;
+    protected boolean cancel = false;
     public CustomItemPreUseEvent(@NotNull ItemUseContext context, @NotNull ItemUseResult useResult) {
         this.context = context;
         this.useResult = useResult;
@@ -40,5 +42,14 @@ public class CustomItemPreUseEvent extends Event {
 
     public static HandlerList getHandlerList() {
         return HANDLER_LIST;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancel;
+    }
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancel = cancel;
     }
 }
