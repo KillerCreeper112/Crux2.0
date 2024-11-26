@@ -5,9 +5,12 @@ import killercreepr.crux.api.item.dynamic.DynamicItem;
 import killercreepr.crux.api.item.dynamic.DynamicItemComponent;
 import killercreepr.crux.api.item.dynamic.component.persistence.TypedDynamicPersistentTag;
 import killercreepr.crux.api.registry.MappedRegistry;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.item.dynamic.BukkitDynamicItem;
+import killercreepr.crux.core.item.dynamic.component.DynamicItemAttributes;
 import killercreepr.crux.core.item.dynamic.component.DynamicItemCruxComponents;
 import killercreepr.crux.core.item.dynamic.component.DynamicItemUnbreakable;
+import killercreepr.crux.core.item.dynamic.component.attribute.DynamicAttributeModifier;
 import killercreepr.crux.core.registry.SimpleMappedRegistry;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.FileDynamicItemComponent;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.FileGenericSingleDynamicComponent;
@@ -19,15 +22,14 @@ import killercreepr.cruxconfig.config.common.element.FileGeneric;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.SimpleFileHandler;
 import killercreepr.cruxconfig.config.common.json.annotation.JsonSerializer;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
+import java.util.logging.Level;
 
-//todo attributes, food,
+//todo food,
 @JsonSerializer(id = "dynamic_item")
 public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
     protected final MappedRegistry<String, FileDynamicItemComponent<?>> COMPONENT_REGISTRY = new SimpleMappedRegistry<>();
@@ -301,6 +303,39 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
             @Override
             public @NotNull DynamicItemCruxComponents deserialize(@NotNull Object object) {
                 return new DynamicItemCruxComponents(object);
+            }
+        });
+
+        COMPONENT_REGISTRY.register("attributes", new FileDynamicItemComponent<>(DynamicItemAttributes.class) {
+            @Override
+            public @NotNull String jsonSerializerID() {
+                return "dynamic_item_attributes";
+            }
+
+            @Override
+            public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull DynamicItemAttributes object) {
+                FileRegistry registry = context.getRegistry();
+                FileObject o = new FileObject();
+                object.getAttributes().forEach((key, value) -> o.add(key.toString(), registry.serializeToFile(value)));
+                return o;
+            }
+
+            @Override
+            public @Nullable DynamicItemAttributes deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
+                if(!(e instanceof FileArray o)) return null;
+                FileRegistry registry = context.getRegistry();
+                Map<Object, Collection<DynamicAttributeModifier>> attributes = new HashMap<>();
+                o.forEach(element ->{
+                    if(!(element instanceof FileObject oo)) return;
+                    String key = oo.getObject(String.class, "attribute");
+                    if(key == null) return;
+                    Collection<DynamicAttributeModifier> level = registry.deserializeFromFile(
+                        new TypeToken<Set<DynamicAttributeModifier>>(){}.getType(), oo.get("values"));
+                    if(level==null) return;
+                    attributes.put(key, level);
+                });
+                if(attributes.isEmpty()) return null;
+                return new DynamicItemAttributes(attributes);
             }
         });
     }

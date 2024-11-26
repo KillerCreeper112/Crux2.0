@@ -28,6 +28,7 @@ import killercreepr.crux.core.communication.MsgContainer;
 import killercreepr.crux.core.data.world.StoredChunk;
 import killercreepr.crux.core.data.world.StoredWorld;
 import killercreepr.crux.core.item.StoredItem;
+import killercreepr.crux.core.item.dynamic.component.attribute.DynamicAttributeModifier;
 import killercreepr.crux.core.loot.item.SimpleItemLootObject;
 import killercreepr.crux.core.math.BlockPos;
 import killercreepr.crux.core.math.LocationPos;
@@ -101,6 +102,7 @@ public class BukkitCfgHandlers {
     public static final FileDataComponentHandler DATA_COMPONENT_HANDLER = new FileDataComponentHandler();
     public static final FileCruxEntitySnapshot CRUX_ENTITY_SNAPSHOT = new FileCruxEntitySnapshot();
     public static final FileVector VECTOR = new FileVector();
+    public static final FileDynamicAttributeModifier DYNAMIC_ATTRIBUTE_MODIFIER = new FileDynamicAttributeModifier();
 
     public static void initStandard(){
         CfgRegistries.FILE.forEach(BukkitCfgHandlers::init);
@@ -142,6 +144,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(CruxEntitySnapshot.class, CRUX_ENTITY_SNAPSHOT);
         registry.registerFileHandler(Vector.class, VECTOR);
         registry.registerFileHandler(NumberVector.class, NUMBER_VECTOR);
+        registry.registerFileHandler(DynamicAttributeModifier.class, DYNAMIC_ATTRIBUTE_MODIFIER);
 
         StandardCfgDataComponentTypes.register(TYPED_DATA_COMPONENT.typeHandlers());
         registry.registerFileHandler(TypedDataComponent.class, TYPED_DATA_COMPONENT);
