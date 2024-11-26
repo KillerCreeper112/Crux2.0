@@ -4,8 +4,9 @@ import killercreepr.crux.api.component.parser.InputDecodeContext;
 import killercreepr.crux.api.component.parser.hybrid.PersistTextParser;
 import killercreepr.crux.api.component.parser.hybrid.TextInputField;
 import killercreepr.crux.api.component.parser.hybrid.TextInputResultParser;
-import org.bukkit.persistence.PersistentDataAdapterContext;
-import org.bukkit.persistence.PersistentDataContainer;
+import killercreepr.crux.core.component.parser.hybrid.text.persistence.ElementDataListType;
+import killercreepr.crux.core.component.parser.hybrid.text.persistence.ElementDataType;
+import org.bukkit.persistence.ListPersistentDataType;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,41 +33,10 @@ public class ElementPersistTextParser<T> implements PersistTextParser<T> {
 
     public PersistentDataType<?, T> buildDataType(@NotNull Class<T> complexType,
                                                   @NotNull TextInputField<T, ?> element){
-        return new PersistentDataType<>() {
-            @Override
-            public @NotNull Class<Object> getPrimitiveType() {
-                return (Class<Object>) element.inputParser().dataType().getPrimitiveType();
-            }
-
-            @Override
-            public @NotNull Class<T> getComplexType() {
-                return complexType;
-            }
-
-            @Override
-            public @NotNull Object toPrimitive(@NotNull T complex, @NotNull PersistentDataAdapterContext context) {
-                Object object;
-                try{
-                    T test =(T) complex;
-                    object = element.parseField(complex);
-                }catch (ClassCastException ignored){
-                    object = complex;
-                }
-
-
-                PersistentDataType type = element.inputParser().dataType();
-                return type.toPrimitive(object, context);
-            }
-
-            @Override
-            public @NotNull T fromPrimitive(@NotNull Object primitive, @NotNull PersistentDataAdapterContext context) {
-                PersistentDataType type = element.inputParser().dataType();
-                Object parsed = type.fromPrimitive(primitive, context);
-                InputDecodeContext ctx = InputDecodeContext.context(parsed);
-                return resultParser.parse(ctx);
-            }
-
-        };
+        if(element.inputParser().dataType() instanceof ListPersistentDataType<?,?>) return new ElementDataListType<>(
+            complexType, element, resultParser
+        );
+        return new ElementDataType<>(complexType, element, resultParser);
     }
 
     @Override

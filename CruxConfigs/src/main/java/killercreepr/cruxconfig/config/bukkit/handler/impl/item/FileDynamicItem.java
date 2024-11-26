@@ -7,9 +7,7 @@ import killercreepr.crux.api.item.dynamic.component.persistence.TypedDynamicPers
 import killercreepr.crux.api.registry.MappedRegistry;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.item.dynamic.BukkitDynamicItem;
-import killercreepr.crux.core.item.dynamic.component.DynamicItemAttributes;
-import killercreepr.crux.core.item.dynamic.component.DynamicItemCruxComponents;
-import killercreepr.crux.core.item.dynamic.component.DynamicItemUnbreakable;
+import killercreepr.crux.core.item.dynamic.component.*;
 import killercreepr.crux.core.item.dynamic.component.attribute.DynamicAttributeModifier;
 import killercreepr.crux.core.registry.SimpleMappedRegistry;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.FileDynamicItemComponent;
@@ -108,6 +106,30 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
             @Override
             public @NotNull killercreepr.crux.core.item.dynamic.component.DynamicItemMaxStackSize deserialize(@NotNull Object object) {
                 return new killercreepr.crux.core.item.dynamic.component.DynamicItemMaxStackSize(object);
+            }
+        });
+
+        COMPONENT_REGISTRY.register("max_damage", new FileGenericSingleDynamicComponent<>(DynamicItemMaxDamage.class) {
+            @Override
+            public @NotNull String jsonSerializerID() {
+                return "dynamic_item_max_damage";
+            }
+
+            @Override
+            public @NotNull DynamicItemMaxDamage deserialize(@NotNull Object object) {
+                return new DynamicItemMaxDamage(object);
+            }
+        });
+
+        COMPONENT_REGISTRY.register("damage", new FileGenericSingleDynamicComponent<>(DynamicItemDamage.class) {
+            @Override
+            public @NotNull String jsonSerializerID() {
+                return "dynamic_item_damage";
+            }
+
+            @Override
+            public @NotNull DynamicItemDamage deserialize(@NotNull Object object) {
+                return new DynamicItemDamage(object);
             }
         });
 

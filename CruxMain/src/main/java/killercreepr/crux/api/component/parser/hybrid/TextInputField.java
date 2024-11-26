@@ -24,4 +24,8 @@ public interface TextInputField<B, T> {
     @NotNull
     PersistTextParser<T> inputParser();
     T parseField(B base);
+
+    default T parseFieldObject(Object base){
+        return parseField((B) base);
+    }
 }

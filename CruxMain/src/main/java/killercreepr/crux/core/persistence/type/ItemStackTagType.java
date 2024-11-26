@@ -5,8 +5,6 @@ import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Base64;
-
 public class ItemStackTagType implements PersistentDataType<byte[], ItemStack> {
     /**
      * Returns the primitive data type of this tag.
