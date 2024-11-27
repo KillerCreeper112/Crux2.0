@@ -157,9 +157,15 @@ public class CruxLoc {
         if(forward != 0D) newLocation.add(locDirection.getDirection().multiply(forward));
         //- LEFT + RIGHT
         if(right != 0D){
-            locDirection.setYaw(90 - loc.getYaw());
+
+            Vector sideDirection = locDirection.getDirection().setY(0).normalize();  // Remove vertical component
+            sideDirection = new Vector(-sideDirection.getZ(), 0, sideDirection.getX()); // Rotate 90 degrees
+
+            newLocation.add(sideDirection.multiply(right));
+
+            /*locDirection.setYaw(90 - loc.getYaw());
             locDirection.setPitch(0);
-            newLocation.add(locDirection.getDirection().multiply(right));
+            newLocation.add(locDirection.getDirection().multiply(right));*/
         }
         //+ UP - DOWN
         if(up != 0D){

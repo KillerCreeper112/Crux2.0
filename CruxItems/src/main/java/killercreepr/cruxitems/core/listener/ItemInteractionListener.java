@@ -1,7 +1,10 @@
 package killercreepr.cruxitems.core.listener;
 
 import killercreepr.crux.api.item.CruxItem;
+import killercreepr.cruxitems.api.event.CustomItemPreUseEvent;
+import killercreepr.cruxitems.api.event.InteractableComponentUseEvent;
 import killercreepr.cruxitems.api.item.CruxedItem;
+import killercreepr.cruxitems.api.item.component.InteractableComponent;
 import killercreepr.cruxitems.api.item.interaction.InteractableItem;
 import killercreepr.cruxitems.api.item.interaction.ItemUseContext;
 import killercreepr.cruxitems.api.item.interaction.ItemUseResult;
@@ -22,14 +25,16 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Collection;
+
 public class ItemInteractionListener implements Listener {
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if(!(event.getDamager() instanceof Player p)) return;
         ItemStack item = p.getInventory().getItemInMainHand();
-        CruxedItem crux = CruxedItem.cruxed(item);
-        if(!(crux.getPluginItem() instanceof InteractableItem pluginItem)) return;
+        if(CruxItem.isEmpty(item)) return;
 
+        CruxedItem crux = CruxedItem.cruxed(item);
         ItemUseContext ctx = ItemUseContextImpl.builder()
             .player(p)
             .blockClicked(null)
@@ -41,9 +46,40 @@ public class ItemInteractionListener implements Listener {
             .item(crux)
             .build();
 
-        ItemUseResult result = pluginItem.onUse(ctx);
+        ItemUseResult result = genericUse(ctx);
+        if(result != null){
+            Boolean cancel = result.getCancelled();
+            if(cancel != null) event.setCancelled(cancel);
+        }
+
+        if(!(crux.getPluginItem() instanceof InteractableItem pluginItem)) return;
+
+        result = pluginItem.onUse(ctx);
         Boolean cancel = result.getCancelled();
         if(cancel != null) event.setCancelled(cancel);
+    }
+
+    public ItemUseResult genericUse(ItemUseContext ctx, Collection<InteractableComponent> list){
+        CustomItemPreUseEvent preUseEvent = new CustomItemPreUseEvent(ctx, ItemUseResult.empty());
+        if(!preUseEvent.callEvent()) return preUseEvent.getUseResult();
+
+        ItemUseResult defaultResult = preUseEvent.getUseResult();
+        for(InteractableComponent c : list){
+            if(!c.isUsable(ctx)) continue;
+            InteractableComponentUseEvent useEvent = new InteractableComponentUseEvent(ctx, c);
+            if(!useEvent.callEvent()) continue;
+
+            ItemUseResult result = c.onUse(ctx);
+            if(!result.successful()) continue;
+            return result;
+        }
+        return defaultResult;
+    }
+
+    public ItemUseResult genericUse(ItemUseContext ctx){
+        Collection<InteractableComponent> list = ctx.getItem().getAllOfType(InteractableComponent.class);
+        if(list == null) return null;
+        return genericUse(ctx, list);
     }
 
 
@@ -52,9 +88,8 @@ public class ItemInteractionListener implements Listener {
         Player p = event.getPlayer();
         Entity rightClicked = event.getRightClicked();
         ItemStack item = p.getInventory().getItem(event.getHand());
-
+        if(CruxItem.isEmpty(item)) return;
         CruxedItem crux = CruxedItem.cruxed(item);
-        if(!(crux.getPluginItem() instanceof InteractableItem pluginItem)) return;
 
         ItemUseContext ctx = ItemUseContextImpl.builder()
             .player(p)
@@ -67,7 +102,15 @@ public class ItemInteractionListener implements Listener {
             .item(crux)
             .build();
 
-        ItemUseResult result = pluginItem.onUse(ctx);
+        ItemUseResult result = genericUse(ctx);
+        if(result != null){
+            Boolean cancel = result.getCancelled();
+            if(cancel != null) event.setCancelled(cancel);
+        }
+
+        if(!(crux.getPluginItem() instanceof InteractableItem pluginItem)) return;
+
+        result = pluginItem.onUse(ctx);
         Boolean cancel = result.getCancelled();
         if(cancel != null) event.setCancelled(cancel);
     }
@@ -79,8 +122,6 @@ public class ItemInteractionListener implements Listener {
         EquipmentSlot hand = event.getHand();
         if(hand==null) return;
         CruxedItem crux = CruxedItem.cruxed(item);
-        if(!(crux.getPluginItem() instanceof InteractableItem pluginItem)) return;
-
         Player p = event.getPlayer();
         ItemUseContext ctx = ItemUseContextImpl.builder()
             .player(p)
@@ -92,7 +133,19 @@ public class ItemInteractionListener implements Listener {
             .item(crux)
             .build();
 
-        ItemUseResult result = pluginItem.onUse(ctx);
+        ItemUseResult result = genericUse(ctx);
+        if(result != null){
+            Boolean cancel = result.getCancelled();
+            if(cancel != null) event.setCancelled(cancel);
+            Event.Result r = result.getUseInteractedBlock();
+            if(r != null) event.setUseInteractedBlock(r);
+            r = result.getUseItemInHand();
+            if(r != null) event.setUseItemInHand(r);
+        }
+
+        if(!(crux.getPluginItem() instanceof InteractableItem pluginItem)) return;
+
+        result = pluginItem.onUse(ctx);
         Boolean cancel = result.getCancelled();
         if(cancel != null) event.setCancelled(cancel);
         Event.Result r = result.getUseInteractedBlock();
