@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class CfgBlockComponents {
+    //TODO change this system up probably
     public static void register(@NotNull MappedRegistry<String, FileDataComponentType<?>> registry){
         registry.register("directional_block", new FileDataComponentType<DirectionalBlock>() {
             @Override
