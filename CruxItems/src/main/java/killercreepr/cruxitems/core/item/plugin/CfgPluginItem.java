@@ -11,6 +11,7 @@ import killercreepr.cruxitems.api.item.component.InteractableComponent;
 import killercreepr.cruxitems.api.item.interaction.InteractableItem;
 import killercreepr.cruxitems.api.item.interaction.ItemUseContext;
 import killercreepr.cruxitems.api.item.interaction.ItemUseResult;
+import killercreepr.cruxitems.api.item.plugin.DynamicPluginItem;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
@@ -19,11 +20,16 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public class CfgPluginItem extends GenericPluginItem implements InteractableItem {
+public class CfgPluginItem extends GenericPluginItem implements DynamicPluginItem, InteractableItem {
     protected final @NotNull DynamicItem item;
     public CfgPluginItem(@NotNull Key key, @NotNull DynamicItem item) {
         super(key);
         this.item = item;
+    }
+
+    @Override
+    public @NotNull DynamicItem dynamicItem() {
+        return item;
     }
 
     @Override

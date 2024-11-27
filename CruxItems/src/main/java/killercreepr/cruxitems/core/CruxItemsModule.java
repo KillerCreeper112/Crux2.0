@@ -2,10 +2,13 @@ package killercreepr.cruxitems.core;
 
 import killercreepr.crux.api.handler.ItemHandler;
 import killercreepr.crux.api.plugin.module.CruxModule;
+import killercreepr.crux.api.registry.KeyedRegistry;
+import killercreepr.crux.api.text.tags.TagParser;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.plugin.module.StandardModules;
 import killercreepr.crux.core.registries.CruxRegistries;
+import killercreepr.crux.core.text.tags.CruxTags;
 import killercreepr.crux.paper.ItemHolder;
 import killercreepr.crux.paper.item.BukkitItemHolder;
 import killercreepr.cruxitems.api.item.CruxedItem;
@@ -20,6 +23,7 @@ import killercreepr.cruxitems.core.item.PluginItemHolder;
 import killercreepr.cruxitems.core.listener.DisableRecipesListener;
 import killercreepr.cruxitems.core.listener.ItemInteractionListener;
 import killercreepr.cruxitems.core.registries.CruxItemRegistries;
+import killercreepr.cruxitems.core.text.tags.object.ItemStackTags;
 import killercreepr.cruxitems.core.values.DefaultValues;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Material;
@@ -60,6 +64,7 @@ public class CruxItemsModule implements CruxModule, ItemHandler {
         if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS)){
             CruxItemsConfigHook.register();
         }
+        registerTags(Crux.tags());
     }
 
     @Override
@@ -84,6 +89,10 @@ public class CruxItemsModule implements CruxModule, ItemHandler {
         if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS)){
             CruxItemsConfigHook.loadCfgPluginItems(plugin, "items");
         }
+    }
+
+    public void registerTags(TagParser tags){
+        tags.register(new ItemStackTags());
     }
 
     @Override
