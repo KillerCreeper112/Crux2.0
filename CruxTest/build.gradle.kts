@@ -14,7 +14,6 @@ dependencies {
     implementation(project(":CruxMenus"))
     implementation(project(":CruxEntities"))
     implementation(project(":CruxAttributes"))
-    implementation(project(":CruxEnchants"))
     implementation(project(":CruxItems"))
     implementation(project(":CruxBlocks"))
     implementation(project(":CruxStructures"))

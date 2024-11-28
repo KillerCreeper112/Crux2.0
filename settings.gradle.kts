@@ -9,6 +9,7 @@ include(
 
     "CruxAttributes",
     "CruxStats",
+    "CruxEnchantsLegacy",
     "CruxEnchants",
 
     "CruxItems",

@@ -13,7 +13,6 @@ import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
 import killercreepr.cruxconfig.config.bukkit.loader.LootTableLoader;
 import killercreepr.cruxcore.command.CruxCoreCommands;
 import killercreepr.cruxcore.listener.PlayerDataListener;
-import killercreepr.cruxenchants.CruxEnchantsModule;
 import killercreepr.cruxentities.CruxEntitiesModule;
 import killercreepr.cruxexternal.CruxExternalModule;
 import killercreepr.cruxitems.core.CruxItemsModule;
@@ -37,7 +36,6 @@ public class CruxCore extends CruxPlugin implements Listener {
     protected final CruxPotionsModule CRUX_POTIONS = new CruxPotionsModule();
     protected final CruxAttributesModule CRUX_ATTRIBUTES = new CruxAttributesModule();
     protected final CruxEntitiesModule CRUX_ENTITIES = new CruxEntitiesModule();
-    protected final CruxEnchantsModule CRUX_ENCHANTS = new CruxEnchantsModule();
     //protected final CruxBlocksModule CRUX_BLOCKS = new CruxBlocksModule(CruxBlocksRegistries.BLOCK);
     protected final CruxStructuresModule CRUX_STRUCTURES = new CruxStructuresModule();
     protected final CruxExternalModule CRUX_EXTERNAL = new CruxExternalModule();
@@ -86,9 +84,6 @@ public class CruxCore extends CruxPlugin implements Listener {
         return CRUX_ENTITIES;
     }
 
-    public CruxEnchantsModule cruxEnchants() {
-        return CRUX_ENCHANTS;
-    }
 
     protected final StructureManager structureManager = new StructureManager(this);
 
@@ -115,7 +110,6 @@ public class CruxCore extends CruxPlugin implements Listener {
             CRUX_POTIONS,
             CRUX_ATTRIBUTES,
             CRUX_ENTITIES,
-            CRUX_ENCHANTS,
             //CRUX_BLOCKS,
             CRUX_STRUCTURES,
             CRUX_EXTERNAL,

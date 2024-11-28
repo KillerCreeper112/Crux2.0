@@ -104,6 +104,11 @@ public interface EntityMemory extends Holder<Entity> {
         return mem.getDataHolder(clazz);
     }
 
+    static <T extends DataHolder> @Nullable T getOrCreateDataHolder(@NotNull Entity entity, @NotNull Class<T> clazz, @NotNull Function<EntityMemory, T> function){
+        EntityMemory mem = getOrCreate(entity);
+        return mem.getDataHolderOrCompute(clazz, function);
+    }
+
     @NotNull KeyedRegistry<DataHolder> getDataHolders();
     @Nullable DataHolder getDataHolder(@NotNull Key key);
 
