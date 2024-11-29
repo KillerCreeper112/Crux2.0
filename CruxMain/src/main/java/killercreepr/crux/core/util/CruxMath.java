@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Random;
 
 public class CruxMath {
+    @Deprecated
     public static final Random RANDOM = new Random();
     public static Random random(){
         return RANDOM;
@@ -32,6 +33,39 @@ public class CruxMath {
         } else { // 32+
             return (int) Math.floor((325.0 / 18.0) + Math.sqrt((2.0 / 9.0) * (points - (54215.0 / 72.0))));
         }
+    }
+
+    /**
+     * @param skewFactor The higher this number, the more likely it will be that
+     *                   this function generates a higher number. The lower it is, the more likely
+     *                   it is that it will generate a lower number.
+     *                   For example, a skew factor of 0.2 will make it more likely for the function
+     *                   to generate a lower number.
+     *                   A skew factor of 2 will make it more likely for the function to generate a higher number.
+     *                   A skew factor of 1 will have equal chance (no skewed results).
+     */
+    public int randomSkewed(int minValue, int maxValue, double skewFactor) {
+        double randomValue = RANDOM.nextDouble();
+        double scaledValue = Math.pow(randomValue, skewFactor) * (maxValue - minValue) + minValue;
+        return (int) Math.min(scaledValue, maxValue);
+    }
+
+    public long randomSkewed(long minValue, long maxValue, double skewFactor) {
+        double randomValue = RANDOM.nextDouble();
+        double scaledValue = Math.pow(randomValue, skewFactor) * (maxValue - minValue) + minValue;
+        return (long) Math.min(scaledValue, maxValue);
+    }
+
+    public double randomSkewed(double minValue, double maxValue, double skewFactor) {
+        double randomValue = RANDOM.nextDouble();
+        double scaledValue = Math.pow(randomValue, skewFactor) * (maxValue - minValue) + minValue;
+        return Math.min(scaledValue, maxValue);
+    }
+
+    public float randomSkewed(float minValue, float maxValue, double skewFactor) {
+        double randomValue = RANDOM.nextDouble();
+        double scaledValue = Math.pow(randomValue, skewFactor) * (maxValue - minValue) + minValue;
+        return (float) Math.min(scaledValue, maxValue);
     }
 
     public static int floorBlock(double num) {
