@@ -11,6 +11,7 @@ include(
     "CruxStats",
     "CruxEnchantsLegacy",
     "CruxEnchants",
+    "CruxForm",
 
     "CruxItems",
     "CruxBlocks",

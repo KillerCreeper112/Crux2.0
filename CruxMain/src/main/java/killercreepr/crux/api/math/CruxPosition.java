@@ -53,6 +53,15 @@ public interface CruxPosition {
     }
 
     @Contract(pure = true)
+    static CruxPosition getMaximum(@NotNull CruxPosition v1, @NotNull CruxPosition v2) {
+        return precise(Math.max(v1.x(), v2.x()), Math.max(v1.y(), v2.y()), Math.max(v1.z(), v2.z()));
+    }
+    @Contract(pure = true)
+    static CruxPosition getMinimum(@NotNull CruxPosition v1, @NotNull CruxPosition v2) {
+        return precise(Math.min(v1.x(), v2.x()), Math.min(v1.y(), v2.y()), Math.min(v1.z(), v2.z()));
+    }
+
+    @Contract(pure = true)
     default @NotNull CruxPosition add(@NotNull CruxPosition pos){
         return add(pos.x(), pos.y(), pos.z());
     }
