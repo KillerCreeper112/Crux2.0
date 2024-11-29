@@ -8,11 +8,25 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class DynamicLocation extends Location implements LocationHolder {
+    @Deprecated
     public static @NotNull EntityLocation from(@NotNull Entity e){
         return new EntityLocation(e);
     }
+    public static @NotNull EntityLocation createEntity(@NotNull Entity e){
+        return new EntityLocation(e);
+    }
+    public static @NotNull EntityLocation createEntity(@NotNull Entity e, @Nullable DynamicInfo info){
+        return new EntityLocation(e, info);
+    }
+    @Deprecated
     public static @NotNull StaticLocation from(@NotNull Location location){
         return new StaticLocation(location, null);
+    }
+    public static @NotNull StaticLocation createStatic(@NotNull Location location){
+        return new StaticLocation(location);
+    }
+    public static @NotNull StaticLocation createStatic(@NotNull Location location, @Nullable DynamicInfo info){
+        return new StaticLocation(location, info);
     }
 
     protected final @Nullable DynamicInfo info;

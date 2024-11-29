@@ -44,25 +44,25 @@ public class CruxMath {
      *                   A skew factor of 2 will make it more likely for the function to generate a higher number.
      *                   A skew factor of 1 will have equal chance (no skewed results).
      */
-    public int randomSkewed(int minValue, int maxValue, double skewFactor) {
+    public static int randomSkewed(int minValue, int maxValue, double skewFactor) {
         double randomValue = RANDOM.nextDouble();
         double scaledValue = Math.pow(randomValue, skewFactor) * (maxValue - minValue) + minValue;
         return (int) Math.min(scaledValue, maxValue);
     }
 
-    public long randomSkewed(long minValue, long maxValue, double skewFactor) {
+    public static long randomSkewed(long minValue, long maxValue, double skewFactor) {
         double randomValue = RANDOM.nextDouble();
         double scaledValue = Math.pow(randomValue, skewFactor) * (maxValue - minValue) + minValue;
         return (long) Math.min(scaledValue, maxValue);
     }
 
-    public double randomSkewed(double minValue, double maxValue, double skewFactor) {
+    public static double randomSkewed(double minValue, double maxValue, double skewFactor) {
         double randomValue = RANDOM.nextDouble();
         double scaledValue = Math.pow(randomValue, skewFactor) * (maxValue - minValue) + minValue;
         return Math.min(scaledValue, maxValue);
     }
 
-    public float randomSkewed(float minValue, float maxValue, double skewFactor) {
+    public static float randomSkewed(float minValue, float maxValue, double skewFactor) {
         double randomValue = RANDOM.nextDouble();
         double scaledValue = Math.pow(randomValue, skewFactor) * (maxValue - minValue) + minValue;
         return (float) Math.min(scaledValue, maxValue);

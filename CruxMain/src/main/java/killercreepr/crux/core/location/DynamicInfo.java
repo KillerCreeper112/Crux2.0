@@ -7,6 +7,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Consumer;
 
 public class DynamicInfo {
+    public static DynamicInfo info(@Nullable Consumer<Location> consumer){
+        return new DynamicInfo(consumer);
+    }
+
     private final Consumer<Location> locationConsumer;
     public DynamicInfo(@Nullable Consumer<Location> consumer){
         this.locationConsumer = consumer;
