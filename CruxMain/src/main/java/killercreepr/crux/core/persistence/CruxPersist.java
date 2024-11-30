@@ -1,6 +1,5 @@
 package killercreepr.crux.core.persistence;
 
-import killercreepr.crux.api.item.component.ToolComponent;
 import killercreepr.crux.api.loot.item.ItemLootTable;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -15,6 +14,6 @@ public class CruxPersist {
     public static final PersistTag<List<ItemLootTable>> ITEM_LOOT_TABLES = PersistTag.register(new PersistTag<>(CruxPersistence.LIST.ITEM_LOOT_TABLE, "item_loot_tables"));
     public static final PersistTag<String> SPAWN_REASON = PersistTag.register(new PersistTag<>(PersistentDataType.STRING, "spawn_reason"));
     public static final PersistTag<UUID> OWNER = PersistTag.register(new PersistTag<>(CruxPersistence.UUID, "owner"));
-    public static final PersistTag<ToolComponent> TOOL = PersistTag.register(new PersistTag<>(CruxPersistence.TOOL_COMPONENT, "tool"));
+    public static final PersistTag<Integer> RICOCHET = PersistTag.register(new PersistTag<>(PersistentDataType.INTEGER, "ricochet"));
     public static final PersistTag<PersistentDataContainer> COMPONENTS = PersistTag.register(new PersistTag<>(PersistentDataType.TAG_CONTAINER, "components"));
 }
