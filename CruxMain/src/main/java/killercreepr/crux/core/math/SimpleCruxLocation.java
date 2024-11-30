@@ -130,7 +130,6 @@ public class SimpleCruxLocation implements CruxLocation {
         }
         //- LEFT + RIGHT
         if(right != 0D){
-
             Vector sideDirection = locDirection.clone().setY(0).normalize();  // Remove vertical component
             sideDirection = new Vector(-sideDirection.getZ(), 0, sideDirection.getX()); // Rotate 90 degrees
             sideDirection.multiply(right);
@@ -141,7 +140,7 @@ public class SimpleCruxLocation implements CruxLocation {
         //+ UP - DOWN
         if(up != 0D){
             SimpleCruxLocation l = (SimpleCruxLocation) this.withPitch(pitch() - 90);
-            Vector v = l.getDirectionVector(l.yaw(), l.pitch()).multiply(up);
+            Vector v = l.getDirectionVector(l.yaw(), l.pitch()).normalize().multiply(up);
             x += v.getX();
             y += v.getY();
             z += v.getZ();

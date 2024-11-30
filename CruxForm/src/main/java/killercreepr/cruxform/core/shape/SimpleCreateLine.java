@@ -6,6 +6,7 @@ import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxform.api.shape.CreateLine;
 import killercreepr.cruxform.api.shape.cache.CreateCachedShape;
 import killercreepr.cruxform.core.shape.cache.SimpleCachedShiftToward;
+import org.bukkit.Bukkit;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -39,16 +40,13 @@ public class SimpleCreateLine implements CreateLine {
         CruxLocation start = this.start.value();
         CruxLocation end = this.end.value();
 
-        double distance = start.distanceSquared(end);
+        double distance = Math.sqrt(start.distanceSquared(end));
         double spacing = this.spacing.value().doubleValue();
-        double spacingSquared = spacing * spacing;
 
-        double realDistance = 0D;
-        for(double currentDistance = 0D; currentDistance <= distance; currentDistance += spacingSquared){
-            Vector vec = new Vector(realDistance, 0, 0);
+        for(double currentDistance = 0D; currentDistance <= distance; currentDistance += spacing){
+            Vector vec = new Vector(currentDistance, 0, 0);
             list.add(vec);
             if(currentDistance > distance) break;
-            realDistance += spacing;
         }
         return list;
     }
