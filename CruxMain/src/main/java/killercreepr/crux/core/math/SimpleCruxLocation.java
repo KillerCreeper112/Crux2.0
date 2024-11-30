@@ -2,10 +2,12 @@ package killercreepr.crux.core.math;
 
 import killercreepr.crux.api.math.CruxLocation;
 import killercreepr.crux.api.math.CruxPosition;
+import killercreepr.crux.core.util.CruxLoc;
 import killercreepr.crux.core.util.CruxMath;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.util.NumberConversions;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
@@ -113,8 +115,152 @@ public class SimpleCruxLocation implements CruxLocation {
     }
 
     @Override
+    public @NotNull CruxLocation addRelative(double forward, double up, double right) {
+        double x = x();
+        double y = y();
+        double z = z();
+        Vector locDirection = getDirectionVector(yaw, pitch);
+        //Location locDirection = loc.clone().setDirection(dir);
+        //+ FORWARD - BACKWARD
+        if(forward != 0D){
+            Vector v = locDirection.clone().multiply(forward);
+            x += v.getX();
+            y += v.getY();
+            z += v.getZ();
+        }
+        //- LEFT + RIGHT
+        if(right != 0D){
+
+            Vector sideDirection = locDirection.clone().setY(0).normalize();  // Remove vertical component
+            sideDirection = new Vector(-sideDirection.getZ(), 0, sideDirection.getX()); // Rotate 90 degrees
+            sideDirection.multiply(right);
+            x += sideDirection.getX();
+            y += sideDirection.getY();
+            z += sideDirection.getZ();
+        }
+        //+ UP - DOWN
+        if(up != 0D){
+            SimpleCruxLocation l = (SimpleCruxLocation) this.withPitch(pitch() - 90);
+            Vector v = l.getDirectionVector(l.yaw(), l.pitch()).multiply(up);
+            x += v.getX();
+            y += v.getY();
+            z += v.getZ();
+        }
+        return new SimpleCruxLocation(x, y, z, yaw, pitch);
+    }
+
+    private float calculateYaw(CruxPosition vector){
+        final double _2PI = 2 * Math.PI;
+        final double x = vector.x();
+        final double z = vector.z();
+
+        if (x == 0 && z == 0) {
+            return yaw();
+        }
+
+        double theta = Math.atan2(-x, z);
+        return (float) Math.toDegrees((theta + _2PI) % _2PI);
+    }
+
+    private float calculatePitch(CruxPosition vector){
+        final double x = vector.x();
+        final double z = vector.z();
+
+        if (x == 0 && z == 0) {
+            return vector.y() > 0 ? -90 : 90;
+        }
+
+        double x2 = NumberConversions.square(x);
+        double z2 = NumberConversions.square(z);
+        double xz = Math.sqrt(x2 + z2);
+        return (float) Math.toDegrees(Math.atan(-vector.y() / xz));
+    }
+
+    private CruxLocation setDirection(CruxPosition vector){
+        final double _2PI = 2 * Math.PI;
+        final double x = vector.x();
+        final double z = vector.z();
+
+        float pitch;
+        float yaw;
+
+        if (x == 0 && z == 0) {
+            pitch = vector.y() > 0 ? -90 : 90;
+            return new SimpleCruxLocation(x, y, z, yaw(), pitch);
+        }
+
+        double theta = Math.atan2(-x, z);
+        yaw = (float) Math.toDegrees((theta + _2PI) % _2PI);
+
+        double x2 = NumberConversions.square(x);
+        double z2 = NumberConversions.square(z);
+        double xz = Math.sqrt(x2 + z2);
+        pitch = (float) Math.toDegrees(Math.atan(-vector.y() / xz));
+
+        return new SimpleCruxLocation(x, y, z, yaw, pitch);
+    }
+
+    private CruxPosition getDirection(float yaw, float pitch){
+
+        double y = -Math.sin(Math.toRadians(pitch));
+
+        double xz = Math.cos(Math.toRadians(pitch));
+
+        double x = -xz * Math.sin(Math.toRadians(yaw));
+        double z = xz * Math.cos(Math.toRadians(yaw));
+
+        return CruxPosition.precise(x, y, z);
+    }
+
+    private Vector getDirectionVector(float yaw, float pitch){
+
+        double y = -Math.sin(Math.toRadians(pitch));
+
+        double xz = Math.cos(Math.toRadians(pitch));
+
+        double x = -xz * Math.sin(Math.toRadians(yaw));
+        double z = xz * Math.cos(Math.toRadians(yaw));
+
+        return new Vector(x, y, z);
+    }
+
+    private CruxPosition getDirection(){
+        return getDirection(yaw, pitch);
+    }
+
+    @Override
+    public @NotNull CruxLocation subtractRelative(double forward, double up, double right) {
+        return addRelative(forward * -1, up * -1, right * -1);
+    }
+
+    @Override
     public @NotNull Location toLocation(World world) {
         return new Location(world, x, y, z, yaw, pitch);
+    }
+
+    @Override
+    public @NotNull CruxLocation withYaw(float yaw) {
+        return new SimpleCruxLocation(x, y, z, yaw, pitch);
+    }
+
+    @Override
+    public @NotNull CruxLocation withPitch(float pitch) {
+        return new SimpleCruxLocation(x, y, z, yaw, pitch);
+    }
+
+    @Override
+    public @NotNull CruxLocation withX(double x) {
+        return new SimpleCruxLocation(x, y, z, yaw, pitch);
+    }
+
+    @Override
+    public @NotNull CruxLocation withY(double y) {
+        return new SimpleCruxLocation(x, y, z, yaw, pitch);
+    }
+
+    @Override
+    public @NotNull CruxLocation withZ(double z) {
+        return new SimpleCruxLocation(x, y, z, yaw, pitch);
     }
 
     @Override

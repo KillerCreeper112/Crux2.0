@@ -8,4 +8,8 @@ public interface ShapeTickContext {
     @NotNull
     CruxLocation getLocation();
     int getSize();
+
+    default float getProgress(){
+        return (float) getTick() / (float) getSize();
+    }
 }

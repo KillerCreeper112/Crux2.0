@@ -56,6 +56,11 @@ public interface CruxLocation extends CruxPosition {
     @Contract(pure = true)
     @NotNull CruxLocation rotateAroundZ(@NotNull CruxPosition center, double angle);
 
+    @Contract(pure = true)
+    @NotNull CruxLocation addRelative(double forward, double up, double right);
+    @Contract(pure = true)
+    @NotNull CruxLocation subtractRelative(double forward, double up, double right);
+
     @NotNull Location toLocation(World world);
 
     /*default CruxPosition getDirection(){
@@ -73,6 +78,17 @@ public interface CruxLocation extends CruxPosition {
 
         return vector;
     }*/
+
+    @Contract(pure = true)
+    @NotNull CruxLocation withYaw(float yaw);
+    @Contract(pure = true)
+    @NotNull CruxLocation withPitch(float pitch);
+    @Contract(pure = true)
+    @NotNull CruxLocation withX(double x);
+    @Contract(pure = true)
+    @NotNull CruxLocation withY(double y);
+    @Contract(pure = true)
+    @NotNull CruxLocation withZ(double z);
 
     float yaw();
     float pitch();
