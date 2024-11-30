@@ -4,9 +4,14 @@ import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.api.math.CruxLocation;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxform.api.shape.CreateRectangle;
+import killercreepr.cruxform.api.shape.cache.CreateCachedShape;
+import killercreepr.cruxform.core.shape.cache.SimpleCachedAddCenter;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class SimpleCreateRectangle implements CreateRectangle {
@@ -27,6 +32,49 @@ public class SimpleCreateRectangle implements CreateRectangle {
         this.spacing = spacing;
         this.time = time;
         this.inverted = inverted;
+    }
+
+    public List<Vector> generateVectors(){
+        List<Vector> list = new ArrayList<>();
+        CruxLocation pos1Pos = pos1.value();
+        CruxLocation pos2Pos = pos2.value();
+        final CruxLocation max = CruxLocation.getMaximum(pos1Pos, pos2Pos);
+        final CruxLocation min = CruxLocation.getMinimum(pos1Pos, pos2Pos);
+        double spacing = this.spacing.value().doubleValue();
+
+        final int xParticleAmount = Math.max(1, (int) (((max.x()-min.x()) / spacing)));
+        final int yParticleAmount = Math.max(1, (int) (((max.y()-min.y()) / spacing)));
+        final int zParticleAmount = Math.max(1, (int) (((max.z()-min.z()) / spacing)));
+
+        for(int x = 0; x <= xParticleAmount; x++){
+            for(int y = 0; y <= yParticleAmount; y++){
+                for(int z = 0; z <= zParticleAmount; z++){
+                    switch (type){
+                        case WIRE -> {
+                            if(!(((x == 0 || x == xParticleAmount)) &&
+                                ((y == 0 || y == yParticleAmount)) ||
+                                ((x == 0 || x == xParticleAmount)) &&
+                                    ((z == 0 || z == zParticleAmount)) ||
+                                ((y == 0 || y == yParticleAmount)) &&
+                                    ((z == 0 || z == zParticleAmount)))) continue;
+                        }
+                        case HOLLOW -> {
+                            if (!(x == 0 || x == xParticleAmount || y == 0 ||
+                                y == yParticleAmount || z == 0 || z == zParticleAmount)) continue;
+                        }
+                        case WALLS -> {
+                            if (!(x == 0 || x == xParticleAmount || z == 0 || z == zParticleAmount)) continue;
+                            if (!(y >= 0 && y <= yParticleAmount)) continue;
+                        }
+                    }
+                    Vector vec = new Vector((max.x() - min.x()) * ((double) x /xParticleAmount),
+                        (max.y() - min.y()) * ((double) y /yParticleAmount),
+                        (max.z() - min.z()) * ((double) z /zParticleAmount));
+                    list.add(vec);
+                }
+            }
+        }
+        return list;
     }
 
     @Override
@@ -73,6 +121,15 @@ public class SimpleCreateRectangle implements CreateRectangle {
         }
     }
 
+    @Override
+    public @NotNull CreateCachedShape generateCache(@Nullable Consumer<Vector> consumer) {
+        return new SimpleCachedAddCenter(generateVectors(), () ->{
+            CruxLocation pos1Pos = pos1.value();
+            CruxLocation pos2Pos = pos2.value();
+            return CruxLocation.getMinimum(pos1Pos, pos2Pos);
+        });
+    }
+
     public static class Builder implements CreateRectangle.Builder {
         protected Holder<CruxLocation> pos1;
         protected Holder<CruxLocation> pos2;
@@ -84,7 +141,7 @@ public class SimpleCreateRectangle implements CreateRectangle {
         @Override
         public Builder pos1(Holder<CruxLocation> pos1) {
             this.pos1 = pos1;
-            return this; // Enables fluent interface
+            return this;
         }
 
         @Override

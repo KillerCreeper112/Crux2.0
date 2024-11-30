@@ -4,9 +4,14 @@ import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.api.math.CruxLocation;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxform.api.shape.CreateCircle;
+import killercreepr.cruxform.api.shape.cache.CreateCachedShape;
+import killercreepr.cruxform.core.shape.cache.SimpleCachedCircle;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class SimpleCreateCircle implements CreateCircle {
@@ -24,6 +29,27 @@ public class SimpleCreateCircle implements CreateCircle {
         this.time = time;
         this.invertX = invertX;
         this.invertZ = invertZ;
+    }
+
+    public List<Vector> generateVectors(){
+        double radius = this.radius.value().doubleValue();
+        int parAmount = (int) (8f * radius);
+        parAmount *= (int) amountMultiplier.value().doubleValue();
+
+        int particleAmount = parAmount / 2;
+        int iterations = parAmount;
+
+        List<Vector> list = new ArrayList<>();
+
+        double t = 0D;
+        for(; iterations > 0; iterations--){
+            t = t + Math.PI / particleAmount;
+            double x = radius * Math.cos(t);
+            double z = radius * Math.sin(t);
+            Vector vec = new Vector(x, 0, z);
+            list.add(vec);
+        }
+        return list;
     }
 
     @Override
@@ -48,6 +74,11 @@ public class SimpleCreateCircle implements CreateCircle {
             CruxLocation result = location.add(vec.getX(), vec.getY(), vec.getZ());
             consumer.accept(result);
         }
+    }
+
+    @Override
+    public @NotNull CreateCachedShape generateCache(@Nullable Consumer<Vector> consumer) {
+        return new SimpleCachedCircle(generateVectors(), center);
     }
 
     public static class Builder implements CreateCircle.Builder{
