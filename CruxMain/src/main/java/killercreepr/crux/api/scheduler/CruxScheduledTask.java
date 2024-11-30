@@ -11,15 +11,13 @@ public interface CruxScheduledTask {
      * being executed no attempt is made to halt the task, however any executions in the future are halted.
      * @return the result of the cancellation attempt.
      */
-    @NotNull
-    ScheduledTask.CancelledState cancel();
+    @NotNull ScheduledTask.CancelledState cancel();
 
     /**
      * Returns the current execution state of this task.
      * @return the current execution state of this task.
      */
-    @NotNull
-    ScheduledTask.ExecutionState getExecutionState();
+    @NotNull ScheduledTask.ExecutionState getExecutionState();
 
     /**
      * Returns whether the current execution state is {@link ScheduledTask.ExecutionState#CANCELLED} or {@link ScheduledTask.ExecutionState#CANCELLED_RUNNING}.
