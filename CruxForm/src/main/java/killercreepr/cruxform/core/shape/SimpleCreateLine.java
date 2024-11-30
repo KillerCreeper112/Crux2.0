@@ -5,7 +5,7 @@ import killercreepr.crux.api.math.CruxLocation;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxform.api.shape.CreateLine;
 import killercreepr.cruxform.api.shape.cache.CreateCachedShape;
-import killercreepr.cruxform.core.shape.cache.SimpleCachedAddRelative;
+import killercreepr.cruxform.core.shape.cache.SimpleCachedShiftToward;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -55,7 +55,7 @@ public class SimpleCreateLine implements CreateLine {
 
     @Override
     public @NotNull CreateCachedShape generateCache(@Nullable Consumer<Vector> consumer) {
-        return new SimpleCachedAddRelative(generateVectors(), start);
+        return new SimpleCachedShiftToward(generateVectors(), start, end);
     }
     public static class Builder implements CreateLine.Builder {
         private Holder<CruxLocation> start;

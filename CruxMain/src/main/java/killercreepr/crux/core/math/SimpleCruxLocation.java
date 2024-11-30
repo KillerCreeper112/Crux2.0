@@ -176,6 +176,28 @@ public class SimpleCruxLocation implements CruxLocation {
         return (float) Math.toDegrees(Math.atan(-vector.y() / xz));
     }
 
+    private CruxLocation setDirection(double x, double y, double z){
+        final double _2PI = 2 * Math.PI;
+
+        float pitch;
+        float yaw;
+
+        if (x == 0 && z == 0) {
+            pitch = y > 0 ? -90 : 90;
+            return new SimpleCruxLocation(x, y, z, yaw(), pitch);
+        }
+
+        double theta = Math.atan2(-x, z);
+        yaw = (float) Math.toDegrees((theta + _2PI) % _2PI);
+
+        double x2 = NumberConversions.square(x);
+        double z2 = NumberConversions.square(z);
+        double xz = Math.sqrt(x2 + z2);
+        pitch = (float) Math.toDegrees(Math.atan(-y / xz));
+
+        return new SimpleCruxLocation(x, y, z, yaw, pitch);
+    }
+
     private CruxLocation setDirection(CruxPosition vector){
         final double _2PI = 2 * Math.PI;
         final double x = vector.x();
@@ -261,6 +283,23 @@ public class SimpleCruxLocation implements CruxLocation {
     @Override
     public @NotNull CruxLocation withZ(double z) {
         return new SimpleCruxLocation(x, y, z, yaw, pitch);
+    }
+
+    @Override
+    public @NotNull CruxLocation lookAt(@NotNull CruxLocation target) {
+        //todo MAKE PROPER DIRECTION FOR CRUXLOCATIONS AHHHHHHHHHHHHH
+        Vector dir = getDirectionVector(yaw, pitch);
+        Vector targetDir = ((SimpleCruxLocation) target).getDirectionVector(target.yaw(), target.pitch());
+        Vector v = targetDir.subtract(dir);
+        return setDirection(
+            v.getX(), v.getY(), v.getZ()
+        );
+    }
+
+    @Override
+    public @NotNull CruxLocation shiftToward(@NotNull CruxLocation target, double amount) {
+        CruxLocation loc = lookAt(target).addRelative(amount, 0D, 0D);
+        return CruxLocation.location(loc.x(), loc.y(), loc.z(), yaw, pitch);
     }
 
     @Override

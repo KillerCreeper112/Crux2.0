@@ -90,6 +90,12 @@ public interface CruxLocation extends CruxPosition {
     @Contract(pure = true)
     @NotNull CruxLocation withZ(double z);
 
+    @Contract(pure = true)
+    @NotNull CruxLocation lookAt(@NotNull CruxLocation target);
+
+    @Contract(pure = true)
+    @NotNull CruxLocation shiftToward(@NotNull CruxLocation target, double amount);
+
     float yaw();
     float pitch();
 }
