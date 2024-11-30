@@ -7,10 +7,7 @@ import killercreepr.crux.core.plugin.module.StandardModules;
 import killercreepr.cruxentities.command.CruxEntitiesCommands;
 import killercreepr.cruxentities.entity.MobCategory;
 import killercreepr.cruxentities.handler.CruxEntitiesEntityHandler;
-import killercreepr.cruxentities.listener.CustomEntitySoundsListener;
-import killercreepr.cruxentities.listener.EntityComponentListener;
-import killercreepr.cruxentities.listener.EntityLogicListener;
-import killercreepr.cruxentities.listener.EntityManager;
+import killercreepr.cruxentities.listener.*;
 import killercreepr.cruxentities.modelengine.ModelEngineHook;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,7 +30,8 @@ public class CruxEntitiesModule implements CruxModule {
             new EntityManager(plugin),
             new CustomEntitySoundsListener(),
             new EntityComponentListener(),
-            new EntityLogicListener()
+            new EntityLogicListener(),
+            new EntityCombatListener()
         );
         ModelEngineHook.register(plugin);
         CruxEntitiesCommands.register(plugin);
