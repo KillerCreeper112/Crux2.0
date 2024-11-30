@@ -23,10 +23,6 @@ public interface CreateRectangle extends CreateShape{
         default Builder spacing(double spacing){
             return spacing(NumberProvider.constant(spacing));
         }
-        Builder time(NumberProvider time);
-        default Builder time(double time){
-            return time(NumberProvider.constant(time));
-        }
         Builder inverted(boolean inverted);
         CreateRectangle build();
     }

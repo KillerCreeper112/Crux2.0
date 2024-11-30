@@ -18,15 +18,13 @@ public class SimpleCreateCircle implements CreateCircle {
     protected final Holder<CruxLocation> center;
     protected final NumberProvider radius;
     protected final NumberProvider amountMultiplier;
-    protected final NumberProvider time;
     protected final boolean invertX;
     protected final boolean invertZ;
 
-    public SimpleCreateCircle(Holder<CruxLocation> center, NumberProvider radius, NumberProvider amountMultiplier, NumberProvider time, boolean invertX, boolean invertZ) {
+    public SimpleCreateCircle(Holder<CruxLocation> center, NumberProvider radius, NumberProvider amountMultiplier, boolean invertX, boolean invertZ) {
         this.center = center;
         this.radius = radius;
         this.amountMultiplier = amountMultiplier;
-        this.time = time;
         this.invertX = invertX;
         this.invertZ = invertZ;
     }
@@ -85,7 +83,6 @@ public class SimpleCreateCircle implements CreateCircle {
         private Holder<CruxLocation> center;
         private NumberProvider radius;
         private NumberProvider amountMultiplier;
-        private NumberProvider time;
         private boolean invertX;
         private boolean invertZ;
 
@@ -108,12 +105,6 @@ public class SimpleCreateCircle implements CreateCircle {
         }
 
         @Override
-        public Builder time(NumberProvider time) {
-            this.time = time;
-            return this;
-        }
-
-        @Override
         public Builder invertX(boolean invertX) {
             this.invertX = invertX;
             return this;
@@ -128,9 +119,8 @@ public class SimpleCreateCircle implements CreateCircle {
         @Override
         public CreateCircle build() {
             if(amountMultiplier == null) amountMultiplier = NumberProvider.constant(1);
-            if(time == null) time = NumberProvider.constant(0);
             if(radius == null) radius = NumberProvider.constant(5);
-            return new SimpleCreateCircle(center, radius, amountMultiplier, time, invertX, invertZ);
+            return new SimpleCreateCircle(center, radius, amountMultiplier,  invertX, invertZ);
         }
     }
 }

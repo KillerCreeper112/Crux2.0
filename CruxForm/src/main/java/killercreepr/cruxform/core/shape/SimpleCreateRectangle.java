@@ -19,18 +19,16 @@ public class SimpleCreateRectangle implements CreateRectangle {
     protected final Holder<CruxLocation> pos2;
     protected final CreateRectangle.Type type;
     protected final NumberProvider spacing;
-    protected final NumberProvider time;
     protected final boolean inverted;
 
     public SimpleCreateRectangle(Holder<CruxLocation> pos1, Holder<CruxLocation> pos2,
                                  CreateRectangle.Type type,
-                                 NumberProvider spacing, NumberProvider time,
+                                 NumberProvider spacing,
                                  boolean inverted) {
         this.pos1 = pos1;
         this.pos2 = pos2;
         this.type = type;
         this.spacing = spacing;
-        this.time = time;
         this.inverted = inverted;
     }
 
@@ -135,7 +133,6 @@ public class SimpleCreateRectangle implements CreateRectangle {
         protected Holder<CruxLocation> pos2;
         protected CreateRectangle.Type type = Type.WIRE;
         protected NumberProvider spacing;
-        protected NumberProvider time;
         protected boolean inverted;
 
         @Override
@@ -163,12 +160,6 @@ public class SimpleCreateRectangle implements CreateRectangle {
         }
 
         @Override
-        public Builder time(NumberProvider time) {
-            this.time = time;
-            return this;
-        }
-
-        @Override
         public Builder inverted(boolean inverted) {
             this.inverted = inverted;
             return this;
@@ -177,8 +168,7 @@ public class SimpleCreateRectangle implements CreateRectangle {
         @Override
         public CreateRectangle build() {
             if(spacing == null) spacing = NumberProvider.constant(0.5f);
-            if(time == null) time = NumberProvider.constant(1);
-            return new SimpleCreateRectangle(pos1, pos2, type, spacing, time, inverted);
+            return new SimpleCreateRectangle(pos1, pos2, type, spacing, inverted);
         }
     }
 }

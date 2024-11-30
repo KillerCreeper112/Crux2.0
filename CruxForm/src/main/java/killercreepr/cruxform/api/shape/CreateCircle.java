@@ -17,16 +17,11 @@ public interface CreateCircle extends CreateShape{
         }
         Builder radius(NumberProvider radius);
         Builder amountMultiplier(NumberProvider amountMultiplier);
-        Builder time(NumberProvider time);
-
         default Builder radius(double radius){
             return radius(NumberProvider.constant(radius));
         }
         default Builder amountMultiplier(double amountMultiplier){
             return amountMultiplier(NumberProvider.constant(amountMultiplier));
-        }
-        default Builder time(double time){
-            return time(NumberProvider.constant(time));
         }
 
         Builder invertX(boolean invertX);
