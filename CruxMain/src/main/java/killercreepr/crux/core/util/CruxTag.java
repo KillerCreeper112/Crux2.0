@@ -12,6 +12,8 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
+
 public class CruxTag {
     public static @NotNull String defaultNamespace(){ return Crux.key("a").getNamespace(); }
 
@@ -259,12 +261,18 @@ public class CruxTag {
 
     public static <E extends PersistentDataHolder> E copyAll(@Nullable E to, @Nullable E from){
         if(to == null || from == null) return to;
-        for(NamespacedKey k : from.getPersistentDataContainer().getKeys()){
+        try{
+            to.getPersistentDataContainer().readFromBytes(from.getPersistentDataContainer().serializeToBytes());
+        }catch (IOException ignored){
+            ignored.printStackTrace();
+        }
+        return to;
+        /*for(NamespacedKey k : from.getPersistentDataContainer().getKeys()){
             PersistentDataType t = getDataType(from.getPersistentDataContainer(), k);
             if(t == null) continue;
             CruxTag.set(to, k, t, from.getPersistentDataContainer().get(k, t));
         }
-        return to;
+        return to;*/
     }
 
     public static @Nullable PersistentDataType<?, ?> getDataType(@NotNull PersistentDataContainer pdc, @NotNull NamespacedKey key) {

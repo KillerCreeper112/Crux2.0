@@ -9,6 +9,7 @@ import killercreepr.cruxattributes.api.attribute.CruxAttributeModifier;
 import killercreepr.cruxattributes.api.attribute.CruxSlot;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
@@ -54,14 +55,14 @@ public class CruxAttributeListener implements Listener {
         }.runTaskLater(DP.inst(), 1L);*/
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onPlayerItemHeld(PlayerItemHeldEvent event) {
         Player p = event.getPlayer();
         ItemStack i = p.getInventory().getItem(event.getNewSlot());
         updateSlot(p, i, CruxSlot.HAND);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onPlayerInventorySlotChange(PlayerInventorySlotChangeEvent event){
         Player p = event.getPlayer();
         CruxSlot slot = CruxSlot.getActivationSlot(p, event.getSlot());

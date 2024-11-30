@@ -6,7 +6,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.world.EntitiesLoadEvent;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -42,10 +41,4 @@ public class EntityManager implements Listener {
         if(mob==null) return;
         mob.onDeath(e, event);
     }
-
-
-    @EventHandler(ignoreCancelled = true)
-    public void onPlayerDeath(PlayerDeathEvent event) {
-    }
-
 }

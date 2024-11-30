@@ -11,7 +11,7 @@ import killercreepr.crux.core.util.GetEntityNear;
 import killercreepr.crux.core.util.GetNear;
 import killercreepr.cruxattributes.api.attribute.CruxAttribute;
 import killercreepr.cruxattributes.api.attribute.CruxAttributeInstance;
-import killercreepr.cruxentities.combat.CruxEntityDamager;
+import killercreepr.cruxentities.api.combat.EntityDamager;
 import killercreepr.cruxentities.combat.EntityHit;
 import killercreepr.cruxentities.entity.CruxMob;
 import killercreepr.cruxentities.entity.MobCategory;
@@ -294,7 +294,7 @@ public class CruxGoalBase implements ICruxGoal {
         for(RayTraceResult r : result.getResults()){
             if(r.getHitEntity() != null){
                 dmg = trueDmg;
-                CruxEntityDamageEvent event = new CruxEntityDamager(r.getHitEntity(), mob).attack(dmg, trueKb, trueUpKb);
+                CruxEntityDamageEvent event = EntityDamager.entityDamager(r.getHitEntity(), mob).attack(dmg, trueKb, trueUpKb);
                 if(event != null) attacked(event);
                 if(event == null || event.isCancelled()) continue;
                 dmgDropOff = Math.max(dmgDropOff - .1f, .1f);

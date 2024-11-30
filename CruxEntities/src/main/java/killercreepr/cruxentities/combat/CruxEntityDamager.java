@@ -3,9 +3,9 @@ package killercreepr.cruxentities.combat;
 import killercreepr.crux.api.event.CruxEntityDamageEvent;
 import killercreepr.crux.api.event.CruxEntityDeathEvent;
 import killercreepr.crux.core.Crux;
-import killercreepr.crux.core.persistence.CruxPersist;
 import killercreepr.crux.core.util.CruxEntityUtil;
 import killercreepr.cruxattributes.api.attribute.CruxAttribute;
+import killercreepr.cruxentities.api.combat.EntityDamager;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -14,7 +14,6 @@ import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -22,14 +21,12 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.UUID;
-
-//todo make crux interface for this
-public class CruxEntityDamager {
+public class CruxEntityDamager implements EntityDamager {
     private Entity damager;
     private Entity target;
     private Location hitPosition;
     private CruxEntityDamageEvent.DamageCause cause;
+    private DamageSource source;
 
     public CruxEntityDamager(@NotNull Entity target) {
         this.target = target;
@@ -39,18 +36,6 @@ public class CruxEntityDamager {
         this.damager = damager;
         this.target = target;
         if(damager != null) hitPosition = damager.getLocation();
-    }
-
-    public static @Nullable Entity getShooter(@NotNull Entity base){
-        if(base instanceof Projectile p){
-            if(p.getShooter() instanceof Entity e) return e;
-            return null;
-        }
-        UUID ownerUUID = CruxPersist.OWNER.get(base);
-        if(ownerUUID != null){
-            return Crux.getServer().getEntity(ownerUUID);
-        }
-        return null;
     }
 
     public @Nullable Location getHitPosition() {
@@ -114,45 +99,15 @@ public class CruxEntityDamager {
     }
 
     public @NotNull Vector applyKnockback(@NotNull Entity target, @NotNull Location attackLoc, double kb, double upKb, boolean add){
-        Vector delta = calculateEntityVelocity(attackLoc, target, kb, upKb);
+        Vector delta = EntityDamager.calculateEntityVelocity(attackLoc, target, kb, upKb);
         if(add) delta = target.getVelocity().add(delta);
         try{ target.setVelocity(delta); }
         catch (IllegalArgumentException ignored){}
         return delta;
     }
 
-    public static @NotNull Vector calculateEntityVelocity(@NotNull Location attackerLoc, @NotNull Entity victim, double kb, double upKb){
-        kb = kb/20D;
-        upKb = upKb/20D;
-        double x = attackerLoc.getX()- victim.getX();
-        double z = attackerLoc.getZ() - victim.getZ();
-
-        Vector v = victim.getVelocity();
-        Vector pos = new Vector(x, 0D, z).normalize().multiply(kb);
-        Vector currentMovement = new Vector(
-                v.getX() / 2D - pos.getX(),
-                victim.isOnGround() ? Math.min(0.4D, v.getY() / 2D + kb) : v.getY(),
-                v.getZ() / 2D - pos.getZ()
-        );
-        if(upKb != 0D) currentMovement.setY(currentMovement.getY()+upKb);
-        return new Vector(currentMovement.getX() - v.getX(), currentMovement.getY() - v.getY(), currentMovement.getZ() - v.getZ());
-    }
-
-    public static @NotNull Vector calculateEntityVelocity(@NotNull Entity attacker, @NotNull Entity victim, double kb, double upKb){
-        return calculateEntityVelocity(attacker.getLocation(), victim, kb, upKb);
-    }
-
     public double calculateKnockback(double trueKb){
-        return trueKb * Math.max((1D-(getKnockbackResistance(target) * .05D)), 0D);
-    }
-
-    public static double getKnockbackResistance(@NotNull Entity e){
-        double x = CruxAttribute.get(e, CruxAttribute.KNOCKBACK_RESISTANCE);
-        if(e instanceof LivingEntity d){
-            AttributeInstance i = d.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE);
-            if(i != null) x+=i.getValue();
-        }
-        return x;
+        return trueKb * Math.max((1D-(EntityDamager.getKnockbackResistance(target) * .05D)), 0D);
     }
 
     public double calculateUpKnockback(double trueUpKb){
@@ -216,13 +171,17 @@ public class CruxEntityDamager {
                     return event;
                 }
             }
-            DamageSource.Builder source = DamageSource.builder(damager == null ? DamageType.GENERIC : DamageType.MOB_ATTACK);
-            if(damager != null) source.withDirectEntity(damager).withCausingEntity(damager);
-            if(attackLoc == null){
-                if(damager != null) source.withDamageLocation(damager.getLocation());
-            }else source.withDamageLocation(attackLoc);
+            DamageSource source;
+            if(this.source == null){
+                DamageSource.Builder builder = DamageSource.builder(damager == null ? DamageType.GENERIC : DamageType.MOB_ATTACK);
+                if(damager != null) builder.withDirectEntity(damager).withCausingEntity(damager);
+                if(attackLoc == null){
+                    if(damager != null) builder.withDamageLocation(damager.getLocation());
+                }else builder.withDamageLocation(attackLoc);
+                source = builder.build();
+            }else source = this.source;
 
-            e.damage(dmg, source.build());
+            e.damage(dmg, source);
             e.setNoDamageTicks(0);
         }
         if(event.getAttackLoc() == null || (event.getKb() == 0D && event.getUpKb() == 0D)) return event;
@@ -255,22 +214,15 @@ public class CruxEntityDamager {
      * Attacks the victim using the default attack damage, and knockback attributes.
      */
     public @Nullable CruxEntityDamageEvent attack(){
-        return attack(getDamage(damager),
+        return attack(EntityDamager.getDamage(damager),
                 CruxAttribute.get(damager, CruxAttribute.ATTACK_KNOCKBACK),
                 CruxAttribute.get(damager, CruxAttribute.ATTACK_KNOCKBACK_UP));
     }
 
     public @Nullable CruxEntityDamageEvent attackWithMultiplier(double x){
-        return attack(getDamage(damager)*x,
+        return attack(EntityDamager.getDamage(damager)*x,
                 CruxAttribute.get(damager, CruxAttribute.ATTACK_KNOCKBACK)*x,
                 CruxAttribute.get(damager, CruxAttribute.ATTACK_KNOCKBACK_UP)*x);
-    }
-
-    public static double getDamage(@Nullable Entity dmger){
-        if(dmger instanceof LivingEntity d && d.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null){
-            return d.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue() + CruxAttribute.get(dmger, CruxAttribute.ATTACK_DAMAGE);
-        }
-        return CruxAttribute.get(dmger, CruxAttribute.ATTACK_DAMAGE);
     }
 
     public @Nullable CruxEntityDamageEvent.DamageCause getCause() {
@@ -279,5 +231,16 @@ public class CruxEntityDamager {
 
     public CruxEntityDamager setCause(@Nullable CruxEntityDamageEvent.DamageCause cause) {
         this.cause = cause; return this;
+    }
+
+    @Override
+    public @Nullable DamageSource getSource() {
+        return source;
+    }
+
+    @Override
+    public EntityDamager setSource(@Nullable DamageSource source) {
+        this.source = source;
+        return this;
     }
 }

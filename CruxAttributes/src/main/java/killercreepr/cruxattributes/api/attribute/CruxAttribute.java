@@ -49,6 +49,8 @@ public interface CruxAttribute extends Keyed {
     CruxAttribute KNOCKBACK_RESISTANCE = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("knockback_resistance")));
     CruxAttribute PROJECTILE_RICOCHET_ENTITY = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("projectile_ricochet_entity")));
     CruxAttribute PROJECTILE_RICOCHET_BLOCK = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("projectile_ricochet_block")));
+    CruxAttribute PROJECTILE_RICOCHET_ENTITY_VELOCITY_DROP_OFF = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("projectile_ricochet_entity_velocity_drop_off")));
+    CruxAttribute PROJECTILE_RICOCHET_BLOCK_VELOCITY_DROP_OFF = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("projectile_ricochet_block_velocity_drop_off")));
 
     CruxAttribute MOVEMENT_SPEED = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("movement_speed")));
 
