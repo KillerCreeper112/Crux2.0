@@ -1,20 +1,22 @@
 package killercreepr.cruxform.core.scheduler;
 
 import killercreepr.crux.api.math.CruxLocation;
+import killercreepr.cruxform.api.scheduler.context.ShapeTickContext;
 import killercreepr.cruxform.api.shape.cache.CreateCachedShape;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
-public class ScheduledShapeCacheRunnable extends BukkitRunnable {
+public class ScheduledShapeCacheRunnable extends BukkitRunnable implements ShapeTickContext {
     private final CreateCachedShape cache;
-    protected final Consumer<CruxLocation> consumer;
+    protected final Consumer<ShapeTickContext> consumer;
     protected final Runnable cancelTask;
     private final double maxParEachIteration;
     private double i;
     private int index = -1;
 
-    public ScheduledShapeCacheRunnable(CreateCachedShape cache, Consumer<CruxLocation> consumer, Runnable cancelTask, int totalTicksTime) {
+    public ScheduledShapeCacheRunnable(CreateCachedShape cache, Consumer<ShapeTickContext> consumer, Runnable cancelTask, int totalTicksTime) {
         this.cache = cache;
         this.consumer = consumer;
         this.cancelTask = cancelTask;
@@ -22,6 +24,7 @@ public class ScheduledShapeCacheRunnable extends BukkitRunnable {
         i = maxParEachIteration < 1D ? 0D : maxParEachIteration;
     }
 
+    protected CruxLocation l;
     @Override
     public void run() {
         if(cache.size() < 1){
@@ -36,8 +39,8 @@ public class ScheduledShapeCacheRunnable extends BukkitRunnable {
 
         for(int x = (int) i; x > 0; x--){
             index++;
-            CruxLocation l = cache.perform(index);
-            consumer.accept(l);
+            l = cache.perform(index);
+            consumer.accept(this);
 
             if(index >= cache.size() - 1){
                 cancel();
@@ -46,5 +49,20 @@ public class ScheduledShapeCacheRunnable extends BukkitRunnable {
             }
         }
         if(maxParEachIteration < 1D) i--;
+    }
+
+    @Override
+    public int getTick() {
+        return index;
+    }
+
+    @Override
+    public @NotNull CruxLocation getLocation() {
+        return l;
+    }
+
+    @Override
+    public int getSize() {
+        return cache.size();
     }
 }

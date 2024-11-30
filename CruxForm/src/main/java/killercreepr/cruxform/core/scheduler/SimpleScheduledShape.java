@@ -1,9 +1,9 @@
 package killercreepr.cruxform.core.scheduler;
 
-import killercreepr.crux.api.math.CruxLocation;
 import killercreepr.crux.core.scheduler.BukkitCruxScheduledTask;
 import killercreepr.cruxform.api.scheduler.ScheduledShape;
 import killercreepr.cruxform.api.scheduler.ShapeScheduler;
+import killercreepr.cruxform.api.scheduler.context.ShapeTickContext;
 import killercreepr.cruxform.api.shape.CreateShape;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -20,12 +20,12 @@ public class SimpleScheduledShape extends BukkitCruxScheduledTask implements Sch
     }
 
     public static class Builder implements ShapeScheduler.Builder {
-        protected Consumer<CruxLocation> locationTick;
+        protected Consumer<ShapeTickContext> locationTick;
         protected Runnable endTask;
         protected CreateShape shape;
 
         @Override
-        public ShapeScheduler.Builder locationTick(Consumer<CruxLocation> locationTick) {
+        public ShapeScheduler.Builder locationTick(Consumer<ShapeTickContext> locationTick) {
             this.locationTick = locationTick;
             return this;
         }
