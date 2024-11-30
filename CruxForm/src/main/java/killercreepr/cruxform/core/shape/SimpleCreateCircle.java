@@ -127,6 +127,9 @@ public class SimpleCreateCircle implements CreateCircle {
 
         @Override
         public CreateCircle build() {
+            if(amountMultiplier == null) amountMultiplier = NumberProvider.constant(1);
+            if(time == null) time = NumberProvider.constant(0);
+            if(radius == null) radius = NumberProvider.constant(5);
             return new SimpleCreateCircle(center, radius, amountMultiplier, time, invertX, invertZ);
         }
     }

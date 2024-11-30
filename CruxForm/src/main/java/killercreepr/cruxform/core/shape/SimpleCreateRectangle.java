@@ -133,7 +133,7 @@ public class SimpleCreateRectangle implements CreateRectangle {
     public static class Builder implements CreateRectangle.Builder {
         protected Holder<CruxLocation> pos1;
         protected Holder<CruxLocation> pos2;
-        protected CreateRectangle.Type type;
+        protected CreateRectangle.Type type = Type.WIRE;
         protected NumberProvider spacing;
         protected NumberProvider time;
         protected boolean inverted;
@@ -176,6 +176,8 @@ public class SimpleCreateRectangle implements CreateRectangle {
 
         @Override
         public CreateRectangle build() {
+            if(spacing == null) spacing = NumberProvider.constant(0.5f);
+            if(time == null) time = NumberProvider.constant(1);
             return new SimpleCreateRectangle(pos1, pos2, type, spacing, time, inverted);
         }
     }
