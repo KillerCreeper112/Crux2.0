@@ -66,8 +66,8 @@ public class SimpleCreateCircle implements CreateCircle {
             double z = radius * Math.sin(t);
             Vector vec = new Vector(x, 0, z);
             CruxLocation location = center.value();
-            vec.rotateAroundX(location.pitch());
-            vec.rotateAroundY(location.yaw());
+            vec.rotateAroundX(Math.toRadians(location.pitch()));
+            vec.rotateAroundY(Math.toRadians(location.yaw()*-1));
 
             CruxLocation result = location.add(vec.getX(), vec.getY(), vec.getZ());
             consumer.accept(result);
