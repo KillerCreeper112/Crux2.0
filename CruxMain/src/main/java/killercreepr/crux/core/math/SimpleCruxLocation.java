@@ -184,7 +184,7 @@ public class SimpleCruxLocation implements CruxLocation {
 
         if (x == 0 && z == 0) {
             pitch = y > 0 ? -90 : 90;
-            return new SimpleCruxLocation(x, y, z, yaw(), pitch);
+            return new SimpleCruxLocation(this.x, this.y, this.z, yaw(), pitch);
         }
 
         double theta = Math.atan2(-x, z);
@@ -195,7 +195,7 @@ public class SimpleCruxLocation implements CruxLocation {
         double xz = Math.sqrt(x2 + z2);
         pitch = (float) Math.toDegrees(Math.atan(-y / xz));
 
-        return new SimpleCruxLocation(x, y, z, yaw, pitch);
+        return new SimpleCruxLocation(this.x, this.y, this.z, yaw, pitch);
     }
 
     private CruxLocation setDirection(CruxPosition vector){
@@ -208,7 +208,7 @@ public class SimpleCruxLocation implements CruxLocation {
 
         if (x == 0 && z == 0) {
             pitch = vector.y() > 0 ? -90 : 90;
-            return new SimpleCruxLocation(x, y, z, yaw(), pitch);
+            return new SimpleCruxLocation(this.x, this.y, this.z, yaw(), pitch);
         }
 
         double theta = Math.atan2(-x, z);
@@ -219,7 +219,7 @@ public class SimpleCruxLocation implements CruxLocation {
         double xz = Math.sqrt(x2 + z2);
         pitch = (float) Math.toDegrees(Math.atan(-vector.y() / xz));
 
-        return new SimpleCruxLocation(x, y, z, yaw, pitch);
+        return new SimpleCruxLocation(this.x, this.y, this.z, yaw, pitch);
     }
 
     private CruxPosition getDirection(float yaw, float pitch){
@@ -288,12 +288,8 @@ public class SimpleCruxLocation implements CruxLocation {
     @Override
     public @NotNull CruxLocation lookAt(@NotNull CruxLocation target) {
         //todo MAKE PROPER DIRECTION FOR CRUXLOCATIONS AHHHHHHHHHHHHH
-        Vector dir = getDirectionVector(yaw, pitch);
-        Vector targetDir = ((SimpleCruxLocation) target).getDirectionVector(target.yaw(), target.pitch());
-        Vector v = targetDir.subtract(dir);
-        return setDirection(
-            v.getX(), v.getY(), v.getZ()
-        );
+        CruxPosition v = target.subtract(this);
+        return setDirection(v.x(), v.y(), v.z());
     }
 
     @Override

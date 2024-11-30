@@ -55,12 +55,15 @@ public class SimpleCreateCircle implements CreateCircle {
         int particleAmount = parAmount / 2;
         int iterations = parAmount;
 
+        int invertX = this.invertX ? -1 : 1;
+        int invertZ = this.invertZ ? -1 : 1;
+
         switch (type){
             case WHOLE -> {
                 for (double r = 0; r <= radius; r += radius / particleAmount) {
                     for (double t = 0; t < 2 * Math.PI; t += Math.PI / particleAmount) {
-                        double x = r * Math.cos(t);
-                        double z = r * Math.sin(t);
+                        double x = r * Math.cos(t) * invertX;
+                        double z = r * Math.sin(t) * invertZ;
                         Vector vec = new Vector(x, 0, z);
                         list.add(vec);
                     }
@@ -70,8 +73,8 @@ public class SimpleCreateCircle implements CreateCircle {
                 double t = 0D;
                 for(; iterations > 0; iterations--){
                     t = t + Math.PI / particleAmount;
-                    double x = radius * Math.cos(t);
-                    double z = radius * Math.sin(t);
+                    double x = radius * Math.cos(t) * invertX;
+                    double z = radius * Math.sin(t) * invertZ;
                     Vector vec = new Vector(x, 0, z);
                     list.add(vec);
                 }
