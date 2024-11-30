@@ -4,6 +4,7 @@ import killercreepr.crux.api.math.CruxLocation;
 import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.core.util.CruxMath;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -109,6 +110,11 @@ public class SimpleCruxLocation implements CruxLocation {
 
         // Translate point back
         return new SimpleCruxLocation(rotatedX + center.blockX(), rotatedY + center.blockY(), this.z, yaw, pitch);
+    }
+
+    @Override
+    public @NotNull Location toLocation(World world) {
+        return new Location(world, x, y, z, yaw, pitch);
     }
 
     @Override

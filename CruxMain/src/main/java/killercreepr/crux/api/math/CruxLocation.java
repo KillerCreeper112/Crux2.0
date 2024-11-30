@@ -2,6 +2,7 @@ package killercreepr.crux.api.math;
 
 import killercreepr.crux.core.math.SimpleCruxLocation;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Contract;
@@ -54,6 +55,8 @@ public interface CruxLocation extends CruxPosition {
     @NotNull CruxLocation rotateAroundY(@NotNull CruxPosition center, double angle);
     @Contract(pure = true)
     @NotNull CruxLocation rotateAroundZ(@NotNull CruxPosition center, double angle);
+
+    @NotNull Location toLocation(World world);
 
     /*default CruxPosition getDirection(){
         Vector vector = new Vector();
