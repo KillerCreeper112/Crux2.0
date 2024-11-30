@@ -18,18 +18,36 @@ public class SimpleCreateCircle implements CreateCircle {
     protected final Holder<CruxLocation> center;
     protected final NumberProvider radius;
     protected final NumberProvider amountMultiplier;
+    protected final CreateCircle.Type type;
     protected final boolean invertX;
     protected final boolean invertZ;
 
-    public SimpleCreateCircle(Holder<CruxLocation> center, NumberProvider radius, NumberProvider amountMultiplier, boolean invertX, boolean invertZ) {
+    public SimpleCreateCircle(Holder<CruxLocation> center, NumberProvider radius, NumberProvider amountMultiplier, Type type, boolean invertX, boolean invertZ) {
         this.center = center;
         this.radius = radius;
         this.amountMultiplier = amountMultiplier;
+        this.type = type;
         this.invertX = invertX;
         this.invertZ = invertZ;
     }
 
+    private void generateFilledCircle(@NotNull Consumer<CruxLocation> consumer, double radius, int particleAmount) {
+        for (double r = 0; r <= radius; r += radius / particleAmount) {
+            for (double t = 0; t < 2 * Math.PI; t += Math.PI / particleAmount) {
+                double x = r * Math.cos(t);
+                double z = r * Math.sin(t);
+                Vector vec = new Vector(x, 0, z);
+                CruxLocation location = center.value();
+                vec.rotateAroundX(Math.toRadians(location.pitch()));
+                vec.rotateAroundY(Math.toRadians(location.yaw() * -1));
+                CruxLocation result = location.add(vec.getX(), vec.getY(), vec.getZ());
+                consumer.accept(result);
+            }
+        }
+    }
+
     public List<Vector> generateVectors(){
+        List<Vector> list = new ArrayList<>();
         double radius = this.radius.value().doubleValue();
         int parAmount = (int) (8f * radius);
         parAmount *= (int) amountMultiplier.value().doubleValue();
@@ -37,22 +55,42 @@ public class SimpleCreateCircle implements CreateCircle {
         int particleAmount = parAmount / 2;
         int iterations = parAmount;
 
-        List<Vector> list = new ArrayList<>();
-
-        double t = 0D;
-        for(; iterations > 0; iterations--){
-            t = t + Math.PI / particleAmount;
-            double x = radius * Math.cos(t);
-            double z = radius * Math.sin(t);
-            Vector vec = new Vector(x, 0, z);
-            list.add(vec);
+        switch (type){
+            case WHOLE -> {
+                for (double r = 0; r <= radius; r += radius / particleAmount) {
+                    for (double t = 0; t < 2 * Math.PI; t += Math.PI / particleAmount) {
+                        double x = r * Math.cos(t);
+                        double z = r * Math.sin(t);
+                        Vector vec = new Vector(x, 0, z);
+                        list.add(vec);
+                    }
+                }
+            }
+            case HOLLOW -> {
+                double t = 0D;
+                for(; iterations > 0; iterations--){
+                    t = t + Math.PI / particleAmount;
+                    double x = radius * Math.cos(t);
+                    double z = radius * Math.sin(t);
+                    Vector vec = new Vector(x, 0, z);
+                    list.add(vec);
+                }
+            }
         }
         return list;
     }
 
     @Override
     public void generate(@NotNull Consumer<CruxLocation> consumer) {
-        double radius = this.radius.value().doubleValue();
+        generateVectors().forEach(vec ->{
+            CruxLocation location = center.value();
+            vec.rotateAroundX(Math.toRadians(location.pitch()));
+            vec.rotateAroundY(Math.toRadians(location.yaw()*-1));
+
+            CruxLocation result = location.add(vec.getX(), vec.getY(), vec.getZ());
+            consumer.accept(result);
+        });
+        /*double radius = this.radius.value().doubleValue();
         int parAmount = (int) (8f * radius);
         parAmount *= (int) amountMultiplier.value().doubleValue();
 
@@ -71,7 +109,7 @@ public class SimpleCreateCircle implements CreateCircle {
 
             CruxLocation result = location.add(vec.getX(), vec.getY(), vec.getZ());
             consumer.accept(result);
-        }
+        }*/
     }
 
     @Override
@@ -85,6 +123,13 @@ public class SimpleCreateCircle implements CreateCircle {
         private NumberProvider amountMultiplier;
         private boolean invertX;
         private boolean invertZ;
+        private CreateCircle.Type type = Type.HOLLOW;
+
+        @Override
+        public Builder type(CreateCircle.Type type){
+            this.type = type;
+            return this;
+        }
 
         @Override
         public Builder center(Holder<CruxLocation> center) {
@@ -120,7 +165,7 @@ public class SimpleCreateCircle implements CreateCircle {
         public CreateCircle build() {
             if(amountMultiplier == null) amountMultiplier = NumberProvider.constant(1);
             if(radius == null) radius = NumberProvider.constant(5);
-            return new SimpleCreateCircle(center, radius, amountMultiplier,  invertX, invertZ);
+            return new SimpleCreateCircle(center, radius, amountMultiplier, type, invertX, invertZ);
         }
     }
 }

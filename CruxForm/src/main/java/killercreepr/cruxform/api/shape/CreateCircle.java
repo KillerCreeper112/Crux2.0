@@ -26,6 +26,12 @@ public interface CreateCircle extends CreateShape{
 
         Builder invertX(boolean invertX);
         Builder invertZ(boolean invertZ);
+        Builder type(Type type);
         CreateCircle build();
+    }
+
+    enum Type{
+        WHOLE,
+        HOLLOW
     }
 }
