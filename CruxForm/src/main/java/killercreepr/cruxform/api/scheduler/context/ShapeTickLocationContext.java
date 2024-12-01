@@ -7,7 +7,7 @@ public interface ShapeTickLocationContext extends ShapeTickContext {
     int getIteration();
     @NotNull
     CruxLocation getLocation();
-    default float getProgress(){
+    default float getIterationProgress(){
         return (float) getIteration() / (float) getLocationAmount();
     }
 }
