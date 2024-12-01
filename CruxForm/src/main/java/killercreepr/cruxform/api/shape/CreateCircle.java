@@ -24,6 +24,11 @@ public interface CreateCircle extends CreateShape{
             return amountMultiplier(NumberProvider.constant(amountMultiplier));
         }
 
+        Builder spacing(NumberProvider spacing);
+        default Builder spacing(double spacing){
+            return spacing(NumberProvider.constant(spacing));
+        }
+
         Builder invertX(boolean invertX);
         Builder invertZ(boolean invertZ);
         Builder type(Type type);
@@ -32,6 +37,8 @@ public interface CreateCircle extends CreateShape{
 
     enum Type{
         WHOLE,
-        HOLLOW
+        HOLLOW,
+        HARD_WHOLE,
+        HARD_HOLLOW
     }
 }
