@@ -2,36 +2,44 @@ package killercreepr.cruxform.core.scheduler;
 
 import killercreepr.crux.api.math.CruxLocation;
 import killercreepr.cruxform.api.scheduler.context.ShapeTickContext;
+import killercreepr.cruxform.api.scheduler.context.ShapeTickLocationContext;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Consumer;
 
-public class ScheduledShapeRunnable extends BukkitRunnable implements ShapeTickContext {
-    protected final Consumer<ShapeTickContext> locationConsumer;
+public class ScheduledShapeRunnableLocation extends BukkitRunnable implements ShapeTickLocationContext {
+    protected final Consumer<ShapeTickLocationContext> locationConsumer;
+    protected final Consumer<ShapeTickContext> tickConsumer;
     protected final Runnable cancelTask;
     private final List<CruxLocation> list;
+    protected final int totalTicks;
 
-    public ScheduledShapeRunnable(Consumer<ShapeTickContext> locationConsumer, Runnable cancelTask, List<CruxLocation> list, int totalTicksTime) {
+    public ScheduledShapeRunnableLocation(Consumer<ShapeTickLocationContext> locationConsumer, Consumer<ShapeTickContext> tickConsumer, Runnable cancelTask, List<CruxLocation> list, int totalTicksTime) {
         this.locationConsumer = locationConsumer;
+        this.tickConsumer = tickConsumer;
         this.cancelTask = cancelTask;
         this.list = list;
         this.maxParEachIteration = (double) list.size() / (double) totalTicksTime;
         this.i = maxParEachIteration < 1D ? 0D : maxParEachIteration;
+        this.totalTicks = totalTicksTime;
     }
 
     private final double maxParEachIteration;
     private double i;
     private int index = -1;
     protected CruxLocation l;
+    protected int tick = -1;
     @Override
     public void run(){
+        tick++;
         if(list.isEmpty()){
             cancel();
             if(cancelTask != null) cancelTask.run();
             return;
         }
+        if(tickConsumer != null) tickConsumer.accept(this);
         if(maxParEachIteration < 1D){
             i++;
             if(i < 1D) return;
@@ -52,7 +60,7 @@ public class ScheduledShapeRunnable extends BukkitRunnable implements ShapeTickC
     }
 
     @Override
-    public int getTick() {
+    public int getIteration() {
         return index;
     }
 
@@ -62,7 +70,17 @@ public class ScheduledShapeRunnable extends BukkitRunnable implements ShapeTickC
     }
 
     @Override
-    public int getSize() {
+    public int getTick() {
+        return tick;
+    }
+
+    @Override
+    public int getMaxTicks() {
+        return totalTicks;
+    }
+
+    @Override
+    public int getLocationAmount() {
         return list.size();
     }
 }
