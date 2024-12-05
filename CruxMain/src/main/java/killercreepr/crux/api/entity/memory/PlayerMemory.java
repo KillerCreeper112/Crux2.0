@@ -49,7 +49,7 @@ public interface PlayerMemory extends EntityMemory {
     @Override
     @Nullable Player value();
 
-    @Nullable Long quit();
+    void scheduleForRemoval(@NotNull Player p);
 
-    void quit(@Nullable Long time);
+    @Nullable Long quit();
 }

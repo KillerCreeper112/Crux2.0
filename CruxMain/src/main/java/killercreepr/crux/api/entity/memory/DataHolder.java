@@ -9,4 +9,5 @@ public interface DataHolder extends Keyed {
      * Called when the parent (the object holding the DataHolder) is getting removed from memory.
      */
     void parentRemoving(@Nullable Entity e);
+    default void scheduledRemoval(Entity e){}
 }

@@ -42,8 +42,9 @@ public class SimplePlayerMemory extends SimpleEntityMemory implements PlayerMemo
         return quit;
     }
     @Override
-    public void quit(@Nullable Long time) {
-        quit = time;
+    public void scheduleForRemoval(@NotNull Player p) {
+        quit = System.currentTimeMillis() + 50L;
+        playerDataHolders.forEach(holder -> holder.scheduledRemoval(p));
     }
 
     @Override

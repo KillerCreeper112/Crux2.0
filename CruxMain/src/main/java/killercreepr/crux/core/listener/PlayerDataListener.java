@@ -13,6 +13,6 @@ public class PlayerDataListener implements Listener {
         Player p = event.getPlayer();
         PlayerMemory data = PlayerMemory.get(p);
         if(data==null) return;
-        data.quit(System.currentTimeMillis() + 50L);
+        data.scheduleForRemoval(p);
     }
 }
