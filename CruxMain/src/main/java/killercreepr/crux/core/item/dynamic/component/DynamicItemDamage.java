@@ -19,7 +19,7 @@ public class DynamicItemDamage extends DynamicSingleValueComponent{
     public void apply(@NotNull CruxItem item, @NotNull TextParserContext context) {
         item.editMeta(Damageable.class, meta ->{
             int damage = parseInt(context);
-            if(damage == 0) meta.resetDamage();
+            if(damage == -1) meta.resetDamage();
             else meta.setDamage(damage);
         });
     }
