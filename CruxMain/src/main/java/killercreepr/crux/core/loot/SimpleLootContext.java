@@ -24,8 +24,8 @@ public class SimpleLootContext implements LootContext {
 
     public SimpleLootContext(Location location, Object looter, Object looted, Random random, DataExchange info){
         this(location,
-            looter instanceof LivingEntity l && l.getAttribute(Attribute.GENERIC_LUCK) != null ?
-                (float) l.getAttribute(Attribute.GENERIC_LUCK).getValue() : 0f,
+            looter instanceof LivingEntity l && l.getAttribute(Attribute.LUCK) != null ?
+                (float) l.getAttribute(Attribute.LUCK).getValue() : 0f,
             looter, looted, random, info);
     }
 
@@ -132,7 +132,7 @@ public class SimpleLootContext implements LootContext {
             if(luck == null){
                 luck = 0f;
                 if(looter instanceof LivingEntity l){
-                    AttributeInstance instance = l.getAttribute(Attribute.GENERIC_LUCK);
+                    AttributeInstance instance = l.getAttribute(Attribute.LUCK);
                     if(instance != null) luck = (float) instance.getValue();
                 }
             }

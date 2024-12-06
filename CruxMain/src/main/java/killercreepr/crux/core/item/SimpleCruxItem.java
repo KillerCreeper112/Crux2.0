@@ -233,7 +233,7 @@ public class SimpleCruxItem implements CruxItem {
         " Keep in mind, this function will add a luck attribute to the item and add hide_attributes.")
     public SimpleCruxItem hideAttributes(){
         return editMeta(meta ->{
-            meta.addAttributeModifier(Attribute.GENERIC_LUCK, new AttributeModifier(
+            meta.addAttributeModifier(Attribute.LUCK, new AttributeModifier(
                 Crux.key("hide"), 0D, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.HAND
             ));
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);

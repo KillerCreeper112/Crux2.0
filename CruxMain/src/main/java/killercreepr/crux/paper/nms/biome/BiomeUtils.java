@@ -63,7 +63,8 @@ public class BiomeUtils {
         if (w.isLoaded(pos)) {
             LevelChunk chunk = w.getChunkAt(pos);
             chunk.setBiome(x >> 2, y >> 2, z >> 2, bb);
-            chunk.setUnsaved(true);
+            chunk.markUnsaved();
+            //chunk.setUnsaved(true);
         }
     }
 

@@ -62,15 +62,15 @@ public interface EntityDamager {
     static double getKnockbackResistance(@NotNull Entity e){
         double x = CruxAttribute.get(e, CruxAttribute.KNOCKBACK_RESISTANCE);
         if(e instanceof LivingEntity d){
-            AttributeInstance i = d.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE);
+            AttributeInstance i = d.getAttribute(Attribute.KNOCKBACK_RESISTANCE);
             if(i != null) x+=i.getValue();
         }
         return x;
     }
 
     static double getDamage(@Nullable Entity dmger){
-        if(dmger instanceof LivingEntity d && d.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null){
-            return d.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue() + CruxAttribute.get(dmger, CruxAttribute.ATTACK_DAMAGE);
+        if(dmger instanceof LivingEntity d && d.getAttribute(Attribute.ATTACK_DAMAGE) != null){
+            return d.getAttribute(Attribute.ATTACK_DAMAGE).getValue() + CruxAttribute.get(dmger, CruxAttribute.ATTACK_DAMAGE);
         }
         return CruxAttribute.get(dmger, CruxAttribute.ATTACK_DAMAGE);
     }

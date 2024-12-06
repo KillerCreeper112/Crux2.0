@@ -119,9 +119,9 @@ public class CruxEntityDamager implements EntityDamager {
         double armor = CruxAttribute.get(target, CruxAttribute.ARMOR);
         double toughness = CruxAttribute.get(target, CruxAttribute.ARMOR_TOUGHNESS);
         if(target instanceof LivingEntity e){
-            AttributeInstance i = e.getAttribute(Attribute.GENERIC_ARMOR);
+            AttributeInstance i = e.getAttribute(Attribute.ARMOR);
             if(i != null) armor += i.getValue();
-            i = e.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS);
+            i = e.getAttribute(Attribute.ARMOR_TOUGHNESS);
             if(i != null) toughness += i.getValue();
         }
 

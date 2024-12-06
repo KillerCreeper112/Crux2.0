@@ -99,7 +99,7 @@ public interface CruxAttribute extends Keyed {
                 }
             }
             if(add){
-                meta.addAttributeModifier(Attribute.GENERIC_LUCK, new AttributeModifier(Crux.key("disable_vanilla"), 0D,
+                meta.addAttributeModifier(Attribute.LUCK, new AttributeModifier(Crux.key("disable_vanilla"), 0D,
                         AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.OFFHAND));
                 meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             }

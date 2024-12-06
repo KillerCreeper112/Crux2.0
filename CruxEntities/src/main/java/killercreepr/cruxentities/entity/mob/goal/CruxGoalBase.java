@@ -115,7 +115,7 @@ public class CruxGoalBase implements ICruxGoal {
     }
 
     protected double getFollowDistance(){
-        AttributeInstance i = mob.getAttribute(Attribute.GENERIC_FOLLOW_RANGE);
+        AttributeInstance i = mob.getAttribute(Attribute.FOLLOW_RANGE);
         return i == null ? 16D : i.getValue();
     }
 
@@ -282,7 +282,7 @@ public class CruxGoalBase implements ICruxGoal {
         }
         if(result.getHit().isEmpty()) return result;
         double trueDmg = (
-            (mob.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) == null ? 0D : mob.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue())
+            (mob.getAttribute(Attribute.ATTACK_DAMAGE) == null ? 0D : mob.getAttribute(Attribute.ATTACK_DAMAGE).getValue())
                 + CruxAttribute.ATTACK_DAMAGE.get(mob)
         ) * Math.max(attackCooldown, .75f);
         double trueKb = CruxAttribute.ATTACK_KNOCKBACK.get(mob) * Math.max(attackCooldown, .75f);

@@ -47,13 +47,13 @@ public class MinerHolder extends PlayerTickedDataHolder {
 
     public void resetBreakSpeed(@NotNull Player p){
         if(lastBreakSpeed != null){
-            p.getAttribute(Attribute.PLAYER_BLOCK_BREAK_SPEED).setBaseValue(lastBreakSpeed);
+            p.getAttribute(Attribute.BLOCK_BREAK_SPEED).setBaseValue(lastBreakSpeed);
             lastBreakSpeed = null;
         }
     }
 
     public int getBlockInteractionRange(@NotNull Player p){
-        return (int) p.getAttribute(Attribute.PLAYER_BLOCK_INTERACTION_RANGE).getValue();
+        return (int) p.getAttribute(Attribute.BLOCK_INTERACTION_RANGE).getValue();
     }
 
     public void onMine(@NotNull Player p){
@@ -75,7 +75,7 @@ public class MinerHolder extends PlayerTickedDataHolder {
         float mineSpeed = block.getCruxBlock().getComponents().getOrDefault(CruxComponents.UNBREAKABLE, false) ?
             0f : block.getMineSpeed(Miner.entity(p.getInventory().getItemInMainHand(), p), true);
         if(lastBreakSpeed == null){
-            lastBreakSpeed = p.getAttribute(Attribute.PLAYER_BLOCK_BREAK_SPEED).getBaseValue();
+            lastBreakSpeed = p.getAttribute(Attribute.BLOCK_BREAK_SPEED).getBaseValue();
         }
         setMineSpeed(p, mineSpeed);
     }
@@ -83,7 +83,7 @@ public class MinerHolder extends PlayerTickedDataHolder {
     public void setMineSpeed(@NotNull Player p, double mineSpeed){
         //mineSpeed = mineSpeed <= 0D ? 0D : 1D + mineSpeed;
         //if(mineSpeed < 0D) mineSpeed = Double.MAX_VALUE;
-        p.getAttribute(Attribute.PLAYER_BLOCK_BREAK_SPEED).setBaseValue(mineSpeed);
+        p.getAttribute(Attribute.BLOCK_BREAK_SPEED).setBaseValue(mineSpeed);
     }
 
     public boolean hasMinedWithin(int ticks){
