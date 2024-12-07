@@ -1,5 +1,6 @@
 package killercreepr.cruxentities.modelengine.wrapper;
 
+import com.ticxo.modelengine.api.animation.BlueprintAnimation;
 import com.ticxo.modelengine.api.animation.property.IAnimationProperty;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
@@ -59,8 +60,10 @@ public interface IModelEntity extends IDesignEntity{
     default int getAnimationLengthTicks(@NotNull String id){
         ActiveModel model = getModel();
         if(model == null) return 0;
-        IAnimationProperty animationProperty = model.getAnimationHandler().getAnimation(id);
-        return animationProperty == null ? 0 : (int) Math.ceil(animationProperty.getBlueprintAnimation().getLength() * 20D);
+        BlueprintAnimation animation = model.getBlueprint().getAnimations().get(id);
+        return animation == null ? 0 : (int) Math.ceil(animation.getLength() * 20D);
+        /*IAnimationProperty animationProperty = model.getAnimationHandler().getAnimation(id);
+        return animationProperty == null ? 0 : (int) Math.ceil(animationProperty.getBlueprintAnimation().getLength() * 20D);*/
     }
 
     IModelEntity model(CompletableFuture<ActiveModel> cache);

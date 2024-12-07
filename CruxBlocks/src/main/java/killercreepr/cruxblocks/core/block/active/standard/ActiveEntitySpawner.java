@@ -1,9 +1,9 @@
 package killercreepr.cruxblocks.core.block.active.standard;
 
-import killercreepr.crux.api.data.tick.ManagedTicked;
 import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.core.Crux;
 import killercreepr.cruxblocks.api.block.CruxBlock;
+import killercreepr.cruxblocks.api.block.active.ActiveCruxTickedBlock;
 import killercreepr.cruxblocks.core.block.active.SimpleActiveCruxBlock;
 import killercreepr.cruxblocks.core.block.component.standard.EntitySpawnerComponent;
 import killercreepr.cruxblocks.core.block.data.CustomBlockData;
@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
-public class ActiveEntitySpawner extends SimpleActiveCruxBlock implements ManagedTicked {
+public class ActiveEntitySpawner extends SimpleActiveCruxBlock implements ActiveCruxTickedBlock {
     protected final @NotNull EntitySpawnerComponent data;
     protected final @NotNull NaturalEntitySpawner spawner;
     public ActiveEntitySpawner(@NotNull Block block, @NotNull CruxBlock cruxBlock, @NotNull EntitySpawnerComponent data, @NotNull NaturalEntitySpawner spawner) {
@@ -24,12 +24,14 @@ public class ActiveEntitySpawner extends SimpleActiveCruxBlock implements Manage
 
     @Override
     public void started() {
+        ActiveCruxTickedBlock.super.started();
         CustomBlockData data = CustomBlockData.wrap(block);
         delay = data.get("delay", PersistentDataType.INTEGER, 0);
     }
 
     @Override
     public void stopped() {
+        ActiveCruxTickedBlock.super.stopped();
         CustomBlockData data = CustomBlockData.wrap(block);
         data.set("delay", PersistentDataType.INTEGER, delay);
     }
