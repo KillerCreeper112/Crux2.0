@@ -304,6 +304,31 @@ public class CruxGoalBase implements ICruxGoal {
         return result;
     }
 
+    public void attack(@NotNull Collection<Entity> targets){
+        attack(targets.toArray(new Entity[0]));
+    }
+
+    public void attack(@NotNull Entity... targets){
+        double trueDmg = (
+            (mob.getAttribute(Attribute.ATTACK_DAMAGE) == null ? 0D : mob.getAttribute(Attribute.ATTACK_DAMAGE).getValue())
+                + CruxAttribute.ATTACK_DAMAGE.get(mob)
+        ) * Math.max(attackCooldown, .75f);
+        double trueKb = CruxAttribute.ATTACK_KNOCKBACK.get(mob) * Math.max(attackCooldown, .75f);
+        double trueUpKb = CruxAttribute.ATTACK_KNOCKBACK_UP.get(mob) * Math.max(attackCooldown, .75f);
+
+        double dmg;
+        double dmgDropOff = 1D;
+        double kbDropOff = 1D;
+        for(Entity e : targets){
+            dmg = trueDmg;
+            CruxEntityDamageEvent event = EntityDamager.entityDamager(e, mob).attack(dmg, trueKb, trueUpKb);
+            if(event != null) attacked(event);
+            if(event == null || event.isCancelled()) continue;
+            dmgDropOff = Math.max(dmgDropOff - .1f, .1f);
+            kbDropOff = Math.max(kbDropOff - .1f, .1f);
+        }
+    }
+
     /**
      * @return Whether the mob should stick with the attack attempt.
      */
