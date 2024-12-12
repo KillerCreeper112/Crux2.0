@@ -75,6 +75,13 @@ public interface IModelEntity extends IDesignEntity{
         return property == null ? -1 : property.getTime();
     }
 
+    default float getPlayingAnimationProgress(@NotNull String id){
+        int length = getAnimationLengthTicks(id);
+        if(length < 1) return 0f;
+        int ticks = getPlayingAnimationTimeTicks(id);
+        return (float) ticks / (float) length;
+    }
+
     default int getAnimationLengthTicks(@NotNull String id){
         ActiveModel model = getModel();
         if(model == null) return 0;
