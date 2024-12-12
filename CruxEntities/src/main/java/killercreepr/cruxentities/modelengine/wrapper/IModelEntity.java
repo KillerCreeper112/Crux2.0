@@ -57,6 +57,24 @@ public interface IModelEntity extends IDesignEntity{
         return model.getAnimationHandler().isPlayingAnimation(id);
     }
 
+    /**
+     *
+     * @return -1 if the animation is not playing
+     */
+    default int getPlayingAnimationTimeTicks(@NotNull String id){
+        ActiveModel model = getModel();
+        if(model == null) return -1;
+        IAnimationProperty property = model.getAnimationHandler().getAnimation(id);
+        return property == null ? -1 : (int) (property.getTime() * 20);
+    }
+
+    default double getPlayingAnimationTime(@NotNull String id){
+        ActiveModel model = getModel();
+        if(model == null) return -1;
+        IAnimationProperty property = model.getAnimationHandler().getAnimation(id);
+        return property == null ? -1 : property.getTime();
+    }
+
     default int getAnimationLengthTicks(@NotNull String id){
         ActiveModel model = getModel();
         if(model == null) return 0;
