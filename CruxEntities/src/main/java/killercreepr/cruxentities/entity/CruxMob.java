@@ -109,6 +109,7 @@ public interface CruxMob extends Keyed {
 
     default void onDeath(@NotNull Entity e, @NotNull EntityDeathEvent event){
         event.getDrops().clear();
+        int previousDroppedExp = event.getDroppedExp();
         event.setDroppedExp(0);
 
         LootContext ctx = null;
@@ -132,7 +133,7 @@ public interface CruxMob extends Keyed {
                 event.setDroppedExp(value);
             }
         }else{
-            event.setDroppedExp(getDefaultDroppedExperience());
+            if(previousDroppedExp > 0) event.setDroppedExp(getDefaultDroppedExperience());
         }
     }
 
