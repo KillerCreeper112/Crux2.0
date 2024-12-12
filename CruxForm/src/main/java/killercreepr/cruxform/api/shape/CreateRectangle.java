@@ -35,6 +35,7 @@ public interface CreateRectangle extends CreateShape{
             return boundingBox(box.box());
         }
         default Builder centerRange(@NotNull CruxLocation center, double size){
+            size = size / 2D;
             CruxLocation pos1 = center.add(-size, -size, -size);
             CruxLocation pos2 = center.add(size, size, size);
             return pos1(pos1).pos2(pos2);
