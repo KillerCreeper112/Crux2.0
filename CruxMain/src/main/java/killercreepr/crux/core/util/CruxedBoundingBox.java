@@ -12,6 +12,41 @@ public class CruxedBoundingBox {
     public static @NotNull CruxedBoundingBox wrap(@NotNull BoundingBox box){
         return new CruxedBoundingBox(box);
     }
+    public static @NotNull BoundingBox boundingBox(@NotNull Location center, double x, double y, double z){
+        return BoundingBox.of(center, x/2, y/2, z/2);
+    }
+
+    public static @NotNull BoundingBox boundingBox(@NotNull Location center, double xz, double y){
+        return boundingBox(center, xz, y, xz);
+    }
+
+    public static @NotNull BoundingBox boundingBox(@NotNull Location center, double radius){
+        return boundingBox(center, radius, radius);
+    }
+
+    public static @NotNull BoundingBox boundingBox(@NotNull Vector center, double x, double y, double z){
+        return BoundingBox.of(center, x/2, y/2, z/2);
+    }
+
+    public static @NotNull BoundingBox boundingBox(@NotNull Vector center, double xz, double y){
+        return boundingBox(center, xz, y, xz);
+    }
+
+    public static @NotNull BoundingBox boundingBox(@NotNull Vector center, double radius){
+        return boundingBox(center, radius, radius);
+    }
+
+    public static @NotNull BoundingBox boundingBox(@NotNull CruxPosition center, double x, double y, double z){
+        return BoundingBox.of(center.toVector(), x/2, y/2, z/2);
+    }
+
+    public static @NotNull BoundingBox boundingBox(@NotNull CruxPosition center, double xz, double y){
+        return boundingBox(center, xz, y, xz);
+    }
+
+    public static @NotNull BoundingBox boundingBox(@NotNull CruxPosition center, double radius){
+        return boundingBox(center, radius, radius);
+    }
 
     protected @NotNull BoundingBox box;
     protected @Nullable CruxPosition centerPoint;
