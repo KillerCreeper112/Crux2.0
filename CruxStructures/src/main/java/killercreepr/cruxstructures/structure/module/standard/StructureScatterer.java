@@ -55,7 +55,7 @@ public class StructureScatterer {
             Location spawn = findRandomSpot(structure, maxScatterAttempts.sample(inputContext).intValue());
             if(spawn==null) continue;
 
-            double rotation = CruxMath.RANDOM.nextInt(4) * 90;
+            double rotation = CruxMath.random().nextInt(4) * 90;
             StructurePlaceEvent event = structure.place(
                 spawn, rotation
             );
@@ -81,9 +81,9 @@ public class StructureScatterer {
         int yRange = scatterRangeY.sample(inputContext).intValue();
         int zRange = scatterRangeZ.sample(inputContext).intValue();
 
-        if(CruxMath.RANDOM.nextBoolean()) xRange *= -1;
-        if(CruxMath.RANDOM.nextBoolean()) yRange *= -1;
-        if(CruxMath.RANDOM.nextBoolean()) zRange *= -1;
+        if(CruxMath.random().nextBoolean()) xRange *= -1;
+        if(CruxMath.random().nextBoolean()) yRange *= -1;
+        if(CruxMath.random().nextBoolean()) zRange *= -1;
 
         return center.clone().add(xRange, yRange, zRange);
     }
