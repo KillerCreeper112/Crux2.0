@@ -14,25 +14,26 @@ import java.util.Collection;
 import java.util.List;
 
 public class SimpleItemLootPoolObject extends SimpleLootObject<ItemStack> implements ItemLootPoolObject {
-    protected final @Nullable Holder<Collection<ItemStack>> item;
+    protected final @Nullable ItemsSupplier item;
 
-    public SimpleItemLootPoolObject(int weight, float quality, @Nullable List<LootCondition> conditions, @Nullable List<LootFunction<ItemStack>> lootFunctions, @Nullable Holder<Collection<ItemStack>> item) {
+    public SimpleItemLootPoolObject(int weight, float quality, @Nullable List<LootCondition> conditions, @Nullable List<LootFunction<ItemStack>> lootFunctions, @Nullable ItemsSupplier item) {
         super(weight, quality, conditions, lootFunctions);
         this.item = item;
     }
 
-    public SimpleItemLootPoolObject(int weight, float quality, @Nullable List<LootFunction<ItemStack>> lootFunctions, @Nullable Holder<Collection<ItemStack>> item) {
+    public SimpleItemLootPoolObject(int weight, float quality, @Nullable List<LootFunction<ItemStack>> lootFunctions, @Nullable ItemsSupplier item) {
         super(weight, quality, lootFunctions);
         this.item = item;
     }
 
-    public SimpleItemLootPoolObject(int weight, float quality, @Nullable Holder<Collection<ItemStack>> item) {
+    public SimpleItemLootPoolObject(int weight, float quality, @Nullable ItemsSupplier item) {
         super(weight, quality);
         this.item = item;
     }
 
     @Override
     public @Nullable Holder<Collection<ItemStack>> getItems(@NotNull LootContext ctx) {
-        return item;
+        if(item == null) return null;
+        return Holder.direct(item.values(ctx));
     }
 }

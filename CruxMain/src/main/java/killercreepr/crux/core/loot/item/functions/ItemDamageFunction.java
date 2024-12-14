@@ -1,5 +1,6 @@
 package killercreepr.crux.core.loot.item.functions;
 
+import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.loot.LootContext;
 import killercreepr.crux.api.loot.conditions.LootCondition;
 import killercreepr.crux.api.loot.item.ItemLootFunction;
@@ -31,8 +32,8 @@ public class ItemDamageFunction extends SimpleLootFunction<ItemStack> implements
     public ItemStack accept(@Nullable ItemStack i, @NotNull LootContext context) {
         if(i==null) return i;
         i.editMeta(Damageable.class, meta ->{
-            if(!meta.hasMaxDamage()) return;
-            int maxDamage = meta.getMaxDamage();
+            int maxDamage = CruxItem.getMaxDurability(i);
+            if(maxDamage < 1) return;
             Random source = context.getRandom();
             InputContext inputCtx = InputContext.simple(StringTagProvider.build(Crux.tags().hookStrings(i).toTags(Crux.tags())));
             int dmg = this.amount.sample(source, inputCtx).intValue();

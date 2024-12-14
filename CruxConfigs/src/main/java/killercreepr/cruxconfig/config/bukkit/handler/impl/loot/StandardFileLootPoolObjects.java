@@ -1,6 +1,7 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 
 import com.google.common.reflect.TypeToken;
+import killercreepr.crux.api.item.dynamic.DynamicItem;
 import killercreepr.crux.api.loot.LootPoolObject;
 import killercreepr.crux.api.loot.item.ItemLootPoolObject;
 import killercreepr.crux.core.loot.item.SimpleItemLootObject;
@@ -8,15 +9,12 @@ import killercreepr.crux.core.loot.item.pool.AlternativeItemPoolObject;
 import killercreepr.crux.core.loot.item.pool.ListItemPoolObject;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
-import killercreepr.cruxconfig.config.common.element.FileGeneric;
 import killercreepr.cruxconfig.config.common.element.FileObject;
-import net.kyori.adventure.key.Key;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 
 public class StandardFileLootPoolObjects {
@@ -33,19 +31,21 @@ public class StandardFileLootPoolObjects {
                 SimpleItemLootObject loot = registry.deserializeFromFile(SimpleItemLootObject.class, e);
                 if(loot==null) return null;
 
-                Collection<Key> itemKeys;
-                if(e.get("item") instanceof FileGeneric){
-                    Key k = registry.deserializeFromFile(Key.class, e.get("item"));
-                    if(k==null) return null;
-                    itemKeys = new HashSet<>();
-                    itemKeys.add(k);
-                }else itemKeys = registry.deserializeFromFile(
-                    new TypeToken<Collection<Key>>(){}.getType(), e.get("item")
+                Collection<DynamicItem> items = registry.deserializeFromFile(
+                    new TypeToken<Collection<DynamicItem>>(){}.getType(),
+                    e.get("item")
                 );
+                if(items == null){
+                    items =registry.deserializeFromFile(
+                        new TypeToken<Collection<DynamicItem>>(){}.getType(),
+                        e.get("items")
+                    );
+                    if(items == null) return null;
+                }
 
-                if(itemKeys == null || itemKeys.isEmpty()) return null;
+                if(items.isEmpty()) return null;
                 return new ListItemPoolObject(
-                    loot.getWeight(), loot.getQuality(), loot.getConditions(), loot.getFunctions(), itemKeys
+                    loot.getWeight(), loot.getQuality(), loot.getConditions(), loot.getFunctions(), items
                 );
             }
         });

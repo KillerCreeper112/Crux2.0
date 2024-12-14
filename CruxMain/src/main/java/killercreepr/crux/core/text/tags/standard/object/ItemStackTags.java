@@ -45,10 +45,7 @@ public class ItemStackTags implements ObjectTag<ItemStack> {
                 if(!(item.getItemMeta() instanceof Damageable meta)) return "0";
                 return (CruxItem.getMaxDurability(item) - meta.getDamage()) + "";
             }))
-            .add(Tag.string("max_damage", (args, context) ->{
-                if(!(item.getItemMeta() instanceof Damageable meta)) return "0";
-                return meta.hasMaxDamage() ? meta.getMaxDamage() + "" : "0";
-            }))
+            .add(Tag.string("max_damage", (args, context) -> CruxItem.getMaxDurability(item) + ""))
             .add(Tag.string("type", (args, context) -> Crux.handlers().item().getType(item).asString()))
             .add(Tag.string("custom_model_data", (args, context) ->{
                 ItemMeta meta = item.getItemMeta();
