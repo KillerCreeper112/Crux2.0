@@ -65,17 +65,17 @@ public class FormatParserContext implements TextParserContext {
 
     @Override
     public @NotNull String deserializeString(@NotNull String text) {
-        return deserializeString(text, null);
+        return deserializeString(text, tags);
     }
 
     @Override
     public @NotNull List<Component> deserializeList(@NotNull Collection<String> list) {
-        return deserializeList(list, null);
+        return deserializeList(list, tags);
     }
 
     @Override
     public @NotNull List<String> deserializeStringList(@NotNull Collection<String> list) {
-        return deserializeStringList(list, null);
+        return deserializeStringList(list, tags);
     }
 
     @Override
