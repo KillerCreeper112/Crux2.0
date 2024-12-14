@@ -8,10 +8,11 @@ import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.loot.LootContext;
 import killercreepr.crux.api.loot.item.ItemLootTable;
 import killercreepr.crux.core.command.argument.CruxCmdArguments;
-import killercreepr.crux.core.persistence.CruxPersist;
+import killercreepr.crux.core.component.CruxComponents;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.util.CruxEntityUtil;
 import org.bukkit.command.CommandSender;
@@ -52,7 +53,8 @@ public class CruxLootCommands {
                                                 .resolve(ctx.getSource()).getFirst();
                                             ItemLootTable lootTable = ctx.getArgument("loot_table", ItemLootTable.class);
                                             ItemStack item = p.getInventory().getItemInMainHand();
-                                            CruxPersist.ITEM_LOOT_TABLES.set(item, List.of(lootTable));
+                                            CruxItem cruxItem = CruxItem.wrap(item);
+                                            cruxItem.set(CruxComponents.ITEM_LOOT_TABLES, List.of(lootTable));
                                             p.sendMessage("Set item loot table tag on main hand item! " + lootTable.key());
                                             return 1;
                                         })
@@ -69,9 +71,10 @@ public class CruxLootCommands {
                                                 .resolve(ctx.getSource()).getFirst();
                                             ItemLootTable lootTable = ctx.getArgument("loot_table", ItemLootTable.class);
                                             ItemStack item = p.getInventory().getItemInMainHand();
-                                            List<ItemLootTable> list = new ArrayList<>(CruxPersist.ITEM_LOOT_TABLES.get(item, List.of()));
+                                            CruxItem cruxItem = CruxItem.wrap(item);
+                                            List<ItemLootTable> list = new ArrayList<>(cruxItem.getOrDefault(CruxComponents.ITEM_LOOT_TABLES, List.of()));
                                             list.add(lootTable);
-                                            CruxPersist.ITEM_LOOT_TABLES.set(item, list);
+                                            cruxItem.set(CruxComponents.ITEM_LOOT_TABLES, list);
                                             p.sendMessage("Added item loot table tag on main hand item! " + lootTable.key());
                                             return 1;
                                         })
@@ -88,9 +91,10 @@ public class CruxLootCommands {
                                                 .resolve(ctx.getSource()).getFirst();
                                             ItemLootTable lootTable = ctx.getArgument("loot_table", ItemLootTable.class);
                                             ItemStack item = p.getInventory().getItemInMainHand();
-                                            List<ItemLootTable> list = new ArrayList<>(CruxPersist.ITEM_LOOT_TABLES.get(item, List.of()));
+                                            CruxItem cruxItem = CruxItem.wrap(item);
+                                            List<ItemLootTable> list = new ArrayList<>(cruxItem.getOrDefault(CruxComponents.ITEM_LOOT_TABLES, List.of()));
                                             list.remove(lootTable);
-                                            CruxPersist.ITEM_LOOT_TABLES.set(item, list);
+                                            cruxItem.set(CruxComponents.ITEM_LOOT_TABLES, list);
                                             p.sendMessage("Removed item loot table tag on main hand item! " + lootTable.key());
                                             return 1;
                                         })
@@ -104,7 +108,8 @@ public class CruxLootCommands {
                                     Player p = ctx.getArgument("target", PlayerSelectorArgumentResolver.class)
                                         .resolve(ctx.getSource()).getFirst();
                                     ItemStack item = p.getInventory().getItemInMainHand();
-                                    CruxPersist.ITEM_LOOT_TABLES.set(item, null);
+                                    CruxItem cruxItem = CruxItem.wrap(item);
+                                    cruxItem.set(CruxComponents.ITEM_LOOT_TABLES, null);
                                     p.sendMessage("Cleared item loot table tag on main hand item!");
                                     return 1;
                                 })

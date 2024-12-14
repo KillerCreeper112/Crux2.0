@@ -1,15 +1,18 @@
 package killercreepr.crux.core.component;
 
 import killercreepr.crux.api.component.DataComponentType;
+import killercreepr.crux.api.component.parser.hybrid.PersistParser;
 import killercreepr.crux.api.component.parser.hybrid.PersistTextParser;
 import killercreepr.crux.api.component.serialization.PersistentDataSerializer;
 import killercreepr.crux.api.item.component.ToolComponent;
+import killercreepr.crux.api.loot.item.ItemLootTable;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.component.parser.type.ComponentInputParsers;
 import killercreepr.crux.core.persistence.CruxPersistence;
 import killercreepr.crux.core.registries.CruxRegistries;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 public class CruxComponents {
@@ -29,6 +32,15 @@ public class CruxComponents {
 
     public static final DataComponentType<ToolComponent> TOOL = register("tool", builder -> builder
         .persistTextParser(ComponentInputParsers.TOOL.createInput(Crux.key("tool"))));
+
+    public static final DataComponentType<ItemLootTable> ITEM_LOOT_TABLE = register("item_loot_table", builder -> builder
+        .persistTextParser(ComponentInputParsers.ITEM_LOOT_TABLE.createInput(Crux.key("item_loot_table"))));
+
+    public static final DataComponentType<List<ItemLootTable>> ITEM_LOOT_TABLES = register("item_loot_tables", builder -> builder
+        .persistTextParser(ComponentInputParsers.ITEM_LOOT_TABLE_LIST.createInput(Crux.key("item_loot_tables"))));
+
+    public static final DataComponentType<Long> LOOT_GENERATED_TIME = register("loot_generated_time", builder -> builder
+        .persistTextParser(PersistTextParser.LONG.createInput(Crux.key("loot_generated_time"))));
 
     private static <T> DataComponentType<T> register(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator){
         return CruxRegistries.DATA_COMPONENT_TYPE.register(Crux.key(id), builderOperator.apply(DataComponentType.builder()).build());

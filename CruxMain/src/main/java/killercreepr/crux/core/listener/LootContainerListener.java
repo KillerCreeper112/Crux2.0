@@ -1,8 +1,11 @@
 package killercreepr.crux.core.listener;
 
+import killercreepr.crux.api.component.serialization.PersistHolderComponentHandler;
+import killercreepr.crux.api.component.serialization.PersistentDataWrappers;
+import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.loot.LootContext;
 import killercreepr.crux.api.loot.item.ItemLootTable;
-import killercreepr.crux.core.persistence.CruxPersist;
+import killercreepr.crux.core.component.CruxComponents;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -25,13 +28,15 @@ public class LootContainerListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
         ItemStack item = event.getItemInHand();
-        List<ItemLootTable> lootTable = CruxPersist.ITEM_LOOT_TABLES.get(item, null);
+        List<ItemLootTable> lootTable = CruxItem.wrap(item).get(CruxComponents.ITEM_LOOT_TABLES);
         if(lootTable == null) return;
         Block b = event.getBlock();
         BlockState state = b.getState();
-        if(!(state instanceof PersistentDataHolder c)) return;
-        CruxPersist.ITEM_LOOT_TABLES.set(c, lootTable);
-        state.update();
+        if(!(state instanceof PersistentDataHolder)) return;
+        PersistHolderComponentHandler handler = PersistentDataWrappers.wrapBlockState(state);
+        handler.set(CruxComponents.ITEM_LOOT_TABLES, lootTable);
+        /*CruxPersist.ITEM_LOOT_TABLES.set(c, lootTable);
+        state.update();*/
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -42,11 +47,14 @@ public class LootContainerListener implements Listener {
         BlockState state = b.getState();
         if(!(state instanceof PersistentDataHolder data)) return;
         HumanEntity p = event.getPlayer();
-        List<ItemLootTable> lootTable = CruxPersist.ITEM_LOOT_TABLES.get(data, null);
+
+        PersistHolderComponentHandler handler = PersistentDataWrappers.wrapBlockState(state);
+
+        List<ItemLootTable> lootTable = handler.get(CruxComponents.ITEM_LOOT_TABLES);
         if(lootTable == null) return;
-        Long time = CruxPersist.LOOT_GENERATED_TIME.get(data, null);
+        Long time = handler.get(CruxComponents.LOOT_GENERATED_TIME);
         if(time != null) return;
-        CruxPersist.LOOT_GENERATED_TIME.set(data, System.currentTimeMillis());
+        handler.set(CruxComponents.LOOT_GENERATED_TIME, System.currentTimeMillis());
         state.update();
 
         LootContext ctx = LootContext.builder().looted(b).location(inv.getLocation()).looter(p).build();
@@ -58,9 +66,12 @@ public class LootContainerListener implements Listener {
         BlockState state = event.getBlockState();
         if(!(state instanceof PersistentDataHolder data)) return;
         HumanEntity p = event.getPlayer();
-        List<ItemLootTable> lootTable = CruxPersist.ITEM_LOOT_TABLES.get(data, null);
+
+        PersistHolderComponentHandler handler = PersistentDataWrappers.wrapBlockState(state);
+
+        List<ItemLootTable> lootTable = handler.get(CruxComponents.ITEM_LOOT_TABLES);
         if(lootTable == null) return;
-        Long time = CruxPersist.LOOT_GENERATED_TIME.get(data, null);
+        Long time = handler.get(CruxComponents.LOOT_GENERATED_TIME);
         if(time != null) return;
         Block b = event.getBlock();
         Location spawn = b.getLocation().toCenterLocation();
