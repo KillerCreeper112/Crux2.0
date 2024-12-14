@@ -4,6 +4,7 @@ import com.google.common.reflect.TypeToken;
 import killercreepr.crux.api.loot.conditions.LootCondition;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.loot.item.functions.ItemAmountFunction;
+import killercreepr.crux.core.loot.item.functions.ItemDamageFunction;
 import killercreepr.crux.core.loot.item.functions.ItemEnchantFunction;
 import killercreepr.crux.core.loot.item.functions.ItemEnchantRandomlyFunction;
 import killercreepr.crux.core.util.CruxObjects;
@@ -70,6 +71,23 @@ public class StandardFileLootFunctions {
                     new TypeToken<Collection<LootCondition>>(){}.getType(), e.get("conditions")
                 );//todo change this cause no I dont want to do this every time
                 return new ItemAmountFunction(conditions, amount, e.getObject(Boolean.class, "add", false));
+            }
+        });
+        file.registerCustomHandler(new CustomFileLootFunction<>() {
+            @Override
+            public @NotNull String getType() {
+                return "set_damage";
+            }
+
+            @Override
+            public @Nullable ItemDamageFunction deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                FileRegistry registry = ctx.getRegistry();
+                NumberProvider amount = registry.deserializeFromFile(NumberProvider.class, e.get("damage"));
+                if(amount==null) return null;
+                Collection<LootCondition> conditions = registry.deserializeFromFile(
+                    new TypeToken<Collection<LootCondition>>(){}.getType(), e.get("conditions")
+                );
+                return new ItemDamageFunction(conditions, amount, e.getObject(Boolean.class, "add", false));
             }
         });
         file.registerCustomHandler(new CustomFileLootFunction<>() {
