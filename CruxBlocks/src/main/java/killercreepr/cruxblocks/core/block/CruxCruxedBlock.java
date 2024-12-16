@@ -2,6 +2,7 @@ package killercreepr.cruxblocks.core.block;
 
 import killercreepr.crux.api.block.CruxedBlock;
 import killercreepr.crux.api.math.CruxPosition;
+import killercreepr.cruxblocks.api.block.CruxBlock;
 import killercreepr.cruxblocks.api.block.active.ActiveCruxBlock;
 import net.kyori.adventure.key.Key;
 import org.bukkit.block.Block;
@@ -15,7 +16,9 @@ public class CruxCruxedBlock implements CruxedBlock {
 
     @Override
     public @NotNull Key getType() {
-        return block.getCruxBlock().key();
+        CruxBlock crux = block.getCruxBlock();
+        if(crux.getGroup() != null) return crux.getGroup().key();
+        return crux.key();
     }
 
     @Override
