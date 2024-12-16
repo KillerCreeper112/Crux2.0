@@ -24,6 +24,9 @@ public class CruxComponents {
     public static final DataComponentType<Float> HARDNESS = register("hardness", builder -> builder
         .persistTextParser(PersistTextParser.FLOAT.createInput(Crux.key("hardness"))));
 
+    public static final DataComponentType<Float> SIZE = register("size", builder -> builder
+        .persistTextParser(PersistTextParser.FLOAT.createInput(Crux.key("size"))));
+
     public static final DataComponentType<ItemStack> ITEM_DISPLAY = register("item_display", builder -> builder
         .persistent(PersistentDataSerializer.create("item_display", CruxPersistence.ITEM_STACK)));
 
