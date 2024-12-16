@@ -2,7 +2,6 @@ package killercreepr.crux.paper.nms.biome;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.chunk.LevelChunk;
@@ -15,7 +14,6 @@ import org.bukkit.craftbukkit.CraftWorld;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Optional;
 
 public class BiomeUtils {
     public static @NotNull NamespacedKey getBiome(@NotNull Location l){
@@ -23,7 +21,8 @@ public class BiomeUtils {
     }
 
     public static @NotNull NamespacedKey getBiome(@NotNull Block l){
-        ServerLevel w = ((CraftWorld)l.getWorld()).getHandle();
+        return l.getBiome().getKey();
+        /*ServerLevel w = ((CraftWorld)l.getWorld()).getHandle();
         BlockPos pos = new BlockPos(l.getX(), l.getY(), l.getZ());
         if (w.isLoaded(pos)) {
             LevelChunk chunk = w.getChunkAt(pos);
@@ -36,7 +35,7 @@ public class BiomeUtils {
                 );
             }
         }
-        return l.getBiome().getKey();
+        return l.getBiome().getKey();*/
     }
 
     public static boolean setBiome(@NotNull Holder<Biome> biomeHolder, @NotNull Chunk c) {

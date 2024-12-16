@@ -309,6 +309,7 @@ public class CruxGoalBase implements ICruxGoal {
     }
 
     public void attack(@NotNull Entity... targets){
+        float attackCooldown = 1f; //Could be used for something down the road.
         double trueDmg = (
             (mob.getAttribute(Attribute.ATTACK_DAMAGE) == null ? 0D : mob.getAttribute(Attribute.ATTACK_DAMAGE).getValue())
                 + CruxAttribute.ATTACK_DAMAGE.get(mob)

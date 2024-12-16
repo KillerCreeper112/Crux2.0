@@ -67,6 +67,9 @@ public class ComponentInputParsers {
             return all.encodeToParser();
         }))
         .apply(ctx ->{
+            if(ctx.get() instanceof String s){
+                return SIMPLE_BLOCK_PREDICATE.decodeObject(s);
+            }
             Collection<String> list = ctx.get();
             Collection<BlockPredicate> parsed = new HashSet<>();
             for(String s : list){
