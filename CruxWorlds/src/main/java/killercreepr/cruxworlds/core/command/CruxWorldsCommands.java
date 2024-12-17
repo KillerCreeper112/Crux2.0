@@ -208,6 +208,15 @@ public class CruxWorldsCommands {
             Commands.literal("tp")
                 .then(
                     Commands.argument("world", worldArg)
+                        .executes(ctx ->{
+                            CommandSender sender = getExecutor(ctx.getSource());
+                            if(!(sender instanceof Entity e)) return -1;
+                            CruxWorld world = ctx.getArgument("world", CruxWorld.class);
+                            Location spawn = world.toBukkitWorld().getSpawnLocation();
+                            e.teleportAsync(spawn);
+                            sender.sendMessage("Teleported " + e.getName() + " to " + world.getName() + ".");
+                            return 1;
+                        })
                         .then(
                             Commands.argument("targets", ArgumentTypes.entities())
                                 .executes(ctx ->{
