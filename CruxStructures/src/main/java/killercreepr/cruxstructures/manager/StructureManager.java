@@ -20,9 +20,9 @@ import killercreepr.cruxstructures.structure.Structure;
 import killercreepr.cruxstructures.structure.active.ActiveStructure;
 import killercreepr.cruxstructures.structure.generation.StructureGenerator;
 import killercreepr.cruxstructures.structure.impl.CfgFAWEStructure;
-import killercreepr.cruxstructures.structure.result.GenerateResult;
 import killercreepr.cruxstructures.structure.stored.StoredStructure;
 import killercreepr.cruxstructures.structure.stored.TickedStoredStructure;
+import killercreepr.cruxworlds.api.event.CruxWorldPreCreateEvent;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -32,7 +32,6 @@ import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.world.*;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -47,6 +46,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 
+//todo move data into own world module
 public class StructureManager implements Listener {
     protected final @NotNull Plugin plugin;
     public StructureManager(@NotNull Plugin plugin) {
@@ -273,7 +273,7 @@ public class StructureManager implements Listener {
         addStoredStructure(stored, spawn.getWorld().getUID(), chunk);
     }
 
-    @EventHandler(ignoreCancelled = true)
+    /*@EventHandler(ignoreCancelled = true)
     public void onChunkPopulate(ChunkPopulateEvent event) {
         Chunk c = event.getChunk();
         List<StructureGenerator> list = structures.get(c.getWorld().getName());
@@ -287,7 +287,7 @@ public class StructureManager implements Listener {
                 break;
             }
         });
-    }
+    }*/
 
     public @NotNull CruxFolder createCfgFolder(){
         return new CruxFolder(plugin, "generation");
@@ -306,11 +306,16 @@ public class StructureManager implements Listener {
         return new StorageChunkFile(plugin, "data/cruxstructures/structures/" + worldUUID + "/" + chunkKey);
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    @EventHandler(ignoreCancelled = true)
+    public void onCruxWorldPreCreate(CruxWorldPreCreateEvent event) {
+        event.getModuleCreators().add(world -> new StructureWorldModule(world, this));
+    }
+
+    /*@EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onWorldLoad(WorldLoadEvent event) {
         World world = event.getWorld();
         onWorldLoaded(world);
-    }
+    }*/
 
     public void onWorldLoaded(World world){
         UUID worldUUID = world.getUID();
@@ -335,11 +340,12 @@ public class StructureManager implements Listener {
         Crux.log(Level.INFO, "Loaded " + loaded + " structures in world, " + world.getName());
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    //moved to world modules from CruxWorld
+    /*@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onWorldUnload(WorldUnloadEvent event) {
         World world = event.getWorld();
         onWorldUnloaded(world);
-    }
+    }*/
 
     public void onWorldUnloaded(World world){
         saveWorld(world);
@@ -388,7 +394,7 @@ public class StructureManager implements Listener {
 
     }
 
-    @EventHandler
+    /*@EventHandler
     public void onChunkLoad(ChunkLoadEvent event) {
         Chunk chunk = event.getChunk();
         long chunkKey = chunk.getChunkKey();
@@ -407,9 +413,9 @@ public class StructureManager implements Listener {
             this.active.add(worldUUID, chunkKey, active);
             active.started();
         });
-    }
+    }*/
 
-    @EventHandler
+    /*@EventHandler
     public void onChunkUnload(ChunkUnloadEvent event) {
         Chunk chunk = event.getChunk();
         long chunkKey = chunk.getChunkKey();
@@ -420,7 +426,7 @@ public class StructureManager implements Listener {
             block.stopped();
             //todo maybe addCache(block);
         });
-    }
+    }*/
 
     public @NotNull Plugin getPlugin() {
         return plugin;

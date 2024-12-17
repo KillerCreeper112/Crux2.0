@@ -142,7 +142,7 @@ public class CruxCore extends CruxPlugin implements Listener {
     public void disabled() {
         super.disabled();
         MODULES.unregisterAll(this);
-        structureManager.saveAllWorlds();
+        //structureManager.saveAllWorlds();
     }
 
     @Override

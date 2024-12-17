@@ -1,32 +1,70 @@
 package killercreepr.cruxworlds.world.manager;
 
+import killercreepr.crux.api.registry.KeyedRegistry;
 import killercreepr.crux.api.registry.MappedRegistry;
 import killercreepr.crux.core.registry.SimpleMappedRegistry;
+import killercreepr.crux.core.util.CruxWorldUtil;
+import killercreepr.cruxworlds.api.event.CruxWorldPreCreateEvent;
+import killercreepr.cruxworlds.core.component.CruxWorldsComponents;
+import killercreepr.cruxworlds.registries.WorldsRegistries;
 import killercreepr.cruxworlds.registry.ActiveCruxWorldRegistry;
 import killercreepr.cruxworlds.world.CruxWorld;
 import killercreepr.cruxworlds.world.SimpleWorld;
-import killercreepr.cruxworlds.world.creator.CruxWorldCreator;
-import killercreepr.cruxworlds.world.creator.CruxWorldModuleCreator;
-import killercreepr.cruxworlds.world.creator.WorldModuleCreatorRegistry;
-import killercreepr.cruxworlds.world.creator.WorldModuleCreatorRegistryImpl;
+import killercreepr.cruxworlds.world.creator.*;
+import net.kyori.adventure.key.Key;
+import org.bukkit.Chunk;
+import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.world.WorldInitEvent;
-import org.bukkit.event.world.WorldLoadEvent;
-import org.bukkit.event.world.WorldSaveEvent;
-import org.bukkit.event.world.WorldUnloadEvent;
+import org.bukkit.event.world.*;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.Set;
+import java.util.HashSet;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
+    protected final Plugin plugin;
+    protected final Server server;
+
+    public SimpleCruxWorldManager(Plugin plugin, Server server) {
+        this(plugin, server, WorldsRegistries.WORLD_TYPE);
+    }
+
+    public SimpleCruxWorldManager(Plugin plugin) {
+        this(plugin, plugin.getServer());
+    }
+
+    public SimpleCruxWorldManager(Plugin plugin, Server server, @NotNull KeyedRegistry<CruxWorldType> worldTypes) {
+        this.plugin = plugin;
+        this.server = server;
+        this.worldTypes = worldTypes;
+    }
+    protected final @NotNull KeyedRegistry<CruxWorldType> worldTypes;
     protected final @NotNull MappedRegistry<String, CruxWorldCreator> creators = new SimpleMappedRegistry<>();
     protected final @NotNull WorldModuleCreatorRegistry moduleCreators = new WorldModuleCreatorRegistryImpl();
     protected final @NotNull ActiveCruxWorldRegistry active = new ActiveCruxWorldRegistry();
+
+    @Override
+    public @Nullable CruxWorld getOrCreateWorld(@NotNull Key worldType, @NotNull String name) {
+        CruxWorld world = getWorld(name);
+        if(world != null) return world;
+        CruxWorldType type = worldTypes.get(worldType);
+        if(type == null) return null;
+        return getOrCreateWorld(type, name);
+    }
+
+    @Override
+    public @Nullable CruxWorld getOrCreateWorld(@NotNull CruxWorldType type, @NotNull String name) {
+        CruxWorld world = getWorld(name);
+        if(world != null) return world;
+        return type.generate(name);
+    }
+
     @Override
     public @Nullable CruxWorld getWorld(@NotNull String name) {
         return active.getByName(name);
@@ -35,6 +73,18 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
     @Override
     public @Nullable CruxWorld getWorld(@NotNull UUID uuid) {
         return active.get(uuid);
+    }
+
+    @Override
+    public CompletableFuture<Boolean> deleteWorld(@NotNull CruxWorld world) {
+        boolean x = CruxWorldUtil.deleteWorld(world.toBukkitWorld());
+        if(x) world.onDelete();
+        return CompletableFuture.completedFuture(x);
+    }
+
+    @Override
+    public CompletableFuture<Boolean> unloadWorld(@NotNull CruxWorld world, boolean save) {
+        return CompletableFuture.completedFuture(server.unloadWorld(world.toBukkitWorld(), save));
     }
 
     @Override
@@ -48,6 +98,11 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
     }
 
     @Override
+    public @NotNull KeyedRegistry<CruxWorldType> getWorldTypeRegistry() {
+        return worldTypes;
+    }
+
+    @Override
     public @NotNull WorldModuleCreatorRegistry getModuleCreatorRegistry() {
         return moduleCreators;
     }
@@ -56,13 +111,46 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
         String name = world.getName();
         CruxWorldCreator creator = creators.get(name);
         Collection<CruxWorldModuleCreator> moduleCreators = this.moduleCreators.get(name);
+        if(moduleCreators == null) moduleCreators = new HashSet<>();
+        else moduleCreators = new HashSet<>(moduleCreators);
+
+        CruxWorldPreCreateEvent event = new CruxWorldPreCreateEvent(world, moduleCreators);
+        if(!event.callEvent()) return null;
+
         CruxWorld cruxWorld;
         if(creator == null){
-            if(moduleCreators == null || moduleCreators.isEmpty()) return null;
             cruxWorld = new SimpleWorld(world, moduleCreators);
 
-        }else cruxWorld = creator.create(world, moduleCreators == null ? Set.of() : moduleCreators);
+        }else cruxWorld = creator.create(world, moduleCreators);
         return cruxWorld;
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onChunkLoad(ChunkLoadEvent event) {
+        if(event.isNewChunk()) return;
+        World world = event.getWorld();
+        CruxWorld crux = getWorld(world.getUID());
+        if(crux==null) return;
+        Chunk chunk = event.getChunk();
+        crux.onChunkLoad(chunk);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onChunkUnload(ChunkUnloadEvent event) {
+        World world = event.getWorld();
+        CruxWorld crux = getWorld(world.getUID());
+        if(crux==null) return;
+        Chunk chunk = event.getChunk();
+        crux.onChunkUnload(chunk);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onChunkPopulate(ChunkPopulateEvent event) {
+        World world = event.getWorld();
+        CruxWorld crux = getWorld(world.getUID());
+        if(crux==null) return;
+        Chunk chunk = event.getChunk();
+        crux.onChunkPopulate(chunk);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -89,7 +177,7 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
         CruxWorld crux = getWorld(world.getUID());
         if(crux==null) return;
         active.remove(crux.getUUID());
-        crux.onUnload();
+        crux.onUnload(crux.shouldSaveOnNextUnload());
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -106,5 +194,17 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
 
     public @NotNull ActiveCruxWorldRegistry getActive() {
         return active;
+    }
+
+    public Plugin getPlugin() {
+        return plugin;
+    }
+
+    public Server getServer() {
+        return server;
+    }
+
+    public @NotNull WorldModuleCreatorRegistry getModuleCreators() {
+        return moduleCreators;
     }
 }

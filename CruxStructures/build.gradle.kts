@@ -20,6 +20,7 @@ dependencies {
     compileOnly(project(":CruxMain"))
     compileOnly((project(":CruxConfigs")))
     compileOnly((project(":CruxGeneration")))
+    compileOnly((project(":CruxWorlds")))
 
     /*compileOnly(fileTree("libs") {
         include("*.jar")

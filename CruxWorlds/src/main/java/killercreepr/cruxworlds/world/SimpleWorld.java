@@ -1,19 +1,20 @@
 package killercreepr.cruxworlds.world;
 
 import killercreepr.crux.api.data.tick.Ticked;
+import killercreepr.crux.api.persistence.PersistenceComponentHandler;
 import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.persistence.CruxPersist;
 import killercreepr.cruxworlds.world.creator.CruxWorldModuleCreator;
 import killercreepr.cruxworlds.world.module.WorldModule;
 import org.bukkit.World;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
-public class SimpleWorld implements CruxWorld {
+public class SimpleWorld implements CruxWorld, PersistenceComponentHandler {
     protected final @NotNull World world;
     protected final @NotNull Random random;
     protected final @NotNull Collection<WorldModule> modules;
@@ -37,6 +38,7 @@ public class SimpleWorld implements CruxWorld {
     }
 
     protected boolean active = false;
+    protected boolean saveOnNextUnload = true;
 
     public BukkitRunnable buildRunnable(){
         return new BukkitRunnable() {
@@ -71,8 +73,8 @@ public class SimpleWorld implements CruxWorld {
     }
 
     @Override
-    public void onUnload() {
-        CruxWorld.super.onUnload();
+    public void onUnload(boolean save) {
+        CruxWorld.super.onUnload(save);
         active = false;
     }
 
@@ -97,7 +99,27 @@ public class SimpleWorld implements CruxWorld {
     }
 
     @Override
+    public boolean shouldSaveOnNextUnload() {
+        return saveOnNextUnload;
+    }
+
+    @Override
     public @NotNull Collection<WorldModule> getModules() {
         return modules;
+    }
+
+    @Override
+    public @Nullable PersistentDataContainer getComponentsPersistentContainer() {
+        return world.getPersistentDataContainer();
+    }
+
+    @Override
+    public void onComponentsPersistentContainerChanged(@NotNull PersistentDataContainer data) {
+        CruxPersist.COMPONENTS.set(getComponentsPersistentContainer(), data.isEmpty() ? null : data);
+    }
+
+    @Override
+    public void clearComponents() {
+        CruxPersist.COMPONENTS.remove(getComponentsPersistentContainer());
     }
 }

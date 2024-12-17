@@ -1,19 +1,27 @@
 package killercreepr.cruxworlds.world.manager;
 
+import killercreepr.crux.api.registry.KeyedRegistry;
 import killercreepr.crux.api.registry.MappedRegistry;
 import killercreepr.cruxworlds.world.CruxWorld;
 import killercreepr.cruxworlds.world.creator.CruxWorldCreator;
+import killercreepr.cruxworlds.world.creator.CruxWorldType;
 import killercreepr.cruxworlds.world.creator.WorldModuleCreatorRegistry;
+import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public interface CruxWorldManager {
+    @Nullable CruxWorld getOrCreateWorld(@NotNull Key worldType, @NotNull String name);
+    @Nullable CruxWorld getOrCreateWorld(@NotNull CruxWorldType type, @NotNull String name);
     @Nullable
     CruxWorld getWorld(@NotNull String name);
     @Nullable CruxWorld getWorld(@NotNull UUID uuid);
+    CompletableFuture<Boolean> deleteWorld(@NotNull CruxWorld world);
+    CompletableFuture<Boolean> unloadWorld(@NotNull CruxWorld world, boolean save);
 
     default <T extends CruxWorld> @Nullable T getWorldOrNull(@NotNull String name, @NotNull Class<T> type){
         try{
@@ -49,6 +57,8 @@ public interface CruxWorldManager {
     Collection<CruxWorld> getWorlds();
 
     @NotNull MappedRegistry<String, CruxWorldCreator> getCreatorRegistry();
+    @NotNull
+    KeyedRegistry<CruxWorldType> getWorldTypeRegistry();
     @NotNull
     WorldModuleCreatorRegistry getModuleCreatorRegistry();
 }

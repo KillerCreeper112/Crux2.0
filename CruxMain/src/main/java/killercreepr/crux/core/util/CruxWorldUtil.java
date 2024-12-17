@@ -32,10 +32,12 @@ public class CruxWorldUtil {
     }
 
     public static boolean deleteWorld(@NotNull World world){
-        if(Crux.getServer().isTickingWorlds()){
-            throw new IllegalStateException("Cannot unload world while Bukkit.isTickingWorlds is true!");
+        if(Crux.getServer().getWorld(world.getUID()) != null){
+            if(Crux.getServer().isTickingWorlds()){
+                throw new IllegalStateException("Cannot unload world while Bukkit.isTickingWorlds is true!");
+            }
+            Crux.getServer().unloadWorld(world, false);
         }
-        Crux.getServer().unloadWorld(world, false);
         return deleteWorld(world.getName());
     }
 

@@ -5,6 +5,7 @@ import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.plugin.module.StandardModules;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxworlds.config.CruxConfigsHook;
+import killercreepr.cruxworlds.core.component.CruxWorldsComponents;
 import org.jetbrains.annotations.NotNull;
 
 public class CruxWorldsModule implements CruxModule {
@@ -20,5 +21,6 @@ public class CruxWorldsModule implements CruxModule {
         if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS)){
             CruxConfigsHook.register();
         }
+        CruxWorldsComponents.register();
     }
 }
