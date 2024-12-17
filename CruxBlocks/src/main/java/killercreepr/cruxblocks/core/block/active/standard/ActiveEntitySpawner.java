@@ -7,7 +7,7 @@ import killercreepr.cruxblocks.api.block.active.ActiveCruxTickedBlock;
 import killercreepr.cruxblocks.core.block.active.SimpleActiveCruxBlock;
 import killercreepr.cruxblocks.core.block.component.standard.EntitySpawnerComponent;
 import killercreepr.cruxblocks.core.block.data.CustomBlockData;
-import killercreepr.cruxworlds.world.entity.NaturalEntitySpawner;
+import killercreepr.cruxworlds.api.world.entity.NaturalEntitySpawner;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;

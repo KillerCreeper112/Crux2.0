@@ -1,0 +1,25 @@
+package killercreepr.cruxworlds.core.world.creator;
+
+import killercreepr.crux.core.registry.SimpleMappedRegistry;
+import killercreepr.cruxworlds.api.world.creator.CruxWorldModuleCreator;
+import killercreepr.cruxworlds.api.world.creator.WorldModuleCreatorRegistry;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+
+public class WorldModuleCreatorRegistryImpl extends SimpleMappedRegistry<String, Collection<CruxWorldModuleCreator>> implements WorldModuleCreatorRegistry {
+    public WorldModuleCreatorRegistryImpl(@NotNull Map<String, Collection<CruxWorldModuleCreator>> map) {
+        super(map);
+    }
+
+    public WorldModuleCreatorRegistryImpl() {
+    }
+
+    @Override
+    public <T extends CruxWorldModuleCreator> T register(@NotNull String worldName, @NotNull T creator) {
+        computeIfAbsent(worldName, (name) -> new HashSet<>()).add(creator);
+        return creator;
+    }
+}

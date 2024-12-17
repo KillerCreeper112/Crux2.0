@@ -1,9 +1,9 @@
 package killercreepr.cruxentities.world.entity;
 
 import killercreepr.cruxentities.entity.CruxMob;
-import killercreepr.cruxworlds.world.entity.NaturalEntityGroupPart;
-import killercreepr.cruxworlds.world.entity.SpawnContext;
-import killercreepr.cruxworlds.world.entity.impl.SimpleNaturalEntitySpawn;
+import killercreepr.cruxworlds.api.world.entity.NaturalEntityGroupPart;
+import killercreepr.cruxworlds.api.world.entity.SpawnContext;
+import killercreepr.cruxworlds.core.world.entity.SimpleNaturalEntitySpawn;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

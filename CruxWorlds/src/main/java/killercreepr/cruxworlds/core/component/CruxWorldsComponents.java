@@ -3,7 +3,7 @@ package killercreepr.cruxworlds.core.component;
 import killercreepr.crux.api.component.DataComponentType;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.registries.CruxRegistries;
-import killercreepr.cruxworlds.world.creator.CruxWorldType;
+import killercreepr.cruxworlds.api.world.type.CruxWorldType;
 
 import java.util.function.UnaryOperator;
 
