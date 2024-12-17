@@ -145,6 +145,10 @@ public class CruxWorldsCommands {
                                                 sender.sendMessage(name + " world already exists.");
                                                 return 0;
                                             }
+                                            if(overwrite){
+                                                sender.sendMessage("Deleting previous world if exists...");
+                                                worldManager.deleteWorld(name);
+                                            }
                                             sender.sendMessage("Creating world...");
                                             CruxWorld world = worldManager.getOrCreateWorld(type, name);
                                             if(world == null){
