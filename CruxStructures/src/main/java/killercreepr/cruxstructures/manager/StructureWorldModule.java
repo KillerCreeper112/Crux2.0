@@ -11,10 +11,12 @@ import killercreepr.cruxstructures.structure.result.GenerateResult;
 import killercreepr.cruxstructures.structure.stored.StoredStructure;
 import killercreepr.cruxworlds.world.CruxWorld;
 import killercreepr.cruxworlds.world.module.SimpleWorldModule;
+import org.apache.commons.io.FileUtils;
 import org.bukkit.Chunk;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 //todo move data into own world module
@@ -24,6 +26,19 @@ public class StructureWorldModule extends SimpleWorldModule {
     public StructureWorldModule(@NotNull CruxWorld parent, StructureManager structureManager) {
         super(parent);
         this.structureManager = structureManager;
+    }
+
+    @Override
+    public void onDelete() {
+        UUID worldUUID = parent.getUUID();
+        CruxFolder folder = structureManager.createWorldFolder(worldUUID);
+        File file = folder.file();
+        if(!file.exists() || !file.isDirectory()) return;
+        try{
+            FileUtils.deleteDirectory(file);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     @Override
