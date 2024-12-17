@@ -88,6 +88,12 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
     }
 
     @Override
+    public void onInitiate() {
+        loadConfiguration();
+        super.onInitiate();
+    }
+
+    @Override
     public void reload(@NotNull CruxPlugin plugin) {
         loadConfiguration();
     }
