@@ -21,6 +21,7 @@ public interface CruxWorldManager {
     CruxWorld getWorld(@NotNull String name);
     @Nullable CruxWorld getWorld(@NotNull UUID uuid);
     CompletableFuture<Boolean> deleteWorld(@NotNull CruxWorld world);
+    CompletableFuture<Boolean> deleteWorld(@NotNull String world);
     CompletableFuture<Boolean> unloadWorld(@NotNull CruxWorld world, boolean save);
 
     default <T extends CruxWorld> @Nullable T getWorldOrNull(@NotNull String name, @NotNull Class<T> type){

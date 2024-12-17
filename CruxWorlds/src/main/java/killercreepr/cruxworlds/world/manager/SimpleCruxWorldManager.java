@@ -62,7 +62,9 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
     public @Nullable CruxWorld getOrCreateWorld(@NotNull CruxWorldType type, @NotNull String name) {
         CruxWorld world = getWorld(name);
         if(world != null) return world;
-        return type.generate(name);
+        CruxWorld crux = type.generate(name);
+        crux.set(CruxWorldsComponents.WORLD_TYPE, type);
+        return crux;
     }
 
     @Override
@@ -80,6 +82,11 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
         boolean x = CruxWorldUtil.deleteWorld(world.toBukkitWorld());
         if(x) world.onDelete();
         return CompletableFuture.completedFuture(x);
+    }
+
+    @Override
+    public CompletableFuture<Boolean> deleteWorld(@NotNull String world) {
+        return CompletableFuture.completedFuture(CruxWorldUtil.deleteWorld(world));
     }
 
     @Override
