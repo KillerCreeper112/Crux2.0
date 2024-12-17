@@ -20,6 +20,7 @@ public interface CruxWorld extends DataComponentHandler {
     @NotNull UUID getUUID();
 
     boolean shouldSaveOnNextUnload();
+    void setShouldSaveOnNextUnload(boolean value);
 
     default void onCreate(){
         getModules().forEach(WorldModule::onCreate);

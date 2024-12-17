@@ -104,6 +104,11 @@ public class SimpleWorld implements CruxWorld, PersistenceComponentHandler {
     }
 
     @Override
+    public void setShouldSaveOnNextUnload(boolean value) {
+        this.saveOnNextUnload = value;
+    }
+
+    @Override
     public @NotNull Collection<WorldModule> getModules() {
         return modules;
     }
