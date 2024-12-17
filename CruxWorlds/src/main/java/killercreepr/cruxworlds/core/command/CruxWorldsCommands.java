@@ -10,6 +10,7 @@ import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.plugin.CruxPlugin;
+import killercreepr.crux.core.util.CruxWorldUtil;
 import killercreepr.cruxworlds.api.world.CruxWorld;
 import killercreepr.cruxworlds.api.world.manager.CruxWorldManager;
 import killercreepr.cruxworlds.api.world.type.CruxWorldType;
@@ -148,6 +149,36 @@ public class CruxWorldsCommands {
                                         })
                                 )
                         )
+                )
+        ).then(
+            Commands.literal("load")
+                .then(
+                    Commands.argument("world", StringArgumentType.string())
+                        .suggests((ctx, builder) ->{
+                            for(String s : CruxWorldUtil.getWorldsFromContainer()){
+                                if(worldManager.getWorld(s) != null) continue;
+                                builder.suggest(s);
+                            }
+                            return builder.buildFuture();
+                        })
+                        .executes(ctx ->{
+                            CommandSender sender = getExecutor(ctx.getSource());
+                            String worldName = ctx.getArgument("world", String.class);
+                            if(worldManager.getWorld(worldName) != null){
+                                sender.sendMessage(worldName + " is already loaded.");
+                                return 0;
+                            }
+                            sender.sendMessage("Loading world...");
+                            worldManager.loadWorld(worldName).whenComplete((success, throwable) ->{
+                                if(throwable != null) Crux.log(Level.SEVERE, throwable.getMessage());
+                                if(success == null){
+                                    sender.sendMessage("Could not load world, " + worldName + "...");
+                                    return;
+                                }
+                                sender.sendMessage("Loaded world, " + worldName + ".");
+                            });
+                            return 1;
+                        })
                 )
         )
         ;

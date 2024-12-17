@@ -2,6 +2,7 @@ package killercreepr.crux.core.util;
 
 import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.core.Crux;
+import org.apache.commons.io.FileUtils;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
@@ -9,6 +10,9 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CruxWorldUtil {
     public static boolean isLoaded(@NotNull World world, int x, int z) {
@@ -51,10 +55,32 @@ public class CruxWorldUtil {
                     break;
                 }
             }
-            if(foundLevel) return f.delete();
+            if(foundLevel){
+                try{
+                    FileUtils.deleteDirectory(f);
+                    return true;
+                }catch (IOException e){
+                    e.printStackTrace();
+                    return false;
+                }
+            }
             break;
         }
         return false;
+    }
+
+    public static List<String> getWorldsFromContainer(){
+        List<String> list = new ArrayList<>();
+        for(File f : Crux.getServer().getWorldContainer().listFiles()){
+            if(!f.isDirectory()) continue;
+            for(File folderF : f.listFiles()){
+                if(folderF.getName().equals("level.dat")){
+                    list.add(f.getName());
+                    break;
+                }
+            }
+        }
+        return list;
     }
 
     public static World getOrLoadWorld(@NotNull String name){

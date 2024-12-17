@@ -104,6 +104,12 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
     }
 
     @Override
+    public CompletableFuture<CruxWorld> loadWorld(@NotNull String worldName) {
+        CruxWorldUtil.getOrLoadWorld(worldName);
+        return CompletableFuture.completedFuture(getWorld(worldName));
+    }
+
+    @Override
     public @NotNull Collection<CruxWorld> getWorlds() {
         return active.values();
     }

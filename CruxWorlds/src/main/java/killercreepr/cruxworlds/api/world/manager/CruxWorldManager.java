@@ -23,6 +23,7 @@ public interface CruxWorldManager {
     CompletableFuture<Boolean> deleteWorld(@NotNull CruxWorld world);
     CompletableFuture<Boolean> deleteWorld(@NotNull String world);
     CompletableFuture<Boolean> unloadWorld(@NotNull CruxWorld world, boolean save);
+    CompletableFuture<CruxWorld> loadWorld(@NotNull String worldName);
 
     default <T extends CruxWorld> @Nullable T getWorldOrNull(@NotNull String name, @NotNull Class<T> type){
         try{

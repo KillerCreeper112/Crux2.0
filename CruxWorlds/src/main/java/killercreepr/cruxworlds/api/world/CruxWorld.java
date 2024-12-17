@@ -18,6 +18,7 @@ public interface CruxWorld extends DataComponentHandler {
     Random getRandom();
     @NotNull String getName();
     @NotNull UUID getUUID();
+    long getSeed();
 
     boolean shouldSaveOnNextUnload();
     void setShouldSaveOnNextUnload(boolean value);

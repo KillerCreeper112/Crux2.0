@@ -103,6 +103,11 @@ public class SimpleWorld implements CruxWorld, PersistenceComponentHandler {
     }
 
     @Override
+    public long getSeed() {
+        return world.getSeed();
+    }
+
+    @Override
     public boolean shouldSaveOnNextUnload() {
         return saveOnNextUnload;
     }
