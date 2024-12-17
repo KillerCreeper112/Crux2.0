@@ -1,16 +1,26 @@
 package killercreepr.cruxstructures.manager;
 
+import com.google.common.reflect.TypeToken;
+import killercreepr.crux.api.data.Reloadable;
 import killercreepr.crux.api.data.tick.Ticked;
 import killercreepr.crux.api.data.world.ChunkBlockStorage;
 import killercreepr.crux.api.data.world.WorldChunkStorage;
 import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.data.world.WorldBlockPosedStorage;
+import killercreepr.crux.core.plugin.CruxPlugin;
+import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
+import killercreepr.cruxstructures.CruxStructuresModule;
+import killercreepr.cruxstructures.api.world.module.StructureWorldModule;
+import killercreepr.cruxstructures.config.loader.StructureGeneratorLoader;
+import killercreepr.cruxstructures.config.loader.StructureLoader;
 import killercreepr.cruxstructures.data.world.StoredStructureChunkStorage;
 import killercreepr.cruxstructures.file.StorageChunkFile;
+import killercreepr.cruxstructures.registries.StructureRegistries;
 import killercreepr.cruxstructures.structure.active.ActiveStructure;
 import killercreepr.cruxstructures.structure.generation.StructureGenerator;
+import killercreepr.cruxstructures.structure.impl.CfgFAWEStructure;
 import killercreepr.cruxstructures.structure.result.GenerateResult;
 import killercreepr.cruxstructures.structure.stored.StoredStructure;
 import killercreepr.cruxstructures.structure.stored.TickedStoredStructure;
@@ -29,8 +39,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.logging.Level;
-//todo move data into own world module
-public class StructureWorldModule extends SimpleWorldModule implements Ticked {
+
+public class SimpleStructureWorldModule extends SimpleWorldModule implements StructureWorldModule {
     private static final Predicate<ChunkBlockStorage<StoredStructure>> storedRemoveIf = chunk -> {
         chunk.removeIf(stored -> {
             if(!(stored instanceof TickedStoredStructure a)) return false;
@@ -61,7 +71,7 @@ public class StructureWorldModule extends SimpleWorldModule implements Ticked {
     protected final WorldChunkStorage<ActiveStructure> activeStructures = new WorldBlockPosedStorage<>(new ConcurrentHashMap<>());
     //protected boolean dirty = false;
 
-    public StructureWorldModule(@NotNull CruxWorld parent) {
+    public SimpleStructureWorldModule(@NotNull CruxWorld parent) {
         super(parent);
     }
 
@@ -75,6 +85,36 @@ public class StructureWorldModule extends SimpleWorldModule implements Ticked {
 
     public WorldChunkStorage<ActiveStructure> getActiveStructures() {
         return activeStructures;
+    }
+
+    @Override
+    public void reload(@NotNull CruxPlugin plugin) {
+        loadConfiguration();
+    }
+
+    public @NotNull CruxFolder createCfgFolder(){
+        return new CruxFolder(Crux.getMainPlugin(), "generation");
+    }
+
+    public void loadGenerationConfiguration(){
+        structureGenerators.clear();
+        CruxFolder cfgFolder = createCfgFolder();
+
+        new StructureGeneratorLoader((cfg, generator) ->{
+            List<String> worlds = cfg.deserialize("worlds",
+                new TypeToken<List<String>>(){}.getType());
+            if(worlds == null || worlds.isEmpty()){
+                Crux.log(Level.WARNING, "Structure generator, " + cfg.file().getName() + " does not have any worlds set for it.");
+                return;
+            }
+            if(!worlds.contains(parent.getName())) return;
+            structureGenerators.add(generator);
+            Crux.log(Level.INFO, "Registered structure generator: " + cfg.file().getName() + " for world: " + parent.getName());
+        }).loadConfiguration(cfgFolder.file());
+    }
+
+    public void loadConfiguration(){
+        loadGenerationConfiguration();
     }
 
     @Override
@@ -96,7 +136,7 @@ public class StructureWorldModule extends SimpleWorldModule implements Ticked {
         //setDirty();
     }
 
-    protected void addStoredStructureSilently(StoredStructure stored, long chunkKey){
+    public void addStoredStructureSilently(StoredStructure stored, long chunkKey){
         storedStructures.add(chunkKey, stored);
     }
 

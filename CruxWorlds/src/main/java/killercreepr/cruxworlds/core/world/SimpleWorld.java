@@ -1,9 +1,11 @@
 package killercreepr.cruxworlds.core.world;
 
+import killercreepr.crux.api.data.Reloadable;
 import killercreepr.crux.api.data.tick.Ticked;
 import killercreepr.crux.api.persistence.PersistenceComponentHandler;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.persistence.CruxPersist;
+import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.cruxworlds.api.world.CruxWorld;
 import killercreepr.cruxworlds.api.world.creator.CruxWorldModuleCreator;
 import killercreepr.cruxworlds.api.world.module.WorldModule;
@@ -18,7 +20,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.UUID;
 
-public class SimpleWorld implements CruxWorld, PersistenceComponentHandler {
+public class SimpleWorld implements CruxWorld, PersistenceComponentHandler, Reloadable {
     protected final @NotNull World world;
     protected final @NotNull Random random;
     protected final @NotNull Collection<WorldModule> modules;
@@ -39,6 +41,15 @@ public class SimpleWorld implements CruxWorld, PersistenceComponentHandler {
             if(module instanceof Ticked t) tickedModules.add(t);
         });
 
+    }
+
+    @Override
+    public void reload(@NotNull CruxPlugin plugin) {
+        for(WorldModule module : modules){
+            if(module instanceof Reloadable r){
+                r.reload(plugin);
+            }
+        }
     }
 
     protected boolean active = false;

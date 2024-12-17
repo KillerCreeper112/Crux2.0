@@ -1,7 +1,17 @@
 package killercreepr.cruxstructures.manager;
 
+import killercreepr.crux.api.data.Reloadable;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.plugin.CruxPlugin;
+import killercreepr.crux.core.registries.CruxRegistries;
+import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
+import killercreepr.cruxstructures.CruxStructuresModule;
+import killercreepr.cruxstructures.api.world.module.StructureWorldModule;
+import killercreepr.cruxstructures.config.loader.StructureLoader;
 import killercreepr.cruxstructures.event.StructurePlaceEvent;
+import killercreepr.cruxstructures.registries.StructureRegistries;
 import killercreepr.cruxstructures.structure.Structure;
+import killercreepr.cruxstructures.structure.impl.CfgFAWEStructure;
 import killercreepr.cruxstructures.structure.stored.StoredStructure;
 import killercreepr.cruxworlds.api.event.CruxWorldPreCreateEvent;
 import killercreepr.cruxworlds.api.world.CruxWorld;
@@ -14,7 +24,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-public class StructureManager implements Listener {
+import java.util.HashSet;
+
+public class StructureManager implements Listener, Reloadable {
     protected final @NotNull Plugin plugin;
     protected final @NotNull CruxWorldManager worldManager;
     public StructureManager(@NotNull Plugin plugin, @NotNull CruxWorldManager worldManager) {
@@ -32,7 +44,7 @@ public class StructureManager implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onCruxWorldPreCreate(CruxWorldPreCreateEvent event) {
-        event.getModuleCreators().add(StructureWorldModule::new);
+        event.getModuleCreators().add(SimpleStructureWorldModule::new);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
@@ -50,5 +62,26 @@ public class StructureManager implements Listener {
         if(module == null) return;
         Chunk chunk = spawn.getChunk();
         module.addStoredStructure(stored, chunk);
+    }
+
+    public @NotNull CruxFolder createStructuresFolder(){
+        return new CruxFolder(Crux.getMainPlugin(), "structures");
+    }
+
+    public void loadStructureConfiguration(){
+        CruxFolder cfgFolder = createStructuresFolder();
+        new HashSet<>(StructureRegistries.STRUCTURES.values()).forEach(str ->{
+            if(str instanceof CfgFAWEStructure){
+                StructureRegistries.STRUCTURES.remove(str.key());
+            }
+        });
+
+        new StructureLoader(CruxRegistries.MODULES.getModuleOrThrow(CruxStructuresModule.class).getFileCfgFAWEStructure())
+            .loadConfiguration(cfgFolder.file());
+    }
+
+    @Override
+    public void reload(@NotNull CruxPlugin plugin) {
+        loadStructureConfiguration();
     }
 }
