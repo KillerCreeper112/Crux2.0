@@ -1,5 +1,6 @@
 package killercreepr.cruxworlds.api.event;
 
+import killercreepr.cruxworlds.api.world.creator.CruxWorldCreator;
 import killercreepr.cruxworlds.api.world.creator.CruxWorldModuleCreator;
 import org.bukkit.World;
 import org.bukkit.event.Cancellable;

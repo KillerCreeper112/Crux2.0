@@ -178,7 +178,6 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
     @EventHandler(ignoreCancelled = true)
     public void onWorldInit(WorldInitEvent event) {
         World world = event.getWorld();
-
         CruxWorld crux = create(world);
         if(crux==null) return;
         active.register(crux);
