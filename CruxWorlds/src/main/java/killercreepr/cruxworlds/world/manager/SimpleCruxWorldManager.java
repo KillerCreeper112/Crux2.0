@@ -86,6 +86,8 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
 
     @Override
     public CompletableFuture<Boolean> deleteWorld(@NotNull String world) {
+        CruxWorld crux = getWorld(world);
+        if(crux != null) return deleteWorld(crux);
         return CompletableFuture.completedFuture(CruxWorldUtil.deleteWorld(world));
     }
 
