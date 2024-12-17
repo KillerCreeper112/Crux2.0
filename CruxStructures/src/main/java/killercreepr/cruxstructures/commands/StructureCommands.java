@@ -22,11 +22,14 @@ import killercreepr.crux.core.util.GetNear;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxstructures.commands.argument.StructureArgs;
 import killercreepr.cruxstructures.manager.StructureManager;
+import killercreepr.cruxstructures.manager.StructureWorldModule;
 import killercreepr.cruxstructures.registries.StructureRegistries;
 import killercreepr.cruxstructures.structure.Structure;
 import killercreepr.cruxstructures.structure.impl.CfgFAWEStructure;
 import killercreepr.cruxstructures.structure.stored.StoredStructure;
 import killercreepr.cruxstructures.util.GetStructureNear;
+import killercreepr.cruxworlds.api.world.CruxWorld;
+import killercreepr.cruxworlds.core.command.arguments.CruxWorldArgument;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -188,13 +191,40 @@ public class StructureCommands {
                         )
                 )
         ).then(
+            Commands.literal("listall")
+                .then(
+                    Commands.argument("world", new CruxWorldArgument(structureManager.getWorldManager()))
+                        .executes(ctx ->{
+                            CommandSender sender = getExecutor(ctx.getSource());
+                            CruxWorld world = ctx.getArgument("world", CruxWorld.class);
+                            StructureWorldModule module = world.getModule(StructureWorldModule.class);
+                            if(module.getStoredStructures().isEmpty()){
+                                sender.sendMessage("No stored structures in " + world.getName());
+                                return 1;
+                            }
+                            sender.sendMessage("Listing all structures in " + world.getName() + ":");
+                            module.getStoredStructures().forEach(blockStorage ->{
+                                blockStorage.forEach(stored ->{
+                                    CruxPosition pos = stored.getPosition();
+                                    sender.sendMessage(Component.text(
+                                        "- " + stored.getStructureKey() + " -> " + pos.blockX() + ", " + pos.blockY() + ", " + pos.blockZ()
+                                    ).hoverEvent(HoverEvent.showText(Component.text("Click to teleport")))
+                                        .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/teleport " + pos.blockX() + " " + pos.blockY() + " " + pos.blockZ())));
+                                });
+                            });
+                            return 1;
+                        })
+                )
+        ).then(
             Commands.literal("pos")
                 .executes(ctx ->{
                     CommandSender sender = getExecutor(ctx.getSource());
                     if(!(sender instanceof Player p)) return -1;
                     Block target = p.getTargetBlockExact(10);
+                    CruxWorld world = structureManager.getWorldManager().getWorld(target.getWorld().getUID());
+                    StructureWorldModule module = world.getModule(StructureWorldModule.class);
 
-                    StoredStructure stored = structureManager.getFirstStoredAt(StoredStructure.class, target);
+                    StoredStructure stored = module.getFirstStoredAt(StoredStructure.class, target);
                     CruxPosition center = stored.getPosition();
 
                     CruxPosition targetPos = CruxPosition.block(target);
@@ -215,7 +245,9 @@ public class StructureCommands {
 
     public int locate(@NotNull CommandSourceStack source, @Nullable Structure structure, @Nullable String type){
         if(!(getExecutor(source) instanceof Entity p)) return -1;
-        GetNear<StoredStructure> near = new GetStructureNear(structureManager.getStored())
+        CruxWorld world = structureManager.getWorldManager().getWorld(p.getWorld().getUID());
+        StructureWorldModule module = world.getModule(StructureWorldModule.class);
+        GetNear<StoredStructure> near = new GetStructureNear(module.getStoredStructures())
             .center(p.getLocation())
             ;
         if(structure != null){

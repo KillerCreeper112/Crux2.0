@@ -7,9 +7,7 @@ import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public interface CruxWorld extends DataComponentHandler {
     @NotNull
@@ -57,6 +55,14 @@ public interface CruxWorld extends DataComponentHandler {
             if(type.isAssignableFrom(module.getClass())) return type.cast(module);
         }
         return null;
+    }
+
+    default <T extends WorldModule> @NotNull Collection<T> getModulesOfType(@NotNull Class<T> type){
+        Collection<T> list = new HashSet<>();
+        for(WorldModule module : getModules()){
+            if(type.isAssignableFrom(module.getClass())) list.add(type.cast(module));
+        }
+        return list;
     }
 
     @NotNull

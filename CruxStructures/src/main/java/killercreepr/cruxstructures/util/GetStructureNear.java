@@ -1,7 +1,6 @@
 package killercreepr.cruxstructures.util;
 
 import killercreepr.crux.api.data.holder.LocationHolder;
-import killercreepr.crux.api.data.world.MultiVerseWorldStorage;
 import killercreepr.crux.api.data.world.WorldChunkStorage;
 import killercreepr.crux.core.util.CruxMap;
 import killercreepr.crux.core.util.GetNear;
@@ -15,14 +14,14 @@ import java.util.List;
 import java.util.Map;
 
 public class GetStructureNear extends GetNear<StoredStructure> {
-    protected final @NotNull MultiVerseWorldStorage<StoredStructure> storage;
+    protected final @NotNull WorldChunkStorage<StoredStructure> storage;
 
-    public GetStructureNear(LocationHolder center, @NotNull MultiVerseWorldStorage<StoredStructure> storage) {
+    public GetStructureNear(LocationHolder center, @NotNull WorldChunkStorage<StoredStructure> storage) {
         super(center);
         this.storage = storage;
     }
 
-    public GetStructureNear(@NotNull MultiVerseWorldStorage<StoredStructure> storage) {
+    public GetStructureNear(@NotNull WorldChunkStorage<StoredStructure> storage) {
         this.storage = storage;
     }
 
@@ -30,9 +29,7 @@ public class GetStructureNear extends GetNear<StoredStructure> {
     public @NotNull List<StoredStructure> find() {
         Location center = this.center.value();
         Map<StoredStructure, Float> map = new HashMap<>();
-        WorldChunkStorage<StoredStructure> worldStorage = storage.get(center.getWorld().getUID());
-        if(worldStorage==null) return new ArrayList<>(map.keySet());
-        worldStorage.forEach(chunkStorage -> chunkStorage.forEach(stored ->{
+        storage.forEach(chunkStorage -> chunkStorage.forEach(stored ->{
             if(filter != null && !filter.test(stored)) return;
             float distance = (float) center.distanceSquared(stored.getPosition().toLocation(center.getWorld()));
             map.put(stored, distance);

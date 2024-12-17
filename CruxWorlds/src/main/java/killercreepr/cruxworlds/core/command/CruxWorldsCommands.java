@@ -1,11 +1,14 @@
 package killercreepr.cruxworlds.core.command;
 
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
+import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
+import io.papermc.paper.command.brigadier.argument.resolvers.selector.EntitySelectorArgumentResolver;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import killercreepr.crux.core.Crux;
@@ -16,9 +19,13 @@ import killercreepr.cruxworlds.api.world.manager.CruxWorldManager;
 import killercreepr.cruxworlds.api.world.type.CruxWorldType;
 import killercreepr.cruxworlds.core.command.arguments.CruxWorldArgs;
 import killercreepr.cruxworlds.core.command.arguments.CruxWorldArgument;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -179,6 +186,26 @@ public class CruxWorldsCommands {
                             });
                             return 1;
                         })
+                )
+        ).then(
+            Commands.literal("tp")
+                .then(
+                    Commands.argument("world", worldArg)
+                        .then(
+                            Commands.argument("targets", ArgumentTypes.entities())
+                                .executes(ctx ->{
+                                    CommandSender sender = getExecutor(ctx.getSource());
+                                    CruxWorld world = ctx.getArgument("world", CruxWorld.class);
+                                    Collection<Entity> targets = ctx.getArgument("targets", EntitySelectorArgumentResolver.class)
+                                        .resolve(ctx.getSource());
+                                    Location spawn = world.toBukkitWorld().getSpawnLocation();
+                                    for(Entity e : targets){
+                                        e.teleportAsync(spawn);
+                                        sender.sendMessage("Teleported " + e.getName() + " to " + world.getName() + ".");
+                                    }
+                                    return 1;
+                                })
+                        )
                 )
         )
         ;
