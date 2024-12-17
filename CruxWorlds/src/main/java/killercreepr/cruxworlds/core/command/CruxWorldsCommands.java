@@ -119,6 +119,19 @@ public class CruxWorldsCommands {
             Commands.literal("create")
                 .then(
                     Commands.argument("type", CruxWorldArgs.WORLD_TYPE)
+                        .executes(ctx ->{
+                            CommandSender sender = getExecutor(ctx.getSource());
+                            CruxWorldType type = ctx.getArgument("type", CruxWorldType.class);
+                            String name = type.defaultWorldName();
+                            sender.sendMessage("Getting or creating world...");
+                            CruxWorld world = worldManager.getOrCreateWorld(type, name);
+                            if(world == null){
+                                sender.sendMessage("Could not get or create world, " + name + " from type, " + type.key() + ".");
+                                return 0;
+                            }
+                            sender.sendMessage("Got world " + world.getName() + " from type " + type.key() + "!");
+                            return 1;
+                        })
                         .then(
                             Commands.argument("name", StringArgumentType.string())
                                 .executes(ctx ->{

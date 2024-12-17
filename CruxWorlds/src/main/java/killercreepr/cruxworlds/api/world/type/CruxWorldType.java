@@ -7,4 +7,5 @@ import org.jetbrains.annotations.NotNull;
 public interface CruxWorldType extends CruxKeyed {
     @NotNull
     CruxWorld generate(@NotNull String name);
+    @NotNull String defaultWorldName();
 }

@@ -15,6 +15,10 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public interface CruxWorldManager {
+    default @Nullable CruxWorld getOrCreateWorld(@NotNull CruxWorldType type){
+        return getOrCreateWorld(type, type.defaultWorldName());
+    }
+
     @Nullable CruxWorld getOrCreateWorld(@NotNull Key worldType, @NotNull String name);
     @Nullable CruxWorld getOrCreateWorld(@NotNull CruxWorldType type, @NotNull String name);
     @Nullable
