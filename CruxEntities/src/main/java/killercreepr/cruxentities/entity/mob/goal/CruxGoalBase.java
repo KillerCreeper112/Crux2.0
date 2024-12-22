@@ -29,6 +29,7 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
@@ -108,6 +109,11 @@ public class CruxGoalBase implements ICruxGoal {
                 mob.getLocation().distanceSquared(target.getLocation()) > (getForgetTargetDistance()*getForgetTargetDistance()) /*||
                 TeamUtility.areMatchingOrAlly(mob, target)*/) return false;
         return UNDESIRED_BEHAVIOR.test(target);
+    }
+
+    @Override
+    public boolean isValidHitTarget(@NotNull Entity target) {
+        return !mob.equals(target);
     }
 
     protected double getForgetTargetDistance(){
@@ -270,10 +276,13 @@ public class CruxGoalBase implements ICruxGoal {
                 direction = lE.getEyeLocation().toVector().subtract(mob.getEyeLocation().toVector());
             }else direction = targets[0].getLocation().toVector().subtract(mob.getEyeLocation().toVector());
         }else direction = mob.getEyeLocation().getDirection();
+        List<Entity> specifiedTargets;
+        if(targets != null && targets.length > 0 && (targets.length > 1 || targets[0] != null)) specifiedTargets = Arrays.asList(targets);
+        else specifiedTargets = null;
         EntityHit.Result result = new EntityHit(mob.getEyeLocation(), direction.length() <= 0D ? mob.getEyeLocation().getDirection() : direction, range, aoe, pierce)
                 .getHitEntities(e ->{
-                    if(targets != null && targets.length > 0 && (targets.length > 1 || targets[0] != null)) return List.of(targets).contains(e);
-                    return !e.equals(mob); /*&& !TeamUtility.areMatchingOrAlly(mob, e);*/
+                    if(specifiedTargets != null) return specifiedTargets.contains(e);
+                    return isValidHitTarget(e); /*&& !TeamUtility.areMatchingOrAlly(mob, e);*/
                 });
         Entity e = mob.getTargetEntity(1);
         if(e != null && !result.getHit().contains(e)){
@@ -281,7 +290,8 @@ public class CruxGoalBase implements ICruxGoal {
             result.getResults().add(new RayTraceResult(mob.getEyeLocation().toVector(), e, null));
         }
         if(result.getHit().isEmpty()) return result;
-        double trueDmg = (
+        attack(result.getHit());
+        /*double trueDmg = (
             (mob.getAttribute(Attribute.ATTACK_DAMAGE) == null ? 0D : mob.getAttribute(Attribute.ATTACK_DAMAGE).getValue())
                 + CruxAttribute.ATTACK_DAMAGE.get(mob)
         ) * Math.max(attackCooldown, .75f);
@@ -300,7 +310,7 @@ public class CruxGoalBase implements ICruxGoal {
                 dmgDropOff = Math.max(dmgDropOff - .1f, .1f);
                 kbDropOff = Math.max(kbDropOff - .1f, .1f);
             }
-        }
+        }*/
         return result;
     }
 

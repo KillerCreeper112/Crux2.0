@@ -12,6 +12,7 @@ public interface ICruxGoal {
     boolean isValidAttackerTarget(@NotNull LivingEntity target);
     boolean isValidNaturalTarget(@NotNull LivingEntity target);
     boolean isValidTarget(@NotNull LivingEntity target);
+    boolean isValidHitTarget(@NotNull Entity target);
     void forgetTarget();
     boolean knowsWhereTargetIs();
     boolean hasLineOfSight(@NotNull Entity e);
