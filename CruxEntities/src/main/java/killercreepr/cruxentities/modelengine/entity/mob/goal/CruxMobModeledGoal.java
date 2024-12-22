@@ -83,6 +83,11 @@ public class CruxMobModeledGoal extends CruxMobGoal implements IModelEntity {
         return !isModelPart(target);
     }
 
+    @Override
+    public boolean isValidHitTarget(@NotNull Entity target) {
+        return super.isValidHitTarget(target) && !isModelPart(target);
+    }
+
     protected ActiveModel cachedModel;
     protected Collection<String> cachedSubHitboxBones;
     public boolean isModelPart(@NotNull Entity e){
