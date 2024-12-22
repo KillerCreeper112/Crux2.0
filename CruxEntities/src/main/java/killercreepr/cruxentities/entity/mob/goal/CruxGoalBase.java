@@ -286,8 +286,10 @@ public class CruxGoalBase implements ICruxGoal {
                 });
         Entity e = mob.getTargetEntity(1);
         if(e != null && !result.getHit().contains(e)){
-            result.getHit().add(e);
-            result.getResults().add(new RayTraceResult(mob.getEyeLocation().toVector(), e, null));
+            if((specifiedTargets == null && isValidHitTarget(e)) || (specifiedTargets != null && specifiedTargets.contains(e))){
+                result.getHit().add(e);
+                result.getResults().add(new RayTraceResult(mob.getEyeLocation().toVector(), e, null));
+            }
         }
         if(result.getHit().isEmpty()) return result;
         attack(result.getHit());
