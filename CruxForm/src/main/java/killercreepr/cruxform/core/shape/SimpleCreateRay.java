@@ -2,6 +2,7 @@ package killercreepr.cruxform.core.shape;
 
 import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.api.math.CruxLocation;
+import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxform.api.shape.CreateRay;
 import killercreepr.cruxform.api.shape.cache.CreateCachedShape;
@@ -26,7 +27,7 @@ public class SimpleCreateRay implements CreateRay {
     }
 
     @Override
-    public void generate(@NotNull Consumer<CruxLocation> consumer) {
+    public void generate(@NotNull Consumer<CruxPosition> consumer) {
         generateVectors().forEach(vec ->{
             CruxLocation location = start.value();
             CruxLocation result = location.addRelative(vec.getX(), vec.getY(), vec.getZ());

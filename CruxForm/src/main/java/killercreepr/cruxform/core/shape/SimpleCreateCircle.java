@@ -2,6 +2,7 @@ package killercreepr.cruxform.core.shape;
 
 import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.api.math.CruxLocation;
+import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxform.api.shape.CreateCircle;
 import killercreepr.cruxform.api.shape.cache.CreateCachedShape;
@@ -131,7 +132,7 @@ public class SimpleCreateCircle implements CreateCircle {
     }
 
     @Override
-    public void generate(@NotNull Consumer<CruxLocation> consumer) {
+    public void generate(@NotNull Consumer<CruxPosition> consumer) {
         generateVectors().forEach(vec ->{
             CruxLocation location = center.value();
             vec.rotateAroundX(Math.toRadians(location.pitch()));

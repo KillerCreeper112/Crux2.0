@@ -1,6 +1,6 @@
 package killercreepr.cruxform.core.scheduler;
 
-import killercreepr.crux.api.math.CruxLocation;
+import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.cruxform.api.scheduler.context.ShapeTickContext;
 import killercreepr.cruxform.api.scheduler.context.ShapeTickLocationContext;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -13,10 +13,10 @@ public class ScheduledShapeRunnableLocation extends BukkitRunnable implements Sh
     protected final Consumer<ShapeTickLocationContext> locationConsumer;
     protected final Consumer<ShapeTickContext> tickConsumer;
     protected final Runnable cancelTask;
-    private final List<CruxLocation> list;
+    private final List<CruxPosition> list;
     protected final int totalTicks;
 
-    public ScheduledShapeRunnableLocation(Consumer<ShapeTickLocationContext> locationConsumer, Consumer<ShapeTickContext> tickConsumer, Runnable cancelTask, List<CruxLocation> list, int totalTicksTime) {
+    public ScheduledShapeRunnableLocation(Consumer<ShapeTickLocationContext> locationConsumer, Consumer<ShapeTickContext> tickConsumer, Runnable cancelTask, List<CruxPosition> list, int totalTicksTime) {
         this.locationConsumer = locationConsumer;
         this.tickConsumer = tickConsumer;
         this.cancelTask = cancelTask;
@@ -29,7 +29,7 @@ public class ScheduledShapeRunnableLocation extends BukkitRunnable implements Sh
     private final double maxParEachIteration;
     private double i;
     private int index = -1;
-    protected CruxLocation l;
+    protected CruxPosition l;
     protected int tick = -1;
     @Override
     public void run(){
@@ -65,7 +65,7 @@ public class ScheduledShapeRunnableLocation extends BukkitRunnable implements Sh
     }
 
     @Override
-    public @NotNull CruxLocation getLocation() {
+    public @NotNull CruxPosition getLocation() {
         return l;
     }
 

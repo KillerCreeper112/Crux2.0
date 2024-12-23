@@ -1,6 +1,6 @@
 package killercreepr.cruxform.core.scheduler;
 
-import killercreepr.crux.api.math.CruxLocation;
+import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.cruxform.api.scheduler.context.ShapeTickContext;
 import killercreepr.cruxform.api.scheduler.context.ShapeTickLocationContext;
 import killercreepr.cruxform.api.shape.cache.CreateCachedShape;
@@ -29,7 +29,7 @@ public class ScheduledShapeCacheRunnableLocation extends BukkitRunnable implemen
         this.maxTicks = totalTicksTime;
     }
 
-    protected CruxLocation l;
+    protected CruxPosition l;
     protected int tick = -1;
     @Override
     public void run() {
@@ -67,7 +67,7 @@ public class ScheduledShapeCacheRunnableLocation extends BukkitRunnable implemen
     }
 
     @Override
-    public @NotNull CruxLocation getLocation() {
+    public @NotNull CruxPosition getLocation() {
         return l;
     }
 

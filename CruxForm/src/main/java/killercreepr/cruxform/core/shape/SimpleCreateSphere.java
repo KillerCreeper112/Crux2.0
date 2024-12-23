@@ -2,6 +2,7 @@ package killercreepr.cruxform.core.shape;
 
 import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.api.math.CruxLocation;
+import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxform.api.shape.CreateSphere;
 import killercreepr.cruxform.api.shape.cache.CreateCachedShape;
@@ -82,13 +83,13 @@ public class SimpleCreateSphere implements CreateSphere {
     }
 
     @Override
-    public void generate(@NotNull Consumer<CruxLocation> consumer) {
+    public void generate(@NotNull Consumer<CruxPosition> consumer) {
         generateVectors().forEach(vec ->{
             CruxLocation location = center.value();
             vec.rotateAroundX(Math.toRadians(location.pitch()));
             vec.rotateAroundY(Math.toRadians(location.yaw()*-1));
 
-            CruxLocation result = location.add(vec.getX(), vec.getY(), vec.getZ());
+            CruxPosition result = location.add(vec.getX(), vec.getY(), vec.getZ());
             consumer.accept(result);
         });
     }

@@ -1,7 +1,7 @@
 package killercreepr.cruxform.api.shape;
 
 import killercreepr.crux.api.data.Holder;
-import killercreepr.crux.api.math.CruxLocation;
+import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxform.core.shape.SimpleCreateLine;
 
@@ -10,12 +10,12 @@ public interface CreateLine extends CreateShape{
         return new SimpleCreateLine.Builder();
     }
     interface Builder {
-        Builder start(Holder<CruxLocation> start);
-        default Builder start(CruxLocation start){
+        Builder start(Holder<CruxPosition> start);
+        default Builder start(CruxPosition start){
             return start(Holder.direct(start));
         }
-        Builder end(Holder<CruxLocation> end);
-        default Builder end(CruxLocation end){
+        Builder end(Holder<CruxPosition> end);
+        default Builder end(CruxPosition end){
             return end(Holder.direct(end));
         }
         Builder spacing(NumberProvider spacing);

@@ -1,7 +1,7 @@
 package killercreepr.cruxform.core.shape;
 
 import killercreepr.crux.api.data.Holder;
-import killercreepr.crux.api.math.CruxLocation;
+import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxform.api.shape.CreateRectangle;
 import killercreepr.cruxform.api.shape.cache.CreateCachedShape;
@@ -15,13 +15,13 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class SimpleCreateRectangle implements CreateRectangle {
-    protected final Holder<CruxLocation> pos1;
-    protected final Holder<CruxLocation> pos2;
+    protected final Holder<CruxPosition> pos1;
+    protected final Holder<CruxPosition> pos2;
     protected final CreateRectangle.Type type;
     protected final NumberProvider spacing;
     protected final boolean inverted;
 
-    public SimpleCreateRectangle(Holder<CruxLocation> pos1, Holder<CruxLocation> pos2,
+    public SimpleCreateRectangle(Holder<CruxPosition> pos1, Holder<CruxPosition> pos2,
                                  CreateRectangle.Type type,
                                  NumberProvider spacing,
                                  boolean inverted) {
@@ -34,10 +34,10 @@ public class SimpleCreateRectangle implements CreateRectangle {
 
     public List<Vector> generateVectors(){
         List<Vector> list = new ArrayList<>();
-        CruxLocation pos1Pos = pos1.value();
-        CruxLocation pos2Pos = pos2.value();
-        final CruxLocation max = CruxLocation.getMaximum(pos1Pos, pos2Pos);
-        final CruxLocation min = CruxLocation.getMinimum(pos1Pos, pos2Pos);
+        CruxPosition pos1Pos = pos1.value();
+        CruxPosition pos2Pos = pos2.value();
+        final CruxPosition max = CruxPosition.getMaximum(pos1Pos, pos2Pos);
+        final CruxPosition min = CruxPosition.getMinimum(pos1Pos, pos2Pos);
         double spacing = this.spacing.value().doubleValue();
 
         final int xParticleAmount = Math.max(1, (int) (((max.x()-min.x()) / spacing)));
@@ -76,11 +76,11 @@ public class SimpleCreateRectangle implements CreateRectangle {
     }
 
     @Override
-    public void generate(@NotNull Consumer<CruxLocation> consumer) {
-        CruxLocation pos1Pos = pos1.value();
-        CruxLocation pos2Pos = pos2.value();
-        final CruxLocation max = CruxLocation.getMaximum(pos1Pos, pos2Pos);
-        final CruxLocation min = CruxLocation.getMinimum(pos1Pos, pos2Pos);
+    public void generate(@NotNull Consumer<CruxPosition> consumer) {
+        CruxPosition pos1Pos = pos1.value();
+        CruxPosition pos2Pos = pos2.value();
+        final CruxPosition max = CruxPosition.getMaximum(pos1Pos, pos2Pos);
+        final CruxPosition min = CruxPosition.getMinimum(pos1Pos, pos2Pos);
         double spacing = this.spacing.value().doubleValue();
 
         final int xParticleAmount = Math.max(1, (int) (((max.x()-min.x()) / spacing)));
@@ -112,7 +112,7 @@ public class SimpleCreateRectangle implements CreateRectangle {
                         (max.y() - min.y()) * ((double) y /yParticleAmount),
                         (max.z() - min.z()) * ((double) z /zParticleAmount));
 
-                    CruxLocation result = min.add(vec.getX(), vec.getY(), vec.getZ());
+                    CruxPosition result = min.add(vec.getX(), vec.getY(), vec.getZ());
                     consumer.accept(result);
                 }
             }
@@ -122,27 +122,27 @@ public class SimpleCreateRectangle implements CreateRectangle {
     @Override
     public @NotNull CreateCachedShape generateCache(@Nullable Consumer<Vector> consumer) {
         return new SimpleCachedAddCenter(generateVectors(), () ->{
-            CruxLocation pos1Pos = pos1.value();
-            CruxLocation pos2Pos = pos2.value();
-            return CruxLocation.getMinimum(pos1Pos, pos2Pos);
+            CruxPosition pos1Pos = pos1.value();
+            CruxPosition pos2Pos = pos2.value();
+            return CruxPosition.getMinimum(pos1Pos, pos2Pos);
         });
     }
 
     public static class Builder implements CreateRectangle.Builder {
-        protected Holder<CruxLocation> pos1;
-        protected Holder<CruxLocation> pos2;
+        protected Holder<CruxPosition> pos1;
+        protected Holder<CruxPosition> pos2;
         protected CreateRectangle.Type type = Type.WIRE;
         protected NumberProvider spacing;
         protected boolean inverted;
 
         @Override
-        public Builder pos1(Holder<CruxLocation> pos1) {
+        public Builder pos1(Holder<CruxPosition> pos1) {
             this.pos1 = pos1;
             return this;
         }
 
         @Override
-        public Builder pos2(Holder<CruxLocation> pos2) {
+        public Builder pos2(Holder<CruxPosition> pos2) {
             this.pos2 = pos2;
             return this;
         }

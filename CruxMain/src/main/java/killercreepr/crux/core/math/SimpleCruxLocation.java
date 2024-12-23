@@ -2,11 +2,8 @@ package killercreepr.crux.core.math;
 
 import killercreepr.crux.api.math.CruxLocation;
 import killercreepr.crux.api.math.CruxPosition;
-import killercreepr.crux.core.util.CruxLoc;
-import killercreepr.crux.core.util.CruxMath;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.util.NumberConversions;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -285,16 +282,24 @@ public class SimpleCruxLocation implements CruxLocation {
     }
 
     @Override
-    public @NotNull CruxLocation lookAt(@NotNull CruxLocation target) {
+    public @NotNull CruxLocation lookAt(@NotNull CruxPosition target) {
         //todo MAKE PROPER DIRECTION FOR CRUXLOCATIONS AHHHHHHHHHHHHH
-        CruxPosition v = target.subtract(this);
-        return setDirection(v.x(), v.y(), v.z());
+        /*CruxPosition v = target.subtract(this);
+        return setDirection(v.x(), v.y(), v.z());*/
+        return lookAt(target.x(), target.y(), target.z());
     }
 
     @Override
-    public @NotNull CruxLocation shiftToward(@NotNull CruxLocation target, double amount) {
+    public @NotNull CruxLocation shiftToward(@NotNull CruxPosition target, double amount) {
         CruxLocation loc = lookAt(target).addRelative(amount, 0D, 0D);
         return CruxLocation.location(loc.x(), loc.y(), loc.z(), yaw, pitch);
+    }
+
+    @Override
+    public @NotNull CruxLocation lookAt(double x, double y, double z) {
+        return setDirection(x - x(), y - y(), z - z());
+        /*CruxPosition v = target.subtract(this);
+        return setDirection(v.x(), v.y(), v.z());*/
     }
 
     @Override

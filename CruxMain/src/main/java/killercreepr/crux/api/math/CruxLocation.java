@@ -27,6 +27,10 @@ public interface CruxLocation extends CruxPosition {
         return location(v.getX(), v.getY(), v.getZ());
     }
 
+    static @NotNull CruxLocation location(@NotNull CruxPosition pos){
+        return location(pos.x(), pos.y(), pos.z());
+    }
+
     @Contract(pure = true)
     static CruxLocation getMaximum(@NotNull CruxLocation v1, @NotNull CruxLocation v2) {
         return location(Math.max(v1.x(), v2.x()), Math.max(v1.y(), v2.y()), Math.max(v1.z(), v2.z()), Math.max(v1.yaw(), v2.yaw()), Math.max(v1.pitch(), v2.pitch()));
@@ -91,10 +95,13 @@ public interface CruxLocation extends CruxPosition {
     @NotNull CruxLocation withZ(double z);
 
     @Contract(pure = true)
-    @NotNull CruxLocation lookAt(@NotNull CruxLocation target);
+    @NotNull CruxLocation lookAt(@NotNull CruxPosition target);
 
     @Contract(pure = true)
-    @NotNull CruxLocation shiftToward(@NotNull CruxLocation target, double amount);
+    @NotNull CruxLocation shiftToward(@NotNull CruxPosition target, double amount);
+
+    @Contract(pure = true)
+    @NotNull CruxLocation lookAt(double x, double y, double z);
 
     float yaw();
     float pitch();

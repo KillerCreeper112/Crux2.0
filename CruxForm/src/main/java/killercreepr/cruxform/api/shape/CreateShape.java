@@ -1,6 +1,6 @@
 package killercreepr.cruxform.api.shape;
 
-import killercreepr.crux.api.math.CruxLocation;
+import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.cruxform.api.shape.cache.CreateCachedShape;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -11,14 +11,14 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public interface CreateShape {
-    void generate(@NotNull Consumer<CruxLocation> consumer);
+    void generate(@NotNull Consumer<CruxPosition> consumer);
     default @NotNull CreateCachedShape generateCache(){
         return generateCache(null);
     }
     @NotNull
     CreateCachedShape generateCache(@Nullable Consumer<Vector> consumer);
-    default List<CruxLocation> generateList(){
-        List<CruxLocation> list = new ArrayList<>();
+    default List<CruxPosition> generateList(){
+        List<CruxPosition> list = new ArrayList<>();
         generate(list::add);
         return list;
     }
