@@ -1,0 +1,43 @@
+package killercreepr.cruxstructures.core.config;
+
+import com.google.common.reflect.TypeToken;
+import killercreepr.cruxconfig.config.common.FileContext;
+import killercreepr.cruxconfig.config.common.FileRegistry;
+import killercreepr.cruxconfig.config.common.element.FileElement;
+import killercreepr.cruxconfig.config.common.element.FileObject;
+import killercreepr.cruxconfig.config.common.handler.PureYamlFileHandler;
+import killercreepr.cruxstructures.core.structure.CfgFAWEStructure;
+import killercreepr.cruxstructures.api.structure.module.StructureModule;
+import net.kyori.adventure.key.Key;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+
+public class FileCfgFAWEStructure extends PureYamlFileHandler<CfgFAWEStructure> {
+    @Override
+    public @Nullable CfgFAWEStructure deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
+        if(!(e instanceof FileObject o)) return null;
+        FileRegistry registry = ctx.getRegistry();
+        Key key = registry.deserializeFromFile(Key.class, o.get("key"));
+        if(key==null) return null;
+        return deserializeFromFile(ctx, e, key);
+    }
+
+    public @Nullable CfgFAWEStructure deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e, @NotNull Key key) {
+        if(!(e instanceof FileObject o)) return null;
+        FileRegistry registry = ctx.getRegistry();
+        String schematic = registry.deserializeFromFile(String.class, o.get("schematic"));
+        if(schematic==null) return null;
+        Boolean persist = registry.deserializeFromFile(Boolean.class, o.get("persistent"));
+        List<StructureModule> beforePlacementModules = registry.deserializeFromFile(
+            new TypeToken<List<StructureModule>>(){}.getType(), o.get("before_modules")
+        );
+        List<StructureModule> modules = registry.deserializeFromFile(
+            new TypeToken<List<StructureModule>>(){}.getType(), o.get("modules")
+        );
+        return new CfgFAWEStructure(
+            key, schematic, persist != null && persist, beforePlacementModules, modules == null ? List.of() : modules
+        );
+    }
+}

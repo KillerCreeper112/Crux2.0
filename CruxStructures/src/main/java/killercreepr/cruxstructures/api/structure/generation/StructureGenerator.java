@@ -1,0 +1,18 @@
+package killercreepr.cruxstructures.api.structure.generation;
+
+import killercreepr.cruxstructures.api.structure.Structure;
+import killercreepr.cruxstructures.api.structure.generation.result.GenerateResult;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
+
+public interface StructureGenerator {
+    @NotNull
+    GenerateResult
+    generate(@NotNull Structure structure, @NotNull Chunk at);
+    @NotNull GenerateResult generate(@NotNull Chunk at);
+
+    @NotNull GenerateResult generate(@NotNull Location at);
+
+    @NotNull GenerateResult generate(@NotNull Structure structure, @NotNull Location at);
+}
