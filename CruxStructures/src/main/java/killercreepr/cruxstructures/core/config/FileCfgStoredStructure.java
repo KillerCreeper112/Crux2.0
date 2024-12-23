@@ -6,21 +6,24 @@ import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
+import killercreepr.cruxstructures.api.structure.StoredStructure;
 import killercreepr.cruxstructures.core.structure.stored.CfgStoredStructure;
 import net.kyori.adventure.key.Key;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FileCfgStoredStructure<T extends CfgStoredStructure> extends FileSimpleStoredStructure<T>{
+public class FileCfgStoredStructure<T extends StoredStructure> extends FileSimpleStoredStructure<T>{
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull T object) {
         FileRegistry reg = context.getRegistry();
         FileObject o = (FileObject) super.serializeToFile(context, object);
-        o.add("bounding_box", reg.serializeToFile(object.getBoundingBox()));
-        BoundingBox inner = object.getInnerBox();
-        if(inner != null){
-            o.add("inner_bounding_box", reg.serializeToFile(inner));
+        if(object instanceof CfgStoredStructure stored){
+            o.add("bounding_box", reg.serializeToFile(stored.getBoundingBox()));
+            BoundingBox inner = stored.getInnerBox();
+            if(inner != null){
+                o.add("inner_bounding_box", reg.serializeToFile(inner));
+            }
         }
         return o;
     }
