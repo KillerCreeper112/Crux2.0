@@ -1,5 +1,6 @@
 package killercreepr.cruxworlds.core.world.manager;
 
+import killercreepr.crux.api.data.tick.Ticked;
 import killercreepr.crux.api.registry.KeyedRegistry;
 import killercreepr.crux.api.registry.MappedRegistry;
 import killercreepr.crux.core.registry.SimpleMappedRegistry;
@@ -24,6 +25,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.*;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -53,6 +55,23 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
     protected final @NotNull MappedRegistry<String, CruxWorldCreator> creators = new SimpleMappedRegistry<>();
     protected final @NotNull WorldModuleCreatorRegistry moduleCreators = new WorldModuleCreatorRegistryImpl();
     protected final @NotNull ActiveCruxWorldRegistry active = new ActiveCruxWorldRegistry();
+
+    public BukkitRunnable buildRunnable(){
+        return new BukkitRunnable() {
+            @Override
+            public void run() {
+                /*if(!isActive()){
+                    cancel();
+                    return;
+                }*/
+                tick();
+            }
+        };
+    }
+
+    public void tick(){
+        active.getTicked().forEach(Ticked::tick);
+    }
 
     @Override
     public @Nullable CruxWorld getOrCreateWorld(@NotNull Key worldType, @NotNull String name) {

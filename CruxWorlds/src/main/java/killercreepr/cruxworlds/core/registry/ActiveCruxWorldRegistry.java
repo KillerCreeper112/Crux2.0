@@ -1,13 +1,12 @@
 package killercreepr.cruxworlds.core.registry;
 
+import killercreepr.crux.api.data.tick.ManagedTicked;
 import killercreepr.crux.core.registry.SimpleMappedRegistry;
 import killercreepr.cruxworlds.api.world.CruxWorld;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class ActiveCruxWorldRegistry extends SimpleMappedRegistry<UUID, CruxWorld> {
     public ActiveCruxWorldRegistry(@NotNull Map<UUID, CruxWorld> map) {
@@ -22,9 +21,19 @@ public class ActiveCruxWorldRegistry extends SimpleMappedRegistry<UUID, CruxWorl
     }
 
     protected final Map<String, CruxWorld> BY_NAME = new HashMap<>();
+    protected final Collection<ManagedTicked> TICKED = new HashSet<>();
+
+    public Collection<ManagedTicked> getTicked(){
+        return TICKED;
+    }
+
     @Override
     public <E extends CruxWorld> @NotNull E register(@NotNull UUID key, @NotNull E value) {
         BY_NAME.put(value.getName(), value);
+        if(value instanceof ManagedTicked t){
+            TICKED.add(t);
+            t.started();
+        }
         return super.register(key, value);
     }
 
@@ -41,7 +50,12 @@ public class ActiveCruxWorldRegistry extends SimpleMappedRegistry<UUID, CruxWorl
     @Override
     public @Nullable CruxWorld remove(@NotNull UUID key) {
         CruxWorld removed = super.remove(key);
-        if(removed != null) BY_NAME.remove(removed.getName());
+        if(removed != null){
+            BY_NAME.remove(removed.getName());
+            if(removed instanceof ManagedTicked t){
+                if(TICKED.remove(t)) t.stopped();
+            }
+        }
         return removed;
     }
 
@@ -49,6 +63,9 @@ public class ActiveCruxWorldRegistry extends SimpleMappedRegistry<UUID, CruxWorl
     public boolean remove(@NotNull UUID key, @NotNull CruxWorld value) {
         boolean x = super.remove(key, value);
         BY_NAME.remove(value.getName());
+        if(value instanceof ManagedTicked t){
+            if(TICKED.remove(t)) t.stopped();
+        }
         return x;
     }
 }

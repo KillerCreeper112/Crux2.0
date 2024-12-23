@@ -1,6 +1,7 @@
 package killercreepr.cruxworlds.core.world;
 
 import killercreepr.crux.api.data.Reloadable;
+import killercreepr.crux.api.data.tick.ManagedTicked;
 import killercreepr.crux.api.data.tick.Ticked;
 import killercreepr.crux.api.persistence.PersistenceComponentHandler;
 import killercreepr.crux.core.Crux;
@@ -20,7 +21,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.UUID;
 
-public class SimpleWorld implements CruxWorld, PersistenceComponentHandler, Reloadable {
+public class SimpleWorld implements CruxWorld, PersistenceComponentHandler, Reloadable, ManagedTicked {
     protected final @NotNull World world;
     protected final @NotNull Random random;
     protected final @NotNull Collection<WorldModule> modules;
@@ -52,26 +53,14 @@ public class SimpleWorld implements CruxWorld, PersistenceComponentHandler, Relo
         }
     }
 
-    protected boolean active = false;
+    //protected boolean active = false;
     protected boolean saveOnNextUnload = true;
 
-    public BukkitRunnable buildRunnable(){
-        return new BukkitRunnable() {
-            @Override
-            public void run() {
-                if(!isActive()){
-                    cancel();
-                    return;
-                }
-                tick();
-            }
-        };
-    }
-
-    public boolean isActive(){
+    /*public boolean isActive(){
         return active;
-    }
+    }*/
 
+    @Override
     public void tick(){
         tickedModules.forEach(Ticked::tick);
     }
@@ -83,14 +72,14 @@ public class SimpleWorld implements CruxWorld, PersistenceComponentHandler, Relo
     @Override
     public void onLoad() {
         CruxWorld.super.onLoad();
-        active = true;
-        buildRunnable().runTaskTimerAsynchronously(Crux.getMainPlugin(), tickInterval(), tickInterval());
+        //active = true;
+        //buildRunnable().runTaskTimerAsynchronously(Crux.getMainPlugin(), tickInterval(), tickInterval());
     }
 
     @Override
     public void onUnload(boolean save) {
         CruxWorld.super.onUnload(save);
-        active = false;
+        //active = false;
     }
 
     @Override
