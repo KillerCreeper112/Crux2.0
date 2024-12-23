@@ -32,5 +32,6 @@ public class SimpleActiveStructure implements ActiveStructure {
     }
 
     @Override
-    public void tick() {}
+    public void tick() {
+    }
 }

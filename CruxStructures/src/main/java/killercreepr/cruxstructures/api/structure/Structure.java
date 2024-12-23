@@ -1,8 +1,10 @@
 package killercreepr.cruxstructures.api.structure;
 
+import killercreepr.crux.api.component.DataComponentHandler;
 import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.core.data.world.StoredChunk;
 import killercreepr.crux.core.util.CruxMath;
+import killercreepr.cruxstructures.api.component.StructureComponent;
 import killercreepr.cruxstructures.api.event.StructurePlaceEvent;
 import killercreepr.cruxstructures.core.structure.stored.SimpleStoredStructure;
 import net.kyori.adventure.key.Keyed;
@@ -14,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.function.Predicate;
 
-public interface Structure extends Keyed {
+public interface Structure extends Keyed, DataComponentHandler {
     @NotNull
     default StructurePlaceEvent place(@NotNull Location at){
         return place(at, CruxMath.random().nextInt(4) * 90);
@@ -29,7 +31,11 @@ public interface Structure extends Keyed {
 
     default boolean isPersistent(){ return false; }
     default @Nullable StoredStructure buildStored(@NotNull Location center, double rotation){
-        return new SimpleStoredStructure(this, StoredChunk.from(center), CruxPosition.block(center), rotation);
+        StoredStructure stored = new SimpleStoredStructure(this, StoredChunk.from(center), CruxPosition.block(center), rotation);
+        getAllOfType(StructureComponent.class).forEach(component ->{
+            component.onCreated(center, rotation, stored);
+        });
+        return stored;
     }
 
     default @NotNull Collection<CruxPosition> getBlocks(double rotation){

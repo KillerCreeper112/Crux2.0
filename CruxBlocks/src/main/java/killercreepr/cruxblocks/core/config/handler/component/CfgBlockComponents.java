@@ -10,9 +10,11 @@ import killercreepr.cruxblocks.api.block.component.*;
 import killercreepr.cruxblocks.core.block.component.CruxBlockComponents;
 import killercreepr.cruxblocks.core.block.component.standard.EntitySpawnerComponent;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileDataComponentType;
+import killercreepr.cruxconfig.config.bukkit.registry.FileDataComponentRegistry;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileObject;
+import net.kyori.adventure.key.Key;
 import org.bukkit.Axis;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class CfgBlockComponents {
     //TODO change this system up probably
-    public static void register(@NotNull MappedRegistry<String, FileDataComponentType<?>> registry){
+    public static void register(@NotNull FileDataComponentRegistry registry){
         registry.register("directional_block", new FileDataComponentType<DirectionalBlock>() {
             @Override
             public @Nullable TypedDataComponent<DirectionalBlock> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {

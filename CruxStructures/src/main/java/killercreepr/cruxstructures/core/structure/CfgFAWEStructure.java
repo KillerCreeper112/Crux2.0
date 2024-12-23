@@ -3,15 +3,12 @@ package killercreepr.cruxstructures.core.structure;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.core.data.world.StoredChunk;
+import killercreepr.cruxstructures.api.component.StructureComponent;
 import killercreepr.cruxstructures.api.event.StructurePlaceEvent;
 import killercreepr.cruxstructures.api.structure.StoredStructure;
-import killercreepr.cruxstructures.api.structure.module.StructureBoundingBoxModule;
-import killercreepr.cruxstructures.api.structure.module.StructureModule;
-import killercreepr.cruxstructures.core.structure.stored.CfgStoredStructure;
-import killercreepr.cruxstructures.core.util.CruxStructureUtil;
+import killercreepr.cruxstructures.core.structure.stored.SimpleStoredStructure;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Location;
-import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,23 +17,23 @@ import java.util.List;
 
 public class CfgFAWEStructure extends FAWEStructure{
     protected final boolean persistent;
-    protected final @Nullable List<StructureModule> beforePlacementModules;
-    protected final @NotNull List<StructureModule> modules;
-    public CfgFAWEStructure(@NotNull Key key, @NotNull ClipboardHolder holder, boolean persistent, @Nullable List<StructureModule> beforePlacementModules, @NotNull List<StructureModule> modules) {
+    protected final @Nullable List<StructureComponent> beforePlacementModules;
+    protected final @NotNull List<StructureComponent> modules;
+    public CfgFAWEStructure(@NotNull Key key, @NotNull ClipboardHolder holder, boolean persistent, @Nullable List<StructureComponent> beforePlacementModules, @NotNull List<StructureComponent> modules) {
         super(key, holder);
         this.persistent = persistent;
         this.beforePlacementModules = beforePlacementModules;
         this.modules = modules;
     }
 
-    public CfgFAWEStructure(@NotNull Key key, @NotNull String filename, boolean persistent, @Nullable List<StructureModule> beforePlacementModules, @NotNull List<StructureModule> modules) {
+    public CfgFAWEStructure(@NotNull Key key, @NotNull String filename, boolean persistent, @Nullable List<StructureComponent> beforePlacementModules, @NotNull List<StructureComponent> modules) {
         super(key, filename);
         this.persistent = persistent;
         this.beforePlacementModules = beforePlacementModules;
         this.modules = modules;
     }
 
-    public CfgFAWEStructure(@NotNull Key key, @NotNull File schematicFile, boolean persistent, @Nullable List<StructureModule> beforePlacementModules, @NotNull List<StructureModule> modules) {
+    public CfgFAWEStructure(@NotNull Key key, @NotNull File schematicFile, boolean persistent, @Nullable List<StructureComponent> beforePlacementModules, @NotNull List<StructureComponent> modules) {
         super(key, schematicFile);
         this.persistent = persistent;
         this.beforePlacementModules = beforePlacementModules;
@@ -54,23 +51,25 @@ public class CfgFAWEStructure extends FAWEStructure{
         return event;
     }
 
-    @Override
+    /*@Override
     public @Nullable StoredStructure buildStored(@NotNull Location center, double rotation) {
-        CruxPosition cruxCenter = CruxPosition.block(center);
+        *//*CruxPosition cruxCenter = CruxPosition.block(center);
         StoredChunk chunk = StoredChunk.from(center);
-        BoundingBox outerBox = CruxStructureUtil.calculateBoundingBox(cruxCenter, this, rotation);
-        BoundingBox innerBox = null;
+        StoredStructure stored = new SimpleStoredStructure(this, chunk, cruxCenter, rotation);
+        return stored;*//*
+        *//*BoundingBox innerBox = CruxStructureUtil.calculateBoundingBox(cruxCenter, this, rotation);
+        BoundingBox outerBox = null;
         for(StructureModule module : getModules()){
-            if(module instanceof StructureBoundingBoxModule mod) innerBox = mod.editBoundingBox(this, center, rotation, innerBox == null ? outerBox : innerBox);
-        }
-        return new CfgStoredStructure(this.key(), chunk, cruxCenter, outerBox, rotation, innerBox);
-    }
+            if(module instanceof StructureBoundingBoxModule mod) outerBox = mod.editBoundingBox(this, center, rotation, outerBox == null ? innerBox : outerBox);
+        }*//*
+        //return new CfgStoredStructure(this.key(), chunk, cruxCenter, outerBox == null ? innerBox : outerBox, rotation, innerBox);
+    }*/
 
-    public @NotNull List<StructureModule> getModules() {
+    public @NotNull List<StructureComponent> getModules() {
         return modules;
     }
 
-    public @Nullable List<StructureModule> getBeforePlacementModules() {
+    public @Nullable List<StructureComponent> getBeforePlacementModules() {
         return beforePlacementModules;
     }
 

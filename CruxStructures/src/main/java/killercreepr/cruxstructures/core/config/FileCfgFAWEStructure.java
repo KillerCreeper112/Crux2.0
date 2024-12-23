@@ -6,6 +6,7 @@ import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.PureYamlFileHandler;
+import killercreepr.cruxstructures.api.component.StructureComponent;
 import killercreepr.cruxstructures.api.structure.module.StructureModule;
 import killercreepr.cruxstructures.core.structure.CfgFAWEStructure;
 import net.kyori.adventure.key.Key;
@@ -30,14 +31,21 @@ public class FileCfgFAWEStructure extends PureYamlFileHandler<CfgFAWEStructure> 
         String schematic = registry.deserializeFromFile(String.class, o.get("schematic"));
         if(schematic==null) return null;
         Boolean persist = registry.deserializeFromFile(Boolean.class, o.get("persistent"));
-        List<StructureModule> beforePlacementModules = registry.deserializeFromFile(
-            new TypeToken<List<StructureModule>>(){}.getType(), o.get("before_modules")
+        List<StructureComponent> beforePlacementModules = registry.deserializeFromFile(
+            new TypeToken<List<StructureComponent>>(){}.getType(), o.get("before_modules")
         );
-        List<StructureModule> modules = registry.deserializeFromFile(
-            new TypeToken<List<StructureModule>>(){}.getType(), o.get("modules")
+        List<StructureComponent> modules = registry.deserializeFromFile(
+            new TypeToken<List<StructureComponent>>(){}.getType(), o.get("modules")
         );
-        return new CfgFAWEStructure(
+        CfgFAWEStructure loaded = new CfgFAWEStructure(
             key, schematic, persist != null && persist, beforePlacementModules, modules == null ? List.of() : modules
         );
+        if(modules != null){
+            modules.forEach(module ->{
+                if(!(module instanceof StructureComponent c)) return;
+                c.onStructureHook(loaded);
+            });
+        }
+        return loaded;
     }
 }

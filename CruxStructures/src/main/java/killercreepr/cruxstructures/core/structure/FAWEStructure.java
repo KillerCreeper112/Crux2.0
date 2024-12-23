@@ -12,6 +12,7 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.math.transform.AffineTransform;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.block.BlockState;
+import killercreepr.crux.api.component.DataComponentHandler;
 import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.math.BlockPos;
@@ -31,7 +32,7 @@ import java.util.HashSet;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 
-public class FAWEStructure implements Structure {
+public class FAWEStructure extends DataComponentHandler.Simple implements Structure {
     protected final @NotNull Key key;
     protected final @NotNull ClipboardHolder holder;
     protected final @NotNull BoundingBox box;

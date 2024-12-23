@@ -1,5 +1,6 @@
 package killercreepr.cruxstructures.api.structure;
 
+import killercreepr.crux.api.component.DataComponentHandler;
 import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.api.math.PositionPosed;
 import killercreepr.crux.core.data.world.StoredChunk;
@@ -12,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public interface StoredStructure extends PositionPosed {
+public interface StoredStructure extends PositionPosed, DataComponentHandler {
     @NotNull
     Key getStructureKey();
     default @NotNull Structure getParent(){

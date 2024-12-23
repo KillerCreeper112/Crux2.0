@@ -7,6 +7,8 @@ import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.SimpleFileHandler;
+import killercreepr.cruxstructures.api.component.StoredStructureComponent;
+import killercreepr.cruxstructures.api.component.StructureComponent;
 import killercreepr.cruxstructures.api.structure.StoredStructure;
 import killercreepr.cruxstructures.api.structure.Structure;
 import killercreepr.cruxstructures.core.registries.StructureRegistries;
@@ -25,6 +27,9 @@ public class FileSimpleStoredStructure<T extends StoredStructure> extends Simple
             .add("center", registry.serializeToFile(object.getPosition()))
             .addProperty("rotation", object.getRotation())
             ;
+        object.getAllOfType(StoredStructureComponent.class).forEach(component ->{
+            component.onFileSave(context, o, object);
+        });
         return o;
     }
 
@@ -50,7 +55,11 @@ public class FileSimpleStoredStructure<T extends StoredStructure> extends Simple
         Structure structure = StructureRegistries.STRUCTURES.get(structureKey);
         if(structure == null) throw new RuntimeException("Structure " + structureKey + " not found!");
 
-        return new SimpleStoredStructure(structure, chunk, center, rotation);
+        SimpleStoredStructure stored = new SimpleStoredStructure(structure, chunk, center, rotation);
+        structure.getAllOfType(StructureComponent.class).forEach(component ->{
+            component.onFileLoad(context, o, stored);
+        });
+        return stored;
     }
 
     @Override

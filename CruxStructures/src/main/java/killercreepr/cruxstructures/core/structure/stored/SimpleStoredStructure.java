@@ -1,5 +1,6 @@
 package killercreepr.cruxstructures.core.structure.stored;
 
+import killercreepr.crux.api.component.DataComponentHandler;
 import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.core.data.world.StoredChunk;
 import killercreepr.cruxstructures.api.structure.ActiveStructure;
@@ -13,7 +14,7 @@ import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SimpleStoredStructure implements StoredStructure {
+public class SimpleStoredStructure extends DataComponentHandler.Simple implements StoredStructure {
     protected final @NotNull Key structureKey;
     protected final @NotNull StoredChunk chunk;
     protected final @NotNull CruxPosition center;
