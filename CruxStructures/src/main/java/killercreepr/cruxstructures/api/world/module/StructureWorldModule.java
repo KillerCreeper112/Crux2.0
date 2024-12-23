@@ -4,15 +4,16 @@ import killercreepr.crux.api.data.Reloadable;
 import killercreepr.crux.api.data.tick.Ticked;
 import killercreepr.crux.api.data.world.WorldChunkStorage;
 import killercreepr.cruxstructures.api.structure.ActiveStructure;
-import killercreepr.cruxstructures.api.structure.generation.StructureGenerator;
 import killercreepr.cruxstructures.api.structure.StoredStructure;
+import killercreepr.cruxstructures.api.structure.generation.StructureGenerator;
 import killercreepr.cruxworlds.api.world.module.WorldModule;
 import org.bukkit.Chunk;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
 import java.util.function.Predicate;
 
 public interface StructureWorldModule extends WorldModule, Ticked, Reloadable {

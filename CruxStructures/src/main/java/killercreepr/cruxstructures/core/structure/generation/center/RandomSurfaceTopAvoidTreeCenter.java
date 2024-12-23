@@ -2,8 +2,8 @@ package killercreepr.cruxstructures.core.structure.generation.center;
 
 import com.destroystokyo.paper.MaterialSetTag;
 import killercreepr.crux.core.util.CruxMath;
-import killercreepr.cruxstructures.api.structure.generation.StructureCenter;
 import killercreepr.cruxstructures.api.structure.Structure;
+import killercreepr.cruxstructures.api.structure.generation.StructureCenter;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.block.Block;

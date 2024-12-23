@@ -6,8 +6,8 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
-import killercreepr.cruxstructures.core.registries.StructureRegistries;
 import killercreepr.cruxstructures.api.structure.Structure;
+import killercreepr.cruxstructures.core.registries.StructureRegistries;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 

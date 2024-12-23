@@ -7,21 +7,22 @@ import killercreepr.cruxconfig.config.bukkit.handler.impl.FileGenericEnum;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.FileSimpleLootTable;
 import killercreepr.cruxconfig.config.bukkit.standard.CommonLootTableHandlers;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
+import killercreepr.cruxstructures.api.location.LocationFinder;
+import killercreepr.cruxstructures.api.structure.generation.StructureCenter;
+import killercreepr.cruxstructures.api.structure.generation.StructureChunkRequirement;
+import killercreepr.cruxstructures.api.structure.generation.StructureGenerator;
+import killercreepr.cruxstructures.api.structure.generation.StructureRequirement;
+import killercreepr.cruxstructures.api.structure.module.StructureModule;
 import killercreepr.cruxstructures.core.commands.StructureCommands;
 import killercreepr.cruxstructures.core.config.*;
 import killercreepr.cruxstructures.core.config.generation.*;
 import killercreepr.cruxstructures.core.config.location.FileDummyLocationFinder;
 import killercreepr.cruxstructures.core.config.location.FileNearbySolidBlockFinder;
 import killercreepr.cruxstructures.core.config.module.*;
-import killercreepr.cruxstructures.api.location.LocationFinder;
 import killercreepr.cruxstructures.core.manager.StructureManager;
-import killercreepr.cruxstructures.api.structure.generation.StructureGenerator;
-import killercreepr.cruxstructures.api.structure.generation.StructureCenter;
-import killercreepr.cruxstructures.api.structure.generation.StructureChunkRequirement;
-import killercreepr.cruxstructures.api.structure.generation.StructureRequirement;
 import killercreepr.cruxstructures.core.structure.CfgFAWEStructure;
-import killercreepr.cruxstructures.api.structure.module.StructureModule;
 import killercreepr.cruxstructures.core.structure.module.WallsModule;
+import killercreepr.cruxstructures.core.structure.stored.CfgStoredStructure;
 import killercreepr.cruxstructures.core.structure.stored.SimpleStoredStructure;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
@@ -119,6 +120,7 @@ public class CruxStructuresModule implements CruxModule {
 
         CfgRegistries.JSON_REGISTRY.forEach(registry ->{
             registry.registerFileHandler(SimpleStoredStructure.class, new FileSimpleStoredStructure<SimpleStoredStructure>());
+            registry.registerFileHandler(CfgStoredStructure.class, new FileCfgStoredStructure<>());
         });
 
         fileLocationFinder.TYPE_HANDLERS.register("nearby_solid_block", new FileNearbySolidBlockFinder());

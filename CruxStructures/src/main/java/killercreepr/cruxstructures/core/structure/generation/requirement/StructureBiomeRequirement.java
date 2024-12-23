@@ -1,8 +1,8 @@
 package killercreepr.cruxstructures.core.structure.generation.requirement;
 
 import killercreepr.crux.paper.nms.biome.BiomeUtils;
-import killercreepr.cruxstructures.api.structure.generation.StructureRequirement;
 import killercreepr.cruxstructures.api.structure.Structure;
+import killercreepr.cruxstructures.api.structure.generation.StructureRequirement;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Chunk;
 import org.bukkit.Location;

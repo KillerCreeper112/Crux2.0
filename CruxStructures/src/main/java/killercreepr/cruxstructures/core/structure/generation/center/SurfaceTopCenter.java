@@ -1,7 +1,7 @@
 package killercreepr.cruxstructures.core.structure.generation.center;
 
-import killercreepr.cruxstructures.api.structure.generation.StructureCenter;
 import killercreepr.cruxstructures.api.structure.Structure;
+import killercreepr.cruxstructures.api.structure.generation.StructureCenter;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
