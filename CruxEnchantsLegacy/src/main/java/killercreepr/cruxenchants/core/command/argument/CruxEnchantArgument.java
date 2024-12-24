@@ -7,8 +7,8 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
-import killercreepr.cruxenchants.enchant.CruxEnchant;
 import killercreepr.cruxenchants.core.registries.CruxEnchantRegistries;
+import killercreepr.cruxenchants.enchant.CruxEnchant;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 

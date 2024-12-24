@@ -10,14 +10,16 @@ import killercreepr.crux.api.loot.item.ItemLootTable;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.block.predicate.BlockAllPredicate;
 import killercreepr.crux.core.component.parser.hybrid.text.ListPersistTextParser;
-import killercreepr.crux.core.persistence.CruxPersist;
 import killercreepr.crux.core.persistence.CruxPersistence;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.paper.ItemHolder;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
 
 public class ComponentInputParsers {
     public static PersistTextParser<ItemHolder> ITEM_HOLDER = PersistTextParser.elementBuilder(ItemHolder.class)

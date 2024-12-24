@@ -2,13 +2,11 @@ package killercreepr.cruxitems.core;
 
 import killercreepr.crux.api.handler.ItemHandler;
 import killercreepr.crux.api.plugin.module.CruxModule;
-import killercreepr.crux.api.registry.KeyedRegistry;
 import killercreepr.crux.api.text.tags.TagParser;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.plugin.module.StandardModules;
 import killercreepr.crux.core.registries.CruxRegistries;
-import killercreepr.crux.core.text.tags.CruxTags;
 import killercreepr.crux.paper.ItemHolder;
 import killercreepr.crux.paper.item.BukkitItemHolder;
 import killercreepr.cruxitems.api.item.CruxedItem;

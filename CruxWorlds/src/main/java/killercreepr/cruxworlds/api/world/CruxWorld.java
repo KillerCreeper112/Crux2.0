@@ -7,7 +7,10 @@ import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.UUID;
 
 public interface CruxWorld extends DataComponentHandler {
     @NotNull

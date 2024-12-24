@@ -1,10 +1,8 @@
 package killercreepr.crux.core.component.parser.hybrid.text.persistence;
 
-import com.google.common.collect.Lists;
 import killercreepr.crux.api.component.parser.InputDecodeContext;
 import killercreepr.crux.api.component.parser.hybrid.TextInputField;
 import killercreepr.crux.api.component.parser.hybrid.TextInputResultParser;
-import killercreepr.crux.core.persistence.type.ListTagType;
 import org.bukkit.persistence.ListPersistentDataType;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataType;

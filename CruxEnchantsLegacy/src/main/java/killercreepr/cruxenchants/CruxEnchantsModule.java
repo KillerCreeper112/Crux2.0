@@ -7,9 +7,9 @@ import killercreepr.crux.core.plugin.module.StandardModules;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxenchants.core.command.CruxEnchantCommands;
 import killercreepr.cruxenchants.core.config.Config;
-import killercreepr.cruxenchants.tags.EnchantLoreTag;
 import killercreepr.cruxenchants.core.values.DefaultValues;
 import killercreepr.cruxenchants.core.values.ValuesProvider;
+import killercreepr.cruxenchants.tags.EnchantLoreTag;
 import org.jetbrains.annotations.NotNull;
 
 public class CruxEnchantsModule implements CruxModule {

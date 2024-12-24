@@ -28,7 +28,9 @@ import killercreepr.cruxstructures.core.config.location.FileNearbySolidBlockFind
 import killercreepr.cruxstructures.core.config.module.*;
 import killercreepr.cruxstructures.core.manager.StructureManager;
 import killercreepr.cruxstructures.core.structure.CfgFAWEStructure;
-import killercreepr.cruxstructures.core.structure.component.*;
+import killercreepr.cruxstructures.core.structure.component.StructureComponents;
+import killercreepr.cruxstructures.core.structure.component.StructureOuterBoxComponent;
+import killercreepr.cruxstructures.core.structure.component.StructureStoredBlocksComponent;
 import killercreepr.cruxstructures.core.structure.module.WallsModule;
 import killercreepr.cruxstructures.core.structure.stored.SimpleStoredStructure;
 import net.kyori.adventure.key.Key;

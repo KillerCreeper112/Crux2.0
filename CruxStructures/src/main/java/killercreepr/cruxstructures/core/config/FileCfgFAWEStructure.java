@@ -2,7 +2,6 @@ package killercreepr.cruxstructures.core.config;
 
 import com.google.common.reflect.TypeToken;
 import killercreepr.crux.api.component.DataComponentHandler;
-import killercreepr.crux.api.component.TypedDataComponent;
 import killercreepr.crux.core.Crux;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
@@ -10,16 +9,11 @@ import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.PureYamlFileHandler;
 import killercreepr.cruxstructures.api.component.StructureComponent;
-import killercreepr.cruxstructures.api.structure.module.StructureModule;
 import killercreepr.cruxstructures.core.structure.CfgFAWEStructure;
 import net.kyori.adventure.key.Key;
-import org.bukkit.entity.Warden;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 

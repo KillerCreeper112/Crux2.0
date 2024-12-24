@@ -2,7 +2,6 @@ package killercreepr.crux.core.component;
 
 import killercreepr.crux.api.component.serialization.PersistHolderComponentHandler;
 import killercreepr.crux.core.persistence.CruxPersist;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataHolder;

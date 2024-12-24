@@ -7,7 +7,6 @@ import io.papermc.paper.registry.event.RegistryFreezeEvent;
 import io.papermc.paper.registry.event.WritableRegistry;
 import killercreepr.crux.api.registry.KeyedRegistry;
 import killercreepr.crux.core.Crux;
-import killercreepr.crux.core.loot.item.functions.ItemEnchantFunction;
 import killercreepr.cruxenchants.api.enchant.CruxEnchantWrapper;
 import net.kyori.adventure.key.Key;
 import org.bukkit.enchantments.Enchantment;

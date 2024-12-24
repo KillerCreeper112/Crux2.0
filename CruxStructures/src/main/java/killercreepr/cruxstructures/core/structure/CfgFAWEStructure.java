@@ -1,13 +1,9 @@
 package killercreepr.cruxstructures.core.structure;
 
 import com.sk89q.worldedit.session.ClipboardHolder;
-import killercreepr.crux.api.math.CruxPosition;
-import killercreepr.crux.core.data.world.StoredChunk;
 import killercreepr.cruxstructures.api.component.StructureComponent;
 import killercreepr.cruxstructures.api.event.StructurePlaceEvent;
 import killercreepr.cruxstructures.api.structure.CfgStructure;
-import killercreepr.cruxstructures.api.structure.StoredStructure;
-import killercreepr.cruxstructures.core.structure.stored.SimpleStoredStructure;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;

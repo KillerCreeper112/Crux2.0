@@ -5,7 +5,6 @@ import killercreepr.crux.api.item.dynamic.DynamicItem;
 import killercreepr.crux.api.item.dynamic.DynamicItemComponent;
 import killercreepr.crux.api.item.dynamic.component.persistence.TypedDynamicPersistentTag;
 import killercreepr.crux.api.registry.MappedRegistry;
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.item.dynamic.BukkitDynamicItem;
 import killercreepr.crux.core.item.dynamic.component.*;
 import killercreepr.crux.core.item.dynamic.component.attribute.DynamicAttributeModifier;
@@ -20,12 +19,10 @@ import killercreepr.cruxconfig.config.common.element.FileGeneric;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.SimpleFileHandler;
 import killercreepr.cruxconfig.config.common.json.annotation.JsonSerializer;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.logging.Level;
 
 //todo food,
 @JsonSerializer(id = "dynamic_item")

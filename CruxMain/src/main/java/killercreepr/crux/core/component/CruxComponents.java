@@ -1,7 +1,6 @@
 package killercreepr.crux.core.component;
 
 import killercreepr.crux.api.component.DataComponentType;
-import killercreepr.crux.api.component.parser.hybrid.PersistParser;
 import killercreepr.crux.api.component.parser.hybrid.PersistTextParser;
 import killercreepr.crux.api.component.serialization.PersistentDataSerializer;
 import killercreepr.crux.api.item.component.ToolComponent;

@@ -7,7 +7,6 @@ import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.api.valueproviders.vector.NumberVector;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.util.CruxLoc;
-import killercreepr.cruxstructures.api.component.StructureComponent;
 import killercreepr.cruxstructures.api.structure.Structure;
 import killercreepr.cruxstructures.api.structure.module.StructureModule;
 import net.kyori.adventure.key.Key;
