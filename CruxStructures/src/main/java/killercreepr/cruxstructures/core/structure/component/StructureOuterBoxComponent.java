@@ -2,14 +2,16 @@ package killercreepr.cruxstructures.core.structure.component;
 
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileObject;
+import killercreepr.cruxstructures.api.component.StoredStructureComponent;
 import killercreepr.cruxstructures.api.component.StructureComponent;
 import killercreepr.cruxstructures.api.structure.StoredStructure;
 import killercreepr.cruxstructures.api.structure.Structure;
+import org.bukkit.Location;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-public class StructureOuterBoxComponent implements StructureComponent {
+public class StructureOuterBoxComponent implements StructureComponent, StoredStructureComponent {
     protected final @NotNull Vector expand;
     public StructureOuterBoxComponent(@NotNull Vector expand) {
         this.expand = expand;
@@ -21,6 +23,19 @@ public class StructureOuterBoxComponent implements StructureComponent {
         BoundingBox box = context.getRegistry().deserializeFromFile(BoundingBox.class, data.get("outer_box"));
         if(box == null) return;
         structure.set(StoredStructureComponents.OUTER_BOX, box);
+    }
+
+    @Override
+    public void onFileSave(@NotNull FileContext<?> context, @NotNull FileObject o, @NotNull StoredStructure structure) {
+        BoundingBox box = structure.get(StoredStructureComponents.OUTER_BOX);
+        if(box == null) return;
+        o.add("outer_box", context.getRegistry().serializeToFile(box));
+    }
+
+    @Override
+    public void onCreated(@NotNull Location center, double rotation, @NotNull StoredStructure stored) {
+        BoundingBox outerBox = stored.getBoundingBox().clone().expand(expand);
+        stored.set(StoredStructureComponents.OUTER_BOX, outerBox);
     }
 
     @Override

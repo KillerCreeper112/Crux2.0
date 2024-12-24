@@ -27,9 +27,11 @@ public class FileSimpleStoredStructure<T extends StoredStructure> extends Simple
             .add("center", registry.serializeToFile(object.getPosition()))
             .addProperty("rotation", object.getRotation())
             ;
+        FileObject data = new FileObject();
         object.getAllOfType(StoredStructureComponent.class).forEach(component ->{
-            component.onFileSave(context, o, object);
+            component.onFileSave(context, data, object);
         });
+        if(!data.isEmpty()) o.add("data", data);
         return o;
     }
 
@@ -55,9 +57,13 @@ public class FileSimpleStoredStructure<T extends StoredStructure> extends Simple
         Structure structure = StructureRegistries.STRUCTURES.get(structureKey);
         if(structure == null) throw new RuntimeException("Structure " + structureKey + " not found!");
 
+        FileObject data;
+        if(o.get("data") instanceof FileObject oop) data = oop;
+        else data = new FileObject();
+
         SimpleStoredStructure stored = new SimpleStoredStructure(structure, chunk, center, rotation);
         structure.getAllOfType(StructureComponent.class).forEach(component ->{
-            component.onFileLoad(context, o, stored);
+            component.onFileLoad(context, data, stored);
         });
         return stored;
     }

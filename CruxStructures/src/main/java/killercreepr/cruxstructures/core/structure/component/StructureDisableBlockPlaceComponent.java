@@ -2,20 +2,25 @@ package killercreepr.cruxstructures.core.structure.component;
 
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileObject;
+import killercreepr.cruxstructures.api.component.StoredStructureComponent;
 import killercreepr.cruxstructures.api.component.StructureComponent;
 import killercreepr.cruxstructures.api.structure.StoredStructure;
-import killercreepr.cruxstructures.core.structure.CfgFAWEStructure;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
-public class StructureStoredBlocksComponent implements StructureComponent {
+public class StructureDisableBlockPlaceComponent implements StructureComponent, StoredStructureComponent {
     @Override
     public void onFileLoad(@NotNull FileContext<?> context, @NotNull FileObject o, @NotNull StoredStructure structure) {
-        structure.set(StoredStructureComponents.STORE_BLOCKS, new SimpleStoredBlocks((CfgFAWEStructure) structure.getParent()));
+        structure.set(StoredStructureComponents.DISABLE_BLOCK_PLACE, true);
+    }
+
+    @Override
+    public void onLoad(@NotNull StoredStructure structure) {
+        structure.set(StoredStructureComponents.DISABLE_BLOCK_PLACE, true);
     }
 
     @Override
     public void onCreated(@NotNull Location center, double rotation, @NotNull StoredStructure stored) {
-        stored.set(StoredStructureComponents.STORE_BLOCKS, new SimpleStoredBlocks((CfgFAWEStructure) stored.getParent()));
+        stored.set(StoredStructureComponents.DISABLE_BLOCK_PLACE, true);
     }
 }

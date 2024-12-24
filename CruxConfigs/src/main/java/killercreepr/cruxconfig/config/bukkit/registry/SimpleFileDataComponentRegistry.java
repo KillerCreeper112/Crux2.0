@@ -12,9 +12,6 @@ public class SimpleFileDataComponentRegistry extends SimpleMappedRegistry<Key, F
         super(map);
     }
 
-    /**
-     * Creates a registry using a HashMap.
-     */
     public SimpleFileDataComponentRegistry() {
     }
 }

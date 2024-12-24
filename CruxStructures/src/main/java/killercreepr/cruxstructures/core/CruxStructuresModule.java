@@ -1,11 +1,18 @@
 package killercreepr.cruxstructures.core;
 
+import killercreepr.crux.api.component.TypedDataComponent;
 import killercreepr.crux.api.plugin.module.CruxModule;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.plugin.module.StandardModules;
+import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.FileGenericEnum;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileDataComponentType;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.FileSimpleLootTable;
+import killercreepr.cruxconfig.config.bukkit.registry.FileDataComponentRegistry;
 import killercreepr.cruxconfig.config.bukkit.standard.CommonLootTableHandlers;
+import killercreepr.cruxconfig.config.common.FileContext;
+import killercreepr.cruxconfig.config.common.FileRegistry;
+import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import killercreepr.cruxstructures.api.component.StructureComponent;
 import killercreepr.cruxstructures.api.location.LocationFinder;
@@ -21,11 +28,13 @@ import killercreepr.cruxstructures.core.config.location.FileNearbySolidBlockFind
 import killercreepr.cruxstructures.core.config.module.*;
 import killercreepr.cruxstructures.core.manager.StructureManager;
 import killercreepr.cruxstructures.core.structure.CfgFAWEStructure;
-import killercreepr.cruxstructures.core.structure.component.StructureComponents;
+import killercreepr.cruxstructures.core.structure.component.*;
 import killercreepr.cruxstructures.core.structure.module.WallsModule;
 import killercreepr.cruxstructures.core.structure.stored.SimpleStoredStructure;
 import net.kyori.adventure.key.Key;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class CruxStructuresModule implements CruxModule {
     public static final FileSimpleLootTable<Key> fileSimpleLootTable = CommonLootTableHandlers.KEY;
@@ -79,6 +88,7 @@ public class CruxStructuresModule implements CruxModule {
     @Override
     public void onLoad(@NotNull CruxPlugin plugin) {
         StructureComponents.register();
+        registerCfgComponents(BukkitCfgHandlers.TYPED_DATA_COMPONENT.typeHandlers());
         CfgRegistries.SIMPLE_REGISTRY.forEach(registry -> {
             registry.registerFileHandler(StructureGenerator.class, fileCfgStructureGen);
             registry.registerFileHandler(StructureCenter.class, fileStructureCenter);
@@ -117,7 +127,6 @@ public class CruxStructuresModule implements CruxModule {
         fileStructureModule.TYPE_HANDLERS.register("elongate_floor", new FileElongateFloorModule());
         fileStructureModule.TYPE_HANDLERS.register("clear_space", new FileClearSpaceModule());
         fileStructureModule.TYPE_HANDLERS.register("clear_region", new FileClearRegionModule());
-        fileStructureModule.TYPE_HANDLERS.register("expand_bounding_box", new FileExpandBoundingBoxModule());
         fileStructureModule.TYPE_HANDLERS.register("store_blocks", new FileStoreBlocksModule());
 
         CfgRegistries.JSON_REGISTRY.forEach(registry ->{
@@ -134,5 +143,34 @@ public class CruxStructuresModule implements CruxModule {
 
         fileCfgStructureGen.typeHandlers().register("set_location_list", new FileLocationSetListStructureGen());
         fileCfgStructureGen.typeHandlers().register("instant_set_location_list", new FileInstantLocationSetListStructureGen());
+    }
+
+    public void registerCfgComponents(FileDataComponentRegistry reg){
+        reg.register("structure/outer_box", new FileDataComponentType<StructureComponent>() {
+            @Override
+            public @Nullable TypedDataComponent<StructureComponent> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
+                FileRegistry r = ctx.getRegistry();
+                Vector expansion = r.deserializeFromFile(Vector.class, e.get("expansion"));
+                return TypedDataComponent.create(StructureComponents.OUTER_BOX, new StructureOuterBoxComponent(expansion));
+            }
+        });
+        reg.register("structure/store_blocks", new FileDataComponentType<StructureComponent>() {
+            @Override
+            public @Nullable TypedDataComponent<StructureComponent> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
+                return TypedDataComponent.create(StructureComponents.STORE_BLOCKS, new StructureStoredBlocksComponent());
+            }
+        });
+        reg.register("structure/disable_block_place", new FileDataComponentType<StructureComponent>() {
+            @Override
+            public @Nullable TypedDataComponent<StructureComponent> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
+                return TypedDataComponent.create(StructureComponents.DISABLE_BLOCK_PLACE, new StructureDisableBlockPlaceComponent());
+            }
+        });
+        reg.register("structure/disable_block_break", new FileDataComponentType<StructureComponent>() {
+            @Override
+            public @Nullable TypedDataComponent<StructureComponent> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
+                return TypedDataComponent.create(StructureComponents.DISABLE_BLOCK_BREAK, new StructureDisableBlockBreakComponent());
+            }
+        });
     }
 }

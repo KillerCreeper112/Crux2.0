@@ -1,8 +1,6 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.component;
 
 import killercreepr.crux.api.component.TypedDataComponent;
-import killercreepr.crux.api.registry.MappedRegistry;
-import killercreepr.crux.core.registry.SimpleMappedRegistry;
 import killercreepr.cruxconfig.config.bukkit.registry.FileDataComponentRegistry;
 import killercreepr.cruxconfig.config.bukkit.registry.SimpleFileDataComponentRegistry;
 import killercreepr.cruxconfig.config.common.FileContext;
@@ -26,7 +24,7 @@ public class FileTypedDataComponent implements FileObjectHandler<TypedDataCompon
     @Override
     public @Nullable TypedDataComponent<?> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;
-        Key type = o.getObject(Key.class, "component");
+        Key type = ctx.getRegistry().deserializeFromFile(Key.class, o.get("component"));
         if(type == null) return null;
         FileDataComponentType<?> file = typeHandlers().get(type);
         if(file == null) throw new IllegalArgumentException("FileDataComponentType of " + type + " does not exist!");
