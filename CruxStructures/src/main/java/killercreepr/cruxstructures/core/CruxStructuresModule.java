@@ -127,7 +127,6 @@ public class CruxStructuresModule implements CruxModule {
         fileStructureModule.TYPE_HANDLERS.register("elongate_floor", new FileElongateFloorModule());
         fileStructureModule.TYPE_HANDLERS.register("clear_space", new FileClearSpaceModule());
         fileStructureModule.TYPE_HANDLERS.register("clear_region", new FileClearRegionModule());
-        fileStructureModule.TYPE_HANDLERS.register("store_blocks", new FileStoreBlocksModule());
 
         CfgRegistries.JSON_REGISTRY.forEach(registry ->{
             registry.registerFileHandler(SimpleStoredStructure.class, new FileSimpleStoredStructure<SimpleStoredStructure>());
@@ -151,25 +150,20 @@ public class CruxStructuresModule implements CruxModule {
             public @Nullable TypedDataComponent<StructureComponent> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
                 FileRegistry r = ctx.getRegistry();
                 Vector expansion = r.deserializeFromFile(Vector.class, e.get("expansion"));
-                return TypedDataComponent.create(StructureComponents.OUTER_BOX, new StructureOuterBoxComponent(expansion));
+                return TypedDataComponent.create(StructureComponents.OUTER_BOX, new StructureOuterBoxComponent(
+                    e.getOrDefaultObject(Boolean.class, "disable_block_break", false),
+                    e.getOrDefaultObject(Boolean.class, "disable_block_place", false),
+                    expansion
+                ));
             }
         });
         reg.register("structure/store_blocks", new FileDataComponentType<StructureComponent>() {
             @Override
             public @Nullable TypedDataComponent<StructureComponent> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
-                return TypedDataComponent.create(StructureComponents.STORE_BLOCKS, new StructureStoredBlocksComponent());
-            }
-        });
-        reg.register("structure/disable_block_place", new FileDataComponentType<StructureComponent>() {
-            @Override
-            public @Nullable TypedDataComponent<StructureComponent> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
-                return TypedDataComponent.create(StructureComponents.DISABLE_BLOCK_PLACE, new StructureDisableBlockPlaceComponent());
-            }
-        });
-        reg.register("structure/disable_block_break", new FileDataComponentType<StructureComponent>() {
-            @Override
-            public @Nullable TypedDataComponent<StructureComponent> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
-                return TypedDataComponent.create(StructureComponents.DISABLE_BLOCK_BREAK, new StructureDisableBlockBreakComponent());
+                return TypedDataComponent.create(StructureComponents.STORE_BLOCKS, new StructureStoredBlocksComponent(
+                    e.getOrDefaultObject(Boolean.class, "disable_block_break", false),
+                    e.getOrDefaultObject(Boolean.class, "disable_block_place", false)
+                ));
             }
         });
     }

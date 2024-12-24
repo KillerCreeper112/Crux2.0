@@ -8,14 +8,18 @@ import killercreepr.cruxstructures.core.structure.CfgFAWEStructure;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
-public class StructureStoredBlocksComponent implements StructureComponent {
+public class StructureStoredBlocksComponent extends SimpleBlockManipulatorComponent implements StructureComponent {
+    public StructureStoredBlocksComponent(boolean disableBlockBreak, boolean disableBlockPlace) {
+        super(disableBlockBreak, disableBlockPlace);
+    }
+
     @Override
     public void onFileLoad(@NotNull FileContext<?> context, @NotNull FileObject o, @NotNull StoredStructure structure) {
-        structure.set(StoredStructureComponents.STORE_BLOCKS, new SimpleStoredBlocks((CfgFAWEStructure) structure.getParent()));
+        structure.set(StoredStructureComponents.STORE_BLOCKS, new SimpleStoredBlocks(disableBlockBreak, disableBlockPlace, (CfgFAWEStructure) structure.getParent()));
     }
 
     @Override
     public void onCreated(@NotNull Location center, double rotation, @NotNull StoredStructure stored) {
-        stored.set(StoredStructureComponents.STORE_BLOCKS, new SimpleStoredBlocks((CfgFAWEStructure) stored.getParent()));
+        stored.set(StoredStructureComponents.STORE_BLOCKS, new SimpleStoredBlocks(disableBlockBreak, disableBlockPlace, (CfgFAWEStructure) stored.getParent()));
     }
 }

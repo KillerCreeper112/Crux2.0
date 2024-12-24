@@ -11,11 +11,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.HashSet;
 
-public class SimpleStoredBlocks implements StoredBlocks {
+public class SimpleStoredBlocks extends SimpleBlockManipulatorComponent implements StoredBlocks {
     protected final @NotNull CfgFAWEStructure structure;
     protected final @NotNull Collection<CruxPosition> blocks;
 
-    public SimpleStoredBlocks(@NotNull CfgFAWEStructure structure) {
+    public SimpleStoredBlocks(boolean disableBlockBreak, boolean disableBlockPlace,@NotNull CfgFAWEStructure structure) {
+        super(disableBlockBreak, disableBlockPlace);
         this.structure = structure;
         this.blocks = calculateBlocks();
     }

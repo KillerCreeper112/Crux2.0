@@ -11,9 +11,10 @@ import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-public class StructureOuterBoxComponent implements StructureComponent, StoredStructureComponent {
+public class StructureOuterBoxComponent extends SimpleBlockManipulatorComponent implements StructureComponent, StoredStructureComponent {
     protected final @NotNull Vector expand;
-    public StructureOuterBoxComponent(@NotNull Vector expand) {
+    public StructureOuterBoxComponent(boolean disableBlockBreak, boolean disableBlockPlace, @NotNull Vector expand) {
+        super(disableBlockBreak, disableBlockPlace);
         this.expand = expand;
     }
 
