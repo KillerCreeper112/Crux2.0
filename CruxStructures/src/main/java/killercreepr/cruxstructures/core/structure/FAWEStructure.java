@@ -1,6 +1,7 @@
 package killercreepr.cruxstructures.core.structure;
 
 import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.EditSessionBuilder;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
@@ -106,14 +107,18 @@ public class FAWEStructure extends DataComponentHandler.Simple implements Struct
 
     public void pasteSchematic(@NotNull Location loc, double rotation, boolean ignoreAirBlocks){
         //paste schematic
-        try (EditSession editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(loc.getWorld()))) {
+        try (EditSession editSession = WorldEdit.getInstance().newEditSessionBuilder()
+            .world(BukkitAdapter.adapt(loc.getWorld()))
+            .changeSetNull()
+            .fastMode(true)
+            .build()) {
             AffineTransform transform = new AffineTransform();
             transform = transform.rotateY(rotation);
             ClipboardHolder holder = new ClipboardHolder(this.holder.getClipboards().getFirst());
             holder.setTransform(holder.getTransform().combine(transform));
             Operation operation = holder
                 .createPaste(editSession)
-                .to(BlockVector3.at(loc.getX(), loc.getY(), loc.getZ()))
+                .to(BukkitAdapter.asBlockVector(loc))
                 .ignoreAirBlocks(ignoreAirBlocks)
                 .build();
             Operations.complete(operation);

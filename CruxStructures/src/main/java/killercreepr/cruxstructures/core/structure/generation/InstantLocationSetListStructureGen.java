@@ -61,6 +61,7 @@ public class InstantLocationSetListStructureGen extends LocationSetListStructure
                         cancel();
                         Crux.log(Level.INFO, world.getName() + " - Instant set location list has finished. " + id);
                         alreadyGenerated.remove(world.getName());
+                        onComplete();
                     }
 
                     if(world.isChunkGenerated(pos.x(), pos.z()) && !(at.getX() == pos.x() && at.getZ() == pos.z())) return;
@@ -77,5 +78,9 @@ public class InstantLocationSetListStructureGen extends LocationSetListStructure
         });
 
         return GenerateResult.empty();
+    }
+
+    public void onComplete(){
+
     }
 }
