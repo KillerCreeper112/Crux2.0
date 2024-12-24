@@ -25,6 +25,11 @@ public class SimpleActiveStructure extends DataComponentHandler.Simple implement
     }
 
     @Override
+    public void tick() {
+        forEachAllOfType(Ticked.class, Ticked::tick);
+    }
+
+    @Override
     public void stopped() {
         forEachAllOfType(ManagedTicked.class, ManagedTicked::stopped);
     }
@@ -42,10 +47,5 @@ public class SimpleActiveStructure extends DataComponentHandler.Simple implement
     @Override
     public @NotNull CruxPosition getPosition() {
         return stored.getPosition();
-    }
-
-    @Override
-    public void tick() {
-        forEachAllOfType(Ticked.class, Ticked::tick);
     }
 }

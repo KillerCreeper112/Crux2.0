@@ -2,7 +2,6 @@ package killercreepr.cruxstructures.core.config;
 
 import com.google.common.reflect.TypeToken;
 import killercreepr.crux.api.component.DataComponentHandler;
-import killercreepr.crux.core.Crux;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -15,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.logging.Level;
 
 public class FileCfgFAWEStructure extends PureYamlFileHandler<CfgFAWEStructure> {
     @Override
@@ -43,38 +41,13 @@ public class FileCfgFAWEStructure extends PureYamlFileHandler<CfgFAWEStructure> 
         DataComponentHandler handler = registry.deserializeFromFile(
             DataComponentHandler.class, o.get("components")
         );
-        /*List<TypedDataComponent<?>> components = registry.deserializeFromFile(
-            new TypeToken<List<TypedDataComponent>>(){}.getType(), o.get("components")
-        );*/
-
-        /*List<TypedDataComponent<?>> components = registry.deserializeFromFile(
-            new TypeToken<List<TypedDataComponent<?>>>(){}.getType(), o.get("components")
-        );
-        List<TypedDataComponent<?>> beforeComponents = registry.deserializeFromFile(
-            new TypeToken<List<TypedDataComponent<?>>>(){}.getType(), o.get("before_components")
-        );*/
-        /*List<StructureComponent> modules = new ArrayList<>();
-        if(components != null){
-            for(TypedDataComponent<?> typed : components){
-                if(typed.getValue() instanceof StructureComponent s) modules.add(s);
-            }
-        }
-        List<StructureComponent> beforeModules;
-        if(beforeComponents == null || beforeComponents.isEmpty()){
-            beforeModules = null;
-        }else{
-            beforeModules = new ArrayList<>();
-            for(TypedDataComponent<?> typed : beforeComponents){
-                if(typed.getValue() instanceof StructureComponent s) modules.add(s);
-            }
-        }*/
         CfgFAWEStructure loaded = new CfgFAWEStructure(
             key, schematic, persist != null && persist, beforePlacementModules, modules == null ? List.of() : modules
         );
         if(handler != null){
-            Crux.log(Level.WARNING, "loading compoents " + handler.getAllOfType(Object.class) + "    in " + loaded.key());
             handler.forEach(loaded::set);
         }
+
         loaded.load();
         return loaded;
     }

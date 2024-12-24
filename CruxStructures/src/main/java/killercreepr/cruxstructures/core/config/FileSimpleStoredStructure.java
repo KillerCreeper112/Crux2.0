@@ -12,7 +12,6 @@ import killercreepr.cruxstructures.api.component.StructureComponent;
 import killercreepr.cruxstructures.api.structure.StoredStructure;
 import killercreepr.cruxstructures.api.structure.Structure;
 import killercreepr.cruxstructures.core.registries.StructureRegistries;
-import killercreepr.cruxstructures.core.structure.stored.SimpleStoredStructure;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,7 +39,7 @@ public class FileSimpleStoredStructure<T extends StoredStructure> extends Simple
         return (T) deserializeSimple(context, e);
     }
 
-    public @Nullable SimpleStoredStructure deserializeSimple(@NotNull FileContext<?> context, @NotNull FileElement e){
+    public @Nullable StoredStructure deserializeSimple(@NotNull FileContext<?> context, @NotNull FileElement e){
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = context.getRegistry();
         Key structureKey = registry.deserializeFromFile(Key.class, o.get("structure"));
@@ -61,7 +60,9 @@ public class FileSimpleStoredStructure<T extends StoredStructure> extends Simple
         if(o.get("data") instanceof FileObject oop) data = oop;
         else data = new FileObject();
 
-        SimpleStoredStructure stored = new SimpleStoredStructure(structure, chunk, center, rotation);
+        StoredStructure stored = structure.buildStored(chunk, center, rotation);
+        if(stored == null) return null;
+        //SimpleStoredStructure stored = new SimpleStoredStructure(structure, chunk, center, rotation);
         structure.getAllOfType(StructureComponent.class).forEach(component ->{
             component.onFileLoad(context, data, stored);
         });

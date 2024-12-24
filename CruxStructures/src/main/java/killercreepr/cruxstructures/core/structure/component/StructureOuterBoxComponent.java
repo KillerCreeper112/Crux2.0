@@ -1,12 +1,13 @@
 package killercreepr.cruxstructures.core.structure.component;
 
+import killercreepr.crux.api.math.CruxPosition;
+import killercreepr.crux.core.data.world.StoredChunk;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxstructures.api.component.StoredStructureComponent;
 import killercreepr.cruxstructures.api.component.StructureComponent;
 import killercreepr.cruxstructures.api.structure.StoredStructure;
 import killercreepr.cruxstructures.api.structure.Structure;
-import org.bukkit.Location;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -20,23 +21,18 @@ public class StructureOuterBoxComponent extends SimpleBlockManipulatorComponent 
 
     @Override
     public void onFileLoad(@NotNull FileContext<?> context, @NotNull FileObject o, @NotNull StoredStructure structure) {
-        if(!(o.get("data") instanceof FileObject data)) return;
-        BoundingBox box = context.getRegistry().deserializeFromFile(BoundingBox.class, data.get("outer_box"));
-        if(box == null) return;
-        structure.set(StoredStructureComponents.OUTER_BOX, box);
+        BoundingBox outerBox = buildBox(structure);
+        structure.set(StoredStructureComponents.OUTER_BOX, outerBox);
     }
 
     @Override
-    public void onFileSave(@NotNull FileContext<?> context, @NotNull FileObject o, @NotNull StoredStructure structure) {
-        BoundingBox box = structure.get(StoredStructureComponents.OUTER_BOX);
-        if(box == null) return;
-        o.add("outer_box", context.getRegistry().serializeToFile(box));
-    }
-
-    @Override
-    public void onCreated(@NotNull Location center, double rotation, @NotNull StoredStructure stored) {
-        BoundingBox outerBox = stored.getBoundingBox().clone().expand(expand);
+    public void onCreated(@NotNull StoredChunk chunk, @NotNull CruxPosition center, double rotation, @NotNull StoredStructure stored) {
+        BoundingBox outerBox = buildBox(stored);
         stored.set(StoredStructureComponents.OUTER_BOX, outerBox);
+    }
+
+    public BoundingBox buildBox(@NotNull StoredStructure stored){
+        return stored.getBoundingBox().clone().expand(expand);
     }
 
     @Override

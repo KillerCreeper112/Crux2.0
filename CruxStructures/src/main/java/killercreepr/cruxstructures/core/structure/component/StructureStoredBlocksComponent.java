@@ -1,11 +1,12 @@
 package killercreepr.cruxstructures.core.structure.component;
 
+import killercreepr.crux.api.math.CruxPosition;
+import killercreepr.crux.core.data.world.StoredChunk;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxstructures.api.component.StructureComponent;
 import killercreepr.cruxstructures.api.structure.StoredStructure;
 import killercreepr.cruxstructures.core.structure.CfgFAWEStructure;
-import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
 public class StructureStoredBlocksComponent extends SimpleBlockManipulatorComponent implements StructureComponent {
@@ -19,7 +20,7 @@ public class StructureStoredBlocksComponent extends SimpleBlockManipulatorCompon
     }
 
     @Override
-    public void onCreated(@NotNull Location center, double rotation, @NotNull StoredStructure stored) {
+    public void onCreated(@NotNull StoredChunk chunk, @NotNull CruxPosition center, double rotation, @NotNull StoredStructure stored) {
         stored.set(StoredStructureComponents.STORE_BLOCKS, new SimpleStoredBlocks(disableBlockBreak, disableBlockPlace, (CfgFAWEStructure) stored.getParent()));
     }
 }

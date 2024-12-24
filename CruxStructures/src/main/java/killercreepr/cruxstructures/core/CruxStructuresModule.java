@@ -15,6 +15,7 @@ import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import killercreepr.cruxstructures.api.component.StructureComponent;
+import killercreepr.cruxstructures.api.component.StructureEditorComponent;
 import killercreepr.cruxstructures.api.location.LocationFinder;
 import killercreepr.cruxstructures.api.structure.generation.StructureCenter;
 import killercreepr.cruxstructures.api.structure.generation.StructureChunkRequirement;
@@ -31,6 +32,7 @@ import killercreepr.cruxstructures.core.structure.CfgFAWEStructure;
 import killercreepr.cruxstructures.core.structure.component.StructureComponents;
 import killercreepr.cruxstructures.core.structure.component.StructureOuterBoxComponent;
 import killercreepr.cruxstructures.core.structure.component.StructureStoredBlocksComponent;
+import killercreepr.cruxstructures.core.structure.component.StructureTickedStoredComponent;
 import killercreepr.cruxstructures.core.structure.module.WallsModule;
 import killercreepr.cruxstructures.core.structure.stored.SimpleStoredStructure;
 import net.kyori.adventure.key.Key;
@@ -166,6 +168,12 @@ public class CruxStructuresModule implements CruxModule {
                     e.getOrDefaultObject(Boolean.class, "disable_block_break", false),
                     e.getOrDefaultObject(Boolean.class, "disable_block_place", false)
                 ));
+            }
+        });
+        reg.register("structure/ticked_stored", new FileDataComponentType<StructureEditorComponent>() {
+            @Override
+            public @Nullable TypedDataComponent<StructureEditorComponent> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
+                return TypedDataComponent.create(StructureComponents.TICKED_STORED, new StructureTickedStoredComponent());
             }
         });
     }
