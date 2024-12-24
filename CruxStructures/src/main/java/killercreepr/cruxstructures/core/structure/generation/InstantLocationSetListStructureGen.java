@@ -26,6 +26,10 @@ public class InstantLocationSetListStructureGen extends LocationSetListStructure
         this.id = id;
     }
 
+    public @NotNull String getId() {
+        return id;
+    }
+
     public boolean hasGeneratedIn(@NotNull World world){
         return CruxTag.has(world, "instant_location_set/" + id);
     }
