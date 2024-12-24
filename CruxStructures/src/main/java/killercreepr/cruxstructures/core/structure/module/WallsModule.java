@@ -47,7 +47,7 @@ public class WallsModule implements StructureModule {
     @Override
     public void onPlaced(@NotNull Structure structure, @NotNull Location at, double rotation) {
         double wallRotation = switch (wallRotationType){
-            case RANDOM -> (CruxMath.RANDOM.nextInt( 4) * 90);
+            case RANDOM -> (CruxMath.random().nextInt( 4) * 90);
             case NONE -> 0D;
             default -> rotation;
         };

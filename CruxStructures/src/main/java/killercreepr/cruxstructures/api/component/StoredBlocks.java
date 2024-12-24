@@ -5,6 +5,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-public interface StoredBlocks {
+public interface StoredBlocks extends StoredStructureComponent {
     @NotNull Collection<CruxPosition> getStoredBlocks();
 }

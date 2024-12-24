@@ -24,6 +24,8 @@ public interface StoredStructure extends PositionPosed, DataComponentHandler {
     @NotNull
     StoredChunk getChunk();
 
+    void load();
+
     double getRotation();
 
     default boolean shouldPersist(){ return getParent().isPersistent(); }

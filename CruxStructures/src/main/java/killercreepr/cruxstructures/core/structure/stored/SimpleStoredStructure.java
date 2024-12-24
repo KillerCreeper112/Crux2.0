@@ -3,6 +3,7 @@ package killercreepr.cruxstructures.core.structure.stored;
 import killercreepr.crux.api.component.DataComponentHandler;
 import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.core.data.world.StoredChunk;
+import killercreepr.cruxstructures.api.component.StoredStructureComponent;
 import killercreepr.cruxstructures.api.structure.ActiveStructure;
 import killercreepr.cruxstructures.api.structure.StoredStructure;
 import killercreepr.cruxstructures.api.structure.Structure;
@@ -69,6 +70,11 @@ public class SimpleStoredStructure extends DataComponentHandler.Simple implement
     }
 
     @Override
+    public void load() {
+        getAllOfType(StoredStructureComponent.class).forEach(component -> component.onLoad(this));
+    }
+
+    @Override
     public double getRotation() {
         return rotation;
     }
@@ -85,7 +91,9 @@ public class SimpleStoredStructure extends DataComponentHandler.Simple implement
 
     @Override
     public @Nullable ActiveStructure buildActive(@NotNull Chunk chunk) {
-        return new SimpleActiveStructure(this, chunk);
+        ActiveStructure active = new SimpleActiveStructure(this, chunk);
+        forEachAllOfType(StoredStructureComponent.class, c -> c.onActiveCreated(active));
+        return active;
     }
 
 }

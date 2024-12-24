@@ -132,11 +132,13 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
 
     public void addStoredStructure(StoredStructure stored, long chunkKey){
         storedStructures.add(chunkKey, stored);
+        stored.load();
         //setDirty();
     }
 
     public void addStoredStructureSilently(StoredStructure stored, long chunkKey){
         storedStructures.add(chunkKey, stored);
+        stored.load();
     }
 
     public void addStoredStructure(StoredStructure stored, Chunk chunk){

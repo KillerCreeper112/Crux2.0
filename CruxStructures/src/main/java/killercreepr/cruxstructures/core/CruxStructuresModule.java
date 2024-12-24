@@ -118,6 +118,7 @@ public class CruxStructuresModule implements CruxModule {
         fileStructureModule.TYPE_HANDLERS.register("clear_space", new FileClearSpaceModule());
         fileStructureModule.TYPE_HANDLERS.register("clear_region", new FileClearRegionModule());
         fileStructureModule.TYPE_HANDLERS.register("expand_bounding_box", new FileExpandBoundingBoxModule());
+        fileStructureModule.TYPE_HANDLERS.register("store_blocks", new FileStoreBlocksModule());
 
         CfgRegistries.JSON_REGISTRY.forEach(registry ->{
             registry.registerFileHandler(SimpleStoredStructure.class, new FileSimpleStoredStructure<SimpleStoredStructure>());

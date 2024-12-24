@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public interface DataComponentAccessor extends Iterable<TypedDataComponent<?>> {
     @Nullable
@@ -21,6 +22,15 @@ public interface DataComponentAccessor extends Iterable<TypedDataComponent<?>> {
             if(type.isAssignableFrom(o.getClass())) list.add(type.cast(o));
         }
         return list;
+    }
+
+    default <T> void forEachAllOfType(Class<T> type, Consumer<T> consumer){
+        if(isEmpty()) return;
+        for(TypedDataComponent<?> typed : this){
+            Object o = typed.getValue();
+            if(o == null) continue;
+            if(type.isAssignableFrom(o.getClass())) consumer.accept(type.cast(o));
+        }
     }
 
     default boolean has(DataComponentType<?> type) {

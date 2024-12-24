@@ -5,7 +5,6 @@ import killercreepr.cruxstructures.api.structure.Structure;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
-@Deprecated
 public interface StructureModule extends StructureComponent {
     //void onPlaced(@NotNull Structure structure, @NotNull Location at, double rotation);
 }

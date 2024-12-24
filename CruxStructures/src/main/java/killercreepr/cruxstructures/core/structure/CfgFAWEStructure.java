@@ -5,6 +5,7 @@ import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.core.data.world.StoredChunk;
 import killercreepr.cruxstructures.api.component.StructureComponent;
 import killercreepr.cruxstructures.api.event.StructurePlaceEvent;
+import killercreepr.cruxstructures.api.structure.CfgStructure;
 import killercreepr.cruxstructures.api.structure.StoredStructure;
 import killercreepr.cruxstructures.core.structure.stored.SimpleStoredStructure;
 import net.kyori.adventure.key.Key;
@@ -15,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.util.List;
 
-public class CfgFAWEStructure extends FAWEStructure{
+public class CfgFAWEStructure extends FAWEStructure implements CfgStructure {
     protected final boolean persistent;
     protected final @Nullable List<StructureComponent> beforePlacementModules;
     protected final @NotNull List<StructureComponent> modules;
@@ -38,6 +39,13 @@ public class CfgFAWEStructure extends FAWEStructure{
         this.persistent = persistent;
         this.beforePlacementModules = beforePlacementModules;
         this.modules = modules;
+    }
+
+    @Override
+    public void load(){
+        for(StructureComponent c : modules){
+            c.onStructureHook(this);
+        }
     }
 
     @Override
