@@ -4,6 +4,7 @@ import killercreepr.crux.api.data.tick.ManagedTicked;
 import killercreepr.crux.api.data.tick.Ticked;
 import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.core.data.world.StoredChunk;
+import killercreepr.cruxstructures.api.component.TickedStoredComponent;
 import killercreepr.cruxstructures.api.structure.Structure;
 import killercreepr.cruxstructures.api.structure.TickedStoredStructure;
 import net.kyori.adventure.key.Key;
@@ -21,16 +22,16 @@ public class SimpleTickedStoredStructure extends SimpleStoredStructure implement
 
     @Override
     public void started() {
-        forEachAllOfType(ManagedTicked.class, ManagedTicked::started);
+        forEachAllOfType(TickedStoredComponent.class, TickedStoredComponent::storedStarted);
     }
 
     @Override
     public void tick() {
-        forEachAllOfType(Ticked.class, Ticked::tick);
+        forEachAllOfType(TickedStoredComponent.class, TickedStoredComponent::storedTick);
     }
 
     @Override
     public void stopped() {
-        forEachAllOfType(ManagedTicked.class, ManagedTicked::stopped);
+        forEachAllOfType(TickedStoredComponent.class, TickedStoredComponent::storedStopped);
     }
 }

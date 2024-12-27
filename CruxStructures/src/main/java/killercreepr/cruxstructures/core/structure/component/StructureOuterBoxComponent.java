@@ -17,13 +17,13 @@ public class StructureOuterBoxComponent extends SimpleBlockManipulatorComponent 
     protected final @Nullable Vector expand;
     protected final @Nullable Vector offset;
     protected final @Nullable Vector expandNegative;
-    protected final @Nullable Vector expandPostive;
-    public StructureOuterBoxComponent(boolean disableBlockBreak, boolean disableBlockPlace, @Nullable Vector expand, @Nullable Vector offset, @Nullable Vector expandNegative, @Nullable Vector expandPostive) {
+    protected final @Nullable Vector expandPositive;
+    public StructureOuterBoxComponent(boolean disableBlockBreak, boolean disableBlockPlace, @Nullable Vector expand, @Nullable Vector offset, @Nullable Vector expandNegative, @Nullable Vector expandPositive) {
         super(disableBlockBreak, disableBlockPlace);
         this.expand = expand;
         this.offset = offset;
         this.expandNegative = expandNegative;
-        this.expandPostive = expandPostive;
+        this.expandPositive = expandPositive;
     }
 
     @Override
@@ -42,6 +42,14 @@ public class StructureOuterBoxComponent extends SimpleBlockManipulatorComponent 
         BoundingBox box = stored.getBoundingBox().clone();
         if(expand != null) box.expand(expand);
         if(offset != null) box.shift(offset);
+        if(expandNegative != null){
+            box.expand(expandNegative.getX(), expandNegative.getY(), expandNegative.getZ(),
+                0D, 0D, 0D);
+        }
+        if(expandPositive != null){
+            box.expand(0D, 0D, 0D,
+                expandPositive.getX(), expandPositive.getY(), expandPositive.getZ());
+        }
         return box;
     }
 
