@@ -27,10 +27,22 @@ public class CruxCollection {
         return list.get(CruxMath.random(0, list.size()-1));
     }
 
+    @SafeVarargs
+    public static <T> T getRandom(@NotNull T... list){
+        if(list.length < 1) return null;
+        return list[(CruxMath.random(0, list.length-1))];
+    }
+
     public static <T> T getFirst(@NotNull Collection<T> list){
         for(T t : list){
             return t;
         }
         return null;
+    }
+
+    @SafeVarargs
+    public static <T> T getFirst(@NotNull T... list){
+        if(list.length < 1) return null;
+        return list[0];
     }
 }
