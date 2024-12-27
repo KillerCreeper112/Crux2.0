@@ -11,12 +11,19 @@ import killercreepr.cruxstructures.api.structure.Structure;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class StructureOuterBoxComponent extends SimpleBlockManipulatorComponent implements StructureComponent, StoredStructureComponent {
-    protected final @NotNull Vector expand;
-    public StructureOuterBoxComponent(boolean disableBlockBreak, boolean disableBlockPlace, @NotNull Vector expand) {
+    protected final @Nullable Vector expand;
+    protected final @Nullable Vector offset;
+    protected final @Nullable Vector expandNegative;
+    protected final @Nullable Vector expandPostive;
+    public StructureOuterBoxComponent(boolean disableBlockBreak, boolean disableBlockPlace, @Nullable Vector expand, @Nullable Vector offset, @Nullable Vector expandNegative, @Nullable Vector expandPostive) {
         super(disableBlockBreak, disableBlockPlace);
         this.expand = expand;
+        this.offset = offset;
+        this.expandNegative = expandNegative;
+        this.expandPostive = expandPostive;
     }
 
     @Override
@@ -32,7 +39,10 @@ public class StructureOuterBoxComponent extends SimpleBlockManipulatorComponent 
     }
 
     public BoundingBox buildBox(@NotNull StoredStructure stored){
-        return stored.getBoundingBox().clone().expand(expand);
+        BoundingBox box = stored.getBoundingBox().clone();
+        if(expand != null) box.expand(expand);
+        if(offset != null) box.shift(offset);
+        return box;
     }
 
     @Override

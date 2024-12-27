@@ -157,7 +157,10 @@ public class CruxStructuresModule implements CruxModule {
                 return TypedDataComponent.create(StructureComponents.OUTER_BOX, new StructureOuterBoxComponent(
                     e.getOrDefaultObject(Boolean.class, "disable_block_break", false),
                     e.getOrDefaultObject(Boolean.class, "disable_block_place", false),
-                    expansion
+                    expansion,
+                    r.deserializeFromFile(Vector.class, e.get("offset")),
+                    r.deserializeFromFile(Vector.class, e.get("expand_negative")),
+                    r.deserializeFromFile(Vector.class, e.get("expand_positive"))
                 ));
             }
         });
