@@ -71,10 +71,12 @@ public interface ICfg<T, V extends IConfigValue<?, ?>> extends ICruxConfig<T> {
      */
     default @NotNull LinkedHashMap<String, V> getAllValues(){
         LinkedHashMap<String, V> map = new LinkedHashMap<>();
-        CruxReflect.getNonStaticParsedDeclaredFields(this).forEach((name, v) ->{
-            if(!(v instanceof IConfigValue<?, ?> value)) return;
-            String path = value.getPath() == null ? name.toLowerCase() : value.getPath();
-            map.put(path, (V) value);
+        CruxReflect.getClassInheritanceChain(getClass()).forEach(type ->{
+            CruxReflect.getParsedDeclaredFields(type, this, CruxReflect.NON_STATIC(null)).forEach((name, v) ->{
+                if(!(v instanceof IConfigValue<?, ?> value)) return;
+                String path = value.getPath() == null ? name.toLowerCase() : value.getPath();
+                map.put(path, (V) value);
+            });
         });
         return map;
     }

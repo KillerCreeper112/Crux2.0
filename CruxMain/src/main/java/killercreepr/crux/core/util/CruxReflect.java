@@ -28,6 +28,7 @@ public class CruxReflect {
         while (current != null) {
             chain.add(current);
             current = current.getSuperclass();
+            if(current == Object.class) break;
         }
         return chain;
     }
@@ -121,8 +122,12 @@ public class CruxReflect {
     }
 
     public static @NotNull LinkedHashMap<String, Object> getParsedDeclaredFields(@NotNull Object from, @Nullable Predicate<Field> filter) {
+        return getParsedDeclaredFields(from.getClass(), from, filter);
+    }
+
+    public static @NotNull LinkedHashMap<String, Object> getParsedDeclaredFields(@NotNull Class<?> clazz, @NotNull Object from, @Nullable Predicate<Field> filter) {
         LinkedHashMap<String, Object> fields = new LinkedHashMap<>();
-        for(Field field : from.getClass().getDeclaredFields()){
+        for(Field field : clazz.getDeclaredFields()){
             if(filter != null && !filter.test(field)) continue;
             try{
                 boolean accessible = field.canAccess(from);
