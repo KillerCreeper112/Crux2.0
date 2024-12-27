@@ -5,10 +5,12 @@ import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.util.CruxKey;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.crux.core.util.CruxString;
+import killercreepr.crux.core.util.CruxTag;
 import killercreepr.cruxattributes.core.attribute.GenericAttribute;
 import killercreepr.cruxattributes.core.registries.CruxAttributeRegistries;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -337,7 +339,9 @@ public interface CruxAttribute extends Keyed {
         PersistentDataContainer attributeContainer = getAttributeContainer(i, attribute);
         if(attributeContainer == null) attributeContainer = i.getPersistentDataContainer().getAdapterContext().newPersistentDataContainer();
 
-        PersistentDataContainer modProvider = path == null || path.length < 1 ? getAttributeContainer(i, attribute) : getModifierProvider(i, path);
+        PersistentDataContainer modProvider = path == null || path.length < 1 ?
+            CruxTag.get(attributeContainer, modifier.key(), PersistentDataType.TAG_CONTAINER, null) :
+            getModifierProvider(i, path);
         if(modProvider == null) modProvider = i.getPersistentDataContainer().getAdapterContext().newPersistentDataContainer();
         modProvider.set(k("value"), PersistentDataType.DOUBLE, modifier.getAmount());
         modProvider.set(k("operation"), PersistentDataType.STRING, modifier.getOperation().toString().toLowerCase());
@@ -353,31 +357,21 @@ public interface CruxAttribute extends Keyed {
             //Get the existing path or create a new one.
             for(Key pathKey : path){
                 index++;
-                PersistentDataContainer found = null;
-                for(NamespacedKey k : current.getKeys()){
-                    if(k.equals(pathKey)){
-                        try{
-                            found = current.get(k, PersistentDataType.TAG_CONTAINER);
-                            break;
-                        }catch (Exception ignored){}
-                    }
-                }
+                PersistentDataContainer found = CruxTag.get(current, pathKey, PersistentDataType.TAG_CONTAINER, null);
                 if(found == null) found = i.getPersistentDataContainer().getAdapterContext().newPersistentDataContainer();
                 if(index == path.length) found.set(killercreepr.crux.core.util.CruxKey.key(modifier.key()), PersistentDataType.TAG_CONTAINER, modProvider);
                 list.add(found);
                 current = found;
             }
-            index = path.length-1;
-            PersistentDataContainer last = null;
             //Set the path data back into each other. 4 into 3, 3 into 2, 2 into 1.
-            for(; index >= 0; index--) {
-                PersistentDataContainer c = list.get(index);
-                if (last == null) {
-                    last = c;
-                    continue;
+            if(path.length > 1){
+                index = path.length-1;
+                for(; index >= 0; index--) {
+                    PersistentDataContainer c = list.get(index);
+                    if(index == 0) continue;
+                    PersistentDataContainer last = list.get(index+1);
+                    c.set(killercreepr.crux.core.util.CruxKey.key(path[index+1]), PersistentDataType.TAG_CONTAINER, last);
                 }
-                c.set(killercreepr.crux.core.util.CruxKey.key(path[index+1]), PersistentDataType.TAG_CONTAINER, last);
-                last = c;
             }
             //Finally, set the whole path into the attribute container.
             attributeContainer.set(killercreepr.crux.core.util.CruxKey.key(path[0]), PersistentDataType.TAG_CONTAINER, list.getFirst());
@@ -505,8 +499,7 @@ public interface CruxAttribute extends Keyed {
     @Nullable PersistentDataContainer  getAttributeContainer(@Nullable P i, @NotNull CruxAttribute attribute){
         PersistentDataContainer container = getContainer(i);
         if(container == null) return null;
-        try{ return container.get(killercreepr.crux.core.util.CruxKey.key(attribute.key()), PersistentDataType.TAG_CONTAINER); }
-        catch (Exception ex){ return null; }
+        return CruxTag.get(container, attribute.key(), PersistentDataType.TAG_CONTAINER, null);
     }
 
     static <P extends PersistentDataHolder>
