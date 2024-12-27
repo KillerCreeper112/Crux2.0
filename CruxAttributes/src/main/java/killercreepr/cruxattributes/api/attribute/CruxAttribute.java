@@ -54,6 +54,7 @@ public interface CruxAttribute extends Keyed {
     CruxAttribute PROJECTILE_RICOCHET_BLOCK_VELOCITY_DROP_OFF = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("projectile_ricochet_block_velocity_drop_off")));
 
     CruxAttribute MOVEMENT_SPEED = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("movement_speed")));
+    CruxAttribute TARGET_HALT_RANGE = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("target_halt_range")));
 
     default double getDefaultValue(){
         return 0D;
