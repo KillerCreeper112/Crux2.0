@@ -3,6 +3,8 @@ package killercreepr.crux.core.util;
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.parser.ParseException;
+import killercreepr.crux.api.math.CruxPosition;
+import org.bukkit.util.NumberConversions;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -329,4 +331,41 @@ public class CruxMath {
     }
 
     public static @NotNull String padWithZeroIfSingleDigit(int x){ return (x < 10 ? "0" : "") + new DecimalFormat().format(x); }
+
+    public static float calculateYaw(double x, double z){
+        if (x == 0 && z == 0) {
+            return 0f;
+        }
+
+        final double _2PI = 2 * Math.PI;
+        double theta = Math.atan2(-x, z);
+        return (float) Math.toDegrees((theta + _2PI) % _2PI);
+    }
+
+    public static float calculatePitch(double x, double y, double z){
+        if (x == 0 && z == 0) {
+            return y > 0 ? -90 : 90;
+        }
+
+        double x2 = NumberConversions.square(x);
+        double z2 = NumberConversions.square(z);
+        double xz = Math.sqrt(x2 + z2);
+        return (float) Math.toDegrees(Math.atan(-y / xz));
+    }
+
+    public static float calculatePitch(CruxPosition dir){
+        return calculatePitch(dir.x(), dir.y(), dir.z());
+    }
+
+    public static float calculatePitch(Vector dir){
+        return calculatePitch(dir.getX(), dir.getY(), dir.getZ());
+    }
+
+    public static float calculateYaw(CruxPosition dir){
+        return calculateYaw(dir.x(), dir.z());
+    }
+
+    public static float calculateYaw(Vector dir){
+        return calculateYaw(dir.getX(), dir.getZ());
+    }
 }

@@ -1,6 +1,7 @@
 package killercreepr.crux.api.math;
 
 import killercreepr.crux.core.math.SimpleCruxLocation;
+import killercreepr.crux.core.util.CruxMath;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -11,6 +12,10 @@ import org.jetbrains.annotations.NotNull;
 public interface CruxLocation extends CruxPosition {
     static @NotNull CruxLocation location(double x, double y, double z, float yaw, float pitch){
         return new SimpleCruxLocation(x, y, z, yaw, pitch);
+    }
+
+    static @NotNull CruxLocation location(double x, double y, double z, Vector dir){
+        return location(x, y, z, CruxMath.calculateYaw(dir), CruxMath.calculatePitch(dir));
     }
 
     static @NotNull CruxLocation location(double x, double y, double z){
@@ -29,6 +34,12 @@ public interface CruxLocation extends CruxPosition {
 
     static @NotNull CruxLocation location(@NotNull CruxPosition pos){
         return location(pos.x(), pos.y(), pos.z());
+    }
+    static @NotNull CruxLocation location(@NotNull CruxPosition pos, float yaw, float pitch){
+        return location(pos.x(), pos.y(), pos.z(), yaw, pitch);
+    }
+    static @NotNull CruxLocation location(@NotNull CruxPosition pos, Vector dir){
+        return location(pos.x(), pos.y(), pos.z(), dir);
     }
 
     @Contract(pure = true)
