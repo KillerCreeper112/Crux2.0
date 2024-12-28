@@ -175,6 +175,7 @@ public class CruxLoc {
         }
         return newLocation;
     }
+
     @Contract(pure = true)
     public static @NotNull Location shift(@NotNull Location loc, double forward, double up, double right){
         return shift(loc, loc.getDirection(), forward, up, right);

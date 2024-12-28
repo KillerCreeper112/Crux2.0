@@ -145,33 +145,6 @@ public class SimpleCruxLocation implements CruxLocation {
         return new SimpleCruxLocation(x, y, z, yaw, pitch);
     }
 
-    private float calculateYaw(CruxPosition vector){
-        final double _2PI = 2 * Math.PI;
-        final double x = vector.x();
-        final double z = vector.z();
-
-        if (x == 0 && z == 0) {
-            return yaw();
-        }
-
-        double theta = Math.atan2(-x, z);
-        return (float) Math.toDegrees((theta + _2PI) % _2PI);
-    }
-
-    private float calculatePitch(CruxPosition vector){
-        final double x = vector.x();
-        final double z = vector.z();
-
-        if (x == 0 && z == 0) {
-            return vector.y() > 0 ? -90 : 90;
-        }
-
-        double x2 = NumberConversions.square(x);
-        double z2 = NumberConversions.square(z);
-        double xz = Math.sqrt(x2 + z2);
-        return (float) Math.toDegrees(Math.atan(-vector.y() / xz));
-    }
-
     private CruxLocation setDirection(double x, double y, double z){
         final double _2PI = 2 * Math.PI;
 

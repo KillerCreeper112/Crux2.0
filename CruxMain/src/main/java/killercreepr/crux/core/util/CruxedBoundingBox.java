@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -212,6 +213,32 @@ public class CruxedBoundingBox {
             )
         );
         return this;
+    }
+
+    public CruxedBoundingBox shift(@NotNull Location loc, double forward, double up, double right){
+        return shift(loc, loc.getDirection(), forward, up, right);
+    }
+
+    public CruxedBoundingBox shift(@NotNull Location loc, @NotNull Vector dir, double forward, double up, double right){
+        BoundingBox newBox = box.clone();
+        Location locDirection = loc.clone().setDirection(dir);
+        //+ FORWARD - BACKWARD
+        if(forward != 0D) newBox.shift(locDirection.getDirection().multiply(forward));
+        //- LEFT + RIGHT
+        if(right != 0D){
+
+            Vector sideDirection = locDirection.getDirection().setY(0).normalize();  // Remove vertical component
+            sideDirection = new Vector(-sideDirection.getZ(), 0, sideDirection.getX()); // Rotate 90 degrees
+
+            newBox.shift(sideDirection.multiply(right));
+        }
+        //+ UP - DOWN
+        if(up != 0D){
+            locDirection.setYaw(loc.getYaw());
+            locDirection.setPitch(loc.getPitch() - 90);
+            newBox.shift(locDirection.getDirection().multiply(up));
+        }
+        return box(newBox);
     }
 
     private static double toRadians(double degrees) {
