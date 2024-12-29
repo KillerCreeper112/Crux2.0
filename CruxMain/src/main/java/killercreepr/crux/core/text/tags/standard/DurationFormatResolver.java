@@ -57,7 +57,7 @@ public class DurationFormatResolver implements StringResolver {
         return excluded.contains("hour") || excluded.contains("h");
     }
 
-    public static  boolean hasDays(@NotNull Collection<String> excluded){
+    public static boolean hasDays(@NotNull Collection<String> excluded){
         return excluded.contains("day") || excluded.contains("d");
     }
 
@@ -85,19 +85,19 @@ public class DurationFormatResolver implements StringResolver {
         StringBuilder result = new StringBuilder();
 
         // Only append each time unit if it's non-zero and not excluded
-        if (!excluded.contains("days") && (displayZero || days > 0)) {
+        if (!hasDays(excluded) && (displayZero || days > 0)) {
             if(!result.isEmpty()) result.append(separator);
             result.append(format.get(0).replace("%d", days + ""));
         }
-        if (!excluded.contains("hours") && (displayZero || hours > 0)) {
+        if (!hasHours(excluded) && (displayZero || hours > 0)) {
             if(!result.isEmpty()) result.append(separator);
             result.append(format.get(1).replace("%h", hours + ""));
         }
-        if (!excluded.contains("minutes") && (displayZero || minutes > 0)) {
+        if (!hasMinutes(excluded) && (displayZero || minutes > 0)) {
             if(!result.isEmpty()) result.append(separator);
             result.append(format.get(2).replace("%m", minutes + ""));
         }
-        if (!excluded.contains("seconds") && (displayZero || seconds > 0)) {
+        if (!hasSeconds(excluded) && (displayZero || seconds > 0)) {
             if(!result.isEmpty()) result.append(separator);
             result.append(format.get(3).replace("%s", seconds + ""));
         }
