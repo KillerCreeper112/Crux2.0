@@ -22,6 +22,8 @@ import killercreepr.crux.api.loot.item.ItemLootFunction;
 import killercreepr.crux.api.loot.item.ItemLootPool;
 import killercreepr.crux.api.loot.item.ItemLootPoolObject;
 import killercreepr.crux.api.loot.item.ItemLootTable;
+import killercreepr.crux.api.loot.key.KeyLootTable;
+import killercreepr.crux.api.loot.number.NumberLootTable;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.api.valueproviders.vector.NumberVector;
 import killercreepr.crux.core.communication.MsgContainer;
@@ -40,6 +42,7 @@ import killercreepr.cruxconfig.config.bukkit.handler.impl.component.StandardCfgD
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.FileDynamicItem;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.FileDynamicPersistentTag;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.*;
+import killercreepr.cruxconfig.config.bukkit.standard.CommonLootTableHandlers;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.handler.AutoFileHandler;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
@@ -145,6 +148,8 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(Vector.class, VECTOR);
         registry.registerFileHandler(NumberVector.class, NUMBER_VECTOR);
         registry.registerFileHandler(DynamicAttributeModifier.class, DYNAMIC_ATTRIBUTE_MODIFIER);
+        registry.registerFileHandler(KeyLootTable.class, CommonLootTableHandlers.KEY);
+        registry.registerFileHandler(NumberLootTable.class, CommonLootTableHandlers.NUMBER);
 
         StandardCfgDataComponentTypes.register(TYPED_DATA_COMPONENT.typeHandlers());
         registry.registerFileHandler(TypedDataComponent.class, TYPED_DATA_COMPONENT);

@@ -88,9 +88,11 @@ public class FileSimpleLootTable<T> implements FileObjectHandler<LootTable<T>> {
             pools.add(pool);
         });
         if(CruxObjects.checkNull(pools)) return null;
-        return new SimpleLootTable<>(
-            key, rolls, pools
-        );
+        return createLootTable(key, rolls, pools);
+    }
+
+    public @Nullable SimpleLootTable<T> createLootTable(@NotNull Key key, @NotNull NumberProvider rolls, @NotNull List<LootPool<T>> pools){
+        return new SimpleLootTable<>(key, rolls, pools);
     }
 
     @Override
