@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SimpleEntityMemory implements EntityMemory {
     protected final DataHolderRegistry dataHolders;
@@ -26,11 +27,11 @@ public class SimpleEntityMemory implements EntityMemory {
     }
 
     public SimpleEntityMemory(@NotNull Entity e) {
-        this(e, new DataHolderRegistry());
+        this(e, new DataHolderRegistry(new ConcurrentHashMap<>()));
     }
 
     public SimpleEntityMemory(@NotNull UUID uuid, @NotNull Holder<? extends Entity> holder){
-        this(new DataHolderRegistry(), uuid, holder);
+        this(new DataHolderRegistry(new ConcurrentHashMap<>()), uuid, holder);
     }
 
     @Override

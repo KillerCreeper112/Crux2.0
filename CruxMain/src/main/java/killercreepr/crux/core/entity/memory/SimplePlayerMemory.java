@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SimplePlayerMemory extends SimpleEntityMemory implements PlayerMemory {
     protected Long quit = null;
@@ -27,7 +28,7 @@ public class SimplePlayerMemory extends SimpleEntityMemory implements PlayerMemo
     }
 
     public SimplePlayerMemory(@NotNull UUID uuid, @NotNull Holder<Player> player) {
-        super(new PlayerDataHolderRegistry(), uuid, player);
+        super(new PlayerDataHolderRegistry(new ConcurrentHashMap<>()), uuid, player);
         this.entity = player;
         this.playerDataHolders = (PlayerDataHolderRegistry) this.dataHolders;
     }

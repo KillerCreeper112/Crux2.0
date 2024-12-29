@@ -22,7 +22,7 @@ import java.util.function.Predicate;
 public interface Structure extends Keyed, DataComponentHandler {
     @NotNull
     default StructurePlaceEvent place(@NotNull Location at){
-        return place(at, CruxMath.random().nextInt(4) * 90);
+        return place(at, (CruxMath.random().nextInt(4) * 90));
     }
 
     @NotNull

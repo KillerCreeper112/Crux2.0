@@ -51,20 +51,11 @@ public class SimpleWorld implements CruxWorld, PersistenceComponentHandler, Relo
         }
     }
 
-    //protected boolean active = false;
     protected boolean saveOnNextUnload = true;
-
-    /*public boolean isActive(){
-        return active;
-    }*/
 
     @Override
     public void tick(){
         tickedModules.forEach(Ticked::tick);
-    }
-
-    public int tickInterval(){
-        return 100;
     }
 
     @Override
