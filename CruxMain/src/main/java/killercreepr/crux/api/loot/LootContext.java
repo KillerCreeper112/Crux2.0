@@ -12,6 +12,10 @@ public interface LootContext {
     static Builder builder(){
         return new SimpleLootContext.Builder();
     }
+    static LootContext empty(){
+        return EMPTY;
+    }
+    LootContext EMPTY = builder().build();
 
     @NotNull Random getRandom();
     @Nullable Location getLocation();
