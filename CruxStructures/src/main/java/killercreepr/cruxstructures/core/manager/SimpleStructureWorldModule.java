@@ -265,6 +265,25 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
     }
 
     @Override
+    public Collection<ActiveStructure> getActive(@Nullable Predicate<ActiveStructure> filter) {
+        return getActive(ActiveStructure.class, filter);
+    }
+
+    @Override
+    public <T extends ActiveStructure> Collection<T> getActive(@NotNull Class<T> type, @Nullable Predicate<T> filter) {
+        Collection<T> list = new HashSet<>();
+        activeStructures.forEach(chunkStorage ->{
+            chunkStorage.forEach(s ->{
+                if(!type.isAssignableFrom(s.getClass())) return;
+                T value = type.cast(s);
+                if(filter != null && !filter.test(value)) return;
+                list.add(value);
+            });
+        });
+        return list;
+    }
+
+    @Override
     public void onChunkLoad(Chunk chunk) {
         long chunkKey = chunk.getChunkKey();
         ChunkBlockStorage<StoredStructure> cached = storedStructures.get(chunkKey);

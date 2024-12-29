@@ -56,4 +56,8 @@ public interface StructureWorldModule extends WorldModule, Ticked, Reloadable {
     Collection<StoredStructure> getStored(@Nullable Predicate<StoredStructure> filter);
 
     <T extends StoredStructure> Collection<T> getStored(@NotNull Class<T> type, @Nullable Predicate<T> filter);
+
+    Collection<ActiveStructure> getActive(@Nullable Predicate<ActiveStructure> filter);
+
+    <T extends ActiveStructure> Collection<T> getActive(@NotNull Class<T> type, @Nullable Predicate<T> filter);
 }
