@@ -11,13 +11,13 @@ public class AdvanceLootCtx {
         HumanEntity p = event.getWhoClicked();
         ItemStack item = event.getItemResult();
         return LootContext.builder()
-            .info(
+            /*todo maybe something to do with result amount .info(
                 DataExchange.builder()
                     .putAll(p, "player")
                     .putAll(item, "item", "crafted", "result")
                     .putAll(event.getResultAmount(), "result_amount", "amount")
                     .build()
-            )
+            )*/
             .location(p.getLocation())
             .looter(p)
             .looted(item)

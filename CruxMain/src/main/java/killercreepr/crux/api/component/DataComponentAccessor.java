@@ -1,10 +1,13 @@
 package killercreepr.crux.api.component;
 
+import com.google.common.collect.ImmutableMap;
+import killercreepr.crux.api.data.Holder;
+import killercreepr.crux.core.data.util.MapBuilder;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 
 public interface DataComponentAccessor extends Iterable<TypedDataComponent<?>> {
@@ -41,6 +44,11 @@ public interface DataComponentAccessor extends Iterable<TypedDataComponent<?>> {
         T object = this.get(type);
         return object != null ? object : defaultValue;
     }
+    default <T> T getOrThrow(DataComponentType<? extends T> type){
+        T object = this.get(type);
+        Objects.requireNonNull(object, "DataComponentAccessor " + type + " is not present!");
+        return object;
+    }
 
     default int size() {
         return this.keySet().size();
@@ -48,5 +56,84 @@ public interface DataComponentAccessor extends Iterable<TypedDataComponent<?>> {
 
     default boolean isEmpty() {
         return this.size() == 0;
+    }
+
+    interface ImmutableHandler extends DataComponentAccessor{
+        @Contract(pure = true)
+        <T> ImmutableHandler with(DataComponentType<? extends T> type, T value);
+        @Contract(pure = true)
+        <T> ImmutableHandler with(DataComponentType<? extends T> type, Holder<T> value);
+    }
+
+    class SimpleImmutableHandler extends SimpleImmutable implements ImmutableHandler{
+
+        public SimpleImmutableHandler(Map<DataComponentType<?>, Holder<?>> map) {
+            super(map);
+        }
+
+        public SimpleImmutableHandler(Collection<TypedDataComponent<?>> data) {
+            super(data);
+        }
+
+        @Override
+        public <T> ImmutableHandler with(DataComponentType<? extends T> type, T value) {
+            return with(type, Holder.direct(value));
+        }
+
+        @Override
+        public <T> ImmutableHandler with(DataComponentType<? extends T> type, Holder<T> value) {
+            return new SimpleImmutableHandler(addAndCopy(type, value));
+        }
+
+        protected <T> Map<DataComponentType<?>, Holder<?>> addAndCopy(DataComponentType<? extends T> type, T value){
+            return addAndCopy(type, Holder.direct(value));
+        }
+
+        protected <T> Map<DataComponentType<?>, Holder<?>> addAndCopy(DataComponentType<? extends T> type, Holder<T> value){
+            Map<DataComponentType<?>, Holder<?>> map = new HashMap<>(this.map);
+            if(value == null) map.remove(type);
+            else map.put(type, value);
+            return ImmutableMap.copyOf(map);
+        }
+    }
+
+    class SimpleImmutable implements DataComponentAccessor {
+        protected final Map<DataComponentType<?>, Holder<?>> map;
+        public SimpleImmutable(Map<DataComponentType<?>, Holder<?>> map) {
+            this.map = ImmutableMap.copyOf(map);
+        }
+
+        public SimpleImmutable(Collection<TypedDataComponent<?>> data) {
+            this(new MapBuilder<DataComponentType<?>, Holder<?>>()
+                .apply(builder ->{
+                    data.forEach(typed ->{
+                        builder.put(typed.getType(), Holder.direct(typed.getValue()));
+                    });
+                })
+                .buildUnmodifiable());
+        }
+
+        @Override
+        public <T> @Nullable T get(DataComponentType<? extends T> type) {
+            Holder<?> holder = map.get(type);
+            return holder == null ? null : (T) holder.value();
+        }
+
+        @Override
+        public Set<DataComponentType<?>> keySet() {
+            return map.keySet();
+        }
+
+        public Collection<TypedDataComponent<?>> buildTypedCollection(){
+            Collection<TypedDataComponent<?>> list = new HashSet<>();
+            map.forEach((type, value) -> list.add(TypedDataComponent.createUnchecked(type, value.value())));
+            return list;
+        }
+
+        @NotNull
+        @Override
+        public Iterator<TypedDataComponent<?>> iterator() {
+            return buildTypedCollection().iterator();
+        }
     }
 }
