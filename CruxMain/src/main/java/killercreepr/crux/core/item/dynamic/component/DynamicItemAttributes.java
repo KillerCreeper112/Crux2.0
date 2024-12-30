@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DynamicItemAttributes implements DynamicItemComponent {
+public class DynamicItemAttributes extends SimpleDynamicItemComponent {
     protected final @NotNull Map<Object, Collection<DynamicAttributeModifier>> attributes;
 
     public DynamicItemAttributes(@NotNull Map<Object, Collection<DynamicAttributeModifier>> attributes) {

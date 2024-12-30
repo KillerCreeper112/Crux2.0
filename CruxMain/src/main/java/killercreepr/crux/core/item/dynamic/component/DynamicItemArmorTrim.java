@@ -13,7 +13,7 @@ import org.bukkit.inventory.meta.trim.TrimPattern;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class DynamicItemArmorTrim implements DynamicItemComponent {
+public class DynamicItemArmorTrim extends SimpleDynamicItemComponent {
     protected final @NotNull Object trimMaterial;
     protected final @NotNull Object trimPattern;
     public DynamicItemArmorTrim(@NotNull Object trimMaterial, @NotNull Object trimPattern) {

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-public class DynamicItemPersistentTags implements DynamicItemComponent {
+public class DynamicItemPersistentTags extends SimpleDynamicItemComponent {
     protected final @NotNull Collection<TypedDynamicPersistentTag> tags;
     public DynamicItemPersistentTags(@NotNull Collection<TypedDynamicPersistentTag> tags) {
         this.tags = tags;

@@ -145,9 +145,17 @@ public class BukkitDynamicItem implements DynamicItem {
     public @NotNull BukkitDynamicItem clone() {
         try {
             BukkitDynamicItem item = (BukkitDynamicItem) super.clone();
+            Map<String, DynamicItemComponent> components;
+            if(this.components == null) components = null;
+            else{
+                components = new HashMap<>();
+                this.components.forEach((id, comp) ->{
+                    components.put(id, comp.clone());
+                });
+            }
             BukkitDynamicItem.Builder builder = new Builder(item.material())
                     .amount(amount())
-                    .components(components())
+                    .components(components)
                     ;
             return builder.build();
         } catch (CloneNotSupportedException e) {

@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class DynamicSingleValueComponent implements DynamicItemComponent {
+public abstract class DynamicSingleValueComponent extends SimpleDynamicItemComponent {
     protected final @NotNull Object value;
     public DynamicSingleValueComponent(@NotNull Object value) {
         this.value = value;

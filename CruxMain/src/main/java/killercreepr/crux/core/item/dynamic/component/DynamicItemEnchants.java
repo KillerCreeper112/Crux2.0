@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DynamicItemEnchants implements DynamicItemComponent {
+public class DynamicItemEnchants extends SimpleDynamicItemComponent {
     protected final @NotNull Map<Object, Object> enchants;
     public DynamicItemEnchants(@NotNull Map<Object, Object> enchants) {
         this.enchants = enchants;

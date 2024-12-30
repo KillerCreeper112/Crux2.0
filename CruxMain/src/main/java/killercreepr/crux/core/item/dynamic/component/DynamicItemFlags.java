@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 //todo possibly make it a map: Flag -> True/False
-public class DynamicItemFlags implements DynamicItemComponent {
+public class DynamicItemFlags extends SimpleDynamicItemComponent {
     protected final @NotNull Collection<Object> flags;
     public DynamicItemFlags(@NotNull Collection<Object> flags) {
         this.flags = flags;

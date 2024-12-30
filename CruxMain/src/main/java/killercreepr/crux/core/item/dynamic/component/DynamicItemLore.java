@@ -24,6 +24,15 @@ public class DynamicItemLore extends DynamicSingleValueComponent {
     }
 
     @Override
+    public DynamicItemComponent clone() {
+        DynamicItemLore lore = (DynamicItemLore) super.clone();
+        if(lore.value instanceof List<?> l){
+            return new DynamicItemLore(new ArrayList<>(l));
+        }
+        return lore;
+    }
+
+    @Override
     public @NotNull DynamicItemComponent merge(@NotNull DynamicItemComponent with) {
         if(!(with instanceof DynamicItemLore w)) return this;
         List<Object> unparsed;
