@@ -1,5 +1,6 @@
 package killercreepr.cruxadvancements.core.config;
 
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxadvancements.api.advancement.criteria.CruxCriteria;
 import killercreepr.cruxadvancements.api.advancement.flag.CruxAdvancementFlag;
 import killercreepr.cruxadvancements.api.advancement.icon.CriterionDisplay;
@@ -47,11 +48,7 @@ public class CruxConfigHook {
                 return new NumberObjectiveProgress(progress);
             }
         });
-        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<BreakBlockObjective>() {
-            @Override
-            public @NotNull String getType() {
-                return "break_block";
-            }
+        FileAdvancementObjective.registerCustomHandler(new FileSimpleAdvanceObjective<>(Crux.key("break_block")) {
 
             @Override
             public @Nullable BreakBlockObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
@@ -61,12 +58,7 @@ public class CruxConfigHook {
             }
         });
 
-        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<BreakBlockDropObjective>() {
-            @Override
-            public @NotNull String getType() {
-                return "break_block_drop";
-            }
-
+        FileAdvancementObjective.registerCustomHandler(new FileSimpleAdvanceObjective<>(Crux.key("break_block_drop")) {
             @Override
             public @Nullable BreakBlockDropObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
                 Integer maxProgress = e.getObject(Integer.class, "amount");
@@ -75,11 +67,7 @@ public class CruxConfigHook {
             }
         });
 
-        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<PlaceBlockObjective>() {
-            @Override
-            public @NotNull String getType() {
-                return "place_block";
-            }
+        FileAdvancementObjective.registerCustomHandler(new FileSimpleAdvanceObjective<>(Crux.key("place_block")) {
 
             @Override
             public @Nullable PlaceBlockObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
@@ -89,11 +77,7 @@ public class CruxConfigHook {
             }
         });
 
-        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<KillEntityObjective>() {
-            @Override
-            public @NotNull String getType() {
-                return "kill_entity";
-            }
+        FileAdvancementObjective.registerCustomHandler(new FileSimpleAdvanceObjective<>(Crux.key("kill_entity")) {
 
             @Override
             public @Nullable KillEntityObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
@@ -103,11 +87,7 @@ public class CruxConfigHook {
             }
         });
 
-        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<FishObjective>() {
-            @Override
-            public @NotNull String getType() {
-                return "fish";
-            }
+        FileAdvancementObjective.registerCustomHandler(new FileSimpleAdvanceObjective<>(Crux.key("fish")) {
 
             @Override
             public @Nullable FishObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
@@ -117,11 +97,7 @@ public class CruxConfigHook {
             }
         });
 
-        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<CatchFishObjective>() {
-            @Override
-            public @NotNull String getType() {
-                return "catch_fish";
-            }
+        FileAdvancementObjective.registerCustomHandler(new FileSimpleAdvanceObjective<>(Crux.key("catch_fish")) {
 
             @Override
             public @Nullable CatchFishObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
@@ -131,11 +107,7 @@ public class CruxConfigHook {
             }
         });
 
-        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<ConsumeItemObjective>() {
-            @Override
-            public @NotNull String getType() {
-                return "consume_item";
-            }
+        FileAdvancementObjective.registerCustomHandler(new FileSimpleAdvanceObjective<>(Crux.key("consume_item")) {
 
             @Override
             public @Nullable ConsumeItemObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
@@ -145,11 +117,7 @@ public class CruxConfigHook {
             }
         });
 
-        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<TravelToWorldObjective>() {
-            @Override
-            public @NotNull String getType() {
-                return "travel_to_world";
-            }
+        FileAdvancementObjective.registerCustomHandler(new FileSimpleAdvanceObjective<>(Crux.key("travel_to_world")){
 
             @Override
             public @Nullable TravelToWorldObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
@@ -159,11 +127,7 @@ public class CruxConfigHook {
             }
         });
 
-        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<BreedEntityObjective>() {
-            @Override
-            public @NotNull String getType() {
-                return "breed_entity";
-            }
+        FileAdvancementObjective.registerCustomHandler(new FileSimpleAdvanceObjective<>(Crux.key("breed_entity")) {
 
             @Override
             public @Nullable BreedEntityObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
@@ -173,11 +137,7 @@ public class CruxConfigHook {
             }
         });
 
-        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<ResurrectObjective>() {
-            @Override
-            public @NotNull String getType() {
-                return "resurrect";
-            }
+        FileAdvancementObjective.registerCustomHandler(new FileSimpleAdvanceObjective<>(Crux.key("resurrect")) {
 
             @Override
             public @Nullable ResurrectObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
@@ -187,11 +147,7 @@ public class CruxConfigHook {
             }
         });
 
-        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<>() {
-            @Override
-            public @NotNull String getType() {
-                return "shear_block";
-            }
+        FileAdvancementObjective.registerCustomHandler(new FileSimpleAdvanceObjective<>(Crux.key("shear_block")) {
 
             @Override
             public @Nullable AdvancementObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
@@ -201,11 +157,7 @@ public class CruxConfigHook {
             }
         });
 
-        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<>() {
-            @Override
-            public @NotNull String getType() {
-                return "shear_entity";
-            }
+        FileAdvancementObjective.registerCustomHandler(new FileSimpleAdvanceObjective<>(Crux.key("shear_entity")) {
 
             @Override
             public @Nullable AdvancementObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
@@ -215,11 +167,7 @@ public class CruxConfigHook {
             }
         });
 
-        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<>() {
-            @Override
-            public @NotNull String getType() {
-                return "tame_entity";
-            }
+        FileAdvancementObjective.registerCustomHandler(new FileSimpleAdvanceObjective<>(Crux.key("tame_entity")) {
 
             @Override
             public @Nullable AdvancementObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
@@ -229,11 +177,7 @@ public class CruxConfigHook {
             }
         });
 
-        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<>() {
-            @Override
-            public @NotNull String getType() {
-                return "pickup_item";
-            }
+        FileAdvancementObjective.registerCustomHandler(new FileSimpleAdvanceObjective<>(Crux.key("pickup_item")){
 
             @Override
             public @Nullable AdvancementObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
@@ -243,11 +187,7 @@ public class CruxConfigHook {
             }
         });
 
-        FileAdvancementObjective.registerCustomHandler(new CustomFileAdvancementObjective<>() {
-            @Override
-            public @NotNull String getType() {
-                return "craft_item";
-            }
+        FileAdvancementObjective.registerCustomHandler(new FileSimpleAdvanceObjective<>(Crux.key("craft_item")) {
 
             @Override
             public @Nullable AdvancementObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
