@@ -6,6 +6,8 @@ import killercreepr.cruxadvancements.api.advancement.criteria.CruxCriteria;
 import killercreepr.cruxadvancements.api.advancement.flag.CruxAdvancementFlag;
 import killercreepr.cruxadvancements.api.advancement.objective.AdvancementObjective;
 import killercreepr.cruxadvancements.api.advancement.reward.CruxAdvanceReward;
+import killercreepr.cruxadvancements.core.config.CruxAdvanceCfgData;
+import killercreepr.cruxadvancements.core.config.CruxConfigHook;
 import killercreepr.cruxadvancements.core.config.handler.FileAdvancementObjective;
 import killercreepr.cruxadvancements.crazy.advancement.CrazyAdvancement;
 import killercreepr.cruxadvancements.crazy.advancement.CrazyAdvancementDisplay;
@@ -62,7 +64,7 @@ public class FileCrazyAdvancement implements FileObjectHandler<CrazyAdvancement>
         Map<String, AdvancementObjective> objectives = new HashMap<>();
         if(o.get("objectives") instanceof FileObject oo){
             oo.forEach((objectiveKey, value) ->{
-                AdvancementObjective objective = FileAdvancementObjective.deserializeFromFile(ctx, value, objectiveKey);
+                AdvancementObjective objective = CruxAdvanceCfgData.fileAdvancementObjective().deserializeFromFile(ctx, value, objectiveKey);
                 if(objective != null) objective = registry.getParsedObjectRegistry().parse(value, ctx, objective);
                 if(objective==null) return;
                 objectives.put(objectiveKey, objective);

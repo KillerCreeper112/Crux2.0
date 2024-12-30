@@ -13,8 +13,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class FileAdvancementObjective implements FileObjectHandler<AdvancementObjective> {
-    public static final KeyedRegistry<CustomFileAdvancementObjective<?>> CUSTOM_HANDLERS = KeyedRegistry.keyedRegistry();
-    public static void registerCustomHandler(@NotNull CustomFileAdvancementObjective<?> handler){
+
+    public final KeyedRegistry<CustomFileAdvancementObjective<?>> CUSTOM_HANDLERS = KeyedRegistry.keyedRegistry();
+    public void registerCustomHandler(@NotNull CustomFileAdvancementObjective<?> handler){
         CUSTOM_HANDLERS.register(handler);
     }
     @Override
@@ -32,7 +33,7 @@ public class FileAdvancementObjective implements FileObjectHandler<AdvancementOb
         return deserializeFromFile(context, e, criterion);
     }
 
-    public static @Nullable AdvancementObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e, @NotNull String criterion) {
+    public @Nullable AdvancementObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e, @NotNull String criterion) {
         if(!(e instanceof FileObject base)) return null;
         if(!(base.get("objective") instanceof FileObject o)) return null;
 
