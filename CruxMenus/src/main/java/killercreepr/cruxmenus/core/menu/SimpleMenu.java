@@ -52,7 +52,7 @@ public abstract class SimpleMenu implements SlottedMenu {
     }
 
     @Override
-    public @NotNull MenuOpenEvent open(@NotNull Player p) {
+    public @NotNull MenuOpenEvent open(@NotNull HumanEntity p) {
         MenuOpenEvent event = new MenuOpenEvent(p, this);
         if(!event.callEvent()) return event;
         onOpen(p);
@@ -62,7 +62,7 @@ public abstract class SimpleMenu implements SlottedMenu {
     protected abstract void openInventory(HumanEntity p);
 
     @Override
-    public void onOpen(@NotNull Player p) {
+    public void onOpen(@NotNull HumanEntity p) {
         openInventory(p);
         Menus.OPENED.register(p.getUniqueId(), this);
 
@@ -71,7 +71,7 @@ public abstract class SimpleMenu implements SlottedMenu {
     }
 
     @Override
-    public @NotNull MenuCloseEvent close(@NotNull Player p) {
+    public @NotNull MenuCloseEvent close(@NotNull HumanEntity p) {
         Menu menu = Menus.getOpened(p);
         if(menu == null || !menu.uuid().equals(uuid))
             throw new UnsupportedOperationException("Menu, " + this + " has not been opened by " + p.getName());
@@ -83,7 +83,7 @@ public abstract class SimpleMenu implements SlottedMenu {
     }
 
     @Override
-    public void onClose(@NotNull Player p) {
+    public void onClose(@NotNull HumanEntity p) {
         Menus.OPENED.remove(p.getUniqueId());
 
         slots.values().forEach(slot -> slot.onMenuClose(p));

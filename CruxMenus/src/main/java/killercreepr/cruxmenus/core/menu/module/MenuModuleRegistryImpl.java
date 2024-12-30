@@ -5,6 +5,7 @@ import killercreepr.cruxmenus.api.menu.Menu;
 import killercreepr.cruxmenus.api.menu.module.ActiveMenuModule;
 import killercreepr.cruxmenus.api.menu.module.MenuModuleRegistry;
 import net.kyori.adventure.key.Key;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,12 +43,12 @@ public class MenuModuleRegistryImpl implements MenuModuleRegistry {
     }
 
     @Override
-    public void onClose(@NotNull Player p) {
+    public void onClose(@NotNull HumanEntity p) {
         this.forEach(m -> m.onClose(p, menu));
     }
 
     @Override
-    public void onOpen(@NotNull Player p) {
+    public void onOpen(@NotNull HumanEntity p) {
         this.forEach(m -> m.onOpen(p, menu));
     }
 

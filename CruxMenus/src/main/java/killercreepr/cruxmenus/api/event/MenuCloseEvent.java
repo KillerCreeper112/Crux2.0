@@ -1,6 +1,7 @@
 package killercreepr.cruxmenus.api.event;
 
 import killercreepr.cruxmenus.api.menu.Menu;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class MenuCloseEvent extends MenuPlayerCancellableEvent{
     private static final HandlerList HANDLER_LIST = new HandlerList();
-    public MenuCloseEvent(@NotNull Player who, @NotNull Menu menu) {
+    public MenuCloseEvent(@NotNull HumanEntity who, @NotNull Menu menu) {
         super(who, menu);
     }
 

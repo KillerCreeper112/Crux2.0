@@ -44,11 +44,11 @@ public interface Slot {
 
     }
 
-    default void onMenuOpen(@NotNull Player p){
+    default void onMenuOpen(@NotNull HumanEntity p){
 
     }
 
-    default void onMenuClose(@NotNull Player p){
+    default void onMenuClose(@NotNull HumanEntity p){
 
     }
 

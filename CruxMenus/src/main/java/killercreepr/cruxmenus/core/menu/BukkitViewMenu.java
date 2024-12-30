@@ -60,7 +60,7 @@ public class BukkitViewMenu extends SimpleMenu implements ViewedMenu {
     }
 
     @Override
-    public ViewedMenu reconstruct(@NotNull Player p, @NotNull Component name) {
+    public ViewedMenu reconstruct(@NotNull HumanEntity p, @NotNull Component name) {
         return reconstruct(MenuType.GENERIC_9X6.create(p, name));
     }
 

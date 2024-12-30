@@ -35,14 +35,14 @@ public interface Menu extends CommonMenu, InventoryHolder {
     Menu reconstruct(int size, @NotNull Component name);
     Menu reconstruct(@NotNull Inventory inv);
     @NotNull
-    MenuOpenEvent open(@NotNull Player p);
+    MenuOpenEvent open(@NotNull HumanEntity p);
     /**
      * This does not actually close the player's inventory.
      * Use {@link Player#closeInventory()} instead and this method will automatically
      * be called. See {@link MenuListener}
      */
     @NotNull
-    MenuCloseEvent close(@NotNull Player p);
+    MenuCloseEvent close(@NotNull HumanEntity p);
     MenuRefreshEvent refresh();
 
     default void onRefresh(){

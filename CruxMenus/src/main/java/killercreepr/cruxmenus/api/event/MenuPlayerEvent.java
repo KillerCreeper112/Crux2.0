@@ -1,15 +1,22 @@
 package killercreepr.cruxmenus.api.event;
 
 import killercreepr.cruxmenus.api.menu.Menu;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class MenuPlayerEvent extends PlayerEvent {
+public abstract class MenuPlayerEvent extends Event {
     protected final @NotNull Menu menu;
-    public MenuPlayerEvent(@NotNull Player who, @NotNull Menu menu) {
-        super(who);
+    protected final HumanEntity player;
+    public MenuPlayerEvent(@NotNull HumanEntity who, @NotNull Menu menu) {
+        this.player = who;
         this.menu = menu;
+    }
+
+    public @NotNull HumanEntity getPlayer() {
+        return player;
     }
 
     public @NotNull Menu getMenu() {

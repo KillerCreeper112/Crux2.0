@@ -6,13 +6,14 @@ import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.cruxmenus.api.menu.Menu;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface ActiveMenuModule extends Keyed, StringIdentifiable {
-    default void onOpen(@NotNull Player p, @NotNull Menu menu){}
-    default void onClose(@NotNull Player p, @NotNull Menu menu){}
+    default void onOpen(@NotNull HumanEntity p, @NotNull Menu menu){}
+    default void onClose(@NotNull HumanEntity p, @NotNull Menu menu){}
     default void onUpdate(@NotNull Menu menu){}
 
     default void load(@NotNull Menu menu){

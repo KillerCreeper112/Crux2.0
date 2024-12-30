@@ -1,13 +1,14 @@
 package killercreepr.cruxmenus.api.menu.slot;
 
 import killercreepr.crux.core.util.CruxEntityUtil;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public interface TempStoredSlot extends Slot, TempSlotted {
     @Override
-    default void onMenuClose(@NotNull Player p) {
+    default void onMenuClose(@NotNull HumanEntity p) {
         if(!giveItemUponClose()) return;
         ItemStack item = getItem();
         if(isBlank(item) || item == null) return;
