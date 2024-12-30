@@ -8,11 +8,12 @@ import killercreepr.cruxmenus.api.menu.contex.MenuContext;
 import killercreepr.cruxmenus.api.menu.holder.MenuItems;
 import killercreepr.cruxmenus.api.menu.module.MenuModule;
 import killercreepr.cruxmenus.core.menu.module.SimpleActiveMenuModule;
+import killercreepr.cruxmenus.core.menu.module.SimpleActiveMenuModuled;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class ActiveFillMenuModule extends SimpleActiveMenuModule {
+public class ActiveFillMenuModule extends SimpleActiveMenuModuled {
     protected final @NotNull NumberProvider indexes;
     protected final @NotNull MenuItems menuItems;
 

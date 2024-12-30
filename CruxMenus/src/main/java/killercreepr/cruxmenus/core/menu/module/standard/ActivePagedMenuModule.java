@@ -12,14 +12,14 @@ import killercreepr.crux.core.util.CruxMath;
 import killercreepr.crux.core.util.CruxString;
 import killercreepr.cruxmenus.api.menu.Menu;
 import killercreepr.cruxmenus.api.menu.module.MenuModule;
-import killercreepr.cruxmenus.core.menu.module.SimpleActiveMenuModule;
+import killercreepr.cruxmenus.core.menu.module.SimpleActiveMenuModuled;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ActivePagedMenuModule<T> extends SimpleActiveMenuModule {
+public abstract class ActivePagedMenuModule<T> extends SimpleActiveMenuModuled {
     protected final @NotNull NumberProvider indexes;
     protected final @Nullable String valueFilter;
     protected final @NotNull Holder<List<T>> values;
