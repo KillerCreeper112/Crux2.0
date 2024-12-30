@@ -36,6 +36,7 @@ public interface Menu extends CommonMenu, InventoryHolder {
     Menu reconstruct(@NotNull Inventory inv);
     @NotNull
     MenuOpenEvent open(@NotNull HumanEntity p);
+    void openSilently(@NotNull HumanEntity p);
     /**
      * This does not actually close the player's inventory.
      * Use {@link Player#closeInventory()} instead and this method will automatically

@@ -47,8 +47,10 @@ public abstract class SimpleMenu implements SlottedMenu {
     }
 
     public void openSilently(@NotNull HumanEntity p){
+        refreshing = true;
         openInventory(p);
         Menus.OPENED.register(p.getUniqueId(), this);
+        refreshing = false;
     }
 
     @Override
