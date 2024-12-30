@@ -5,6 +5,7 @@ import killercreepr.crux.api.block.predicate.BlockPredicate;
 import killercreepr.crux.api.entity.predicate.EntityPredicate;
 import killercreepr.crux.api.item.predicate.ItemPredicate;
 import killercreepr.crux.api.loot.conditions.LootCondition;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.loot.conditions.EntityOrItemCondition;
 import killercreepr.crux.core.loot.conditions.block.BlockCondition;
 import killercreepr.crux.core.loot.conditions.block.BlockStateCondition;
@@ -26,12 +27,7 @@ import java.util.Map;
 
 public class StandardFileLootConditions {
     public static void register(@NotNull FileLootCondition file){
-        file.registerCustomHandler(new CustomFileLootCondition<>() {
-            @Override
-            public @NotNull String getType() {
-                return "all_of";
-            }
-
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("all_of")) {
             @Override
             public @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 Collection<LootCondition> conditions = ctx.getRegistry().deserializeFromFile(
@@ -42,11 +38,7 @@ public class StandardFileLootConditions {
                 return new killercreepr.crux.core.loot.conditions.AllOfCondition(conditions);
             }
         });
-        file.registerCustomHandler(new CustomFileLootCondition<>() {
-            @Override
-            public @NotNull String getType() {
-                return "any_of";
-            }
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("any_of")) {
 
             @Override
             public @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
@@ -58,12 +50,7 @@ public class StandardFileLootConditions {
                 return new killercreepr.crux.core.loot.conditions.AnyOfCondition(conditions);
             }
         });
-        file.registerCustomHandler(new CustomFileLootCondition<>() {
-            @Override
-            public @NotNull String getType() {
-                return "block";
-            }
-
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("block")) {
             @Override
             public @NotNull BlockCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 FileRegistry registry = ctx.getRegistry();
@@ -71,12 +58,7 @@ public class StandardFileLootConditions {
                 return new BlockCondition(target, blockPredicate);
             }
         });
-        file.registerCustomHandler(new CustomFileLootCondition<>() {
-            @Override
-            public @NotNull String getType() {
-                return "block_state";
-            }
-
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("block_state")) {
             @Override
             public @NotNull BlockStateCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 FileRegistry registry = ctx.getRegistry();
@@ -85,11 +67,7 @@ public class StandardFileLootConditions {
                 return new BlockStateCondition(target, type, age);
             }
         });
-        file.registerCustomHandler(new CustomFileLootCondition<>() {
-            @Override
-            public @NotNull String getType() {
-                return "entity";
-            }
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("entity")) {
 
             @Override
             public @NotNull EntityCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
@@ -105,12 +83,7 @@ public class StandardFileLootConditions {
             }
         });
 
-        file.registerCustomHandler(new CustomFileLootCondition<>() {
-            @Override
-            public @NotNull String getType() {
-                return "item";
-            }
-
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("item")) {
             @Override
             public @NotNull ItemStackCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 FileRegistry registry = ctx.getRegistry();
@@ -125,11 +98,7 @@ public class StandardFileLootConditions {
             }
         });
 
-        file.registerCustomHandler(new CustomFileLootCondition<>() {
-            @Override
-            public @NotNull String getType() {
-                return "world";
-            }
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("world")) {
 
             @Override
             public @NotNull WorldCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
@@ -142,12 +111,7 @@ public class StandardFileLootConditions {
             }
         });
 
-        file.registerCustomHandler(new CustomFileLootCondition<>() {
-            @Override
-            public @NotNull String getType() {
-                return "location";
-            }
-
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("location")) {
             @Override
             public @NotNull LocationCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 FileRegistry registry = ctx.getRegistry();
@@ -160,12 +124,7 @@ public class StandardFileLootConditions {
             }
         });
 
-        file.registerCustomHandler(new CustomFileLootCondition<>() {
-            @Override
-            public @NotNull String getType() {
-                return "entity_or_item";
-            }
-
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("entity_or_item")) {
             @Override
             public @Nullable killercreepr.crux.core.loot.conditions.EntityOrItemCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 FileRegistry registry = ctx.getRegistry();
@@ -178,12 +137,7 @@ public class StandardFileLootConditions {
             }
         });
 
-        file.registerCustomHandler(new CustomFileLootCondition<>() {
-            @Override
-            public @NotNull String getType() {
-                return "target_check";
-            }
-
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("target_check")) {
             @Override
             public @Nullable killercreepr.crux.core.loot.conditions.TargetCheckCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 FileRegistry registry = ctx.getRegistry();
@@ -195,12 +149,7 @@ public class StandardFileLootConditions {
             }
         });
 
-        file.registerCustomHandler(new CustomFileLootCondition<>() {
-            @Override
-            public @NotNull String getType() {
-                return "random_chance";
-            }
-
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("random_chance")) {
             @Override
             public @Nullable killercreepr.crux.core.loot.conditions.RandomChanceCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 Float chance = e.getObject(Float.class, "chance");
@@ -209,11 +158,7 @@ public class StandardFileLootConditions {
             }
         });
 
-        file.registerCustomHandler(new CustomFileLootCondition<>() {
-            @Override
-            public @NotNull String getType() {
-                return "random_luck_chance";
-            }
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("random_luck_chance")) {
 
             @Override
             public @Nullable killercreepr.crux.core.loot.conditions.RandomChanceCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
@@ -225,11 +170,7 @@ public class StandardFileLootConditions {
             }
         });
 
-        file.registerCustomHandler(new CustomFileLootCondition<>() {
-            @Override
-            public @NotNull String getType() {
-                return "evaluation";
-            }
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("evaluation")) {
 
             @Override
             public @Nullable EvaluationCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
@@ -241,11 +182,7 @@ public class StandardFileLootConditions {
             }
         });
 
-        file.registerCustomHandler(new CustomFileLootCondition<>() {
-            @Override
-            public @NotNull String getType() {
-                return "list";
-            }
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("list")) {
 
             @Override
             public @Nullable killercreepr.crux.core.loot.conditions.CollectionCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {

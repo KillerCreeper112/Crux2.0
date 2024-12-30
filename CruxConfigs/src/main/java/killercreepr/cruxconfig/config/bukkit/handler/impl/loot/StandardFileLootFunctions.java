@@ -3,6 +3,7 @@ package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 import com.google.common.reflect.TypeToken;
 import killercreepr.crux.api.loot.conditions.LootCondition;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.loot.item.functions.ItemAmountFunction;
 import killercreepr.crux.core.loot.item.functions.ItemDamageFunction;
 import killercreepr.crux.core.loot.item.functions.ItemEnchantFunction;
@@ -21,11 +22,7 @@ import java.util.HashSet;
 
 public class StandardFileLootFunctions {
     public static void register(@NotNull FileItemLootFunction file){
-        file.registerCustomHandler(new CustomFileLootFunction<>() {
-            @Override
-            public @NotNull String getType() {
-                return "set_enchants";
-            }
+        file.registerCustomHandler(new SimpleFileItemLootFunction<>(Crux.key("set_enchants")) {
 
             @Override
             public @Nullable ItemEnchantFunction deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
@@ -56,12 +53,7 @@ public class StandardFileLootFunctions {
                 );
             }
         });
-        file.registerCustomHandler(new CustomFileLootFunction<>() {
-            @Override
-            public @NotNull String getType() {
-                return "set_count";
-            }
-
+        file.registerCustomHandler(new SimpleFileItemLootFunction<>(Crux.key("set_count")) {
             @Override
             public @Nullable ItemAmountFunction deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 FileRegistry registry = ctx.getRegistry();
@@ -73,11 +65,7 @@ public class StandardFileLootFunctions {
                 return new ItemAmountFunction(conditions, amount, e.getObject(Boolean.class, "add", false));
             }
         });
-        file.registerCustomHandler(new CustomFileLootFunction<>() {
-            @Override
-            public @NotNull String getType() {
-                return "set_damage";
-            }
+        file.registerCustomHandler(new SimpleFileItemLootFunction<>(Crux.key("set_damage")) {
 
             @Override
             public @Nullable ItemDamageFunction deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
@@ -90,12 +78,7 @@ public class StandardFileLootFunctions {
                 return new ItemDamageFunction(conditions, amount, e.getObject(Boolean.class, "add", false));
             }
         });
-        file.registerCustomHandler(new CustomFileLootFunction<>() {
-            @Override
-            public @NotNull String getType() {
-                return "enchant_randomly";
-            }
-
+        file.registerCustomHandler(new SimpleFileItemLootFunction<>(Crux.key("enchant_randomly")) {
             @Override
             public @Nullable ItemEnchantRandomlyFunction deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 FileRegistry registry = ctx.getRegistry();

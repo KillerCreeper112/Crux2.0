@@ -1,19 +1,19 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 
 import killercreepr.crux.api.loot.item.ItemLootPoolObject;
-import killercreepr.crux.api.registry.MappedRegistry;
-import killercreepr.crux.core.registry.SimpleMappedRegistry;
+import killercreepr.crux.api.registry.KeyedRegistry;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
+import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class FileItemLootPoolObject implements FileObjectHandler<ItemLootPoolObject> {
-    public final MappedRegistry<String, CustomFilePoolObject<?>> CUSTOM_HANDLERS = new SimpleMappedRegistry<>();
-    public void registerCustomHandler(@NotNull CustomFilePoolObject<?> handler){
-        CUSTOM_HANDLERS.register(handler.getType(), handler);
+    public final KeyedRegistry<CustomFileItemPoolObject<?>> CUSTOM_HANDLERS = KeyedRegistry.keyedRegistry();
+    public void registerCustomHandler(@NotNull CustomFileItemPoolObject<?> handler){
+        CUSTOM_HANDLERS.register(handler);
     }
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull ItemLootPoolObject object) {
@@ -29,10 +29,9 @@ public class FileItemLootPoolObject implements FileObjectHandler<ItemLootPoolObj
 
     public @Nullable ItemLootPoolObject deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e, @Nullable String target) {
         if(!(e instanceof FileObject o)) return null;
-        String type = o.getObject(String.class, "type");
+        Key type = o.getObject(Key.class, "type");
         if(type==null) return null;
-        type = type.toLowerCase();
-        CustomFilePoolObject<?> handler = CUSTOM_HANDLERS.get(type);
+        CustomFileItemPoolObject<?> handler = CUSTOM_HANDLERS.get(type);
         if(handler==null) throw new IllegalStateException("ItemLootPoolObject type " + type + " does not exist!");
         return handler.deserializeFromFile(ctx, o);
     }

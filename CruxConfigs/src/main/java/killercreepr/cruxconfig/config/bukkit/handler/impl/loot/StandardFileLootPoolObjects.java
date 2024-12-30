@@ -4,6 +4,7 @@ import com.google.common.reflect.TypeToken;
 import killercreepr.crux.api.item.dynamic.DynamicItem;
 import killercreepr.crux.api.loot.LootPoolObject;
 import killercreepr.crux.api.loot.item.ItemLootPoolObject;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.loot.item.SimpleItemLootObject;
 import killercreepr.crux.core.loot.item.pool.AlternativeItemPoolObject;
 import killercreepr.crux.core.loot.item.pool.ListItemPoolObject;
@@ -19,12 +20,7 @@ import java.util.List;
 
 public class StandardFileLootPoolObjects {
     public static void register(@NotNull FileItemLootPoolObject file){
-        file.registerCustomHandler(new CustomFilePoolObject<>() {
-            @Override
-            public @NotNull String getType() {
-                return "item";
-            }
-
+        file.registerCustomHandler(new SimpleFileItemLootPoolObject<>(Crux.key("item")) {
             @Override
             public @Nullable ItemLootPoolObject deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
                 FileRegistry registry = ctx.getRegistry();
@@ -49,12 +45,7 @@ public class StandardFileLootPoolObjects {
                 );
             }
         });
-        file.registerCustomHandler(new CustomFilePoolObject<>() {
-            @Override
-            public @NotNull String getType() {
-                return "alternatives";
-            }
-
+        file.registerCustomHandler(new SimpleFileItemLootPoolObject<>(Crux.key("alternatives")) {
             @Override
             public @Nullable ItemLootPoolObject deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
                 FileRegistry registry = ctx.getRegistry();

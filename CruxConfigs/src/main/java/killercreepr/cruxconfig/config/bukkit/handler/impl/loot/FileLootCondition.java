@@ -1,19 +1,19 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 
 import killercreepr.crux.api.loot.conditions.LootCondition;
-import killercreepr.crux.api.registry.MappedRegistry;
-import killercreepr.crux.core.registry.SimpleMappedRegistry;
+import killercreepr.crux.api.registry.KeyedRegistry;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
+import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class FileLootCondition implements FileObjectHandler<LootCondition> {
-    public final MappedRegistry<String, CustomFileLootCondition<?>> CUSTOM_HANDLERS = new SimpleMappedRegistry<>();
+    public final KeyedRegistry<CustomFileLootCondition<?>> CUSTOM_HANDLERS = KeyedRegistry.keyedRegistry();
     public void registerCustomHandler(@NotNull CustomFileLootCondition<?> handler){
-        CUSTOM_HANDLERS.register(handler.getType(), handler);
+        CUSTOM_HANDLERS.register(handler);
     }
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull LootCondition object) {
@@ -29,9 +29,8 @@ public class FileLootCondition implements FileObjectHandler<LootCondition> {
 
     public @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e, @Nullable String target) {
         if(!(e instanceof FileObject o)) return null;
-        String type = o.getObject(String.class, "condition");
+        Key type = o.getObject(Key.class, "condition");
         if(type==null) return null;
-        type = type.toLowerCase();
         CustomFileLootCondition<?> handler = CUSTOM_HANDLERS.get(type);
         if(handler==null) throw new IllegalStateException("LootCondition type " + type + " does not exist!");
         return handler.deserializeFromFile(ctx, o, target == null ? "this" : target);
