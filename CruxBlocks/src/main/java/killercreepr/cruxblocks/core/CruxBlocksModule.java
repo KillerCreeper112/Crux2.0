@@ -17,9 +17,9 @@ import killercreepr.cruxblocks.api.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.api.block.data.events.CustomBlockDataRemoveEvent;
 import killercreepr.cruxblocks.api.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.api.block.manager.CruxBlockManager;
-import killercreepr.cruxblocks.api.block.manager.CruxBlockTicker;
 import killercreepr.cruxblocks.api.block.registry.CruxBlockRegistry;
 import killercreepr.cruxblocks.api.item.KeyedItemProvider;
+import killercreepr.cruxblocks.api.world.module.CruxBlocksWorldModule;
 import killercreepr.cruxblocks.core.block.CruxCruxedBlock;
 import killercreepr.cruxblocks.core.block.data.CustomBlockData;
 import killercreepr.cruxblocks.core.block.wrapper.CruxBlockCruxWrapper;
@@ -42,6 +42,8 @@ import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileGeneric;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
+import killercreepr.cruxworlds.api.world.CruxWorld;
+import killercreepr.cruxworlds.api.world.manager.CruxWorldManager;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Material;
 import org.bukkit.Registry;
@@ -60,14 +62,14 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
     }
 
     protected final @NotNull CruxBlockRegistry blockRegistry;
-    protected final @NotNull CruxBlockTicker blockTicker;
-    public CruxBlocksModule(@NotNull CruxBlockRegistry blockRegistry, @NotNull CruxBlockTicker blockTicker) {
+    protected final @NotNull CruxWorldManager worldManager;
+    public CruxBlocksModule(@NotNull CruxBlockRegistry blockRegistry, @NotNull CruxWorldManager worldManager) {
         this.blockRegistry = blockRegistry;
-        this.blockTicker = blockTicker;
+        this.worldManager = worldManager;
     }
 
-    public CruxBlocksModule(@NotNull CruxBlockTicker blockTicker) {
-        this(CruxBlocksRegistries.BLOCK, blockTicker);
+    public CruxBlocksModule(@NotNull CruxWorldManager worldManager) {
+        this(CruxBlocksRegistries.BLOCK, worldManager);
     }
 
     protected @Nullable KeyedItemProvider keyedItemProvider;
@@ -122,7 +124,7 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
     @Override
     public void onEnable(@NotNull CruxPlugin plugin) {
         Crux.handlers().setBlock(this);
-        blockTicker.setStarted();
+        //blockTicker.setStarted();
         plugin.registerListeners(
             new CustomBlocksListener(plugin, this),
             new NoteBlockSoundsListener(plugin, CruxBlocksRegistries.BLOCK),
@@ -144,7 +146,7 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
     @Override
     public void onDisable(@NotNull CruxPlugin plugin) {
         CruxModule.super.onDisable(plugin);
-        blockTicker.setStopped();
+        //blockTicker.setStopped();
     }
 
     public @NotNull CruxBlockRegistry getBlockRegistry() {
@@ -156,19 +158,31 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
         return getActiveBlock(at, at.getBlockData());
     }
 
+    protected CruxBlocksWorldModule module(Block b){
+        CruxWorld world = worldManager.getWorld(b.getWorld().getUID());
+        if(world == null) return null;
+        return world.getModule(CruxBlocksWorldModule.class);
+    }
+
     @Override
     public @Nullable ActiveCruxBlock getActiveBlock(@NotNull Block at, @NotNull BlockData data) {
-        return blockTicker.getActiveBlock(at, data);
+        CruxBlocksWorldModule module = module(at);
+        if(module == null) return null;
+        return module.getActiveBlock(at, data);
     }
 
     @Override
-    public boolean hasTickedBlock(@NotNull Block at){
-        return blockTicker.hasTickedBlock(at);
+    public boolean hasActiveBlock(@NotNull Block at){
+        CruxBlocksWorldModule module = module(at);
+        if(module == null) return false;
+        return module.hasActiveBlock(at);
     }
 
     @Override
-    public @Nullable ActiveCruxBlock getTickedBlock(@NotNull Block at){
-        return blockTicker.getTickedBlock(at);
+    public @Nullable ActiveCruxBlock getActiveBlockPure(@NotNull Block at){
+        CruxBlocksWorldModule module = module(at);
+        if(module == null) return null;
+        return module.getActiveBlockPure(at);
     }
 
     @Override

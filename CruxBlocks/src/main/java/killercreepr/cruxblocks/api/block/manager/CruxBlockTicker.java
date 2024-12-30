@@ -14,10 +14,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
+@Deprecated(forRemoval = true)
 public interface CruxBlockTicker extends Statutable {
+    @Deprecated(forRemoval = true)
     static CruxBlockTicker simple(Plugin plugin){
         return simple(plugin, CruxBlocksRegistries.BLOCK);
     }
+    @Deprecated(forRemoval = true)
     static CruxBlockTicker simple(Plugin plugin, CruxBlockRegistry registry){
         return new SimpleCruxBlockTicker(plugin, registry);
     }

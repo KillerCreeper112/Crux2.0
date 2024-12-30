@@ -42,7 +42,7 @@ public class StructureManager implements Listener, Reloadable {
         return worldManager;
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onCruxWorldPreCreate(CruxWorldPreCreateEvent event) {
         event.getModuleCreators().add(SimpleStructureWorldModule::new);
     }

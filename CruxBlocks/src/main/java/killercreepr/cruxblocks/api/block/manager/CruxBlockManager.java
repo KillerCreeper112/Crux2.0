@@ -16,7 +16,7 @@ public interface CruxBlockManager {
      */
     @Nullable ActiveCruxBlock getActiveBlock(@NotNull Block at, @NotNull BlockData data);
 
-    boolean hasTickedBlock(@NotNull Block at);
+    boolean hasActiveBlock(@NotNull Block at);
 
-    @Nullable ActiveCruxBlock getTickedBlock(@NotNull Block at);
+    @Nullable ActiveCruxBlock getActiveBlockPure(@NotNull Block at);
 }
