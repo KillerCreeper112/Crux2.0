@@ -4,6 +4,7 @@ import com.google.common.reflect.TypeToken;
 import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.api.item.dynamic.DynamicItem;
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -16,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 public class FileMenuItem extends SimpleFileMenuModuled<MenuItemHolder> {
     public FileMenuItem(@NotNull FileMenuHolder<?> menuModule) {
@@ -48,7 +50,11 @@ public class FileMenuItem extends SimpleFileMenuModuled<MenuItemHolder> {
                 MenuItemHolder possibleBase = menuModule.getFileMenuItem().deserializeFromFile(
                     context, menuContext.get("items").getAsFileObject().get(s), menuContext
                 );
-                if (possibleBase != null) base.add(possibleBase);
+                if (possibleBase != null){
+                    base.add(possibleBase);
+                }else{
+                    Crux.log(Level.WARNING, "No item base of " + s + " found!");
+                }
             }
         }
 

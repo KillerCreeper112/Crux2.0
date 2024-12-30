@@ -31,12 +31,6 @@ public class SimpleCruxBlocksWorldModule extends SimpleWorldModule implements Cr
     }
 
     @Override
-    public void onLoad() {
-        super.onLoad();
-
-    }
-
-    @Override
     public void onUnload(boolean save) {
         super.onUnload(save);
         active.values().forEach(b ->{
