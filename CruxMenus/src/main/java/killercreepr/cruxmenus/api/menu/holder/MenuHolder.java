@@ -11,6 +11,7 @@ import killercreepr.cruxmenus.api.menu.registry.MenuRegistry;
 import killercreepr.cruxmenus.core.menu.holder.SimpleMenuHolder;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,14 +31,14 @@ public interface MenuHolder extends DataInfoHolder, Keyed {
     MenuHolder setRegistry(@NotNull MenuRegistry registry);
     MenuRegistry getRegistry();
 
-    default @NotNull MenuOpenEvent open(@NotNull Player p){
+    default @NotNull MenuOpenEvent open(@NotNull HumanEntity p){
         return open(p, DataExchange.empty());
     }
 
-    default @NotNull MenuOpenEvent open(@NotNull Player p, @NotNull DataExchange data){
+    default @NotNull MenuOpenEvent open(@NotNull HumanEntity p, @NotNull DataExchange data){
         return open(p, data, null);
     };
-    @NotNull MenuOpenEvent open(@NotNull Player p, @NotNull DataExchange data, @Nullable MergedTagContainer tags);
+    @NotNull MenuOpenEvent open(@NotNull HumanEntity p, @NotNull DataExchange data, @Nullable MergedTagContainer tags);
 
     @NotNull CfgMenu createMenu(@NotNull DataExchange data);
 

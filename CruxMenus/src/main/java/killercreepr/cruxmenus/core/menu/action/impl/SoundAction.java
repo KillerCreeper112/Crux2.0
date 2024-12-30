@@ -4,6 +4,7 @@ import killercreepr.cruxmenus.api.menu.contex.ActionContext;
 import killercreepr.cruxmenus.core.menu.action.SimpleMenuAction;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,7 +14,8 @@ public class SoundAction extends SimpleMenuAction {
     }
 
     @Override
-    public boolean execute(@NotNull Player p, @NotNull ActionContext actionInfo, @NotNull String[] args) {
+    public boolean execute(@NotNull ActionContext ctx, @NotNull String[] args) {
+        HumanEntity p = ctx.getPlayer();
         Key key = Key.key(args[0]);
         float pitch = 1f;
         if(args.length > 1){

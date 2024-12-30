@@ -5,6 +5,7 @@ import killercreepr.cruxmenus.api.menu.CfgMenu;
 import killercreepr.cruxmenus.api.menu.contex.ActionContext;
 import killercreepr.cruxmenus.core.menu.action.SimpleMenuAction;
 import net.kyori.adventure.key.Key;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +16,7 @@ public class UpdateItemAction extends SimpleMenuAction {
     }
 
     @Override
-    public boolean execute(@NotNull Player p, @NotNull ActionContext ctx, @NotNull String[] args) {
+    public boolean execute(@NotNull ActionContext ctx, @NotNull String[] args) {
         InventoryClickEvent event = ctx.getEvent();
         CfgMenu menu = ctx.getMenu();
 

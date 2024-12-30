@@ -5,6 +5,7 @@ import killercreepr.cruxmenus.api.menu.contex.ActionContext;
 import killercreepr.cruxmenus.core.menu.action.SimpleMenuAction;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,7 +20,7 @@ public class ConsoleCommandAction extends SimpleMenuAction {
     }
 
     @Override
-    public boolean execute(@NotNull Player p, @NotNull ActionContext actionInfo, @NotNull String[] args) {
+    public boolean execute(@NotNull ActionContext actionInfo, @NotNull String[] args) {
         Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),  CruxString.join(args));
         return true;
     }

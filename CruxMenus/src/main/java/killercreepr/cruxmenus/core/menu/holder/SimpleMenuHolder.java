@@ -11,6 +11,7 @@ import killercreepr.cruxmenus.api.menu.module.MenuModule;
 import killercreepr.cruxmenus.api.menu.registry.MenuRegistry;
 import killercreepr.cruxmenus.core.menu.ConfigMenu;
 import net.kyori.adventure.key.Key;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -55,7 +56,7 @@ public class SimpleMenuHolder implements MenuHolder {
     }
 
     @Override
-    public @NotNull MenuOpenEvent open(@NotNull Player p, @NotNull DataExchange data, @Nullable MergedTagContainer tags) {
+    public @NotNull MenuOpenEvent open(@NotNull HumanEntity p, @NotNull DataExchange data, @Nullable MergedTagContainer tags) {
         DataExchange.Builder builder = DataExchange.builder().putAll(data);
         builder.put("viewer", p);
 

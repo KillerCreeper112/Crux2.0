@@ -4,6 +4,7 @@ import killercreepr.crux.core.util.CruxString;
 import killercreepr.cruxmenus.api.menu.contex.ActionContext;
 import killercreepr.cruxmenus.core.menu.action.SimpleMenuAction;
 import net.kyori.adventure.key.Key;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,8 +19,11 @@ public class CommandAction extends SimpleMenuAction {
     }
 
     @Override
-    public boolean execute(@NotNull Player p, @NotNull ActionContext actionInfo, @NotNull String[] args) {
-        p.performCommand(CruxString.join(args));
-        return true;
+    public boolean execute(@NotNull ActionContext ctx, @NotNull String[] args) {
+        if(ctx.getPlayer() instanceof Player p){
+            p.performCommand(CruxString.join(args));
+            return true;
+        }
+        return false;
     }
 }

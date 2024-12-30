@@ -5,6 +5,7 @@ import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.cruxmenus.api.menu.CfgMenu;
 import killercreepr.cruxmenus.api.menu.item.MenuItem;
 import killercreepr.cruxmenus.core.menu.context.SimpleActionContext;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,6 +14,7 @@ public interface ActionContext extends MenuContext {
                                  @NotNull MenuItem item, @NotNull InventoryClickEvent event){
         return new SimpleActionContext(menu, info, resolvers, item, event);
     }
+    @NotNull HumanEntity getPlayer();
     @NotNull
     InventoryClickEvent getEvent();
     @NotNull

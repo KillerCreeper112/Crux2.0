@@ -4,6 +4,7 @@ import killercreepr.cruxmenus.api.menu.Menu;
 import killercreepr.cruxmenus.api.menu.action.click.ClickActions;
 import killercreepr.cruxmenus.api.menu.contex.ActionContext;
 import killercreepr.cruxmenus.api.menu.item.MenuItem;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +20,7 @@ public class MenuItemClickEvent extends MenuPlayerCancellableEvent{
     protected @NotNull ActionContext context;
     protected @Nullable ClickActions clickActions;
 
-    public MenuItemClickEvent(@NotNull Player who, @NotNull Menu menu, @NotNull MenuItem item, @NotNull ActionContext context, @Nullable ClickActions clickActions) {
+    public MenuItemClickEvent(@NotNull HumanEntity who, @NotNull Menu menu, @NotNull MenuItem item, @NotNull ActionContext context, @Nullable ClickActions clickActions) {
         super(who, menu);
         this.item = item;
         this.context = context;
