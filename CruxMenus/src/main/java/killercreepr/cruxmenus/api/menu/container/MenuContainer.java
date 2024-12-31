@@ -3,7 +3,7 @@ package killercreepr.cruxmenus.api.menu.container;
 import killercreepr.cruxmenus.api.event.MenuOpenEvent;
 import killercreepr.cruxmenus.api.menu.Menu;
 import killercreepr.cruxmenus.core.menu.container.SimpleMenuContainer;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.HumanEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,27 +19,27 @@ public interface MenuContainer {
 
     MenuContainer setOpening(boolean opening);
 
-    MenuOpenEvent next(@NotNull Supplier<Menu> menu, @NotNull Player p);
+    MenuOpenEvent next(@NotNull Supplier<Menu> menu, @NotNull HumanEntity p);
 
     MenuOpenEvent next(@NotNull Supplier<MenuOpenEvent> open);
 
-    MenuOpenEvent back(@NotNull Supplier<Menu> menu, @NotNull Player p);
+    MenuOpenEvent back(@NotNull Supplier<Menu> menu, @NotNull HumanEntity p);
 
     MenuOpenEvent back(@NotNull Supplier<MenuOpenEvent> open);
 
-    MenuContainer back(@NotNull Player p);
+    MenuContainer back(@NotNull HumanEntity p);
 
     /**
      * Calls the onClose(Player) method on all menus except for
      * the current menu.
      */
-    MenuContainer onClosed(@NotNull Player p, @NotNull Menu menu);
+    MenuContainer onClosed(@NotNull HumanEntity p, @NotNull Menu menu);
 
     boolean isClosed();
 
     void setClosed(boolean closed);
 
-    MenuContainer closeAll(@NotNull Player p);
+    MenuContainer closeAll(@NotNull HumanEntity p);
 
     MenuContainer addOpenedMenu(@NotNull MenuOpenEvent menu);
 

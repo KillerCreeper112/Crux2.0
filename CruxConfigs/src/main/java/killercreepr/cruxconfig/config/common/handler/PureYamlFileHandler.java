@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Mainly used just so it's easier for future compatibility.
  */
+@Deprecated
 public abstract class PureYamlFileHandler<T> extends SimpleFileHandler<T> {
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull T object) {

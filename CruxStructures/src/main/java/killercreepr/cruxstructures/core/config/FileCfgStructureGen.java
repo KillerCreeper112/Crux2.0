@@ -49,7 +49,7 @@ public class FileCfgStructureGen extends PureYamlFileHandler<StructureGenerator>
 
         StructureCenter center = registry.deserializeFromFile(StructureCenter.class, o.get("center"));
         if(center==null){
-            throw new RuntimeException("StructureCenter type not found!");
+            throw new RuntimeException("StructureCenter type not found! " + o);
         }
         LootTable<Key> structurePool = fileSimpleLootTable.deserializeFromFile(
             context, o.get("structure")

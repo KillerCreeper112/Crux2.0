@@ -3,7 +3,7 @@ package killercreepr.cruxmenus.core.menu.container;
 import killercreepr.cruxmenus.api.event.MenuOpenEvent;
 import killercreepr.cruxmenus.api.menu.Menu;
 import killercreepr.cruxmenus.api.menu.container.MenuContainer;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.HumanEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,7 +24,7 @@ public class SimpleMenuContainer implements MenuContainer {
         this.opening = opening; return this;
     }
 
-    public MenuOpenEvent next(@NotNull Supplier<Menu> menu, @NotNull Player p){
+    public MenuOpenEvent next(@NotNull Supplier<Menu> menu, @NotNull HumanEntity p){
         return next(() -> menu.get().open(p));
     }
 
@@ -36,7 +36,7 @@ public class SimpleMenuContainer implements MenuContainer {
         return event;
     }
 
-    public MenuOpenEvent back(@NotNull Supplier<Menu> menu, @NotNull Player p){
+    public MenuOpenEvent back(@NotNull Supplier<Menu> menu, @NotNull HumanEntity p){
         return back(() ->{
             Menu m = menu.get();
             m.refresh();
@@ -52,7 +52,7 @@ public class SimpleMenuContainer implements MenuContainer {
         return event;
     }
 
-    public SimpleMenuContainer back(@NotNull Player p){
+    public SimpleMenuContainer back(@NotNull HumanEntity p){
         Menu menu = getPrevious();
         if(menu==null) return this;
         back(() -> menu, p);
@@ -64,7 +64,7 @@ public class SimpleMenuContainer implements MenuContainer {
      * the current menu.
      */
     protected boolean closed = false;
-    public SimpleMenuContainer onClosed(@NotNull Player p, @NotNull Menu menu){
+    public SimpleMenuContainer onClosed(@NotNull HumanEntity p, @NotNull Menu menu){
         if(isClosed() || isOpening()) return this;
         closed = true;
         for(Menu m : openedMenus){
@@ -83,7 +83,7 @@ public class SimpleMenuContainer implements MenuContainer {
         this.closed = closed;
     }
 
-    public SimpleMenuContainer closeAll(@NotNull Player p){
+    public SimpleMenuContainer closeAll(@NotNull HumanEntity p){
         Menu opened = getCurrent();
         if(opened==null) return this;
         opened.close(p);

@@ -222,6 +222,10 @@ public class BaseFileRegistry implements FileRegistry {
                 parsedKey = Short.parseShort(key);
             }else if(firstType == Long.class){
                 parsedKey = Long.parseLong(key);
+            }else if(firstType == Boolean.class){
+                parsedKey = Boolean.parseBoolean(key);
+            }else if(firstType == Character.class){
+                parsedKey = key.charAt(0);
             }else{
                 parsedKey = deserializeObject(firstType, new FilePrimitive(key));
             }
@@ -265,6 +269,7 @@ public class BaseFileRegistry implements FileRegistry {
     public @NotNull FileElement serializeObject(@NotNull Object o, @NotNull FileContext<?> context){
         if(o instanceof FileElement d) return d;
         if(o instanceof String s) return new FilePrimitive(s);
+        if(o instanceof Character s) return new FilePrimitive(s.toString());
         if(o instanceof Number s) return new FilePrimitive(s);
         if(o instanceof Boolean s) return new FilePrimitive(s);
         if(o instanceof Collection<?> l) return serializeCollection(l, context);
@@ -333,7 +338,13 @@ public class BaseFileRegistry implements FileRegistry {
     public @NotNull FileObject serializeMap(@NotNull Map<?, ?> list, @NotNull FileContext<?> context){
         FileObject array = new FileObject();
         for(Map.Entry<?, ?> entry : list.entrySet()){
-            array.add(entry.getKey() + "", serializeObject(entry.getValue(), context));
+            FileElement serializedKey = serializeObject(entry.getKey(), context);
+            if(!(serializedKey instanceof FilePrimitive prim)){
+                throw new UnsupportedOperationException(entry.getKey() + " was not serialized into a primitive element! " +
+                    entry.getKey().getClass().getSimpleName() + " Maps require the key element to be serialized into a string. Got " + serializedKey);
+            }
+
+            array.add(prim.getAsString(), serializeObject(entry.getValue(), context));
         }
         return array;
     }
