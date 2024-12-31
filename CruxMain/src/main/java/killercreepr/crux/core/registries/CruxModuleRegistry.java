@@ -1,12 +1,14 @@
 package killercreepr.crux.core.registries;
 
 import killercreepr.crux.api.plugin.module.CruxModule;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.registry.SimpleMappedRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
+import java.util.logging.Level;
 
 public class CruxModuleRegistry extends SimpleMappedRegistry<String, CruxModule> {
     @Override
@@ -63,6 +65,7 @@ public class CruxModuleRegistry extends SimpleMappedRegistry<String, CruxModule>
 
     public CruxModuleRegistry load(@NotNull CruxPlugin plugin){
         for(CruxModule m : this){
+            Crux.log(Level.INFO, "Loading module " + m.name() + "...");
             m.onLoad(plugin);
         }
         return this;
