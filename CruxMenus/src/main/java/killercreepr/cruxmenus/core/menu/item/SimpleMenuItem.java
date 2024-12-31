@@ -1,14 +1,17 @@
 package killercreepr.cruxmenus.core.menu.item;
 
+import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.item.dynamic.DynamicItem;
 import killercreepr.crux.api.registry.Registry;
 import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.crux.api.text.format.FormatSerializer;
+import killercreepr.crux.api.text.resolver.StringResolver;
 import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.crux.api.text.tags.container.TagContainer;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.text.format.FormatParserContext;
+import killercreepr.crux.core.text.resolver.Tag;
 import killercreepr.crux.core.util.CruxString;
 import killercreepr.cruxmenus.api.event.MenuItemClickEvent;
 import killercreepr.cruxmenus.api.menu.action.MenuAction;
@@ -33,6 +36,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SimpleMenuItem implements MenuItem {
+    public static final String FORMAT_DATA_PREFIX = "menu_item/";
+
     protected final @NotNull MenuItemHolder base;
     protected final @NotNull MenuContext inputtedContext;
     protected final @NotNull MenuContext evaluatedContext;
@@ -79,10 +84,30 @@ public class SimpleMenuItem implements MenuItem {
         resolvers.hook(base);
         resolvers.hook(SimpleMenuItem.this);
 
+        resolvers.addAll(buildPrimitiveTags(base.info()));
         resolvers.hookAll(base.info());
         resolvers.hookAll(inputtedContext.info());
         resolvers.hookAll(evaluatedContext.info());
         return resolvers;
+    }
+
+    public TagContainer<?> buildPrimitiveTags(DataExchange info){
+        if(info.isEmpty()) return null;
+        TagContainer<StringResolver> tags = TagContainer.string();
+
+        info.forEach((id, holder) ->{
+            Object o = holder.value();
+            if(!isPrimitive(o)) return;
+            tags.add(Tag.parsed(FORMAT_DATA_PREFIX + id, o + ""));
+        });
+        return tags;
+    }
+    public boolean isPrimitive(Object o){
+        if(o instanceof String) return true;
+        if(o instanceof Boolean) return true;
+        if(o instanceof Number) return true;
+        if(o instanceof Character) return true;
+        return false;
     }
 
     public @Nullable ItemStack buildItem(@NotNull HumanEntity p){

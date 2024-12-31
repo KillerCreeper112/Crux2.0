@@ -51,6 +51,11 @@ public class BukkitMenu extends SimpleMenu {
     @Override
     public Menu reconstruct(@NotNull Inventory inv) {
         inventory = inv;
+        getSlots().values().forEach(slot ->{
+            ItemStack item = slot.getSlottedItemReplacement();
+            if(item == null) return;
+            slot.setItem(item, true);
+        });
         return this;
     }
 

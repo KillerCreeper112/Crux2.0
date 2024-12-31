@@ -66,7 +66,13 @@ public class BukkitViewMenu extends SimpleMenu implements ViewedMenu {
 
     @Override
     public ViewedMenu reconstruct(@NotNull InventoryView inv) {
+        if(view != null) getInventory().clear();
         this.view = inv;
+        getSlots().values().forEach(slot ->{
+            ItemStack item = slot.getSlottedItemReplacement();
+            if(item == null) return;
+            slot.setItem(item, true);
+        });
         return this;
     }
 

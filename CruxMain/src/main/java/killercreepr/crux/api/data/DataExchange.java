@@ -8,6 +8,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public interface DataExchange extends Iterable<Holder<?>> {
     DataExchange EMPTY = new SimpleDataExchange(Map.of());
@@ -86,6 +88,8 @@ public interface DataExchange extends Iterable<Holder<?>> {
         }
         return null;
     }
+
+    DataExchange forEach(BiConsumer<String, Holder<?>> consumer);
 
     //Convenience methods.
     <T> @NotNull T getOrThrow(@NotNull Class<T> find);

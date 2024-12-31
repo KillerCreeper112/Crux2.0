@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 
 public class SimpleDataExchange implements DataExchange {
     protected final @NotNull Map<String, Holder<?>> data;
@@ -110,6 +111,12 @@ public class SimpleDataExchange implements DataExchange {
         Object found = get(id);
         if (found == null || !(find.isAssignableFrom(found.getClass()))) return null;
         return find.cast(found);
+    }
+
+    @Override
+    public DataExchange forEach(BiConsumer<String, Holder<?>> consumer) {
+        data.forEach(consumer);
+        return this;
     }
 
     //Convenience methods.
