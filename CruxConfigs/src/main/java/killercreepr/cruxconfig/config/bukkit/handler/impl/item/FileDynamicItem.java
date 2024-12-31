@@ -45,6 +45,17 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
                 return new killercreepr.crux.core.item.dynamic.component.DynamicItemName(object);
             }
         });
+        COMPONENT_REGISTRY.register("custom_name", new FileGenericSingleDynamicComponent<>(killercreepr.crux.core.item.dynamic.component.DynamicItemCustomName.class) {
+            @Override
+            public @NotNull String jsonSerializerID() {
+                return "dynamic_item_custom_name";
+            }
+
+            @Override
+            public @NotNull killercreepr.crux.core.item.dynamic.component.DynamicItemCustomName deserialize(@NotNull Object object) {
+                return new killercreepr.crux.core.item.dynamic.component.DynamicItemCustomName(object);
+            }
+        });
 
         COMPONENT_REGISTRY.register("lore", new FileGenericSingleDynamicComponent<>(killercreepr.crux.core.item.dynamic.component.DynamicItemLore.class) {
             @Override
