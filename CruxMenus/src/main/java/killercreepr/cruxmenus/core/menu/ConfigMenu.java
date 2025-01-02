@@ -2,6 +2,7 @@ package killercreepr.cruxmenus.core.menu;
 
 import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.text.tags.TagParser;
+import killercreepr.crux.api.text.tags.TagsPrefixBuilder;
 import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.crux.api.text.tags.container.TagContainer;
 import killercreepr.crux.core.text.container.SimpleMergedTagContainer;
@@ -14,6 +15,7 @@ import killercreepr.cruxmenus.api.menu.holder.MenuItemHolder;
 import killercreepr.cruxmenus.api.menu.holder.MenuItems;
 import killercreepr.cruxmenus.api.menu.item.MenuItem;
 import net.kyori.adventure.text.Component;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -57,6 +59,9 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
         MergedTagContainer tags = new SimpleMergedTagContainer(tagParser);
         tags.addAll(super.buildTags(tagParser));
         tags.hookAll(info());
+        if(info.get("viewer") instanceof OfflinePlayer viewer){
+            tags.addAll(tags.hook(viewer, TagsPrefixBuilder.overwriteCompletely("viewer_")));
+        }
         tags.addAll(getTags());
         return tags;
     }
