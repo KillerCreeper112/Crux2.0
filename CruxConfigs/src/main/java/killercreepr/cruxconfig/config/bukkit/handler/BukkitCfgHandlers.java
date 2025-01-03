@@ -10,6 +10,7 @@ import killercreepr.crux.api.communication.CreateTitle;
 import killercreepr.crux.api.communication.boss.CreateBossBar;
 import killercreepr.crux.api.component.DataComponentHandler;
 import killercreepr.crux.api.component.TypedDataComponent;
+import killercreepr.crux.api.data.User;
 import killercreepr.crux.api.entity.CruxEntitySnapshot;
 import killercreepr.crux.api.entity.predicate.EntityPredicate;
 import killercreepr.crux.api.entity.tag.EntityTag;
@@ -105,6 +106,7 @@ public class BukkitCfgHandlers {
     public static final FileDataComponentHandler DATA_COMPONENT_HANDLER = new FileDataComponentHandler();
     public static final FileCruxEntitySnapshot CRUX_ENTITY_SNAPSHOT = new FileCruxEntitySnapshot();
     public static final FileVector VECTOR = new FileVector();
+    public static final FileUser USER = new FileUser();
     public static final FileDynamicAttributeModifier DYNAMIC_ATTRIBUTE_MODIFIER = new FileDynamicAttributeModifier();
 
     public static void initStandard(){
@@ -150,6 +152,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(DynamicAttributeModifier.class, DYNAMIC_ATTRIBUTE_MODIFIER);
         registry.registerFileHandler(KeyLootTable.class, CommonLootTableHandlers.KEY);
         registry.registerFileHandler(NumberLootTable.class, CommonLootTableHandlers.NUMBER);
+        registry.registerFileHandler(User.class, USER);
 
         StandardCfgDataComponentTypes.register(TYPED_DATA_COMPONENT.typeHandlers());
         registry.registerFileHandler(TypedDataComponent.class, TYPED_DATA_COMPONENT);
