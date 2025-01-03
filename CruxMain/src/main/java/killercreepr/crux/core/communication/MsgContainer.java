@@ -81,9 +81,10 @@ public class MsgContainer implements Communicator {
         if(isBroadcast()) return broadcast(ctx);
         if(a instanceof Player p) return use(p, false, ctx);
         if(chat != null){
-            for(String s : chat){
+            ctx.deserializeList(chat).forEach(a::sendMessage);
+            /*for(String s : chat){
                 a.sendMessage(deserialize(s, ctx));
-            }
+            }*/
         }
         if(bossBar != null) bossBar.showBossBar(a, ctx);
         return this;
@@ -94,9 +95,7 @@ public class MsgContainer implements Communicator {
             return broadcast(ctx);
         }
         if(chat != null){
-            for(String s : chat){
-                p.sendMessage(deserialize(s, ctx));
-            }
+            ctx.deserializeList(chat).forEach(p::sendMessage);
         }
         if(actionBar != null) p.sendActionBar(deserialize(actionBar, ctx));
         if(title != null) title.use(p, ctx);
