@@ -30,6 +30,9 @@ import java.util.logging.Logger;
 
 //todo maybe eventually separate bukkit/paper and crux
 public final class Crux {
+    public static short debug = 0;
+
+
     public static String namespace(){
         return NAMESPACE;
     }

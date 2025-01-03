@@ -22,6 +22,7 @@ public class AddonFormatPrefix implements FormatPrefix {
 
     @Override
     public @NotNull String buildPrefix(@NotNull TagResolver<?> resolver) {
+        //Bukkit.broadcastMessage("buildPrefix=" + first.buildPrefix(resolver) + " | " +  second.buildPrefix(resolver));
         return first.buildPrefix(resolver) + second.buildPrefix(resolver);
     }
 

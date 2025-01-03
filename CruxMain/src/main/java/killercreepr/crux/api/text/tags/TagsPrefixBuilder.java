@@ -76,7 +76,7 @@ public interface TagsPrefixBuilder {
                 return new FormatPrefix() {
                     @Override
                     public @NotNull String buildPrefix(@NotNull TagResolver<?> resolver) {
-                        return prefix + tag.getObjectTag().defaultPrefix().buildPrefix(resolver);
+                        return prefix;// + tag.getObjectTag().defaultPrefix().buildPrefix(resolver);
                     }
                 };
             }

@@ -19,7 +19,7 @@ public class OverwriteHookedPrefixBuilder implements HookedPrefixBuilder {
     public @Nullable FormatPrefix buildPrefix(@NotNull HookedObjectTag<?, ?> hookedObjectTag, @Nullable FormatPrefix builtPrefix,
                                               @Nullable TagsPrefixBuilder builder) {
         if(builder == null) return prefix;
-        return FormatPrefix.add(prefix, builtPrefix);
+        return FormatPrefix.add(builtPrefix, prefix);
     }
 
     @Override

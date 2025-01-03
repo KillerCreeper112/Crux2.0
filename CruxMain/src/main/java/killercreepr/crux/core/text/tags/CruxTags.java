@@ -79,7 +79,7 @@ public class CruxTags implements TagParser {
             if(hookedTags != null){
                 hookedTags.addAll(container);
                 hookedTags.getHookedObjects().forEach(hooked ->{
-                    container.add(hooked.withAddedPrefix(prefix));
+                    container.add(hooked/*.withAddedPrefix(prefix)*/);
                 });
 
                 //container.addAll(hookedTags);
@@ -103,10 +103,10 @@ public class CruxTags implements TagParser {
             HookedObjectContainer<StringListHookedObjectTag<?>> hookedTags = objectTag.hookStringLists(object, this);
             if(hookedTags != null){
                 hookedTags.getHookedObjects().forEach(hooked ->{
-                    FormatPrefix pre = prefixBuilder == null ? hooked.getObjectTag().defaultPrefix() : prefixBuilder.buildHookedPrefix(
+                    FormatPrefix pre = hooked.getObjectTag().defaultPrefix(); /*prefixBuilder == null ? hooked.getObjectTag().defaultPrefix() : prefixBuilder.buildHookedPrefix(
                         objectTag, object, hooked
-                    );
-                    tag.addAll(hooked.getTags(), hooked.getPrefix().buildPrefix(hooked, pre, prefixBuilder));
+                    );*/
+                    tag.addAll(hooked.getTags(), hooked.getPrefix().buildPrefix(hooked, pre, null));
                 });
             }
         });
@@ -126,7 +126,7 @@ public class CruxTags implements TagParser {
             if(hookedTags != null){
                 hookedTags.addAll(container);
                 hookedTags.getHookedObjects().forEach(hooked ->{
-                    container.add(hooked.withAddedPrefix(prefix));
+                    container.add(hooked/*.withAddedPrefix(prefix)*/);
                 });
                 //hookedTags.getHookedObjects().forEach(container::add);
             }

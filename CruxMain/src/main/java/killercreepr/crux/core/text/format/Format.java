@@ -9,6 +9,7 @@ import killercreepr.crux.api.text.resolver.StringResolver;
 import killercreepr.crux.api.text.tags.TagParser;
 import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.crux.api.text.tags.container.TagContainer;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.data.util.Pair;
 import killercreepr.crux.core.registry.SimpleRegistry;
 import killercreepr.crux.core.text.container.StringListTagContainer;
@@ -17,6 +18,7 @@ import killercreepr.crux.core.text.tags.standard.NumberFormatResolver;
 import killercreepr.crux.core.util.CruxMath;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Bukkit;
 import org.codehaus.plexus.util.FastMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -308,6 +310,10 @@ public class Format implements FormatSerializer {
         StringTagContainer resolvers = new StringTagContainer(this.tags);
         resolvers.addAll(STRING_RESOLVERS.values());
         resolvers.addAll(tags);
+
+        if(Crux.debug >= 3){
+            Bukkit.broadcastMessage(resolvers.asMap().keySet() + "");
+        }
 
         //Bukkit.broadcastMessage("before(p): " + text);
         TextParserContext context = new FormatParserContext.Builder(this)
