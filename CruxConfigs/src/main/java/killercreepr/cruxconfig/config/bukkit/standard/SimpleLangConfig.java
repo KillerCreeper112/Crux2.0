@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
-@Config(autoUpdate = true)
 public class SimpleLangConfig extends LangConfig implements LangProvider {
     public final Holder<CreateLang> lang;
     protected final Class<?> langClass;
@@ -68,6 +67,9 @@ public class SimpleLangConfig extends LangConfig implements LangProvider {
     public void reload(@NotNull CruxPlugin plugin) {
         if(!file.exists()){
             setDefaults(langClass).save();
+        }else{
+            super.reload();
+            setDefaults(langClass, false).save();
         }
         super.reload();
         populate(lang());

@@ -49,6 +49,20 @@ public class LangConfig extends CruxConfig {
         return this;
     }
 
+    public LangConfig setDefaults(@NotNull Class<?> type, boolean overwrite){
+        try{
+            for (Field field : type.getDeclaredFields()) {
+                if(!Modifier.isStatic(field.getModifiers())) continue;
+                if(!field.canAccess(null)) continue;
+
+                if(!(field.get(null) instanceof TranslateMsg msg)) continue;
+                if(!overwrite && contains(msg.id())) continue;
+                set(msg.id(), msg.defaultValue());
+            }
+        }catch (IllegalArgumentException | IllegalAccessException ignored){}
+        return this;
+    }
+
     public LangConfig setDefaults(@NotNull Class<?> type){
         try{
             for (Field field : type.getDeclaredFields()) {
