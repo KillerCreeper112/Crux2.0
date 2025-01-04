@@ -6,6 +6,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Predicate;
 
 public class SimpleUserMap<E extends User, T> implements UserMap<E,T> {
     protected final Map<E, T> usersToObject;
@@ -15,6 +17,56 @@ public class SimpleUserMap<E extends User, T> implements UserMap<E,T> {
         this.usersToObject = usersToObject;
         this.users = users;
         this.usersByName = usersByName;
+    }
+
+    @Override
+    public String toString() {
+        return "SimpleUserMap{usersToObject=" + usersToObject + "}";
+    }
+
+    @Override
+    public boolean removeIf(Predicate<T> filter) {
+        if(usersToObject.isEmpty()) return false;
+        AtomicBoolean removed = new AtomicBoolean(false);
+        new HashMap<>(usersToObject).forEach((user, object) ->{
+            if(!filter.test(object)) return;
+            removed.set(true);
+            remove(user);
+        });
+        return removed.get();
+    }
+
+    @Override
+    public T getFromUser(UUID user) {
+        User u = getUser(user);
+        if(u == null) return null;
+        return get(u);
+    }
+
+    @Override
+    public T getFromUser(String user) {
+        User u = getUser(user);
+        if(u == null) return null;
+        return get(u);
+    }
+
+    @Override
+    public T removeUser(User user) {
+        return removeUser(user.uuid());
+    }
+
+    @Override
+    public T removeUser(UUID user) {
+        User u = users.remove(user);
+        if(u != null) return remove(u);
+        return null;
+    }
+
+    @Override
+    public T removeUser(String user) {
+        User u = usersByName.remove(user);
+        if(u != null) return remove(u);
+        return null;
     }
 
     public E getUser(UUID uuid){
@@ -31,6 +83,11 @@ public class SimpleUserMap<E extends User, T> implements UserMap<E,T> {
 
     public boolean hasUser(String name){
         return usersByName.containsKey(name);
+    }
+
+    @Override
+    public boolean hasUser(User user) {
+        return false;
     }
 
     @Override

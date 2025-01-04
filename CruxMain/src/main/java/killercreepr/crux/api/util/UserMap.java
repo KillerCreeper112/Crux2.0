@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public interface UserMap<E extends User, T> extends Map<E, T> {
@@ -20,10 +21,20 @@ public interface UserMap<E extends User, T> extends Map<E, T> {
         return new SimpleUserMap<>(mapSupplier.get(), mapSupplier.get(), mapSupplier.get());
     }
 
+    boolean removeIf(Predicate<T> filter);
+
+    T getFromUser(UUID user);
+    T getFromUser(String user);
+
+    T removeUser(User user);
+    T removeUser(UUID user);
+    T removeUser(String user);
+
     E getUser(UUID uuid);
     E getUser(String name);
     boolean hasUser(UUID uuid);
     boolean hasUser(String name);
+    boolean hasUser(User user);
 
     default void applyUser(UUID uuid, Consumer<E> consumer) {
         E user = getUser(uuid);
