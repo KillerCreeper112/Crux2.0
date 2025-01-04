@@ -118,6 +118,10 @@ public class CruxJson extends CruxFolder implements DataFile, ICruxJson {
     public void serialize(@NotNull String path, @Nullable Object value) {
         reloadIfNeeded();
         Pair<FileElement, String> element = buildElementPath(path, value == null ? null : jsonRegistry.serializeToFile(value));
+        if(element.getFirst() == null){
+            json.remove(element.getSecond());
+            return;
+        }
         json.add(element.getSecond(), element.getFirst().toJson());
     }
 
