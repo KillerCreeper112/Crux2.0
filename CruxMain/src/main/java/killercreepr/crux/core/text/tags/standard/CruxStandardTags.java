@@ -21,7 +21,8 @@ public class CruxStandardTags {
             new BlockStateTags(),
             new CruxPositionTags(),
             new LocationTags(),
-            new UserTags()
+            new UserTags(),
+            new EntityTags()
         );
     }
 
