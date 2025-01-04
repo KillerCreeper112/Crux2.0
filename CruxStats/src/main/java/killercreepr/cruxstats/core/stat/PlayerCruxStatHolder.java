@@ -1,10 +1,8 @@
 package killercreepr.cruxstats.core.stat;
 
-import com.google.common.reflect.TypeToken;
 import killercreepr.crux.api.entity.memory.PlayerMemory;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.entity.memory.PlayerDataHolder;
-import killercreepr.cruxconfig.config.bukkit.file.CruxJson;
 import killercreepr.cruxstats.api.stat.CruxStat;
 import killercreepr.cruxstats.api.stat.CruxStatInstance;
 import killercreepr.cruxstats.api.stat.EntityStatHolder;
@@ -14,16 +12,13 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
 public class PlayerCruxStatHolder extends PlayerDataHolder implements EntityStatHolder {
     public static final Key KEY = Crux.key("stat");
-    protected final @NotNull Map<CruxStat, CruxStatInstance> stats = new HashMap<>();
+    protected final EntityStatHolder data;
 
     public PlayerCruxStatHolder(@NotNull Key key, @NotNull PlayerMemory parent) {
         super(key, parent);
+        this.data = new DataStatHolder(parent.getUUID());
         load();
     }
 
@@ -39,37 +34,22 @@ public class PlayerCruxStatHolder extends PlayerDataHolder implements EntityStat
 
     @Override
     public @Nullable CruxStatInstance getStat(@NotNull CruxStat stat) {
-        return stats.get(stat);
+        return data.getStat(stat);
     }
 
     @Override
     public @NotNull CruxStatInstance getOrLoadStat(@NotNull CruxStat stat) {
-        CruxStatInstance instance = getStat(stat);
-        if(instance != null) return instance;
-        instance = stat.createNewInstance();
-        if(instance == null) throw new UnsupportedOperationException(stat.key() + " cannot be create new instances!");
-        stats.put(instance.getStat(), instance);
-        return instance;
-    }
-
-    public CruxJson getDataFile(){
-        return new CruxJson(Crux.getMainPlugin(), "data/cruxstats/player/" + parent.getUUID());
+        return data.getOrLoadStat(stat);
     }
 
     @Override
     public void save() {
-        CruxJson data = getDataFile();
-        data.serialize("stats", stats.values());
         data.save();
     }
 
     @Override
     public void load() {
-        CruxJson data = getDataFile();
-        Collection<CruxStatInstance> stats = data.deserialize("stats", new TypeToken<Collection<CruxStatInstance>>(){}.getType());
-        data.close();
-        if(stats == null) return;
-        stats.forEach(stat -> this.stats.put(stat.getStat(), stat));
+        data.load();
     }
 
     @Override
