@@ -6,12 +6,14 @@ import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.core.communication.processor.LangProcessor;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
+import killercreepr.cruxconfig.config.common.annotations.Config;
 import killercreepr.cruxconfig.config.common.yaml.registry.YamlRegistry;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
+@Config(autoUpdate = true)
 public class SimpleLangConfig extends LangConfig implements LangProvider {
     public final Holder<CreateLang> lang;
     protected final Class<?> langClass;

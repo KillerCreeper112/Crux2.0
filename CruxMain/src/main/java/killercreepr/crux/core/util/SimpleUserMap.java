@@ -65,7 +65,7 @@ public class SimpleUserMap<E extends User, T> implements UserMap<E,T> {
     }
 
     @Override
-    public T removeUser(User user) {
+    public T removeUser(E user) {
         return removeUser(user.uuid());
     }
 
@@ -100,8 +100,8 @@ public class SimpleUserMap<E extends User, T> implements UserMap<E,T> {
     }
 
     @Override
-    public boolean hasUser(User user) {
-        return false;
+    public boolean hasUser(E user) {
+        return usersToObject.containsKey(user);
     }
 
     @Override

@@ -29,7 +29,7 @@ public interface UserMap<E extends User, T> extends Map<E, T> {
     T getFromUser(UUID user);
     T getFromUser(String user);
 
-    T removeUser(User user);
+    T removeUser(E user);
     T removeUser(UUID user);
     T removeUser(String user);
 
@@ -37,7 +37,7 @@ public interface UserMap<E extends User, T> extends Map<E, T> {
     E getUser(String name);
     boolean hasUser(UUID uuid);
     boolean hasUser(String name);
-    boolean hasUser(User user);
+    boolean hasUser(E user);
 
     default void applyUser(UUID uuid, Consumer<E> consumer) {
         E user = getUser(uuid);
