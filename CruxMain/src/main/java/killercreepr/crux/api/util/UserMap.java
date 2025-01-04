@@ -23,6 +23,9 @@ public interface UserMap<E extends User, T> extends Map<E, T> {
 
     boolean removeIf(Predicate<T> filter);
 
+    T getFromUserOrDefault(UUID user, T fallback);
+    T getFromUserOrDefault(String user, T fallback);
+
     T getFromUser(UUID user);
     T getFromUser(String user);
 

@@ -37,6 +37,20 @@ public class SimpleUserMap<E extends User, T> implements UserMap<E,T> {
     }
 
     @Override
+    public T getFromUserOrDefault(UUID user, T fallback) {
+        User u = getUser(user);
+        if(u == null) return null;
+        return getOrDefault(u, fallback);
+    }
+
+    @Override
+    public T getFromUserOrDefault(String user, T fallback) {
+        User u = getUser(user);
+        if(u == null) return null;
+        return getOrDefault(u, fallback);
+    }
+
+    @Override
     public T getFromUser(UUID user) {
         User u = getUser(user);
         if(u == null) return null;
