@@ -148,6 +148,9 @@ public class OfflinePlayerTags implements ObjectTag<OfflinePlayer> {
                 if(statistic == null) return key + " statistic not found";
                 return p.getStatistic(statistic, entityType) + "";
             }))
+            .add(Tag.string("first_played", (args, ctx) ->{
+                return p.getFirstPlayed() + "";
+            }))
             ;
     }
 
