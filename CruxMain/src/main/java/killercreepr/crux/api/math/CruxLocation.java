@@ -28,6 +28,9 @@ public interface CruxLocation extends CruxPosition {
     static @NotNull CruxLocation location(@NotNull Location l){
         return location(l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch());
     }
+    static @NotNull CruxLocation location(@NotNull Location l, float yaw, float pitch){
+        return location(l.getX(), l.getY(), l.getZ(), yaw, pitch);
+    }
     static @NotNull CruxLocation location(@NotNull Vector v){
         return location(v.getX(), v.getY(), v.getZ());
     }
