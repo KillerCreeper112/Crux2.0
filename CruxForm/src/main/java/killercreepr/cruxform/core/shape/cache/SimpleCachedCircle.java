@@ -16,9 +16,10 @@ public class SimpleCachedCircle extends SimpleCachedShape{
     @Override
     public CruxLocation perform(int index) {
         CruxLocation location = center.value();
-        Vector vec = get(index);
-        vec.rotateAroundX(Math.toRadians(location.pitch()));
-        vec.rotateAroundY(Math.toRadians(location.yaw()*-1));
+        Vector vec = get(index)
+            .rotateAroundX(Math.toRadians(location.pitch()))
+            .rotateAroundY(Math.toRadians(location.yaw()*-1))
+            ;
         return location.add(vec.getX(), vec.getY(), vec.getZ());
     }
 }

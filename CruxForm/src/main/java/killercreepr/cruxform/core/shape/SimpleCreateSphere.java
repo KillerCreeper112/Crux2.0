@@ -41,40 +41,42 @@ public class SimpleCreateSphere implements CreateSphere {
         List<Vector> list = new ArrayList<>();
         double spacing = this.spacing.value().doubleValue();
         double radius = this.radius.value().doubleValue();
-        final double newSpacing = spacing == 0f ? (float) (radius * 3f) + 1f : spacing;
+        //final double newSpacing = spacing == 0f ? (float) (radius * 3f) + 1f : spacing;
 
         int invertX = this.invertX ? -1 : 1;
         int invertY = this.invertY ? -1 : 1;
         int invertZ = this.invertZ ? -1 : 1;
 
-        switch (type){
+        // Define angular step sizes based on spacing and radius
+        double piSpacing = spacing / radius; // Proportional spacing based on radius
+
+        switch (type) {
             case WHOLE -> {
-                for (double i = 0; i <= Math.PI; i += Math.PI / newSpacing) {
-                    for (double a = 0; a < Math.PI * 2; a += Math.PI / newSpacing) {
+                for (double i = 0; i <= Math.PI; i += piSpacing) {
+                    for (double a = 0; a < Math.PI * 2; a += piSpacing) {
 
                         // Randomly choose a radial distance between 0 and the radius
-                        double r = radius * Math.cbrt(Math.random()); // Cube root to keep the distribution uniform
+                        double r = radius * Math.cbrt(Math.random()); // Uniform distribution
 
-                        // Convert spherical coordinates (r, i, a) to Cartesian coordinates (x, y, z)
+                        // Spherical to Cartesian
                         double x = r * Math.sin(i) * Math.cos(a) * invertX;
                         double y = r * Math.cos(i) * invertY;
                         double z = r * Math.sin(i) * Math.sin(a) * invertZ;
 
-                        // Create vector and add it to the list
-                        Vector vec = new Vector(x, y, z);
-                        list.add(vec);
+                        list.add(new Vector(x, y, z));
                     }
                 }
             }
             case HOLLOW -> {
-                for (double i = 0; i <= Math.PI; i += Math.PI / newSpacing) {
+                for (double i = 0; i <= Math.PI; i += piSpacing) {
                     double r = Math.sin(i);
                     double y = radius * Math.cos(i) * invertY;
-                    for (double a = 0; a < Math.PI * 2; a += Math.PI / newSpacing) {
+
+                    for (double a = 0; a < Math.PI * 2; a += piSpacing) {
                         double x = radius * Math.cos(a) * r * invertX;
                         double z = radius * Math.sin(a) * r * invertZ;
-                        Vector vec = new Vector(x, y, z);
-                        list.add(vec);
+
+                        list.add(new Vector(x, y, z));
                     }
                 }
             }
