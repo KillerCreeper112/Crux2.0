@@ -52,6 +52,23 @@ public class CruxMath {
         return (int) Math.min(scaledValue, maxValue);
     }
 
+    public static void rotateVector(Vector vector, float yaw, float pitch) {
+        double yawRad = Math.toRadians(-yaw); // Negative yaw for Minecraft coordinate system
+        double pitchRad = Math.toRadians(-pitch);
+
+        // Rotate around Y-axis (yaw)
+        double x = vector.getX();
+        double z = vector.getZ();
+        vector.setX(x * Math.cos(yawRad) - z * Math.sin(yawRad));
+        vector.setZ(x * Math.sin(yawRad) + z * Math.cos(yawRad));
+
+        // Rotate around X-axis (pitch)
+        double y = vector.getY();
+        z = vector.getZ();
+        vector.setY(y * Math.cos(pitchRad) - z * Math.sin(pitchRad));
+        vector.setZ(y * Math.sin(pitchRad) + z * Math.cos(pitchRad));
+    }
+
     public static long randomSkewed(long minValue, long maxValue, double skewFactor) {
         double randomValue = RANDOM.nextDouble();
         double scaledValue = Math.pow(randomValue, skewFactor) * (maxValue - minValue) + minValue;
