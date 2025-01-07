@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class CruxCollection {
     public static <T> T getRandom(@NotNull Collection<T> set) {
@@ -44,5 +45,19 @@ public class CruxCollection {
     public static <T> T getFirst(@NotNull T... list){
         if(list.length < 1) return null;
         return list[0];
+    }
+
+    public static <T> boolean testAny(@NotNull Collection<T> collection, @NotNull Predicate<T> test){
+        for(T t : collection){
+            if(test.test(t)) return true;
+        }
+        return false;
+    }
+
+    public static <T> boolean testAll(@NotNull Collection<T> collection, @NotNull Predicate<T> test){
+        for(T t : collection){
+            if(!test.test(t)) return false;
+        }
+        return true;
     }
 }
