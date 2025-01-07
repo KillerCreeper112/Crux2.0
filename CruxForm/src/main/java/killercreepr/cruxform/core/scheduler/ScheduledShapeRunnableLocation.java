@@ -15,6 +15,7 @@ public class ScheduledShapeRunnableLocation extends BukkitRunnable implements Sh
     protected final Runnable cancelTask;
     private final List<CruxPosition> list;
     protected final int totalTicks;
+    protected boolean cancel = false;
 
     public ScheduledShapeRunnableLocation(Consumer<ShapeTickLocationContext> locationConsumer, Consumer<ShapeTickContext> tickConsumer, Runnable cancelTask, List<CruxPosition> list, int totalTicksTime) {
         this.locationConsumer = locationConsumer;
@@ -26,6 +27,11 @@ public class ScheduledShapeRunnableLocation extends BukkitRunnable implements Sh
         this.totalTicks = totalTicksTime;
     }
 
+    public void onCancel(){
+        cancel();
+        if(cancelTask != null) cancelTask.run();
+    }
+
     private final double maxParEachIteration;
     private double i;
     private int index = -1;
@@ -35,11 +41,16 @@ public class ScheduledShapeRunnableLocation extends BukkitRunnable implements Sh
     public void run(){
         tick++;
         if(list.isEmpty()){
-            cancel();
-            if(cancelTask != null) cancelTask.run();
+            onCancel();
             return;
         }
-        if(tickConsumer != null) tickConsumer.accept(this);
+        if(tickConsumer != null){
+            tickConsumer.accept(this);
+            if(wasCancelled()){
+                onCancel();
+                return;
+            }
+        }
         if(maxParEachIteration < 1D){
             i++;
             if(i < 1D) return;
@@ -50,9 +61,8 @@ public class ScheduledShapeRunnableLocation extends BukkitRunnable implements Sh
             l = list.get(index);
             locationConsumer.accept(this);
 
-            if(index >= list.size() - 1){
-                cancel();
-                if(cancelTask != null) cancelTask.run();
+            if(wasCancelled() || index >= list.size() - 1){
+                onCancel();
                 return;
             }
         }
@@ -82,5 +92,15 @@ public class ScheduledShapeRunnableLocation extends BukkitRunnable implements Sh
     @Override
     public int getLocationAmount() {
         return list.size();
+    }
+
+    @Override
+    public boolean wasCancelled() {
+        return cancel;
+    }
+
+    @Override
+    public void setCancelled(boolean value) {
+        cancel = value;
     }
 }

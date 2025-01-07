@@ -18,6 +18,7 @@ public class ScheduledShapeCacheRunnableLocation extends BukkitRunnable implemen
     private double i;
     private int index = -1;
     protected final int maxTicks;
+    protected boolean cancel = false;
 
     public ScheduledShapeCacheRunnableLocation(CreateCachedShape cache, Consumer<ShapeTickLocationContext> consumer, Consumer<ShapeTickContext> tickConsumer, Runnable cancelTask, int totalTicksTime) {
         this.cache = cache;
@@ -29,18 +30,28 @@ public class ScheduledShapeCacheRunnableLocation extends BukkitRunnable implemen
         this.maxTicks = totalTicksTime;
     }
 
+    public void onCancel(){
+        cancel();
+        if(cancelTask != null) cancelTask.run();
+    }
+
     protected CruxPosition l;
     protected int tick = -1;
     @Override
     public void run() {
         tick++;
-        if(cache.size() < 1){
-            cancel();
-            if(cancelTask != null) cancelTask.run();
+        if(isCancelled() || cache.size() < 1){
+            onCancel();
             return;
         }
 
-        if(tickConsumer != null) tickConsumer.accept(this);
+        if(tickConsumer != null){
+            tickConsumer.accept(this);
+            if(wasCancelled()){
+                onCancel();
+                return;
+            }
+        }
 
         if(maxParEachIteration < 1D){
             i++;
@@ -52,9 +63,8 @@ public class ScheduledShapeCacheRunnableLocation extends BukkitRunnable implemen
             l = cache.perform(index);
             consumer.accept(this);
 
-            if(index >= cache.size() - 1){
-                cancel();
-                if(cancelTask != null) cancelTask.run();
+            if(wasCancelled() || index >= cache.size() - 1){
+                onCancel();
                 return;
             }
         }
@@ -84,5 +94,15 @@ public class ScheduledShapeCacheRunnableLocation extends BukkitRunnable implemen
     @Override
     public int getLocationAmount() {
         return cache.size();
+    }
+
+    @Override
+    public boolean wasCancelled() {
+        return cancel;
+    }
+
+    @Override
+    public void setCancelled(boolean value) {
+        cancel = value;
     }
 }

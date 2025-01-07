@@ -7,4 +7,6 @@ public interface ShapeTickContext {
     default float getTickProgress(){
         return (float) getTick() / (float) getMaxTicks();
     }
+    boolean wasCancelled();
+    void setCancelled(boolean value);
 }
