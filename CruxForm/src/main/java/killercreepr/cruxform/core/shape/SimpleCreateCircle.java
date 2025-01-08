@@ -53,8 +53,6 @@ public class SimpleCreateCircle implements CreateCircle {
         if(type == Type.HARD_HOLLOW || type == Type.HARD_WHOLE) return generateHardVectors();
         List<Vector> list = new ArrayList<>();
         double radius = this.radius.value().doubleValue();
-        int parAmount = (int) (8f * radius);
-        parAmount *= (int) amountMultiplier.value().doubleValue();
 
         // Define a fixed spacing (distance between particles)
         double spacing = this.spacing.value().doubleValue();  // You can adjust this to control the distance between particles
@@ -64,8 +62,27 @@ public class SimpleCreateCircle implements CreateCircle {
 
         switch (type) {
             case WHOLE -> {
+                for (double r = spacing; r <= radius; r += spacing) {
+                    // Calculate the number of particles for the current radius based on the desired spacing
+                    int numParticles = (int) ((2 * Math.PI * r) / spacing); // Number of particles around the circumference at radius r
+
+                    // Calculate the angular step for the current radius
+                    double angularStep = 2 * Math.PI / numParticles;
+
+                    // Iterate over the angular distance from 0 to 2 * PI with the calculated angular spacing
+                    for (double t = 0; t < 2 * Math.PI; t += angularStep) {
+                        // Calculate the (x, z) coordinates for the particle at radius r
+                        double x = r * Math.cos(t) * invertX;
+                        double z = r * Math.sin(t) * invertZ;
+
+                        // Create a vector for the particle and add it to the list
+                        Vector vec = new Vector(x, 0, z);
+                        list.add(vec);
+                    }
+                }
+
                 // Iterate over the radial distance from 0 to radius with a fixed spacing
-                for (double r = 0; r <= radius; r += spacing) {
+                /*for (double r = 0; r <= radius; r += spacing) {
                     // For each radial distance, calculate the appropriate angular step
                     double angleStep = spacing / r;  // The angular step needed to maintain fixed spacing
 
@@ -76,15 +93,22 @@ public class SimpleCreateCircle implements CreateCircle {
                         Vector vec = new Vector(x, 0, z);
                         list.add(vec);
                     }
-                }
+                }*/
             }
             case HOLLOW -> {
-                double t = 0D;
-                for (int iterations = 0; iterations < parAmount; iterations++) {
-                    // In the HOLLOW case, particles are on the perimeter of the circle, so r is constant
-                    t += spacing / radius;  // Angular step to maintain fixed spacing
+                // Calculate the number of particles based on the desired spacing
+                int numParticles = (int) ((2 * Math.PI * radius) / spacing);
+
+                // Calculate the angular step based on the number of particles
+                double angularStep = 2 * Math.PI / numParticles;
+
+                // Iterate over the angular distance from 0 to 2 * PI with the calculated angular spacing
+                for (double t = 0; t < 2 * Math.PI; t += angularStep) {
+                    // Calculate the (x, z) coordinates at the fixed radius
                     double x = radius * Math.cos(t) * invertX;
                     double z = radius * Math.sin(t) * invertZ;
+
+                    // Create a vector for the particle and add it to the list
                     Vector vec = new Vector(x, 0, z);
                     list.add(vec);
                 }

@@ -52,7 +52,7 @@ public class SimpleCreateSphere implements CreateSphere {
 
         switch (type) {
             case WHOLE -> {
-                for (double i = 0; i <= Math.PI; i += piSpacing) {
+                /*for (double i = 0; i <= Math.PI; i += piSpacing) {
                     for (double a = 0; a < Math.PI * 2; a += piSpacing) {
 
                         // Randomly choose a radial distance between 0 and the radius
@@ -65,10 +65,29 @@ public class SimpleCreateSphere implements CreateSphere {
 
                         list.add(new Vector(x, y, z));
                     }
+                }*/
+                for (double i = 0; i <= Math.PI; i += piSpacing) {
+                    // Calculate the radial distance for each layer (similar to the circle)
+                    double rLayer = radius * Math.sin(i);
+
+                    // Calculate the number of particles based on the desired spacing for each radius
+                    int numParticles = (int) ((2 * Math.PI * rLayer) / spacing);  // Circumference divided by spacing
+                    double angularStep = 2 * Math.PI / numParticles;  // Calculate angular step for even distribution
+
+                    // Iterate over the azimuthal angle (phi) from 0 to 2 * Math.PI with angular step
+                    for (double a = 0; a < 2 * Math.PI; a += angularStep) {
+                        // Calculate spherical to Cartesian conversion
+                        double x = radius * Math.sin(i) * Math.cos(a) * invertX;
+                        double y = radius * Math.cos(i) * invertY;
+                        double z = radius * Math.sin(i) * Math.sin(a) * invertZ;
+
+                        // Add the particle to the list
+                        list.add(new Vector(x, y, z));
+                    }
                 }
             }
             case HOLLOW -> {
-                for (double i = 0; i <= Math.PI; i += piSpacing) {
+                /*for (double i = 0; i <= Math.PI; i += piSpacing) {
                     double r = Math.sin(i);
                     double y = radius * Math.cos(i) * invertY;
 
@@ -76,6 +95,25 @@ public class SimpleCreateSphere implements CreateSphere {
                         double x = radius * Math.cos(a) * r * invertX;
                         double z = radius * Math.sin(a) * r * invertZ;
 
+                        list.add(new Vector(x, y, z));
+                    }
+                }*/
+                for (double i = 0; i <= Math.PI; i += piSpacing) {
+                    // For a hollow sphere, we set the radius at this layer to `radius`
+                    double rLayer = Math.sin(i);  // This is the unit circle for the radius at angle i
+                    double y = radius * Math.cos(i) * invertY;  // y is fixed for each angle `i`
+
+                    // Calculate the number of particles around the circumference based on spacing
+                    int numParticles = (int) ((2 * Math.PI * rLayer) / spacing);  // Circumference divided by spacing
+                    double angularStep = 2 * Math.PI / numParticles;  // Calculate angular step for even distribution
+
+                    // Iterate over the azimuthal angle (phi) from 0 to 2 * Math.PI with angular step
+                    for (double a = 0; a < 2 * Math.PI; a += angularStep) {
+                        // Calculate spherical to Cartesian conversion
+                        double x = radius * Math.cos(a) * rLayer * invertX;
+                        double z = radius * Math.sin(a) * rLayer * invertZ;
+
+                        // Add the particle to the list
                         list.add(new Vector(x, y, z));
                     }
                 }
