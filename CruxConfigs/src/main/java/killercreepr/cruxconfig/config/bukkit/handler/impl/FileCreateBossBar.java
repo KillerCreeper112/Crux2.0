@@ -28,6 +28,9 @@ public class FileCreateBossBar extends SimpleFileHandler<CreateBossBar> {
         value = s.getTitle();
         if(value != null) o.addProperty("title", value);
 
+        value = s.getColor();
+        if(value != null) o.addProperty("color", value);
+
         value = s.getProgress();
         if(value != null) o.addProperty("progress", value);
 
