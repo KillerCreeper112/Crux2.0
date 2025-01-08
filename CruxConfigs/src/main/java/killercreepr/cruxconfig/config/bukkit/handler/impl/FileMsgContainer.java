@@ -32,6 +32,8 @@ public class FileMsgContainer extends SimpleFileHandler<MsgContainer> {
         if(title != null) map.add("title", registry.serializeToFile(title));
         CreateSound sound = msg.getSound();
         if(sound != null) map.add("sound", registry.serializeToFile(sound));
+        CreateBossBar bossBar = msg.getBossBar();
+        if(bossBar != null) map.add("boss_bar", registry.serializeToFile(bossBar));
         return map;
     }
 

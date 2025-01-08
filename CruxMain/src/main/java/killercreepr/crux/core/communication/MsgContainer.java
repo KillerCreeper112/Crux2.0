@@ -137,6 +137,10 @@ public class MsgContainer implements Communicator {
         return actionBar;
     }
 
+    public CreateBossBar getBossBar() {
+        return bossBar;
+    }
+
     public @Nullable CreateTitle getTitle() {
         return title;
     }

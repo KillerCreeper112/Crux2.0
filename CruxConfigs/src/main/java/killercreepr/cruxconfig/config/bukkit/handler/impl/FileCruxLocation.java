@@ -24,8 +24,8 @@ public class FileCruxLocation extends SimpleFileHandler<CruxLocation> {
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull CruxLocation loc) {
         return new FileObject()
             .addProperty("x", loc.x())
-            .addProperty("y", loc.x())
-            .addProperty("z", loc.x())
+            .addProperty("y", loc.y())
+            .addProperty("z", loc.z())
             .addProperty("yaw", loc.yaw())
             .addProperty("pitch", loc.pitch())
             ;
