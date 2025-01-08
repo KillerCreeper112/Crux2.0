@@ -25,6 +25,7 @@ import killercreepr.crux.api.loot.item.ItemLootPoolObject;
 import killercreepr.crux.api.loot.item.ItemLootTable;
 import killercreepr.crux.api.loot.key.KeyLootTable;
 import killercreepr.crux.api.loot.number.NumberLootTable;
+import killercreepr.crux.api.math.CruxLocation;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.api.valueproviders.vector.NumberVector;
 import killercreepr.crux.core.communication.MsgContainer;
@@ -108,6 +109,7 @@ public class BukkitCfgHandlers {
     public static final FileVector VECTOR = new FileVector();
     public static final FileUser USER = new FileUser();
     public static final FileDynamicAttributeModifier DYNAMIC_ATTRIBUTE_MODIFIER = new FileDynamicAttributeModifier();
+    public static final FileCruxLocation CRUX_LOCATION = new FileCruxLocation();
 
     public static void initStandard(){
         CfgRegistries.FILE.forEach(BukkitCfgHandlers::init);
@@ -148,6 +150,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(CruxBlockWrapper.class, CRUX_BLOCK_WRAPPER);
         registry.registerFileHandler(CruxEntitySnapshot.class, CRUX_ENTITY_SNAPSHOT);
         registry.registerFileHandler(Vector.class, VECTOR);
+        registry.registerFileHandler(CruxLocation.class, CRUX_LOCATION);
         registry.registerFileHandler(NumberVector.class, NUMBER_VECTOR);
         registry.registerFileHandler(DynamicAttributeModifier.class, DYNAMIC_ATTRIBUTE_MODIFIER);
         registry.registerFileHandler(KeyLootTable.class, CommonLootTableHandlers.KEY);
