@@ -17,24 +17,31 @@ public class BukkitDataFile {
         throw new IllegalArgumentException(file.getName() + " is not a supported file type!");
     }
     public static @Nullable DataFile parseFromGeneralPath(@NotNull String absolutePath, @NotNull String fileName){
+        return parseFromGeneralPath(absolutePath, fileName, false);
+    }
+    public static @Nullable DataFile parseFromGeneralPath(@NotNull String absolutePath, @NotNull String fileName, boolean createIfNeeded){
         DataFile dataFile;
-        dataFile = attemptParse(new File(absolutePath, fileName));
+        dataFile = attemptParse(new File(absolutePath, fileName), createIfNeeded);
         if(dataFile != null) return dataFile;
 
         fileName = CruxFolder.withoutFileExtension(fileName);
-        dataFile = attemptParse(new File(absolutePath, fileName + ".yml"));
+        dataFile = attemptParse(new File(absolutePath, fileName + ".yml"), createIfNeeded);
         if(dataFile != null) return dataFile;
 
-        dataFile = attemptParse(new File(absolutePath, fileName + ".json"));
+        dataFile = attemptParse(new File(absolutePath, fileName + ".json"), createIfNeeded);
         return dataFile;
     }
 
     public static @Nullable DataFile parseFromGeneralPath(@NotNull File file){
-        return parseFromGeneralPath(file.getParent(), file.getName());
+        return parseFromGeneralPath(file, false);
     }
 
-    private static DataFile attemptParse(File file){
-        if(file.exists()){
+    public static @Nullable DataFile parseFromGeneralPath(@NotNull File file, boolean createIfNeeded){
+        return parseFromGeneralPath(file.getParent(), file.getName(), createIfNeeded);
+    }
+
+    private static DataFile attemptParse(File file, boolean createIfNeeded){
+        if(createIfNeeded || file.exists()){
             try{
                 return parse(file);
             }catch (IllegalArgumentException ignored){}

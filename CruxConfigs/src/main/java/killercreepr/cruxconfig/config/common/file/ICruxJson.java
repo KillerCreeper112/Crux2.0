@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import killercreepr.cruxconfig.config.common.json.registry.JsonRegistry;
+import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -84,9 +85,13 @@ public interface ICruxJson extends ICruxFile {
         if(json == null) return false;
         FileReader reader = reader();
         if(json.isEmpty()){
-            try{ reader.close(); } catch (IOException | NullPointerException ignored){}
-            setClosed(true);
-            return file().delete();
+            close();
+            try{
+                FileUtils.delete(file());
+                return true;
+            }catch (IOException ignored){
+                return false;
+            }
         }
         try {
             String jsonString = pretty ? new GsonBuilder().setPrettyPrinting().create().toJson(json) :
