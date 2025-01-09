@@ -105,9 +105,9 @@ public interface ICruxJson extends ICruxFile {
     }
 
     default void close(){
-        JsonObject json = json();
-        if(json == null) return;
-        try{ reader().close(); } catch (IOException ignored){}
+        FileReader reader = reader();
+        if(reader == null) return;
+        try{ reader.close(); } catch (IOException ignored){}
         setClosed(true);
     }
 
