@@ -29,6 +29,12 @@ public class CruxEntityUtil {
         return GENERAL_SLOTS;
     }
 
+    public static boolean isValid(Entity e){
+        if(!e.isValid()) return false;
+        if(e instanceof Player p) return p.isOnline();
+        return true;
+    }
+
     public static Vector calculateViewVector(float pitch, float yaw) {
         float f2 = pitch * 0.017453292F;
         float f3 = -yaw * 0.017453292F;
