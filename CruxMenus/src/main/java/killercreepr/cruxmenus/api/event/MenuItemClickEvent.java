@@ -5,7 +5,6 @@ import killercreepr.cruxmenus.api.menu.action.click.ClickActions;
 import killercreepr.cruxmenus.api.menu.contex.ActionContext;
 import killercreepr.cruxmenus.api.menu.item.MenuItem;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

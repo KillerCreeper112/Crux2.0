@@ -1,7 +1,6 @@
 package killercreepr.cruxmenus.core.menu.module;
 
 import killercreepr.cruxmenus.api.menu.module.ActiveMenuModule;
-import killercreepr.cruxmenus.api.menu.module.MenuModule;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 

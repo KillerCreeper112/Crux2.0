@@ -2,7 +2,6 @@ package killercreepr.crux.core.text.tags;
 
 import killercreepr.crux.api.text.format.FormatPrefix;
 import killercreepr.crux.api.text.hook.HookedObjectContainer;
-import killercreepr.crux.api.text.hook.HookedPrefixBuilder;
 import killercreepr.crux.api.text.hook.ObjectTag;
 import killercreepr.crux.api.text.resolver.StringListResolver;
 import killercreepr.crux.api.text.resolver.StringResolver;
@@ -50,16 +49,45 @@ public class CruxTags implements TagParser {
         StringTagContainer tag = new StringTagContainer(this);
         locateTags(object).forEach(objectTag ->{
             TagContainer<StringResolver> tags = objectTag.requestStrings(object, this);
-            FormatPrefix prefix = prefixBuilder == null ? objectTag.defaultPrefix() : prefixBuilder.buildPrefix(objectTag, object, tags);
-            tag.addAll(tags, prefix);
+            FormatPrefix normalPrefix = prefixBuilder == null ? objectTag.defaultPrefix() : prefixBuilder.buildPrefix(objectTag, object, tags);
+            tag.addAll(tags, normalPrefix);
 
-            HookedObjectContainer<StringHookedObjectTag<?>> hookedTags = objectTag.hookStrings(object, this);
+            HookedObjectContainer<StringHookedObjectTag<?>> hookedTags = objectTag.hookStrings(
+                object, object, object, this
+            );
             if(hookedTags != null){
                 hookedTags.getHookedObjects().forEach(hooked ->{
-                    FormatPrefix pre = prefixBuilder == null ? hooked.getObjectTag().defaultPrefix() : prefixBuilder.buildHookedPrefix(
-                        objectTag, object, hooked
+                    tag.addAll(buildStrings(
+                        object, normalPrefix,
+                        hooked.getPrefix(),
+                        hooked.getObject()
+                    ));
+                });
+            }
+        });
+        return tag;
+    }
+
+    public <T> @NotNull StringTagContainer buildStrings(@NotNull Object baseObject,
+                                                        @Nullable FormatPrefix basePrefix,
+                                                        @NotNull FormatPrefix hookedObjectPrefix,
+                                                        @NotNull T hookedObject){
+
+        StringTagContainer tag = new StringTagContainer(this);
+        locateTags(hookedObject).forEach(objectTag ->{
+            TagContainer<StringResolver> tags = objectTag.requestStrings(hookedObject, this);
+            FormatPrefix normalPrefix = FormatPrefix.add(basePrefix, hookedObjectPrefix);
+            tag.addAll(tags, normalPrefix);
+
+            var hookedTags = objectTag.hookStrings(
+                hookedObject, baseObject, this, this
+            );
+            if(hookedTags != null){
+                hookedTags.getHookedObjects().forEach(hooked ->{
+                    FormatPrefix hookedPrefix = FormatPrefix.add(normalPrefix, hooked.getPrefix());
+                    tag.addAll(hooked.getTags(), hookedPrefix).addAll(
+                        buildStrings(baseObject, normalPrefix, hooked.getPrefix(), hooked.getObject())
                     );
-                    tag.addAll(hooked.getTags(), hooked.getPrefix().buildPrefix(hooked, pre, prefixBuilder));
                 });
             }
         });
@@ -67,71 +95,109 @@ public class CruxTags implements TagParser {
     }
 
     @Override
-    public <T> @NotNull StringHookedObjectContainer hookStrings(@NotNull T object, @NotNull HookedPrefixBuilder prefix){
+    public <T> @NotNull StringHookedObjectContainer hookStrings(@NotNull T object, @Nullable FormatPrefix prefix){
+        return hookStrings(object, object, object, prefix);
+    }
+
+    @Override
+    public @NotNull <T> StringHookedObjectContainer hookStrings(@NotNull T object, Object base, Object parent, @Nullable FormatPrefix inputPrefix) {
         StringHookedObjectContainer container = HookedObjectContainer.string();
         locateTags(object).forEach(objectTag ->{
+            FormatPrefix prefix = inputPrefix == null ? objectTag.defaultPrefix() : inputPrefix;
             TagContainer<StringResolver> tags = objectTag.requestStrings(object, this);
             if(tags != null){
-                container.add(new StringHookedObjectTag<>(object, objectTag, tags, prefix));
+                container.add(new StringHookedObjectTag<>(base, parent, object, objectTag, tags, prefix));
             }
 
-            HookedObjectContainer<StringHookedObjectTag<?>> hookedTags = objectTag.hookStrings(object, this);
+            HookedObjectContainer<StringHookedObjectTag<?>> hookedTags = objectTag.hookStrings(
+                object, base, object, this
+            );
             if(hookedTags != null){
                 hookedTags.addAll(container);
-                hookedTags.getHookedObjects().forEach(hooked ->{
-                    container.add(hooked/*.withAddedPrefix(prefix)*/);
-                });
-
-                //container.addAll(hookedTags);
             }
         });
         return container;
     }
+
+    @Override
+    public @NotNull <T> StringListHookedObjectContainer hookStringLists(@NotNull T object, @Nullable FormatPrefix prefix) {
+        return hookStringLists(object, object, object, prefix);
+    }
+
+    @Override
+    public @NotNull <T> StringListHookedObjectContainer hookStringLists(@NotNull T object, Object base, Object parent, @Nullable FormatPrefix inputPrefix) {
+        StringListHookedObjectContainer container = HookedObjectContainer.stringList();
+        locateTags(object).forEach(objectTag ->{
+            FormatPrefix prefix = inputPrefix == null ? objectTag.defaultPrefix() : inputPrefix;
+            TagContainer<StringListResolver> tags = objectTag.requestStringLists(object, this);
+            if(tags != null){
+                container.add(new StringListHookedObjectTag<T>(base, parent, object, objectTag, tags, prefix));
+            }
+
+            var hookedTags = objectTag.hookStringLists(
+                object, base, object, this
+            );
+            if(hookedTags != null){
+                hookedTags.addAll(container);
+            }
+        });
+        return container;
+    }
+
+    public <T> @NotNull StringListTagContainer buildStringLists(@NotNull Object baseObject,
+                                                        @Nullable FormatPrefix basePrefix,
+                                                        @NotNull FormatPrefix hookedObjectPrefix,
+                                                        @NotNull T hookedObject){
+
+        StringListTagContainer tag = new StringListTagContainer(this);
+        locateTags(hookedObject).forEach(objectTag ->{
+            TagContainer<StringListResolver> tags = objectTag.requestStringLists(hookedObject, this);
+            FormatPrefix normalPrefix = FormatPrefix.add(basePrefix, hookedObjectPrefix);
+            tag.addAll(tags, normalPrefix);
+
+            var hookedTags = objectTag.hookStringLists(
+                hookedObject, baseObject, this, this
+            );
+            if(hookedTags != null){
+                hookedTags.getHookedObjects().forEach(hooked ->{
+                    FormatPrefix hookedPrefix = FormatPrefix.add(normalPrefix, hooked.getPrefix());
+                    tag.addAll(hooked.getTags(), hookedPrefix).addAll(
+                        buildStringLists(baseObject, normalPrefix, hooked.getPrefix(), hooked.getObject())
+                    );
+                });
+            }
+        });
+        return tag;
+    }
+
 
     @Override
     public <T> @Nullable StringListTagContainer buildStringListTags(@NotNull T object){
         return buildStringListTags(object, null);
     }
+
     @Override
     public <T> @Nullable StringListTagContainer buildStringListTags(@NotNull T object, @Nullable TagsPrefixBuilder prefixBuilder){
         StringListTagContainer tag = new StringListTagContainer(this);
         locateTags(object).forEach(objectTag ->{
             TagContainer<StringListResolver> tags = objectTag.requestStringLists(object, this);
-            FormatPrefix prefix = prefixBuilder == null ? objectTag.defaultPrefix() : prefixBuilder.buildPrefix(objectTag, object, tags);
-            tag.addAll(tags, prefix);
+            FormatPrefix normalPrefix = prefixBuilder == null ? objectTag.defaultPrefix() : prefixBuilder.buildPrefix(objectTag, object, tags);
+            tag.addAll(tags, normalPrefix);
 
-            HookedObjectContainer<StringListHookedObjectTag<?>> hookedTags = objectTag.hookStringLists(object, this);
+            HookedObjectContainer<StringHookedObjectTag<?>> hookedTags = objectTag.hookStrings(
+                object, object, object, this
+            );
             if(hookedTags != null){
                 hookedTags.getHookedObjects().forEach(hooked ->{
-                    FormatPrefix pre = hooked.getObjectTag().defaultPrefix(); /*prefixBuilder == null ? hooked.getObjectTag().defaultPrefix() : prefixBuilder.buildHookedPrefix(
-                        objectTag, object, hooked
-                    );*/
-                    tag.addAll(hooked.getTags(), hooked.getPrefix().buildPrefix(hooked, pre, null));
+                    tag.addAll(buildStringLists(
+                        object, normalPrefix,
+                        hooked.getPrefix(),
+                        hooked.getObject()
+                    ));
                 });
             }
         });
         return tag;
-    }
-
-    @Override
-    public <T> @NotNull StringListHookedObjectContainer hookStringLists(@NotNull T object, @NotNull HookedPrefixBuilder prefix){
-        StringListHookedObjectContainer container = HookedObjectContainer.stringList();
-        locateTags(object).forEach(objectTag ->{
-            TagContainer<StringListResolver> tags = objectTag.requestStringLists(object, this);
-            if(tags != null){
-                container.add(new StringListHookedObjectTag<>(object, objectTag, tags, prefix));
-            }
-
-            HookedObjectContainer<StringListHookedObjectTag<?>> hookedTags = objectTag.hookStringLists(object, this);
-            if(hookedTags != null){
-                hookedTags.addAll(container);
-                hookedTags.getHookedObjects().forEach(hooked ->{
-                    container.add(hooked/*.withAddedPrefix(prefix)*/);
-                });
-                //hookedTags.getHookedObjects().forEach(container::add);
-            }
-        });
-        return container;
     }
 
     @Override

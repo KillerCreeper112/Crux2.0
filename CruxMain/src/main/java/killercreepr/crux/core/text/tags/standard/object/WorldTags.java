@@ -2,7 +2,6 @@ package killercreepr.crux.core.text.tags.standard.object;
 
 import killercreepr.crux.api.text.format.FormatPrefix;
 import killercreepr.crux.api.text.hook.HookedObjectContainer;
-import killercreepr.crux.api.text.hook.HookedPrefixBuilder;
 import killercreepr.crux.api.text.hook.ObjectTag;
 import killercreepr.crux.api.text.resolver.StringResolver;
 import killercreepr.crux.api.text.tags.TagParser;
@@ -43,16 +42,20 @@ public class WorldTags implements ObjectTag<World> {
     }
 
     @Override
-    public @Nullable HookedObjectContainer<StringHookedObjectTag<?>> hookStrings(@NotNull World object, @NotNull TagParser tags) {
-        return HookedObjectContainer.string().addAll(tags.hookStrings(object.getWorldBorder(),
-            HookedPrefixBuilder.overwrite(FormatPrefix.simple("world_border/"))))
-            ;
+    public @Nullable HookedObjectContainer<StringHookedObjectTag<?>> hookStrings(@NotNull World object, Object base, Object parent, @NotNull TagParser tags) {
+        HookedObjectContainer<StringHookedObjectTag<?>> hooks = HookedObjectContainer.string();
+        hooks.addAll(tags.hookStrings(
+            object.getWorldBorder(), base, object, FormatPrefix.simple("border/")
+        ));
+        return hooks;
     }
 
     @Override
-    public @Nullable HookedObjectContainer<StringListHookedObjectTag<?>> hookStringLists(@NotNull World object, @NotNull TagParser tags) {
-        return HookedObjectContainer.stringList().addAll(tags.hookStringLists(object.getWorldBorder(),
-            HookedPrefixBuilder.overwrite(FormatPrefix.simple("world_border/"))))
+    public @Nullable HookedObjectContainer<StringListHookedObjectTag<?>> hookStringLists(@NotNull World object, Object base, Object parent, @NotNull TagParser tags) {
+        return HookedObjectContainer.stringList()
+            .addAll(tags.hookStringLists(
+                object.getWorldBorder(), base, object, FormatPrefix.simple("border/")
+            ))
             ;
     }
 }

@@ -1,6 +1,5 @@
 package killercreepr.crux.core.item.dynamic.component;
 
-import killercreepr.crux.api.item.dynamic.DynamicItemComponent;
 import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.util.CruxString;

@@ -2,7 +2,6 @@ package killercreepr.cruxadvancements.core.tags;
 
 import killercreepr.crux.api.text.format.FormatPrefix;
 import killercreepr.crux.api.text.hook.HookedObjectContainer;
-import killercreepr.crux.api.text.hook.HookedPrefixBuilder;
 import killercreepr.crux.api.text.hook.ObjectTag;
 import killercreepr.crux.api.text.resolver.StringListResolver;
 import killercreepr.crux.api.text.resolver.StringResolver;
@@ -141,21 +140,20 @@ public class CrazyAdvancementTags implements ObjectTag<ObjectiveAdvancement> {
     }
 
     @Override
-    public @Nullable HookedObjectContainer<StringListHookedObjectTag<?>> hookStringLists(@NotNull ObjectiveAdvancement object, @NotNull TagParser tags) {
-        var hooks = HookedObjectContainer.stringList()
-            .addAll(tags.hookStringLists(object.getIcon(), HookedPrefixBuilder.overwrite(
-                FormatPrefix.simple("advancement_icon/")
-            )))
+    public @Nullable HookedObjectContainer<StringHookedObjectTag<?>> hookStrings(@NotNull ObjectiveAdvancement object, Object base, Object parent, @NotNull TagParser tags) {
+        return HookedObjectContainer.string()
+            .addAll(tags.hookStrings(
+                object.getIcon(), base, object, FormatPrefix.simple("icon/")
+            ))
             ;
-        return hooks;
     }
 
     @Override
-    public @Nullable HookedObjectContainer<StringHookedObjectTag<?>> hookStrings(@NotNull ObjectiveAdvancement object, @NotNull TagParser tags) {
-        return HookedObjectContainer.string()
-            .addAll(tags.hookStrings(object.getIcon(), HookedPrefixBuilder.overwrite(
-                FormatPrefix.simple("advancement_icon/")
-            )))
+    public @Nullable HookedObjectContainer<StringListHookedObjectTag<?>> hookStringLists(@NotNull ObjectiveAdvancement object, Object base, Object parent, @NotNull TagParser tags) {
+        return HookedObjectContainer.stringList()
+            .addAll(tags.hookStringLists(
+                object.getIcon(), base, object, FormatPrefix.simple("icon/")
+            ))
             ;
     }
 }

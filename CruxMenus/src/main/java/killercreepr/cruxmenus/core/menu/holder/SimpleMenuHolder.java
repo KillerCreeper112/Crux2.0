@@ -12,7 +12,6 @@ import killercreepr.cruxmenus.api.menu.registry.MenuRegistry;
 import killercreepr.cruxmenus.core.menu.ConfigMenu;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

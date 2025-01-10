@@ -1,7 +1,6 @@
 package killercreepr.crux.core.item.dynamic.component;
 
 import killercreepr.crux.api.item.CruxItem;
-import killercreepr.crux.api.item.dynamic.DynamicItemComponent;
 import killercreepr.crux.api.item.dynamic.component.persistence.TypedDynamicPersistentTag;
 import killercreepr.crux.api.text.context.TextParserContext;
 import org.jetbrains.annotations.NotNull;

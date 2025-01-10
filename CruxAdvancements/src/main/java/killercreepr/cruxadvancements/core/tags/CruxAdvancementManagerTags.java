@@ -2,7 +2,6 @@ package killercreepr.cruxadvancements.core.tags;
 
 import killercreepr.crux.api.text.format.FormatPrefix;
 import killercreepr.crux.api.text.hook.HookedObjectContainer;
-import killercreepr.crux.api.text.hook.HookedPrefixBuilder;
 import killercreepr.crux.api.text.hook.ObjectTag;
 import killercreepr.crux.api.text.resolver.StringResolver;
 import killercreepr.crux.api.text.tags.TagParser;
@@ -83,20 +82,20 @@ public class CruxAdvancementManagerTags implements ObjectTag<CruxAdvancementMana
     }
 
     @Override
-    public @Nullable HookedObjectContainer<StringHookedObjectTag<?>> hookStrings(@NotNull CruxAdvancementManager<?> object, @NotNull TagParser tags) {
-        return HookedObjectContainer.string()
-            .addAll(tags.hookStrings(getRoot(object), HookedPrefixBuilder.overwrite(
-                FormatPrefix.simple("advancement_manager/root/")
-            )))
+    public @Nullable HookedObjectContainer<StringListHookedObjectTag<?>> hookStringLists(@NotNull CruxAdvancementManager<?> object, Object base, Object parent, @NotNull TagParser tags) {
+        return HookedObjectContainer.stringList()
+            .addAll(tags.hookStringLists(
+                getRoot(object), base, object, FormatPrefix.simple("root/")
+            ))
             ;
     }
 
     @Override
-    public @Nullable HookedObjectContainer<StringListHookedObjectTag<?>> hookStringLists(@NotNull CruxAdvancementManager<?> object, @NotNull TagParser tags) {
-        return HookedObjectContainer.stringList()
-            .addAll(tags.hookStringLists(getRoot(object), HookedPrefixBuilder.overwrite(
-                FormatPrefix.simple("advancement_manager/root/")
-            )))
+    public @Nullable HookedObjectContainer<StringHookedObjectTag<?>> hookStrings(@NotNull CruxAdvancementManager<?> object, Object base, Object parent, @NotNull TagParser tags) {
+        return HookedObjectContainer.string()
+            .addAll(tags.hookStrings(
+                getRoot(object), base, object, FormatPrefix.simple("root/")
+            ))
             ;
     }
 }

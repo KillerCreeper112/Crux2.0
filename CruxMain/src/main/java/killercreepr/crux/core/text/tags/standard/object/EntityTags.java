@@ -2,7 +2,6 @@ package killercreepr.crux.core.text.tags.standard.object;
 
 import killercreepr.crux.api.text.format.FormatPrefix;
 import killercreepr.crux.api.text.hook.HookedObjectContainer;
-import killercreepr.crux.api.text.hook.HookedPrefixBuilder;
 import killercreepr.crux.api.text.hook.ObjectTag;
 import killercreepr.crux.api.text.tags.TagParser;
 import killercreepr.crux.core.text.container.StringTagContainer;
@@ -35,20 +34,16 @@ public class EntityTags implements ObjectTag<Entity> {
     }
 
     @Override
-    public @Nullable HookedObjectContainer<StringHookedObjectTag<?>> hookStrings(@NotNull Entity object, @NotNull TagParser tags) {
+    public @Nullable HookedObjectContainer<StringHookedObjectTag<?>> hookStrings(@NotNull Entity object, Object base, Object parent, @NotNull TagParser tags) {
         return HookedObjectContainer.string()
-            .addAll(tags.hookStrings(object.getWorld(), HookedPrefixBuilder.overwrite(
-                FormatPrefix.simple("entity_world/")
-            )))
+            .addAll(tags.hookStrings(object.getWorld(), base, object, FormatPrefix.simple("world/")))
             ;
     }
 
     @Override
-    public @Nullable HookedObjectContainer<StringListHookedObjectTag<?>> hookStringLists(@NotNull Entity object, @NotNull TagParser tags) {
+    public @Nullable HookedObjectContainer<StringListHookedObjectTag<?>> hookStringLists(@NotNull Entity object, Object base, Object parent, @NotNull TagParser tags) {
         return HookedObjectContainer.stringList()
-            .addAll(tags.hookStringLists(object.getWorld(), HookedPrefixBuilder.overwrite(
-                FormatPrefix.simple("entity_world/")
-            )))
+            .addAll(tags.hookStringLists(object.getWorld(), base, object, FormatPrefix.simple("world/")))
             ;
     }
 }

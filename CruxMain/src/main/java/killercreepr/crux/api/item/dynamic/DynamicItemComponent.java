@@ -2,7 +2,6 @@ package killercreepr.crux.api.item.dynamic;
 
 import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.text.context.TextParserContext;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public interface DynamicItemComponent extends Cloneable {

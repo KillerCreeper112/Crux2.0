@@ -6,7 +6,6 @@ import killercreepr.cruxmenus.api.menu.module.ActiveMenuModule;
 import killercreepr.cruxmenus.api.menu.module.MenuModuleRegistry;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -21,15 +21,27 @@ public interface ObjectTag<T> {
     /**
      * @return Generates other StringHooks that may be tied to this one object.
      */
+    /*default @Nullable HookedObjectContainer<StringHookedObjectTag<?>> hookStrings(@NotNull T object, @NotNull TagParser tags){
+        return null;
+    }*/
+
     default @Nullable HookedObjectContainer<StringHookedObjectTag<?>> hookStrings(@NotNull T object, @NotNull TagParser tags){
+        return hookStrings(object, object, object, tags);
+    }
+
+    default @Nullable HookedObjectContainer<StringHookedObjectTag<?>> hookStrings(@NotNull T object, Object base, Object parent, @NotNull TagParser tags){
         return null;
     }
 
     /**
      * @return Generates other LoreHooks that may be tied to this one object.
      */
-    default @Nullable HookedObjectContainer<StringListHookedObjectTag<?>> hookStringLists(@NotNull T object, @NotNull TagParser tags){
+    default @Nullable HookedObjectContainer<StringListHookedObjectTag<?>> hookStringLists(@NotNull T object, Object base, Object parent, @NotNull TagParser tags){
         return null;
+    }
+
+    default @Nullable HookedObjectContainer<StringListHookedObjectTag<?>> hookStringLists(@NotNull T object, @NotNull TagParser tags){
+        return hookStringLists(object, object, object, tags);
     }
 
     /**

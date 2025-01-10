@@ -1,7 +1,6 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
 import killercreepr.crux.api.math.CruxLocation;
-import killercreepr.crux.core.util.CruxLoc;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
@@ -11,7 +10,6 @@ import killercreepr.cruxconfig.config.common.element.FileGeneric;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.SimpleFileHandler;
 import killercreepr.cruxconfig.config.common.json.annotation.JsonSerializer;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

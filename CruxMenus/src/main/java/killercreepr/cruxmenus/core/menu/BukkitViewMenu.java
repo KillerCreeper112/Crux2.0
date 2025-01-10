@@ -4,7 +4,6 @@ import killercreepr.cruxmenus.api.menu.Menu;
 import killercreepr.cruxmenus.api.menu.ViewedMenu;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;

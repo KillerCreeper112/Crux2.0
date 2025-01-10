@@ -1,7 +1,5 @@
 package killercreepr.cruxstructures.core.structure.stored;
 
-import killercreepr.crux.api.data.tick.ManagedTicked;
-import killercreepr.crux.api.data.tick.Ticked;
 import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.core.data.world.StoredChunk;
 import killercreepr.cruxstructures.api.component.TickedStoredComponent;

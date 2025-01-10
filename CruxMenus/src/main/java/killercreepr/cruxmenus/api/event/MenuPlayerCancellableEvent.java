@@ -2,7 +2,6 @@ package killercreepr.cruxmenus.api.event;
 
 import killercreepr.cruxmenus.api.menu.Menu;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.jetbrains.annotations.NotNull;
 

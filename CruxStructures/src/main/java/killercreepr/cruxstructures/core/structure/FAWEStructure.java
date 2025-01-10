@@ -1,7 +1,6 @@
 package killercreepr.cruxstructures.core.structure;
 
 import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.EditSessionBuilder;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;

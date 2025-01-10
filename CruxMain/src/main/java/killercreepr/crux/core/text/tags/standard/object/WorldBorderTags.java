@@ -1,14 +1,19 @@
 package killercreepr.crux.core.text.tags.standard.object;
 
+import killercreepr.crux.api.data.User;
 import killercreepr.crux.api.text.format.FormatPrefix;
+import killercreepr.crux.api.text.hook.HookedObjectContainer;
 import killercreepr.crux.api.text.hook.ObjectTag;
 import killercreepr.crux.api.text.resolver.StringResolver;
 import killercreepr.crux.api.text.tags.TagParser;
 import killercreepr.crux.api.text.tags.container.TagContainer;
+import killercreepr.crux.core.text.hook.StringHookedObjectTag;
 import killercreepr.crux.core.text.resolver.Tag;
 import org.bukkit.WorldBorder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.UUID;
 
 public class WorldBorderTags implements ObjectTag<WorldBorder> {
     @Override
@@ -32,5 +37,15 @@ public class WorldBorderTags implements ObjectTag<WorldBorder> {
             .add(Tag.string("warning_distance", (args, ctx) -> object.getWarningDistance() + ""))
             .add(Tag.string("max_center_coordinate", (args, ctx) -> object.getMaxCenterCoordinate() + ""))
             ;
+    }
+
+    @Override
+    public @Nullable HookedObjectContainer<StringHookedObjectTag<?>> hookStrings(@NotNull WorldBorder object, Object base, Object parent, @NotNull TagParser tags) {
+        HookedObjectContainer<StringHookedObjectTag<?>> hooks = HookedObjectContainer.string();
+        hooks.addAll(tags.hookStrings(
+            User.user(UUID.randomUUID(), "my man is a dude tooDWDWDWDW"),
+            base, object, FormatPrefix.simple("user/")
+        ));
+        return hooks;
     }
 }

@@ -2,9 +2,7 @@ package killercreepr.cruxmenus.api.event;
 
 import killercreepr.cruxmenus.api.menu.Menu;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class MenuPlayerEvent extends Event {

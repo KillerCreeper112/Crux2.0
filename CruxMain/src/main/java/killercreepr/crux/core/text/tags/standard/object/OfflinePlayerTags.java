@@ -4,12 +4,10 @@ import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import killercreepr.crux.api.text.format.FormatPrefix;
 import killercreepr.crux.api.text.hook.HookedObjectContainer;
-import killercreepr.crux.api.text.hook.HookedPrefixBuilder;
 import killercreepr.crux.api.text.hook.ObjectTag;
 import killercreepr.crux.api.text.tags.TagParser;
 import killercreepr.crux.core.text.container.StringTagContainer;
 import killercreepr.crux.core.text.hook.StringHookedObjectTag;
-import killercreepr.crux.core.text.hook.StringListHookedObjectTag;
 import killercreepr.crux.core.text.resolver.Tag;
 import net.kyori.adventure.key.Key;
 import org.bukkit.*;
@@ -164,25 +162,13 @@ public class OfflinePlayerTags implements ObjectTag<OfflinePlayer> {
     }
 
     @Override
-    public @Nullable HookedObjectContainer<StringHookedObjectTag<?>> hookStrings(@NotNull OfflinePlayer object, @NotNull TagParser tags) {
+    public @Nullable HookedObjectContainer<StringHookedObjectTag<?>> hookStrings(@NotNull OfflinePlayer object, Object base, Object parent, @NotNull TagParser tags) {
         HookedObjectContainer<StringHookedObjectTag<?>> hooks = HookedObjectContainer.string();
         Player p = object.getPlayer();
         if(p != null){
-            hooks.addAll(tags.hookStrings(p.getWorld(), HookedPrefixBuilder.overwrite(
-                FormatPrefix.simple("player_world/")
-            )));
-        }
-        return hooks;
-    }
-
-    @Override
-    public @Nullable HookedObjectContainer<StringListHookedObjectTag<?>> hookStringLists(@NotNull OfflinePlayer object, @NotNull TagParser tags) {
-        HookedObjectContainer<StringListHookedObjectTag<?>> hooks = HookedObjectContainer.stringList();
-        Player p = object.getPlayer();
-        if(p != null){
-            hooks.addAll(tags.hookStringLists(p.getWorld(), HookedPrefixBuilder.overwrite(
-                FormatPrefix.simple("player_world/")
-            )));
+            hooks.addAll(tags.hookStrings(
+                p.getWorld(), base, p, FormatPrefix.simple("world/")
+            ));
         }
         return hooks;
     }

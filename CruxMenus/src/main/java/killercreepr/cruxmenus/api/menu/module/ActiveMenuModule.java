@@ -4,10 +4,8 @@ import killercreepr.crux.api.data.StringIdentifiable;
 import killercreepr.crux.api.text.tags.TagParser;
 import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.cruxmenus.api.menu.Menu;
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

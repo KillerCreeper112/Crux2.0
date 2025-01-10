@@ -7,8 +7,6 @@ import killercreepr.cruxadvancements.api.advancement.flag.CruxAdvancementFlag;
 import killercreepr.cruxadvancements.api.advancement.objective.AdvancementObjective;
 import killercreepr.cruxadvancements.api.advancement.reward.CruxAdvanceReward;
 import killercreepr.cruxadvancements.core.config.CruxAdvanceCfgData;
-import killercreepr.cruxadvancements.core.config.CruxConfigHook;
-import killercreepr.cruxadvancements.core.config.handler.FileAdvancementObjective;
 import killercreepr.cruxadvancements.crazy.advancement.CrazyAdvancement;
 import killercreepr.cruxadvancements.crazy.advancement.CrazyAdvancementDisplay;
 import killercreepr.cruxconfig.config.common.FileContext;

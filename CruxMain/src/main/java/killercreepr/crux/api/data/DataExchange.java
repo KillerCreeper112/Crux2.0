@@ -9,7 +9,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public interface DataExchange extends Iterable<Holder<?>> {
     DataExchange EMPTY = new SimpleDataExchange(Map.of());

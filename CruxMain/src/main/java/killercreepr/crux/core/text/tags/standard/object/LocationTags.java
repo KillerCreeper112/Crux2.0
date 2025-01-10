@@ -2,7 +2,6 @@ package killercreepr.crux.core.text.tags.standard.object;
 
 import killercreepr.crux.api.text.format.FormatPrefix;
 import killercreepr.crux.api.text.hook.HookedObjectContainer;
-import killercreepr.crux.api.text.hook.HookedPrefixBuilder;
 import killercreepr.crux.api.text.hook.ObjectTag;
 import killercreepr.crux.api.text.resolver.StringResolver;
 import killercreepr.crux.api.text.tags.TagParser;
@@ -37,23 +36,23 @@ public class LocationTags implements ObjectTag<Location> {
             ;
     }
 
-
     @Override
-    public @Nullable HookedObjectContainer<StringListHookedObjectTag<?>> hookStringLists(@NotNull Location object, @NotNull TagParser tags) {
-        var hooks = HookedObjectContainer.stringList();
+    public @Nullable HookedObjectContainer<StringHookedObjectTag<?>> hookStrings(@NotNull Location object, Object base, Object parent, @NotNull TagParser tags) {
+        var hooks =HookedObjectContainer.string();
         World world = object.getWorld();
-        if(world != null) hooks.addAll(tags.hookStringLists(world, HookedPrefixBuilder.overwrite(
-            FormatPrefix.simple("location_world/")
-        )));
+        if(world != null){
+            hooks.addAll(tags.hookStrings(world, base, object, FormatPrefix.simple("world/")));
+        }
         return hooks;
     }
+
     @Override
-    public @Nullable HookedObjectContainer<StringHookedObjectTag<?>> hookStrings(@NotNull Location object, @NotNull TagParser tags) {
-        var hooks = HookedObjectContainer.string();
+    public @Nullable HookedObjectContainer<StringListHookedObjectTag<?>> hookStringLists(@NotNull Location object, Object base, Object parent, @NotNull TagParser tags) {
+        var hooks =HookedObjectContainer.stringList();
         World world = object.getWorld();
-        if(world != null) hooks.addAll(tags.hookStrings(world, HookedPrefixBuilder.overwrite(
-            FormatPrefix.simple("location_world/")
-        )));
+        if(world != null){
+            hooks.addAll(tags.hookStringLists(world, base, object, FormatPrefix.simple("world/")));
+        }
         return hooks;
     }
 }

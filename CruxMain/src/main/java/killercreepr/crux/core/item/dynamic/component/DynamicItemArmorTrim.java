@@ -3,7 +3,6 @@ package killercreepr.crux.core.item.dynamic.component;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import killercreepr.crux.api.item.CruxItem;
-import killercreepr.crux.api.item.dynamic.DynamicItemComponent;
 import killercreepr.crux.api.text.context.TextParserContext;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.meta.ArmorMeta;

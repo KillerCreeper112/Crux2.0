@@ -3,7 +3,6 @@ package killercreepr.cruxform.api.shape;
 import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.api.math.CruxLocation;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
-import killercreepr.cruxform.core.shape.SimpleCreateRay;
 import killercreepr.cruxform.core.shape.SimpleCreateSwirl;
 
 public interface CreateSwirl extends CreateShape{

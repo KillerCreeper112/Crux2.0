@@ -6,6 +6,7 @@ import killercreepr.crux.core.text.hook.prefix.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@Deprecated(forRemoval = true)
 public interface HookedPrefixBuilder {
     HookedPrefixBuilder EMPTY = new DummyHookedPrefixBuilder();
     static HookedPrefixBuilder empty(){

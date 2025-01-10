@@ -1,6 +1,6 @@
 package killercreepr.crux.api.text.tags;
 
-import killercreepr.crux.api.text.hook.HookedPrefixBuilder;
+import killercreepr.crux.api.text.format.FormatPrefix;
 import killercreepr.crux.api.text.hook.ObjectTag;
 import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.crux.core.text.container.StringListTagContainer;
@@ -14,6 +14,15 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 public interface TagParser {
+    <T> @NotNull StringHookedObjectContainer hookStrings(@NotNull T object, @Nullable FormatPrefix prefix);
+    <T> @NotNull StringHookedObjectContainer hookStrings(@NotNull T object, Object base, Object parent, @Nullable FormatPrefix prefix);
+
+    <T> @NotNull StringListHookedObjectContainer hookStringLists(@NotNull T object, @Nullable FormatPrefix prefix);
+    <T> @NotNull StringListHookedObjectContainer hookStringLists(@NotNull T object, Object base, Object parent, @Nullable FormatPrefix prefix);
+
+
+    //todo testing
+
     static Builder builder(){
         return new CruxTags.Builder();
     }
@@ -42,16 +51,14 @@ public interface TagParser {
     <T> @Nullable MergedTagContainer buildTags(@NotNull T object);
 
     default <T> @NotNull StringHookedObjectContainer hookStrings(@NotNull T object){
-        return hookStrings(object, HookedPrefixBuilder.empty());
+        return hookStrings(object, null);
     }
 
-    <T> @NotNull StringHookedObjectContainer hookStrings(@NotNull T object, @NotNull HookedPrefixBuilder prefix);
+    //<T> @NotNull StringHookedObjectContainer hookStrings(@NotNull T object, @NotNull HookedPrefixBuilder prefix);
 
     default <T> @NotNull StringListHookedObjectContainer hookStringLists(@NotNull T object){
-        return hookStringLists(object, HookedPrefixBuilder.empty());
+        return hookStringLists(object, null);
     }
-
-    <T> @NotNull StringListHookedObjectContainer hookStringLists(@NotNull T object, @NotNull HookedPrefixBuilder prefix);
 
     interface Builder{
         Builder addTag(@NotNull ObjectTag<?> tag);

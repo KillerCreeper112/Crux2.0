@@ -23,7 +23,6 @@ import killercreepr.cruxmenus.api.menu.item.MenuItem;
 import killercreepr.cruxmenus.api.menu.item.requirement.ViewCondition;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
