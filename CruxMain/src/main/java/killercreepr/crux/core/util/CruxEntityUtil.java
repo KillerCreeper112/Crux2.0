@@ -30,6 +30,7 @@ public class CruxEntityUtil {
     }
 
     public static boolean isValid(Entity e){
+        if(e == null) return false;
         if(!e.isValid()) return false;
         if(e instanceof Player p) return p.isOnline();
         return true;
