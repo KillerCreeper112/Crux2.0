@@ -439,6 +439,9 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
         for(Map.Entry<String, FileElement> entry : o){
             FileDynamicItemComponent<?> handler = COMPONENT_REGISTRY.get(entry.getKey());
             if(handler == null){
+                switch (entry.getKey().toLowerCase()){
+                    case "material", "amount" -> { continue; }
+                }
                 Crux.log(Level.WARNING, "Component " + entry.getKey() + " does not exist for DynamicItem! " + o.asMap());
                 continue;
             }
