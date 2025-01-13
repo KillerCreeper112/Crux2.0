@@ -4,6 +4,7 @@ import killercreepr.crux.api.component.serialization.PersistHolderComponentHandl
 import killercreepr.crux.api.text.format.FormatSerializer;
 import killercreepr.crux.core.item.SimpleCruxItem;
 import killercreepr.crux.core.text.format.FormatParserContext;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Color;
@@ -66,6 +67,8 @@ public interface CruxItem extends Cloneable, PersistHolderComponentHandler {
 
     @NotNull Optional<ItemMeta> getMeta();
 
+    @Nullable Key itemModel();
+    CruxItem itemModel(@Nullable Key key);
     CruxItem meta(@Nullable ItemMeta meta);
 
     CruxItem addFlags(@NotNull ItemFlag @NotNull... flags);
@@ -106,6 +109,7 @@ public interface CruxItem extends Cloneable, PersistHolderComponentHandler {
 
     CruxItem flags(@Nullable Collection<ItemFlag> flags);
 
+    @Deprecated(forRemoval = true)
     CruxItem customModelData(@Nullable Integer data);
 
     boolean unbreakable();

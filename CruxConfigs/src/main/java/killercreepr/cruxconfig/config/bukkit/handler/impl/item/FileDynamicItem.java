@@ -81,6 +81,18 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
             }
         });
 
+        COMPONENT_REGISTRY.register("item_model", new FileGenericSingleDynamicComponent<>(DynamicItemItemModel.class) {
+            @Override
+            public @NotNull String jsonSerializerID() {
+                return "dynamic_item_item_model";
+            }
+
+            @Override
+            public @NotNull DynamicItemItemModel deserialize(@NotNull Object object) {
+                return new DynamicItemItemModel(object);
+            }
+        });
+
         COMPONENT_REGISTRY.register("unbreakable", new FileGenericSingleDynamicComponent<>(killercreepr.crux.core.item.dynamic.component.DynamicItemUnbreakable.class) {
             @Override
             public @NotNull String jsonSerializerID() {

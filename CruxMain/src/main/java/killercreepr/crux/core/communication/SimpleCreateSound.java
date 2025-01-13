@@ -3,6 +3,7 @@ package killercreepr.crux.core.communication;
 import killercreepr.crux.api.communication.CreateSound;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.Location;
+import org.bukkit.Registry;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,7 +27,7 @@ public class SimpleCreateSound implements CreateSound {
     }
 
     public SimpleCreateSound(@NotNull org.bukkit.Sound sound, @NotNull Sound.Source source, float volume, float pitch) {
-        this.sound = Sound.sound(sound.key(), source, volume, pitch);
+        this.sound = Sound.sound(Registry.SOUNDS.getKeyOrThrow(sound), source, volume, pitch);
     }
 
     @Override

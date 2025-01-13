@@ -6,6 +6,8 @@ import killercreepr.crux.api.text.provider.StringTagProvider;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.persistence.CruxPersist;
 import killercreepr.crux.core.text.format.FormatParserContext;
+import killercreepr.crux.core.util.CruxKey;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -76,6 +78,18 @@ public class SimpleCruxItem implements CruxItem {
 
     public @NotNull Optional<ItemMeta> getMeta(){
         return Optional.ofNullable(meta());
+    }
+
+    @Override
+    public @Nullable Key itemModel() {
+        ItemMeta meta = meta();
+        if(meta == null) return null;
+        return meta.hasItemModel() ? meta.getItemModel() : null;
+    }
+
+    @Override
+    public SimpleCruxItem itemModel(@Nullable Key key){
+        return editMeta(meta -> meta.setItemModel(key == null ? null : CruxKey.key(key)));
     }
 
     public SimpleCruxItem meta(@Nullable ItemMeta meta){
