@@ -5,7 +5,7 @@ import killercreepr.crux.api.item.dynamic.DynamicItem;
 import killercreepr.crux.api.item.dynamic.DynamicItemComponent;
 import killercreepr.crux.api.item.dynamic.component.persistence.TypedDynamicPersistentTag;
 import killercreepr.crux.api.registry.MappedRegistry;
-import killercreepr.crux.core.item.dynamic.BukkitDynamicItem;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.item.dynamic.component.*;
 import killercreepr.crux.core.item.dynamic.component.attribute.DynamicAttributeModifier;
 import killercreepr.crux.core.registry.SimpleMappedRegistry;
@@ -23,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.logging.Level;
 
 //todo food,
 @JsonSerializer(id = "dynamic_item")
@@ -78,18 +79,6 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
             @Override
             public @NotNull killercreepr.crux.core.item.dynamic.component.DynamicItemCustomModelData deserialize(@NotNull Object object) {
                 return new killercreepr.crux.core.item.dynamic.component.DynamicItemCustomModelData(object);
-            }
-        });
-
-        COMPONENT_REGISTRY.register("item_model", new FileGenericSingleDynamicComponent<>(DynamicItemItemModel.class) {
-            @Override
-            public @NotNull String jsonSerializerID() {
-                return "dynamic_item_item_model";
-            }
-
-            @Override
-            public @NotNull DynamicItemItemModel deserialize(@NotNull Object object) {
-                return new DynamicItemItemModel(object);
             }
         });
 
@@ -380,6 +369,18 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
                 return new DynamicItemAttributes(attributes);
             }
         });
+
+        COMPONENT_REGISTRY.register("item_model", new FileGenericSingleDynamicComponent<>(DynamicItemItemModel.class) {
+            @Override
+            public @NotNull String jsonSerializerID() {
+                return "dynamic_item_item_model";
+            }
+
+            @Override
+            public @NotNull DynamicItemItemModel deserialize(@NotNull Object object) {
+                return new DynamicItemItemModel(object);
+            }
+        });
     }
 
     public FileDynamicItem registerComponents(@NotNull FileRegistry registry){
@@ -411,13 +412,13 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
 
     public @Nullable DynamicItem buildItem(@NotNull FileContext<?> context, @NotNull FileElement e){
         if(e instanceof FileGeneric s){
-            return new BukkitDynamicItem.Builder(s.getAsString()).build();
+            return DynamicItem.builder().material(s.getAsString()).build();
         }
         if(!(e instanceof FileObject o)) return null;
         if(o.get("material") instanceof FileGeneric s){
-            return new BukkitDynamicItem.Builder(s.getAsString()).build();
+            return DynamicItem.builder().material(s.getAsString()).build();
         }
-        return o.isEmpty() ? null : new BukkitDynamicItem.Builder("").build();
+        return o.isEmpty() ? null : DynamicItem.builder().material("").build();
     }
 
     public @Nullable DynamicItem deserializeFromYaml(@NotNull FileContext<?> context, @NotNull FileElement e, @Nullable DynamicItem stack) {
@@ -431,15 +432,21 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
         if(o.get("material") instanceof FileGeneric s){
             stack = stack.withType(s.getAsString());
         }
-        if(o.get("amount") instanceof FileGeneric s){
+        if(o.get("amount") instanceof FileGeneric s) {
             stack = stack.withAmount(s.getAsString());
         }
 
         for(Map.Entry<String, FileElement> entry : o){
             FileDynamicItemComponent<?> handler = COMPONENT_REGISTRY.get(entry.getKey());
-            if(handler == null) continue;
+            if(handler == null){
+                Crux.log(Level.WARNING, "Component " + entry.getKey() + " does not exist for DynamicItem! " + o.asMap());
+                continue;
+            }
             DynamicItemComponent component = handler.deserializeFromFile(context, entry.getValue());
-            if(component == null) continue;
+            if(component == null){
+                Crux.log(Level.WARNING, "No object set for DynamicItemComponent " + entry.getKey() + "! " + o.asMap());
+                continue;
+            }
             stack = stack.withComponent(component);
         }
 
