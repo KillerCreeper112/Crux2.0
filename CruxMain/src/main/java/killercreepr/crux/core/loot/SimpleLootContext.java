@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Random;
 
+//todo this loot context thing needs to be worked out man
 public class SimpleLootContext extends DataComponentAccessor.SimpleImmutableHandler implements LootContext {
     protected final DataExchange info;
     public SimpleLootContext(Map<DataComponentType<?>, Holder<?>> map, DataExchange info) {
@@ -191,6 +192,24 @@ public class SimpleLootContext extends DataComponentAccessor.SimpleImmutableHand
 
             if(!has(LootCtxObjects.RANDOM)){
                 set(LootCtxObjects.RANDOM, new Random());
+            }
+
+            if(info == null) info = DataExchange.empty();
+
+            if(has(LootCtxObjects.LOOTED)){
+                info = info.append("looted", Holder.direct(get(LootCtxObjects.LOOTED)));
+            }
+            if(has(LootCtxObjects.LOOTER)){
+                info = info.append("looter", Holder.direct(get(LootCtxObjects.LOOTER)));
+            }
+            if(has(LootCtxObjects.LOCATION)){
+                info = info.append("location", Holder.direct(get(LootCtxObjects.LOCATION)));
+            }
+            if(has(LootCtxObjects.LUCK)){
+                info = info.append("luck", Holder.direct(get(LootCtxObjects.LUCK)));
+            }
+            if(has(LootCtxObjects.RANDOM)){
+                info = info.append("random", Holder.direct(get(LootCtxObjects.RANDOM)));
             }
 
             return new SimpleLootContext(map, info);

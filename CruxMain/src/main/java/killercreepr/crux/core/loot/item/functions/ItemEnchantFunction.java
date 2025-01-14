@@ -48,7 +48,6 @@ public class ItemEnchantFunction extends SimpleLootFunction<ItemStack> implement
                     RegistryKey.ENCHANTMENT
                 ).get(e.getEnchant()), level, true);
             });
-            //todo CustomEnchant.set(i, e.getEnchant(), level);
         }
         return i;
     }

@@ -3,6 +3,7 @@ package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 import killercreepr.crux.api.loot.conditions.LootCondition;
 import killercreepr.crux.api.registry.KeyedRegistry;
 import killercreepr.cruxconfig.config.common.FileContext;
+import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
@@ -29,7 +30,8 @@ public class FileLootCondition implements FileObjectHandler<LootCondition> {
 
     public @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e, @Nullable String target) {
         if(!(e instanceof FileObject o)) return null;
-        Key type = o.getObject(Key.class, "condition");
+        FileRegistry reg = ctx.getRegistry();
+        Key type = reg.deserializeFromFile(Key.class, o.get("condition"));
         if(type==null) return null;
         CustomFileLootCondition<?> handler = CUSTOM_HANDLERS.get(type);
         if(handler==null) throw new IllegalStateException("LootCondition type " + type + " does not exist!");

@@ -11,7 +11,7 @@ import java.util.function.UnaryOperator;
 public class LootCtxObjects {
     public static void register(){}
 
-    public static final DataComponentType<Random> RANDOM = register("invulnerable", builder -> builder);
+    public static final DataComponentType<Random> RANDOM = register("random", builder -> builder);
     public static final DataComponentType<Float> LUCK = register("luck", builder -> builder);
     public static final DataComponentType<Object> LOOTER = register("looter", builder -> builder);
     public static final DataComponentType<Object> LOOTED = register("looted", builder -> builder);
