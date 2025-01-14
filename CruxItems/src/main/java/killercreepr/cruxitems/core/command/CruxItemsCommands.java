@@ -36,10 +36,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class CruxItemsCommands {
@@ -179,11 +176,24 @@ public class CruxItemsCommands {
                                 )
                         ).then(
                             Commands.literal("clear")
+                                .executes(ctx -> clearComponents(
+                                    ctx.getSource(),
+                                    ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource())
+                                ))
+                        ).then(
+                            Commands.literal("remove")
                                 .then(
                                     Commands.argument("input", StringArgumentType.greedyString())
-                                        .executes(ctx -> clearComponents(
+                                        .suggests((source, builder) ->{
+                                            for (Map.Entry<Key, DataComponentType<?>> entry : CruxRegistries.DATA_COMPONENT_TYPE.entrySet()) {
+                                                builder.suggest(Crux.keyMinimalString(entry.getKey()));
+                                            }
+                                            return builder.buildFuture();
+                                        })
+                                        .executes(ctx -> removeComponents(
                                             ctx.getSource(),
-                                            ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource())
+                                            ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
+                                            ctx.getArgument("input", String.class)
                                         ))
                                 )
                         )
@@ -236,6 +246,24 @@ public class CruxItemsCommands {
             item.color(color);
         });
         Communicator.chat("Changed the color of main hand items on " + given + " entities.").use(getExecutor(source));
+        return given > 0 ? 1 : -1;
+    }
+
+    public static int removeComponents(@NotNull CommandSourceStack source, @NotNull Collection<Entity> targets, String input){
+        Collection<DataComponentType<?>> types = new HashSet<>();
+        String[] args = input.replace(" ", "").split(",");
+        for(String s : args){
+            Key key = Crux.key(s);
+            DataComponentType<?> type = CruxRegistries.DATA_COMPONENT_TYPE.get(key);
+            if(type == null) continue;
+            types.add(type);
+        }
+        int given = mainHandArgument(source, targets, e ->{
+            for(DataComponentType<?> type : types){
+                e.set(type, null);
+            }
+        });
+        Communicator.chat("Removed components on main hand items from " + given + " entities.").use(getExecutor(source));
         return given > 0 ? 1 : -1;
     }
 
