@@ -35,6 +35,7 @@ import killercreepr.cruxstructures.core.structure.component.StructureStoredBlock
 import killercreepr.cruxstructures.core.structure.component.StructureTickedStoredComponent;
 import killercreepr.cruxstructures.core.structure.module.WallsModule;
 import killercreepr.cruxstructures.core.structure.stored.SimpleStoredStructure;
+import killercreepr.cruxstructures.core.structure.stored.SimpleTickedStoredStructure;
 import net.kyori.adventure.key.Key;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -132,8 +133,10 @@ public class CruxStructuresModule implements CruxModule {
         fileStructureModule.TYPE_HANDLERS.register("clear_space", new FileClearSpaceModule());
         fileStructureModule.TYPE_HANDLERS.register("clear_region", new FileClearRegionModule());
 
+        var simpleStored = new FileSimpleStoredStructure<SimpleStoredStructure>();
         CfgRegistries.JSON_REGISTRY.forEach(registry ->{
-            registry.registerFileHandler(SimpleStoredStructure.class, new FileSimpleStoredStructure<SimpleStoredStructure>());
+            registry.registerFileHandler(SimpleStoredStructure.class, simpleStored);
+            registry.registerFileHandler(SimpleTickedStoredStructure.class, simpleStored);
             //registry.registerFileHandler(CfgStoredStructure.class, new FileCfgStoredStructure<>());
         });
 
