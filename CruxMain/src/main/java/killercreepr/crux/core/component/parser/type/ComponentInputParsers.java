@@ -15,6 +15,7 @@ import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.paper.ItemHolder;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
+import org.bukkit.Bukkit;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -69,8 +70,8 @@ public class ComponentInputParsers {
             return all.encodeToParser();
         }))
         .apply(ctx ->{
-            if(ctx.get() instanceof String s){
-                return SIMPLE_BLOCK_PREDICATE.decodeObject(s);
+            if(!(ctx.get() instanceof List<?>)){
+                return SIMPLE_BLOCK_PREDICATE.decodeObject(ctx.get());
             }
             Collection<String> list = ctx.get();
             Collection<BlockPredicate> parsed = new HashSet<>();
