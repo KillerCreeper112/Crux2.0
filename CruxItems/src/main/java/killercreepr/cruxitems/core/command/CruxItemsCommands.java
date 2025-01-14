@@ -11,14 +11,19 @@ import io.papermc.paper.command.brigadier.argument.resolvers.selector.EntitySele
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import killercreepr.crux.api.communication.Communicator;
+import killercreepr.crux.api.component.DataComponentType;
 import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.text.context.TextParserContext;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.command.argument.CruxCmdArguments;
 import killercreepr.crux.core.item.dynamic.component.DynamicItemCruxComponents;
 import killercreepr.crux.core.plugin.CruxPlugin;
+import killercreepr.crux.core.registries.CruxRegistries;
+import killercreepr.crux.core.util.CruxKey;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxitems.api.item.plugin.PluginItem;
 import killercreepr.cruxitems.core.command.argument.CruxItemsArguments;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
 import org.bukkit.command.CommandSender;
@@ -33,6 +38,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -159,6 +165,12 @@ public class CruxItemsCommands {
                             Commands.literal("apply")
                                 .then(
                                     Commands.argument("input", StringArgumentType.greedyString())
+                                        .suggests((source, builder) ->{
+                                            for (Map.Entry<Key, DataComponentType<?>> entry : CruxRegistries.DATA_COMPONENT_TYPE.entrySet()) {
+                                                builder.suggest(Crux.keyMinimalString(entry.getKey()));
+                                            }
+                                            return builder.buildFuture();
+                                        })
                                         .executes(ctx -> applyComponents(
                                             ctx.getSource(),
                                             ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),

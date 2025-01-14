@@ -12,6 +12,7 @@ import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.core.scheduler.CruxSimpleScheduler;
 import killercreepr.crux.core.text.tags.standard.CruxStandardTags;
 import killercreepr.crux.core.text.tags.standard.minimessage.*;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Bukkit;
@@ -132,6 +133,11 @@ public final class Crux {
 
     public static void log(@NotNull Level level, @NotNull String msg){
         log.log(level, msg);
+    }
+
+    public static String keyMinimalString(@NotNull Key key){
+        if(key.namespace().equals(NAMESPACE)) return key.value();
+        return key.asString();
     }
 
     public static @NotNull NamespacedKey key(@NotNull String key){
