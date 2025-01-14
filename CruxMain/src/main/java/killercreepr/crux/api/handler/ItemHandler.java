@@ -1,6 +1,7 @@
 package killercreepr.crux.api.handler;
 
 import killercreepr.crux.api.item.CruxItem;
+import killercreepr.crux.api.item.CruxItemType;
 import killercreepr.crux.paper.ItemHolder;
 import killercreepr.crux.paper.item.BukkitItemHolder;
 import net.kyori.adventure.key.Key;
@@ -11,6 +12,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,7 +28,13 @@ public interface ItemHandler {
 
     @Nullable
     ItemHolder getItem(@NotNull Key key);
+    @Contract("null -> null")
+    default @Nullable CruxItemType getItemType(@Nullable ItemStack item){
+        if(item == null) return null;
+        return getItemType(getType(item));
+    }
 
+    @Nullable CruxItemType getItemType(@NotNull Key key);
 
     default ItemStack damageItem(@NotNull ItemStack item, int amount, @Nullable Entity holder){
         if(holder instanceof LivingEntity e){
@@ -74,6 +82,11 @@ public interface ItemHandler {
             Material m = Registry.MATERIAL.get(key);
             if(m == null) return null;
             return new BukkitItemHolder(key);
+        }
+
+        @Override
+        public @Nullable CruxItemType getItemType(@NotNull Key key) {
+            return null;
         }
     }
 }

@@ -1,6 +1,8 @@
 package killercreepr.crux.core.item;
 
+import killercreepr.crux.api.component.DataComponentType;
 import killercreepr.crux.api.item.CruxItem;
+import killercreepr.crux.api.item.CruxItemType;
 import killercreepr.crux.api.text.format.FormatSerializer;
 import killercreepr.crux.api.text.provider.StringTagProvider;
 import killercreepr.crux.core.Crux;
@@ -318,6 +320,15 @@ public class SimpleCruxItem implements CruxItem {
 
     public @NotNull FormatSerializer getFormat() {
         return format;
+    }
+
+    @Override
+    public <T> T getOrDefaultData(DataComponentType<? extends T> type) {
+        T value = get(type);
+        if(value != null) return value;
+        CruxItemType itemType = Crux.handlers().item().getItemType(item);
+        if(itemType == null) return null;
+        return itemType.getDefaultData(type);
     }
 
     @Override

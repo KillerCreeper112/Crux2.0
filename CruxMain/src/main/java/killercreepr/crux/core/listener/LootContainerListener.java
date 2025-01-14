@@ -28,7 +28,7 @@ public class LootContainerListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
         ItemStack item = event.getItemInHand();
-        List<ItemLootTable> lootTable = CruxItem.wrap(item).get(CruxComponents.ITEM_LOOT_TABLES);
+        List<ItemLootTable> lootTable = CruxItem.wrap(item).getOrDefaultData(CruxComponents.ITEM_LOOT_TABLES);
         if(lootTable == null) return;
         Block b = event.getBlock();
         BlockState state = b.getState();

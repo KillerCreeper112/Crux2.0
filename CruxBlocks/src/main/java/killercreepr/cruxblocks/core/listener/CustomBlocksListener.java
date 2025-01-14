@@ -348,9 +348,9 @@ public class CustomBlocksListener implements Listener {
             if(!p.isSneaking() || (p.isSneaking() && item == null)) return;
         }
         if(CruxItem.isEmpty(item)) return;
-        CruxItem cruxItem = CruxItem.create(item);
+        CruxItem cruxItem = CruxItem.wrap(item);
 
-        CruxBlockGroup group = cruxItem.get(CruxBlockComponents.BLOCK_GROUP); //CruxBlocksPersistTags.CRUX_BLOCK_GROUP.get(item);
+        CruxBlockGroup group = cruxItem.getOrDefaultData(CruxBlockComponents.BLOCK_GROUP);
         if(group == null) return;
         Block placeBlock = getPlaceBlock(clickedBlock, blockFace);
         if(!placeBlock.isEmpty() && !placeBlock.isReplaceable()) return;

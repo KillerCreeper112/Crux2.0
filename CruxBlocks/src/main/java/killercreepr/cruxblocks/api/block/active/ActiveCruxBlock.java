@@ -150,8 +150,8 @@ public interface ActiveCruxBlock {
         else tooled = null;
         if(tooled == null || tooled.getTool() == null) return false;
 
-        CruxItem cruxItem = CruxItem.create(tooled.getTool());
-        ToolComponent toolComponent = cruxItem.get(CruxComponents.TOOL);
+        CruxItem cruxItem = CruxItem.wrap(tooled.getTool());
+        ToolComponent toolComponent = cruxItem.getOrDefaultData(CruxComponents.TOOL);
         if(toolComponent == null) return false;
         ToolComponent.Result result = toolComponent.test(Objects.requireNonNull(
             Crux.handlers().block().getBlock(getBlock())
@@ -178,8 +178,8 @@ public interface ActiveCruxBlock {
         ItemStack tool = tooled.getTool();
         if(tool == null) return 1f;
 
-        CruxItem cruxItem = CruxItem.create(tool);
-        ToolComponent toolComponent = cruxItem.get(CruxComponents.TOOL);
+        CruxItem cruxItem = CruxItem.wrap(tool);
+        ToolComponent toolComponent = cruxItem.getOrDefaultData(CruxComponents.TOOL);
         if(toolComponent == null) return 1f;
         ToolComponent.Result result = toolComponent.test(Objects.requireNonNull(
             Crux.handlers().block().getBlock(getBlock())

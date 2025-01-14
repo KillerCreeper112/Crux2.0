@@ -1,6 +1,7 @@
 package killercreepr.cruxitems.core;
 
 import killercreepr.crux.api.handler.ItemHandler;
+import killercreepr.crux.api.item.CruxItemType;
 import killercreepr.crux.api.plugin.module.CruxModule;
 import killercreepr.crux.api.text.tags.TagParser;
 import killercreepr.crux.core.Crux;
@@ -9,6 +10,7 @@ import killercreepr.crux.core.plugin.module.StandardModules;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.paper.ItemHolder;
 import killercreepr.crux.paper.item.BukkitItemHolder;
+import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import killercreepr.cruxitems.api.item.CruxedItem;
 import killercreepr.cruxitems.api.item.ItemDisplayFormatter;
 import killercreepr.cruxitems.api.item.plugin.PluginItem;
@@ -16,6 +18,8 @@ import killercreepr.cruxitems.api.values.ValuesProvider;
 import killercreepr.cruxitems.core.command.CruxItemsCommands;
 import killercreepr.cruxitems.core.config.Config;
 import killercreepr.cruxitems.core.config.CruxItemsConfigHook;
+import killercreepr.cruxitems.core.config.handler.FileCfgItemType;
+import killercreepr.cruxitems.core.item.CfgItemType;
 import killercreepr.cruxitems.core.item.GeneralCruxedItemDisplayUpdater;
 import killercreepr.cruxitems.core.item.PluginItemHolder;
 import killercreepr.cruxitems.core.listener.DisableRecipesListener;
@@ -30,6 +34,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Map;
 
 public class CruxItemsModule implements CruxModule, ItemHandler {
     public static final String NAMESPACE = StandardModules.CRUX_ITEMS;
@@ -62,6 +68,9 @@ public class CruxItemsModule implements CruxModule, ItemHandler {
         if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS)){
             CruxItemsConfigHook.register();
         }
+        CfgRegistries.SIMPLE_REGISTRY.forEach(reg ->{
+            reg.registerFileHandler(CfgItemType.class, new FileCfgItemType());
+        });
         registerTags(Crux.tags());
     }
 
@@ -112,5 +121,10 @@ public class CruxItemsModule implements CruxModule, ItemHandler {
         Material m = Registry.MATERIAL.get(key);
         if(m == null) return null;
         return new BukkitItemHolder(key);
+    }
+
+    @Override
+    public @Nullable CruxItemType getItemType(@NotNull Key key) {
+        return values.itemTypes().valueOr(Map.of()).get(key);
     }
 }
