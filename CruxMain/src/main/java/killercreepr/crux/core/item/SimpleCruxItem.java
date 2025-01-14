@@ -332,6 +332,40 @@ public class SimpleCruxItem implements CruxItem {
     }
 
     @Override
+    public boolean hasOrDefaultData(DataComponentType<?> type) {
+        return getOrDefaultData(type) != null;
+    }
+
+    @Override
+    public <T> Collection<T> getAllOfTypeOrDefaultData(Class<T> type) {
+        CruxItemType itemType = Crux.handlers().item().getItemType(item);
+        if(itemType == null || itemType.getDefaultData().isEmpty()) return getAllOfType(type);
+        Collection<T> list = new ArrayList<>(getAllOfType(type));
+        itemType.getDefaultData().forEach(defaultType ->{
+            if(has(defaultType)) return;
+            Object value = itemType.getDefaultData(defaultType);
+            if(!type.isAssignableFrom(value.getClass())) return;
+            list.add(type.cast(value));
+        });
+        return list;
+    }
+
+    @Override
+    public <T> void forEachAllOfTypeOrDefaultData(Class<T> type, Consumer<T> consumer) {
+        forEachAllOfType(type, consumer);
+        CruxItemType itemType = Crux.handlers().item().getItemType(item);
+        if(itemType == null || itemType.getDefaultData().isEmpty()){
+            return;
+        }
+        itemType.getDefaultData().forEach(defaultType ->{
+            if(has(defaultType)) return;
+            Object value = itemType.getDefaultData(defaultType);
+            if(!type.isAssignableFrom(value.getClass())) return;
+            consumer.accept(type.cast(value));
+        });
+    }
+
+    @Override
     public @Nullable PersistentDataHolder getComponentsPersistentHolder() {
         return item.getItemMeta();
     }

@@ -1,5 +1,6 @@
 package killercreepr.crux.api.item;
 
+import killercreepr.crux.api.component.DataComponentDefaultAccessor;
 import killercreepr.crux.api.component.DataComponentType;
 import killercreepr.crux.api.component.serialization.PersistHolderComponentHandler;
 import killercreepr.crux.api.text.format.FormatSerializer;
@@ -27,7 +28,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public interface CruxItem extends Cloneable, PersistHolderComponentHandler {
+public interface CruxItem extends Cloneable, PersistHolderComponentHandler, DataComponentDefaultAccessor {
     static boolean isEmpty(@Nullable ItemStack i){
         //pre 1.20.5
         //return i == null || i.getType().isEmpty();
@@ -150,6 +151,4 @@ public interface CruxItem extends Cloneable, PersistHolderComponentHandler {
     CruxItem item(@NotNull ItemStack item);
 
     @NotNull FormatSerializer getFormat();
-
-    <T> T getOrDefaultData(DataComponentType<? extends T> type);
 }
