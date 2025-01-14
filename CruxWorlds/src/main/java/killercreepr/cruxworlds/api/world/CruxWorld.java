@@ -35,7 +35,9 @@ public interface CruxWorld extends DataComponentHandler {
         getModules().forEach(WorldModule::onLoad);
     }
     default void onUnload(boolean save){
-        getModules().forEach(module -> module.onUnload(save));
+        getModules().forEach(module ->{
+            module.onUnload(save);
+        });
     }
     default void onDelete(){
         getModules().forEach(WorldModule::onDelete);
