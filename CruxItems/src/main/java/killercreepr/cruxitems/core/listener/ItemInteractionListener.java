@@ -77,7 +77,7 @@ public class ItemInteractionListener implements Listener {
     }
 
     public ItemUseResult genericUse(ItemUseContext ctx){
-        Collection<InteractableComponent> list = ctx.getItem().getAllOfType(InteractableComponent.class);
+        Collection<InteractableComponent> list = ctx.getItem().getAllOfTypeOrDefaultData(InteractableComponent.class);
         if(list == null) return null;
         return genericUse(ctx, list);
     }
