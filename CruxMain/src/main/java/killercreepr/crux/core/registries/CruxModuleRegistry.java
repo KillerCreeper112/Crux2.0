@@ -80,7 +80,11 @@ public class CruxModuleRegistry extends SimpleMappedRegistry<String, CruxModule>
 
     public CruxModuleRegistry unregisterAll(@NotNull CruxPlugin plugin){
         for(CruxModule m : this){
-            m.onDisable(plugin);
+            try{
+                m.onDisable(plugin);
+            }catch (Exception ignored){
+                ignored.printStackTrace();
+            }
         }
         clear();
         return this;

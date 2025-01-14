@@ -36,6 +36,32 @@ public interface ICruxJson extends ICruxFile {
         return json();
     }
 
+    default void createNewFileIfNeeded(){
+        File file = file();
+        try {
+            if(!file.getParentFile().exists()) file.getParentFile().mkdirs();
+            if(!file.exists()) {
+                PrintWriter pw = new PrintWriter(file, StandardCharsets.UTF_8);
+                pw.print("{");
+                pw.print("}");
+                pw.flush();
+                pw.close();
+            }
+            FileReader reader = reader();
+            if(reader != null){
+                reader.close();
+                setClosed(true);
+            }
+            if(reader == null || isClosed()){
+                reader = new FileReader(file);
+                reader(reader);
+            }
+            json(parser().fromJson(reader, JsonObject.class));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     default void reload(boolean createFile) {
         File file = file();
         try {
@@ -106,6 +132,7 @@ public interface ICruxJson extends ICruxFile {
             }
         }
         try {
+            createNewFileIfNeeded();
             String jsonString = pretty ? new GsonBuilder().setPrettyPrinting().create().toJson(json) :
                     new GsonBuilder().create().toJson(json);
             FileWriter fw = new FileWriter(file());
