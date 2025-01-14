@@ -24,7 +24,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.logging.Level;
 
 public class StandardFileLootConditions {
     public static void register(@NotNull FileLootCondition file){

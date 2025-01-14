@@ -7,7 +7,6 @@ import killercreepr.crux.api.loot.LootTable;
 import killercreepr.crux.api.loot.opened.OpenedLootObject;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import net.kyori.adventure.key.Key;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,7 +46,6 @@ public class SimpleLootTable<T> implements LootTable<T>, OpenedLootObject<T> {
     @Override
     public @NotNull List<T> populateLoot(@NotNull LootContext context, @Nullable Predicate<LootPoolObject<T>> exclude, boolean excludeEmpty) {
         List<T> list = new ArrayList<>();
-        Bukkit.broadcastMessage("loot=" + context.info().asMap());
         List<LootPool<T>> data = exclude == null ? this.pools : new ArrayList<>(this.pools);
         if(excludeEmpty && exclude != null) data.removeIf(x -> x.isEmptyWith(exclude));
         for(LootPool<T> pool : getPools()){

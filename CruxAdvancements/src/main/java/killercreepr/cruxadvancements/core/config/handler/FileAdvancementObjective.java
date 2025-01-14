@@ -5,6 +5,7 @@ import killercreepr.crux.api.registry.KeyedRegistry;
 import killercreepr.cruxadvancements.api.advancement.objective.AdvancementObjective;
 import killercreepr.cruxadvancements.core.advancement.objective.ObjectiveCommonData;
 import killercreepr.cruxconfig.config.common.FileContext;
+import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
@@ -37,7 +38,8 @@ public class FileAdvancementObjective implements FileObjectHandler<AdvancementOb
         if(!(e instanceof FileObject base)) return null;
         if(!(base.get("objective") instanceof FileObject o)) return null;
 
-        Key type = o.getObject(Key.class, "type");
+        FileRegistry reg = ctx.getRegistry();
+        Key type = reg.deserializeFromFile(Key.class, o.get("type"));
         if(type==null) return null;
         CustomFileAdvancementObjective<?> handler = CUSTOM_HANDLERS.get(type);
         if(handler==null) throw new IllegalStateException("AdvancementObject type " + type + " does not exist!");
