@@ -18,4 +18,5 @@ public class StandardModules {
     public static final String CRUX_GENERATION = "CruxGeneration";
     public static final String CRUX_WORLDS = "CruxWorlds";
     public static final String CRUX_FORM = "CruxForm";
+    public static final String CRUX_STATISTICS = "CruxStatistics";
 }

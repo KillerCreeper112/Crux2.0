@@ -47,7 +47,7 @@ public class EntityManager implements Listener {
         CruxMob mob = CruxMob.get(e);
         if(mob==null){
             Key key = Crux.handlers().entity().getType(e);
-            Key lootKey = Key.key(key.namespace(), "entity/" + key.value());
+            Key lootKey = Crux.key("entity/" + key.value());
 
             LootTable<ItemStack> lootTable = CruxRegistries.ITEM_LOOT_TABLE.get(lootKey);
             if(lootTable == null) return;

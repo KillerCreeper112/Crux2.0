@@ -26,6 +26,7 @@ include(
     "CruxWorlds",
 
     "CruxEntities",
+    "CruxStatistics",
 
     "CruxTest"
 )
