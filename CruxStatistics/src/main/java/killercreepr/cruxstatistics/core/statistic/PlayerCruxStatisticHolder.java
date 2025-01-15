@@ -63,4 +63,49 @@ public class PlayerCruxStatisticHolder extends PlayerDataHolder implements Entit
     public <T> int getStatistic(@NotNull CruxStatisticType<T> type, T value) {
         return data.getStatistic(type, value);
     }
+
+    @Override
+    public <T> void setStatistic(@NotNull CruxStatisticType<T> type, T value, int amount) {
+        data.setStatistic(type, value, amount);
+    }
+
+    @Override
+    public void setStatistic(@NotNull CruxStatisticType<?> type, int amount) {
+        data.setStatistic(type, amount);
+    }
+
+    @Override
+    public void setStatistic(@NotNull CruxStatistic<?> type, int amount) {
+        data.setStatistic(type, amount);
+    }
+
+    @Override
+    public <T> void incrementStatistic(@NotNull CruxStatisticType<T> type, T value, int amount) {
+        data.incrementStatistic(type, value, amount);
+    }
+
+    @Override
+    public void incrementStatistic(@NotNull CruxStatisticType<?> type, int amount) {
+        data.incrementStatistic(type, amount);
+    }
+
+    @Override
+    public void incrementStatistic(@NotNull CruxStatistic<?> type, int amount) {
+        data.incrementStatistic(type, amount);
+    }
+
+    @Override
+    public <T> void decrementStatistic(@NotNull CruxStatisticType<T> type, T value, int amount) {
+        data.decrementStatistic(type, value, amount);
+    }
+
+    @Override
+    public void decrementStatistic(@NotNull CruxStatisticType<?> type, int amount) {
+        data.decrementStatistic(type, amount);
+    }
+
+    @Override
+    public void decrementStatistic(@NotNull CruxStatistic<?> type, int amount) {
+        data.decrementStatistic(type, amount);
+    }
 }

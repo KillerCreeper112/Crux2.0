@@ -64,4 +64,49 @@ public class DataStatisticHolder implements EntityStatisticHolder {
     public <T> int getStatistic(@NotNull CruxStatisticType<T> type, T value) {
         return getStatistic(type.get(value));
     }
+
+    @Override
+    public <T> void setStatistic(@NotNull CruxStatisticType<T> type, T value, int amount) {
+        setStatistic(type.get(value), amount);
+    }
+
+    @Override
+    public void setStatistic(@NotNull CruxStatisticType<?> type, int amount) {
+        setStatistic(type.get(null), amount);
+    }
+
+    @Override
+    public void setStatistic(@NotNull CruxStatistic<?> type, int amount) {
+        stats.compute(type, (stat, value) -> amount == 0 ? null : amount);
+    }
+
+    @Override
+    public <T> void incrementStatistic(@NotNull CruxStatisticType<T> type, T value, int amount) {
+        incrementStatistic(type.get(value), amount);
+    }
+
+    @Override
+    public void incrementStatistic(@NotNull CruxStatisticType<?> type, int amount) {
+        incrementStatistic(type.get(null), amount);
+    }
+
+    @Override
+    public void incrementStatistic(@NotNull CruxStatistic<?> type, int amount) {
+        setStatistic(type, getStatistic(type) + amount);
+    }
+
+    @Override
+    public <T> void decrementStatistic(@NotNull CruxStatisticType<T> type, T value, int amount) {
+        decrementStatistic(type.get(value), amount);
+    }
+
+    @Override
+    public void decrementStatistic(@NotNull CruxStatisticType<?> type, int amount) {
+        decrementStatistic(type.get(null), amount);
+    }
+
+    @Override
+    public void decrementStatistic(@NotNull CruxStatistic<?> type, int amount) {
+        setStatistic(type, getStatistic(type) - amount);
+    }
 }
