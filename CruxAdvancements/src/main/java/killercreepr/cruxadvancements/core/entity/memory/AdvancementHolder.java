@@ -45,7 +45,7 @@ public class AdvancementHolder extends PlayerDataHolder implements Loadable {
     }
 
     public int getMaxTrackedAdvancements() {
-        return (int) BukkitStatHolder.holder(parent.getUUID()).getOrLoadStatValue(AdvancementStats.MAX_TRACKABLE_ADVANCEMENTS);
+        return (int) BukkitStatHolder.holder(parent.getUUID()).getStatValue(AdvancementStats.MAX_TRACKABLE_ADVANCEMENTS);
     }
 
     public AdvancementTracker getAdvancementTracker() {
