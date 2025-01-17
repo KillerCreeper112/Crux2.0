@@ -1,7 +1,6 @@
 package killercreepr.cruxstats.api.stat;
 
-import killercreepr.crux.api.valueproviders.number.NumberHolder;
-import killercreepr.cruxstats.core.stat.SimpleCruxStatInstance;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxstats.core.stat.SimpleStat;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
@@ -10,24 +9,18 @@ import org.jetbrains.annotations.Nullable;
 
 public interface CruxStat extends Keyed {
     static CruxStat stat(@NotNull Key key){
-        return new SimpleStat(key);
+        return stat(key, NumberProvider.zero());
     }
 
-    static CruxStat stat(@NotNull Key key, @NotNull NumberHolder base){
-        return new SimpleStat(key){
-            @Override
-            public @NotNull CruxStatInstance createNewInstance() {
-                return new SimpleCruxStatInstance(this, base);
-            }
-        };
+    static CruxStat stat(@NotNull Key key, @NotNull NumberProvider base){
+        return new SimpleStat(key, base);
     }
+    @NotNull NumberProvider baseValue();
 
     default double processValue(double value){
         return value;
     }
-    default @Nullable CruxStatInstance createNewInstance(){
-        return null;
-    }
+    @Nullable CruxStatInstance createNewInstance();
     enum Operation{
         ADD,
         MULTIPLY,

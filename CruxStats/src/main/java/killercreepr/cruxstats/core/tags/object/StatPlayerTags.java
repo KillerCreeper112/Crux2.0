@@ -35,7 +35,7 @@ public class StatPlayerTags implements ObjectTag<Player> {
                 CruxStat stat = CruxStatRegistries.STAT.get(key);
                 if(stat == null) return key + " stat not found";
                 CruxStatHolder holder = BukkitStatHolder.holder(object);
-                return holder.getOrLoadStatValue(stat) + "";
+                return holder.getStatValue(stat) + "";
             }))
             ;
     }

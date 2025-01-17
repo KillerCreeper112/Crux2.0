@@ -40,7 +40,7 @@ public class DataStatHolder implements EntityStatHolder {
         CruxStatInstance instance = getStat(stat);
         if(instance != null) return instance;
         instance = stat.createNewInstance();
-        if(instance == null) throw new UnsupportedOperationException(stat.key() + " cannot be create new instances!");
+        if(instance == null) throw new UnsupportedOperationException(stat.key() + " cannot create new stat instances!");
         stats.put(instance.getStat(), instance);
         return instance;
     }

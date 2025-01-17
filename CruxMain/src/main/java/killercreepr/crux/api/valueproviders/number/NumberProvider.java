@@ -14,6 +14,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public interface NumberProvider extends NumberHolder {
+    NumberProvider ZERO = constant(0);
+    static @NotNull NumberProvider zero(){
+        return ZERO;
+    }
+
     static @NotNull NumberProvider holder(@NotNull Holder<Number> holder){
         return new HolderNumber(holder);
     }
