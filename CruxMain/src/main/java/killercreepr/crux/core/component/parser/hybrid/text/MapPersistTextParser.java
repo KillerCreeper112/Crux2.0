@@ -41,14 +41,17 @@ public class MapPersistTextParser<T> implements PersistTextParser<T> {
     @Override
     public @NotNull T decodeObject(@NotNull Object object) throws IllegalArgumentException {
         if(!(object instanceof Map<?,?> map)) throw new IllegalArgumentException(object + " is not Map!");
+        TextInputField<T,?> base = elements.getOrDefault("", elements.get(null));
+        if(base != null){
+            if(base instanceof TextInputField.Holder<T,?> holder){
+                return (T) holder.getInputParser(object).decodeObject(object);
+            }
+            return (T) base.inputParser().decodeObject(object);
+        }
+
         Map<String, Object> parsed = new HashMap<>();
         elements.forEach((id, field) ->{
             if(id == null || id.isBlank()){
-                if(field instanceof TextInputField.Holder<T,?>){
-                    return;
-                }
-                Object decoded = field.inputParser().decodeObject(object);
-                parsed.putAll((Map<String, ?>) decoded);
                 return;
             }
             Object value = map.get(id);
@@ -62,16 +65,17 @@ public class MapPersistTextParser<T> implements PersistTextParser<T> {
 
     @Override
     public @NotNull Map<String, Object> encodeObject(@NotNull T object) {
+        TextInputField<T,?> base = elements.getOrDefault("", elements.get(null));
+        if(base != null){
+            if(base instanceof TextInputField.Holder<T,?> holder){
+                return (Map<String, Object>) holder.inputParser(object).encodeObjectUnchecked(object);
+            }
+            return (Map<String, Object>) base.inputParser().encodeObjectUnchecked(object);
+        }
+
         Map<String, Object> map = new HashMap<>();
         elements.forEach((id, field) ->{
             if(id == null || id.isBlank()){
-                if(field instanceof TextInputField.Holder<T,?> holder){
-                    Object encoded = holder.inputParser(object).encodeObjectUnchecked(object);
-                    map.putAll((Map<String, ?>) encoded);
-                    return;
-                }
-                Object encoded = field.inputParser().encodeObjectUnchecked(object);
-                map.putAll((Map<String, ?>) encoded);
                 return;
             }
 

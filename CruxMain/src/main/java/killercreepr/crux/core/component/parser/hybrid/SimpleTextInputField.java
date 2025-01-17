@@ -24,4 +24,24 @@ public class SimpleTextInputField<B, T> implements TextInputField<B, T> {
     public T parseField(B base) {
         return field.apply(base);
     }
+
+    public static class Holder<B, T> implements TextInputField.Holder<B, T>{
+        protected final Function<B, PersistTextParser<T>> baseObject;
+        protected final Function<Object, PersistTextParser<T>> object;
+
+        public Holder(Function<B, PersistTextParser<T>> baseObject, Function<Object, PersistTextParser<T>> object) {
+            this.baseObject = baseObject;
+            this.object = object;
+        }
+
+        @Override
+        public PersistTextParser<T> inputParser(B object) {
+            return baseObject.apply(object);
+        }
+
+        @Override
+        public PersistTextParser<T> inputParserFromObject(Object object) {
+            return this.object.apply(object);
+        }
+    }
 }

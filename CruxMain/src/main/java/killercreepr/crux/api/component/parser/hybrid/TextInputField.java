@@ -21,6 +21,12 @@ public interface TextInputField<B, T> {
         return new SimpleTextInputField<>(parser, field);
     }
 
+    static <B, T> TextInputField<B, T> fieldHolder(Class<B> type,
+                                                   Function<B, PersistTextParser> baseObject,
+                                                   Function<Object, PersistTextParser> object){
+        return new SimpleTextInputField.Holder<>((Function) baseObject, (Function) object);
+    }
+
     @NotNull
     PersistTextParser<T> inputParser();
     T parseField(B base);
@@ -37,6 +43,17 @@ public interface TextInputField<B, T> {
         PersistTextParser<T> inputParser(){
             throw new UnsupportedOperationException("Holder");
         }
+
+        default PersistTextParser<T> getInputParser(Object object){
+            try{
+                B value = (B) object;
+                return inputParser(value);
+            }catch (ClassCastException ignored){
+                return inputParserFromObject(object);
+            }
+        }
+
         PersistTextParser<T> inputParser(B object);
+        PersistTextParser<T> inputParserFromObject(Object object);
     }
 }

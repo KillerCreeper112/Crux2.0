@@ -36,6 +36,16 @@ public class MapDataType<T> implements PersistentDataType<PersistentDataContaine
 
     @Override
     public @NotNull PersistentDataContainer toPrimitive(@NotNull T complex, @NotNull PersistentDataAdapterContext context) {
+        TextInputField<T, ?> base = elements.getOrDefault("", elements.get(null));
+        if(base != null){
+            PersistTextParser<Object> serializer;
+            if(base instanceof TextInputField.Holder<T,?> holder){
+                serializer = (PersistTextParser<Object>) holder.getInputParser(complex);
+            }else serializer = (PersistTextParser<Object>) base.inputParser();
+
+            return (PersistentDataContainer) serializer.dataType().toPrimitive(complex, context);
+        }
+
         Map<String, Object> map;
 
         try{
@@ -44,10 +54,10 @@ public class MapDataType<T> implements PersistentDataType<PersistentDataContaine
         }catch (ClassCastException ignored){
             map = (Map<String, Object>) complex;
         }
-
         PersistentDataContainer c = context.newPersistentDataContainer();
         map.forEach((id, value) ->{
-            PersistTextParser<Object> serializer = (PersistTextParser<Object>) elements.get(id).inputParser();
+            TextInputField<T, ?> field = elements.get(id);
+            PersistTextParser<Object> serializer = (PersistTextParser<Object>) field.inputParser();
             CruxTag.set(c, id, serializer.dataType(), value);
         });
         return c;
@@ -58,12 +68,24 @@ public class MapDataType<T> implements PersistentDataType<PersistentDataContaine
         Map<String, Object> map = new HashMap<>();
         for(NamespacedKey key : c.getKeys()){
             String id = key.value();
+            if(!elements.containsKey(id)) continue;
             PersistTextParser<Object> serializer = (PersistTextParser<Object>) elements.get(id).inputParser();
             Object value = CruxTag.get(c, id, serializer.dataType(), null);
             if(value == null) continue;
             //todo Make better for performance
             map.put(id, serializer.encodeObject(value));
         }
+
+        TextInputField<T, ?> base = elements.getOrDefault("", elements.get(null));
+        if(base != null){
+            PersistTextParser<Object> serializer;
+            if(base instanceof TextInputField.Holder<T,?> holder){
+                serializer = (PersistTextParser<Object>) holder.getInputParser(map);
+            }else serializer = (PersistTextParser<Object>) base.inputParser();
+
+            return (T) ((PersistentDataType<PersistentDataContainer, ?>)serializer.dataType()).fromPrimitive(c, context);
+        }
+
         return parser.decodeObject(map);
     }
 }
