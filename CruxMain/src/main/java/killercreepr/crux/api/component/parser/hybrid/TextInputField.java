@@ -28,4 +28,15 @@ public interface TextInputField<B, T> {
     default T parseFieldObject(Object base){
         return parseField((B) base);
     }
+
+    interface Holder<B, T> extends TextInputField<B, T>{
+        default T parseField(B base){
+            throw new UnsupportedOperationException("Holder");
+        }
+        default @NotNull
+        PersistTextParser<T> inputParser(){
+            throw new UnsupportedOperationException("Holder");
+        }
+        PersistTextParser<T> inputParser(B object);
+    }
 }

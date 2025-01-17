@@ -43,6 +43,14 @@ public class MapPersistTextParser<T> implements PersistTextParser<T> {
         if(!(object instanceof Map<?,?> map)) throw new IllegalArgumentException(object + " is not Map!");
         Map<String, Object> parsed = new HashMap<>();
         elements.forEach((id, field) ->{
+            if(id == null || id.isBlank()){
+                if(field instanceof TextInputField.Holder<T,?>){
+                    return;
+                }
+                Object decoded = field.inputParser().decodeObject(object);
+                parsed.putAll((Map<String, ?>) decoded);
+                return;
+            }
             Object value = map.get(id);
             if(value == null) return;
             Object decoded = field.inputParser().decodeObject(value);
@@ -56,6 +64,17 @@ public class MapPersistTextParser<T> implements PersistTextParser<T> {
     public @NotNull Map<String, Object> encodeObject(@NotNull T object) {
         Map<String, Object> map = new HashMap<>();
         elements.forEach((id, field) ->{
+            if(id == null || id.isBlank()){
+                if(field instanceof TextInputField.Holder<T,?> holder){
+                    Object encoded = holder.inputParser(object).encodeObjectUnchecked(object);
+                    map.putAll((Map<String, ?>) encoded);
+                    return;
+                }
+                Object encoded = field.inputParser().encodeObjectUnchecked(object);
+                map.putAll((Map<String, ?>) encoded);
+                return;
+            }
+
             Object parsedField = field.parseField(object);
             if(parsedField == null) return;
             Object encoded = field.inputParser().encodeObjectUnchecked(parsedField);

@@ -15,7 +15,6 @@ import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.paper.ItemHolder;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
-import org.bukkit.Bukkit;
 
 import java.util.Collection;
 import java.util.HashSet;
