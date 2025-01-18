@@ -27,6 +27,18 @@ public class UniformNumberArray implements NumberProvider {
         this.numbers = numbers;
     }
 
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(numbers);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this) return true;
+        if(!(obj instanceof UniformNumberArray n)) return false;
+        return Arrays.equals(n.numbers, numbers);
+    }
+
     public @NotNull NumberProvider @NotNull[] getNumbers() {
         return numbers;
     }

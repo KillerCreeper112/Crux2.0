@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class UniformNumber implements NumberProvider {
@@ -19,6 +20,18 @@ public class UniformNumber implements NumberProvider {
     public UniformNumber(@NotNull NumberProvider min, @NotNull NumberProvider max) {
         this.minInclusive = min;
         this.maxInclusive = max;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(minInclusive, maxInclusive);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this) return true;
+        if(!(obj instanceof UniformNumber n)) return false;
+        return Objects.equals(n.minInclusive, minInclusive) && Objects.equals(n.maxInclusive, maxInclusive);
     }
 
     public @NotNull Number sample(@NotNull Random random, @NotNull Number minInclusive, @NotNull Number maxInclusive) {

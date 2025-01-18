@@ -6,6 +6,7 @@ import killercreepr.crux.core.util.CruxMath;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.Random;
 
 public class EquationNumber implements NumberProvider {
@@ -16,6 +17,18 @@ public class EquationNumber implements NumberProvider {
 
     public @NotNull String getEquation() {
         return equation;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(equation);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this) return true;
+        if(!(obj instanceof EquationNumber n)) return false;
+        return Objects.equals(n.equation, equation);
     }
 
     @Override

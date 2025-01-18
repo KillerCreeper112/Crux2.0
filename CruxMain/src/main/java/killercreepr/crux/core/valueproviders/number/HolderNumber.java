@@ -15,6 +15,7 @@ public class HolderNumber implements NumberProvider {
         this.holder = holder;
     }
 
+
     @Override
     public @NotNull Number getMinValue() {
         return value();
