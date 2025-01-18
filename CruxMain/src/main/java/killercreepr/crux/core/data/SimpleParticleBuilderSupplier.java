@@ -36,11 +36,11 @@ public class SimpleParticleBuilderSupplier implements ParticleBuilderSupplier {
     public boolean equals(Object obj) {
         if(obj == this) return true;
         if(!(obj instanceof SimpleParticleBuilderSupplier other)) return false;
-        return particle.equals(other.particle) &&
-            count.equals(other.count) &&
-            offset.equals(other.offset) &&
-            extra.equals(other.extra) &&
-            data.equals(other.data);
+        return Objects.equals(particle, other.particle) &&
+            Objects.equals(count, other.count) &&
+            Objects.equals(offset, other.offset) &&
+            Objects.equals(extra, other.extra) &&
+            Objects.equals(data, other.data);
     }
 
     @Override
