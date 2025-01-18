@@ -7,11 +7,14 @@ import killercreepr.crux.core.valueproviders.number.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public interface NumberProvider extends NumberHolder {
     NumberProvider ZERO = constant(0);
@@ -39,6 +42,20 @@ public interface NumberProvider extends NumberHolder {
     }
     static @NotNull UniformNumberArray uniformArray(@NotNull Number... array){
         return new UniformNumberArray(array);
+    }
+
+    static @NotNull String serializeToString(@NotNull NumberProvider provider){
+        return switch (provider) {
+            case ConstantNumber n ->
+                BigDecimal.valueOf(n.getConstant().doubleValue()).stripTrailingZeros().toPlainString();
+            case EquationNumber n -> n.getEquation();
+            case UniformNumber n ->
+                serializeToString(n.getMinInclusive()) + "," + serializeToString(n.getMaxInclusive());
+            case UniformNumberArray n -> "[" + Arrays.stream(n.getNumbers())
+                .map(NumberProvider::serializeToString)
+                .collect(Collectors.joining(",")) + "]";
+            default -> BigDecimal.valueOf(provider.value().doubleValue()).stripTrailingZeros().toPlainString();
+        };
     }
 
     static @NotNull NumberProvider parseFromString(@NotNull String text){

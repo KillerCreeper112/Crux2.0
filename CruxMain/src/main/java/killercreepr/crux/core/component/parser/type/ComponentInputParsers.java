@@ -28,7 +28,7 @@ import java.util.Objects;
 
 public class ComponentInputParsers {
     public static PersistTextParser<NumberProvider> NUMBER_PROVIDER = PersistTextParser.elementBuilder(NumberProvider.class)
-        .field(TextInputField.field(PersistTextParser.STRING, e -> "todo"))//todo
+        .field(TextInputField.field(PersistTextParser.STRING, NumberProvider::serializeToString))
         .apply(ctx ->{
             String input = ctx.get();
             return NumberProvider.parseFromString(input);
