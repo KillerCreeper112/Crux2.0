@@ -11,6 +11,8 @@ import killercreepr.crux.api.item.tag.ItemTag;
 import killercreepr.crux.api.loot.item.ItemLootTable;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.component.parser.hybrid.text.ListPersistTextParser;
+import killercreepr.crux.core.item.predicate.ItemAllPredicate;
+import killercreepr.crux.core.item.predicate.ItemAnyPredicate;
 import killercreepr.crux.core.persistence.CruxPersistence;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.paper.ItemHolder;
@@ -67,22 +69,34 @@ public class ComponentInputParsers {
             return invert ? ItemPredicate.fromInverted(p) : p;
         });
 
-    public static PersistTextParser<ItemPredicate> ITEM_PREDICATE = PersistTextParser.elementBuilder(ItemPredicate.class)
-        .field(TextInputField.field(PersistTextParser.LIST.STRING, e ->{
-            if(!(e instanceof StringListEncodeComponent all)) throw new IllegalArgumentException(
-                "ItemPredicate must be a StringListEncodeComponent! " + e
-            );
-            return all.encodeToParser();
+    public static PersistTextParser<ItemPredicate> ITEM_PREDICATE = PersistTextParser.mapBuilder(ItemPredicate.class)
+        .field("type", TextInputField.field(PersistTextParser.STRING, e ->{
+            if(e instanceof ItemAllPredicate) return "all_of";
+            if(e instanceof ItemAnyPredicate) return "any_of";
+            return null;
+        }))
+        .field("terms", TextInputField.field(PersistTextParser.LIST.STRING, e ->{
+            if(!(e instanceof StringListEncodeComponent c)) return null;
+            return c.encodeToParser();
         }))
         .apply(ctx ->{
-            if(!(ctx.get() instanceof List<?>)){
+            if(!(ctx.getOptional("terms") instanceof List<?> list)){
                 return SIMPLE_ITEM_PREDICATE.decodeObject(ctx.get());
             }
-            Collection<String> list = ctx.get();
+
             Collection<ItemPredicate> parsed = new HashSet<>();
-            for(String s : list){
+            for(Object s : list){
                 ItemPredicate predicate = SIMPLE_ITEM_PREDICATE.decodeObject(s);
                 parsed.add(predicate);
+            }
+            String type = ctx.getOptional("type", "all_of");
+            switch (type.toLowerCase()){
+                case "all_of" ->{
+                    return ItemPredicate.fromAllOf(parsed);
+                }
+                case "any_of" ->{
+                    return ItemPredicate.fromAnyOf(parsed);
+                }
             }
             return ItemPredicate.fromAllOf(parsed);
         });

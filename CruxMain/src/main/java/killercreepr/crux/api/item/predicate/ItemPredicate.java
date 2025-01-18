@@ -1,10 +1,7 @@
 package killercreepr.crux.api.item.predicate;
 
 import killercreepr.crux.api.data.tag.Tag;
-import killercreepr.crux.core.item.predicate.ItemAllPredicate;
-import killercreepr.crux.core.item.predicate.ItemInvertPredicate;
-import killercreepr.crux.core.item.predicate.ItemTagPredicate;
-import killercreepr.crux.core.item.predicate.ItemTypePredicate;
+import killercreepr.crux.core.item.predicate.*;
 import net.kyori.adventure.key.Key;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -25,6 +22,13 @@ public interface ItemPredicate extends Predicate<ItemStack> {
     }
     static ItemPredicate fromAllOf(@NotNull ItemPredicate... children){
         return new ItemAllPredicate(Arrays.asList(children));
+    }
+
+    static ItemPredicate fromAnyOf(@NotNull Collection<ItemPredicate> children){
+        return new ItemAnyPredicate(children);
+    }
+    static ItemPredicate fromAnyOf(@NotNull ItemPredicate... children){
+        return new ItemAnyPredicate(Arrays.asList(children));
     }
 
     static ItemPredicate fromInverted(@NotNull ItemPredicate predicate){
