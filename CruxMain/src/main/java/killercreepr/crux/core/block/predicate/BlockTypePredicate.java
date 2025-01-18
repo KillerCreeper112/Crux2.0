@@ -1,14 +1,15 @@
 package killercreepr.crux.core.block.predicate;
 
 import killercreepr.crux.api.block.CruxedBlock;
-import killercreepr.crux.api.block.predicate.BlockPredicateComponent;
+import killercreepr.crux.api.block.predicate.BlockPredicate;
+import killercreepr.crux.api.component.parser.StringListEncodeComponent;
 import net.kyori.adventure.key.Key;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class BlockTypePredicate implements BlockPredicateComponent {
+public class BlockTypePredicate implements BlockPredicate, StringListEncodeComponent {
     protected final @NonNull Key type;
     public BlockTypePredicate(@NonNull Key type) {
         this.type = type;

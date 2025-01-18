@@ -2,6 +2,7 @@ package killercreepr.crux.api.item.predicate;
 
 import killercreepr.crux.api.data.tag.Tag;
 import killercreepr.crux.core.item.predicate.ItemAllPredicate;
+import killercreepr.crux.core.item.predicate.ItemInvertPredicate;
 import killercreepr.crux.core.item.predicate.ItemTagPredicate;
 import killercreepr.crux.core.item.predicate.ItemTypePredicate;
 import net.kyori.adventure.key.Key;
@@ -25,5 +26,10 @@ public interface ItemPredicate extends Predicate<ItemStack> {
     static ItemPredicate fromAllOf(@NotNull ItemPredicate... children){
         return new ItemAllPredicate(Arrays.asList(children));
     }
+
+    static ItemPredicate fromInverted(@NotNull ItemPredicate predicate){
+        return new ItemInvertPredicate(predicate);
+    }
+
     boolean test(@NotNull ItemStack item);
 }

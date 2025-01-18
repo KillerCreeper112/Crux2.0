@@ -1,10 +1,10 @@
-package killercreepr.crux.api.block.predicate;
+package killercreepr.crux.api.component.parser;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public interface BlockPredicateComponent extends BlockPredicate {
+public interface StringListEncodeComponent {
     @NotNull
     List<String> encodeToParser();
 }
