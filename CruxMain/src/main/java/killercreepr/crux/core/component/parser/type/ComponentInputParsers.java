@@ -5,6 +5,7 @@ import killercreepr.crux.api.block.tag.BlockTag;
 import killercreepr.crux.api.component.parser.StringListEncodeComponent;
 import killercreepr.crux.api.component.parser.hybrid.PersistTextParser;
 import killercreepr.crux.api.component.parser.hybrid.TextInputField;
+import killercreepr.crux.api.data.ParticleBuilderSupplier;
 import killercreepr.crux.api.item.component.ToolComponent;
 import killercreepr.crux.api.item.predicate.ItemPredicate;
 import killercreepr.crux.api.item.tag.ItemTag;
@@ -20,8 +21,11 @@ import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.paper.ItemHolder;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
+import org.bukkit.Color;
 import org.bukkit.Particle;
 import org.bukkit.Registry;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -181,4 +185,70 @@ public class ComponentInputParsers {
         .field("default_mining_speed", TextInputField.field(PersistTextParser.FLOAT, ToolComponent::getDefaultMiningSpeed))
         .field("rules", TextInputField.field(new ListPersistTextParser<>(TOOL_RULE, null), ToolComponent::getRules))
         .apply(ctx -> new ToolComponent.Simple(ctx.getOptional("default_mining_speed", 1f), ctx.getOptional("rules")));
+
+    public static PersistTextParser<Particle.DustOptions> PARTICLE_DUST_OPTIONS = PersistTextParser.mapBuilder(Particle.DustOptions.class)
+        .field("color", TextInputField.field(PersistTextParser.COLOR, Particle.DustOptions::getColor))
+        .field("size", TextInputField.field(PersistTextParser.FLOAT, Particle.DustOptions::getSize))
+        .apply(ctx ->{
+            Color color = ctx.getOptional("color", Color.WHITE);
+            float size = ctx.getOptional("size", 1f);
+            return new Particle.DustOptions(color, size);
+        });
+    public static PersistTextParser<Particle.DustTransition> PARTICLE_DUST_TRANSITION = PersistTextParser.mapBuilder(Particle.DustTransition.class)
+        .field("from_color", TextInputField.field(PersistTextParser.COLOR, Particle.DustOptions::getColor))
+        .field("to_color", TextInputField.field(PersistTextParser.COLOR, Particle.DustOptions::getColor))
+        .field("size", TextInputField.field(PersistTextParser.FLOAT, Particle.DustOptions::getSize))
+        .apply(ctx ->{
+            Color fromColor = ctx.getOptional("from_color", Color.WHITE);
+            Color toColor = ctx.getOptional("to_color", Color.WHITE);
+            float size = ctx.getOptional("size", 1f);
+            return new Particle.DustTransition(fromColor, toColor, size);
+        });
+
+    public static PersistTextParser<ParticleBuilderSupplier> PARTICLE_BUILDER_SUPPLIER = PersistTextParser.mapBuilder(ParticleBuilderSupplier.class)
+        .field("particle", TextInputField.field(PARTICLE, e -> e.particle().value()))
+        .field("offset", TextInputField.field(NUMBER_VECTOR, ParticleBuilderSupplier::offset))
+        .field("count", TextInputField.field(NUMBER_PROVIDER, ParticleBuilderSupplier::count))
+        .field("extra", TextInputField.field(NUMBER_PROVIDER, ParticleBuilderSupplier::extra))
+        .field("item", TextInputField.field(PersistTextParser.KEY, e ->{
+            if(!(e.openData() instanceof ItemStack i)) return null;
+            return Crux.handlers().item().getType(i);
+        }))
+        .field("block_data", TextInputField.field(PersistTextParser.KEY, e ->{
+            if(!(e.openData() instanceof BlockData i)) return null;
+            return i.getMaterial().key();
+        }))
+        .field("dust_options", TextInputField.field(PARTICLE_DUST_OPTIONS, e ->{
+            if(!(e.openData() instanceof Particle.DustOptions i)) return null;
+            return i;
+        }))
+        .field("dust_transition", TextInputField.field(PARTICLE_DUST_TRANSITION, e ->{
+            if(!(e.openData() instanceof Particle.DustTransition i)) return null;
+            return i;
+        }))
+        .apply(ctx ->{
+            Particle particle = ctx.getOptional("particle", Particle.FIREWORK);
+            NumberVector offset = ctx.getOptional("offset");
+            NumberProvider count = ctx.getOptional("count");
+            NumberProvider extra = ctx.getOptional("extra");
+
+            Object data = null;
+            if(ctx.getOptional("item") instanceof Key k){
+                data = Crux.handlers().item().getItem(k).value();
+            }else if(ctx.getOptional("block_data") instanceof Key k) {
+                data = Registry.MATERIAL.get(k).createBlockData();
+            }else if(ctx.getOptional("dust_options") instanceof Particle.DustOptions k) {
+                data = k;
+            }else if(ctx.getOptional("dust_transition") instanceof Particle.DustTransition k) {
+                data = k;
+            }
+
+            return ParticleBuilderSupplier.builder()
+                .particle(particle)
+                .offset(offset)
+                .count(count)
+                .extra(extra)
+                .data(data)
+                .build();
+        });
 }

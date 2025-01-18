@@ -8,6 +8,13 @@ public interface NumberVector {
     static NumberVector vector(@NotNull NumberProvider x, @NotNull NumberProvider y, @NotNull NumberProvider z){
         return new SimpleNumberVector(x, y, z);
     }
+    static NumberVector vector(double x, double y, double z){
+        return new SimpleNumberVector(
+            NumberProvider.constant(x),
+            NumberProvider.constant(y),
+            NumberProvider.constant(z)
+        );
+    }
 
     @NotNull
     NumberProvider x();
