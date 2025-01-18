@@ -8,6 +8,8 @@ import killercreepr.crux.api.valueproviders.vector.NumberVector;
 import org.bukkit.Particle;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class SimpleParticleBuilderSupplier implements ParticleBuilderSupplier {
     protected final Holder<Particle> particle;
     protected final NumberProvider count;
@@ -21,6 +23,24 @@ public class SimpleParticleBuilderSupplier implements ParticleBuilderSupplier {
         this.offset = offset;
         this.extra = extra;
         this.data = data;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+            particle, count, offset, extra, data
+        );
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this) return true;
+        if(!(obj instanceof SimpleParticleBuilderSupplier other)) return false;
+        return particle.equals(other.particle) &&
+            count.equals(other.count) &&
+            offset.equals(other.offset) &&
+            extra.equals(other.extra) &&
+            data.equals(other.data);
     }
 
     @Override
@@ -55,7 +75,9 @@ public class SimpleParticleBuilderSupplier implements ParticleBuilderSupplier {
 
     @Override
     public @NotNull ParticleBuilder build() {
-        ParticleBuilder build = new ParticleBuilder(particle.value());
+        ParticleBuilder build = new ParticleBuilder(particle.value())
+            .offset(0, 0, 0)
+            .extra(0);
         if(count != null){
             build.count(count.value().intValue());
         }
