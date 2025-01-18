@@ -9,6 +9,8 @@ import killercreepr.crux.api.item.component.ToolComponent;
 import killercreepr.crux.api.item.predicate.ItemPredicate;
 import killercreepr.crux.api.item.tag.ItemTag;
 import killercreepr.crux.api.loot.item.ItemLootTable;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
+import killercreepr.crux.api.valueproviders.vector.NumberVector;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.component.parser.hybrid.text.ListPersistTextParser;
 import killercreepr.crux.core.item.predicate.ItemAllPredicate;
@@ -25,6 +27,25 @@ import java.util.List;
 import java.util.Objects;
 
 public class ComponentInputParsers {
+    public static PersistTextParser<NumberProvider> NUMBER_PROVIDER = PersistTextParser.elementBuilder(NumberProvider.class)
+        .field(TextInputField.field(PersistTextParser.STRING, e -> "todo"))//todo
+        .apply(ctx ->{
+            String input = ctx.get();
+            return NumberProvider.parseFromString(input);
+        });
+
+    public static PersistTextParser<NumberVector> NUMBER_VECTOR = PersistTextParser.mapBuilder(NumberVector.class)
+        .field("x", TextInputField.field(NUMBER_PROVIDER, NumberVector::x))
+        .field("y", TextInputField.field(NUMBER_PROVIDER, NumberVector::y))
+        .field("z", TextInputField.field(NUMBER_PROVIDER, NumberVector::z))
+        .apply(ctx ->{
+            return NumberVector.vector(
+                ctx.get("x"),
+                ctx.get("y"),
+                ctx.get("z")
+            );
+        });
+
     public static PersistTextParser<ItemHolder> ITEM_HOLDER = PersistTextParser.elementBuilder(ItemHolder.class)
         .field(TextInputField.field(PersistTextParser.KEY, ItemHolder::key))
         .apply(ctx ->{
