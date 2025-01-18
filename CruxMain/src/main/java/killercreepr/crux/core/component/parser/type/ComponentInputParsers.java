@@ -20,6 +20,8 @@ import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.paper.ItemHolder;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
+import org.bukkit.Particle;
+import org.bukkit.Registry;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -27,6 +29,13 @@ import java.util.List;
 import java.util.Objects;
 
 public class ComponentInputParsers {
+    public static PersistTextParser<Particle> PARTICLE = PersistTextParser.elementBuilder(Particle.class)
+        .field(TextInputField.field(PersistTextParser.KEY, Keyed::key))
+        .apply(ctx ->{
+            Key key = ctx.get();
+            return Registry.PARTICLE_TYPE.get(key);
+        });
+
     public static PersistTextParser<NumberProvider> NUMBER_PROVIDER = PersistTextParser.elementBuilder(NumberProvider.class)
         .field(TextInputField.field(PersistTextParser.STRING, NumberProvider::serializeToString))
         .apply(ctx ->{
