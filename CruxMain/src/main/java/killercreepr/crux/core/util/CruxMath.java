@@ -155,7 +155,6 @@ public class CruxMath {
         return new Vector(vx, vy, vz);
     }
 
-
     public static boolean hasOccurredWithin(long value, int ticks){
         return (System.currentTimeMillis() - (50L * ticks)) <= value;
     }

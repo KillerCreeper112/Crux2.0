@@ -38,6 +38,9 @@ public interface CruxPosition {
         return new LocationPos(v.getX(), v.getY(), v.getZ());
     }
 
+    static @NotNull CruxPosition precise(@NotNull CruxPosition v){
+        return precise(v.x(), v.y(), v.z());
+    }
 
     static @NotNull CruxPosition block(int x, int y, int z){
         return new BlockPos(x, y, z);
@@ -50,6 +53,9 @@ public interface CruxPosition {
     }
     static @NotNull CruxPosition block(@NotNull Vector v){
         return new BlockPos(v.getBlockX(), v.getBlockY(), v.getBlockZ());
+    }
+    static @NotNull CruxPosition block(@NotNull CruxPosition v){
+        return new BlockPos(v.blockX(), v.blockY(), v.blockZ());
     }
 
     @Contract(pure = true)
