@@ -10,12 +10,15 @@ import killercreepr.cruxstructures.api.event.StructurePlaceEvent;
 import killercreepr.cruxstructures.core.structure.stored.SimpleStoredStructure;
 import net.kyori.adventure.key.Keyed;
 import org.bukkit.Location;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.util.BoundingBox;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
@@ -80,4 +83,6 @@ public interface Structure extends Keyed, DataComponentHandler {
         return getBlocks(rotation, null);
     }
     @NotNull Collection<CruxPosition> getBlocks(double rotation, @Nullable Predicate<CruxPosition> filter);
+    @ApiStatus.Experimental
+    @NotNull Map<CruxPosition, BlockData> getBlockMap(double rotation);
 }

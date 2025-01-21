@@ -22,7 +22,10 @@ public class DataHolderRegistry extends SimpleKeyedRegistry<DataHolder> {
     protected final @NotNull Map<Key, TickedDataHolder> tickedHolders = new HashMap<>();
 
     public <E extends DataHolder> void onRegistered(@NotNull Key key, @NotNull E value){
-        if(value instanceof TickedDataHolder t) tickedHolders.put(key, t);
+        if(value instanceof TickedDataHolder t){
+            tickedHolders.put(key, t);
+            t.adding();
+        }
     }
 
     public void onRemoved(@NotNull Key key){

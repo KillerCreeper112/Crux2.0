@@ -110,6 +110,7 @@ public class BlockPos implements CruxPosition {
 
     @Override
     public @NotNull BlockPos rotateAroundY(@NotNull CruxPosition center, double angle) {
+        if(angle == 0D) return this;
         double radians = Math.toRadians(angle*-1);
         double cosTheta = Math.cos(radians);
         double sinTheta = Math.sin(radians);

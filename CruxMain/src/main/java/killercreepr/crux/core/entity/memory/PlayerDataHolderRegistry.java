@@ -24,6 +24,7 @@ public class PlayerDataHolderRegistry extends DataHolderRegistry {
     public <E extends DataHolder> void onRegistered(@NotNull Key key, @NotNull E value) {
         if(value instanceof PlayerTickDataHolder t){
             playerTickedHolders.put(key, t);
+            t.adding();
             return;
         }
         super.onRegistered(key, value);

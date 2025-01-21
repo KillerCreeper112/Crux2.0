@@ -21,6 +21,7 @@ import killercreepr.cruxstructures.api.structure.Structure;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,7 +29,9 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 
@@ -141,6 +144,22 @@ public class FAWEStructure extends DataComponentHandler.Simple implements Struct
             if(filter != null && !filter.test(pos)) return;
 
             list.add(pos);
+        });
+        return list;
+    }
+
+    @Override
+    public @NotNull Map<CruxPosition, BlockData> getBlockMap(double rotation) {
+        Map<CruxPosition, BlockData> list = new HashMap<>();
+        Clipboard clipboard = holder.getClipboards().getFirst();
+        clipboard.forEach(block ->{
+            BlockState state = clipboard.getBlock(block);
+            if(state.isAir()) return;
+            CruxPosition pos = BlockPos.at(block.x(), block.y(), block.z()).rotateAroundY(
+                originPos(), rotation
+            );
+
+            list.put(pos, BukkitAdapter.adapt(state));
         });
         return list;
     }
