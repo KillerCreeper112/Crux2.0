@@ -2,6 +2,7 @@ package killercreepr.crux.core.math;
 
 import killercreepr.crux.api.math.CruxLocation;
 import killercreepr.crux.api.math.CruxPosition;
+import killercreepr.crux.core.util.CruxMath;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.util.NumberConversions;
@@ -292,17 +293,17 @@ public class SimpleCruxLocation implements CruxLocation {
 
     @Override
     public int blockX() {
-        return (int) x;
+        return CruxMath.floorBlock(x);
     }
 
     @Override
     public int blockY() {
-        return (int) y;
+        return CruxMath.floorBlock(y);
     }
 
     @Override
     public int blockZ() {
-        return (int) z;
+        return CruxMath.floorBlock(z);
     }
 
     @Override
