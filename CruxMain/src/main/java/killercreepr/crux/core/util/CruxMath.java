@@ -4,6 +4,7 @@ import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.parser.ParseException;
 import killercreepr.crux.api.math.CruxPosition;
+import org.bukkit.block.BlockFace;
 import org.bukkit.util.NumberConversions;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -100,6 +101,34 @@ public class CruxMath {
             case 3 -> DECIMAL_FORMAT_3;
             default -> new CruxNumberFormat(decimalPlaces);
         };
+    }
+
+    public static BlockFace getClosestYawDirection(float yaw) {
+        // Normalize yaw to [0, 360)
+        yaw = (yaw + 360) % 360;
+
+        if (yaw >= 315 || yaw < 45) {
+            return BlockFace.NORTH;
+        } else if (yaw >= 45 && yaw < 135) {
+            return BlockFace.EAST;
+        } else if (yaw >= 135 && yaw < 225) {
+            return BlockFace.SOUTH;
+        } else if (yaw >= 225 && yaw < 315) {
+            return BlockFace.WEST;
+        }
+        throw new IllegalStateException("Invalid yaw! " + yaw);
+    }
+
+    public static BlockFace getClosestPitchDirection(float pitch) {
+        // Normalize pitch to [-90, 90] range
+        pitch = Math.max(-90, Math.min(90, pitch));
+
+        if (pitch >= -45 && pitch <= 45) {
+            return BlockFace.SELF;
+        } else if (pitch < -45) {
+            return BlockFace.UP;
+        }
+        return BlockFace.DOWN;
     }
 
     public static @NotNull String format(@NotNull Number number){
