@@ -103,6 +103,33 @@ public class CruxMath {
         };
     }
 
+    public static float clampClosestYaw(float yaw){
+        yaw = (yaw + 360) % 360;
+
+        if (yaw >= 315 || yaw < 45) {
+            return 180f; //north
+        } else if (yaw >= 45 && yaw < 135) {
+            return -90f; //BlockFace.EAST;
+        } else if (yaw >= 135 && yaw < 225) {
+            return 0f; //south
+        } else if (yaw >= 225 && yaw < 315) {
+            return 90f; //BlockFace.WEST;
+        }
+        return yaw;
+    }
+
+    public static float clampClosestPitch(float pitch) {
+        // Normalize pitch to [-90, 90] range
+        pitch = Math.max(-90, Math.min(90, pitch));
+
+        if (pitch >= -45 && pitch <= 45) {
+            return 0f;
+        } else if (pitch < -45) {
+            return -90f;
+        }
+        return 90f;
+    }
+
     public static BlockFace getClosestYawDirection(float yaw) {
         // Normalize yaw to [0, 360)
         yaw = (yaw + 360) % 360;
