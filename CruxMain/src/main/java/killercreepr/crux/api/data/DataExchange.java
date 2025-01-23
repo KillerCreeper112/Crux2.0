@@ -105,19 +105,19 @@ public interface DataExchange extends Iterable<Holder<?>> {
 
     <T> T getOrDefault(@NotNull String id, @NotNull Class<T> type, @Nullable T defaultValue);
 
-    default <T> T getOrDefault(@NotNull Class<T> find, @Nullable Function<DataExchange, T> defaultValue){
+    default <T> T getWithDefault(@NotNull Class<T> find, @Nullable Function<DataExchange, T> defaultValue){
         T value = get(find);
         if(value != null) return value;
         return defaultValue == null ? null : defaultValue.apply(this);
     }
 
-    default Object getOrDefault(@NotNull String id, @Nullable Function<DataExchange, Object> defaultValue){
+    default Object getWithDefault(@NotNull String id, @Nullable Function<DataExchange, Object> defaultValue){
         Object value = get(id);
         if(value != null) return value;
         return defaultValue == null ? null : defaultValue.apply(this);
     }
 
-    default <T> T getOrDefault(@NotNull String id, @NotNull Class<T> type, @Nullable Function<DataExchange, T> defaultValue){
+    default <T> T getWithDefault(@NotNull String id, @NotNull Class<T> type, @Nullable Function<DataExchange, T> defaultValue){
         T value = get(id, type);
         if(value != null) return value;
         return defaultValue == null ? null : defaultValue.apply(this);
