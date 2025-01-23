@@ -28,6 +28,7 @@ public interface BlockHandler {
     CruxedBlock getBlock(@NotNull Block block);
     @NotNull Key getType(@NotNull Block block, @NotNull BlockData data);
     @NotNull Key getType(@NotNull BlockState state);
+    @NotNull Key getType(@NotNull BlockData data);
 
     class Dummy implements BlockHandler {
 
@@ -67,6 +68,11 @@ public interface BlockHandler {
         @Override
         public @NotNull Key getType(@NotNull BlockState state) {
             return state.getType().key();
+        }
+
+        @Override
+        public @NotNull Key getType(@NotNull BlockData data) {
+            return data.getMaterial().key();
         }
     }
 }

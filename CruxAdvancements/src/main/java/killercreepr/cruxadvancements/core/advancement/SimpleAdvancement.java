@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SimpleAdvancement implements CruxAdvancement {
     protected final @NotNull Key key;
@@ -25,7 +26,7 @@ public class SimpleAdvancement implements CruxAdvancement {
     protected final @Nullable CruxAdvanceReward reward;
     //we're using strings here because Minecraft stores progress as strings as well.
     //So... just in case if we'd ever want to store more than just UUIDs here in the future
-    protected final @NotNull Map<String, CruxAdvancementProgress> progressMap = new HashMap<>();
+    protected final @NotNull Map<String, CruxAdvancementProgress> progressMap = new ConcurrentHashMap<>();
 
     public SimpleAdvancement(@NotNull Key key, @Nullable Key parentKey, @NotNull CruxAdvancementIcon icon, @NotNull CruxCriteria criteria, @Nullable CruxAdvanceReward reward) {
         this.key = key;

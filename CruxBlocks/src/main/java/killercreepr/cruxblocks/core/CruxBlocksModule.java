@@ -246,6 +246,13 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
         return cruxBlock.key();
     }
 
+    @Override
+    public @NotNull Key getType(@NotNull BlockData data) {
+        CruxBlock cruxBlock = getBlockRegistry().getByBlockData(data);
+        if(cruxBlock == null) return data.getMaterial().key();
+        return cruxBlock.key();
+    }
+
     public static boolean callRemoveBlockDataEvent(@NotNull Block block, @Nullable Event bukkitEvent) {
         if(!CustomBlockData.hasCustomBlockData(block, Crux.getMainPlugin()) || CustomBlockData.isProtected(block, Crux.getMainPlugin())) {
             return false;
