@@ -17,6 +17,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Base64;
+
 public class ItemStackTags implements ObjectTag<ItemStack> {
     @Override
     public @NotNull Class<ItemStack> getObjectType() {
@@ -32,6 +34,7 @@ public class ItemStackTags implements ObjectTag<ItemStack> {
     public @Nullable StringTagContainer requestStrings(@NotNull ItemStack item, @NotNull TagParser tags) {
         Tag.StringParser stackAmount = (args, context) -> item.getAmount() + "";
         return new StringTagContainer(tags)
+            .add(Tag.string("base64", (args, ctx) -> Base64.getEncoder().encodeToString(item.serializeAsBytes())))
             .add(Tag.string("amount", stackAmount))
             .add(Tag.string("stack", stackAmount))
             .add(Tag.string("count", stackAmount))

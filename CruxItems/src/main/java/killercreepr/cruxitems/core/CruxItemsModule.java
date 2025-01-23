@@ -119,7 +119,7 @@ public class CruxItemsModule implements CruxModule, ItemHandler {
         PluginItem pluginItem = CruxItemRegistries.ITEMS.get(key);
         if(pluginItem != null) return new PluginItemHolder(key);
         Material m = Registry.MATERIAL.get(key);
-        if(m == null) return null;
+        if(m == null || !m.isItem()) return null;
         return new BukkitItemHolder(key);
     }
 

@@ -134,6 +134,7 @@ public class Format implements FormatSerializer {
             .tags(tagProvider)
             .build();
         for(String s : list){
+            s = deserializeString(s, tagProvider);
             List<String> found = matchStringList(s, container, ctx);
             if(found==null){
                 formated.add(s);
