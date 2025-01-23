@@ -107,13 +107,13 @@ public class CruxMath {
         yaw = (yaw + 360) % 360;
 
         if (yaw >= 315 || yaw < 45) {
-            return 180f; //north
+            return 0f; //north
         } else if (yaw >= 45 && yaw < 135) {
-            return -90f; //BlockFace.EAST;
+            return 90f; //BlockFace.EAST;
         } else if (yaw >= 135 && yaw < 225) {
-            return 0f; //south
+            return 180f; //south
         } else if (yaw >= 225 && yaw < 315) {
-            return 90f; //BlockFace.WEST;
+            return -90f; //BlockFace.WEST;
         }
         return yaw;
     }

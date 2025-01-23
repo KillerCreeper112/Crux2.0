@@ -31,6 +31,9 @@ public class LocationTags implements ObjectTag<Location> {
             .add(Tag.string("x", (args, ctx) -> object.x() + ""))
             .add(Tag.string("y", (args, ctx) -> object.y() + ""))
             .add(Tag.string("z", (args, ctx) -> object.z() + ""))
+            .add(Tag.string("block_x", (args, ctx) -> object.getBlockX() + ""))
+            .add(Tag.string("block_y", (args, ctx) -> object.getBlockY() + ""))
+            .add(Tag.string("block_z", (args, ctx) -> object.getBlockZ() + ""))
             .add(Tag.string("yaw", (args, ctx) -> object.getYaw() + ""))
             .add(Tag.string("pitch", (args, ctx) -> object.getPitch() + ""))
             ;

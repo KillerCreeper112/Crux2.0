@@ -20,6 +20,8 @@ public class CruxStandardTags {
             new BlockTags(),
             new BlockStateTags(),
             new CruxPositionTags(),
+            new CruxLocationTags(),
+            new VectorTags(),
             new LocationTags(),
             new UserTags(),
             new EntityTags(),

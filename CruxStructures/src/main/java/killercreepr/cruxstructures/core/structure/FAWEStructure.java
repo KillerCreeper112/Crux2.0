@@ -6,6 +6,7 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
+import com.sk89q.worldedit.extent.transform.BlockTransformExtent;
 import com.sk89q.worldedit.function.operation.Operation;
 import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
@@ -152,9 +153,18 @@ public class FAWEStructure extends DataComponentHandler.Simple implements Struct
     public @NotNull Map<CruxPosition, BlockData> getBlockMap(double rotation) {
         Map<CruxPosition, BlockData> list = new HashMap<>();
         Clipboard clipboard = holder.getClipboards().getFirst();
+
+        AffineTransform transform = new AffineTransform();
+        transform = transform.rotateY(rotation);
+        ClipboardHolder holder = new ClipboardHolder(clipboard);
+        holder.setTransform(holder.getTransform().combine(transform));
+
+        BlockTransformExtent blockTransform = new BlockTransformExtent(clipboard, holder.getTransform());
+
         clipboard.forEach(block ->{
             BlockState state = clipboard.getBlock(block);
             if(state.isAir()) return;
+            state = blockTransform.transform(state);
             CruxPosition pos = BlockPos.at(block.x(), block.y(), block.z()).rotateAroundY(
                 originPos(), rotation
             );
