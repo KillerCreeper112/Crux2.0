@@ -8,6 +8,7 @@ import com.ticxo.modelengine.api.model.bone.BoneBehaviorTypes;
 import com.ticxo.modelengine.api.model.bone.ModelBone;
 import com.ticxo.modelengine.api.model.bone.type.SubHitbox;
 import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.data.util.Pair;
 import killercreepr.cruxentities.entity.mob.goal.CruxMobGoal;
 import killercreepr.cruxentities.modelengine.wrapper.IModelEntity;
 import org.bukkit.entity.Entity;
@@ -104,6 +105,23 @@ public class CruxMobModeledGoal extends CruxMobGoal implements IModelEntity {
             if(uuid.equals(hitbox.getHitboxEntity().getUniqueId())) return true;
         }
         return false;
+    }
+
+    public Pair<String, SubHitbox> getModelSubHitbox(@NotNull Entity e){
+        if(shouldUpdateModelSubHitboxCache()){
+            updateModelSubHitboxCache();
+        }
+        if(cachedSubHitboxBones == null) return null;
+        if(cachedModel == null) return null;
+        UUID uuid = e.getUniqueId();
+        for(String boneID : cachedSubHitboxBones){
+            ModelBone bone = cachedModel.getBone(boneID).orElse(null);
+            if(bone == null) continue;
+            SubHitbox hitbox = bone.getBoneBehavior(BoneBehaviorTypes.SUB_HITBOX).orElse(null);
+            if(hitbox == null) continue;
+            if(uuid.equals(hitbox.getHitboxEntity().getUniqueId())) return new Pair<>(boneID, hitbox);
+        }
+        return null;
     }
 
     public void updateModelSubHitboxCache(){
