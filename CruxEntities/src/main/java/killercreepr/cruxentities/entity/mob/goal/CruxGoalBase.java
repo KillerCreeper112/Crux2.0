@@ -116,11 +116,15 @@ public class CruxGoalBase implements ICruxGoal {
         return !mob.equals(target);
     }
 
-    protected double getForgetTargetDistance(){
+    public double getForgetTargetDistance(){
         return 128D;
     }
 
-    protected double getFollowDistance(){
+    public double getFollowDistance(){
+        AttributeInstance i = mob.getAttribute(Attribute.FOLLOW_RANGE);
+        return i == null ? 16D : i.getValue();
+    }
+    public double getFindTargetRange(){
         AttributeInstance i = mob.getAttribute(Attribute.FOLLOW_RANGE);
         return i == null ? 16D : i.getValue();
     }
@@ -216,9 +220,9 @@ public class CruxGoalBase implements ICruxGoal {
     }
 
     public @Nullable Entity findTarget(@Nullable Predicate<Entity> targetCheck){
-        double followRange = getFollowDistance();
+        double followRange = getFindTargetRange();
 
-        DynamicLocation loc = EntityLocation.from(mob);
+        DynamicLocation loc = EntityLocation.createEntity(mob);
         final List<LivingEntity> targets = new GetEntityNear<>(loc, LivingEntity.class)
             .range(followRange)
             .operation(GetNear.Operation.NEAREST)
@@ -232,7 +236,7 @@ public class CruxGoalBase implements ICruxGoal {
             e -> isValidNaturalTarget(e) && (targetCheck == null || targetCheck.test(e))
         ), mob.getLocation(), -1, false);*/
 
-        Collection<Mob> teammates = new GetEntityNear<>(EntityLocation.from(mob), Mob.class)
+        Collection<Mob> teammates = new GetEntityNear<>(loc, Mob.class)
             .range(followRange)
             .filter(this::isValidTeammate)
             .find();
