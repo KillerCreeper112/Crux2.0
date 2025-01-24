@@ -3,6 +3,7 @@ package killercreepr.cruxstructures.api.world.module;
 import killercreepr.crux.api.data.Reloadable;
 import killercreepr.crux.api.data.tick.Ticked;
 import killercreepr.crux.api.data.world.WorldChunkStorage;
+import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.cruxstructures.api.structure.ActiveStructure;
 import killercreepr.cruxstructures.api.structure.StoredStructure;
 import killercreepr.cruxstructures.api.structure.generation.StructureGenerator;
@@ -29,6 +30,12 @@ public interface StructureWorldModule extends WorldModule, Ticked, Reloadable {
 
     void addStoredStructure(StoredStructure stored, Chunk chunk);
 
+    <T extends ActiveStructure> @Nullable T getFirstActiveAt(@NotNull Class<T> type, @NotNull CruxPosition block);
+
+    <T extends ActiveStructure> @Nullable T getFirstActiveAt(@NotNull Class<T> type, @NotNull CruxPosition block, @Nullable Predicate<T> filter);
+    <T extends ActiveStructure> @NotNull Collection<T> getActiveAt(@NotNull Class<T> type, @NotNull CruxPosition block, @Nullable Predicate<T> filter);
+
+
     <T extends ActiveStructure> @Nullable T getFirstActiveAt(@NotNull Class<T> type, @NotNull Block block);
 
     <T extends ActiveStructure> @Nullable T getFirstActiveAt(@NotNull Class<T> type, @NotNull Block block, @Nullable Predicate<T> filter);
@@ -40,6 +47,19 @@ public interface StructureWorldModule extends WorldModule, Ticked, Reloadable {
     <T extends ActiveStructure> @NotNull Collection<T> getActiveAt(@NotNull Class<T> type, @NotNull Block block);
 
     <T extends ActiveStructure> @NotNull Collection<T> getActiveAt(@NotNull Class<T> type, @NotNull Block block, @Nullable Predicate<T> filter);
+
+    @NotNull Collection<StoredStructure> getStoredAt(@NotNull CruxPosition block);
+
+    @NotNull Collection<StoredStructure> getStoredAt(@NotNull CruxPosition block, @Nullable Predicate<StoredStructure> filter);
+
+    <T extends StoredStructure> @NotNull Collection<T> getStoredAt(@NotNull Class<T> type, @NotNull CruxPosition block);
+
+    <T extends StoredStructure> @NotNull Collection<T> getStoredAt(@NotNull Class<T> type, @NotNull CruxPosition block, @Nullable Predicate<T> filter);
+
+    <T extends StoredStructure> @Nullable T getFirstStoredAt(@NotNull Class<T> type, @NotNull CruxPosition block);
+
+    <T extends StoredStructure> @Nullable T getFirstStoredAt(@NotNull Class<T> type, @NotNull CruxPosition block, @Nullable Predicate<T> filter);
+    //
 
     @NotNull Collection<StoredStructure> getStoredAt(@NotNull Block block);
 

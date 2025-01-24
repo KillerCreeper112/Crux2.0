@@ -7,6 +7,8 @@ import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.data.world.WorldBlockPosedStorage;
 import killercreepr.crux.core.plugin.CruxPlugin;
+import killercreepr.crux.core.util.CruxCollection;
+import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxstructures.api.structure.ActiveStructure;
 import killercreepr.cruxstructures.api.structure.StoredStructure;
@@ -177,10 +179,17 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
     }
 
     public <T extends ActiveStructure> @Nullable T getFirstActiveAt(@NotNull Class<T> type, @NotNull Block block, @Nullable Predicate<T> filter){
-        for(T t : getActiveAt(type, block, filter)){
-            return t;
-        }
-        return null;
+        return CruxCollection.getFirst(getActiveAt(type, block, filter));
+    }
+
+    @Override
+    public <T extends ActiveStructure> @Nullable T getFirstActiveAt(@NotNull Class<T> type, @NotNull CruxPosition block) {
+        return getFirstActiveAt(type, block, null);
+    }
+
+    @Override
+    public <T extends ActiveStructure> @Nullable T getFirstActiveAt(@NotNull Class<T> type, @NotNull CruxPosition block, @Nullable Predicate<T> filter) {
+        return CruxCollection.getFirst(getActiveAt(type, block, filter));
     }
 
     public @NotNull Collection<ActiveStructure> getActiveAt(@NotNull Block block){
@@ -195,9 +204,9 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
         return getActiveAt(type, block, null);
     }
 
-    public <T extends ActiveStructure> @NotNull Collection<T> getActiveAt(@NotNull Class<T> type, @NotNull Block block, @Nullable Predicate<T> filter){
+    public <T extends ActiveStructure> @NotNull Collection<T> getActiveAt(@NotNull Class<T> type, @NotNull CruxPosition block, @Nullable Predicate<T> filter){
         Collection<T> list = new HashSet<>();
-        Vector pos = block.getLocation().toVector();
+        Vector pos = block.toVector();
         activeStructures.forEach(chunkStorage ->{
             for(ActiveStructure s : chunkStorage){
                 if(!s.getData().getBoundingBox().contains(pos)) continue;
@@ -209,6 +218,52 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
         });
         return list;
     }
+
+    public <T extends ActiveStructure> @NotNull Collection<T> getActiveAt(@NotNull Class<T> type, @NotNull Block block, @Nullable Predicate<T> filter){
+        return getActiveAt(type, CruxPosition.block(block), filter);
+    }
+
+    @Override
+    public @NotNull Collection<StoredStructure> getStoredAt(@NotNull CruxPosition block) {
+        return getStoredAt(StoredStructure.class, block);
+    }
+
+    @Override
+    public @NotNull Collection<StoredStructure> getStoredAt(@NotNull CruxPosition block, @Nullable Predicate<StoredStructure> filter) {
+        return getStoredAt(StoredStructure.class, block, filter);
+    }
+
+    @Override
+    public @NotNull <T extends StoredStructure> Collection<T> getStoredAt(@NotNull Class<T> type, @NotNull CruxPosition block) {
+        return getStoredAt(type, block, null);
+    }
+
+    @Override
+    public @NotNull <T extends StoredStructure> Collection<T> getStoredAt(@NotNull Class<T> type, @NotNull CruxPosition block, @Nullable Predicate<T> filter) {
+        Collection<T> list = new HashSet<>();
+        Vector pos = block.toVector();
+        storedStructures.forEach(chunkStorage ->{
+            for(StoredStructure s : chunkStorage){
+                if(!s.getBoundingBox().contains(pos)) continue;
+                if(!type.isAssignableFrom(s.getClass())) continue;
+                T value = type.cast(s);
+                if(filter != null && !filter.test(value)) continue;
+                list.add(value);
+            }
+        });
+        return list;
+    }
+
+    @Override
+    public <T extends StoredStructure> @Nullable T getFirstStoredAt(@NotNull Class<T> type, @NotNull CruxPosition block) {
+        return getFirstStoredAt(type, block, null);
+    }
+
+    @Override
+    public <T extends StoredStructure> @Nullable T getFirstStoredAt(@NotNull Class<T> type, @NotNull CruxPosition block, @Nullable Predicate<T> filter) {
+        return CruxCollection.getFirst(getStoredAt(type, block, filter));
+    }
+
     public @NotNull Collection<StoredStructure> getStoredAt(@NotNull Block block){
         return getStoredAt(block, null);
     }
@@ -241,10 +296,7 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
     }
 
     public <T extends StoredStructure> @Nullable T getFirstStoredAt(@NotNull Class<T> type, @NotNull Block block, @Nullable Predicate<T> filter){
-        for(T t : getStoredAt(type, block, filter)){
-            return t;
-        }
-        return null;
+        return CruxCollection.getFirst(getStoredAt(type, block, filter));
     }
 
     public Collection<StoredStructure> getStored(@Nullable Predicate<StoredStructure> filter){
