@@ -17,6 +17,12 @@ public interface IDesignEntity extends IEntityWrapper {
         return this;
     }
 
+    default IDesignEntity setBaseEntityVisible(boolean value){
+        ModeledEntity modeled = getOrCreateModeledEntity();
+        modeled.setBaseEntityVisible(value);
+        return this;
+    }
+
     default @NotNull Optional<ActiveModel> attemptAddModel(@NotNull String id, boolean overrideHitbox){
         ModeledEntity modeled = getOrCreateModeledEntity();
         Optional<ActiveModel> gotted = getModel(id);

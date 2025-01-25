@@ -55,6 +55,7 @@ public interface CruxAttribute extends Keyed {
 
     CruxAttribute MOVEMENT_SPEED = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("movement_speed")));
     CruxAttribute TARGET_HALT_RANGE = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("target_halt_range")));
+    CruxAttribute FIND_TARGET_RANGE = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("find_target_range")));
 
     default double getDefaultValue(){
         return 0D;
