@@ -1,18 +1,21 @@
 package killercreepr.crux.api.event;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.WorldBorder;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CruxEntityDamageEvent extends EntityEvent implements Cancellable {
+public class CruxEntityDamageEvent extends Event implements Cancellable {
     private final static HandlerList handlers = new HandlerList();
+    protected final Entity victim;
     protected Entity damager;
     protected double dmg;
     protected double kb;
@@ -28,7 +31,8 @@ public class CruxEntityDamageEvent extends EntityEvent implements Cancellable {
     public CruxEntityDamageEvent(@NotNull Entity victim, @Nullable Entity damager, @Nullable Location attackLoc,
                                  double trueDmg, double trueKb, double trueUpKb,
                                  double dmg, double kb, double upKb) {
-        super(victim);
+        super(!Bukkit.isPrimaryThread());
+        this.victim = victim;
         this.damager = damager;
         this.trueDmg = trueDmg;
         this.trueKb = trueKb;
@@ -45,6 +49,14 @@ public class CruxEntityDamageEvent extends EntityEvent implements Cancellable {
                                  double dmg, double kb, double upKb, @Nullable Location hitPosition) {
         this(victim, damager, attackLoc, trueDmg, trueKb, trueUpKb, dmg, kb, upKb);
         this.hitPosition = hitPosition;
+    }
+
+    public @NotNull Entity getEntity() {
+        return victim;
+    }
+
+    public @NotNull Entity getVictim() {
+        return victim;
     }
 
     public @Nullable DamageCause getCause() {

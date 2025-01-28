@@ -320,7 +320,7 @@ public class CruxGoalBase implements ICruxGoal {
         return result;
     }
 
-    public void attack(@NotNull Collection<Entity> targets){
+    public void attack(@NotNull Collection<? extends Entity> targets){
         attack(targets.toArray(new Entity[0]));
     }
 
