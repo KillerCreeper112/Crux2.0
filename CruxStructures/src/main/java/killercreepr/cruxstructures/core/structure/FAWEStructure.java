@@ -1,5 +1,7 @@
 package killercreepr.cruxstructures.core.structure;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -33,17 +35,49 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 
 public class FAWEStructure extends DataComponentHandler.Simple implements Structure {
+    public static final Cache<String, ClipboardHolder> CACHE = CacheBuilder.newBuilder()
+        .maximumSize(100)
+        .expireAfterWrite(30, TimeUnit.MINUTES)
+        .softValues()
+        .initialCapacity(50)
+        .build();
+
+    public static ClipboardHolder getOrCreateClipboard(@NotNull String fileName){
+        ClipboardHolder holder = CACHE.getIfPresent(fileName);
+        if(holder != null) return holder;
+        holder = loadClipboardFromFile(fileName);
+        CACHE.put(fileName, holder);
+        return holder;
+    }
+
+    public static ClipboardHolder loadClipboardFromFile(@NotNull String fileName){
+        File schematicFile = new File(WorldEdit.getInstance().getSchematicsFolderPath().toString() + "/" + fileName + ".schem");
+        ClipboardFormat format = ClipboardFormats.findByFile(schematicFile);
+        if(format == null) {
+            throw new RuntimeException("Invalid schematic format for schematic " + schematicFile.getName() + "!");
+        }
+
+        try{
+            Clipboard clipboard = format.load(schematicFile);
+            return new ClipboardHolder(clipboard);
+        }catch (IOException e){
+            throw new RuntimeException(e);
+        }
+    }
+
     protected final @NotNull Key key;
-    protected final @NotNull ClipboardHolder holder;
+    protected final @NotNull String schematicID;
     protected final @NotNull BoundingBox box;
     protected final @NotNull BlockPos originPos;
-    public FAWEStructure(@NotNull Key key, @NotNull ClipboardHolder holder) {
+    @Deprecated
+    public FAWEStructure(@NotNull Key key, @NotNull String schematicID, @NotNull ClipboardHolder holder) {
         this.key = key;
-        this.holder = holder;
+        this.schematicID = schematicID;
         Clipboard clipboard = holder.getClipboards().getFirst();
         BlockVector3 min = clipboard.getMinimumPoint();
         BlockVector3 max = clipboard.getMaximumPoint();
@@ -57,11 +91,12 @@ public class FAWEStructure extends DataComponentHandler.Simple implements Struct
     }
 
     public FAWEStructure(@NotNull Key key, @NotNull String filename) {
-        this(key, new File(WorldEdit.getInstance().getSchematicsFolderPath().toString() + "/" + filename + ".schem"));
+        this(key, filename, new File(WorldEdit.getInstance().getSchematicsFolderPath().toString() + "/" + filename + ".schem"));
     }
 
-    public FAWEStructure(@NotNull Key key, @NotNull File schematicFile) {
+    public FAWEStructure(@NotNull Key key, @NotNull String schematicID, @NotNull File schematicFile) {
         this.key = key;
+        this.schematicID = schematicID;
         if(!schematicFile.exists()) {
             throw new RuntimeException("Cannot find schematic file at " + schematicFile.getAbsolutePath() + "!");
         }
@@ -70,22 +105,17 @@ public class FAWEStructure extends DataComponentHandler.Simple implements Struct
             throw new RuntimeException("Invalid schematic format for schematic " + schematicFile.getName() + "!");
         }
 
-        try{
-            Clipboard clipboard = format.load(schematicFile);
-            BlockVector3 min = clipboard.getMinimumPoint();
-            BlockVector3 max = clipboard.getMaximumPoint();
+        Clipboard clipboard = getOrCreateClipboard(schematicID).getClipboards().getFirst();
+        BlockVector3 min = clipboard.getMinimumPoint();
+        BlockVector3 max = clipboard.getMaximumPoint();
 
-            BlockVector3 origin = clipboard.getOrigin();
-            originPos = new BlockPos(origin.x(), origin.y(), origin.z());
+        BlockVector3 origin = clipboard.getOrigin();
+        originPos = new BlockPos(origin.x(), origin.y(), origin.z());
 
-            box = new BoundingBox(
-                min.x(), min.y(), min.z(),
-                max.x(), max.y(), max.z()
-            );
-            this.holder = new ClipboardHolder(clipboard);
-        }catch (IOException e){
-            throw new RuntimeException(e);
-        }
+        box = new BoundingBox(
+            min.x(), min.y(), min.z(),
+            max.x(), max.y(), max.z()
+        );
     }
 
     @Override
@@ -117,7 +147,7 @@ public class FAWEStructure extends DataComponentHandler.Simple implements Struct
             .build()) {
             AffineTransform transform = new AffineTransform();
             transform = transform.rotateY(rotation);
-            ClipboardHolder holder = new ClipboardHolder(this.holder.getClipboards().getFirst());
+            ClipboardHolder holder = getHolder();
             holder.setTransform(holder.getTransform().combine(transform));
             Operation operation = holder
                 .createPaste(editSession)
@@ -135,7 +165,7 @@ public class FAWEStructure extends DataComponentHandler.Simple implements Struct
     @NotNull
     public Collection<CruxPosition> getBlocks(double rotation, @Nullable Predicate<CruxPosition> filter) {
         Collection<CruxPosition> list = new HashSet<>();
-        Clipboard clipboard = holder.getClipboards().getFirst();
+        Clipboard clipboard = getHolder().getClipboards().getFirst();
         clipboard.forEach(block ->{
             BlockState state = clipboard.getBlock(block);
             if(state.isAir()) return;
@@ -152,7 +182,7 @@ public class FAWEStructure extends DataComponentHandler.Simple implements Struct
     @Override
     public @NotNull Map<CruxPosition, BlockData> getBlockMap(double rotation) {
         Map<CruxPosition, BlockData> list = new HashMap<>();
-        Clipboard clipboard = holder.getClipboards().getFirst();
+        Clipboard clipboard = getHolder().getClipboards().getFirst();
 
         AffineTransform transform = new AffineTransform();
         transform = transform.rotateY(rotation);
@@ -180,7 +210,7 @@ public class FAWEStructure extends DataComponentHandler.Simple implements Struct
     }
 
     public @NotNull ClipboardHolder getHolder() {
-        return holder;
+        return getOrCreateClipboard(schematicID);
     }
 
     public @NotNull BoundingBox getBox() {

@@ -1,6 +1,5 @@
 package killercreepr.cruxstructures.core.structure;
 
-import com.sk89q.worldedit.session.ClipboardHolder;
 import killercreepr.cruxstructures.api.component.StructureComponent;
 import killercreepr.cruxstructures.api.event.StructurePlaceEvent;
 import killercreepr.cruxstructures.api.structure.CfgStructure;
@@ -16,12 +15,12 @@ public class CfgFAWEStructure extends FAWEStructure implements CfgStructure {
     protected final boolean persistent;
     protected final @Nullable List<StructureComponent> beforePlacementModules;
     protected final @NotNull List<StructureComponent> modules;
-    public CfgFAWEStructure(@NotNull Key key, @NotNull ClipboardHolder holder, boolean persistent, @Nullable List<StructureComponent> beforePlacementModules, @NotNull List<StructureComponent> modules) {
+    /*public CfgFAWEStructure(@NotNull Key key, @NotNull ClipboardHolder holder, boolean persistent, @Nullable List<StructureComponent> beforePlacementModules, @NotNull List<StructureComponent> modules) {
         super(key, holder);
         this.persistent = persistent;
         this.beforePlacementModules = beforePlacementModules;
         this.modules = modules;
-    }
+    }*/
 
     public CfgFAWEStructure(@NotNull Key key, @NotNull String filename, boolean persistent, @Nullable List<StructureComponent> beforePlacementModules, @NotNull List<StructureComponent> modules) {
         super(key, filename);
@@ -30,8 +29,8 @@ public class CfgFAWEStructure extends FAWEStructure implements CfgStructure {
         this.modules = modules;
     }
 
-    public CfgFAWEStructure(@NotNull Key key, @NotNull File schematicFile, boolean persistent, @Nullable List<StructureComponent> beforePlacementModules, @NotNull List<StructureComponent> modules) {
-        super(key, schematicFile);
+    public CfgFAWEStructure(@NotNull Key key, @NotNull String schematicID, @NotNull File schematicFile, boolean persistent, @Nullable List<StructureComponent> beforePlacementModules, @NotNull List<StructureComponent> modules) {
+        super(key,schematicID, schematicFile);
         this.persistent = persistent;
         this.beforePlacementModules = beforePlacementModules;
         this.modules = modules;
