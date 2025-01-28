@@ -18,6 +18,9 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public interface StructureWorldModule extends WorldModule, Ticked, Reloadable {
+    boolean isActive(StoredStructure stored);
+    ActiveStructure getActive(StoredStructure stored);
+
     List<StructureGenerator> getStructureGenerators();
 
     WorldChunkStorage<StoredStructure> getStoredStructures();

@@ -5,6 +5,7 @@ import killercreepr.crux.api.data.world.ChunkBlockStorage;
 import killercreepr.crux.api.data.world.WorldChunkStorage;
 import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.data.world.StoredChunk;
 import killercreepr.crux.core.data.world.WorldBlockPosedStorage;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.util.CruxCollection;
@@ -173,6 +174,16 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
     public void setDirty(){
         this.dirty = true;
     }*/
+
+    public boolean isActive(StoredStructure stored){
+        return getActive(stored) != null;
+    }
+
+    public ActiveStructure getActive(StoredStructure stored){
+        CruxPosition pos = stored.getPosition();
+        StoredChunk chunk = stored.getChunk();
+        return activeStructures.get(chunk.getChunkKey(), pos);
+    }
 
     public <T extends ActiveStructure> @Nullable T getFirstActiveAt(@NotNull Class<T> type, @NotNull Block block){
         return getFirstActiveAt(type, block, null);
