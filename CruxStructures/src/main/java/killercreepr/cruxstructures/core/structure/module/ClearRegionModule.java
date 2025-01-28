@@ -37,8 +37,8 @@ public class ClearRegionModule implements StructureModule {
         CruxPosition placedAt = CruxPosition.location(at);
         CruxPosition center = CruxStructureUtil.fromStructureToWorldPos(structure, placedAt, structure.originPos());
 
-        CruxPosition pos1 = placedAt.add(pos1X, pos1Y, pos1Z).rotateAroundY(center, rotation);
-        CruxPosition pos2 = placedAt.add(pos2X, pos2Y, pos2Z).rotateAroundY(center, rotation);
+        CruxPosition pos1 = center.add(pos1X, pos1Y, pos1Z).rotateAroundY(center, rotation);
+        CruxPosition pos2 = center.add(pos2X, pos2Y, pos2Z).rotateAroundY(center, rotation);
 
         try(EditSession session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(at.getWorld()))){
             CuboidRegion region = new CuboidRegion(
