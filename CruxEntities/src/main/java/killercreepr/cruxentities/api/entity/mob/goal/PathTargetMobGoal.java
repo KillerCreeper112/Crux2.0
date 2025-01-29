@@ -12,14 +12,22 @@ public interface PathTargetMobGoal {
         return pathTargetMobGoal(mob, 1D);
     }
     static PathTargetMobGoal pathTargetMobGoal(Mob mob, double speed) {
-        return new SimplePathTargetMobGoal(mob, speed);
+        return pathTargetMobGoal(mob, speed, true);
+    }
+
+    static PathTargetMobGoal pathTargetMobGoal(Mob mob, double speed, boolean stopPathFindingWhenFinished) {
+        return new SimplePathTargetMobGoal(mob, speed, stopPathFindingWhenFinished);
     }
 
     static PathTargetMobGoal pathTargetMobGoal(CruxGoalBase goal) {
         return pathTargetMobGoal(goal, 1D);
     }
     static PathTargetMobGoal pathTargetMobGoal(CruxGoalBase goal, double speed) {
-        return new CruxGoalPathTargetMobGoal(goal, speed);
+        return pathTargetMobGoal(goal, speed, true);
+    }
+
+    static PathTargetMobGoal pathTargetMobGoal(CruxGoalBase goal, double speed, boolean stopPathFindingWhenFinished) {
+        return new CruxGoalPathTargetMobGoal(goal, speed, stopPathFindingWhenFinished);
     }
 
     @Nullable GoalPath getPath();

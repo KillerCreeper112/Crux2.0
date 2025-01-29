@@ -10,10 +10,12 @@ import org.jetbrains.annotations.Nullable;
 public class SimplePathTargetMobGoal implements PathTargetMobGoal {
     protected final Mob mob;
     protected final double speed;
+    protected final boolean stopPathFindingWhenFinished;
 
-    public SimplePathTargetMobGoal(Mob mob, double speed) {
+    public SimplePathTargetMobGoal(Mob mob, double speed, boolean stopPathFindingWhenFinished) {
         this.mob = mob;
         this.speed = speed;
+        this.stopPathFindingWhenFinished = stopPathFindingWhenFinished;
     }
 
     protected GoalPath path;
@@ -27,12 +29,17 @@ public class SimplePathTargetMobGoal implements PathTargetMobGoal {
         this.path = path;
     }
 
+    public void onPathFinish(){
+        if(stopPathFindingWhenFinished) mob.getPathfinder().stopPathfinding();
+    }
+
     @Override
     public void tick() {
         if(path.canMoveOn(mob)){
             path.nextNode();
         }
         if(path.hasFinished()){
+            onPathFinish();
             setPath(null);
             return;
         }

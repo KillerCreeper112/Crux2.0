@@ -11,10 +11,12 @@ import org.jetbrains.annotations.Nullable;
 public class CruxGoalPathTargetMobGoal implements PathTargetMobGoal {
     protected final CruxGoalBase goal;
     protected final double speed;
+    protected final boolean stopPathFindingWhenFinished;
 
-    public CruxGoalPathTargetMobGoal(CruxGoalBase goal, double speed) {
+    public CruxGoalPathTargetMobGoal(CruxGoalBase goal, double speed, boolean stopPathFindingWhenFinished) {
         this.goal = goal;
         this.speed = speed;
+        this.stopPathFindingWhenFinished = stopPathFindingWhenFinished;
     }
 
     protected GoalPath path;
@@ -32,6 +34,10 @@ public class CruxGoalPathTargetMobGoal implements PathTargetMobGoal {
         return goal.getMob();
     }
 
+    public void onPathFinish(){
+        if(stopPathFindingWhenFinished) getMob().getPathfinder().stopPathfinding();
+    }
+
     @Override
     public void tick() {
         if(path == null) return;
@@ -39,6 +45,7 @@ public class CruxGoalPathTargetMobGoal implements PathTargetMobGoal {
             path.nextNode();
         }
         if(path.hasFinished()){
+            onPathFinish();
             setPath(null);
             return;
         }
