@@ -4,6 +4,7 @@ import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
 import com.ezylang.evalex.parser.ParseException;
 import killercreepr.crux.api.math.CruxPosition;
+import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.util.NumberConversions;
 import org.bukkit.util.Vector;
@@ -439,5 +440,28 @@ public class CruxMath {
 
     public static float calculateYaw(Vector dir){
         return calculateYaw(dir.getX(), dir.getZ());
+    }
+
+    public static double distanceSquared(
+        Location loc, double x2, double y2, double z2
+    ){
+        return distanceSquared(loc.getX(), loc.getY(), loc.getZ(), x2, y2, z2);
+    }
+    public static double distanceSquared(
+        Vector loc, double x2, double y2, double z2
+    ){
+        return distanceSquared(loc.getX(), loc.getY(), loc.getZ(), x2, y2, z2);
+    }
+    public static double distanceSquared(
+        CruxPosition loc, double x2, double y2, double z2
+    ){
+        return distanceSquared(loc.x(), loc.y(), loc.z(), x2, y2, z2);
+    }
+
+    public static double distanceSquared(
+        double x1, double y1, double z1,
+        double x2, double y2, double z2
+    ) {
+        return square(x1 - x2) + square(y1 - y2) + square(z1 - z2);
     }
 }
