@@ -40,22 +40,22 @@ import java.util.function.Predicate;
 import java.util.logging.Level;
 
 public class FAWEStructure extends DataComponentHandler.Simple implements Structure {
-    public static final Cache<String, ClipboardHolder> CACHE = CacheBuilder.newBuilder()
+    public static final Cache<String, Clipboard> CACHE = CacheBuilder.newBuilder()
         .maximumSize(100)
         .expireAfterWrite(30, TimeUnit.MINUTES)
         .softValues()
         .initialCapacity(50)
         .build();
 
-    public static ClipboardHolder getOrCreateClipboard(@NotNull String fileName){
-        ClipboardHolder holder = CACHE.getIfPresent(fileName);
+    public static Clipboard getOrCreateClipboard(@NotNull String fileName){
+        Clipboard holder = CACHE.getIfPresent(fileName);
         if(holder != null) return holder;
         holder = loadClipboardFromFile(fileName);
         CACHE.put(fileName, holder);
         return holder;
     }
 
-    public static ClipboardHolder loadClipboardFromFile(@NotNull String fileName){
+    public static Clipboard loadClipboardFromFile(@NotNull String fileName){
         File schematicFile = new File(WorldEdit.getInstance().getSchematicsFolderPath().toString() + "/" + fileName + ".schem");
         ClipboardFormat format = ClipboardFormats.findByFile(schematicFile);
         if(format == null) {
@@ -63,8 +63,7 @@ public class FAWEStructure extends DataComponentHandler.Simple implements Struct
         }
 
         try{
-            Clipboard clipboard = format.load(schematicFile);
-            return new ClipboardHolder(clipboard);
+            return format.load(schematicFile);
         }catch (IOException e){
             throw new RuntimeException(e);
         }
@@ -105,7 +104,7 @@ public class FAWEStructure extends DataComponentHandler.Simple implements Struct
             throw new RuntimeException("Invalid schematic format for schematic " + schematicFile.getName() + "!");
         }
 
-        Clipboard clipboard = getOrCreateClipboard(schematicID).getClipboards().getFirst();
+        Clipboard clipboard = getOrCreateClipboard(schematicID);
         BlockVector3 min = clipboard.getMinimumPoint();
         BlockVector3 max = clipboard.getMaximumPoint();
 
@@ -210,7 +209,7 @@ public class FAWEStructure extends DataComponentHandler.Simple implements Struct
     }
 
     public @NotNull ClipboardHolder getHolder() {
-        return getOrCreateClipboard(schematicID);
+        return new ClipboardHolder(getOrCreateClipboard(schematicID));
     }
 
     public @NotNull BoundingBox getBox() {
