@@ -12,6 +12,7 @@ import killercreepr.cruxblocks.core.registries.CruxBlocksRegistries;
 import killercreepr.cruxstructures.api.structure.StoredStructure;
 import killercreepr.cruxstructures.api.structure.Structure;
 import killercreepr.cruxstructures.api.structure.module.StructureModule;
+import killercreepr.cruxstructures.core.registries.StructureRegistries;
 import killercreepr.cruxstructures.core.util.CruxStructureUtil;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Location;
@@ -35,6 +36,11 @@ public class PlaceCustomBlocksModule implements StructureModule {
     }
 
     @Override
+    public void onStructureHook(@NotNull Structure structure) {
+        structure.set(CruxBlockComponents.PLACE_CUSTOM_BLOCKS, this);
+    }
+
+    @Override
     public void onPlaced(@NotNull Structure structure, @NotNull Location at, double rotation) {
         World world = at.getWorld();
         CruxPosition placedAt = CruxPosition.location(at);
@@ -55,10 +61,14 @@ public class PlaceCustomBlocksModule implements StructureModule {
 
     @Override
     public void onCreated(@NotNull StoredChunk chunk, @NotNull CruxPosition center, double rotation, @NotNull StoredStructure stored) {
+        if(!save) return;
+        Structure structure = StructureRegistries.STRUCTURES.get(stored.getStructureKey());
+        CruxPosition worldCenter = CruxStructureUtil.fromStructureToWorldPos(structure, center, structure.originPos());
+
         Collection<CruxPosition> placed = new HashSet<>();
         blocks.values().forEach((positions) ->{
             for(BlockPos pos : positions){
-                CruxPosition place = center.add(pos).rotateAroundY(center, rotation);
+                CruxPosition place = worldCenter.add(pos).rotateAroundY(worldCenter, rotation);
                 placed.add(place);
             }
         });

@@ -10,9 +10,9 @@ import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
 public interface StructureComponent {
-    default void onCreated(@NotNull Location center, double rotation, @NotNull StoredStructure stored){
+    /*default void onCreated(@NotNull Location center, double rotation, @NotNull StoredStructure stored){
         onCreated(StoredChunk.from(center), CruxPosition.block(center), rotation, stored);
-    }
+    }*/
     default void onCreated(@NotNull StoredChunk chunk, @NotNull CruxPosition center, double rotation, @NotNull StoredStructure stored){
     }
     default void onPlaced(@NotNull Structure structure, @NotNull Location at, double rotation){

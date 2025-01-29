@@ -73,8 +73,11 @@ public interface Structure extends Keyed, DataComponentHandler {
         StoredStructure stored = storedBuilt.get();
         if(stored == null) return null;
 
+        StoredChunk chunk = StoredChunk.from(center);
+        CruxPosition pos = CruxPosition.block(center);
+
         structureComponents.forEach(component ->{
-            component.onCreated(center, rotation, stored);
+            component.onCreated(chunk, pos, rotation, stored);
         });
         return stored;
     }

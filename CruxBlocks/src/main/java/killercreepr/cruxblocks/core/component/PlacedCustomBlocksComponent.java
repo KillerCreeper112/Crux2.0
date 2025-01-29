@@ -1,7 +1,6 @@
 package killercreepr.cruxblocks.core.component;
 
 import killercreepr.crux.api.math.CruxPosition;
-import killercreepr.crux.core.math.BlockPos;
 import killercreepr.cruxstructures.api.component.StoredStructureComponent;
 
 import java.util.Collection;
