@@ -40,7 +40,8 @@ public class CruxStructuresHook {
                     new TypeToken<Map<Key, Collection<BlockPos>>>(){}.getType(),
                     o.get("blocks")
                 );
-                return new PlaceCustomBlocksModule(blocks);
+                boolean save = o.getOrDefaultObject(Boolean.class, "save", false);
+                return new PlaceCustomBlocksModule(blocks, save);
             }
         });
     }

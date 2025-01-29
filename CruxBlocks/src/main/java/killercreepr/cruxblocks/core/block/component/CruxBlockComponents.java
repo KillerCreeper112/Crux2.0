@@ -12,6 +12,7 @@ import killercreepr.cruxblocks.api.block.component.DirectionalBlock;
 import killercreepr.cruxblocks.api.block.component.DirectionalGroup;
 import killercreepr.cruxblocks.api.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.core.block.component.standard.EntitySpawnerComponent;
+import killercreepr.cruxblocks.core.component.PlacedCustomBlocksComponent;
 import killercreepr.cruxblocks.core.registries.CruxBlocksRegistries;
 import net.kyori.adventure.key.Keyed;
 
@@ -50,6 +51,9 @@ public class CruxBlockComponents {
                 .createInput(Crux.key("block_group"))
             )
     );
+
+    public static final DataComponentType<PlacedCustomBlocksComponent> PLACED_CUSTOM_BLOCKS = register("structure/placed_custom_blocks",
+        builder -> builder);
 
     private static <T> DataComponentType<T> register(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator){
         return CruxRegistries.DATA_COMPONENT_TYPE.register(Crux.key(id), builderOperator.apply(DataComponentType.builder()).build());

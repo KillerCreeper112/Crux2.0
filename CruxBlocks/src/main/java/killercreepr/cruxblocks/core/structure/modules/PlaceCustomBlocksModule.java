@@ -2,10 +2,14 @@ package killercreepr.cruxblocks.core.structure.modules;
 
 import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.data.world.StoredChunk;
 import killercreepr.crux.core.math.BlockPos;
 import killercreepr.cruxblocks.api.block.context.PlaceBlockContext;
 import killercreepr.cruxblocks.api.block.group.CruxBlockGroup;
+import killercreepr.cruxblocks.core.block.component.CruxBlockComponents;
+import killercreepr.cruxblocks.core.component.PlacedCustomBlocksComponent;
 import killercreepr.cruxblocks.core.registries.CruxBlocksRegistries;
+import killercreepr.cruxstructures.api.structure.StoredStructure;
 import killercreepr.cruxstructures.api.structure.Structure;
 import killercreepr.cruxstructures.api.structure.module.StructureModule;
 import killercreepr.cruxstructures.core.util.CruxStructureUtil;
@@ -17,14 +21,17 @@ import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.logging.Level;
 
 public class PlaceCustomBlocksModule implements StructureModule {
     protected final Map<Key, Collection<BlockPos>> blocks;
+    protected final boolean save;
 
-    public PlaceCustomBlocksModule(Map<Key, Collection<BlockPos>> blocks) {
+    public PlaceCustomBlocksModule(Map<Key, Collection<BlockPos>> blocks, boolean save) {
         this.blocks = blocks;
+        this.save = save;
     }
 
     @Override
@@ -44,5 +51,17 @@ public class PlaceCustomBlocksModule implements StructureModule {
                 group.placeBlock(PlaceBlockContext.context(block, null, BlockFace.DOWN));
             }
         });
+    }
+
+    @Override
+    public void onCreated(@NotNull StoredChunk chunk, @NotNull CruxPosition center, double rotation, @NotNull StoredStructure stored) {
+        Collection<CruxPosition> placed = new HashSet<>();
+        blocks.values().forEach((positions) ->{
+            for(BlockPos pos : positions){
+                CruxPosition place = center.add(pos).rotateAroundY(center, rotation);
+                placed.add(place);
+            }
+        });
+        stored.set(CruxBlockComponents.PLACED_CUSTOM_BLOCKS, new PlacedCustomBlocksComponent(placed));
     }
 }

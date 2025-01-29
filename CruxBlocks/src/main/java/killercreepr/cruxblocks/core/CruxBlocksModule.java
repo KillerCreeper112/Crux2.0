@@ -25,7 +25,7 @@ import killercreepr.cruxblocks.core.block.data.CustomBlockData;
 import killercreepr.cruxblocks.core.block.wrapper.CruxBlockCruxWrapper;
 import killercreepr.cruxblocks.core.block.wrapper.CruxGroupBlockWrapper;
 import killercreepr.cruxblocks.core.command.CruxBlocksCommands;
-import killercreepr.cruxblocks.core.components.persistence.BlocksDynamicPersistence;
+import killercreepr.cruxblocks.core.component.persistence.BlocksDynamicPersistence;
 import killercreepr.cruxblocks.core.config.CruxConfigHook;
 import killercreepr.cruxblocks.core.config.handler.component.CfgBlockComponents;
 import killercreepr.cruxblocks.core.entity.memory.MinerHolder;

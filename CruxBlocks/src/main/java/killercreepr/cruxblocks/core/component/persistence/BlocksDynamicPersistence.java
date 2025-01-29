@@ -1,4 +1,4 @@
-package killercreepr.cruxblocks.core.components.persistence;
+package killercreepr.cruxblocks.core.component.persistence;
 
 import killercreepr.crux.api.item.dynamic.component.persistence.DynamicPersistentTag;
 import killercreepr.crux.api.text.context.TextParserContext;
