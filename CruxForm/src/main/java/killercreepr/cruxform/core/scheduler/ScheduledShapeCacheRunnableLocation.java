@@ -60,6 +60,10 @@ public class ScheduledShapeCacheRunnableLocation extends BukkitRunnable implemen
 
         for(int x = (int) i; x > 0; x--){
             index++;
+            if(!cache.has(index)){
+                onCancel();
+                return;
+            }
             l = cache.perform(index);
             consumer.accept(this);
 

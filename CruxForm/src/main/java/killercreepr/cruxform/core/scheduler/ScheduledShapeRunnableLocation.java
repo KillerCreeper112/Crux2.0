@@ -58,6 +58,10 @@ public class ScheduledShapeRunnableLocation extends BukkitRunnable implements Sh
 
         for(int x = (int) i; x > 0; x--){
             index++;
+            if(index >= list.size()){
+                onCancel();
+                return;
+            }
             l = list.get(index);
             locationConsumer.accept(this);
 

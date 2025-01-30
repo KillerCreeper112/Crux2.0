@@ -22,13 +22,15 @@ public class SimpleCreateSwirl implements CreateSwirl {
     protected final NumberProvider height;
     protected final NumberProvider spacing;
     protected final NumberProvider turns;
+    protected final NumberProvider radiusFactor;
 
-    public SimpleCreateSwirl(Holder<CruxLocation> center, NumberProvider radius, NumberProvider height, NumberProvider spacing, NumberProvider turns) {
+    public SimpleCreateSwirl(Holder<CruxLocation> center, NumberProvider radius, NumberProvider height, NumberProvider spacing, NumberProvider turns, NumberProvider radiusFactor) {
         this.center = center;
         this.radius = radius;
         this.height = height;
         this.spacing = spacing;
         this.turns = turns;
+        this.radiusFactor = radiusFactor;
     }
 
 
@@ -43,6 +45,47 @@ public class SimpleCreateSwirl implements CreateSwirl {
 
     public List<Vector> generateVectors(){
         List<Vector> vectors = new ArrayList<>();
+        double height = this.height.value().doubleValue();
+        double turns = this.turns.value().doubleValue();
+        double radius = this.turns.value().doubleValue();
+        double spacing = this.spacing.value().doubleValue();
+        double radiusFactor = this.radiusFactor.value().doubleValue();  // User-defined radius factor
+
+        int points = (int) (height / spacing); // Calculate number of points based on spacing
+        double heightStep = height / points; // Step per point in height
+        double angleStep = (2 * Math.PI * turns) / points; // Spread points evenly across turns
+
+        for (int i = 0; i < points; i++) {
+            double angle = i * angleStep;
+
+            // Prevent radius from decreasing if radiusFactor is 0
+            double currentRadius;
+            if (radiusFactor == 0) {
+                currentRadius = radius; // No decrease, radius stays constant
+            } else {
+                // Adjust how the radius decreases based on the radiusFactor
+                double radiusDecrement = Math.pow(1 - (double) i / points, radiusFactor);  // Modify decrease rate using radiusFactor
+                currentRadius = radius * radiusDecrement; // Apply factor to radius decrease
+            }
+
+            double x = currentRadius * Math.cos(angle);
+            double z = currentRadius * Math.sin(angle);
+            double y = i * heightStep;
+
+            // Create the initial vector
+            Vector point = new Vector(x, y, z);
+
+            // Rotate the vector based on location yaw and pitch
+            CruxLocation loc = center.value();
+            CruxMath.rotateVector(point, loc.yaw(), loc.pitch());
+
+            // Add to the list
+            vectors.add(point);
+        }
+
+        return vectors;
+
+        /*List<Vector> vectors = new ArrayList<>();
         double height = this.height.value().doubleValue();
         double turns = this.turns.value().doubleValue();
         double radius = this.turns.value().doubleValue();
@@ -71,7 +114,7 @@ public class SimpleCreateSwirl implements CreateSwirl {
             vectors.add(point);
         }
 
-        return vectors;
+        return vectors;*/
     }
 
     @Override
@@ -85,7 +128,13 @@ public class SimpleCreateSwirl implements CreateSwirl {
         private NumberProvider height;
         private NumberProvider spacing;
         private NumberProvider turns;
+        private NumberProvider radiusFactor;
 
+        @Override
+        public CreateSwirl.Builder radiusFactor(NumberProvider radiusFactor) {
+            this.radiusFactor = radiusFactor;
+            return this;
+        }
 
         @Override
         public CreateSwirl.Builder center(Holder<CruxLocation> center) {
@@ -123,8 +172,9 @@ public class SimpleCreateSwirl implements CreateSwirl {
             if(height == null) height = NumberProvider.constant(3);
             if(spacing == null) spacing = NumberProvider.constant(.1);
             if(turns == null) turns = NumberProvider.constant(3);
+            if(radiusFactor == null) radiusFactor = NumberProvider.constant(1);
             return new SimpleCreateSwirl(
-                center, radius, height, spacing, turns
+                center, radius, height, spacing, turns, radiusFactor
             );
         }
     }

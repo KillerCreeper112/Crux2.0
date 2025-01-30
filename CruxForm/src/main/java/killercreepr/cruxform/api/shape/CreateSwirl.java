@@ -30,6 +30,14 @@ public interface CreateSwirl extends CreateShape{
         default Builder turns(double turns){
             return turns(NumberProvider.constant(turns));
         }
+
+        /**
+         * @param radiusFactor 0 = no radius decrease. 1 = linear radius decrease. less than 1 = fast radius decrease. greater than 1 = slow radius decrease.
+         */
+        Builder radiusFactor(NumberProvider radiusFactor);
+        default Builder radiusFactor(double radiusFactor){
+            return radiusFactor(NumberProvider.constant(radiusFactor));
+        }
         CreateSwirl build();
     }
 }
