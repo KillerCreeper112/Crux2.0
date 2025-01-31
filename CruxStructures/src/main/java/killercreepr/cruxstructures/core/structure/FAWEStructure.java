@@ -152,6 +152,8 @@ public class FAWEStructure extends DataComponentHandler.Simple implements Struct
                 .createPaste(editSession)
                 .to(BukkitAdapter.asBlockVector(loc))
                 .ignoreAirBlocks(ignoreAirBlocks)
+                .copyBiomes(false)
+                .copyEntities(false)
                 .build();
             Operations.complete(operation);
         } catch (Exception e) {

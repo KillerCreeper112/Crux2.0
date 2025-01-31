@@ -15,6 +15,7 @@ import killercreepr.cruxstructures.api.structure.module.StructureModule;
 import killercreepr.cruxstructures.core.registries.StructureRegistries;
 import killercreepr.cruxstructures.core.util.CruxStructureUtil;
 import net.kyori.adventure.key.Key;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -45,18 +46,23 @@ public class PlaceCustomBlocksModule implements StructureModule {
         World world = at.getWorld();
         CruxPosition placedAt = CruxPosition.location(at);
         CruxPosition center = CruxStructureUtil.fromStructureToWorldPos(structure, placedAt, structure.originPos());
-        blocks.forEach((key, positions) ->{
-            CruxBlockGroup group = CruxBlocksRegistries.BLOCK.getGroup(key);
-            if(group == null){
-                Crux.log(Level.WARNING, "CruxBlockGroup " + key + " not found! PlaceCustomPlacesModule");
-                return;
-            }
-            for(BlockPos pos : positions){
-                CruxPosition place = center.add(pos).rotateAroundY(center, rotation);
-                Block block = place.getBlock(world);
-                group.placeBlock(PlaceBlockContext.context(block, null, BlockFace.DOWN));
-            }
-        });
+        Runnable run = () ->{
+            blocks.forEach((key, positions) ->{
+                CruxBlockGroup group = CruxBlocksRegistries.BLOCK.getGroup(key);
+                if(group == null){
+                    Crux.log(Level.WARNING, "CruxBlockGroup " + key + " not found! PlaceCustomPlacesModule");
+                    return;
+                }
+                for(BlockPos pos : positions){
+                    CruxPosition place = center.add(pos).rotateAroundY(center, rotation);
+                    Block block = place.getBlock(world);
+                    group.placeBlock(PlaceBlockContext.context(block, null, BlockFace.DOWN));
+                }
+            });
+        };
+        if(Bukkit.isPrimaryThread()){
+            run.run();
+        }else Crux.scheduler().runTask(run);
     }
 
     @Override

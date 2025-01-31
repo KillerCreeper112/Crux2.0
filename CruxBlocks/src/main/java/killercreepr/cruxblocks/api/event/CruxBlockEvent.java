@@ -2,6 +2,7 @@ package killercreepr.cruxblocks.api.event;
 
 import killercreepr.cruxblocks.api.block.CruxBlock;
 import killercreepr.cruxblocks.api.block.context.BlockContext;
+import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,8 +10,7 @@ public abstract class CruxBlockEvent extends Event {
     protected final @NotNull CruxBlock block;
     protected @NotNull BlockContext context;
     public CruxBlockEvent(@NotNull CruxBlock block, @NotNull BlockContext context) {
-        this.block = block;
-        this.context = context;
+        this(!Bukkit.isPrimaryThread(), block, context);
     }
 
     public CruxBlockEvent(boolean isAsync, @NotNull CruxBlock block, @NotNull BlockContext context) {

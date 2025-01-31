@@ -3,7 +3,6 @@ package killercreepr.cruxstructures.core.data.world;
 import killercreepr.crux.api.data.world.ChunkBlockStorage;
 import killercreepr.crux.api.data.world.WorldChunkStorage;
 import killercreepr.crux.api.math.CruxPosition;
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.data.world.WorldBlockPosedStorage;
 import killercreepr.cruxstructures.api.structure.StoredStructure;
 import killercreepr.cruxstructures.api.structure.TickedStoredStructure;
@@ -14,7 +13,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
-import java.util.logging.Level;
 
 public class StoredStructureChunkStorage extends WorldBlockPosedStorage<StoredStructure> {
     protected final WorldChunkStorage<TickedStoredStructure> tickedStored = new WorldBlockPosedStorage<>(new ConcurrentHashMap<>());
@@ -63,7 +61,6 @@ public class StoredStructureChunkStorage extends WorldBlockPosedStorage<StoredSt
 
     @Override
     public StoredStructure add(long chunkKey, @NotNull StoredStructure block) {
-        Crux.log(Level.WARNING, "added=" + block + ", " + (block instanceof TickedStoredStructure s));
         if(block instanceof TickedStoredStructure s){
             tickedStored.add(chunkKey, s);
             s.started(module);
