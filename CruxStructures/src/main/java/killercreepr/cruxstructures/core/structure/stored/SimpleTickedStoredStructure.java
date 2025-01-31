@@ -5,6 +5,7 @@ import killercreepr.crux.core.data.world.StoredChunk;
 import killercreepr.cruxstructures.api.component.TickedStoredComponent;
 import killercreepr.cruxstructures.api.structure.Structure;
 import killercreepr.cruxstructures.api.structure.TickedStoredStructure;
+import killercreepr.cruxstructures.api.world.module.StructureWorldModule;
 import net.kyori.adventure.key.Key;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
@@ -19,17 +20,22 @@ public class SimpleTickedStoredStructure extends SimpleStoredStructure implement
     }
 
     @Override
-    public void started() {
-        forEachAllOfType(TickedStoredComponent.class, TickedStoredComponent::storedStarted);
+    public void started(@NotNull StructureWorldModule module) {
+        forEachAllOfType(TickedStoredComponent.class, s -> s.storedStarted(module));
     }
 
     @Override
-    public void tick() {
-        forEachAllOfType(TickedStoredComponent.class, TickedStoredComponent::storedTick);
+    public void tick(@NotNull StructureWorldModule module) {
+        forEachAllOfType(TickedStoredComponent.class, s -> s.storedTick(module));
     }
 
     @Override
-    public void stopped() {
-        forEachAllOfType(TickedStoredComponent.class, TickedStoredComponent::storedStopped);
+    public void stopped(@NotNull StructureWorldModule module) {
+        forEachAllOfType(TickedStoredComponent.class, s -> s.storedStopped(module));
     }
+
+    /*@Override
+    public void tick(@NotNull StructureWorldModule module) {
+
+    }*/
 }

@@ -60,21 +60,20 @@ public interface Structure extends Keyed, DataComponentHandler {
 
     default @Nullable StoredStructure buildStored(@NotNull Location center, double rotation){
         Collection<StructureComponent> structureComponents = new HashSet<>();
+        StoredChunk chunk = StoredChunk.from(center);
+        CruxPosition pos = CruxPosition.block(center);
         AtomicReference<StoredStructure> storedBuilt = new AtomicReference<>(
-            new SimpleStoredStructure(this, StoredChunk.from(center), CruxPosition.block(center), rotation)
+            new SimpleStoredStructure(this, chunk, pos, rotation)
         );
         forEach(typed ->{
             if(typed.getValue() instanceof StructureComponent s) structureComponents.add(s);
             if(typed.getValue() instanceof StructureEditorComponent c){
-                storedBuilt.set(c.onCreated(center, rotation, this, storedBuilt.get()));
+                storedBuilt.set(c.onCreated(chunk, pos, rotation, this, storedBuilt.get()));
             }
         });
 
         StoredStructure stored = storedBuilt.get();
         if(stored == null) return null;
-
-        StoredChunk chunk = StoredChunk.from(center);
-        CruxPosition pos = CruxPosition.block(center);
 
         structureComponents.forEach(component ->{
             component.onCreated(chunk, pos, rotation, stored);

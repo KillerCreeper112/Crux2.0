@@ -3,20 +3,44 @@ package killercreepr.cruxstructures.core.data.world;
 import killercreepr.crux.api.data.world.ChunkBlockStorage;
 import killercreepr.crux.api.data.world.WorldChunkStorage;
 import killercreepr.crux.api.math.CruxPosition;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.data.world.WorldBlockPosedStorage;
 import killercreepr.cruxstructures.api.structure.StoredStructure;
 import killercreepr.cruxstructures.api.structure.TickedStoredStructure;
+import killercreepr.cruxstructures.api.world.module.StructureWorldModule;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
+import java.util.logging.Level;
 
 public class StoredStructureChunkStorage extends WorldBlockPosedStorage<StoredStructure> {
     protected final WorldChunkStorage<TickedStoredStructure> tickedStored = new WorldBlockPosedStorage<>(new ConcurrentHashMap<>());
-    public StoredStructureChunkStorage(@NotNull Map<Long, ChunkBlockStorage<StoredStructure>> data) {
+    protected final StructureWorldModule module;
+    public StoredStructureChunkStorage(@NotNull Map<Long, ChunkBlockStorage<StoredStructure>> data, StructureWorldModule module) {
         super(data);
+        this.module = module;
+    }
+
+    public WorldChunkStorage<TickedStoredStructure> getTickedStored() {
+        return tickedStored;
+    }
+
+    public boolean tickTickeds(){
+        return tickedStored.removeIf(chunk -> {
+            chunk.removeIf(a -> {
+                if (a.shouldStop(module)) {
+                    a.stopped(module);
+                    super.remove(a.getChunk().getChunkKey(), a.getPosition());
+                    return true;
+                }
+                a.tick(module);
+                return false;
+            });
+            return chunk.isEmpty();
+        });
     }
 
     @Override
@@ -39,7 +63,11 @@ public class StoredStructureChunkStorage extends WorldBlockPosedStorage<StoredSt
 
     @Override
     public StoredStructure add(long chunkKey, @NotNull StoredStructure block) {
-        if(block instanceof TickedStoredStructure s) tickedStored.add(chunkKey, s);
+        Crux.log(Level.WARNING, "added=" + block + ", " + (block instanceof TickedStoredStructure s));
+        if(block instanceof TickedStoredStructure s){
+            tickedStored.add(chunkKey, s);
+            s.started(module);
+        }
         return super.add(chunkKey, block);
     }
 

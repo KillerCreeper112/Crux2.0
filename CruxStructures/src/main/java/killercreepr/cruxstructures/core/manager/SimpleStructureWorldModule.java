@@ -38,7 +38,7 @@ import java.util.function.Predicate;
 import java.util.logging.Level;
 
 public class SimpleStructureWorldModule extends SimpleWorldModule implements StructureWorldModule {
-    private static final Predicate<ChunkBlockStorage<StoredStructure>> storedRemoveIf = chunk -> {
+    /*private static final Predicate<ChunkBlockStorage<StoredStructure>> storedRemoveIf = chunk -> {
         chunk.removeIf(stored -> {
             if(!(stored instanceof TickedStoredStructure a)) return false;
             if (a.shouldStop()) {
@@ -49,7 +49,7 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
             return false;
         });
         return chunk.isEmpty();
-    };
+    };*/
 
     private static final Predicate<ChunkBlockStorage<ActiveStructure>> chunkRemoveIf = chunk ->{
         chunk.removeIf(a ->{
@@ -64,7 +64,7 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
     };
 
     protected final List<StructureGenerator> structureGenerators = new ArrayList<>();
-    protected final WorldChunkStorage<StoredStructure> storedStructures = new StoredStructureChunkStorage(new ConcurrentHashMap<>());
+    protected final StoredStructureChunkStorage storedStructures = new StoredStructureChunkStorage(new ConcurrentHashMap<>(), this);
     protected final WorldChunkStorage<ActiveStructure> activeStructures = new WorldBlockPosedStorage<>(new ConcurrentHashMap<>());
     //protected boolean dirty = false;
 
@@ -123,7 +123,8 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
     @Override
     public void tick() {
         activeStructures.removeIf(chunkRemoveIf);
-        storedStructures.removeIf(storedRemoveIf);
+        storedStructures.tickTickeds();
+        //storedStructures.removeIf(storedRemoveIf);
     }
 
     public @NotNull CruxFolder createWorldFolder(@NotNull UUID worldUUID){

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+//todo make pitch and yaw work properly, the spiral should point in the direction
 public class SimpleCreateSwirl implements CreateSwirl {
     protected final Holder<CruxLocation> center;
     protected final NumberProvider radius;
