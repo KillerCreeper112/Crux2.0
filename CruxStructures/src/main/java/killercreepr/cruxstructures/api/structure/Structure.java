@@ -1,6 +1,7 @@
 package killercreepr.cruxstructures.api.structure;
 
 import killercreepr.crux.api.component.DataComponentHandler;
+import killercreepr.crux.api.data.CruxKeyed;
 import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.core.data.world.StoredChunk;
 import killercreepr.crux.core.util.CruxMath;
@@ -8,7 +9,6 @@ import killercreepr.cruxstructures.api.component.StructureComponent;
 import killercreepr.cruxstructures.api.component.StructureEditorComponent;
 import killercreepr.cruxstructures.api.event.StructurePlaceEvent;
 import killercreepr.cruxstructures.core.structure.stored.SimpleStoredStructure;
-import net.kyori.adventure.key.Keyed;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.util.BoundingBox;
@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
-public interface Structure extends Keyed, DataComponentHandler {
+public interface Structure extends CruxKeyed, DataComponentHandler {
     @NotNull
     default StructurePlaceEvent place(@NotNull Location at){
         return place(at, (CruxMath.random().nextInt(4) * 90));
