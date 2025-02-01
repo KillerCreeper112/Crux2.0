@@ -95,6 +95,7 @@ public interface Menu extends CommonMenu, InventoryHolder {
     @NotNull Map<Integer, Slot> getSlots();
 
     int buildSize();
+
     default @Nullable MergedTagContainer buildTags(@NotNull TagParser tagParser){
         MergedTagContainer tags = new SimpleMergedTagContainer(tagParser);
         tags.addAll(getModules().buildTags(tagParser));
