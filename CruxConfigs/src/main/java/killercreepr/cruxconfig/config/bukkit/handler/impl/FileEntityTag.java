@@ -28,11 +28,23 @@ public class FileEntityTag extends SimpleFileHandler<EntityTag> {
 
     @Override
     public @Nullable EntityTag deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
+        EntityTag tag = reference(ctx, e);
+        if(tag != null) return tag;
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = ctx.getRegistry();
         Key key = registry.deserializeFromFile(Key.class, o.get("key"));
         if(key==null) return null;
         return deserializeFromFile(ctx, e, key);
+    }
+
+    private EntityTag reference(@NotNull FileContext<?> ctx, @NotNull FileElement e){
+        if(e instanceof FileGeneric single){
+            String itemKey = single.getAsString();
+            if(itemKey.startsWith("#")){
+                return CruxRegistries.ENTITY_TAG.get(Crux.key(itemKey.substring(1)));
+            }
+        }
+        return null;
     }
 
     public @Nullable EntityTag deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e, @NotNull Key key){
