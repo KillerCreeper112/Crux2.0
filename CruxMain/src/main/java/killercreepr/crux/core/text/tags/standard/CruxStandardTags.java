@@ -25,7 +25,8 @@ public class CruxStandardTags {
             new LocationTags(),
             new UserTags(),
             new EntityTags(),
-            new CommandSenderTags()
+            new CommandSenderTags(),
+            new ServerTags()
         );
     }
 
