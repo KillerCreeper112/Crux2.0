@@ -12,6 +12,7 @@ import killercreepr.cruxstatistics.api.statistic.EntityStatisticHolder;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -44,10 +45,14 @@ public class DataStatisticHolder implements EntityStatisticHolder {
     @Override
     public void load() {
         CruxJson data = getDataFile();
-        Map<CruxStatistic<?>, Integer> stats = data.deserialize("statistics", new TypeToken<Map<CruxStatistic<?>, Integer>>(){}.getType());
+        Map<CruxStatistic<?>, Number> stats = data.deserialize("statistics", new TypeToken<Map<CruxStatistic, Number>>(){}.getType());
         data.close();
-        if(stats == null) return;
-        this.stats.putAll(stats);
+        if(stats == null || stats.isEmpty()) return;
+
+        //todo make this better
+        Map<CruxStatistic<?>, Integer> convert = new HashMap<>();
+        stats.forEach((s, d) -> convert.put(s, d.intValue()));
+        this.stats.putAll(convert);
     }
 
     @Override
