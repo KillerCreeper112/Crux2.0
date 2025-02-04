@@ -10,6 +10,8 @@ import org.bukkit.entity.Mob;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Consumer;
+
 public class CfgNaturalEntitySpawn extends SimpleNaturalEntitySpawn {
     protected final @NotNull CruxEntitySnapshot entitySnapshot;
     protected final @Nullable SpawnValidator spawnValidator;
@@ -25,13 +27,14 @@ public class CfgNaturalEntitySpawn extends SimpleNaturalEntitySpawn {
     }
 
     @Override
-    public @Nullable Entity spawn(@NotNull SpawnContext ctx) {
+    public @Nullable Entity spawn(@NotNull SpawnContext ctx, @Nullable Consumer<Entity> consumer) {
         Location to = ctx.getPosition().toLocation(ctx.getWorld()).toCenterLocation().subtract(0, .4, 0);
         return entitySnapshot.createEntity(to, e ->{
             if(persistent != null) e.setPersistent(persistent);
             if(removeWhenFarAway != null){
                 if(e instanceof Mob m) m.setRemoveWhenFarAway(removeWhenFarAway);
             }
+            if(consumer != null) consumer.accept(e);
         });
     }
 

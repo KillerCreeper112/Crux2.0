@@ -29,13 +29,14 @@ public class EntitySpawnerComponent implements CruxBlockComponent {
     public final @NotNull Collection<NaturalEntitySpawnGroup> spawns;
     public final @NotNull NaturalEntitySpawner spawner;
     public final boolean ignoreCreativePlayers;
+    public final boolean persistEntities;
 
     public EntitySpawnerComponent(@NotNull NumberProvider spawnDelay,
                                   @NotNull NumberProvider spawnRange, @NotNull NumberProvider innerSpawnDistance,
                                   @NotNull NumberProvider spawnCount,
                                   @NotNull NumberProvider requiredPlayerRange, @NotNull NumberProvider maxSpawnAttempts,
                                   @NotNull NumberProvider groupSpawnAmount, @NotNull NumberProvider yCheck, @NotNull NumberProvider failedDelay,
-                                  @NotNull Collection<NaturalEntitySpawnGroup> spawns, boolean ignoreCreativePlayers) {
+                                  @NotNull Collection<NaturalEntitySpawnGroup> spawns, boolean ignoreCreativePlayers, boolean persistEntities) {
         this.spawnDelay = spawnDelay;
         this.spawnRange = spawnRange;
         this.innerSpawnDistance = innerSpawnDistance;
@@ -47,6 +48,7 @@ public class EntitySpawnerComponent implements CruxBlockComponent {
         this.failedDelay = failedDelay;
         this.spawns = spawns;
         this.ignoreCreativePlayers = ignoreCreativePlayers;
+        this.persistEntities = persistEntities;
         spawner = new SimpleNaturalEntitySpawner(
             Crux.getMainPlugin(), CruxMath.random(), spawns,
             spawnRange,

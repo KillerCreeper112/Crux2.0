@@ -10,6 +10,7 @@ import killercreepr.cruxworlds.api.world.entity.NaturalEntitySpawner;
 import killercreepr.cruxworlds.api.world.entity.SpawnContext;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -86,7 +87,8 @@ public class SimpleNaturalEntitySpawner implements NaturalEntitySpawner {
     @Override
     public void navigate(@NotNull World world, @NotNull CruxPosition center,
                          @Nullable Predicate<NaturalEntitySpawner> canContinue,
-                         @Nullable Consumer<NaturalEntitySpawner> onFinish){
+                         @Nullable Consumer<NaturalEntitySpawner> onFinish,
+                         @Nullable Consumer<Entity> spawnConsumer){
         if(!center.getBlock(world).getChunk().isLoaded()){
             if(onFinish != null) onFinish.accept(this);
             return;
@@ -104,7 +106,7 @@ public class SimpleNaturalEntitySpawner implements NaturalEntitySpawner {
                     SpawnContext ctx = found.getSecond();
                     for(NaturalEntitySpawnGroup m : found.getFirst()){
                         NaturalEntitySpawner.spawn(
-                            m.selectRandom(groupSpawnAmount.value().intValue(), ctx), ctx
+                            m.selectRandom(groupSpawnAmount.value().intValue(), ctx), ctx, spawnConsumer
                         );
                     }
                 });

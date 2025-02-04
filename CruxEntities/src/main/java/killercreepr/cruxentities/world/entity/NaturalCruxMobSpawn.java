@@ -8,6 +8,8 @@ import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Consumer;
+
 public abstract class NaturalCruxMobSpawn extends SimpleNaturalEntitySpawn implements NaturalEntityGroupPart {
     protected final @NotNull CruxMob mob;
     public NaturalCruxMobSpawn(int weight, float quality, @NotNull CruxMob mob) {
@@ -16,8 +18,8 @@ public abstract class NaturalCruxMobSpawn extends SimpleNaturalEntitySpawn imple
     }
 
     @Override
-    public @Nullable Entity spawn(@NotNull SpawnContext ctx) {
-        return mob.spawn(ctx.getBlock().getLocation().toCenterLocation().subtract(0, .5, 0));
+    public @Nullable Entity spawn(@NotNull SpawnContext ctx, @Nullable Consumer<Entity> consumer) {
+        return mob.spawn(ctx.getBlock().getLocation().toCenterLocation().subtract(0, .5, 0), consumer);
     }
 
     @Override

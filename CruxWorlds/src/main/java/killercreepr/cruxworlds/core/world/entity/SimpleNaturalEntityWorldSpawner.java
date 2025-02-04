@@ -119,7 +119,8 @@ public class SimpleNaturalEntityWorldSpawner implements NaturalEntityWorldSpawne
     @Override
     public void navigate(@NotNull World world, @NotNull CruxPosition center,
                          @Nullable Predicate<NaturalEntitySpawner> canContinue,
-                         @Nullable Consumer<NaturalEntitySpawner> onFinish){
+                         @Nullable Consumer<NaturalEntitySpawner> onFinish,
+                         @Nullable Consumer<Entity> spawnConsumer){
         if(!center.getBlock(world).getChunk().isLoaded()){
             if(onFinish != null) onFinish.accept(this);
             return;
@@ -153,7 +154,7 @@ public class SimpleNaturalEntityWorldSpawner implements NaturalEntityWorldSpawne
                     plugin.getServer().getScheduler().runTask(plugin, task ->{
                         for(NaturalEntitySpawnGroup m : list){
                             NaturalEntitySpawner.spawn(
-                                m.selectRandom(CruxMath.random(1, 5), ctx), ctx
+                                m.selectRandom(CruxMath.random(1, 5), ctx), ctx, spawnConsumer
                             );
                         }
                     });

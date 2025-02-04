@@ -9,17 +9,26 @@ import killercreepr.cruxblocks.core.block.component.standard.EntitySpawnerCompon
 import killercreepr.cruxblocks.core.block.data.CustomBlockData;
 import killercreepr.cruxworlds.api.world.entity.NaturalEntitySpawner;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Consumer;
+
 public class ActiveEntitySpawner extends SimpleActiveCruxBlock implements ActiveCruxTickedBlock {
     protected final @NotNull EntitySpawnerComponent data;
     protected final @NotNull NaturalEntitySpawner spawner;
+    protected final Consumer<Entity> spawnConsumer;
     public ActiveEntitySpawner(@NotNull Block block, @NotNull CruxBlock cruxBlock, @NotNull EntitySpawnerComponent data, @NotNull NaturalEntitySpawner spawner) {
         super(block, cruxBlock);
         this.data = data;
         this.spawner = spawner;
+        this.spawnConsumer = data.persistEntities ? e ->{
+            e.setPersistent(true);
+            if(e instanceof Mob m) m.setRemoveWhenFarAway(false);
+        } : null;
     }
 
     @Override

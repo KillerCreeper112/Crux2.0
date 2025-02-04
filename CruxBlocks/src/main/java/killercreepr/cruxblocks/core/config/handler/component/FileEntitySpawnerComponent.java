@@ -43,11 +43,13 @@ public abstract class FileEntitySpawnerComponent<T extends EntitySpawnerComponen
         NumberProvider yCheck = num(registry, e, "y_check", NumberProvider.uniform(1, 3));
         NumberProvider failedDelay = num(registry, e, "failed_delay", NumberProvider.uniform(20, 30));
         boolean ignoreCreativePlayers = e.getObject(Boolean.class, "ignore_creative_players", true);
+        boolean persistEntities = e.getObject(Boolean.class, "persist_entities", false);
         return new EntitySpawnerComponent(
             spawnDelay, spawnRange, innerSpawnDistance,
             spawnCount, requiredPlayerRange, maxSpawnAttempts,
             groupSpawnAmount, yCheck,failedDelay, spawns,
-            ignoreCreativePlayers
+            ignoreCreativePlayers,
+            persistEntities
         );
     }
 

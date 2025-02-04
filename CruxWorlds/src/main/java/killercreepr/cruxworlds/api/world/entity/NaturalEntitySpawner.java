@@ -19,9 +19,20 @@ public interface NaturalEntitySpawner {
     }
     void navigate(@NotNull World world, @NotNull CruxPosition center,
                   @Nullable Predicate<NaturalEntitySpawner> canContinue,
-                  @Nullable Consumer<NaturalEntitySpawner> onFinish);
+                  @Nullable Consumer<NaturalEntitySpawner> onFinish,
+                  @Nullable Consumer<Entity> spawnConsumer);
+
+    default void navigate(@NotNull World world, @NotNull CruxPosition center,
+                  @Nullable Predicate<NaturalEntitySpawner> canContinue,
+                  @Nullable Consumer<NaturalEntitySpawner> onFinish){
+        navigate(world, center, canContinue, onFinish, null);
+    }
 
     static @NotNull List<Entity> spawn(@NotNull Collection<? extends NaturalEntitySpawn> poll, @NotNull SpawnContext ctx){
+        return spawn(poll, ctx, null);
+    }
+
+    static @NotNull List<Entity> spawn(@NotNull Collection<? extends NaturalEntitySpawn> poll, @NotNull SpawnContext ctx, @Nullable Consumer<Entity> spawnConsumer){
         List<Entity> list = new ArrayList<>();
         for(NaturalEntitySpawn s : poll){
             int spawned = 0;
@@ -33,7 +44,7 @@ public interface NaturalEntitySpawner {
                     if(s.canSpawn(ctx)) e = s.spawn(ctx);
                     else break;
                 }else{
-                    e = spawnGroup(groupRadius, ctx, s);
+                    e = spawnGroup(groupRadius, ctx, s, spawnConsumer);
                 }
                 if(e == null && spawned == 0) break;
                 if(e != null){
@@ -46,6 +57,10 @@ public interface NaturalEntitySpawner {
     }
 
     static @Nullable Entity spawnGroup(int groupRadius, @NotNull SpawnContext ctx, @NotNull NaturalEntitySpawn s){
+        return spawnGroup(groupRadius, ctx, s, null);
+    }
+
+    static @Nullable Entity spawnGroup(int groupRadius, @NotNull SpawnContext ctx, @NotNull NaturalEntitySpawn s, @Nullable Consumer<Entity> spawnConsumer){
         for(int x = groupRadius; x >= -groupRadius; --x) {
             for(int y = groupRadius; y >= -groupRadius; --y) {
                 for(int z = groupRadius; z >= -groupRadius; --z) {
@@ -53,7 +68,9 @@ public interface NaturalEntitySpawner {
                     if(b.equals(ctx.getBlock())) continue;
                     SpawnContext groupCtx = SpawnContext.simple(b, ctx.getRandom());
                     if(s.canSpawn(groupCtx)){
-                        return s.spawn(groupCtx);
+                        Entity e = s.spawn(groupCtx);
+                        if(e != null && spawnConsumer != null) spawnConsumer.accept(e);
+                        return e;
                     }
                 }
             }
