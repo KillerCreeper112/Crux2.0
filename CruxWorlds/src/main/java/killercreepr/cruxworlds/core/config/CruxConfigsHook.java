@@ -11,6 +11,7 @@ import killercreepr.cruxworlds.core.config.entity.CfgNaturalEntitySpawn;
 import killercreepr.cruxworlds.core.config.handler.FileNaturalEntitySpawn;
 import killercreepr.cruxworlds.core.config.handler.FileNaturalEntitySpawnGroup;
 import killercreepr.cruxworlds.core.config.handler.FileSpawnValidator;
+import killercreepr.cruxworlds.core.world.spawning.DummySpawnValidator;
 import killercreepr.cruxworlds.core.world.spawning.SolidGroundSpawnValidator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,6 +31,12 @@ public class CruxConfigsHook {
             @Override
             public @Nullable SpawnValidator deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
                 return new SolidGroundSpawnValidator();
+            }
+        });
+        SPAWN_VALIDATOR.typeHandlers().register("dummy", new PureYamlFileHandler<SpawnValidator>() {
+            @Override
+            public @Nullable SpawnValidator deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
+                return new DummySpawnValidator();
             }
         });
     }

@@ -24,7 +24,7 @@ public class ServerTags implements ObjectTag<Server> {
     @Override
     public @Nullable TagContainer<StringResolver> requestStrings(@NotNull Server server, @NotNull TagParser tags) {
         return TagContainer.string(tags)
-            .add(Tag.string("player_count", (args, ctx) -> server.getOnlinePlayers().size() + ""))
+            .add(Tag.string("players", (args, ctx) -> server.getOnlinePlayers().size() + ""))
             .add(Tag.string("name", (args, ctx) -> server.getName()))
             .add(Tag.string("ip", (args, ctx) -> server.getIp()))
             .add(Tag.string("current_tick", (args, ctx) -> server.getCurrentTick() + ""))
