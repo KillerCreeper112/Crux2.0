@@ -27,10 +27,13 @@ import killercreepr.cruxblocks.core.block.wrapper.CruxGroupBlockWrapper;
 import killercreepr.cruxblocks.core.command.CruxBlocksCommands;
 import killercreepr.cruxblocks.core.component.persistence.BlocksDynamicPersistence;
 import killercreepr.cruxblocks.core.config.CruxConfigHook;
+import killercreepr.cruxblocks.core.config.advancement.CruxBlocksAdvanceCfgHook;
 import killercreepr.cruxblocks.core.config.handler.component.CfgBlockComponents;
+import killercreepr.cruxblocks.core.config.loot.CruxBlocksFileLootConditions;
 import killercreepr.cruxblocks.core.entity.memory.MinerHolder;
 import killercreepr.cruxblocks.core.hook.CruxStructuresHook;
 import killercreepr.cruxblocks.core.item.CruxItemsItemProvider;
+import killercreepr.cruxblocks.core.listener.CruxBlocksObjectiveListener;
 import killercreepr.cruxblocks.core.listener.CustomBlockClientSyncListener;
 import killercreepr.cruxblocks.core.listener.CustomBlocksListener;
 import killercreepr.cruxblocks.core.listener.NoteBlockSoundsListener;
@@ -118,6 +121,10 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
         }
         if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_STRUCTURES)){
             CruxStructuresHook.register();
+            CruxBlocksFileLootConditions.register(BukkitCfgHandlers.LOOT_CONDITION);
+            if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_ADVANCEMENTS)){
+                CruxBlocksAdvanceCfgHook.load();
+            }
         }
     }
 
@@ -130,6 +137,12 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
             new NoteBlockSoundsListener(plugin, CruxBlocksRegistries.BLOCK),
             new CustomBlockClientSyncListener(plugin, CruxBlocksRegistries.BLOCK)
         );
+
+        if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_ADVANCEMENTS)){
+            plugin.registerListeners(
+                new CruxBlocksObjectiveListener()
+            );
+        }
 
         EntityMemory.registerFunction(plugin, e ->{
             if(!(e instanceof PlayerMemory p)) return;

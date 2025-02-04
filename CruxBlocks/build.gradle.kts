@@ -12,6 +12,7 @@ dependencies {
     compileOnly(project(":CruxConfigs"))
     compileOnly(project(":CruxWorlds"))
     compileOnly(project(":CruxStructures"))
+    compileOnly(project(":CruxAdvancements"))
 }
 tasks.getByName<JavaCompile>("compileJava") {
     dependsOn(":CruxMain:shadowJar")
