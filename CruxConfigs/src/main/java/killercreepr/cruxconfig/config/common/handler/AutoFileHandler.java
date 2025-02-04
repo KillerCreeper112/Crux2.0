@@ -7,6 +7,8 @@ import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -15,6 +17,8 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class AutoFileHandler<T> extends SimpleFileHandler<T> {
+    private static final Logger log = LoggerFactory.getLogger(AutoFileHandler.class);
+
     public static <T> AutoFileHandler<T> notNull(@NotNull Class<T> type){
         return new AutoFileHandler<>(
             type, AutoFileOptions.builder()
@@ -87,15 +91,18 @@ public class AutoFileHandler<T> extends SimpleFileHandler<T> {
         Map<String, FileElement> yamlMap = o.asMap();
         for(Field field : CruxReflect.getAllDeclaredFields(type, CruxReflect.NON_STATIC(null))){
             if(options != null && options.testDisabled(field)) continue;
+            String fieldName = field.getName();
 
             Object found;
-            if(options != null && options.hasManualHandler(field.getName())) {
-                found = options.getManualHandler(field.getName()).deserializeFromFile(context, yamlMap.get(field.getName()));
+            if(options != null && options.hasManualHandler(fieldName)) {
+                found = options.getManualHandler(fieldName).deserializeFromFile(context, yamlMap.get(fieldName));
+            }else if(options != null && options.hasTypeToken(fieldName)){
+                found = registry.deserializeFromFile(options.getTypeToken(fieldName).getType(), yamlMap.get(fieldName));
             }else{
-                found = registry.deserializeFromFile(field.getType(), yamlMap.get(field.getName()));
+                found = registry.deserializeFromFile(field.getType(), yamlMap.get(fieldName));
             }
-            if(options != null && !options.testIsValid(field.getName(), found)) return null;
-            fields.put(field.getName(), found);
+            if(options != null && !options.testIsValid(fieldName, found)) return null;
+            fields.put(fieldName, found);
         }
         return CruxReflect.attemptCreation(type, fields);
     }

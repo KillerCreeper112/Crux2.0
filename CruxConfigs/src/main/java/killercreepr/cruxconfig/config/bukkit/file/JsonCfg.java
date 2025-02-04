@@ -162,7 +162,7 @@ public class JsonCfg extends CruxJson implements IJsonCfg<JsonObject, CfgValue<?
     public void register() {
         reloadIfNeeded();
         getAllValues().forEach((path, value) ->{
-            Object found = get(path);
+            Object found = deserialize(path, value.getParameterType());
             value.attemptSetValue(found);
         });
     }

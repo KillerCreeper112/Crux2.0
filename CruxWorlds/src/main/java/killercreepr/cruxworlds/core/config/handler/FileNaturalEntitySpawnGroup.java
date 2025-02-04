@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.logging.Level;
 
 public class FileNaturalEntitySpawnGroup implements FileObjectHandler<NaturalEntitySpawnGroup> {
     @Override
@@ -36,7 +37,9 @@ public class FileNaturalEntitySpawnGroup implements FileObjectHandler<NaturalEnt
         if(keyString == null) return null;
         if(keyString.startsWith("#")){
             keyString = keyString.substring(1);
-            return WorldsRegistries.NATURAL_ENTITY_SPAWN_GROUP.get(Crux.key(keyString));
+            var x = WorldsRegistries.NATURAL_ENTITY_SPAWN_GROUP.get(Crux.key(keyString));
+            if(x == null) Crux.log(Level.SEVERE, "NaturalEntitySpawnGroup of " + keyString + " not found!");
+            return x;
         }
         return null;
     }
