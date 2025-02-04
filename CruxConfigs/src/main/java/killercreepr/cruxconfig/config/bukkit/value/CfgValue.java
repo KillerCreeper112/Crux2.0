@@ -1,6 +1,7 @@
 package killercreepr.cruxconfig.config.bukkit.value;
 
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
+import killercreepr.cruxconfig.config.common.file.DataFile;
 import killercreepr.cruxconfig.config.common.file.ICruxConfig;
 import killercreepr.cruxconfig.config.common.value.IConfigValue;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +35,7 @@ import java.lang.reflect.Type;
  *  <a href="https://stackoverflow.com/questions/20918650/what-are-the-benefits-of-javas-types-erasure">
  *      Benefits of Java's types erasure</a>
  */
-public abstract class CfgValue<T> implements IConfigValue<T, CruxConfig> {
+public abstract class CfgValue<T> implements IConfigValue<T, DataFile> {
     protected final T defaultValue;
     protected T value;
     protected final @Nullable String path;
@@ -114,15 +115,16 @@ public abstract class CfgValue<T> implements IConfigValue<T, CruxConfig> {
     }
 
     @Override
-    public @Nullable T register(@NotNull CruxConfig cfg, @NotNull String path) {
-        attemptSetValue(cfg.deserializeObject(parameterType, path));
+    public @Nullable T register(@NotNull DataFile cfg, @NotNull String path) {
+        attemptSetValue(cfg.deserialize(path, parameterType));
+        //attemptSetValue(cfg.deserializeObject(parameterType, path));
         return getValue();
     }
 
     @Override
-    public abstract @Nullable T get(@NotNull CruxConfig cfg, @NotNull String path);
+    public abstract @Nullable T get(@NotNull DataFile cfg, @NotNull String path);
     @Override
-    public abstract void set(@NotNull CruxConfig cfg, @NotNull String path, @Nullable T object);
+    public abstract void set(@NotNull DataFile cfg, @NotNull String path, @Nullable T object);
 
     protected @NotNull String addDot(@NotNull String s){ return ICruxConfig.addDot(s); }
     protected @NotNull String removeDot(@NotNull String s){ return ICruxConfig.removeDot(s); }

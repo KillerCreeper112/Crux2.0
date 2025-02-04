@@ -10,4 +10,5 @@ public @interface Config {
      * Normally not recommended since it does not provide full control over what is in the config for the user.
      */
     boolean autoUpdate() default false;
+    boolean pretty() default true;
 }

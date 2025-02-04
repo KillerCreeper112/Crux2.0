@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Type;
 
-public interface DataFile extends ICruxFile{
+public interface DataFile extends ICruxFile {
     @Nullable
     FileElement getRoot();
     @Nullable FileElement getElement(@NotNull String path);

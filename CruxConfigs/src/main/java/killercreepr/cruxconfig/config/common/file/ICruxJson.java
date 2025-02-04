@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import killercreepr.cruxconfig.config.common.annotations.Config;
 import killercreepr.cruxconfig.config.common.json.registry.JsonRegistry;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
@@ -112,7 +113,8 @@ public interface ICruxJson extends ICruxFile {
     default void setDefaults(){}
 
     default boolean save(){
-        return save(false);
+        Config annotation = this.getClass().getAnnotation(Config.class);
+        return save(annotation != null && annotation.pretty());
     }
 
     boolean existedBefore();

@@ -105,6 +105,12 @@ public class JsonCfg extends CruxJson implements IJsonCfg<JsonObject, CfgValue<?
     }
 
     @Override
+    public void setup(boolean reloadAfter) {
+        IJsonCfg.super.setup(reloadAfter);
+        close();
+    }
+
+    @Override
     public @NotNull JsonObject config() {
         reloadIfNeeded();
         return json();

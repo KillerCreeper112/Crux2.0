@@ -13,6 +13,12 @@ public class GenericCfgContainer<T extends ICfg<?, ?>> {
         }
         return this;
     }
+    public GenericCfgContainer<T> addUnchecked(@NotNull Object... cfgs){
+        for(Object c : cfgs){
+            registry.register((T) c);
+        }
+        return this;
+    }
     public GenericCfgContainer<T> reload(){
         registry.reload();
         return this;

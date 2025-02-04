@@ -1,6 +1,6 @@
 package killercreepr.cruxconfig.config.bukkit.value;
 
-import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
+import killercreepr.cruxconfig.config.common.file.DataFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,12 +28,12 @@ public class CommonValue<T> extends CfgValue<T>{
     }
 
     @Override
-    public @Nullable T get(@NotNull CruxConfig cfg, @NotNull String path) {
-        return (T) cfg.deserializeObject(parameterType, path);
+    public @Nullable T get(@NotNull DataFile cfg, @NotNull String path) {
+        return (T) cfg.deserialize(path, parameterType);
     }
 
     @Override
-    public void set(@NotNull CruxConfig cfg, @NotNull String path, @Nullable T object) {
-        cfg.set(path, object);
+    public void set(@NotNull DataFile cfg, @NotNull String path, @Nullable T object) {
+        cfg.serialize(path, object);
     }
 }
