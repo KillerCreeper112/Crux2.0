@@ -36,8 +36,8 @@ public interface DataComponentAccessor extends Iterable<TypedDataComponent<?>> {
         }
     }
 
-    default boolean has(DataComponentType<?> type) {
-        return this.get(type) != null;
+    default boolean has(DataComponentType<?> type){
+        return get(type) != null;
     }
 
     default <T> T getOrDefault(DataComponentType<? extends T> type, T defaultValue) {

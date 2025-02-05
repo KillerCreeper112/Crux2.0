@@ -332,8 +332,20 @@ public class SimpleCruxItem implements CruxItem {
     }
 
     @Override
+    public boolean isDataOverridden(DataComponentType<?> type) {
+        return has(type);
+    }
+
+    @Override
     public boolean hasOrDefaultData(DataComponentType<?> type) {
         return getOrDefaultData(type) != null;
+    }
+
+    @Override
+    public boolean hasDefaultData(DataComponentType<?> type) {
+        CruxItemType itemType = Crux.handlers().item().getItemType(item);
+        if(itemType == null) return false;
+        return itemType.hasDefaultData(type);
     }
 
     @Override

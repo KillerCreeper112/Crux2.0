@@ -6,7 +6,9 @@ import java.util.function.Consumer;
 public interface DataComponentDefaultAccessor {
     <T> T getOrDefaultData(DataComponentType<? extends T> type);
     boolean hasOrDefaultData(DataComponentType<?> type);
+    boolean hasDefaultData(DataComponentType<?> type);
 
     <T> Collection<T> getAllOfTypeOrDefaultData(Class<T> type);
     <T> void forEachAllOfTypeOrDefaultData(Class<T> type, Consumer<T> consumer);
+    boolean isDataOverridden(DataComponentType<?> type);
 }
