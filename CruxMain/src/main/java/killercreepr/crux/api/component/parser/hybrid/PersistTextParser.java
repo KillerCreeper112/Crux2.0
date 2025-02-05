@@ -4,10 +4,7 @@ import killercreepr.crux.api.component.parser.ComponentTextInputParser;
 import killercreepr.crux.api.component.parser.standard.ComponentParserListTypeHolder;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.component.parser.hybrid.SimplePersistParser;
-import killercreepr.crux.core.component.parser.hybrid.text.ElementPersistTextParser;
-import killercreepr.crux.core.component.parser.hybrid.text.ListPersistTextParser;
-import killercreepr.crux.core.component.parser.hybrid.text.MapPersistTextParser;
-import killercreepr.crux.core.component.parser.hybrid.text.PrimitivePersistTextParser;
+import killercreepr.crux.core.component.parser.hybrid.text.*;
 import killercreepr.crux.core.persistence.CruxPersistence;
 import killercreepr.crux.core.util.CruxColor;
 import net.kyori.adventure.key.Key;
@@ -17,6 +14,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 
@@ -43,6 +41,14 @@ public interface PersistTextParser<T> extends ComponentTextInputParser<T>{
 
     static <T> PersistTextParser<List<T>> list(@NotNull PersistTextParser<T> elementParser){
         return list(elementParser,  null);
+    }
+
+    static <T> PersistTextParser<Collection<T>> collectionList(@NotNull PersistTextParser<T> elementParser, @Nullable PersistentDataType<?, Collection<T>> dataType){
+        return new CollectionPersistTextParser<>(elementParser, dataType);
+    }
+
+    static <T> PersistTextParser<Collection<T>> collectionList(@NotNull PersistTextParser<T> elementParser){
+        return collectionList(elementParser,  null);
     }
 
     static <T> PersistTextParser<T> primitive(@NotNull PersistentDataType<?, T> dataType, @NotNull Function<Object, T> resultParser){

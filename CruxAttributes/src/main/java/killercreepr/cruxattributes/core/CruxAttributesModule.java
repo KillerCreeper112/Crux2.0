@@ -4,6 +4,7 @@ import killercreepr.crux.api.plugin.module.CruxModule;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.plugin.module.StandardModules;
 import killercreepr.cruxattributes.core.command.CruxAttributeCommands;
+import killercreepr.cruxattributes.core.component.CruxAttributeComponents;
 import killercreepr.cruxattributes.core.listener.CruxAttributeListener;
 import killercreepr.cruxattributes.core.persistence.CruxAttributesPersistence;
 import org.jetbrains.annotations.NotNull;
@@ -17,6 +18,12 @@ public class CruxAttributesModule implements CruxModule {
 
     public CruxAttributesModule() {
         CruxAttributesPersistence.register();
+    }
+
+    @Override
+    public void onLoad(@NotNull CruxPlugin plugin) {
+        CruxModule.super.onLoad(plugin);
+        CruxAttributeComponents.register();
     }
 
     @Override

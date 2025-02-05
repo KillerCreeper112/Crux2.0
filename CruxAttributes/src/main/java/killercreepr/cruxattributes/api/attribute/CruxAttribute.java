@@ -334,6 +334,7 @@ public interface CruxAttribute extends Keyed {
     static <P extends PersistentDataHolder> P addModifier(@Nullable P i, @NotNull CruxAttribute attribute,
                                                           @NotNull CruxAttributeModifier modifier, @NotNull Key... path){
         if(i == null) return null;
+        if(path == null || path.length==0) path = modifier.getPath();
         PersistentDataContainer container = getContainer(i);
         if(container == null) container = i.getPersistentDataContainer().getAdapterContext().newPersistentDataContainer();
 
@@ -586,6 +587,10 @@ public interface CruxAttribute extends Keyed {
         ADD,
         MULTIPLY,
         SET;
+
+        public String id(){
+            return this.toString().toLowerCase();
+        }
 
         public static @Nullable Operation match(@NotNull String id){
             try{

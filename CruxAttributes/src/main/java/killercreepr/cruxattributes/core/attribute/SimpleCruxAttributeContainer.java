@@ -6,32 +6,34 @@ import killercreepr.cruxattributes.api.attribute.CruxAttributeInstance;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SimpleCruxAttributeContainer implements CruxAttributeContainer {
-    private final Set<CruxAttributeInstance> attributes = new HashSet<>();
+    private final Map<CruxAttribute, CruxAttributeInstance> attributes = new HashMap<>();
     public SimpleCruxAttributeContainer(@NotNull CruxAttributeInstance... attributes){
-        this.attributes.addAll(Arrays.asList(attributes));
+        for(CruxAttributeInstance i : attributes) {
+            this.attributes.put(i.getAttribute(), i);
+        }
     }
 
     public SimpleCruxAttributeContainer(@NotNull Collection<CruxAttributeInstance> attributes){
-        this.attributes.addAll(attributes);
+        for(CruxAttributeInstance i : attributes) {
+            this.attributes.put(i.getAttribute(), i);
+        }
+    }
+
+    @Override
+    public @NotNull Collection<CruxAttributeInstance> getAttributeInstances() {
+        return attributes.values();
     }
 
     public @Nullable CruxAttributeInstance getAttribute(@NotNull CruxAttribute attribute){
-        for(CruxAttributeInstance i : attributes){
-            if(i.getAttribute() == attribute) return i;
-        }
-        return null;
+        return attributes.get(attribute);
     }
 
     public boolean hasAttribute(@NotNull CruxAttribute attribute){
-        for(CruxAttributeInstance i : attributes){
-            if(i.getAttribute() == attribute) return true;
-        }
-        return false;
+        return attributes.containsKey(attribute);
     }
 }

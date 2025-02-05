@@ -19,6 +19,10 @@ public enum CruxSlot {
     FEET(36),
     ;
 
+    public String id(){
+        return this.toString().toLowerCase();
+    }
+
     public static @Nullable CruxSlot match(@NotNull String id){
         try{
             return CruxSlot.valueOf(id.toUpperCase());

@@ -15,6 +15,7 @@ public interface CruxAttributeContainer {
         return new SimpleCruxAttributeContainer(attributes);
     }
 
+    @NotNull Collection<CruxAttributeInstance> getAttributeInstances();
     @Nullable CruxAttributeInstance getAttribute(@NotNull CruxAttribute attribute);
     boolean hasAttribute(@NotNull CruxAttribute attribute);
 }
