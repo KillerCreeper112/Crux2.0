@@ -58,7 +58,8 @@ public class CrazyAdvancementTags implements ObjectTag<ObjectiveAdvancement> {
                     int progressNum = progress == null ? 0 : progress.toType(NumberObjectiveProgress.class).getProgress();
                     var tagContainer = TagContainer.string(tags)
                         .add(Tag.parsed("max", max+""))
-                        .add(Tag.parsed("progress", progressNum + ""));
+                        .add(Tag.parsed("progress", progressNum + ""))
+                        ;
 
                     list.add(ctx.deserializeString(args.get(2), tagContainer.add(
                         Tag.parsed("format", ctx.deserializeString(format, tagContainer))

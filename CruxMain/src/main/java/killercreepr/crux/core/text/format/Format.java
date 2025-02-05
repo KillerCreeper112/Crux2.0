@@ -1,5 +1,7 @@
 package killercreepr.crux.core.text.format;
 
+import com.ezylang.evalex.EvaluationException;
+import com.ezylang.evalex.parser.ParseException;
 import killercreepr.crux.api.registry.Registry;
 import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.crux.api.text.format.FormatSerializer;
@@ -477,14 +479,13 @@ public class Format implements FormatSerializer {
             }
 
             try{
-                evaluatedValue = CruxMath.evaluateEvalEx(expression) + "";
+                evaluatedValue = CruxMath.tryEvaluateEvalEx(expression) + "";
                 if(decimalPlaces != null){
                     try{
                         evaluatedValue = NumberFormatResolver.resolve(Double.parseDouble(evaluatedValue), decimalPlaces);
                     }catch (IllegalArgumentException ignored){}
                 }
-            }
-            catch (IllegalArgumentException ignored){ continue; }
+            } catch (IllegalArgumentException | ParseException | EvaluationException ignored){ continue; }
 
             matcher.appendReplacement(result, Matcher.quoteReplacement(evaluatedValue));
         }

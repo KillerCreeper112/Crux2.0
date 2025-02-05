@@ -356,6 +356,11 @@ public class CruxMath {
         return Crunch.compileExpression(eq, ev).evaluate();
     }
 
+    public static String tryEvaluateEvalEx(@Nullable String eq) throws EvaluationException, ParseException {
+        if(eq==null || eq.isBlank()) return "false";
+        return new Expression(eq).evaluate().getStringValue();
+    }
+
     public static String evaluateEvalEx(@Nullable String eq){
         if(eq==null || eq.isBlank()) return "false";
         try{
