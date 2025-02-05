@@ -62,6 +62,7 @@ public class CruxAttributeCompParsers {
 
     public static PersistTextParser<CruxAttributeContainer> CRUX_ATTRIBUTES = PersistTextParser.elementBuilder(CruxAttributeContainer.class)
         .field(TextInputField.field(PersistTextParser.collectionList(CRUX_ATTRIBUTE_INSTANCE), CruxAttributeContainer::getAttributeInstances))
+        .dataType(new AttributeDataParser())
         .apply(ctx ->{
             Collection<CruxAttributeInstance> instances = ctx.get();
             return CruxAttributeContainer.container(instances);

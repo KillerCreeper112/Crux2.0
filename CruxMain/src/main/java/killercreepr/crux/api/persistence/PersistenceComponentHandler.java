@@ -64,8 +64,8 @@ public interface PersistenceComponentHandler extends DataComponentHandler {
 
         if(type instanceof DataComponentType.Notify<? super T> notify){
             if(value == null){
-                notify.onComponentRemoved(this, null);
-            }else notify.onComponentApplied(this, value, null);
+                notify.onComponentRemoved(this, (T) previousValue);
+            }else notify.onComponentApplied(this, value, (T) previousValue);
         }
 
         onComponentsPersistentContainerChanged(container);
