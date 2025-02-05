@@ -82,8 +82,20 @@ public interface DataComponentHandler extends DataComponentAccessor, DataCompone
         @Override
         public <T> @Nullable T set(DataComponentType<? super T> type, @Nullable T value) {
             Holder<?> holder;
-            if(value == null) holder = map.remove(type);
-            else holder = map.put(type, Holder.direct(value));
+            if(value == null){
+                holder = map.remove(type);
+                if(type instanceof DataComponentType.Notify<? super T> notify){
+                    notify.onComponentRemoved(
+                        this, holder == null ? null : (T) holder.value()
+                    );
+                }
+            }
+            else{
+                holder = map.put(type, Holder.direct(value));
+                if(type instanceof DataComponentType.Notify<? super T> notify) notify.onComponentApplied(
+                    this, value, holder == null ? null : (T) holder.value()
+                );
+            }
             return holder == null ? null : (T) holder.value();
         }
 

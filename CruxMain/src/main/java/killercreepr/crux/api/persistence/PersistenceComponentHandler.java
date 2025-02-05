@@ -61,6 +61,13 @@ public interface PersistenceComponentHandler extends DataComponentHandler {
 
         Object previousValue = get(type);
         serializer.encodeUnchecked(container, value);
+
+        if(type instanceof DataComponentType.Notify<? super T> notify){
+            if(value == null){
+                notify.onComponentRemoved(this, null);
+            }else notify.onComponentApplied(this, value, null);
+        }
+
         onComponentsPersistentContainerChanged(container);
         return (T) previousValue;
     }

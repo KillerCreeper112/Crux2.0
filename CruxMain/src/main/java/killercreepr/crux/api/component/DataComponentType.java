@@ -16,6 +16,11 @@ public interface DataComponentType<T> {
     @Nullable
     ComponentTextInputParser<T> textParser();
 
+    interface Notify<T> extends DataComponentType<T>{
+        void onComponentApplied(DataComponentAccessor holder, T value, T previousValue);
+        void onComponentRemoved(DataComponentAccessor holder, T previousValue);
+    }
+
     interface Builder<T>{
         DataComponentType<T> build();
         Builder<T> persistent(@Nullable ComponentSerializer<?, T> serializer);

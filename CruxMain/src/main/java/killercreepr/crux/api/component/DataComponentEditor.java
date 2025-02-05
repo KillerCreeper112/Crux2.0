@@ -3,7 +3,6 @@ package killercreepr.crux.api.component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-
 public interface DataComponentEditor {
     /**
      * @return The previous value, if any.
