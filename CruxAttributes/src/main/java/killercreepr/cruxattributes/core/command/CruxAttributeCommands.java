@@ -18,7 +18,7 @@ import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.text.resolver.Tag;
 import killercreepr.cruxattributes.api.attribute.CruxAttribute;
 import killercreepr.cruxattributes.api.attribute.CruxAttributeModifier;
-import killercreepr.cruxattributes.api.attribute.CruxSlot;
+import killercreepr.cruxattributes.api.equipment.CruxSlotGroup;
 import killercreepr.cruxattributes.core.command.argument.CruxAttributeArguments;
 import killercreepr.cruxattributes.core.registries.CruxAttributeRegistries;
 import net.kyori.adventure.key.Key;
@@ -73,7 +73,7 @@ public class CruxAttributeCommands {
                                                             )
                                                         ))
                                                         .then(
-                                                            Commands.argument("slot", CruxAttributeArguments.cruxSlot())
+                                                            Commands.argument("slot", CruxAttributeArguments.cruxSlotGroup())
                                                                 .executes(ctx -> addModifier(
                                                                     ctx.getSource(),
                                                                     ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
@@ -82,7 +82,7 @@ public class CruxAttributeCommands {
                                                                     CruxAttributeModifier.modifier(
                                                                         ctx.getArgument("modkey", Key.class),
                                                                         ctx.getArgument("amount", Double.class),
-                                                                        ctx.getArgument("slot", CruxSlot.class)
+                                                                        ctx.getArgument("slot", CruxSlotGroup.class)
                                                                     )
                                                                 ))
                                                                 .then(
@@ -96,7 +96,7 @@ public class CruxAttributeCommands {
                                                                                 ctx.getArgument("modkey", Key.class),
                                                                                 ctx.getArgument("amount", Double.class),
                                                                                 ctx.getArgument("operation", CruxAttribute.Operation.class),
-                                                                                ctx.getArgument("slot", CruxSlot.class)
+                                                                                ctx.getArgument("slot", CruxSlotGroup.class)
                                                                             )
                                                                         ))
                                                                 )
@@ -217,7 +217,7 @@ public class CruxAttributeCommands {
                         Tag.parsed("key", m.key().asString()),
                         Tag.parsed("amount", m.getAmount()+""),
                         Tag.parsed("operation", m.getOperation().name().toLowerCase()),
-                        Tag.parsed("slot", m.getSlot() == null ? "all" : m.getSlot().toString().toLowerCase())
+                        Tag.parsed("slot", m.getSlotGroup().key().asString())
                     )
                 );
             }
@@ -267,7 +267,7 @@ public class CruxAttributeCommands {
             );
         }
         Communicator.chat("Added attribute modifier of " + modifier.key() + " with value " + modifier.getAmount() + " and operation " +
-            modifier.getOperation().toString().toLowerCase() + " with slot " + modifier.getSlot() + ".")
+            modifier.getOperation().toString().toLowerCase() + " with slot " + modifier.getSlotGroup().key() + ".")
             .use(getExecutor(source));
         return 1;
     }

@@ -6,7 +6,7 @@ import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.loot.functions.SimpleLootFunction;
 import killercreepr.cruxattributes.api.attribute.CruxAttribute;
 import killercreepr.cruxattributes.api.attribute.CruxAttributeModifier;
-import killercreepr.cruxattributes.api.attribute.CruxSlot;
+import killercreepr.cruxattributes.api.equipment.CruxSlotGroup;
 import killercreepr.cruxattributes.core.registries.CruxAttributeRegistries;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
@@ -50,7 +50,7 @@ public class ItemCruxAttributeFunction extends SimpleLootFunction<ItemStack> {
                     }
                 }
                 value += attribute.round(m.getProvider().sample(random).doubleValue());
-                CruxAttribute.addModifier(i, attribute, CruxAttributeModifier.modifier(m.key(), value, m.getOperation(), m.getSlot()));
+                CruxAttribute.addModifier(i, attribute, CruxAttributeModifier.modifier(m.key(), value, m.getOperation(), m.getSlotGroup()));
             }
         }
         return i;
@@ -60,18 +60,18 @@ public class ItemCruxAttributeFunction extends SimpleLootFunction<ItemStack> {
         private final Key key;
         private final NumberProvider provider;
         private final CruxAttribute.Operation operation;
-        private final CruxSlot slot;
+        private final CruxSlotGroup slot;
 
         public Modifier(@NotNull NamespacedKey key, @NotNull NumberProvider provider, @NotNull CruxAttribute.Operation operation) {
             this(key, provider, operation, null);
         }
 
-        public Modifier(@NotNull NamespacedKey key, @NotNull NumberProvider provider, @Nullable CruxSlot slot) {
+        public Modifier(@NotNull NamespacedKey key, @NotNull NumberProvider provider, @Nullable CruxSlotGroup slot) {
             this(key, provider, CruxAttribute.Operation.ADD, slot);
         }
 
         public Modifier(@NotNull NamespacedKey key, @NotNull NumberProvider provider, @NotNull CruxAttribute.Operation operation,
-                                     @Nullable CruxSlot slot) {
+                                     @Nullable CruxSlotGroup slot) {
             this.key = key;
             this.provider = provider;
             this.operation = operation;
@@ -87,7 +87,7 @@ public class ItemCruxAttributeFunction extends SimpleLootFunction<ItemStack> {
         /**
          * Creates a base attribute modifier.
          */
-        public Modifier(@NotNull NumberProvider provider, @Nullable CruxSlot slot) {
+        public Modifier(@NotNull NumberProvider provider, @Nullable CruxSlotGroup slot) {
             this(CruxAttribute.k("base"), provider, CruxAttribute.Operation.ADD, slot);
         }
 
@@ -109,7 +109,7 @@ public class ItemCruxAttributeFunction extends SimpleLootFunction<ItemStack> {
         }
 
         @Nullable
-        public CruxSlot getSlot() {
+        public CruxSlotGroup getSlotGroup() {
             return slot;
         }
     }

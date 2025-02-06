@@ -1,6 +1,5 @@
 package killercreepr.cruxattributes.core.component;
 
-import killercreepr.crux.api.component.DataComponentAccessor;
 import killercreepr.crux.api.component.DataComponentType;
 import killercreepr.crux.api.component.parser.ComponentTextInputParser;
 import killercreepr.crux.api.component.parser.hybrid.PersistParser;
@@ -8,7 +7,7 @@ import killercreepr.crux.api.component.serialization.ComponentSerializer;
 import killercreepr.cruxattributes.api.attribute.CruxAttributeContainer;
 import org.jetbrains.annotations.Nullable;
 
-public class CruxAttributesComponentType extends DataComponentType.Simple<CruxAttributeContainer> implements DataComponentType.Notify<CruxAttributeContainer> {
+public class CruxAttributesComponentType extends DataComponentType.Simple<CruxAttributeContainer> {
     public CruxAttributesComponentType(@Nullable ComponentSerializer<?, CruxAttributeContainer> serializer,
                                        @Nullable ComponentTextInputParser<CruxAttributeContainer> textParser) {
         super(serializer, textParser);
@@ -16,16 +15,6 @@ public class CruxAttributesComponentType extends DataComponentType.Simple<CruxAt
 
     public CruxAttributesComponentType(PersistParser<CruxAttributeContainer> parser) {
         super(parser, parser);
-    }
-
-    @Override
-    public void onComponentApplied(DataComponentAccessor holder, CruxAttributeContainer value, CruxAttributeContainer previousValue) {
-
-    }
-
-    @Override
-    public void onComponentRemoved(DataComponentAccessor holder, CruxAttributeContainer previousValue) {
-
     }
 
     /*@Override

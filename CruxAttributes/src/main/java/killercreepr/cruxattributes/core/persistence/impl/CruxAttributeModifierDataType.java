@@ -1,8 +1,10 @@
 package killercreepr.cruxattributes.core.persistence.impl;
 
+import killercreepr.crux.core.persistence.CruxPersistence;
 import killercreepr.cruxattributes.api.attribute.CruxAttribute;
-import killercreepr.cruxattributes.api.attribute.CruxSlot;
+import killercreepr.cruxattributes.api.equipment.CruxSlotGroup;
 import killercreepr.cruxattributes.core.attribute.container.CruxAttributeModData;
+import killercreepr.cruxattributes.core.registries.CruxAttributeRegistries;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -24,16 +26,18 @@ public class CruxAttributeModifierDataType implements PersistentDataType<Persist
         PersistentDataContainer c = context.newPersistentDataContainer();
         c.set(CruxAttribute.k("value"), PersistentDataType.DOUBLE, complex.getAmount());
         c.set(CruxAttribute.k("operation"), PersistentDataType.STRING, complex.getOperation().toString().toLowerCase());
-        if(complex.getSlot() != null) c.set(CruxAttribute.k("slot"), PersistentDataType.STRING, complex.getSlot().toString().toLowerCase());
+        if(complex.getSlotGroup() != null){
+            c.set(CruxAttribute.k("slot"), CruxPersistence.CRUX_KEY, complex.getSlotGroup().key());
+        }
         return c;
     }
 
     @Override
     public @NotNull CruxAttributeModData fromPrimitive(@NotNull PersistentDataContainer c, @NotNull PersistentDataAdapterContext context) {
         try{
-            CruxSlot slot;
+            CruxSlotGroup slot;
             if(c.has(CruxAttribute.k("slot"))){
-                slot = CruxSlot.valueOf(c.getOrDefault(CruxAttribute.k("slot"), PersistentDataType.STRING, ""));
+                slot = CruxAttributeRegistries.SLOT_GROUP.get(c.get(CruxAttribute.k("slot"), CruxPersistence.CRUX_KEY));
             }else slot = null;
             return new CruxAttributeModData(
                     c.getOrDefault(CruxAttribute.k("value"), PersistentDataType.DOUBLE, 0D),
@@ -41,7 +45,7 @@ public class CruxAttributeModifierDataType implements PersistentDataType<Persist
                     slot
             );
         }catch (Exception ex){
-            throw new RuntimeException("Cannot convert PersistentDataContainer into GrimAttributeModifier!");
+            throw new RuntimeException("Cannot convert PersistentDataContainer into CruxAttributeModifier!");
         }
     }
 }

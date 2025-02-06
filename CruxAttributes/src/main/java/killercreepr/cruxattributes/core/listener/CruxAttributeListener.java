@@ -3,9 +3,12 @@ package killercreepr.cruxattributes.core.listener;
 import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
 import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.core.Crux;
-import killercreepr.cruxattributes.api.attribute.*;
+import killercreepr.cruxattributes.api.attribute.CruxAttribute;
+import killercreepr.cruxattributes.api.attribute.CruxAttributeContainer;
+import killercreepr.cruxattributes.api.attribute.CruxAttributeInstance;
+import killercreepr.cruxattributes.api.attribute.CruxAttributeModifier;
+import killercreepr.cruxattributes.api.equipment.CruxSlot;
 import killercreepr.cruxattributes.core.component.CruxAttributeComponents;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -62,7 +65,7 @@ public class CruxAttributeListener implements Listener {
     public void onPlayerItemHeld(PlayerItemHeldEvent event) {
         Player p = event.getPlayer();
         ItemStack i = p.getInventory().getItem(event.getNewSlot());
-        updateSlot(p, i, CruxSlot.HAND);
+        updateSlot(p, i, CruxSlot.MAIN_HAND);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)

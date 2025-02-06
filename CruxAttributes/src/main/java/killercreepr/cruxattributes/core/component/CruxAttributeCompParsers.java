@@ -2,7 +2,12 @@ package killercreepr.cruxattributes.core.component;
 
 import killercreepr.crux.api.component.parser.hybrid.PersistTextParser;
 import killercreepr.crux.api.component.parser.hybrid.TextInputField;
-import killercreepr.cruxattributes.api.attribute.*;
+import killercreepr.cruxattributes.api.attribute.CruxAttribute;
+import killercreepr.cruxattributes.api.attribute.CruxAttributeContainer;
+import killercreepr.cruxattributes.api.attribute.CruxAttributeInstance;
+import killercreepr.cruxattributes.api.attribute.CruxAttributeModifier;
+import killercreepr.cruxattributes.api.equipment.CruxSlot;
+import killercreepr.cruxattributes.api.equipment.CruxSlotGroup;
 import killercreepr.cruxattributes.core.persistence.CruxAttributesPersistence;
 import killercreepr.cruxattributes.core.registries.CruxAttributeRegistries;
 import net.kyori.adventure.key.Key;
@@ -18,8 +23,12 @@ public class CruxAttributeCompParsers {
         .apply(ctx -> CruxAttributeRegistries.ATTRIBUTES.get(ctx.get()));
 
     public static PersistTextParser<CruxSlot> CRUX_SLOT = PersistTextParser.elementBuilder(CruxSlot.class)
-        .field(TextInputField.field(PersistTextParser.STRING, CruxSlot::id))
-        .apply(ctx -> CruxSlot.match(ctx.get()));
+        .field(TextInputField.field(PersistTextParser.KEY, CruxSlot::key))
+        .apply(ctx -> CruxAttributeRegistries.SLOT.get(ctx.get()));
+
+    public static PersistTextParser<CruxSlotGroup> CRUX_SLOT_GROUP = PersistTextParser.elementBuilder(CruxSlotGroup.class)
+        .field(TextInputField.field(PersistTextParser.KEY, CruxSlotGroup::key))
+        .apply(ctx -> CruxAttributeRegistries.SLOT_GROUP.get(ctx.get()));
 
     public static PersistTextParser<CruxAttribute.Operation> CRUX_ATTRIBUTE_OPERATION = PersistTextParser.elementBuilder(CruxAttribute.Operation.class)
         .field(TextInputField.field(PersistTextParser.STRING, CruxAttribute.Operation::id))
@@ -29,7 +38,10 @@ public class CruxAttributeCompParsers {
         .field("key", TextInputField.field(PersistTextParser.KEY, Keyed::key))
         .field("amount", TextInputField.field(PersistTextParser.DOUBLE, CruxAttributeModifier::getAmount))
         .field("operation", TextInputField.field(CRUX_ATTRIBUTE_OPERATION, CruxAttributeModifier::getOperation))
-        .field("slot", TextInputField.field(CRUX_SLOT, CruxAttributeModifier::getSlot))
+        .field("slot", TextInputField.field(CRUX_SLOT_GROUP, e ->{
+            if(e.getSlotGroup().equals(CruxSlotGroup.ANY)) return null; //don't save "any" slot group
+            return e.getSlotGroup();
+        }))
         .field("path", TextInputField.field(PersistTextParser.LIST.KEY, e ->{
             Key[] path = e.getPath();
             if(path == null) return null;
@@ -39,7 +51,7 @@ public class CruxAttributeCompParsers {
             Key key = ctx.getOptional("key");
             double amount = ctx.get("amount");
             CruxAttribute.Operation operation = ctx.getOptional("operation", CruxAttribute.Operation.ADD);
-            CruxSlot slot = ctx.getOptional("slot");
+            CruxSlotGroup slot = ctx.getOptional("slot");
             List<Key> path = ctx.getOptional("path");
 
             CruxAttributeModifier mod;

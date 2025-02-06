@@ -15,4 +15,8 @@ public final class CruxAttributeArguments {
     public static CruxAttributeOperationArgument cruxAttributeOperation(){
         return CRUX_ATTRIBUTE_OPERATION;
     }
+    private static final CruxSlotGroupArgument CRUX_SLOT_GROUP = new CruxSlotGroupArgument();
+    public static CruxSlotGroupArgument cruxSlotGroup(){
+        return CRUX_SLOT_GROUP;
+    }
 }

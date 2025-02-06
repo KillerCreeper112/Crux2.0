@@ -3,10 +3,13 @@ package killercreepr.cruxattributes.api.attribute;
 import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.persistence.CruxPersist;
+import killercreepr.crux.core.persistence.CruxPersistence;
 import killercreepr.crux.core.util.CruxKey;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.crux.core.util.CruxString;
 import killercreepr.crux.core.util.CruxTag;
+import killercreepr.cruxattributes.api.equipment.CruxSlot;
+import killercreepr.cruxattributes.api.equipment.CruxSlotGroup;
 import killercreepr.cruxattributes.core.attribute.GenericAttribute;
 import killercreepr.cruxattributes.core.registries.CruxAttributeRegistries;
 import net.kyori.adventure.key.Key;
@@ -387,7 +390,9 @@ public interface CruxAttribute extends Keyed {
         if(modProvider == null) modProvider = base.getAdapterContext().newPersistentDataContainer();
         modProvider.set(k("value"), PersistentDataType.DOUBLE, modifier.getAmount());
         modProvider.set(k("operation"), PersistentDataType.STRING, modifier.getOperation().toString().toLowerCase());
-        if(modifier.getSlot() != null) modProvider.set(k("slot"), PersistentDataType.STRING, modifier.getSlot().toString().toLowerCase());
+        if(!modifier.getSlotGroup().equals(CruxSlotGroup.ANY)){
+            modProvider.set(k("slot"), CruxPersistence.CRUX_KEY, modifier.getSlotGroup().key());
+        }
 
         //no path provided
         if(path == null || path.length < 1){
@@ -470,15 +475,15 @@ public interface CruxAttribute extends Keyed {
     }
 
     static <P extends PersistentDataHolder> @NotNull Collection<CruxAttributeModifier>
-    getModifiers(@Nullable P i, @NotNull CruxAttribute attribute, @Nullable CruxSlot @Nullable... slots){
+    getModifiers(@Nullable P i, @NotNull CruxAttribute attribute, @NotNull CruxSlot @Nullable... slots){
         PersistentDataContainer components = getComponents(i);
         if(components==null) return Set.of();
         Collection<CruxAttributeModifier> list = new ArrayList<>();
         PersistentDataContainer attributeContainer = getAttributeContainer(components, attribute);
         if(attributeContainer == null || i == null) return list;
         list.addAll(convertToModifiers(attributeContainer));
-        if(slots != null){
-            list.removeIf(e -> Arrays.stream(slots).noneMatch(x -> x == e.getSlot()));
+        if(slots != null && slots.length > 0){
+            list.removeIf(e -> !e.getSlotGroup().anyMatch(slots));
         }
         return list;
     }
@@ -489,7 +494,7 @@ public interface CruxAttribute extends Keyed {
     }
 
     static <P extends PersistentDataHolder> @NotNull Collection<CruxAttributeInstance>
-    getInstances(@Nullable P i, @Nullable CruxSlot @Nullable... slots){
+    getInstances(@Nullable P i, @NotNull CruxSlot @Nullable... slots){
         PersistentDataContainer components = getComponents(i);
         if(components==null) return Set.of();
         PersistentDataContainer container = getContainer(components);
@@ -510,14 +515,14 @@ public interface CruxAttribute extends Keyed {
     }
 
     static <P extends PersistentDataHolder>
-    @Nullable CruxAttributeInstance getInstance(@Nullable P i, @NotNull CruxAttribute attribute, @Nullable CruxSlot @Nullable... slots){
+    @Nullable CruxAttributeInstance getInstance(@Nullable P i, @NotNull CruxAttribute attribute, @NotNull CruxSlot @Nullable... slots){
         PersistentDataContainer components = getComponents(i);
         if(components==null) return null;
         PersistentDataContainer modifierProvider = getAttributeContainer(components, attribute);
         if(modifierProvider == null) return null;
         Collection<CruxAttributeModifier> list = convertToModifiers(modifierProvider);
-        if(slots != null){
-            list.removeIf(e -> Arrays.stream(slots).noneMatch(x -> x == e.getSlot()));
+        if(slots != null && slots.length > 0){
+            list.removeIf(e -> !e.getSlotGroup().anyMatch(slots));
         }
         return CruxAttributeInstance.instance(attribute, list);
     }
@@ -532,10 +537,10 @@ public interface CruxAttribute extends Keyed {
         PersistentDataContainer modifierProvider = getAttributeContainer(container, attribute);
         if(modifierProvider == null) return null;
         Collection<CruxAttributeModifier> list = convertToModifiers(modifierProvider);
-        if(slots != null){
-            list.removeIf(e -> !slots.contains(e.getSlot()));
+        if(slots != null && !slots.isEmpty()){
+            list.removeIf(e -> !e.getSlotGroup().anyMatch(slots));
         }
-        if(operations != null){
+        if(operations != null && !operations.isEmpty()){
             list.removeIf(e -> !operations.contains(e.getOperation()));
         }
         return CruxAttributeInstance.instance(attribute, list);
@@ -642,10 +647,10 @@ public interface CruxAttribute extends Keyed {
         try{
             o = Operation.valueOf(modContainer.getOrDefault(k("operation"), PersistentDataType.STRING, "ADD").toUpperCase());
         }catch (IllegalArgumentException e) { o = Operation.ADD; }
-        CruxSlot slot;
-        try{
-            slot = CruxSlot.valueOf(modContainer.getOrDefault(k("slot"), PersistentDataType.STRING, "").toUpperCase());
-        }catch (IllegalArgumentException e) { slot = null; }
+
+        Key slotID = CruxTag.get(modContainer, k("slot"), CruxPersistence.CRUX_KEY, null);
+
+        CruxSlotGroup slot = slotID == null ? null : CruxAttributeRegistries.SLOT_GROUP.get(slotID);
         return CruxAttributeModifier.modifier(key, modContainer.getOrDefault(k("value"), PersistentDataType.DOUBLE, 0D), o, slot);
     }
 

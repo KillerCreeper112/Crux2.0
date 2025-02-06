@@ -1,5 +1,6 @@
 package killercreepr.cruxattributes.api.attribute;
 
+import killercreepr.cruxattributes.api.equipment.CruxSlotGroup;
 import killercreepr.cruxattributes.core.attribute.SimpleCruxAttributeModifier;
 import killercreepr.cruxattributes.core.attribute.container.CruxAttributeModData;
 import net.kyori.adventure.key.Key;
@@ -8,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface CruxAttributeModifier extends Keyed {
-    static CruxAttributeModifier modifier(@NotNull Key key, double amount, @NotNull CruxAttribute.Operation operation, @Nullable CruxSlot slot){
+    static CruxAttributeModifier modifier(@NotNull Key key, double amount, @NotNull CruxAttribute.Operation operation, @Nullable CruxSlotGroup slot){
         return new SimpleCruxAttributeModifier(key, amount, operation, slot);
     }
 
@@ -20,7 +21,7 @@ public interface CruxAttributeModifier extends Keyed {
         return modifier(key, amount, operation, null);
     }
 
-    static CruxAttributeModifier modifier(@NotNull Key key, double amount, @Nullable CruxSlot slot){
+    static CruxAttributeModifier modifier(@NotNull Key key, double amount, @Nullable CruxSlotGroup slot){
         return new SimpleCruxAttributeModifier(key, amount, slot);
     }
 
@@ -28,7 +29,7 @@ public interface CruxAttributeModifier extends Keyed {
         return new SimpleCruxAttributeModifier(key, amount);
     }
 
-    static CruxAttributeModifier baseModifier(double amount, @NotNull CruxAttribute.Operation operation, @Nullable CruxSlot slot){
+    static CruxAttributeModifier baseModifier(double amount, @NotNull CruxAttribute.Operation operation, @Nullable CruxSlotGroup slot){
         return new SimpleCruxAttributeModifier(amount, operation, slot);
     }
 
@@ -36,7 +37,7 @@ public interface CruxAttributeModifier extends Keyed {
         return new SimpleCruxAttributeModifier(amount, operation);
     }
 
-    static CruxAttributeModifier baseModifier(double amount, @Nullable CruxSlot slot){
+    static CruxAttributeModifier baseModifier(double amount, @Nullable CruxSlotGroup slot){
         return new SimpleCruxAttributeModifier(amount, slot);
     }
 
@@ -44,7 +45,7 @@ public interface CruxAttributeModifier extends Keyed {
         return new SimpleCruxAttributeModifier(amount);
     }
 
-    static CruxAttributeModifier addModifier(@NotNull Key key, double amount, @Nullable CruxSlot slot){
+    static CruxAttributeModifier addModifier(@NotNull Key key, double amount, @Nullable CruxSlotGroup slot){
         return modifier(key, amount, CruxAttribute.Operation.ADD, slot);
     }
 
@@ -66,6 +67,6 @@ public interface CruxAttributeModifier extends Keyed {
 
     @NotNull CruxAttribute.Operation getOperation();
 
-    @Nullable
-    CruxSlot getSlot();
+    @NotNull
+    CruxSlotGroup getSlotGroup();
 }
