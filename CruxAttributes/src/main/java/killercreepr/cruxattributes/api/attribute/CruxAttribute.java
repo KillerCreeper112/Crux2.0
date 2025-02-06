@@ -241,8 +241,10 @@ public interface CruxAttribute extends Keyed {
 
         for(NamespacedKey k : container.getKeys()){
             CruxAttribute a = CruxAttributeRegistries.ATTRIBUTES.get(k);
-            if(a != null) removeModifier(i, a, path);
+            if(a != null) removeModifier(container, a, path);
         }
+        components.set(k("attributes"), PersistentDataType.TAG_CONTAINER, container);
+        CruxPersist.COMPONENTS.set(i, components);
         return i;
     }
 
@@ -275,15 +277,15 @@ public interface CruxAttribute extends Keyed {
 
     @ApiStatus.Experimental
     static <P extends PersistentDataContainer> P removeModifier(@Nullable P base, @NotNull CruxAttribute attribute,
-                                                              @NotNull Key @NotNull... path){
+                                                                @NotNull Key @NotNull... path){
         if(base == null || path.length < 1) return base;
 
-        PersistentDataContainer attributeContainer = getAttributeContainer(base, attribute);
+        PersistentDataContainer attributeContainer = getAttributeContainerFromBase(base, attribute);
         if(attributeContainer == null || attributeContainer.isEmpty()) return base;
 
         List<PersistentDataContainer> list = new ArrayList<>();
         int index = 0;
-        PersistentDataContainer current = base;
+        PersistentDataContainer current = attributeContainer;
         //Get the existing path.
         for(Key pathKey : path){
             index++;
@@ -407,10 +409,10 @@ public interface CruxAttribute extends Keyed {
             if(path.length > 1){
                 index = path.length-1;
                 for(; index >= 0; index--) {
+                    if(index == (path.length-1)) continue;
                     PersistentDataContainer c = list.get(index);
-                    if(index == 0) continue;
                     PersistentDataContainer last = list.get(index+1);
-                    c.set(killercreepr.crux.core.util.CruxKey.key(path[index+1]), PersistentDataType.TAG_CONTAINER, last);
+                    c.set(CruxKey.key(path[index+1]), PersistentDataType.TAG_CONTAINER, last);
                 }
             }
             //Finally, set the whole path into the attribute container.
@@ -509,7 +511,9 @@ public interface CruxAttribute extends Keyed {
 
     static <P extends PersistentDataHolder>
     @Nullable CruxAttributeInstance getInstance(@Nullable P i, @NotNull CruxAttribute attribute, @Nullable CruxSlot @Nullable... slots){
-        PersistentDataContainer modifierProvider = getAttributeContainer(i, attribute);
+        PersistentDataContainer components = getComponents(i);
+        if(components==null) return null;
+        PersistentDataContainer modifierProvider = getAttributeContainer(components, attribute);
         if(modifierProvider == null) return null;
         Collection<CruxAttributeModifier> list = convertToModifiers(modifierProvider);
         if(slots != null){
@@ -561,7 +565,12 @@ public interface CruxAttribute extends Keyed {
     @Nullable PersistentDataContainer  getAttributeContainer(@Nullable P i, @NotNull CruxAttribute attribute){
         PersistentDataContainer container = getContainer(i);
         if(container == null) return null;
-        return CruxTag.get(container, attribute.key(), PersistentDataType.TAG_CONTAINER, null);
+        return getAttributeContainerFromBase(container, attribute);
+    }
+
+    static <P extends PersistentDataContainer>
+    @Nullable PersistentDataContainer  getAttributeContainerFromBase(@Nullable P i, @NotNull CruxAttribute attribute){
+        return CruxTag.get(i, attribute.key(), PersistentDataType.TAG_CONTAINER, null);
     }
 
     static <P extends PersistentDataHolder>

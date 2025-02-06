@@ -3,10 +3,9 @@ package killercreepr.cruxattributes.core.listener;
 import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
 import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.core.Crux;
-import killercreepr.cruxattributes.api.attribute.CruxAttribute;
-import killercreepr.cruxattributes.api.attribute.CruxAttributeInstance;
-import killercreepr.cruxattributes.api.attribute.CruxAttributeModifier;
-import killercreepr.cruxattributes.api.attribute.CruxSlot;
+import killercreepr.cruxattributes.api.attribute.*;
+import killercreepr.cruxattributes.core.component.CruxAttributeComponents;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -30,7 +29,11 @@ public class CruxAttributeListener implements Listener {
      * @param subSlot The slot that can activate the main slot. A null value is ALL.
      */
     private void applyModifiersFromItem(@NotNull Player p, @NotNull ItemStack i, @NotNull CruxSlot mainSlot, @Nullable CruxSlot subSlot){
-        for(CruxAttributeInstance a : CruxAttribute.getInstances(i, subSlot)){
+        CruxItem crux = CruxItem.wrap(i);
+        CruxAttributeContainer container = crux.get(CruxAttributeComponents.CRUX_ATTRIBUTES);
+        if(container == null) return;
+
+        for(CruxAttributeInstance a : container.getAttributeInstances()){
             for(CruxAttributeModifier m : a.getModifiers()){
                 CruxAttribute.addModifier(p, a.getAttribute(), m/*.withKey(Crux.key(UUID.randomUUID().toString()))*/,
                         mainSlot.key(), subSlot == null ? Crux.key("all") : subSlot.key(), Crux.key(UUID.randomUUID().toString()));

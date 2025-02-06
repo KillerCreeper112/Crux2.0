@@ -25,6 +25,11 @@ public class SimpleCruxAttributeContainer implements CruxAttributeContainer {
     }
 
     @Override
+    public String toString() {
+        return "SimpleCruxAttributeContainer{attributes=" + attributes + "}";
+    }
+
+    @Override
     public @NotNull Collection<CruxAttributeInstance> getAttributeInstances() {
         return attributes.values();
     }

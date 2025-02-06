@@ -24,6 +24,11 @@ public class SimpleCruxAttributeInstance implements CruxAttributeInstance {
         this.modifiers.addAll(List.of(modifiers));
     }
 
+    @Override
+    public String toString() {
+        return "SimpleCruxAttributeInstance{attribute=" + attribute + ", modifiers=" + modifiers + "}";
+    }
+
     public double getValue(@NotNull CruxAttribute.Operation operation){
         double x = 0D;
         for(CruxAttributeModifier m : modifiers){

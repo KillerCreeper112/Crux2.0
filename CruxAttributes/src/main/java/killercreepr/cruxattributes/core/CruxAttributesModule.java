@@ -29,7 +29,7 @@ public class CruxAttributesModule implements CruxModule {
     @Override
     public void onEnable(@NotNull CruxPlugin plugin) {
         plugin.registerListeners(
-                new CruxAttributeListener()
+            new CruxAttributeListener()
         );
         CruxAttributeCommands.register(plugin);
     }

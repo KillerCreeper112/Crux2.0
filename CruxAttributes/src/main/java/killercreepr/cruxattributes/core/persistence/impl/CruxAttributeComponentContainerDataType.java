@@ -1,8 +1,8 @@
 package killercreepr.cruxattributes.core.persistence.impl;
 
-import killercreepr.crux.core.util.CruxTag;
 import killercreepr.cruxattributes.api.attribute.*;
 import killercreepr.cruxattributes.core.registries.CruxAttributeRegistries;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -28,7 +28,6 @@ public class CruxAttributeComponentContainerDataType implements PersistentDataTy
     @Override
     public @NotNull PersistentDataContainer toPrimitive(@NotNull CruxAttributeContainer complex, @NotNull PersistentDataAdapterContext context) {
         PersistentDataContainer data = context.newPersistentDataContainer();
-
         complex.getAttributeInstances().forEach(instance ->{
             CruxAttribute attribute = instance.getAttribute();
             instance.getModifiers().forEach(mod ->{
@@ -40,7 +39,7 @@ public class CruxAttributeComponentContainerDataType implements PersistentDataTy
 
     static <P extends PersistentDataContainer>
     @Nullable CruxAttributeInstance getInstance(@Nullable P i, @NotNull CruxAttribute attribute, @Nullable CruxSlot @Nullable... slots){
-        PersistentDataContainer modifierProvider = CruxAttribute.getAttributeContainer(i, attribute);
+        PersistentDataContainer modifierProvider = CruxAttribute.getAttributeContainerFromBase(i, attribute);
         if(modifierProvider == null) return null;
         Collection<CruxAttributeModifier> list = CruxAttribute.convertToModifiers(modifierProvider);
         if(slots != null && slots.length > 0){
@@ -63,13 +62,6 @@ public class CruxAttributeComponentContainerDataType implements PersistentDataTy
 
     @Override
     public @NotNull CruxAttributeContainer fromPrimitive(@NotNull PersistentDataContainer primitive, @NotNull PersistentDataAdapterContext context) {
-        Collection<CruxAttributeInstance> instances = new HashSet<>();
-
-        PersistentDataContainer data = CruxTag.get(primitive, "attributes", PersistentDataType.TAG_CONTAINER, null);
-        if(data != null){
-            instances = getInstances(data);
-        }
-
-        return CruxAttributeContainer.container(instances);
+        return CruxAttributeContainer.container(getInstances(primitive));
     }
 }

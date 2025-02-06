@@ -91,7 +91,6 @@ public interface EventLootContexts {
     static LootContext.Builder builder(@NotNull BlockDropItemEvent event){
         Block block = event.getBlock();
         Entity player = event.getPlayer();
-        Bukkit.broadcastMessage(event.getBlockState() + "");
         return builder()
             .info(
                 DataExchange.builder()

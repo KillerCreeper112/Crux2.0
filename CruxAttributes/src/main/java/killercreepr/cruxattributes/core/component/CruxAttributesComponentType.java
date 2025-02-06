@@ -5,11 +5,7 @@ import killercreepr.crux.api.component.DataComponentType;
 import killercreepr.crux.api.component.parser.ComponentTextInputParser;
 import killercreepr.crux.api.component.parser.hybrid.PersistParser;
 import killercreepr.crux.api.component.serialization.ComponentSerializer;
-import killercreepr.crux.api.component.serialization.PersistHolderComponentHandler;
-import killercreepr.crux.core.util.CruxTag;
-import killercreepr.cruxattributes.api.attribute.CruxAttribute;
 import killercreepr.cruxattributes.api.attribute.CruxAttributeContainer;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.Nullable;
 
 public class CruxAttributesComponentType extends DataComponentType.Simple<CruxAttributeContainer> implements DataComponentType.Notify<CruxAttributeContainer> {
@@ -23,6 +19,16 @@ public class CruxAttributesComponentType extends DataComponentType.Simple<CruxAt
     }
 
     @Override
+    public void onComponentApplied(DataComponentAccessor holder, CruxAttributeContainer value, CruxAttributeContainer previousValue) {
+
+    }
+
+    @Override
+    public void onComponentRemoved(DataComponentAccessor holder, CruxAttributeContainer previousValue) {
+
+    }
+
+    /*@Override
     public void onComponentApplied(DataComponentAccessor holder,
                                    CruxAttributeContainer value, CruxAttributeContainer previousValue) {
         if(!(holder instanceof PersistHolderComponentHandler handler)) return;
@@ -44,5 +50,5 @@ public class CruxAttributesComponentType extends DataComponentType.Simple<CruxAt
         if(componentsContainer == null) return;
         CruxTag.remove(componentsContainer, "attributes");
         handler.onComponentsPersistentContainerChanged(componentsContainer);
-    }
+    }*/
 }

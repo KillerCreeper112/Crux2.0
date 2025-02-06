@@ -113,6 +113,6 @@ public class SimpleCruxAttributeModifier implements CruxAttributeModifier {
 
     @Override
     public String toString() {
-        return "CruxAttributeModifier{key=" + key + ", amount=" + amount + ", operation=" + operation + ", slot=" + slot + ", path=" + Arrays.toString(path) + "}";
+        return "SimpleCruxAttributeModifier{key=" + key + ", amount=" + amount + ", operation=" + operation + ", slot=" + slot + ", path=" + Arrays.toString(path) + "}";
     }
 }

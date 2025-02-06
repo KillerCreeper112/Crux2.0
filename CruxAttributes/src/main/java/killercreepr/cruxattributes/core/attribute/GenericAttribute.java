@@ -14,4 +14,9 @@ public class GenericAttribute implements CruxAttribute {
     public @NotNull Key key() {
         return key;
     }
+
+    @Override
+    public String toString() {
+        return "GenericAttribute{key=" + key + "}";
+    }
 }
