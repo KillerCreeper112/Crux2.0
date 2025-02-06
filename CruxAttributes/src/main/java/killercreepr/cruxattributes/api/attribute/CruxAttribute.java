@@ -194,18 +194,25 @@ public interface CruxAttribute extends Keyed {
     }
 
     static <P extends PersistentDataHolder> boolean hasAttributeData(@Nullable P i){
-        PersistentDataContainer container = getContainer(i);
+        PersistentDataContainer components = getComponents(i);
+        if(components == null) return false;
+        PersistentDataContainer container = getContainer(components);
         return container != null && !container.isEmpty();
     }
 
     static <P extends PersistentDataHolder> P clearAttributes(@Nullable P i){
         if(i == null) return null;
-        i.getPersistentDataContainer().remove(k("attributes"));
+        PersistentDataContainer components = getComponents(i);
+        if(components == null) return i;
+        components.remove(k("attributes"));
+        i.getPersistentDataContainer().set(k("components"), PersistentDataType.TAG_CONTAINER, components);
         return i;
     }
 
     static <P extends PersistentDataHolder> P clearModifiers(@Nullable P i, @NotNull CruxAttribute attribute){
-        PersistentDataContainer container = getContainer(i);
+        PersistentDataContainer components = getComponents(i);
+        if(components == null) return i;
+        PersistentDataContainer container = getContainer(components);
         if(container == null) return i;
         container.remove(killercreepr.crux.core.util.CruxKey.key(attribute.key()));
         if(container.isEmpty()) i.getPersistentDataContainer().remove(k("attributes"));
@@ -227,8 +234,10 @@ public interface CruxAttribute extends Keyed {
     static <P extends PersistentDataHolder> P removeModifiers(@Nullable P i,
                                                                      @NotNull Key @NotNull... path){
         if(i == null || path.length < 1) return i;
-        PersistentDataContainer container = getContainer(i);
-        if(container == null) container = i.getPersistentDataContainer().getAdapterContext().newPersistentDataContainer();
+        PersistentDataContainer components = getComponents(i);
+        if(components==null) return i;
+        PersistentDataContainer container = getContainer(components);
+        if(container == null) return i;
 
         for(NamespacedKey k : container.getKeys()){
             CruxAttribute a = CruxAttributeRegistries.ATTRIBUTES.get(k);
@@ -253,9 +262,9 @@ public interface CruxAttribute extends Keyed {
                                                                     @NotNull Key @NotNull... path){
         if(i == null || path.length < 1) return i;
         PersistentDataContainer components = getComponents(i);
-        if(components == null) components = i.getPersistentDataContainer().getAdapterContext().newPersistentDataContainer();
+        if(components == null) return i;
         PersistentDataContainer container = getContainer(components);
-        if(container == null) container = i.getPersistentDataContainer().getAdapterContext().newPersistentDataContainer();
+        if(container == null) return i;
 
         removeModifier(container, attribute, path);
 
@@ -460,8 +469,10 @@ public interface CruxAttribute extends Keyed {
 
     static <P extends PersistentDataHolder> @NotNull Collection<CruxAttributeModifier>
     getModifiers(@Nullable P i, @NotNull CruxAttribute attribute, @Nullable CruxSlot @Nullable... slots){
+        PersistentDataContainer components = getComponents(i);
+        if(components==null) return Set.of();
         Collection<CruxAttributeModifier> list = new ArrayList<>();
-        PersistentDataContainer attributeContainer = getAttributeContainer(i, attribute);
+        PersistentDataContainer attributeContainer = getAttributeContainer(components, attribute);
         if(attributeContainer == null || i == null) return list;
         list.addAll(convertToModifiers(attributeContainer));
         if(slots != null){
@@ -477,10 +488,12 @@ public interface CruxAttribute extends Keyed {
 
     static <P extends PersistentDataHolder> @NotNull Collection<CruxAttributeInstance>
     getInstances(@Nullable P i, @Nullable CruxSlot @Nullable... slots){
+        PersistentDataContainer components = getComponents(i);
+        if(components==null) return Set.of();
+        PersistentDataContainer container = getContainer(components);
+        if(container == null) return Set.of();
         Collection<CruxAttributeInstance> list = new HashSet<>();
-        PersistentDataContainer attributeContainer = getContainer(i);
-        if(attributeContainer == null) return list;
-        for(NamespacedKey k : attributeContainer.getKeys()){
+        for(NamespacedKey k : container.getKeys()){
             CruxAttribute attribute = CruxAttributeRegistries.ATTRIBUTES.get(k);
             if(attribute == null) continue;
             CruxAttributeInstance instance = getInstance(i, attribute, slots);
@@ -508,7 +521,11 @@ public interface CruxAttribute extends Keyed {
     static <P extends PersistentDataHolder>
     @Nullable CruxAttributeInstance getInstance(@Nullable P i, @NotNull CruxAttribute attribute, @Nullable Collection<@Nullable CruxSlot> slots,
                                                       @Nullable Collection<@NotNull Operation> operations){
-        PersistentDataContainer modifierProvider = getAttributeContainer(i, attribute);
+        PersistentDataContainer components = getComponents(i);
+        if(components==null) return null;
+        PersistentDataContainer container = getContainer(components);
+        if(container == null) return null;
+        PersistentDataContainer modifierProvider = getAttributeContainer(container, attribute);
         if(modifierProvider == null) return null;
         Collection<CruxAttributeModifier> list = convertToModifiers(modifierProvider);
         if(slots != null){
@@ -520,10 +537,10 @@ public interface CruxAttribute extends Keyed {
         return CruxAttributeInstance.instance(attribute, list);
     }
 
-    static <P extends PersistentDataHolder>
+    /*static <P extends PersistentDataHolder>
     @Nullable PersistentDataContainer getContainer(@Nullable P i){
         return killercreepr.crux.core.util.CruxTag.get(i, "attributes", PersistentDataType.TAG_CONTAINER, null);
-    }
+    }*/
 
     static <P extends PersistentDataHolder>
     @Nullable PersistentDataContainer getComponents(@Nullable P i){
