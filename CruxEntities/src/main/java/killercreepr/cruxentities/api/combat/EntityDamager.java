@@ -39,13 +39,14 @@ public interface EntityDamager {
     }
 
     static @Nullable Entity getShooter(@NotNull Entity base){
-        if(base instanceof Projectile p){
-            if(p.getShooter() instanceof Entity e) return e;
-            return null;
-        }
         UUID ownerUUID = CruxPersist.OWNER.get(base);
         if(ownerUUID != null){
             return Crux.getServer().getEntity(ownerUUID);
+        }
+
+        if(base instanceof Projectile p){
+            if(p.getShooter() instanceof Entity e) return e;
+            return null;
         }
         return null;
     }
