@@ -3,6 +3,7 @@ package killercreepr.cruxattributes.core.component;
 import killercreepr.crux.api.component.parser.hybrid.PersistTextParser;
 import killercreepr.crux.api.component.parser.hybrid.TextInputField;
 import killercreepr.cruxattributes.api.attribute.*;
+import killercreepr.cruxattributes.core.persistence.CruxAttributesPersistence;
 import killercreepr.cruxattributes.core.registries.CruxAttributeRegistries;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
@@ -62,7 +63,7 @@ public class CruxAttributeCompParsers {
 
     public static PersistTextParser<CruxAttributeContainer> CRUX_ATTRIBUTES = PersistTextParser.elementBuilder(CruxAttributeContainer.class)
         .field(TextInputField.field(PersistTextParser.collectionList(CRUX_ATTRIBUTE_INSTANCE), CruxAttributeContainer::getAttributeInstances))
-        .dataType(new AttributeDataParser())
+        .dataType(CruxAttributesPersistence.ATTRIBUTE_CONTAINER_COMPONENT)
         .apply(ctx ->{
             Collection<CruxAttributeInstance> instances = ctx.get();
             return CruxAttributeContainer.container(instances);

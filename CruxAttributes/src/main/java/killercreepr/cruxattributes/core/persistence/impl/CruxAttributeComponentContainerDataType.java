@@ -1,4 +1,4 @@
-package killercreepr.cruxattributes.core.component;
+package killercreepr.cruxattributes.core.persistence.impl;
 
 import killercreepr.crux.core.util.CruxTag;
 import killercreepr.cruxattributes.api.attribute.*;
@@ -10,9 +10,11 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 
-public class AttributeDataParser implements PersistentDataType<PersistentDataContainer, CruxAttributeContainer> {
+public class CruxAttributeComponentContainerDataType implements PersistentDataType<PersistentDataContainer, CruxAttributeContainer> {
     @Override
     public @NotNull Class<PersistentDataContainer> getPrimitiveType() {
         return PersistentDataContainer.class;
@@ -33,7 +35,6 @@ public class AttributeDataParser implements PersistentDataType<PersistentDataCon
                 CruxAttribute.addModifier(data, attribute, mod);
             });
         });
-
         return data;
     }
 

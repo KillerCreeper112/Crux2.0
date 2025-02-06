@@ -3,6 +3,7 @@ package killercreepr.cruxattributes.core.component;
 import killercreepr.crux.api.component.DataComponentAccessor;
 import killercreepr.crux.api.component.DataComponentType;
 import killercreepr.crux.api.component.parser.ComponentTextInputParser;
+import killercreepr.crux.api.component.parser.hybrid.PersistParser;
 import killercreepr.crux.api.component.serialization.ComponentSerializer;
 import killercreepr.crux.api.component.serialization.PersistHolderComponentHandler;
 import killercreepr.crux.core.util.CruxTag;
@@ -15,6 +16,10 @@ public class CruxAttributesComponentType extends DataComponentType.Simple<CruxAt
     public CruxAttributesComponentType(@Nullable ComponentSerializer<?, CruxAttributeContainer> serializer,
                                        @Nullable ComponentTextInputParser<CruxAttributeContainer> textParser) {
         super(serializer, textParser);
+    }
+
+    public CruxAttributesComponentType(PersistParser<CruxAttributeContainer> parser) {
+        super(parser, parser);
     }
 
     @Override

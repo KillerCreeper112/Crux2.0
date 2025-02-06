@@ -1,6 +1,7 @@
 package killercreepr.cruxattributes.core.persistence;
 
 import killercreepr.crux.core.registries.CruxRegistries;
+import killercreepr.cruxattributes.core.persistence.impl.CruxAttributeComponentContainerDataType;
 import killercreepr.cruxattributes.core.persistence.impl.CruxAttributeContainerDataType;
 import killercreepr.cruxattributes.core.persistence.impl.CruxAttributeInstanceDataType;
 import killercreepr.cruxattributes.core.persistence.impl.CruxAttributeModifierDataType;
@@ -10,4 +11,5 @@ public class CruxAttributesPersistence {
     public static final CruxAttributeContainerDataType ATTRIBUTE_CONTAINER = CruxRegistries.PERSISTENT_DATA_TYPE.register(new CruxAttributeContainerDataType());
     public static final CruxAttributeInstanceDataType ATTRIBUTE_INSTANCE = CruxRegistries.PERSISTENT_DATA_TYPE.register(new CruxAttributeInstanceDataType());
     public static final CruxAttributeModifierDataType ATTRIBUTE_MODIFIER = CruxRegistries.PERSISTENT_DATA_TYPE.register(new CruxAttributeModifierDataType());
+    public static final CruxAttributeComponentContainerDataType ATTRIBUTE_CONTAINER_COMPONENT = CruxRegistries.PERSISTENT_DATA_TYPE.register(new CruxAttributeComponentContainerDataType());
 }

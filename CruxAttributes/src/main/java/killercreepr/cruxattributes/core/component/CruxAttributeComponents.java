@@ -14,7 +14,6 @@ public class CruxAttributeComponents {
 
     public static final DataComponentType<CruxAttributeContainer> CRUX_ATTRIBUTES = register("attributes",
         new CruxAttributesComponentType(
-            CruxAttributeCompParsers.CRUX_ATTRIBUTES.createInput(Crux.key("attributes")),
             CruxAttributeCompParsers.CRUX_ATTRIBUTES.createInput(Crux.key("attributes"))
         ));
 
