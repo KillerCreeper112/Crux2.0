@@ -22,24 +22,18 @@ import java.util.UUID;
 
 public class CruxAttributeListener implements Listener {
     /**
-     * //todo change this
-     * An example of this is would be:
-     * mainSlot = HAND, subSlot = null (ALL)
-     * OR accessories can be activated from ANY_ACCESSORY or ALL, like this:
-     * mainSlot = ACCESSORY_8, subSlot = null (ALL)
-     * mainSlot = ACCESSORY_8, subSlot = ANY_ACCESSORY
      * @param mainSlot The main slot that the attributes are coming from.
-     * @param subSlot The slot that can activate the main slot. A null value is ALL.
      */
-    private void applyModifiersFromItem(@NotNull Player p, @NotNull ItemStack i, @NotNull CruxSlot mainSlot, @Nullable CruxSlot subSlot){
+    private void applyModifiersFromItem(@NotNull Player p, @NotNull ItemStack i, @NotNull CruxSlot mainSlot){
         CruxItem crux = CruxItem.wrap(i);
         CruxAttributeContainer container = crux.get(CruxAttributeComponents.CRUX_ATTRIBUTES);
         if(container == null) return;
 
         for(CruxAttributeInstance a : container.getAttributeInstances()){
             for(CruxAttributeModifier m : a.getModifiers()){
-                CruxAttribute.addModifier(p, a.getAttribute(), m/*.withKey(Crux.key(UUID.randomUUID().toString()))*/,
-                        mainSlot.key(), subSlot == null ? Crux.key("all") : subSlot.key(), Crux.key(UUID.randomUUID().toString()));
+                if(!m.getSlotGroup().test(mainSlot)) continue;
+                CruxAttribute.addModifier(p, a.getAttribute(), m,
+                    mainSlot.key(), m.getSlotGroup().key(), Crux.key(UUID.randomUUID().toString()));
             }
         }
     }
@@ -47,10 +41,7 @@ public class CruxAttributeListener implements Listener {
     private void updateSlot(@NotNull Player p, @Nullable ItemStack i, @NotNull CruxSlot slot){
         CruxAttribute.removeModifiers(p, slot.key());
         if(!CruxItem.isEmpty(i)){
-            applyModifiersFromItem(p, i, slot, null);
-            /*for(CruxSlot sub : slot.activationSlots()){
-                applyModifiersFromItem(p, i, slot, sub);
-            }*/
+            applyModifiersFromItem(p, i, slot);
         }
 
         /*new BukkitRunnable(){
