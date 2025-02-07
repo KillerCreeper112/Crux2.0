@@ -71,7 +71,7 @@ public class EntityTickablesHolder extends EntityTickedDataHolder {
     private void addTickablesFromItem(Map<Key, ActiveEntityTickable> map, Entity user, ItemStack item, CruxSlot slot){
         if(CruxItem.isEmpty(item)) return;
         CruxItem crux = CruxItem.wrap(item);
-        EntityTickablesContainer container = crux.get(CruxTickableComponents.ENTITY_TICKABLES);
+        EntityTickablesContainer container = crux.getOrDefaultData(CruxTickableComponents.ENTITY_TICKABLES);
         if(container== null) return;
         container.getTickableModifiers().forEach(mod ->{
             if(!mod.getSlotGroup().test(slot)) return;
