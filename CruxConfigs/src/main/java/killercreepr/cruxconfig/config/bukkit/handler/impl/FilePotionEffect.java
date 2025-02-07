@@ -29,7 +29,7 @@ public class FilePotionEffect extends SimpleFileHandler<PotionEffect> {
     @Override
     public @Nullable PotionEffect deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)) return null;
-        PotionEffectType type = Registry.POTION_EFFECT_TYPE.get(CruxKey.key(Key.key(o.getOrDefaultObject("type", "a"))));
+        PotionEffectType type = Registry.MOB_EFFECT.get(CruxKey.key(Key.key(o.getOrDefaultObject("type", "a"))));
         //for backwards compatibility PotionEffectType type = PotionEffectType.getByKey(NamespacedKey.fromString(o.getOrDefaultObject("type", "a")));
         if(type==null) return null;
         return new PotionEffect(

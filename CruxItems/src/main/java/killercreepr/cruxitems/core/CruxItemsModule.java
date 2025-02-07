@@ -1,5 +1,6 @@
 package killercreepr.cruxitems.core;
 
+import com.google.common.reflect.TypeToken;
 import killercreepr.crux.api.handler.ItemHandler;
 import killercreepr.crux.api.item.CruxItemType;
 import killercreepr.crux.api.plugin.module.CruxModule;
@@ -10,6 +11,8 @@ import killercreepr.crux.core.plugin.module.StandardModules;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.paper.ItemHolder;
 import killercreepr.crux.paper.item.BukkitItemHolder;
+import killercreepr.cruxconfig.config.common.handler.AutoFileHandler;
+import killercreepr.cruxconfig.config.common.handler.AutoFileOptions;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import killercreepr.cruxitems.api.item.CruxedItem;
 import killercreepr.cruxitems.api.item.ItemDisplayFormatter;
@@ -35,6 +38,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.Map;
 
 public class CruxItemsModule implements CruxModule, ItemHandler {
@@ -67,10 +71,13 @@ public class CruxItemsModule implements CruxModule, ItemHandler {
     public void onLoad(@NotNull CruxPlugin plugin) {
         if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS)){
             CruxItemsConfigHook.register();
+            CfgRegistries.SIMPLE_REGISTRY.forEach(reg ->{
+                reg.registerFileHandler(CfgItemType.class, new FileCfgItemType());
+                reg.registerFileHandler(Config.CfgItemGrouping.class, new AutoFileHandler<>(Config.CfgItemGrouping.class,
+                    AutoFileOptions.builder()
+                        .addTypeToken("item_types", new TypeToken<Collection<Key>>() {}).build()));
+            });
         }
-        CfgRegistries.SIMPLE_REGISTRY.forEach(reg ->{
-            reg.registerFileHandler(CfgItemType.class, new FileCfgItemType());
-        });
         registerTags(Crux.tags());
     }
 

@@ -258,7 +258,7 @@ public class ComponentInputParsers {
         .field(TextInputField.field(PersistTextParser.KEY, PotionEffectType::key))
         .apply(ctx ->{
             Key key = ctx.get();
-            return Registry.POTION_EFFECT_TYPE.get(key);
+            return Registry.MOB_EFFECT.get(key);
         });
 
     public static PersistTextParser<PotionEffect> POTION_EFFECT = PersistTextParser.mapBuilder(PotionEffect.class)

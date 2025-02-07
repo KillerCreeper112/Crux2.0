@@ -28,4 +28,11 @@ public class CfgItemType implements CruxItemType {
     public @NotNull Collection<DataComponentType<?>> getDefaultData() {
         return data.keySet();
     }
+
+    @Override
+    public String toString() {
+        return "CfgItemType{" +
+            "components=" + data +
+            '}';
+    }
 }

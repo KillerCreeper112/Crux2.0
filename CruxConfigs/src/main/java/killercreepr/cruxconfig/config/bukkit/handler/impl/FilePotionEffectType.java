@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 public class FilePotionEffectType extends FileGenericKeyed<PotionEffectType> {
     @Override
     public @Nullable PotionEffectType deserializeFromKey(@NotNull Key key) {
-        return Registry.POTION_EFFECT_TYPE.get(CruxKey.key(key));
+        return Registry.MOB_EFFECT.get(CruxKey.key(key));
         //return PotionEffectType.getByKey(key); // Used for backwards compatibility.
     }
 

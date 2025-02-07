@@ -95,6 +95,13 @@ public interface DataComponentAccessor extends Iterable<TypedDataComponent<?>> {
             else map.put(type, value);
             return ImmutableMap.copyOf(map);
         }
+
+        @Override
+        public String toString() {
+            return "SimpleImmutableHandler{" +
+                "map=" + map +
+                '}';
+        }
     }
 
     class SimpleImmutable implements DataComponentAccessor {
@@ -134,6 +141,13 @@ public interface DataComponentAccessor extends Iterable<TypedDataComponent<?>> {
         @Override
         public Iterator<TypedDataComponent<?>> iterator() {
             return buildTypedCollection().iterator();
+        }
+
+        @Override
+        public String toString() {
+            return "SimpleImmutable{" +
+                "map=" + map +
+                '}';
         }
     }
 }
