@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 public class MapPersistTextParser<T> implements PersistTextParser<T> {
     protected final @NotNull Map<String, TextInputField<T, ?>> elements;
@@ -33,9 +34,25 @@ public class MapPersistTextParser<T> implements PersistTextParser<T> {
         this.dataType = buildDataType(type, elements);
     }
 
+    public MapPersistTextParser(@NotNull Map<String, TextInputField<T, ?>> elements,
+                                @NotNull TextInputResultParser<T> resultParser,
+                                @NotNull Function<PersistTextParser<T>, PersistentDataType<PersistentDataContainer, T>> function) {
+        this.elements = elements;
+        this.resultParser = resultParser;
+        this.dataType = function.apply(this);
+    }
+
     public PersistentDataType<PersistentDataContainer, T> buildDataType(@NotNull Class<T> complexType,
                                                                         @NotNull Map<String, TextInputField<T, ?>> elements){
         return new MapDataType<>(complexType, elements, this);
+    }
+
+    public @NotNull Map<String, TextInputField<T, ?>> getElements() {
+        return elements;
+    }
+
+    public @NotNull TextInputResultParser<T> getResultParser() {
+        return resultParser;
     }
 
     @Override
@@ -97,6 +114,7 @@ public class MapPersistTextParser<T> implements PersistTextParser<T> {
         protected TextInputResultParser<T> resultParser;
         protected PersistentDataType<PersistentDataContainer, T> dataType;
         protected Class<T> dataTypeClass;
+        protected Function<PersistTextParser<T>, PersistentDataType<PersistentDataContainer, T>> function;
 
         @Override
         public MapBuilder<T> field(String name, TextInputField<T, ?> field) {
@@ -128,8 +146,23 @@ public class MapPersistTextParser<T> implements PersistTextParser<T> {
 
         @Override
         public PersistTextParser<T> build() {
+            if(function != null){
+                return new MapPersistTextParser<>(elements, resultParser, function);
+            }
             if(dataType == null) return new MapPersistTextParser<>(elements, resultParser, dataTypeClass);
             return new MapPersistTextParser<>(elements, resultParser, dataType);
+        }
+
+        @Override
+        public PersistTextParser<T> buildUnset() {
+            if(dataType == null) return new UnsetMapPersistTextParser<>(elements, resultParser, dataTypeClass);
+            return new UnsetMapPersistTextParser<>(elements, resultParser, dataType);
+        }
+
+        @Override
+        public MapBuilder<T> dataTypeFunction(Function<PersistTextParser<T>, PersistentDataType<PersistentDataContainer, T>> function) {
+            this.function = function;
+            return this;
         }
     }
 }

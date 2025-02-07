@@ -26,6 +26,8 @@ import org.bukkit.Particle;
 import org.bukkit.Registry;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -78,8 +80,6 @@ public class ComponentInputParsers {
                 "ItemLootTable of " + key + " not found!"
             );
         });
-
-    public static PersistTextParser<List<ItemLootTable>> ITEM_LOOT_TABLE_LIST = PersistTextParser.list(ITEM_LOOT_TABLE, CruxPersistence.LIST.ITEM_LOOT_TABLE);
 
     public static PersistTextParser<ItemPredicate> SIMPLE_ITEM_PREDICATE = PersistTextParser.elementBuilder(ItemPredicate.class)
         .field(TextInputField.field(PersistTextParser.STRING, e ->{
@@ -251,4 +251,30 @@ public class ComponentInputParsers {
                 .data(data)
                 .build();
         });
+
+    public static PersistTextParser<PotionEffectType> POTION_EFFECT_TYPE = PersistTextParser.elementBuilder(PotionEffectType.class)
+        .field(TextInputField.field(PersistTextParser.KEY, PotionEffectType::key))
+        .apply(ctx ->{
+            Key key = ctx.get();
+            return Registry.POTION_EFFECT_TYPE.get(key);
+        });
+
+    public static PersistTextParser<PotionEffect> POTION_EFFECT = PersistTextParser.mapBuilder(PotionEffect.class)
+        .field("type", TextInputField.field(POTION_EFFECT_TYPE, PotionEffect::getType))
+        .field("duration", TextInputField.field(PersistTextParser.INTEGER, e -> e.getDuration() == 600 ? null : e.getDuration()))
+        .field("amplifier", TextInputField.field(PersistTextParser.INTEGER, e -> e.getAmplifier() == 0 ? null : e.getAmplifier()))
+        .field("ambient", TextInputField.field(PersistTextParser.BOOLEAN, e -> e.isAmbient() ? e.isAmbient() : null))
+        .field("particles", TextInputField.field(PersistTextParser.BOOLEAN, e -> e.hasParticles() ? null : e.hasParticles()))
+        .field("icon", TextInputField.field(PersistTextParser.BOOLEAN, e -> e.hasIcon() ? null : e.hasIcon()))
+        .apply(ctx ->{
+            PotionEffectType type = ctx.get("type");
+            int duration = ctx.getOptional("duration", 600);
+            int amplifier = ctx.getOptional("amplifier", 0);
+            boolean ambient = ctx.getOptional("ambient", false);
+            boolean particles = ctx.getOptional("particles", true);
+            boolean icon = ctx.getOptional("icon", true);
+            return new PotionEffect(type, duration, amplifier, ambient, particles, icon);
+        });
+
+    public static ComponentInputListParsers LIST = new ComponentInputListParsers();
 }

@@ -6,6 +6,7 @@ import killercreepr.crux.api.component.serialization.PersistentDataSerializer;
 import killercreepr.crux.api.item.component.ToolComponent;
 import killercreepr.crux.api.loot.item.ItemLootTable;
 import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.component.parser.type.ComponentInputListParsers;
 import killercreepr.crux.core.component.parser.type.ComponentInputParsers;
 import killercreepr.crux.core.persistence.CruxPersistence;
 import killercreepr.crux.core.registries.CruxRegistries;
@@ -39,7 +40,7 @@ public class CruxComponents {
         .persistTextParser(ComponentInputParsers.ITEM_LOOT_TABLE.createInput(Crux.key("item_loot_table"))));
 
     public static final DataComponentType<List<ItemLootTable>> ITEM_LOOT_TABLES = register("item_loot_tables", builder -> builder
-        .persistTextParser(ComponentInputParsers.ITEM_LOOT_TABLE_LIST.createInput(Crux.key("item_loot_tables"))));
+        .persistTextParser(ComponentInputListParsers.ITEM_LOOT_TABLE.createInput(Crux.key("item_loot_tables"))));
 
     public static final DataComponentType<Long> LOOT_GENERATED_TIME = register("loot_generated_time", builder -> builder
         .persistTextParser(PersistTextParser.LONG.createInput(Crux.key("loot_generated_time"))));

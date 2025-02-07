@@ -132,6 +132,8 @@ public interface PersistTextParser<T> extends ComponentTextInputParser<T>{
         MapBuilder<T> dataType(PersistentDataType<PersistentDataContainer, T> dataType);
         MapBuilder<T> dataTypeClass(Class<T> type);
         PersistTextParser<T> build();
+        PersistTextParser<T> buildUnset();
+        MapBuilder<T> dataTypeFunction(Function<PersistTextParser<T>, PersistentDataType<PersistentDataContainer, T>> function);
     }
 
     interface ElementBuilder<T>{

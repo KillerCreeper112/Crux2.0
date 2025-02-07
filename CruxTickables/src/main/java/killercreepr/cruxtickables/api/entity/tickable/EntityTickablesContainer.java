@@ -6,9 +6,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 public interface EntityTickablesContainer {
-    static EntityTickablesContainer container(Collection<EntityTickableInstance> instances){
-        return new SimpleEntityTickablesContainer(instances);
+    static EntityTickablesContainer container(Collection<EntityTickableModifier> modifiers){
+        return new SimpleEntityTickablesContainer(modifiers);
     }
-
-    @NotNull Collection<EntityTickableInstance> getTickableInstances();
+    @NotNull Collection<EntityTickableModifier> getTickableModifiers();
 }
