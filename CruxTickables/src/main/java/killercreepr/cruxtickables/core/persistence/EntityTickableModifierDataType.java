@@ -42,7 +42,7 @@ public class EntityTickableModifierDataType extends MapDataType<EntityTickableMo
             EntityTickableModifier test =(EntityTickableModifier) complex;
             map = parser.encodeObject(complex);
 
-            if(test.getData() != null && !test.getData().isEmpty() && complex.getTickable() instanceof DataEntityTickable dataTickable){
+            if(test.getData() != null && complex.getTickable() instanceof DataEntityTickable dataTickable){
                 ((PersistParser)dataTickable.getDataParser()).encode(c, test.getData());
                 setData = true;
                 /*CruxTag.set(dataContainer, "data", dataTickable.getDataParser().dataType(), );
@@ -60,7 +60,7 @@ public class EntityTickableModifierDataType extends MapDataType<EntityTickableMo
 
         map.forEach((id, value) ->{
             TextInputField<EntityTickableModifier, ?> field = elements.get(id);
-            if(field==null) return;
+            if(field==null || id.equalsIgnoreCase("data")) return;
             PersistTextParser<Object> serializer = (PersistTextParser<Object>) field.inputParser();
             CruxTag.set(c, id, serializer.dataType(), value);
         });
@@ -99,7 +99,7 @@ public class EntityTickableModifierDataType extends MapDataType<EntityTickableMo
         EntityTickableModifier mod = parser.decodeObject(map);
         if(dataContainer==null) return mod;
         if(!(mod.getTickable() instanceof DataEntityTickable dataTickable)) return mod;
-        Map<?, ?> data = (Map<?, ?>) dataTickable.getDataParser().decode(dataContainer);
+        Object data = dataTickable.getDataParser().decode(c);
         mod = new SimpleEntityTickableModifier(mod.key(), mod.getTickable(), mod.getSlotGroup(), data);
         return mod;
     }

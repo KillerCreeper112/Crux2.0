@@ -33,26 +33,21 @@ public class CruxTickableCompParsers {
             return e.getSlotGroup();
         }))
         .field("data", TextInputField.field(PersistTextParser.mapBuilder()
-                .resultParser(InputDecodeContext::get)
-            .buildUnset(), e ->{
-            return e.getData();
-        }))
-        .dataTypeFunction(parser -> new EntityTickableModifierDataType(
-            EntityTickableModifier.class, Map.of(
-            "key", TextInputField.field(PersistTextParser.KEY, Keyed::key),
-            "tickable", TextInputField.field(ENTITY_TICKABLE, EntityTickableModifier::getTickable),
-            "slot", TextInputField.field(CruxAttributeCompParsers.CRUX_SLOT_GROUP, e ->{
-                if(e.getSlotGroup() == CruxSlotGroup.ANY) return null;
-                return e.getSlotGroup();
-            })), (MapPersistTextParser<EntityTickableModifier>) parser
-        ))
+            .resultParser(InputDecodeContext::get)
+            .buildUnset(), EntityTickableModifier::getData))
+        .dataTypeFunction(parser ->{
+            MapPersistTextParser<EntityTickableModifier> mapParser = (MapPersistTextParser<EntityTickableModifier>) parser;
+            return new EntityTickableModifierDataType(
+                EntityTickableModifier.class, mapParser.getElements(), mapParser
+            );
+        })
         .apply(ctx ->{
             Key key = ctx.getOptional("key", Crux.key("base"));
             EntityTickable tickable = ctx.get("tickable");
             CruxSlotGroup slot = ctx.getOptional("slot");
 
             if(ctx.getOptional("data") instanceof Map<?,?> data && tickable instanceof DataEntityTickable dataTickable){
-                Map<?,?> dataObject = (Map<?, ?>) dataTickable.getDataParser().decodeObject(data);
+                Object dataObject = dataTickable.getDataParser().decodeObject(data);
                 return new SimpleEntityTickableModifier(key, tickable, slot, dataObject);
             }
 
