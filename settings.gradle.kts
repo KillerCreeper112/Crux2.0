@@ -27,6 +27,7 @@ include(
 
     "CruxEntities",
     "CruxStatistics",
+    "CruxTickables",
 
     "CruxTest"
 )
