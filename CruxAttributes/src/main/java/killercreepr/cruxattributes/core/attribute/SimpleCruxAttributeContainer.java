@@ -11,17 +11,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SimpleCruxAttributeContainer implements CruxAttributeContainer {
-    private final Map<CruxAttribute, CruxAttributeInstance> attributes = new HashMap<>();
+    private final Map<CruxAttribute, CruxAttributeInstance> attributes;
     public SimpleCruxAttributeContainer(@NotNull CruxAttributeInstance... attributes){
+        this(new HashMap<>());
         for(CruxAttributeInstance i : attributes) {
             this.attributes.put(i.getAttribute(), i);
         }
     }
 
     public SimpleCruxAttributeContainer(@NotNull Collection<CruxAttributeInstance> attributes){
+        this(new HashMap<>());
         for(CruxAttributeInstance i : attributes) {
             this.attributes.put(i.getAttribute(), i);
         }
+    }
+
+    public SimpleCruxAttributeContainer(Map<CruxAttribute, CruxAttributeInstance> attributes) {
+        this.attributes = attributes;
     }
 
     @Override
@@ -40,5 +46,16 @@ public class SimpleCruxAttributeContainer implements CruxAttributeContainer {
 
     public boolean hasAttribute(@NotNull CruxAttribute attribute){
         return attributes.containsKey(attribute);
+    }
+
+    @Override
+    public double getValue(CruxAttribute attribute) {
+        return getValue(attribute, 0D);
+    }
+
+    @Override
+    public double getValue(CruxAttribute attribute, double fallBack) {
+        CruxAttributeInstance instance = getAttribute(attribute);
+        return instance == null ? fallBack : instance.getValue();
     }
 }

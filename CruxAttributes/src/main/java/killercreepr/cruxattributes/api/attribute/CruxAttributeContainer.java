@@ -5,6 +5,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 
 public interface CruxAttributeContainer {
     static CruxAttributeContainer container(@NotNull Collection<CruxAttributeInstance> attributes){
@@ -15,7 +17,20 @@ public interface CruxAttributeContainer {
         return new SimpleCruxAttributeContainer(attributes);
     }
 
+    static CruxAttributeContainer container(@NotNull Map<CruxAttribute, CruxAttributeInstance> map){
+        return new SimpleCruxAttributeContainer(map);
+    }
+
+    static CruxAttributeContainer empty(){
+        return EMPTY;
+    }
+
+    CruxAttributeContainer EMPTY = container(Map.of());
+
     @NotNull Collection<CruxAttributeInstance> getAttributeInstances();
     @Nullable CruxAttributeInstance getAttribute(@NotNull CruxAttribute attribute);
     boolean hasAttribute(@NotNull CruxAttribute attribute);
+
+    double getValue(CruxAttribute attribute);
+    double getValue(CruxAttribute attribute, double fallBack);
 }
