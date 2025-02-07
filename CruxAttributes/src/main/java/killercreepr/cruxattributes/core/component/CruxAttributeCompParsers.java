@@ -73,6 +73,13 @@ public class CruxAttributeCompParsers {
             return CruxAttributeInstance.instance(attribute, modifiers);
         });
 
+    public static PersistTextParser<CruxAttributeContainer> CRUX_ATTRIBUTE_CONTAINER = PersistTextParser.elementBuilder(CruxAttributeContainer.class)
+        .field(TextInputField.field(PersistTextParser.collectionList(CRUX_ATTRIBUTE_INSTANCE), CruxAttributeContainer::getAttributeInstances))
+        .apply(ctx ->{
+            Collection<CruxAttributeInstance> instances = ctx.get();
+            return CruxAttributeContainer.container(instances);
+        });
+
     public static PersistTextParser<CruxAttributeContainer> CRUX_ATTRIBUTES = PersistTextParser.elementBuilder(CruxAttributeContainer.class)
         .field(TextInputField.field(PersistTextParser.collectionList(CRUX_ATTRIBUTE_INSTANCE), CruxAttributeContainer::getAttributeInstances))
         .dataType(CruxAttributesPersistence.ATTRIBUTE_CONTAINER_COMPONENT)

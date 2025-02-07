@@ -37,9 +37,10 @@ public class TickableListener implements Listener {
 
         EntityTickablesHolder holder = EntityMemory.getDataHolder(p, EntityTickablesHolder.class);
         if(holder==null) return;
-        Crux.scheduler().runTask(() ->{
+        holder.setLastItemUpdate(System.currentTimeMillis());
+        /*Crux.scheduler().runTask(() ->{
             holder.updateTickables(p);
-        });
+        });*/
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)

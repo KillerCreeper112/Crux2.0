@@ -43,10 +43,12 @@ public class EntityTickableModifierDataType extends MapDataType<EntityTickableMo
             map = parser.encodeObject(complex);
 
             if(test.getData() != null && complex.getTickable() instanceof DataEntityTickable dataTickable){
-                ((PersistParser)dataTickable.getDataParser()).encode(c, test.getData());
-                setData = true;
-                /*CruxTag.set(dataContainer, "data", dataTickable.getDataParser().dataType(), );
-                map.put("data", dataTickable.getDataParser().encodeObjectUnchecked(test.getData()));*/
+                try{
+                    ((PersistParser)dataTickable.getDataParser()).encode(c, test.getData());
+                    setData = true;
+                }catch (ClassCastException e){
+                    e.printStackTrace();
+                }
             }
 
         }catch (ClassCastException ignored){

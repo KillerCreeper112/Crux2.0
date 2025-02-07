@@ -5,6 +5,7 @@ import killercreepr.crux.api.entity.memory.EntityMemory;
 import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.entity.memory.EntityTickedDataHolder;
+import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxattributes.api.equipment.CruxSlot;
 import killercreepr.cruxattributes.api.equipment.CruxSlotGroup;
 import killercreepr.cruxattributes.bukkit.AttributeBukkitAdaptor;
@@ -61,6 +62,7 @@ public class EntityTickablesHolder extends EntityTickedDataHolder {
             return true;
         });
         tickables.forEach((key, active) ->{
+            if(activeTickables.containsKey(key)) return;
             activeTickables.put(key, active);
             active.started();
         });
@@ -98,8 +100,25 @@ public class EntityTickablesHolder extends EntityTickedDataHolder {
         return map;
     }
 
+    protected long lastItemUpdate;
+
+    public long getLastItemUpdate() {
+        return lastItemUpdate;
+    }
+
+    public void setLastItemUpdate(long lastItemUpdate) {
+        this.lastItemUpdate = lastItemUpdate;
+    }
+
+    protected int tick = 0;
     @Override
     public void tick(@NotNull Entity e) {
         tickTickables();
+        tick++;
+        if(tick > 20){
+            tick = 0;
+            if(!CruxMath.hasOccurredWithin(lastItemUpdate, 100)) return;
+            updateTickables(e);
+        }
     }
 }
