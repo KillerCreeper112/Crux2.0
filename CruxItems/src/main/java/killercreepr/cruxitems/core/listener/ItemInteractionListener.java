@@ -1,15 +1,21 @@
 package killercreepr.cruxitems.core.listener;
 
 import killercreepr.crux.api.item.CruxItem;
+import killercreepr.cruxitems.api.event.ConsumableComponentUseEvent;
+import killercreepr.cruxitems.api.event.CustomItemPreConsumeEvent;
 import killercreepr.cruxitems.api.event.CustomItemPreUseEvent;
 import killercreepr.cruxitems.api.event.InteractableComponentUseEvent;
 import killercreepr.cruxitems.api.item.CruxedItem;
+import killercreepr.cruxitems.api.item.component.ConsumableComponent;
 import killercreepr.cruxitems.api.item.component.InteractableComponent;
+import killercreepr.cruxitems.api.item.consume.ItemConsumeContext;
+import killercreepr.cruxitems.api.item.consume.ItemConsumeResult;
 import killercreepr.cruxitems.api.item.interaction.InteractableItem;
 import killercreepr.cruxitems.api.item.interaction.ItemUseContext;
 import killercreepr.cruxitems.api.item.interaction.ItemUseResult;
 import killercreepr.cruxitems.api.item.inventory.InventoryItem;
 import killercreepr.cruxitems.api.item.inventory.ItemClickContext;
+import killercreepr.cruxitems.core.item.consume.ItemConsumeContextImpl;
 import killercreepr.cruxitems.core.item.interaction.impl.ItemUseContextImpl;
 import killercreepr.cruxitems.core.item.inventory.ItemClickContextImpl;
 import org.bukkit.entity.Entity;
@@ -22,6 +28,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
@@ -185,4 +192,48 @@ public class ItemInteractionListener implements Listener {
             }
         }
     }
+
+    public ItemConsumeResult genericConsume(ItemConsumeContext ctx){
+        Collection<ConsumableComponent> list = ctx.getItem().getAllOfTypeOrDefaultData(ConsumableComponent.class);
+        if(list == null) return null;
+        return genericConsume(ctx, list);
+    }
+
+    public ItemConsumeResult genericConsume(ItemConsumeContext ctx, Collection<ConsumableComponent> list){
+        CustomItemPreConsumeEvent preUseEvent = new CustomItemPreConsumeEvent(ctx, ItemConsumeResult.empty());
+        if(!preUseEvent.callEvent()) return preUseEvent.getUseResult();
+
+        ItemConsumeResult defaultResult = preUseEvent.getUseResult();
+        for(ConsumableComponent c : list){
+            if(!c.isUsable(ctx)) continue;
+            ConsumableComponentUseEvent useEvent = new ConsumableComponentUseEvent(ctx, c);
+            if(!useEvent.callEvent()) continue;
+
+            ItemConsumeResult result = c.onUse(ctx);
+            if(!result.successful()) continue;
+            return result;
+        }
+        return defaultResult;
+    }
+
+    @EventHandler
+    public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
+        Player p = event.getPlayer();
+        CruxItem crux = CruxItem.wrap(event.getItem());
+
+        ItemConsumeContext ctx = new ItemConsumeContextImpl(p, crux, event.getReplacement());
+        ItemConsumeResult result = genericConsume(ctx);
+        if(result==null) return;
+
+        if(result.getCancelled() != null && result.getCancelled()){
+            event.setCancelled(true);
+        }
+        if(result.replaceResultItem()){
+            event.setReplacement(result.resultItem());
+        }
+        if(result.replaceItem()){
+            event.setItem(result.item());
+        }
+    }
+
 }
