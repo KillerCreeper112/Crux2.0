@@ -2,6 +2,7 @@ package killercreepr.crux.core.component.parser.type;
 
 import killercreepr.crux.api.block.predicate.BlockPredicate;
 import killercreepr.crux.api.block.tag.BlockTag;
+import killercreepr.crux.api.communication.CreateSound;
 import killercreepr.crux.api.component.parser.StringListEncodeComponent;
 import killercreepr.crux.api.component.parser.hybrid.PersistTextParser;
 import killercreepr.crux.api.component.parser.hybrid.TextInputField;
@@ -21,6 +22,7 @@ import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.paper.ItemHolder;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
+import net.kyori.adventure.sound.Sound;
 import org.bukkit.Color;
 import org.bukkit.Particle;
 import org.bukkit.Registry;
@@ -274,6 +276,17 @@ public class ComponentInputParsers {
             boolean particles = ctx.getOptional("particles", true);
             boolean icon = ctx.getOptional("icon", true);
             return new PotionEffect(type, duration, amplifier, ambient, particles, icon);
+        });
+
+    public static PersistTextParser<CreateSound> CREATE_SOUND = PersistTextParser.mapBuilder(CreateSound.class)
+        .field("sound",TextInputField.field(PersistTextParser.KEY, e -> e.getSound().name()))
+        .field("pitch",TextInputField.field(PersistTextParser.FLOAT, e -> e.getSound().pitch()))
+        .field("volume",TextInputField.field(PersistTextParser.FLOAT, e -> e.getSound().volume()))
+        .apply(ctx ->{
+            Key key = ctx.get();
+            float volume = ctx.getOptional("volume", 2f);
+            float pitch = ctx.getOptional("pitch", 1f);
+            return CreateSound.sound(key, Sound.Source.MASTER, volume, pitch);
         });
 
     public static ComponentInputListParsers LIST = new ComponentInputListParsers();
