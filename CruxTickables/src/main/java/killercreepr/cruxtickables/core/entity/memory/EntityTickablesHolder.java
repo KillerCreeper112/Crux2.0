@@ -29,7 +29,7 @@ public class EntityTickablesHolder extends EntityTickedDataHolder {
 
     }
 
-    private Map<Key, ActiveEntityTickable> getTickables(CruxItem item, CruxSlot slot){
+    /*private Map<Key, ActiveEntityTickable> getTickables(CruxItem item, CruxSlot slot){
 
     }
 
@@ -61,7 +61,7 @@ public class EntityTickablesHolder extends EntityTickedDataHolder {
         if(bonus.isEmpty() || setBonus < 4) return b;
         return addDistinct(p, b, GrimSlot.CHEST, bonus);
     }
-
+*/
     @Override
     public void tick(@NotNull Entity e) {
 
