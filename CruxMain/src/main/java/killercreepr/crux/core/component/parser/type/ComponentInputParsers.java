@@ -279,11 +279,11 @@ public class ComponentInputParsers {
         });
 
     public static PersistTextParser<CreateSound> CREATE_SOUND = PersistTextParser.mapBuilder(CreateSound.class)
-        .field("sound",TextInputField.field(PersistTextParser.KEY, e -> e.getSound().name()))
+        .field("sound_id",TextInputField.field(PersistTextParser.KEY, e -> e.getSound().name()))
         .field("pitch",TextInputField.field(PersistTextParser.FLOAT, e -> e.getSound().pitch()))
         .field("volume",TextInputField.field(PersistTextParser.FLOAT, e -> e.getSound().volume()))
         .apply(ctx ->{
-            Key key = ctx.get();
+            Key key = ctx.get("sound_id");
             float volume = ctx.getOptional("volume", 2f);
             float pitch = ctx.getOptional("pitch", 1f);
             return CreateSound.sound(key, Sound.Source.MASTER, volume, pitch);
