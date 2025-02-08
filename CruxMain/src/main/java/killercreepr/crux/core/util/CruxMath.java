@@ -49,31 +49,41 @@ public class CruxMath {
      *                   A skew factor of 1 will have equal chance (no skewed results).
      */
     public static int randomSkewed(int minValue, int maxValue, double skewFactor) {
-        double randomValue = RANDOM.nextDouble();
-        double scaledValue = Math.pow(randomValue, skewFactor) * (maxValue - minValue) + minValue;
-        return (int) Math.min(scaledValue, maxValue);
+        return randomSkewed(random(), minValue, maxValue, skewFactor);
+    }
+    public static long randomSkewed(long minValue, long maxValue, double skewFactor) {
+        return randomSkewed(random(), minValue, maxValue, skewFactor);
+    }
+    public static double randomSkewed(double minValue, double maxValue, double skewFactor) {
+        return randomSkewed(random(), minValue, maxValue, skewFactor);
+    }
+    public static float randomSkewed(float minValue, float maxValue, double skewFactor) {
+        return randomSkewed(random(), minValue, maxValue, skewFactor);
     }
     public static int randomSkewed(Random random, int minValue, int maxValue, double skewFactor) {
-        double randomValue = random.nextDouble();
-        double scaledValue = Math.pow(randomValue, skewFactor) * (maxValue - minValue) + minValue;
-        return (int) Math.min(scaledValue, maxValue);
+        return (int) randomSkewed(random, (double) minValue, maxValue, skewFactor);
     }
+    /**
+     * @param skewFactor The higher this number, the more likely it will be that
+     *                   this function generates a higher number. The lower it is, the more likely
+     *                   it is that it will generate a lower number.
+     *                   For example, a skew factor of 0.2 will make it more likely for the function
+     *                   to generate a lower number.
+     *                   A skew factor of 2 will make it more likely for the function to generate a higher number.
+     *                   A skew factor of 1 will have equal chance (no skewed results).
+     */
     public static double randomSkewed(Random random, double minValue, double maxValue, double skewFactor) {
         double randomValue = random.nextDouble();
-        double scaledValue = Math.pow(randomValue, skewFactor) * (maxValue - minValue) + minValue;
-        return Math.min(scaledValue, maxValue);
-    }
-    public static float randomSkewed(Random random, float minValue, float maxValue, double skewFactor) {
-        double randomValue = random.nextDouble();
-        double scaledValue = Math.pow(randomValue, skewFactor) * (maxValue - minValue) + minValue;
-        return (float) Math.min(scaledValue, maxValue);
-    }
-    public static long randomSkewed(Random random, long minValue, long maxValue, double skewFactor) {
-        double randomValue = random.nextDouble();
-        double scaledValue = Math.pow(randomValue, skewFactor) * (maxValue - minValue) + minValue;
-        return (long) Math.min(scaledValue, maxValue);
+        double skewed = Math.pow(randomValue, 1.0 / skewFactor);
+        return minValue + skewed * (maxValue - minValue);
     }
 
+    public static float randomSkewed(Random random, float minValue, float maxValue, double skewFactor) {
+        return (float) randomSkewed(random, (double) minValue, maxValue, skewFactor);
+    }
+    public static long randomSkewed(Random random, long minValue, long maxValue, double skewFactor) {
+        return (long) randomSkewed(random, (double) minValue, maxValue, skewFactor);
+    }
 
     public static void rotateVector(Vector vector, float yaw, float pitch) {
         double yawRad = Math.toRadians(-yaw); // Negative yaw for Minecraft coordinate system
@@ -94,24 +104,6 @@ public class CruxMath {
         vector.setX(newX);
         vector.setY(newY);
         vector.setZ(newZ);
-    }
-
-    public static long randomSkewed(long minValue, long maxValue, double skewFactor) {
-        double randomValue = RANDOM.nextDouble();
-        double scaledValue = Math.pow(randomValue, skewFactor) * (maxValue - minValue) + minValue;
-        return (long) Math.min(scaledValue, maxValue);
-    }
-
-    public static double randomSkewed(double minValue, double maxValue, double skewFactor) {
-        double randomValue = RANDOM.nextDouble();
-        double scaledValue = Math.pow(randomValue, skewFactor) * (maxValue - minValue) + minValue;
-        return Math.min(scaledValue, maxValue);
-    }
-
-    public static float randomSkewed(float minValue, float maxValue, double skewFactor) {
-        double randomValue = RANDOM.nextDouble();
-        double scaledValue = Math.pow(randomValue, skewFactor) * (maxValue - minValue) + minValue;
-        return (float) Math.min(scaledValue, maxValue);
     }
 
     public static int floorBlock(double num) {
