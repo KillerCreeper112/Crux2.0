@@ -13,6 +13,8 @@ import killercreepr.crux.core.text.container.SimpleMergedTagContainer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Function;
+
 public interface MergedTagContainer extends StringTagProvider, StringListTagProvider {
     static @Nullable MergedTagContainer merge(@Nullable MergedTagContainer first, @Nullable MergedTagContainer second){
         if(first == null && second == null) return null;
@@ -57,6 +59,10 @@ public interface MergedTagContainer extends StringTagProvider, StringListTagProv
     MergedTagContainer hook(@Nullable Object info);
     MergedTagContainer hook(@Nullable Object info, @Nullable TagsPrefixBuilder prefix);
     MergedTagContainer hookAll(@Nullable DataExchange info);
+    default MergedTagContainer hookAllWithPrefix(@Nullable DataExchange info){
+        return hookAllWithPrefix(info, null);
+    }
+    MergedTagContainer hookAllWithPrefix(@Nullable DataExchange info, @Nullable Function<String, TagsPrefixBuilder> prefixConsumer);
 
     MergedTagContainer add(@NotNull TagResolver<?> resolver);
     MergedTagContainer add(@NotNull TagResolver<?> resolver, @Nullable FormatPrefix prefix);

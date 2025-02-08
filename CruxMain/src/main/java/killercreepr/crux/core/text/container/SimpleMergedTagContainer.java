@@ -13,6 +13,8 @@ import killercreepr.crux.api.text.tags.container.TagContainer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Function;
+
 public class SimpleMergedTagContainer implements MergedTagContainer {
     protected final @NotNull TagParser tags;
     protected final @NotNull TagContainer<StringResolver> strings;
@@ -65,6 +67,21 @@ public class SimpleMergedTagContainer implements MergedTagContainer {
         for(Holder<?> o : info){
             hook(o.value());
         }
+        return this;
+    }
+
+    @Override
+    public MergedTagContainer hookAllWithPrefix(@Nullable DataExchange info, @Nullable Function<String, TagsPrefixBuilder> prefixConsumer) {
+        if(info==null) return this;
+        info.forEach((id, holder) ->{
+            Object value = holder.value();
+            if(id.isBlank()){
+                hook(value);
+                return;
+            }
+            TagsPrefixBuilder prefix = prefixConsumer == null ? TagsPrefixBuilder.overwriteBase(id + "_") : prefixConsumer.apply(id);
+            hook(value, prefix);
+        });
         return this;
     }
 

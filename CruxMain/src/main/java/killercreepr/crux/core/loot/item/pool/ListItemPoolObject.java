@@ -4,6 +4,7 @@ import killercreepr.crux.api.item.dynamic.DynamicItem;
 import killercreepr.crux.api.loot.conditions.LootCondition;
 import killercreepr.crux.api.loot.functions.LootFunction;
 import killercreepr.crux.api.text.context.TextParserContext;
+import killercreepr.crux.api.text.tags.container.TagContainer;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,7 +19,9 @@ public class ListItemPoolObject extends SimpleItemLootPoolObject{
                               @Nullable List<LootFunction<ItemStack>> lootFunctions, @NotNull Collection<DynamicItem> item) {
         super(weight, quality, conditions, lootFunctions, (ctx) ->{
             Collection<ItemStack> items = new ArrayList<>();
-            TextParserContext parserCtx = TextParserContext.empty();
+            TextParserContext parserCtx = TextParserContext.builder()
+                .tags(TagContainer.merged().hookAllWithPrefix(ctx.info()))
+                .build();
             for(DynamicItem dynamicItem : item){
                 ItemStack i = dynamicItem.buildItem(parserCtx);
                 if(i == null) continue;
