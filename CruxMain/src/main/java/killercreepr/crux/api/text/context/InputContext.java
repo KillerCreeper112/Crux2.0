@@ -10,19 +10,39 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface InputContext {
+    @Deprecated
     static @NotNull InputContext simple(){
         return simple((MergedTagContainer) null);
     }
 
+    @Deprecated
     static @NotNull InputContext simple(@Nullable StringTagProvider tags){
         return simple(Crux.format(), tags);
     }
 
+    @Deprecated
     static @NotNull InputContext simple(@NotNull FormatSerializer format, @Nullable StringTagProvider tags){
         return new SimpleInputContext(format, tags);
     }
 
+    @Deprecated
     static @NotNull InputContext simple(@NotNull FormatSerializer format){
+        return simple(format, null);
+    }
+
+    static @NotNull InputContext inputContext(){
+        return inputContext((MergedTagContainer) null);
+    }
+
+    static @NotNull InputContext inputContext(@Nullable StringTagProvider tags){
+        return inputContext(Crux.format(), tags);
+    }
+
+    static @NotNull InputContext inputContext(@NotNull FormatSerializer format, @Nullable StringTagProvider tags){
+        return new SimpleInputContext(format, tags);
+    }
+
+    static @NotNull InputContext inputContext(@NotNull FormatSerializer format){
         return simple(format, null);
     }
 

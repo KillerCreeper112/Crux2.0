@@ -34,7 +34,7 @@ public class ItemDamageFunction extends SimpleLootFunction<ItemStack> implements
             int maxDamage = CruxItem.getMaxDurability(i);
             if(maxDamage < 1) return;
             Random source = context.getRandom();
-            InputContext inputCtx = InputContext.simple(TagContainer.string().hook(i));
+            InputContext inputCtx = InputContext.inputContext(TagContainer.string().hook(i));
             int dmg = this.amount.sample(source, inputCtx).intValue();
             if(add) dmg = meta.getDamage() + dmg;
             meta.setDamage(CruxMath.clamp(dmg, 0, maxDamage));
