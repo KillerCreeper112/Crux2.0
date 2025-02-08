@@ -2,6 +2,7 @@ package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.valueproviders.number.UniformNumberArray;
+import killercreepr.crux.core.valueproviders.number.UniformSkewedNumber;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileArray;
@@ -23,6 +24,13 @@ public class FileNumberProvider extends SimpleFileHandler<killercreepr.crux.api.
         FileRegistry registry = context.getRegistry();
         if(object instanceof killercreepr.crux.core.valueproviders.number.ConstantNumber d){
             return new FileGeneric(d.getConstant());
+        }
+        if(object instanceof killercreepr.crux.core.valueproviders.number.UniformSkewedNumber d){
+            FileObject map = new FileObject();
+            map.add("min", registry.serializeToFile(d.getMinInclusive()));
+            map.add("max", registry.serializeToFile(d.getMaxInclusive()));
+            map.add("skew", registry.serializeToFile(d.getSkew()));
+            return map;
         }
         if(object instanceof killercreepr.crux.core.valueproviders.number.UniformNumber d){
             FileObject map = new FileObject();
@@ -59,6 +67,14 @@ public class FileNumberProvider extends SimpleFileHandler<killercreepr.crux.api.
             FileElement min = map.get("min");
             FileElement max = map.get("max");
             if(min != null && max != null){
+                FileElement skew = map.get("skew");
+                if(skew != null){
+                    return new UniformSkewedNumber(
+                        registry.deserializeFromFile(killercreepr.crux.api.valueproviders.number.NumberProvider.class, min),
+                        registry.deserializeFromFile(killercreepr.crux.api.valueproviders.number.NumberProvider.class, max),
+                        registry.deserializeFromFile(killercreepr.crux.api.valueproviders.number.NumberProvider.class, skew)
+                    );
+                }
                 return new killercreepr.crux.core.valueproviders.number.UniformNumber(
                         registry.deserializeFromFile(killercreepr.crux.api.valueproviders.number.NumberProvider.class, min),
                         registry.deserializeFromFile(killercreepr.crux.api.valueproviders.number.NumberProvider.class, max)

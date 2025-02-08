@@ -53,6 +53,26 @@ public class CruxMath {
         double scaledValue = Math.pow(randomValue, skewFactor) * (maxValue - minValue) + minValue;
         return (int) Math.min(scaledValue, maxValue);
     }
+    public static int randomSkewed(Random random, int minValue, int maxValue, double skewFactor) {
+        double randomValue = random.nextDouble();
+        double scaledValue = Math.pow(randomValue, skewFactor) * (maxValue - minValue) + minValue;
+        return (int) Math.min(scaledValue, maxValue);
+    }
+    public static double randomSkewed(Random random, double minValue, double maxValue, double skewFactor) {
+        double randomValue = random.nextDouble();
+        double scaledValue = Math.pow(randomValue, skewFactor) * (maxValue - minValue) + minValue;
+        return Math.min(scaledValue, maxValue);
+    }
+    public static float randomSkewed(Random random, float minValue, float maxValue, double skewFactor) {
+        double randomValue = random.nextDouble();
+        double scaledValue = Math.pow(randomValue, skewFactor) * (maxValue - minValue) + minValue;
+        return (float) Math.min(scaledValue, maxValue);
+    }
+    public static long randomSkewed(Random random, long minValue, long maxValue, double skewFactor) {
+        double randomValue = random.nextDouble();
+        double scaledValue = Math.pow(randomValue, skewFactor) * (maxValue - minValue) + minValue;
+        return (long) Math.min(scaledValue, maxValue);
+    }
 
 
     public static void rotateVector(Vector vector, float yaw, float pitch) {

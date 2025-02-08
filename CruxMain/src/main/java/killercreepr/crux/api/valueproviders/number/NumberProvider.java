@@ -34,6 +34,12 @@ public interface NumberProvider extends NumberHolder {
     static @NotNull NumberProvider uniform(@NotNull NumberProvider min, @NotNull NumberProvider max){
         return new UniformNumber(min, max);
     }
+    static @NotNull NumberProvider uniformSkewed(@NotNull Number min, @NotNull Number max, @NotNull Number skew){
+        return new UniformSkewedNumber(min, max, skew);
+    }
+    static @NotNull NumberProvider uniformSkewed(@NotNull NumberProvider min, @NotNull NumberProvider max, @NotNull NumberProvider skew){
+        return new UniformSkewedNumber(min, max, skew);
+    }
     static @NotNull NumberProvider equation(@NotNull String equation){
         return new EquationNumber(equation);
     }
@@ -49,6 +55,7 @@ public interface NumberProvider extends NumberHolder {
             case ConstantNumber n ->
                 BigDecimal.valueOf(n.getConstant().doubleValue()).stripTrailingZeros().toPlainString();
             case EquationNumber n -> n.getEquation();
+            case UniformSkewedNumber n -> serializeToString(n.getMinInclusive()) + "," + serializeToString(n.getMaxInclusive()) + ", " + serializeToString(n.getSkew());
             case UniformNumber n ->
                 serializeToString(n.getMinInclusive()) + "," + serializeToString(n.getMaxInclusive());
             case UniformNumberArray n -> "[" + Arrays.stream(n.getNumbers())
@@ -75,6 +82,13 @@ public interface NumberProvider extends NumberHolder {
 
         String[] split = text.split(",");
         if(split.length > 1){
+            if(split.length > 2){
+                return NumberProvider.uniformSkewed(
+                    NumberProvider.parseFromString(split[0]),
+                    NumberProvider.parseFromString(split[1]),
+                    NumberProvider.parseFromString(split[2])
+                );
+            }
             return NumberProvider.uniform(
                 NumberProvider.parseFromString(split[0]), NumberProvider.parseFromString(split[1])
             );
