@@ -11,7 +11,6 @@ import killercreepr.cruxitems.api.values.ValuesProvider;
 import killercreepr.cruxitems.core.item.CfgItemType;
 import killercreepr.cruxitems.core.values.DefaultValues;
 import net.kyori.adventure.key.Key;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -73,7 +72,6 @@ public class Config extends Cfg implements ValuesProvider {
         }
         Map<Key, CfgItemType> finalItemTypes = itemTypes;
         groupList.forEach(g ->{
-            Bukkit.broadcastMessage("group=" + g.item);
             g.getItem_types().forEach(key ->{
                 finalItemTypes.put(key, g.item);
             });
