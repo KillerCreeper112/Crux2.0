@@ -361,7 +361,7 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
                     String key = oo.getObject(String.class, "attribute");
                     if(key == null) return;
                     Collection<DynamicAttributeModifier> level = registry.deserializeFromFile(
-                        new TypeToken<Set<DynamicAttributeModifier>>(){}.getType(), oo.get("values"));
+                        new TypeToken<Set<DynamicAttributeModifier>>(){}.getType(), oo.get("modifiers"));
                     if(level==null) return;
                     attributes.put(key, level);
                 });

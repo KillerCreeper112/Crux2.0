@@ -67,9 +67,16 @@ public class CruxAttributeCompParsers {
     public static PersistTextParser<CruxAttributeInstance> CRUX_ATTRIBUTE_INSTANCE = PersistTextParser.mapBuilder(CruxAttributeInstance.class)
         .field("attribute", TextInputField.field(CRUX_ATTRIBUTE, CruxAttributeInstance::getAttribute))
         .field("modifiers", TextInputField.field(PersistTextParser.collectionList(CRUX_ATTRIBUTE_MODIFIER), CruxAttributeInstance::getModifiers))
+        .field("amount", TextInputField.field(PersistTextParser.DOUBLE, e -> null))
         .apply(ctx ->{
             CruxAttribute attribute = ctx.get("attribute");
-            Collection<CruxAttributeModifier> modifiers = ctx.get("modifiers");
+            Collection<CruxAttributeModifier> modifiers = ctx.getOptional("modifiers");
+
+            if(modifiers == null){
+                double amount = ctx.get("amount");
+                return CruxAttributeInstance.instance(attribute, CruxAttributeModifier.baseModifier(amount));
+            }
+
             return CruxAttributeInstance.instance(attribute, modifiers);
         });
 
