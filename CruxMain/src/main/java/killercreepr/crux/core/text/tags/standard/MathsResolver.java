@@ -16,11 +16,20 @@ public class MathsResolver implements StringResolver {
     @Override
     public @Nullable String resolve(@NotNull FormatArgs args, @NotNull TextParserContext context) {
         String function = args.get(0);
-        return resolve(function, args, context);
+        try{
+            return resolve(function, args, context);
+        }catch (Exception ignored){}
+        return null;
     }
 
     public static @NotNull String resolve(@NotNull String function, @NotNull FormatArgs args, @NotNull TextParserContext ctx){
         switch (function.toLowerCase()){
+            case "less" ->{
+                double first = CruxMath.evaluate(ctx.deserializeString(args.get(1)));
+                double second = CruxMath.evaluate(ctx.deserializeString(args.get(2)));
+                if(first < second) return ctx.deserializeString(args.get(3));
+                return args.has(4) ? ctx.deserializeString(args.get(4)) : "";
+            }
             case "rand", "random" ->{
                 if(args.has(2)){
                     return CruxMath.random(

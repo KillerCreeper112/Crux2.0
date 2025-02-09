@@ -15,7 +15,7 @@ public class RomanNumeralResolver implements StringResolver {
 
     @Override
     public @Nullable String resolve(@NotNull FormatArgs args, @NotNull TextParserContext context) {
-        return resolve(args.get(0));
+        return resolve(context.deserializeString(args.get(0)));
     }
 
     public static @NotNull String resolve(@NotNull String text){

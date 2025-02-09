@@ -32,7 +32,7 @@ public class DurationFormatResolver implements StringResolver {
         String separator = args.getOrDefault(3, ", ");
         List<String> format = args.has(4) ? buildFormat(args, 4) : List.of("%dd", "%hh", "%mm", "%ss");
 
-        return format(milliseconds, separator, format, excluded, displayZero);
+        return format(milliseconds, separator, format, excluded, displayZero, ctx);
     }
 
     public @NotNull List<String> buildFormat(@NotNull FormatArgs args, int start){
@@ -70,7 +70,8 @@ public class DurationFormatResolver implements StringResolver {
                                          @NotNull String separator,
                                          @NotNull List<String> format,
                                          @NotNull Collection<String> excluded,
-                                         boolean displayZero){
+                                         boolean displayZero,
+                                         TextParserContext ctx){
         long seconds = milliseconds / 1000;
         long minutes = seconds / 60;
         long hours = minutes / 60;
@@ -87,19 +88,19 @@ public class DurationFormatResolver implements StringResolver {
         // Only append each time unit if it's non-zero and not excluded
         if (!hasDays(excluded) && (displayZero || days > 0)) {
             if(!result.isEmpty()) result.append(separator);
-            result.append(format.get(0).replace("%d", days + ""));
+            result.append(ctx.deserializeString(format.get(0).replace("%d", days + "")));
         }
         if (!hasHours(excluded) && (displayZero || hours > 0)) {
             if(!result.isEmpty()) result.append(separator);
-            result.append(format.get(1).replace("%h", hours + ""));
+            result.append(ctx.deserializeString(format.get(1).replace("%h", hours + "")));
         }
         if (!hasMinutes(excluded) && (displayZero || minutes > 0)) {
             if(!result.isEmpty()) result.append(separator);
-            result.append(format.get(2).replace("%m", minutes + ""));
+            result.append(ctx.deserializeString(format.get(2).replace("%m", minutes + "")));
         }
         if (!hasSeconds(excluded) && (displayZero || seconds > 0)) {
             if(!result.isEmpty()) result.append(separator);
-            result.append(format.get(3).replace("%s", seconds + ""));
+            result.append(ctx.deserializeString(format.get(3).replace("%s", seconds + "")));
         }
 
         // Trim any trailing whitespace and return the result
