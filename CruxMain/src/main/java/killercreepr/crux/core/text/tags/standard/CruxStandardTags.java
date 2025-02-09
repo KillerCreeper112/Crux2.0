@@ -27,7 +27,8 @@ public class CruxStandardTags {
             new EntityTags(),
             new CommandSenderTags(),
             new ServerTags(),
-            new LivingEntityTags()
+            new LivingEntityTags(),
+            new PotionEffectTags()
         );
     }
 
@@ -41,7 +42,8 @@ public class CruxStandardTags {
             new DateFormatResolver(),
             new DurationFormatResolver(),
             new CurrentTimeResolver(),
-            new ProgressBarResolver()
+            new ProgressBarResolver(),
+            new RomanNumeralResolver()
         );
     }
 
