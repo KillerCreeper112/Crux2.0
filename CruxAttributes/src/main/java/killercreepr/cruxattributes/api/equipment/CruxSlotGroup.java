@@ -12,19 +12,21 @@ import java.util.Collection;
 public interface CruxSlotGroup extends CruxKeyed, Translatable, Iterable<CruxSlot> {
     static void register(){}
 
-    CruxSlotGroup ANY = register(new SimpleCruxSlotGroup(Crux.key("any"), e -> true));
-    CruxSlotGroup HAND = register(new SimpleCruxSlotGroup(Crux.key("hand"), CruxSlot.MAIN_HAND, CruxSlot.OFF_HAND));
-    CruxSlotGroup MAIN_HAND = register(new SimpleCruxSlotGroup(Crux.key("main_hand"), CruxSlot.MAIN_HAND));
-    CruxSlotGroup OFF_HAND = register(new SimpleCruxSlotGroup(Crux.key("off_hand"), CruxSlot.OFF_HAND));
-    CruxSlotGroup HEAD = register(new SimpleCruxSlotGroup(Crux.key("head"), CruxSlot.HEAD));
-    CruxSlotGroup CHEST = register(new SimpleCruxSlotGroup(Crux.key("chest"), CruxSlot.CHEST));
-    CruxSlotGroup LEGS = register(new SimpleCruxSlotGroup(Crux.key("legs"), CruxSlot.LEGS));
-    CruxSlotGroup FEET = register(new SimpleCruxSlotGroup(Crux.key("feet"), CruxSlot.FEET));
-    CruxSlotGroup ARMOR = register(new SimpleCruxSlotGroup(Crux.key("armor"), CruxSlot.HEAD, CruxSlot.CHEST, CruxSlot.LEGS, CruxSlot.FEET));
+    CruxSlotGroup ANY = register(new SimpleCruxSlotGroup(Crux.key("any"), e -> true, "When equipped"));
+    CruxSlotGroup HAND = register(new SimpleCruxSlotGroup(Crux.key("hand"), "When in Hand", CruxSlot.MAIN_HAND, CruxSlot.OFF_HAND));
+    CruxSlotGroup MAIN_HAND = register(new SimpleCruxSlotGroup(Crux.key("main_hand"), "When in Main Hand", CruxSlot.MAIN_HAND));
+    CruxSlotGroup OFF_HAND = register(new SimpleCruxSlotGroup(Crux.key("off_hand"),"When in Off Hand", CruxSlot.OFF_HAND));
+    CruxSlotGroup HEAD = register(new SimpleCruxSlotGroup(Crux.key("head"), "When on Head", CruxSlot.HEAD));
+    CruxSlotGroup CHEST = register(new SimpleCruxSlotGroup(Crux.key("chest"), "When on Body", CruxSlot.CHEST));
+    CruxSlotGroup LEGS = register(new SimpleCruxSlotGroup(Crux.key("legs"),"When on Legs", CruxSlot.LEGS));
+    CruxSlotGroup FEET = register(new SimpleCruxSlotGroup(Crux.key("feet"), "When on Feet", CruxSlot.FEET));
+    CruxSlotGroup ARMOR = register(new SimpleCruxSlotGroup(Crux.key("armor"), "When worn", CruxSlot.HEAD, CruxSlot.CHEST, CruxSlot.LEGS, CruxSlot.FEET));
 
     private static CruxSlotGroup register(CruxSlotGroup group){
         return CruxAttributeRegistries.SLOT_GROUP.register(group);
     }
+
+    String getWhenInSlot();
 
     boolean test(@NotNull CruxSlot slot);
     default boolean anyMatch(@NotNull CruxSlot... slots){

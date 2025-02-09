@@ -15,27 +15,37 @@ public class SimpleCruxSlotGroup implements CruxSlotGroup {
     protected final Key key;
     protected final Predicate<CruxSlot> filter;
     protected final Collection<CruxSlot> slots;
+    protected final String whenInSlot;
 
-    public SimpleCruxSlotGroup(Key key, Predicate<CruxSlot> filter) {
+    public SimpleCruxSlotGroup(Key key, Predicate<CruxSlot> filter, String whenInSlot) {
         this.key = key;
         this.filter = filter;
+        this.whenInSlot = whenInSlot;
         this.slots = null;
     }
-    public SimpleCruxSlotGroup(Key key, CruxSlot slot) {
+    public SimpleCruxSlotGroup(Key key, CruxSlot slot, String whenInSlot) {
         this.key = key;
         this.filter = e -> e.compare(slot);
         this.slots = Set.of(slot);
+        this.whenInSlot = whenInSlot;
     }
-    public SimpleCruxSlotGroup(Key key, CruxSlot... slot) {
+    public SimpleCruxSlotGroup(Key key, String whenInSlot, CruxSlot... slot) {
         this.key = key;
+        this.whenInSlot = whenInSlot;
         Collection<CruxSlot> slots = Set.of(slot);
         this.filter = slots::contains;
         this.slots = slots;
     }
-    public SimpleCruxSlotGroup(Key key, Collection<CruxSlot> slots) {
+    public SimpleCruxSlotGroup(Key key, Collection<CruxSlot> slots, String whenInSlot) {
         this.key = key;
         this.filter = slots::contains;
         this.slots = slots;
+        this.whenInSlot = whenInSlot;
+    }
+
+    @Override
+    public String getWhenInSlot() {
+        return whenInSlot;
     }
 
     @Override
