@@ -55,7 +55,7 @@ public class CruxStandardTags {
     }
 
     public static @NotNull Pattern buildStringPattern(){
-        return Pattern.compile("<([^<>]+?)>");
+        return Pattern.compile("<((?:[^<>]+|<[^<>]*>)+)>");//Pattern.compile("<([^<>]+?)>");
     }
 
     public static @NotNull Pattern buildLorePattern(){

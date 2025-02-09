@@ -310,7 +310,8 @@ public class Format implements FormatSerializer {
     //todo FIXED IT :D
     private static final String placeholderSplit = ":(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
     public @NotNull String processPlaceholders(@NotNull String text, @NotNull TagContainer<StringResolver> tags) {
-        StringTagContainer resolvers = new StringTagContainer(this.tags);
+        return processPlaceholders(text, tags, Map.of(), Set.of());
+        /*StringTagContainer resolvers = new StringTagContainer(this.tags);
         resolvers.addAll(STRING_RESOLVERS.values());
         resolvers.addAll(tags);
 
@@ -363,6 +364,94 @@ public class Format implements FormatSerializer {
                 if(replacement == null){
                     already.add(placeholder);
                     replacement = "<" + placeholder + (args.isEmpty() ? "" : ":" + processPlaceholders(String.join(":", args.getArgs()), resolvers)) + ">";
+
+                    //If the placeholder cannot be parsed, generate an unresolved placeholder that
+                    //does not contain <>. Put that in a map with the replacement so in the end, it
+                    //can replace the unresolved placeholders with their normal <> placeholder.
+                    //
+                    //For example, if I had: <something:<test>> and <test> could not be parsed,
+                    //it will basically make the text "<something:|UNRESOLVED-UUID|>".
+                    //Then, when it parses <something>, |UNRESOLVED-UUID| will be turned back into <test> for the
+                    //placeholder's arguments. And at the very end of the parsing, it will
+                    //also replace all the unresolved placeholders back.
+                    //
+                    //It needs to do this because if it doesn't,
+                    //"String placeholder = matcher.group(1);" will get stuck
+                    //on the unparsed placeholder.
+
+                    String replace = "|UNRESOLVED-" + UUID.randomUUID() + "|";
+                    unresolved.put(replace, replacement);
+                    replacement = replace;
+                }
+                matcher.appendReplacement(result, replacement);
+            }
+            matcher.appendTail(result);
+            text = result.toString();
+        }while(found);
+        //Bukkit.broadcastMessage("after: " + result);
+
+        for(Map.Entry<String, String> entry : unresolved.entrySet()){
+            text = text.replace(entry.getKey(), entry.getValue());
+        }
+
+        return text;*/
+    }
+
+    public @NotNull String processPlaceholders(@NotNull String text, @NotNull TagContainer<StringResolver> tags,
+                                               Map<String, String> preUnresolved, Collection<String> preAlready) {
+        StringTagContainer resolvers = new StringTagContainer(this.tags);
+        resolvers.addAll(STRING_RESOLVERS.values());
+        resolvers.addAll(tags);
+
+        if(Crux.debug >= 3){
+            Bukkit.broadcastMessage(resolvers.asMap().keySet() + "");
+        }
+
+        //Bukkit.broadcastMessage("before(p): " + text);
+        TextParserContext context = new FormatParserContext.Builder(this)
+            .build();
+        //Bukkit.broadcastMessage("text to process: " + text);
+        boolean found;
+        Collection<String> already = new HashSet<>(preAlready);
+        Map<String, String> unresolved = new FastMap<>(preUnresolved);
+        do{
+            Matcher matcher = STRING_PATTERN.matcher(text);
+            StringBuilder result = new StringBuilder(text.length());
+            found = false;
+
+            while (matcher.find()) {
+                String placeholder = matcher.group(1);
+
+                for(Map.Entry<String, String> entry : unresolved.entrySet()){
+                    placeholder = placeholder.replace(entry.getKey(), entry.getValue());
+                }
+
+                String[] parts = placeholder.split(placeholderSplit);
+                placeholder = parts[0];
+
+                if(already.contains(placeholder)) continue;
+
+                found = true;
+
+                String[] arguments = new String[parts.length - 1];
+                System.arraycopy(parts, 1, arguments, 0, parts.length - 1);
+
+                for(int i = 0; i < arguments.length; i++){
+                    String arg = arguments[i];
+                    if(arg.startsWith("\"") && arg.endsWith("\"")){
+                        arg = arg.substring(1, arg.length()-1);
+                    }
+                    arguments[i] = processPlaceholders(arg, tags, unresolved, already);
+                }
+
+                //Bukkit.broadcastMessage("placeholder: " + placeholder + " - " + Arrays.toString(arguments));
+
+                FormatArgs args = new FormatArgs(arguments);
+                String replacement = resolvePlaceholder(placeholder, args, context, resolvers);
+                //Bukkit.broadcastMessage(placeholder + ": " + replacement + " ---   " + Arrays.toString(arguments));
+                if(replacement == null){
+                    already.add(placeholder);
+                    replacement = "<" + placeholder + (args.isEmpty() ? "" : ":" + processPlaceholders(String.join(":", args.getArgs()), resolvers, unresolved, already)) + ">";
 
                     //If the placeholder cannot be parsed, generate an unresolved placeholder that
                     //does not contain <>. Put that in a map with the replacement so in the end, it
