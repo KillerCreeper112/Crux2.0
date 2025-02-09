@@ -53,4 +53,9 @@ public class SimpleCruxSlotGroup implements CruxSlotGroup {
         if(slots == null) return CruxAttributeRegistries.SLOT.iterator();
         return slots.iterator();
     }
+
+    @Override
+    public @NotNull String translateKey() {
+        return "cruxslotgroup/" + key.asString();
+    }
 }

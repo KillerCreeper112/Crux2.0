@@ -36,6 +36,6 @@ public class SimpleCruxSlot implements CruxSlot {
 
     @Override
     public @NotNull String translateKey() {
-        return "cruxslot." + key.asString();
+        return "cruxslot/" + key.asString();
     }
 }

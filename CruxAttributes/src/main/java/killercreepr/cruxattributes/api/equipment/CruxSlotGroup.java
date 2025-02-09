@@ -1,6 +1,7 @@
 package killercreepr.cruxattributes.api.equipment;
 
 import killercreepr.crux.api.data.CruxKeyed;
+import killercreepr.crux.api.translation.Translatable;
 import killercreepr.crux.core.Crux;
 import killercreepr.cruxattributes.core.equipment.SimpleCruxSlotGroup;
 import killercreepr.cruxattributes.core.registries.CruxAttributeRegistries;
@@ -8,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-public interface CruxSlotGroup extends CruxKeyed, Iterable<CruxSlot> {
+public interface CruxSlotGroup extends CruxKeyed, Translatable, Iterable<CruxSlot> {
     static void register(){}
 
     CruxSlotGroup ANY = register(new SimpleCruxSlotGroup(Crux.key("any"), e -> true));
