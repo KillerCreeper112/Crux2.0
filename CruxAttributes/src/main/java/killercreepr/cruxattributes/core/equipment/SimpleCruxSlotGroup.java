@@ -8,13 +8,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 import java.util.function.Predicate;
 
 public class SimpleCruxSlotGroup implements CruxSlotGroup {
     protected final Key key;
     protected final Predicate<CruxSlot> filter;
-    protected final Collection<CruxSlot> slots;
+    protected final List<CruxSlot> slots;
     protected final String whenInSlot;
 
     public SimpleCruxSlotGroup(Key key, Predicate<CruxSlot> filter, String whenInSlot) {
@@ -26,17 +26,17 @@ public class SimpleCruxSlotGroup implements CruxSlotGroup {
     public SimpleCruxSlotGroup(Key key, CruxSlot slot, String whenInSlot) {
         this.key = key;
         this.filter = e -> e.compare(slot);
-        this.slots = Set.of(slot);
+        this.slots = List.of(slot);
         this.whenInSlot = whenInSlot;
     }
     public SimpleCruxSlotGroup(Key key, String whenInSlot, CruxSlot... slot) {
         this.key = key;
         this.whenInSlot = whenInSlot;
-        Collection<CruxSlot> slots = Set.of(slot);
+        List<CruxSlot> slots = List.of(slot);
         this.filter = slots::contains;
         this.slots = slots;
     }
-    public SimpleCruxSlotGroup(Key key, Collection<CruxSlot> slots, String whenInSlot) {
+    public SimpleCruxSlotGroup(Key key, List<CruxSlot> slots, String whenInSlot) {
         this.key = key;
         this.filter = slots::contains;
         this.slots = slots;

@@ -146,4 +146,10 @@ public interface EntityMemory extends Holder<Entity> {
     boolean tick();
 
     void removeDataHolders(@Nullable Entity e);
+
+    /**
+     * This is called immediately when this EntityMemory is supposed to be
+     * removed from memory (e.x., when a player quits the server or when an entity is removed from world)
+     */
+    void onMemoryUnload(@NotNull Entity e);
 }

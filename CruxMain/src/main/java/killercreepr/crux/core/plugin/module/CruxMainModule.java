@@ -7,7 +7,7 @@ import killercreepr.crux.core.command.CruxLootCommands;
 import killercreepr.crux.core.component.CruxComponents;
 import killercreepr.crux.core.listener.EntitySpawnListener;
 import killercreepr.crux.core.listener.LootContainerListener;
-import killercreepr.crux.core.listener.PlayerDataListener;
+import killercreepr.crux.core.listener.EntityDataListener;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,7 +38,7 @@ public class CruxMainModule implements CruxModule {
     @Override
     public void onEnable(@NotNull CruxPlugin plugin) {
         plugin.registerListeners(
-            new PlayerDataListener(),
+            new EntityDataListener(),
             new EntitySpawnListener(),
             new LootContainerListener()
         );

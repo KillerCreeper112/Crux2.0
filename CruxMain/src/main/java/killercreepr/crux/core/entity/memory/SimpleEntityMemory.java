@@ -68,6 +68,13 @@ public class SimpleEntityMemory implements EntityMemory {
     }
 
     @Override
+    public void onMemoryUnload(@NotNull Entity e) {
+        for(DataHolder h : dataHolders.values()){
+            h.onMemoryUnload(e);
+        }
+    }
+
+    @Override
     public void removeDataHolders(@Nullable Entity e){
         for(DataHolder h : dataHolders.values()){
             h.parentRemoving(e);
