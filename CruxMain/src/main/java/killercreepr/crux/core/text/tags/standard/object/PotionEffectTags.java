@@ -30,6 +30,8 @@ public class PotionEffectTags implements ObjectTag<PotionEffect> {
             .add(Tag.string("key", (args, ctx) -> object.getType().key() + ""))
             .add(Tag.string("duration", (args, ctx) -> object.getDuration() + ""))
             .add(Tag.string("amplifier", (args, ctx) -> object.getAmplifier() + ""))
+            .add(Tag.string("infinite", (args, ctx) -> object.isInfinite() + ""))
+            .add(Tag.string("instant", (args, ctx) -> object.getType().isInstant() + ""))
             .add(Tag.string("harmful", (args, ctx) -> (object.getType().getCategory() == PotionEffectTypeCategory.HARMFUL) + ""))
             .add(Tag.string("name", (args, ctx) -> PlainTextComponentSerializer.plainText().serialize(Component.translatable(object.getType()))))
             ;
