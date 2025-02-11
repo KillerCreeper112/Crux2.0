@@ -2,10 +2,8 @@ package killercreepr.cruxattributes.core.component;
 
 import killercreepr.crux.api.component.parser.hybrid.PersistTextParser;
 import killercreepr.crux.api.component.parser.hybrid.TextInputField;
-import killercreepr.cruxattributes.api.attribute.CruxAttribute;
-import killercreepr.cruxattributes.api.attribute.CruxAttributeContainer;
-import killercreepr.cruxattributes.api.attribute.CruxAttributeInstance;
-import killercreepr.cruxattributes.api.attribute.CruxAttributeModifier;
+import killercreepr.crux.core.data.util.Pair;
+import killercreepr.cruxattributes.api.attribute.*;
 import killercreepr.cruxattributes.api.equipment.CruxSlot;
 import killercreepr.cruxattributes.api.equipment.CruxSlotGroup;
 import killercreepr.cruxattributes.core.persistence.CruxAttributesPersistence;
@@ -16,6 +14,7 @@ import net.kyori.adventure.key.Keyed;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public class CruxAttributeCompParsers {
     public static PersistTextParser<CruxAttribute> CRUX_ATTRIBUTE = PersistTextParser.elementBuilder(CruxAttribute.class)
@@ -90,6 +89,21 @@ public class CruxAttributeCompParsers {
     public static PersistTextParser<CruxAttributeContainer> CRUX_ATTRIBUTES = PersistTextParser.elementBuilder(CruxAttributeContainer.class)
         .field(TextInputField.field(PersistTextParser.collectionList(CRUX_ATTRIBUTE_INSTANCE), CruxAttributeContainer::getAttributeInstances))
         .dataType(CruxAttributesPersistence.ATTRIBUTE_CONTAINER_COMPONENT)
+        .apply(ctx ->{
+            Collection<CruxAttributeInstance> instances = ctx.get();
+            return CruxAttributeContainer.container(instances);
+        });
+
+
+    public static PersistTextParser<Pair<CruxAttribute, Double>> CRUX_ATTRIBUTE_MAP_VALUE = PersistTextParser.mapBuilder((Class<Pair<CruxAttribute, Double>>) (Class) Pair.class)
+        .field("attribute", TextInputField.field(CRUX_ATTRIBUTE, Pair::getFirst))
+        .field("value", TextInputField.field(PersistTextParser.DOUBLE, Pair::getSecond))
+        .apply(ctx -> new Pair<>(ctx.get("attribute"), ctx.get("value")));
+
+    public static PersistTextParser<CruxAttributeMap> CRUX_ATTRIBUTE_MAP = PersistTextParser.elementBuilder(CruxAttributeMap.class)
+        .field(TextInputField.field(CRUX_ATTRIBUTE_MAP_VALUE, e ->{
+
+        }))
         .apply(ctx ->{
             Collection<CruxAttributeInstance> instances = ctx.get();
             return CruxAttributeContainer.container(instances);

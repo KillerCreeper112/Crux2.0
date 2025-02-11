@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 public interface PersistTextParser<T> extends ComponentTextInputParser<T>{
@@ -25,6 +26,14 @@ public interface PersistTextParser<T> extends ComponentTextInputParser<T>{
 
     static <T> MapBuilder<T> mapBuilder(Class<T> type){
         return new MapPersistTextParser.Builder<T>().dataTypeClass(type);
+    }
+
+    static <T> DynamicMapBuilder<T> mapDynamicBuilder(){
+        return new DynamicMapPersistTextParser.Builder<T>();
+    }
+
+    static <T> DynamicMapBuilder<T> mapDynamicBuilder(Class<T> type){
+        return new DynamicMapPersistTextParser.Builder<T>().dataTypeClass(type);
     }
 
     static <T> ElementBuilder<T> elementBuilder(){
@@ -134,6 +143,20 @@ public interface PersistTextParser<T> extends ComponentTextInputParser<T>{
         PersistTextParser<T> build();
         PersistTextParser<T> buildUnset();
         MapBuilder<T> dataTypeFunction(Function<PersistTextParser<T>, PersistentDataType<PersistentDataContainer, T>> function);
+    }
+
+    interface DynamicMapBuilder<T> extends MapBuilder<T>{
+        DynamicMapBuilder<T> field(String name, TextInputField<T, ?> field);
+        DynamicMapBuilder<T> resultParser(TextInputResultParser<T> resultParser);
+        PersistTextParser<T> apply(TextInputResultParser<T> resultParser);
+        DynamicMapBuilder<T> dataType(PersistentDataType<PersistentDataContainer, T> dataType);
+        DynamicMapBuilder<T> dataTypeClass(Class<T> type);
+        PersistTextParser<T> build();
+        PersistTextParser<T> buildUnset();
+        DynamicMapBuilder<T> dataTypeFunction(Function<PersistTextParser<T>, PersistentDataType<PersistentDataContainer, T>> function);
+        DynamicMapBuilder<T> keyField(TextInputField<T, ?> field);
+        DynamicMapBuilder<T> valueField(TextInputField<T, ?> field);
+        DynamicMapBuilder<T> mapToEncode(Function<T, Map<Object, Object>> function);
     }
 
     interface ElementBuilder<T>{
