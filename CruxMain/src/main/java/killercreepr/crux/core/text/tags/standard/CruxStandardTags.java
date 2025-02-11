@@ -72,8 +72,9 @@ public class CruxStandardTags {
     }
 
     public static @NotNull Pattern buildBEquationPattern(){
+        return Pattern.compile("\\{e\\{([^{}]*+(?:\\{[^{}]*+}[^{}]*+)*?)}(?:\\[(\\d+)])?}");
         //return Pattern.compile("\\{e\\{(.+?)}(?:\\[(\\d+)])?(.*?)}");
-        return Pattern.compile("\\{e\\{(.+?)}(?:\\[(\\d+)])?}");
+        //return Pattern.compile("\\{e\\{(.+?)}(?:\\[(\\d+)])?}");
         //return Pattern.compile("\\{e\\{(.+?)\\}\\}");
     }
 }
