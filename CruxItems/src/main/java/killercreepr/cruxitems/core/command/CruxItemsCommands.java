@@ -8,6 +8,7 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.EntitySelectorArgumentResolver;
+import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import killercreepr.crux.api.communication.Communicator;
@@ -129,6 +130,60 @@ public class CruxItemsCommands {
                         )
                 )
         ).then(
+            Commands.literal("damage")
+                .then(
+                    Commands.argument("targets", ArgumentTypes.entities())
+                        .executes(ctx -> damage(
+                            ctx.getSource(),
+                            ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
+                            null
+                        ))
+                        .then(
+                            Commands.argument("damage", IntegerArgumentType.integer())
+                                .executes(ctx -> damage(
+                                    ctx.getSource(),
+                                    ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
+                                    ctx.getArgument("damage", Integer.class)
+                                ))
+                        )
+                )
+        ).then(
+            Commands.literal("max_damage")
+                .then(
+                    Commands.argument("targets", ArgumentTypes.entities())
+                        .executes(ctx -> maxDamage(
+                            ctx.getSource(),
+                            ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
+                            null
+                        ))
+                        .then(
+                            Commands.argument("max_damage", IntegerArgumentType.integer())
+                                .executes(ctx -> maxDamage(
+                                    ctx.getSource(),
+                                    ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
+                                    ctx.getArgument("max_damage", Integer.class)
+                                ))
+                        )
+                )
+        ).then(
+            Commands.literal("max_stack_size")
+                .then(
+                    Commands.argument("targets", ArgumentTypes.entities())
+                        .executes(ctx -> maxStackSize(
+                            ctx.getSource(),
+                            ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
+                            null
+                        ))
+                        .then(
+                            Commands.argument("max_stack_size", IntegerArgumentType.integer())
+                                .executes(ctx -> maxStackSize(
+                                    ctx.getSource(),
+                                    ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
+                                    ctx.getArgument("max_stack_size", Integer.class)
+                                ))
+                        )
+                )
+        ).then(
             Commands.literal("flags")
                 .then(
                     Commands.argument("targets", ArgumentTypes.entities())
@@ -246,6 +301,42 @@ public class CruxItemsCommands {
             item.color(color);
         });
         Communicator.chat("Changed the color of main hand items on " + given + " entities.").use(getExecutor(source));
+        return given > 0 ? 1 : -1;
+    }
+
+    public static int damage(@NotNull CommandSourceStack source, @NotNull Collection<Entity> targets, @Nullable Integer dmg){
+        int given = mainHandArgument(source, targets, item ->{
+            if(dmg == null){
+                item.item().resetData(DataComponentTypes.DAMAGE);
+            }else{
+                item.item().setData(DataComponentTypes.DAMAGE, dmg);
+            }
+        });
+        Communicator.chat("Set the damage of main hand items on " + given + " entities.").use(getExecutor(source));
+        return given > 0 ? 1 : -1;
+    }
+
+    public static int maxDamage(@NotNull CommandSourceStack source, @NotNull Collection<Entity> targets, @Nullable Integer dmg){
+        int given = mainHandArgument(source, targets, item ->{
+            if(dmg == null){
+                item.item().resetData(DataComponentTypes.MAX_DAMAGE);
+            }else{
+                item.item().setData(DataComponentTypes.MAX_DAMAGE, dmg);
+            }
+        });
+        Communicator.chat("Set the max damage of main hand items on " + given + " entities.").use(getExecutor(source));
+        return given > 0 ? 1 : -1;
+    }
+
+    public static int maxStackSize(@NotNull CommandSourceStack source, @NotNull Collection<Entity> targets, @Nullable Integer dmg){
+        int given = mainHandArgument(source, targets, item ->{
+            if(dmg == null){
+                item.item().resetData(DataComponentTypes.MAX_STACK_SIZE);
+            }else{
+                item.item().setData(DataComponentTypes.MAX_STACK_SIZE, dmg);
+            }
+        });
+        Communicator.chat("Set the max stack size of main hand items on " + given + " entities.").use(getExecutor(source));
         return given > 0 ? 1 : -1;
     }
 
