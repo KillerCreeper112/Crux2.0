@@ -289,5 +289,6 @@ public class ComponentInputParsers {
             return CreateSound.sound(key, Sound.Source.MASTER, volume, pitch);
         });
 
-    public static ComponentInputListParsers LIST = new ComponentInputListParsers();
+    public static final ComponentInputListParsers LIST = new ComponentInputListParsers();
+    public static final ComponentInputMapParsers MAP = new ComponentInputMapParsers();
 }
