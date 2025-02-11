@@ -18,6 +18,8 @@ public class CruxTag {
     public static @NotNull String defaultNamespace(){ return Crux.key("a").getNamespace(); }
 
     public static @NotNull Key defaultKey(@NotNull String name){
+        String[] args = name.split(":", 2);
+        if(args.length > 1) return Key.key(args[0], args[1]);
         return Key.key(defaultNamespace(), name);
     }
 

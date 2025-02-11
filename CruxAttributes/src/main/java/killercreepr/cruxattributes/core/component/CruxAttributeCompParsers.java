@@ -2,10 +2,10 @@ package killercreepr.cruxattributes.core.component;
 
 import killercreepr.crux.api.component.parser.hybrid.PersistTextParser;
 import killercreepr.crux.api.component.parser.hybrid.TextInputField;
-import killercreepr.crux.core.data.util.Pair;
 import killercreepr.cruxattributes.api.attribute.*;
 import killercreepr.cruxattributes.api.equipment.CruxSlot;
 import killercreepr.cruxattributes.api.equipment.CruxSlotGroup;
+import killercreepr.cruxattributes.core.attribute.map.SimpleCruxAttributeMap;
 import killercreepr.cruxattributes.core.persistence.CruxAttributesPersistence;
 import killercreepr.cruxattributes.core.registries.CruxAttributeRegistries;
 import net.kyori.adventure.key.Key;
@@ -95,17 +95,12 @@ public class CruxAttributeCompParsers {
         });
 
 
-    public static PersistTextParser<Pair<CruxAttribute, Double>> CRUX_ATTRIBUTE_MAP_VALUE = PersistTextParser.mapBuilder((Class<Pair<CruxAttribute, Double>>) (Class) Pair.class)
-        .field("attribute", TextInputField.field(CRUX_ATTRIBUTE, Pair::getFirst))
-        .field("value", TextInputField.field(PersistTextParser.DOUBLE, Pair::getSecond))
-        .apply(ctx -> new Pair<>(ctx.get("attribute"), ctx.get("value")));
-
-    public static PersistTextParser<CruxAttributeMap> CRUX_ATTRIBUTE_MAP = PersistTextParser.elementBuilder(CruxAttributeMap.class)
-        .field(TextInputField.field(CRUX_ATTRIBUTE_MAP_VALUE, e ->{
-
-        }))
+    public static PersistTextParser<CruxAttributeMap> CRUX_ATTRIBUTE_MAP = PersistTextParser.mapDynamicBuilder(CruxAttributeMap.class)
+        .keyParser(CRUX_ATTRIBUTE)
+        .valueParser(PersistTextParser.DOUBLE)
+        .mapToEncode(CruxAttributeMap::getMap)
         .apply(ctx ->{
-            Collection<CruxAttributeInstance> instances = ctx.get();
-            return CruxAttributeContainer.container(instances);
+            Map<CruxAttribute, Double> instances = ctx.get();
+            return new SimpleCruxAttributeMap(instances);
         });
 }

@@ -14,17 +14,17 @@ import java.util.Map;
 import java.util.function.Function;
 
 public class DynamicMapPersistTextParser<T> extends MapPersistTextParser<T> {
-    protected final TextInputField<T, ?> keyField;
-    protected final TextInputField<T, ?> valueField;
-    protected final Function<T, Map<Object, Object>> encodeMap;
-    public DynamicMapPersistTextParser(@NotNull Map<String, TextInputField<T, ?>> elements, @NotNull TextInputResultParser<T> resultParser, @NotNull PersistentDataType<PersistentDataContainer, T> dataType, TextInputField<T, ?> keyField, TextInputField<T, ?> valueField, Function<T, Map<Object, Object>> encodeMap) {
+    protected final PersistTextParser<?> keyField;
+    protected final PersistTextParser<?> valueField;
+    protected final Function<T, Map<?, ?>> encodeMap;
+    public DynamicMapPersistTextParser(@NotNull Map<String, TextInputField<T, ?>> elements, @NotNull TextInputResultParser<T> resultParser, @NotNull PersistentDataType<PersistentDataContainer, T> dataType, PersistTextParser<?> keyField, PersistTextParser<?> valueField, Function<T, Map<?, ?>> encodeMap) {
         super(elements, resultParser, dataType);
         this.keyField = keyField;
         this.valueField = valueField;
         this.encodeMap = encodeMap;
     }
 
-    public DynamicMapPersistTextParser(@NotNull Map<String, TextInputField<T, ?>> elements, @NotNull TextInputResultParser<T> resultParser, @NotNull Class<T> type, TextInputField<T, ?> keyField, TextInputField<T, ?> valueField, Function<T, Map<Object, Object>> encodeMap) {
+    public DynamicMapPersistTextParser(@NotNull Map<String, TextInputField<T, ?>> elements, @NotNull TextInputResultParser<T> resultParser, @NotNull Class<T> type, PersistTextParser<?> keyField, PersistTextParser<?> valueField, Function<T, Map<?, ?>> encodeMap) {
         super(elements, resultParser, type);
         this.keyField = keyField;
         this.valueField = valueField;
@@ -34,27 +34,28 @@ public class DynamicMapPersistTextParser<T> extends MapPersistTextParser<T> {
     public DynamicMapPersistTextParser(@NotNull Map<String, TextInputField<T, ?>> elements,
                                 @NotNull TextInputResultParser<T> resultParser,
                                 @NotNull Function<PersistTextParser<T>, PersistentDataType<PersistentDataContainer, T>> function,
-                                TextInputField<T, ?> keyField, TextInputField<T, ?> valueField, Function<T, Map<Object, Object>> encodeMap) {
+                                       PersistTextParser<?> keyField, PersistTextParser<?> valueField, Function<T, Map<?, ?>> encodeMap) {
         super(elements, resultParser, function);
         this.keyField = keyField;
         this.valueField = valueField;
         this.encodeMap = encodeMap;
     }
 
+    @Override
     public PersistentDataType<PersistentDataContainer, T> buildDataType(@NotNull Class<T> complexType,
                                                                         @NotNull Map<String, TextInputField<T, ?>> elements){
         return new DynamicMapDataType<>(complexType, elements, this);
     }
 
-    public TextInputField<T, ?> getKeyField() {
+    public PersistTextParser<?> getKeyField() {
         return keyField;
     }
 
-    public TextInputField<T, ?> getValueField() {
+    public PersistTextParser<?> getValueField() {
         return valueField;
     }
 
-    public Function<T, Map<Object, Object>> getEncodeMap() {
+    public Function<T, Map<?, ?>> getEncodeMap() {
         return encodeMap;
     }
 
@@ -72,8 +73,8 @@ public class DynamicMapPersistTextParser<T> extends MapPersistTextParser<T> {
 
         encodeMap.apply(object).forEach((key, value) ->{
             map.put(
-                keyField.inputParser().encodeObjectUnchecked(key).toString(),
-                valueField.inputParser().encodeObjectUnchecked(value)
+                keyField.encodeObjectUnchecked(key).toString(),
+                valueField.encodeObjectUnchecked(value)
             );
         });
 
@@ -96,10 +97,10 @@ public class DynamicMapPersistTextParser<T> extends MapPersistTextParser<T> {
         map.forEach((id, value) ->{
             TextInputField<?, ?> field = elements.get(id.toString());
             Object decoded;
-            if(field == null) decoded = valueField.inputParser().decodeObject(value);
+            if(field == null) decoded = valueField.decodeObject(value);
             else decoded = field.inputParser().decodeObject(value);
 
-            Object parsedKey = keyField.inputParser().decodeObject(id);
+            Object parsedKey = keyField.decodeObject(id);
             parsed.put(parsedKey, decoded);
         });
         InputDecodeContext ctx = InputDecodeContext.context(parsed);
@@ -112,9 +113,9 @@ public class DynamicMapPersistTextParser<T> extends MapPersistTextParser<T> {
         protected PersistentDataType<PersistentDataContainer, T> dataType;
         protected Class<T> dataTypeClass;
         protected Function<PersistTextParser<T>, PersistentDataType<PersistentDataContainer, T>> function;
-        protected TextInputField<T, ?> keyField;
-        protected TextInputField<T, ?> valueField;
-        protected Function<T, Map<Object, Object>> mapToEncode;
+        protected PersistTextParser<?> keyField;
+        protected PersistTextParser<?> valueField;
+        protected Function<T, Map<?, ?>> mapToEncode;
 
         @Override
         public DynamicMapBuilder<T> field(String name, TextInputField<T, ?> field) {
@@ -166,19 +167,19 @@ public class DynamicMapPersistTextParser<T> extends MapPersistTextParser<T> {
         }
 
         @Override
-        public DynamicMapBuilder<T> keyField(TextInputField<T, ?> field) {
+        public DynamicMapBuilder<T> keyParser(PersistTextParser<?> field) {
             this.keyField = field;
             return this;
         }
 
         @Override
-        public DynamicMapBuilder<T> valueField(TextInputField<T, ?> field) {
+        public DynamicMapBuilder<T> valueParser(PersistTextParser<?> field) {
             this.valueField = field;
             return this;
         }
 
         @Override
-        public DynamicMapBuilder<T> mapToEncode(Function<T, Map<Object, Object>> function) {
+        public DynamicMapBuilder<T> mapToEncode(Function<T, Map<?, ?>> function) {
             this.mapToEncode = function;
             return this;
         }

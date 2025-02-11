@@ -154,9 +154,9 @@ public interface PersistTextParser<T> extends ComponentTextInputParser<T>{
         PersistTextParser<T> build();
         PersistTextParser<T> buildUnset();
         DynamicMapBuilder<T> dataTypeFunction(Function<PersistTextParser<T>, PersistentDataType<PersistentDataContainer, T>> function);
-        DynamicMapBuilder<T> keyField(TextInputField<T, ?> field);
-        DynamicMapBuilder<T> valueField(TextInputField<T, ?> field);
-        DynamicMapBuilder<T> mapToEncode(Function<T, Map<Object, Object>> function);
+        DynamicMapBuilder<T> keyParser(PersistTextParser<?> field);
+        DynamicMapBuilder<T> valueParser(PersistTextParser<?> field);
+        DynamicMapBuilder<T> mapToEncode(Function<T, Map<?, ?>> function);
     }
 
     interface ElementBuilder<T>{

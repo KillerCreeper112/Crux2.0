@@ -57,8 +57,7 @@ public class DynamicMapDataType<T> implements PersistentDataType<PersistentDataC
         PersistentDataContainer c = context.newPersistentDataContainer();
         map.forEach((id, value) ->{
             TextInputField<T, ?> field = elements.get(id);
-            if(field == null) field = parser.getValueField();
-            PersistTextParser<Object> serializer = (PersistTextParser<Object>) field.inputParser();
+            PersistTextParser<Object> serializer = (PersistTextParser<Object>) (field == null ? parser.getValueField() : field.inputParser());
             CruxTag.set(c, id, serializer.dataType(), value);
         });
         return c;
@@ -69,12 +68,12 @@ public class DynamicMapDataType<T> implements PersistentDataType<PersistentDataC
         Map<String, Object> map = new HashMap<>();
         for(NamespacedKey key : c.getKeys()){
             String id = key.value();
-            TextInputField<T, ?> field = elements.getOrDefault(id, parser.getValueField());
-            PersistTextParser<Object> serializer = (PersistTextParser<Object>) field.inputParser();
-            Object value = CruxTag.get(c, id, serializer.dataType(), null);
+            TextInputField<T, ?> field = elements.get(id);
+            PersistTextParser<Object> serializer = (PersistTextParser<Object>) (field == null ? parser.getValueField() : field.inputParser());
+            Object value = CruxTag.get(c, key, serializer.dataType(), null);
             if(value == null) continue;
             //todo Make better for performance
-            map.put(id, serializer.encodeObject(value));
+            map.put(key.asString(), serializer.encodeObject(value));
         }
 
         TextInputField<T, ?> base = elements.get("");
