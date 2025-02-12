@@ -276,9 +276,9 @@ public class SimpleCruxItem implements CruxItem {
     public @Nullable Color color(){
         ItemMeta meta = meta();
         if(meta==null) return null;
-        if(meta instanceof LeatherArmorMeta m) m.getColor();
-        if(meta instanceof PotionMeta m) m.getColor();
-        if(meta instanceof MapMeta m) m.getColor();
+        if(meta instanceof LeatherArmorMeta m) return m.getColor();
+        if(meta instanceof PotionMeta m && m.hasColor()) return m.getColor();
+        if(meta instanceof MapMeta m && m.hasColor()) return m.getColor();
         return null;
     }
 
