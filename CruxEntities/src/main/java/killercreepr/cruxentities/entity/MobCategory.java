@@ -33,4 +33,5 @@ public interface MobCategory extends Keyed {
      * Normal mobs probably do not want to attack these types of entities.
      */
     MobCategory ETERNAL = CruxEntityRegistries.MOB_CATEGORY.register(new SimpleMobCategory(Crux.key("eternal")));
+    MobCategory COSMETIC = CruxEntityRegistries.MOB_CATEGORY.register(new SimpleMobCategory(Crux.key("cosmetic")));
 }

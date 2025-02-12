@@ -1,5 +1,8 @@
 package killercreepr.crux.core.text.tags.standard.object;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.DyedItemColor;
+import io.papermc.paper.datacomponent.item.MapItemColor;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import killercreepr.crux.api.item.CruxItem;
@@ -9,7 +12,10 @@ import killercreepr.crux.api.text.tags.TagParser;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.text.container.StringTagContainer;
 import killercreepr.crux.core.text.resolver.Tag;
+import killercreepr.crux.core.util.CruxColor;
+import killercreepr.crux.core.util.CruxMath;
 import net.kyori.adventure.key.Key;
+import org.bukkit.DyeColor;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
@@ -87,6 +93,21 @@ public class ItemStackTags implements ObjectTag<ItemStack> {
                 ItemMeta meta = item.getItemMeta();
                 if(meta==null) return null;
                 return meta.isHideTooltip() + "";
+            }))
+            .add(Tag.string("component", (args, context) ->{
+                String id = args.get(0);
+                switch (id.toString()){
+                    case "color" ->{
+                        DyedItemColor color = item.getData(DataComponentTypes.DYED_COLOR);
+                        if(color != null) return CruxColor.colorToHex(color.color());
+                        DyeColor base = item.getData(DataComponentTypes.BASE_COLOR);
+                        if(base != null) return CruxColor.colorToHex(base.getColor());
+                        MapItemColor map = item.getData(DataComponentTypes.MAP_COLOR);
+                        if(map != null) return CruxColor.colorToHex(map.color());
+                        return "none";
+                    }
+                }
+                return null;
             }))
             ;
     }
