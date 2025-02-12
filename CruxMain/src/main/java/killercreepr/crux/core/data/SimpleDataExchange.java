@@ -43,6 +43,18 @@ public class SimpleDataExchange implements DataExchange {
     }
 
     /**
+     * @return A new DataExchange with the appended info.
+     */
+    @Override
+    public @NotNull DataExchange appendObjects(@NotNull Map<String, ?> info) {
+        Map<String, Holder<?>> data = new HashMap<>(this.data);
+        info.forEach((id, value) ->{
+            data.put(id, Holder.direct(value));
+        });
+        return new SimpleDataExchange(data);
+    }
+
+    /**
      * @return A new DataExchange with the appended object.
      */
     @Contract(pure = true)
@@ -59,6 +71,18 @@ public class SimpleDataExchange implements DataExchange {
     public @NotNull DataExchange removeIf(@NotNull DataExchange.Predicate predicate) {
         Map<String, Holder<?>> data = new HashMap<>(this.data);
         data.entrySet().removeIf((entry) -> predicate.test(entry.getKey(), entry.getValue()));
+        return new SimpleDataExchange(data);
+    }
+
+    /**
+     * @return A new DataExchange with the removed values.
+     */
+    @Override
+    public @NotNull DataExchange remove(@NotNull String... ids) {
+        Map<String, Holder<?>> data = new HashMap<>(this.data);
+        for(String i : ids){
+            data.remove(i);
+        }
         return new SimpleDataExchange(data);
     }
 

@@ -22,17 +22,29 @@ public class CruxColor {
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Invalid hex color string. Ensure the hex values are valid: " + hex, e);
         }
+    }
 
-        // Parse the hex string into an integer
-        /*int rgbValue = Integer.parseInt(hex, 16);
+    public static Color addTint(Color color, int tint){
+        if(tint == 0) return color;
 
-        // Extract individual RGB components
-        int red = (rgbValue >> 16) & 0xFF;
-        int green = (rgbValue >> 8) & 0xFF;
-        int blue = rgbValue & 0xFF;
+        int r = Math.max(0, Math.min(255, color.getRed() + tint));
+        int g = Math.max(0, Math.min(255, color.getGreen() + tint));
+        int b = Math.max(0, Math.min(255, color.getBlue() + tint));
 
-        // Create a Color object
-        return Color.fromRGB(red, green, blue);*/
+        return Color.fromRGB(r, g, b);
+    }
+
+    //Color slightlyTinted = setTint(original, whiteTint, 0.3); // 30% lighter
+    //Color fullyTinted = setTint(original, whiteTint, 1.0); // Completely white
+    //Color darkerTint = setTint(original, blackTint, 0.5); // 50% darker
+    public static Color setTint(Color color, Color tintColor, double factor) {
+        factor = Math.max(0, Math.min(1, factor));
+
+        int r = (int) ((1 - factor) * color.getRed() + factor * tintColor.getRed());
+        int g = (int) ((1 - factor) * color.getGreen() + factor * tintColor.getGreen());
+        int b = (int) ((1 - factor) * color.getBlue() + factor * tintColor.getBlue());
+
+        return Color.fromRGB(r, g, b);
     }
 
     public static @NotNull String colorToHex(@NotNull Color color) {

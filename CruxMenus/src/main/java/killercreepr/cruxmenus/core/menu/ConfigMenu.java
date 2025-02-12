@@ -26,7 +26,7 @@ import java.util.*;
 
 public class ConfigMenu extends BukkitMenu implements CfgMenu {
     protected final @NotNull MenuHolder holder;
-    protected final @NotNull DataExchange info;
+    protected @NotNull DataExchange info;
     protected final @NotNull MergedTagContainer tags;
 
     protected final Map<Integer, MenuItem> items = new HashMap<>();
@@ -58,7 +58,7 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
     public @NotNull MergedTagContainer buildTags(@NotNull TagParser tagParser){
         MergedTagContainer tags = new SimpleMergedTagContainer(tagParser);
         tags.addAll(super.buildTags(tagParser));
-        tags.hookAll(info());
+        tags.hookAllWithPrefix(info());
         if(info.get("viewer") instanceof OfflinePlayer viewer){
             tags.addAll(tags.hook(viewer, TagsPrefixBuilder.overwriteCompletely("viewer_")));
         }
@@ -124,6 +124,12 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
             if(slot.isEmpty() || !i.canDisplay()) return;
             setItem(slot.get(), i, viewer);
         }));*/
+    }
+
+    @Override
+    public CfgMenu info(@NotNull DataExchange info) {
+        this.info = info;
+        return this;
     }
 
     public @Nullable MenuItem setItem(@NotNull MenuItemHolder menuItem, @NotNull Player viewer, @NotNull MenuContext menuContext){

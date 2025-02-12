@@ -1,5 +1,6 @@
 package killercreepr.cruxmenus.api.menu;
 
+import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.data.holder.DataInfoHolder;
 import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.crux.core.Crux;
@@ -10,6 +11,7 @@ import killercreepr.cruxmenus.api.menu.holder.MenuItems;
 import killercreepr.cruxmenus.api.menu.item.MenuItem;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,6 +28,9 @@ public interface CfgMenu extends Menu, DataInfoHolder {
     default void setItem(int slot, @Nullable MenuItem item, @NotNull Player viewer){
         setItem(slot, item, viewer, false);
     }
+
+    @ApiStatus.Experimental
+    CfgMenu info(@NotNull DataExchange info);
 
     default void setItem(int slot, @Nullable MenuItem item, @NotNull Player viewer, boolean silent){
         if(true){//todo

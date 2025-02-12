@@ -28,7 +28,8 @@ public class CruxStandardTags {
             new CommandSenderTags(),
             new ServerTags(),
             new LivingEntityTags(),
-            new PotionEffectTags()
+            new PotionEffectTags(),
+            new ColorTags()
         );
     }
 

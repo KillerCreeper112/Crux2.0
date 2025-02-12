@@ -19,6 +19,8 @@ public class StandardMenuActions {
             new SoundAction(Crux.key("sound")),
             new UpdateMenuAction(Crux.key("update")),
             new UpdateItemAction(Crux.key("update_item")),
+            new SetDataAction(Crux.key("set_data")),
+            new RemoveDataAction(Crux.key("remove_data")),
 
             new PagedAddAction(Crux.key("page_add")),
             new PagedSetAction(Crux.key("page_set"))

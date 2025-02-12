@@ -43,6 +43,13 @@ public interface DataExchange extends Iterable<Holder<?>> {
     DataExchange append(@NotNull Map<String, Holder<?>> info);
 
     /**
+     * @return A new DataExchange with the appended info.
+     */
+    @Contract(pure = true)
+    @NotNull
+    DataExchange appendObjects(@NotNull Map<String, ?> info);
+
+    /**
      * @return A new DataExchange with the appended object.
      */
     @Contract(pure = true)
@@ -55,6 +62,13 @@ public interface DataExchange extends Iterable<Holder<?>> {
     @Contract(pure = true)
     @NotNull
     DataExchange removeIf(@NotNull Predicate predicate);
+
+    /**
+     * @return A new DataExchange with the removed values.
+     */
+    @Contract(pure = true)
+    @NotNull
+    DataExchange remove(@NotNull String... ids);
 
     boolean has(@NotNull String id);
 
