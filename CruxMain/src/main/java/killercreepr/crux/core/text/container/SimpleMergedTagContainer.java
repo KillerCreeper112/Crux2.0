@@ -10,6 +10,7 @@ import killercreepr.crux.api.text.tags.TagParser;
 import killercreepr.crux.api.text.tags.TagsPrefixBuilder;
 import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.crux.api.text.tags.container.TagContainer;
+import killercreepr.crux.core.text.resolver.Tag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -80,9 +81,16 @@ public class SimpleMergedTagContainer implements MergedTagContainer {
                 return;
             }
             TagsPrefixBuilder prefix = prefixConsumer == null ? TagsPrefixBuilder.overwriteBase(id + "_") : prefixConsumer.apply(id);
+
+            if(isPrimitive(value)) add(Tag.parsed(id, value.toString()));
+
             hook(value, prefix);
         });
         return this;
+    }
+
+    private boolean isPrimitive(Object o){
+        return o instanceof String || o instanceof Number || o instanceof Boolean || o instanceof Character;
     }
 
     @Override
