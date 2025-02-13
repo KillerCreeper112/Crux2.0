@@ -54,6 +54,13 @@ public class CruxColor {
 
         return String.format("#%02X%02X%02X", r, g, b);
     }
+    public static @NotNull String colorToHexPlain(@NotNull Color color) {
+        int r = color.getRed();
+        int g = color.getGreen();
+        int b = color.getBlue();
+
+        return String.format("%02X%02X%02X", r, g, b);
+    }
 
     public static @Nullable Color parseColor(@NotNull String id){
         return parseColor(id, null);

@@ -31,10 +31,10 @@ public class ColorTags implements ObjectTag<Color> {
     @Override
     public @Nullable TagContainer<StringResolver> requestStrings(@NotNull Color color, @NotNull TagParser tags) {
         return TagContainer.string(tags)
-            .add(Tag.string("hex", (args, ctx) -> CruxColor.colorToHex(color)))
+            .add(Tag.string("hex", (args, ctx) -> CruxColor.colorToHexPlain(color)))
             .add(Tag.string("add_tint", (args, ctx) ->{
                 int tint = (int) CruxMath.evaluate(ctx.deserializeString(args.get(0)));
-                return CruxColor.colorToHex(CruxColor.addTint(color, tint));
+                return CruxColor.colorToHexPlain(CruxColor.addTint(color, tint));
             }))
             ;
     }
