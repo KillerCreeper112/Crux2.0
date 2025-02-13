@@ -5,6 +5,7 @@ import killercreepr.cruxmenus.api.menu.module.config.MenuModuleBuilder;
 import killercreepr.cruxmenus.api.menu.registry.MenuRegistry;
 import killercreepr.cruxmenus.core.menu.module.standard.container.ItemsContainerMenuModuleBuilder;
 import killercreepr.cruxmenus.core.menu.module.standard.fill.FillMenuModuleBuilder;
+import killercreepr.cruxmenus.core.menu.module.standard.fill.simple.SimpleFillMenuModuleBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -14,7 +15,8 @@ public class StandardMenuModules {
     public static @NotNull Collection<MenuModuleBuilder> buildModules(@NotNull MenuRegistry registry){
         return Set.of(
             new FillMenuModuleBuilder(registry.menuModule(), Crux.key("fill")),
-            new ItemsContainerMenuModuleBuilder(registry.menuModule(), Crux.key("items_container"))
+            new ItemsContainerMenuModuleBuilder(registry.menuModule(), Crux.key("items_container")),
+            new SimpleFillMenuModuleBuilder(registry.menuModule(), Crux.key("simple_fill"))
         );
     }
 }

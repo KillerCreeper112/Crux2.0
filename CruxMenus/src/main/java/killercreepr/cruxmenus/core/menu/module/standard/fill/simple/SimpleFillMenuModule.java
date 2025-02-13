@@ -1,8 +1,10 @@
-package killercreepr.cruxmenus.core.menu.module.standard.fill;
+package killercreepr.cruxmenus.core.menu.module.standard.fill.simple;
 
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxmenus.api.menu.Menu;
+import killercreepr.cruxmenus.api.menu.holder.MenuItemHolder;
 import killercreepr.cruxmenus.api.menu.holder.MenuItems;
+import killercreepr.cruxmenus.api.menu.item.MenuItem;
 import killercreepr.cruxmenus.api.menu.module.ActiveMenuModule;
 import killercreepr.cruxmenus.api.menu.module.config.MenuModuleBuilder;
 import killercreepr.cruxmenus.core.menu.module.SimpleMenuModule;
@@ -12,20 +14,20 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FillMenuModule extends SimpleMenuModule {
+public class SimpleFillMenuModule extends SimpleMenuModule {
     protected final @NotNull String id;
     protected final @NotNull MenuModuleBuilder builder;
     protected final @NotNull NumberProvider indexes;
-    protected final @NotNull MenuItems menuItems;
+    protected final @NotNull MenuItemHolder menuItem;
     protected final @Nullable List<Integer> cachedIndexes;
-    public FillMenuModule(@NotNull String id, @NotNull MenuModuleBuilder builder,
-                          @NotNull NumberProvider indexes,
-                          @NotNull MenuItems menuItems, boolean cacheIndexes) {
+    public SimpleFillMenuModule(@NotNull String id, @NotNull MenuModuleBuilder builder,
+                                @NotNull NumberProvider indexes,
+                                @NotNull MenuItemHolder menuItem, boolean cacheIndexes) {
         super(builder.key());
         this.id = id;
         this.builder = builder;
         this.indexes = indexes;
-        this.menuItems = menuItems;
+        this.menuItem = menuItem;
         if(cacheIndexes){
             cachedIndexes = new ArrayList<>();
             this.indexes.sampleList().forEach(i -> cachedIndexes.add(i.intValue()));
@@ -34,6 +36,6 @@ public class FillMenuModule extends SimpleMenuModule {
 
     @Override
     public @Nullable ActiveMenuModule build(@NotNull Menu menu) {
-        return new ActiveFillMenuModule(id, this, indexes, menuItems, cachedIndexes);
+        return new ActiveSimpleFillMenuModule(id, this, indexes, menuItem, cachedIndexes);
     }
 }

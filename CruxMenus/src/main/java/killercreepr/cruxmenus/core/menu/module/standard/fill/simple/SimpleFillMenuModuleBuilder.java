@@ -1,4 +1,4 @@
-package killercreepr.cruxmenus.core.menu.module.standard.fill;
+package killercreepr.cruxmenus.core.menu.module.standard.fill.simple;
 
 import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
@@ -18,9 +18,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
-public class FillMenuModuleBuilder extends SimpleFileMenuModuled<MenuModule> implements MenuModuleBuilder {
+public class SimpleFillMenuModuleBuilder extends SimpleFileMenuModuled<MenuModule> implements MenuModuleBuilder {
     protected final @NotNull Key key;
-    public FillMenuModuleBuilder(@NotNull FileMenuHolder<?> menuModule, @NotNull Key key) {
+    public SimpleFillMenuModuleBuilder(@NotNull FileMenuHolder<?> menuModule, @NotNull Key key) {
         super(menuModule);
         this.key = key;
     }
@@ -41,12 +41,14 @@ public class FillMenuModuleBuilder extends SimpleFileMenuModuled<MenuModule> imp
         };
     }
 
-    public @Nullable MenuItems parseItems(@NotNull FileContext<?> ctx,
+    public @Nullable MenuItemHolder parseItem(@NotNull FileContext<?> ctx,
                                                @NotNull FileElement e, @Nullable FileObject menuContext,
                                                @NotNull String id){
         if(!(e instanceof FileObject o)) return null;
-        return menuModule.getFileMenuItems().deserializeFromFile(ctx, o.get("items"), menuContext,
-            itemsFunction(id));
+        Function<MenuItemHolder, MenuItemHolder> function = itemsFunction(id);
+        MenuItemHolder holder = menuModule.getFileMenuItem().deserializeFromFile(ctx, o.get("item"), menuContext);
+        if(function != null) holder = function.apply(holder);
+        return holder;
     }
 
     @Override
@@ -61,9 +63,9 @@ public class FillMenuModuleBuilder extends SimpleFileMenuModuled<MenuModule> imp
         if(id==null) return null;
         NumberProvider indexes = ctx.getRegistry().deserializeFromFile(NumberProvider.class, o.get("indexes"));
         if(indexes == null) return null;
-        MenuItems items = parseItems(ctx, o, menuCtx, id);
+        MenuItemHolder items = parseItem(ctx, o, menuCtx, id);
         if(items==null) return null;
         boolean cacheIndexes = o.getOrDefaultObject("cache_indexes", false);
-        return new FillMenuModule(id, this, indexes, items, cacheIndexes);
+        return new SimpleFillMenuModule(id, this, indexes, items, cacheIndexes);
     }
 }
