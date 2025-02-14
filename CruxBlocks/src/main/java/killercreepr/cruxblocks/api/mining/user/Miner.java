@@ -18,6 +18,8 @@ public interface Miner {
     static Miner block(@NotNull Block block){
         return new BlockMiner(block);
     }
+
+
     static Miner entity(@NotNull Entity entity){
         return entity(entity, null);
     }

@@ -1,6 +1,7 @@
 package killercreepr.cruxblocks.core.listener;
 
 import com.destroystokyo.paper.MaterialTags;
+import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import io.papermc.paper.event.block.BlockBreakBlockEvent;
 import killercreepr.crux.api.block.sound.CreateBlockSoundGroup;
 import killercreepr.crux.api.communication.CreateSound;
@@ -10,6 +11,7 @@ import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.component.CruxComponents;
 import killercreepr.crux.core.util.CruxBlockUtil;
 import killercreepr.crux.core.util.CruxLoc;
+import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxblocks.api.block.CruxBlock;
 import killercreepr.cruxblocks.api.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.api.block.active.ActiveCruxInteractable;
@@ -18,6 +20,9 @@ import killercreepr.cruxblocks.api.block.flag.BlockBreakFlag;
 import killercreepr.cruxblocks.api.block.flag.BlockBreakFlags;
 import killercreepr.cruxblocks.api.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.api.block.manager.CruxBlockManager;
+import killercreepr.cruxblocks.api.event.CustomBlockExplodeEvent;
+import killercreepr.cruxblocks.api.event.CustomEntityExplodeEvent;
+import killercreepr.cruxblocks.api.event.CustomExplodeEvent;
 import killercreepr.cruxblocks.api.mining.user.Miner;
 import killercreepr.cruxblocks.core.block.component.CruxBlockComponents;
 import killercreepr.cruxblocks.core.entity.memory.MinerHolder;
@@ -48,7 +53,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 //todo the block breaking speed is a little wack
@@ -88,28 +95,90 @@ public class CustomBlocksListener implements Listener {
         return fallBack;
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onBlockExplode(BlockExplodeEvent event) {
         float power = getExplosionPower(event.getExplodedBlockState(), 4f);
-        event.blockList().removeIf(block ->{
-            ActiveCruxBlock crux = manager.getActiveBlock(block);
-            if(crux == null) return false;
-            if(!crux.getCruxBlock().getComponents().has(CruxBlockComponents.EXPLOSION_RESISTANCE)) return false;
+        List<Block> list = new ArrayList<>();
+        event.blockList().removeIf(b ->{
+            list.add(b);
+            ActiveCruxBlock crux = manager.getActiveBlock(b);
+            if(crux == null){
+                list.add(b);
+                return false;
+            }
+
+            if(!crux.getCruxBlock().getComponents().has(CruxBlockComponents.EXPLOSION_RESISTANCE)){
+                list.add(b);
+                return true;
+            }
             float x = power - crux.getCruxBlock().getComponents().get(CruxBlockComponents.EXPLOSION_RESISTANCE);
-            return x <= 0f;
+            if(x <= 0f){
+                return true;
+            }
+            list.add(b);
+            return true;
+        });
+        CustomBlockExplodeEvent customEvent = new CustomBlockExplodeEvent(
+            event.getBlock().getLocation(), list, event.blockList(), event.getExplosionResult(), event.getYield(), event.getBlock()
+        );
+        if(!customEvent.callEvent()){
+            event.setCancelled(true);
+        }
+        handleCustomExplosion(customEvent, Miner.block(event.getBlock()));
+    }
+
+    public void handleCustomExplosion(CustomExplodeEvent event, Miner miner){
+        float yield = event.getYield() * 100f;
+        event.getBlocks().forEach(b ->{
+            ActiveCruxBlock crux = manager.getActiveBlock(b);
+            if(crux == null) return;
+            BlockBreakFlags flags;
+            if(CruxMath.testChance(yield)){
+                flags = BlockBreakFlags.empty();
+            }else flags = BlockBreakFlags.flags(BlockBreakFlag.DISABLE_DROPS);
+            crux.breakBlock(miner, flags);
         });
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onEntityExplode(EntityExplodeEvent event) {
         float power = getExplosionPower(event.getEntity(), 4f);
+        List<Block> list = new ArrayList<>();
+        event.blockList().removeIf(b ->{
+            list.add(b);
+            ActiveCruxBlock crux = manager.getActiveBlock(b);
+            if(crux == null){
+                list.add(b);
+                return false;
+            }
+
+            if(!crux.getCruxBlock().getComponents().has(CruxBlockComponents.EXPLOSION_RESISTANCE)){
+                list.add(b);
+                return true;
+            }
+            float x = power - crux.getCruxBlock().getComponents().get(CruxBlockComponents.EXPLOSION_RESISTANCE);
+            if(x <= 0f){
+                return true;
+            }
+            list.add(b);
+            return true;
+        });
+        CustomEntityExplodeEvent customEvent = new CustomEntityExplodeEvent(
+            event.getEntity().getLocation(), list, event.blockList(), event.getExplosionResult(), event.getYield(), event.getEntity()
+        );
+        if(!customEvent.callEvent()){
+            event.setCancelled(true);
+        }
+
+        handleCustomExplosion(customEvent, Miner.entity(event.getEntity()));
+        /*float power = getExplosionPower(event.getEntity(), 4f);
         event.blockList().removeIf(block ->{
             ActiveCruxBlock crux = manager.getActiveBlock(block);
             if(crux == null) return false;
             if(!crux.getCruxBlock().getComponents().has(CruxBlockComponents.EXPLOSION_RESISTANCE)) return false;
             float x = power - crux.getCruxBlock().getComponents().get(CruxBlockComponents.EXPLOSION_RESISTANCE);
             return x <= 0f;
-        });
+        });*/
     }
 
 
@@ -207,6 +276,14 @@ public class CustomBlocksListener implements Listener {
         MinerHolder data = EntityMemory.getOrCreateDataHolder(p, MinerHolder.class);
         if(data==null) return;
         data.onMine(p);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onBlockDestroy(BlockDestroyEvent event) {
+        Block b = event.getBlock();
+        ActiveCruxBlock active = manager.getActiveBlock(b);
+        if(active==null) return;
+        event.setWillDrop(false);
     }
 
 

@@ -1,7 +1,6 @@
 package killercreepr.cruxblocks.core.hook;
 
 import com.google.common.reflect.TypeToken;
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.math.BlockPos;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxblocks.core.structure.modules.PlaceCustomBlocksModule;
@@ -20,7 +19,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.logging.Level;
 
 public class CruxStructuresHook {
     public static void register(){
