@@ -18,7 +18,7 @@ public class PlayerCruxStatHolder extends PlayerDataHolder implements EntityStat
 
     public PlayerCruxStatHolder(@NotNull Key key, @NotNull PlayerMemory parent) {
         super(key, parent);
-        this.data = new DataStatHolder(parent.getUUID());
+        this.data = new EntityDataStatHolder(parent.getUUID());
         load();
     }
 

@@ -29,4 +29,5 @@ public class NumCfgValue extends NotNullValue<NumberProvider> {
     public NumCfgValue(@NotNull Number defaultConstant, @Nullable String path, @NotNull String @Nullable ... comments) {
         this(new ConstantNumber(defaultConstant), path, comments);
     }
+
 }
