@@ -8,10 +8,8 @@ import killercreepr.crux.api.block.sound.CreateBlockSoundGroup;
 import killercreepr.crux.api.communication.CreateSound;
 import killercreepr.crux.api.entity.memory.EntityMemory;
 import killercreepr.crux.api.item.CruxItem;
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.component.CruxComponents;
 import killercreepr.crux.core.util.CruxBlockUtil;
-import killercreepr.crux.core.util.CruxLoc;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxblocks.api.block.CruxBlock;
 import killercreepr.cruxblocks.api.block.active.ActiveCruxBlock;
@@ -30,21 +28,22 @@ import killercreepr.cruxblocks.core.entity.memory.MinerHolder;
 import killercreepr.cruxblocks.core.mining.user.BlockMiner;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
-import org.bukkit.block.data.Directional;
-import org.bukkit.block.data.Orientable;
-import org.bukkit.block.data.Rotatable;
-import org.bukkit.block.data.type.Snow;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.entity.*;
@@ -64,10 +63,7 @@ import org.bukkit.inventory.ItemType;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 //todo the block breaking speed is a little wack
 public class CustomBlocksListener implements Listener {
@@ -88,6 +84,8 @@ public class CustomBlocksListener implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
+        Player p = event.getPlayer();
+        nmsSkip.remove(p.getUniqueId());
         //interactCooldowns.remove(event.getPlayer().getUniqueId());
     }
 
@@ -362,6 +360,38 @@ public class CustomBlocksListener implements Listener {
         return false;
     }
 
+    public boolean checkForPass(ItemStack item){
+        Material type = item.getType();
+        if(MaterialSetTag.ITEMS_BOATS.isTagged(type)) return true;
+        if(type == Material.PAINTING) return true;
+        if(type == Material.ITEM_FRAME) return true;
+        if(type == Material.GLOW_ITEM_FRAME) return true;
+        if(type == Material.BUCKET) return true;
+        return false;
+    }
+
+    public void nmsPlaceBucket(Block placeBlock, net.minecraft.world.entity.player.Player nmsPlayer,
+                               net.minecraft.world.item.ItemStack nmsItem,
+                               InteractionHand hand,
+                               Direction direction, BlockHitResult result, BlockPos nmsPos, BucketItem bucketItem){
+        if(!bucketItem.emptyContents(
+            nmsPlayer, nmsPlayer.getCommandSenderWorld(), new BlockPos(placeBlock.getX(), placeBlock.getY(), placeBlock.getZ()),
+            result, direction, nmsPos,
+            nmsItem, hand
+        )) return;
+        bucketItem.checkExtraContent(nmsPlayer, nmsPlayer.getCommandSenderWorld(), nmsItem, nmsPos);
+        nmsPlayer.awardStat(Stats.ITEM_USED.get(bucketItem));
+        net.minecraft.world.item.ItemStack itemStack = ItemUtils.createFilledResult(nmsItem, nmsPlayer, BucketItem.getEmptySuccessItem(nmsItem, nmsPlayer));
+        nmsPlayer.setItemInHand(hand, itemStack);
+    }
+
+    protected static BlockHitResult getPlayerPOVHitResult(Level level, net.minecraft.world.entity.player.Player player, ClipContext.Fluid fluidMode) {
+        Vec3 eyePosition = player.getEyePosition();
+        Vec3 vec3 = eyePosition.add(player.calculateViewVector(player.getXRot(), player.getYRot()).scale(player.blockInteractionRange()));
+        return level.clip(new ClipContext(eyePosition, vec3, net.minecraft.world.level.ClipContext.Block.OUTLINE, fluidMode, player));
+    }
+
+    protected final Map<UUID, Boolean> nmsSkip = new HashMap<>();
     @EventHandler
     private void interact(PlayerInteractEvent event){
         if(event.getAction() == Action.PHYSICAL){
@@ -372,6 +402,10 @@ public class CustomBlocksListener implements Listener {
             return;
         }
         Player p = event.getPlayer();
+        if(nmsSkip.containsKey(p.getUniqueId())){
+            nmsSkip.remove(p.getUniqueId());
+            return;
+        }
 
         Block clickedBlock = event.getClickedBlock();
         if(event.getAction().isLeftClick() && clickedBlock != null){
@@ -407,14 +441,32 @@ public class CustomBlocksListener implements Listener {
                 net.minecraft.world.item.ItemStack nmsItem = ((CraftItemStack)item.ensureServerConversions()).handle;
                 InteractionHand hand = event.getHand() == EquipmentSlot.HAND ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
                 Location point = event.getInteractionPoint();
+                Direction nmsDirection = Direction.valueOf(event.getBlockFace().toString());
+                BlockPos nmsPos = new BlockPos(placeBlock.getX(), placeBlock.getY(), placeBlock.getZ());
                 BlockHitResult result = new BlockHitResult(
                     new Vec3(point.getX(), point.getY(), point.getZ()),
-                    Direction.valueOf(event.getBlockFace().toString()),
-                    new BlockPos(placeBlock.getX(), placeBlock.getY(), placeBlock.getZ()), false
+                    nmsDirection,
+                    nmsPos, false
                 );
-                UseOnContext ctx = new UseOnContext(nmsPlayer, hand, result);
-                nmsItem.useOn(ctx);
 
+                if(nmsItem.getItem() instanceof BucketItem bucketItem && item.getType() != Material.BUCKET){
+                    nmsPlaceBucket(
+                        placeBlock, nmsPlayer, nmsItem, hand,
+                        nmsDirection, result, nmsPos, bucketItem
+                    );
+                    return;
+                }
+
+                UseOnContext ctx = new UseOnContext(nmsPlayer, hand, result);
+                InteractionResult nmsResult = nmsItem.useOn(ctx);
+                if(nmsResult == InteractionResult.PASS && checkForPass(item)){
+                    nmsSkip.put(p.getUniqueId(), true);
+                    InteractionResult result2 = nmsItem.use(nmsPlayer.getCommandSenderWorld(), nmsPlayer, hand);
+                    if(result2 instanceof InteractionResult.Success success && success.heldItemTransformedTo() != null){
+                        nmsPlayer.setItemInHand(hand, success.heldItemTransformedTo());
+                    }
+                    nmsSkip.remove(p.getUniqueId());
+                }
                 /*Block placeBlock = getPlaceBlock(clickedBlock, blockFace);
                 if(item.getType().isSolid()){
                     for(Entity e : clickedBlock.getWorld().getNearbyEntities(CruxBlockUtil.getBlockBox(placeBlock).expand(.05D))){
