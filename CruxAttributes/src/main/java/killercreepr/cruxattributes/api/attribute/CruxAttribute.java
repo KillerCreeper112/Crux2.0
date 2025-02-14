@@ -162,6 +162,34 @@ public interface CruxAttribute extends Keyed {
         return get(i.getItemMeta(), attribute, defaultValue, slots);
     }
 
+    static <P extends ItemStack> P applyAttributes(@Nullable P i, @NotNull CruxAttributeHandler attributes){
+        return applyAttributes(i, attributes.getInstances());
+    }
+
+    static <P extends ItemStack> P applyAttributes(@Nullable P i, @NotNull Collection<? extends CruxAttributeInstance> attributes){
+        if(i ==null) return null;
+        for(CruxAttributeInstance in : attributes){
+            for(CruxAttributeModifier mod : in.getModifiers()){
+                addModifier(i, in.getAttribute(), mod);
+            }
+        }
+        return i;
+    }
+
+    static <P extends PersistentDataHolder> P applyAttributes(@Nullable P i, @NotNull CruxAttributeHandler attributes){
+        return applyAttributes(i, attributes.getInstances());
+    }
+
+    static <P extends PersistentDataHolder> P applyAttributes(@Nullable P i, @NotNull Collection<? extends CruxAttributeInstance> attributes){
+        if(i ==null) return null;
+        for(CruxAttributeInstance in : attributes){
+            for(CruxAttributeModifier mod : in.getModifiers()){
+                addModifier(i, in.getAttribute(), mod);
+            }
+        }
+        return i;
+    }
+
     static <P extends PersistentDataHolder>
     double get(@Nullable P i, @NotNull CruxAttribute attribute){
         return get(i, attribute, 0D, (CruxSlot[]) null);
