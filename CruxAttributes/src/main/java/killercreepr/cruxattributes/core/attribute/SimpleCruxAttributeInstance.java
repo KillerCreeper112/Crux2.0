@@ -3,6 +3,7 @@ package killercreepr.cruxattributes.core.attribute;
 import killercreepr.cruxattributes.api.attribute.CruxAttribute;
 import killercreepr.cruxattributes.api.attribute.CruxAttributeInstance;
 import killercreepr.cruxattributes.api.attribute.CruxAttributeModifier;
+import killercreepr.cruxattributes.api.attribute.DynamicCruxAttributeInstance;
 import net.kyori.adventure.key.Key;
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
@@ -12,8 +13,26 @@ import java.util.*;
 
 
 public class SimpleCruxAttributeInstance implements CruxAttributeInstance {
-    private final CruxAttribute attribute;
-    private final Collection<CruxAttributeModifier> modifiers = new ArrayList<>();
+    public static boolean matchesPath(@NotNull CruxAttributeModifier modifier, @NotNull Key... path){
+        int lengthOne = path.length-1;
+        Key key = path.length > 1 ? null : path[lengthOne];
+        Key[] modPath = modifier.getPath();
+        if(modPath == null){
+            if(key == null) return false;
+            return key.equals(modifier.key());
+        }else if(key != null) return false;
+
+        if (modPath.length < (lengthOne)) return false;
+        for (int i = 0; i < lengthOne; i++) {
+            if (!modPath[i].equals(path[i])) {
+                return false;
+            }
+        }
+        if(modPath.length < path.length) return modifier.key().equals(path[lengthOne]);
+        return modPath[lengthOne].equals(path[lengthOne]);
+    }
+    protected final CruxAttribute attribute;
+    protected final Collection<CruxAttributeModifier> modifiers = new ArrayList<>();
     public SimpleCruxAttributeInstance(@NotNull CruxAttribute attribute, @NotNull Collection<CruxAttributeModifier> modifiers) {
         this.attribute = attribute;
         this.modifiers.addAll(modifiers);
@@ -21,12 +40,17 @@ public class SimpleCruxAttributeInstance implements CruxAttributeInstance {
 
     public SimpleCruxAttributeInstance(@NotNull CruxAttribute attribute, @NotNull CruxAttributeModifier... modifiers) {
         this.attribute = attribute;
-        this.modifiers.addAll(List.of(modifiers));
+        if(modifiers != null && modifiers.length > 0) this.modifiers.addAll(List.of(modifiers));
     }
 
     @Override
     public String toString() {
         return "SimpleCruxAttributeInstance{attribute=" + attribute + ", modifiers=" + modifiers + "}";
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return modifiers.isEmpty();
     }
 
     public double getValue(@NotNull CruxAttribute.Operation operation){
@@ -78,7 +102,53 @@ public class SimpleCruxAttributeInstance implements CruxAttributeInstance {
         return null;
     }
 
+    @Override
+    public @NotNull List<CruxAttributeModifier> getModifiers(@NotNull CruxAttribute attribute, @NotNull Key... path) {
+        List<CruxAttributeModifier> list = new ArrayList<>();
+        for(CruxAttributeModifier m : modifiers){
+            if(matchesPath(m, path)) list.add(m);
+        }
+        return list;
+    }
+
     public @NotNull Collection<CruxAttributeModifier> getModifiers() {
         return modifiers;
+    }
+
+    public static class Dynamic extends SimpleCruxAttributeInstance implements DynamicCruxAttributeInstance {
+
+        public Dynamic(@NotNull CruxAttribute attribute, @NotNull Collection<CruxAttributeModifier> modifiers) {
+            super(attribute, modifiers);
+        }
+
+        public Dynamic(@NotNull CruxAttribute attribute, @NotNull CruxAttributeModifier... modifiers) {
+            super(attribute, modifiers);
+        }
+
+        @Override
+        public boolean removeModifiers(@NotNull Key... path) {
+            return modifiers.removeIf(m -> SimpleCruxAttributeInstance.matchesPath(m, path));
+        }
+
+        @Override
+        public void addModifiers(@NotNull CruxAttributeModifier... modifiers) {
+            Set<CruxAttributeModifier> toRemove = new HashSet<>();
+
+            for (CruxAttributeModifier mod : modifiers) {
+                for (CruxAttributeModifier existing : this.modifiers) {
+                    if (existing.key().equals(mod.key()) && Arrays.equals(existing.getPath(), mod.getPath())) {
+                        toRemove.add(existing);
+                    }
+                }
+            }
+
+            this.modifiers.removeAll(toRemove);
+            Collections.addAll(this.modifiers, modifiers);
+
+            /*for(CruxAttributeModifier mod : modifiers){
+                this.modifiers.removeIf(compare -> compare.key().equals(mod.key()) && Arrays.equals(compare.getPath(), mod.getPath()));
+                this.modifiers.add(mod);
+            }*/
+        }
     }
 }
