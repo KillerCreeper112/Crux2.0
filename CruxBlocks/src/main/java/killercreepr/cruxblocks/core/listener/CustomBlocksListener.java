@@ -1,5 +1,6 @@
 package killercreepr.cruxblocks.core.listener;
 
+import com.destroystokyo.paper.MaterialSetTag;
 import com.destroystokyo.paper.MaterialTags;
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import io.papermc.paper.event.block.BlockBreakBlockEvent;
@@ -27,6 +28,13 @@ import killercreepr.cruxblocks.api.mining.user.Miner;
 import killercreepr.cruxblocks.core.block.component.CruxBlockComponents;
 import killercreepr.cruxblocks.core.entity.memory.MinerHolder;
 import killercreepr.cruxblocks.core.mining.user.BlockMiner;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -37,6 +45,8 @@ import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Orientable;
 import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.type.Snow;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -50,6 +60,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -331,9 +342,24 @@ public class CustomBlocksListener implements Listener {
     }
 
     private Block getPlaceBlock(Block clicked, BlockFace blockFace){
-        if (REPLACE.contains(clicked.getType()) ||
-                (clicked.getType().equals(Material.SNOW) && ((Snow) clicked.getBlockData()).getLayers() == 1)) return clicked;
+        if(clicked.isReplaceable()) return clicked;
+        /*if (REPLACE.contains(clicked.getType()) ||
+                (clicked.getType().equals(Material.SNOW) && ((Snow) clicked.getBlockData()).getLayers() == 1)) return clicked;*/
         return clicked.getRelative(blockFace);
+    }
+
+    public boolean isVanillaUsableItem(ItemStack item){
+        Material type = item.getType();
+        ItemType itemType = type.asItemType();
+        if(itemType.hasBlockType()) return true;
+        if(MaterialSetTag.ITEMS_BOATS.isTagged(type)) return true;
+        if(MaterialTags.SPAWN_EGGS.isTagged(type)) return true;
+        if(MaterialTags.BUCKETS.isTagged(type)) return true;
+        if(type == Material.ARMOR_STAND) return true;
+        if(type == Material.PAINTING) return true;
+        if(type == Material.ITEM_FRAME) return true;
+        if(type == Material.GLOW_ITEM_FRAME) return true;
+        return false;
     }
 
     @EventHandler
@@ -375,8 +401,21 @@ public class CustomBlocksListener implements Listener {
             }
         }
         if((clickedBlock.getType() == Material.NOTE_BLOCK)){
-            if(item != null && item.getType().isBlock() && event.useInteractedBlock() == Event.Result.DENY){
+            if(item != null && isVanillaUsableItem(item) && event.useInteractedBlock() == Event.Result.DENY){
                 Block placeBlock = getPlaceBlock(clickedBlock, blockFace);
+                net.minecraft.world.entity.player.Player nmsPlayer = ((CraftPlayer) p).getHandle();
+                net.minecraft.world.item.ItemStack nmsItem = ((CraftItemStack)item.ensureServerConversions()).handle;
+                InteractionHand hand = event.getHand() == EquipmentSlot.HAND ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
+                Location point = event.getInteractionPoint();
+                BlockHitResult result = new BlockHitResult(
+                    new Vec3(point.getX(), point.getY(), point.getZ()),
+                    Direction.valueOf(event.getBlockFace().toString()),
+                    new BlockPos(placeBlock.getX(), placeBlock.getY(), placeBlock.getZ()), false
+                );
+                UseOnContext ctx = new UseOnContext(nmsPlayer, hand, result);
+                nmsItem.useOn(ctx);
+
+                /*Block placeBlock = getPlaceBlock(clickedBlock, blockFace);
                 if(item.getType().isSolid()){
                     for(Entity e : clickedBlock.getWorld().getNearbyEntities(CruxBlockUtil.getBlockBox(placeBlock).expand(.05D))){
                         if(e instanceof LivingEntity) return;
@@ -418,7 +457,7 @@ public class CustomBlocksListener implements Listener {
                 p.getWorld().playSound(placeBlock.getLocation(),
                         placeBlock.getBlockSoundGroup().getPlaceSound(),
                         placeBlock.getBlockSoundGroup().getVolume(),
-                        placeBlock.getBlockSoundGroup().getPitch());
+                        placeBlock.getBlockSoundGroup().getPitch());*/
                 return;
             }
         }
