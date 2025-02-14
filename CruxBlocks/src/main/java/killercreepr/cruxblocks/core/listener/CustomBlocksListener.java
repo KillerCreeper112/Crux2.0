@@ -378,10 +378,11 @@ public class CustomBlocksListener implements Listener {
             if(item != null && item.getType().isBlock() && event.useInteractedBlock() == Event.Result.DENY){
                 Block placeBlock = getPlaceBlock(clickedBlock, blockFace);
                 if(item.getType().isSolid()){
-                    for(Entity e : clickedBlock.getWorld().getNearbyEntities(CruxBlockUtil.getBlockBox(placeBlock))){
+                    for(Entity e : clickedBlock.getWorld().getNearbyEntities(CruxBlockUtil.getBlockBox(placeBlock).expand(.05D))){
                         if(e instanceof LivingEntity) return;
                     }
                 }
+
                 if(!placeBlock.canPlace(item.getType().createBlockData())) return;
                 BlockState replaced = placeBlock.getState(true);
                 placeBlock.setType(item.getType());

@@ -32,6 +32,10 @@ public class CustomExplodeEvent extends Event implements Cancellable {
         this.yield = yield;
     }
 
+    public List<Block> blockList(){
+        return blocks;
+    }
+
     public boolean removeBlockIf(Predicate<Block> filter){
         return blocks.removeIf(b ->{
             if(filter.test(b)){
