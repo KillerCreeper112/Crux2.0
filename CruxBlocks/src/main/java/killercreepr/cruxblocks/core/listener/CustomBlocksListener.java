@@ -78,8 +78,6 @@ public class CustomBlocksListener implements Listener {
         return manager;
     }
 
-    private static final Collection<Material> REPLACE = Set.of(Material.AIR, Material.CAVE_AIR, Material.VOID_AIR,
-            Material.SHORT_GRASS, Material.SEAGRASS, Material.WATER, Material.LAVA, Material.TALL_GRASS);
     //private final static Map<UUID, Long> interactCooldowns = new HashMap<>();
 
     @EventHandler
