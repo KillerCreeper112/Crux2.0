@@ -48,7 +48,7 @@ public class FileCruxAttributeModifier implements FileObjectHandler<CruxAttribut
         CruxAttributeModifier mod = CruxAttributeModifier.modifier(
             key, amount.doubleValue(), operation, slot
         );
-        if(path != null && !path.isEmpty()) mod.setPath(path.toArray(new Key[0]));
+        if(path != null && !path.isEmpty()) mod = mod.withPath(path.toArray(new Key[0]));
         return mod;
     }
 }

@@ -12,10 +12,10 @@ import java.util.Arrays;
 
 public class SimpleCruxAttributeModifier implements CruxAttributeModifier {
     private final Key key;
-    private double amount;
+    private final double amount;
     private final CruxAttribute.Operation operation;
     private final CruxSlotGroup slot;
-    private Key[] path;
+    private final Key[] path;
 
     public SimpleCruxAttributeModifier(@NotNull Key key, @NotNull CruxAttributeModData data) {
         this(key, data.getAmount(), data.getOperation(), data.getSlotGroup());
@@ -35,6 +35,16 @@ public class SimpleCruxAttributeModifier implements CruxAttributeModifier {
         this.amount = amount;
         this.operation = operation;
         this.slot = slot;
+        this.path = null;
+    }
+
+    public SimpleCruxAttributeModifier(@NotNull Key key, double amount, @NotNull CruxAttribute.Operation operation,
+                                       @Nullable CruxSlotGroup slot, Key... path) {
+        this.key = key;
+        this.amount = amount;
+        this.operation = operation;
+        this.slot = slot;
+        this.path = path;
     }
 
     public SimpleCruxAttributeModifier(@NotNull Key key, double amount,
@@ -48,16 +58,36 @@ public class SimpleCruxAttributeModifier implements CruxAttributeModifier {
     }
 
     public SimpleCruxAttributeModifier withKey(@NotNull Key newKey){
-        return new SimpleCruxAttributeModifier(newKey, amount, operation, slot);
+        return new SimpleCruxAttributeModifier(newKey, amount, operation, slot, copyPath());
     }
 
     public @NotNull Key@Nullable[] getPath() {
         return path;
     }
 
-    public SimpleCruxAttributeModifier setPath(@NotNull Key @Nullable... path){
-        this.path = path;
-        return this;
+    @Override
+    public CruxAttributeModifier withPath(@NotNull Key @Nullable ... path) {
+        return new SimpleCruxAttributeModifier(
+            key, amount, operation, slot, path
+        );
+    }
+
+    private Key[] copyPath(){
+        return path == null ? null : Arrays.copyOf(path, path.length);
+    }
+
+    @Override
+    public CruxAttributeModifier withAmount(double amount) {
+        return new SimpleCruxAttributeModifier(
+            key, amount, operation, slot, copyPath()
+        );
+    }
+
+    @Override
+    public CruxAttributeModifier withOperation(CruxAttribute.@NotNull Operation operation) {
+        return new SimpleCruxAttributeModifier(
+            key, amount, operation, slot, copyPath()
+        );
     }
 
     /**
@@ -82,10 +112,7 @@ public class SimpleCruxAttributeModifier implements CruxAttributeModifier {
         this.amount = amount;
         this.operation = operation;
         this.slot = slot;
-    }
-
-    public SimpleCruxAttributeModifier setAmount(double amount) {
-        this.amount = amount; return this;
+        this.path = null;
     }
 
     public boolean isBase(){
@@ -110,6 +137,11 @@ public class SimpleCruxAttributeModifier implements CruxAttributeModifier {
     public CruxSlotGroup getSlotGroup() {
         if(slot == null) return CruxSlotGroup.ANY;
         return slot;
+    }
+
+    @Override
+    public @NotNull CruxAttributeModifier copy() {
+        return withKey(key);
     }
 
     @Override

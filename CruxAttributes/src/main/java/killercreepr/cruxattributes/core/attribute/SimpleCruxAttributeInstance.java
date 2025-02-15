@@ -150,5 +150,11 @@ public class SimpleCruxAttributeInstance implements CruxAttributeInstance {
                 this.modifiers.add(mod);
             }*/
         }
+
+        @Override
+        public @NotNull DynamicCruxAttributeInstance copy() {
+            Collection<CruxAttributeModifier> list = new ArrayList<>(modifiers);
+            return new SimpleCruxAttributeInstance.Dynamic(attribute, list);
+        }
     }
 }

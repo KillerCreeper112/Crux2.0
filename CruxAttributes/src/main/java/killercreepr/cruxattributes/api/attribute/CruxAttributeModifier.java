@@ -5,6 +5,7 @@ import killercreepr.cruxattributes.core.attribute.SimpleCruxAttributeModifier;
 import killercreepr.cruxattributes.core.attribute.container.CruxAttributeModData;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,9 +56,9 @@ public interface CruxAttributeModifier extends Keyed {
 
     CruxAttributeModifier withKey(@NotNull Key newKey);
     @NotNull Key@Nullable[] getPath();
-    CruxAttributeModifier setPath(@NotNull Key @Nullable... path);
-
-    CruxAttributeModifier setAmount(double amount);
+    CruxAttributeModifier withPath(@NotNull Key @Nullable... path);
+    CruxAttributeModifier withAmount(double amount);
+    CruxAttributeModifier withOperation(@NotNull CruxAttribute.Operation operation);
 
     default boolean isBase(){
         return key().equals(CruxAttribute.k("base"));
@@ -69,4 +70,6 @@ public interface CruxAttributeModifier extends Keyed {
 
     @NotNull
     CruxSlotGroup getSlotGroup();
+    @Contract(pure = true)
+    @NotNull CruxAttributeModifier copy();
 }

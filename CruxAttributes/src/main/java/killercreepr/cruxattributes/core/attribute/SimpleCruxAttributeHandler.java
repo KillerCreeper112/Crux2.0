@@ -18,6 +18,10 @@ public class SimpleCruxAttributeHandler implements CruxAttributeHandler {
         }
     }
 
+    public SimpleCruxAttributeHandler(Map<CruxAttribute, DynamicCruxAttributeInstance> map) {
+        instances.putAll(map);
+    }
+
     public SimpleCruxAttributeHandler() {
     }
 
@@ -59,5 +63,14 @@ public class SimpleCruxAttributeHandler implements CruxAttributeHandler {
     @Override
     public @NotNull Collection<? extends CruxAttributeInstance> getInstances() {
         return instances.values();
+    }
+
+    @Override
+    public @NotNull CruxAttributeHandler copy() {
+        Map<CruxAttribute, DynamicCruxAttributeInstance> map = new HashMap<>();
+        for (DynamicCruxAttributeInstance value : instances.values()) {
+            map.put(value.getAttribute(), value.copy());
+        }
+        return new SimpleCruxAttributeHandler(map);
     }
 }

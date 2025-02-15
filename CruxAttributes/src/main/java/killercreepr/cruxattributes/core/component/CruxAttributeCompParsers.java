@@ -59,7 +59,7 @@ public class CruxAttributeCompParsers {
             }else mod = CruxAttributeModifier.modifier(key, amount, operation, slot);
 
             if(path == null || path.isEmpty()) return mod;
-            mod.setPath(path.toArray(new Key[0]));
+            mod = mod.withPath(path.toArray(new Key[0]));
             return mod;
         });
 

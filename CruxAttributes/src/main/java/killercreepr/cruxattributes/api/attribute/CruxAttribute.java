@@ -661,8 +661,8 @@ public interface CruxAttribute extends Keyed {
                 newPath.add(k);
                 list.addAll(convertToModifiers(provider, newPath));
             } else{
+                if(path != null) mod = mod.withPath(path.toArray(new NamespacedKey[0]));
                 list.add(mod);
-                if(path != null) mod.setPath(path.toArray(new NamespacedKey[0]));
             }
         }
         return list;
