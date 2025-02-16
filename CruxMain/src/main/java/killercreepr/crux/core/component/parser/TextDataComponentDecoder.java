@@ -39,6 +39,10 @@ public class TextDataComponentDecoder implements DataComponentDecoder {
         return list;
     }
 
+    public static Object parseComponentObject(String input) {
+        return parseObject(input);
+    }
+
     public static Map<String, Object> parseComponentMap(String input) {
         // Remove the surrounding brackets and trim any whitespace
         String componentsString = input.trim();
