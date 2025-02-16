@@ -18,6 +18,10 @@ public interface CruxAttributeInstance {
         return new SimpleCruxAttributeInstance(attribute, modifiers);
     }
 
+    static CruxAttributeInstance instance(@NotNull CruxAttributeInstance instance){
+        return instance(instance.getAttribute(), instance.getModifiers());
+    }
+
     static DynamicCruxAttributeInstance dynamicInstance(@NotNull CruxAttribute attribute, @NotNull Collection<CruxAttributeModifier> modifiers){
         return new SimpleCruxAttributeInstance.Dynamic(attribute, modifiers);
     }

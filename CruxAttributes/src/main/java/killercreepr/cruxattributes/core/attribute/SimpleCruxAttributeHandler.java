@@ -26,22 +26,37 @@ public class SimpleCruxAttributeHandler implements CruxAttributeHandler {
     }
 
     @Override
-    public void addModifier(@NotNull CruxAttribute attribute, @NotNull CruxAttributeModifier modifier) {
+    public CruxAttributeEditor addModifier(@NotNull CruxAttribute attribute, @NotNull CruxAttributeModifier modifier) {
         instances.computeIfAbsent(attribute, (d) -> CruxAttributeInstance.dynamicInstance(attribute)).addModifiers(modifier);
+        return this;
     }
 
     @Override
-    public void removeModifier(@NotNull CruxAttribute attribute, @NotNull Key... path) {
+    public CruxAttributeEditor removeModifier(@NotNull CruxAttribute attribute, @NotNull Key... path) {
         if(path == null || path.length < 1) throw new IllegalStateException("No path has been provided to remove CruxAttributeModifiers!");
         DynamicCruxAttributeInstance instance = getInstance(attribute);
-        if(instance == null) return;
+        if(instance == null) return this;
         instance.removeModifiers(path);
         if(instance.isEmpty()) clearModifiers(attribute);
+        return this;
     }
 
     @Override
-    public void clearModifiers(@NotNull CruxAttribute attribute) {
+    public CruxAttributeEditor clearModifiers(@NotNull CruxAttribute attribute) {
         instances.remove(attribute);
+        return this;
+    }
+
+    @Override
+    public CruxAttributeEditor addAllModifiers(@NotNull CruxAttributeAccessor attributes) {
+        attributes.getInstances().forEach(this::addAllModifiers);
+        return this;
+    }
+
+    @Override
+    public CruxAttributeEditor addAllModifiers(@NotNull CruxAttributeInstance instance) {
+        instance.getModifiers().forEach(mod -> addModifier(instance.getAttribute(), mod));
+        return this;
     }
 
     @Override
@@ -66,11 +81,63 @@ public class SimpleCruxAttributeHandler implements CruxAttributeHandler {
     }
 
     @Override
+    public @NotNull CruxAttributeHandler copyToHandler(@NotNull CruxAttributeHandler handler) {
+        getInstances().forEach(handler::addAllModifiers);
+        return handler;
+    }
+
+    @Override
+    public @NotNull CruxAttributeHandler copyToNewHandler() {
+        return copy();
+    }
+
+    @Override
     public @NotNull CruxAttributeHandler copy() {
         Map<CruxAttribute, DynamicCruxAttributeInstance> map = new HashMap<>();
         for (DynamicCruxAttributeInstance value : instances.values()) {
             map.put(value.getAttribute(), value.copy());
         }
         return new SimpleCruxAttributeHandler(map);
+    }
+
+    public static class Builder implements CruxAttributeHandler.Builder{
+        protected final CruxAttributeHandler handler = CruxAttributeHandler.attributeHandler();
+        @Override
+        public CruxAttributeHandler.Builder add(CruxAttribute attribute, CruxAttributeModifier... modifiers) {
+            for(CruxAttributeModifier m : modifiers){
+                handler.addModifier(attribute, m);
+            }
+            return this;
+        }
+
+        @Override
+        public CruxAttributeHandler.Builder add(CruxAttribute attribute, Collection<CruxAttributeModifier> modifiers) {
+            for(CruxAttributeModifier m : modifiers){
+                handler.addModifier(attribute, m);
+            }
+            return this;
+        }
+
+        @Override
+        public CruxAttributeHandler.Builder add(CruxAttributeInstance instance) {
+            return add(instance.getAttribute(), instance.getModifiers());
+        }
+
+        @Override
+        public CruxAttributeHandler build() {
+            return handler;
+        }
+
+        @Override
+        public CruxAttributeAccessor buildImmutable() {
+            Map<CruxAttribute, CruxAttributeInstance> map = new HashMap<>();
+            for (CruxAttributeInstance instance : handler.getInstances()) {
+                if(instance instanceof DynamicCruxAttributeInstance i){
+                    instance = CruxAttributeInstance.instance(i);
+                }
+                map.put(instance.getAttribute(), instance);
+            }
+            return CruxAttributeAccessor.attributeAccessor(map);
+        }
     }
 }

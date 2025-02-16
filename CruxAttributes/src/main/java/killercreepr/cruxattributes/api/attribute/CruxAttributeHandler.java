@@ -7,6 +7,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 public interface CruxAttributeHandler extends CruxAttributeAccessor, CruxAttributeEditor{
+    static Builder builder(){
+        return new SimpleCruxAttributeHandler.Builder();
+    }
+
     static CruxAttributeHandler attributeHandler(){
         return new SimpleCruxAttributeHandler();
     }
@@ -16,4 +20,12 @@ public interface CruxAttributeHandler extends CruxAttributeAccessor, CruxAttribu
     }
     @Contract(pure = true)
     @NotNull CruxAttributeHandler copy();
+
+    interface Builder{
+        Builder add(CruxAttribute attribute, CruxAttributeModifier... modifiers);
+        Builder add(CruxAttribute attribute, Collection<CruxAttributeModifier> modifiers);
+        Builder add(CruxAttributeInstance instance);
+        CruxAttributeHandler build();
+        CruxAttributeAccessor buildImmutable();
+    }
 }
