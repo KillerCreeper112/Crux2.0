@@ -1,6 +1,8 @@
 package killercreepr.cruxattributes.core;
 
 import killercreepr.crux.api.plugin.module.CruxModule;
+import killercreepr.crux.api.text.tags.TagParser;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.plugin.module.StandardModules;
 import killercreepr.crux.core.registries.CruxRegistries;
@@ -9,6 +11,9 @@ import killercreepr.cruxattributes.core.component.CruxAttributeComponents;
 import killercreepr.cruxattributes.core.config.CruxAttributesCfgHook;
 import killercreepr.cruxattributes.core.listener.CruxAttributeListener;
 import killercreepr.cruxattributes.core.persistence.CruxAttributesPersistence;
+import killercreepr.cruxattributes.core.text.tags.CruxAttributeInstanceTags;
+import killercreepr.cruxattributes.core.text.tags.CruxAttributeModifierTags;
+import killercreepr.cruxattributes.core.text.tags.CruxAttributeTags;
 import org.jetbrains.annotations.NotNull;
 
 public class CruxAttributesModule implements CruxModule {
@@ -29,6 +34,15 @@ public class CruxAttributesModule implements CruxModule {
         if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS)){
             CruxAttributesCfgHook.onLoad();
         }
+        registerTags(Crux.tags());
+    }
+
+    public void registerTags(TagParser tags){
+        tags.register(
+            new CruxAttributeTags(),
+            new CruxAttributeInstanceTags(),
+            new CruxAttributeModifierTags()
+        );
     }
 
     @Override
