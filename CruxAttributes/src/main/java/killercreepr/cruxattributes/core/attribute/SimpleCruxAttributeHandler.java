@@ -60,6 +60,12 @@ public class SimpleCruxAttributeHandler implements CruxAttributeHandler {
     }
 
     @Override
+    public CruxAttributeEditor clearAllModifiers() {
+        instances.clear();
+        return this;
+    }
+
+    @Override
     public double getValue(@NotNull CruxAttribute attribute) {
         return getValueOrDefault(attribute, 0D);
     }

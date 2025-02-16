@@ -10,6 +10,7 @@ public interface CruxAttributeEditor extends CruxAttributeAccessor{
     CruxAttributeEditor clearModifiers(@NotNull CruxAttribute attribute);
     CruxAttributeEditor addAllModifiers(@NotNull CruxAttributeAccessor attributes);
     CruxAttributeEditor addAllModifiers(@NotNull CruxAttributeInstance instance);
+    CruxAttributeEditor clearAllModifiers();
     @Contract(pure = true)
     @NotNull CruxAttributeEditor copy();
 }
