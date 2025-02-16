@@ -48,6 +48,11 @@ public interface CruxAttribute extends Keyed {
     CruxAttribute ATTACK_AOE = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("attack_aoe")));
     CruxAttribute ATTACK_PIERCE = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("attack_pierce")));
 
+    CruxAttribute MAX_HEALTH = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("max_health")));
+    CruxAttribute MAX_ABSORPTION = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("max_absorption")));
+    CruxAttribute LUCK = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("luck")));
+    CruxAttribute BLOCK_BREAK_SPEED = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("block_break_speed")));
+
     CruxAttribute ATTACK_KNOCKBACK = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("attack_knockback")));
     CruxAttribute ATTACK_KNOCKBACK_UP = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("attack_upwards_knockback")));
     CruxAttribute ARMOR = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("armor")));
