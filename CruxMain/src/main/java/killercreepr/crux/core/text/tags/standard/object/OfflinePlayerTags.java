@@ -61,6 +61,8 @@ public class OfflinePlayerTags implements ObjectTag<OfflinePlayer> {
             .add(Tag.string("level", (args, context) ->p.isOnline() ? p.getPlayer().getLevel()+"" : "0"))
             .add(Tag.string("exp_to_level", (args, context) ->p.isOnline() ? p.getPlayer().getExpToLevel()+"" : "0"))
             .add(Tag.string("no_damage_ticks", (args, context) -> p.isOnline()?p.getPlayer().getNoDamageTicks()+"":"0"))
+            .add(Tag.string("saturation", (args, context) -> p.isOnline()?p.getPlayer().getSaturation()+"":"0"))
+            .add(Tag.string("food", (args, context) -> p.isOnline()?p.getPlayer().getFoodLevel()+"":"0"))
             .add(Tag.string("is_online", (args, ctx) -> p.isOnline() + ""))
             .add(Tag.string("attribute", (args, context) ->{
                 Player online = p.getPlayer();

@@ -30,8 +30,10 @@ public interface InputContext {
         return simple(format, null);
     }
 
+    InputContext EMPTY = new SimpleInputContext(Crux.format(), null);
+
     static @NotNull InputContext inputContext(){
-        return inputContext((MergedTagContainer) null);
+        return EMPTY;
     }
 
     static @NotNull InputContext inputContext(@Nullable StringTagProvider tags){

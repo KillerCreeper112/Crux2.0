@@ -43,7 +43,7 @@ public class EquationNumber implements NumberProvider {
 
     @Override
     public @NotNull Number sample(@NotNull Random random, @Nullable InputContext context) {
-        if(context == null) return CruxMath.evaluate(equation);
+        if(context == null) context = InputContext.inputContext();
         return CruxMath.evaluate(context.input(equation));
     }
 
