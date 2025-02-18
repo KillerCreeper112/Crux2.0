@@ -24,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ConfigMenu extends BukkitMenu implements CfgMenu {
     protected final @NotNull MenuHolder holder;
@@ -163,7 +164,22 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
     }
 
     public @Nullable MenuItem setItem(@NotNull MenuHolder holder, int index, @NotNull Player viewer, @NotNull MenuContext menuContext){
-        Collection<MenuItemHolder> potentialItems = holder.getItems().get(index);
+        AtomicReference<MenuItem> reference = new AtomicReference<>();
+        holder.getItems().forEach(list -> list.forEach(menuItem ->{
+            MenuItem i = menuItem.getDisplayItem(viewer, menuContext);
+            Optional<List<Number>> slot = i.getSlots();
+
+            if(slot.isEmpty() || !i.canDisplay()) return;
+            slot.get().forEach(num ->{
+                if(num.intValue() == index){
+                    setItem(num.intValue(), i, viewer);
+                    reference.set(i);
+                }
+            });
+        }));
+        return reference.get();
+
+        /*Collection<MenuItemHolder> potentialItems = holder.getItems().get(index);
         if(potentialItems == null || potentialItems.isEmpty()) return null;
 
         MenuItem last = null;
@@ -177,7 +193,7 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
             //setItem(slot.get(), i, viewer);
             last = i;
         }
-        return last;
+        return last;*/
     }
 
     @Override
