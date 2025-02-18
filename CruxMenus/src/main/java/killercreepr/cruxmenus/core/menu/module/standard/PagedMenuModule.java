@@ -48,7 +48,7 @@ public abstract class PagedMenuModule<T> implements MenuModule {
                 MenuContext menuContext = MenuContext.context(cfg,
                     DataExchange.builder().putAll(cfg.info()).put(value).build(), cfg.buildTags().addAll(buildTags(
                     menu, cfg.getHolder().getRegistry().getFormat().tags()
-                )).addAll(
+                )).addAll(this.buildTags(value)).addAll(
                     Tag.parsed(MenuModule.buildTag(id, "slot"), slot+""),
                     Tag.parsed(MenuModule.buildTag(id, "index"), index+""),
                     Tag.parsed(MenuModule.buildTag(id, "list_index"), listIndex+"")
