@@ -3,6 +3,8 @@ package killercreepr.cruxmenus.core.menu.module.standard;
 import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.api.text.context.TextParserContext;
+import killercreepr.crux.api.text.tags.container.MergedTagContainer;
+import killercreepr.crux.api.text.tags.container.TagContainer;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.text.resolver.Tag;
 import killercreepr.cruxmenus.api.menu.CfgMenu;
@@ -30,6 +32,10 @@ public abstract class PagedMenuModule<T> implements MenuModule {
         this.emptyItems = emptyItems;
     }
 
+    public MergedTagContainer buildTags(T value){
+        return TagContainer.merged().hook(value);
+    }
+
     public abstract @NotNull Holder<List<T>> getValues(@NotNull Menu menu);
 
     @Override
@@ -49,6 +55,11 @@ public abstract class PagedMenuModule<T> implements MenuModule {
                 ));
 
                 cfg.setItems(valueItems, menuContext);
+            }
+
+            @Override
+            public MergedTagContainer buildTags(T value) {
+                return PagedMenuModule.this.buildTags(value);
             }
 
             @Override

@@ -42,9 +42,11 @@ public abstract class ActivePagedMenuModule<T> extends SimpleActiveMenuModuled {
     public @NotNull List<T> filterValues(@NotNull List<T> value, @NotNull TextParserContext ctx){
         if(valueFilter == null) return value;
         return value.stream().filter(v -> CruxString.parseBoolean(
-            CruxMath.evaluateEvalEx(ctx.deserializeString(valueFilter, TagContainer.merged().hook(v)))
+            CruxMath.evaluateEvalEx(ctx.deserializeString(valueFilter, buildTags(v)))
         )).toList();
     }
+
+    public abstract MergedTagContainer buildTags(T value);
 
     public ActivePagedMenuModule<T> addPage(int amount){
         return setPage(page+amount);
