@@ -335,6 +335,12 @@ public class CruxConfig extends CruxFolder implements IYamlCfg<MemoryConfigurati
     }
 
     @Override
+    public <T> @Nullable T deserializeOrDefault(@NotNull String path, @NotNull Type type, @Nullable T fallback) {
+        T value = deserialize(path, type);
+        return value == null ? fallback : value;
+    }
+
+    @Override
     public @NotNull FileRegistry fileRegistry() {
         return yamlRegistry;
     }

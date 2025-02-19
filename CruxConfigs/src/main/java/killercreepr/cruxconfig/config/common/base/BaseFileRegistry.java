@@ -1,5 +1,6 @@
 package killercreepr.cruxconfig.config.common.base;
 
+import com.google.gson.JsonElement;
 import killercreepr.crux.core.util.CruxObjects;
 import killercreepr.crux.core.util.CruxReflect;
 import killercreepr.cruxconfig.config.common.FileContext;
@@ -11,6 +12,7 @@ import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.element.FilePrimitive;
 import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
+import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -170,6 +172,36 @@ public class BaseFileRegistry implements FileRegistry {
      * This should be used
      */
     public @Nullable Object deserializeObject(@NotNull Type type, @NotNull FileElement from, @NotNull FileContext<?> context){
+        if(type instanceof Class<?> clazz){
+            if(Double.class.isAssignableFrom(clazz)){
+                return from.getAsNumber().doubleValue();
+            }
+            if(Float.class.isAssignableFrom(clazz)){
+                return from.getAsNumber().floatValue();
+            }
+            if(Short.class.isAssignableFrom(clazz)){
+                return from.getAsNumber().shortValue();
+            }
+            if(Long.class.isAssignableFrom(clazz)){
+                return from.getAsNumber().longValue();
+            }
+            if(Integer.class.isAssignableFrom(clazz)){
+                return from.getAsNumber().intValue();
+            }
+            if(Number.class.isAssignableFrom(clazz)){
+                return from.getAsNumber();
+            }
+            if(String.class.isAssignableFrom(clazz)){
+                return from.getAsString();
+            }
+            if(Character.class.isAssignableFrom(clazz)){
+                return from.getAsString().charAt(0);
+            }
+            if(Boolean.class.isAssignableFrom(clazz)){
+                return from.getAsBoolean();
+            }
+        }
+
         Object object = deserializeObjectRaw(type, from, context);
         return parseObjectFromHandlers(from, context, object);
     }
@@ -268,6 +300,8 @@ public class BaseFileRegistry implements FileRegistry {
 
     public @NotNull FileElement serializeObject(@NotNull Object o, @NotNull FileContext<?> context){
         if(o instanceof FileElement d) return d;
+        if(o instanceof YamlElement d) return FileElement.fromYaml(d);
+        if(o instanceof JsonElement d) return FileElement.fromJson(d);
         if(o instanceof String s) return new FilePrimitive(s);
         if(o instanceof Character s) return new FilePrimitive(s.toString());
         if(o instanceof Number s) return new FilePrimitive(s);
