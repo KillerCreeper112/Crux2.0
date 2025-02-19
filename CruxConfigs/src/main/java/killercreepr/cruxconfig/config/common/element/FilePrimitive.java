@@ -34,7 +34,7 @@ public class FilePrimitive extends FileGeneric {
         if(isString()) return new YamlPrimitive((String) value);
         if(isBoolean()) return new YamlPrimitive((Boolean) value);
         if(isNumber()) return new YamlPrimitive((Number) value);
-        throw new UnsupportedOperationException(getClass().getSimpleName());
+        throw new UnsupportedOperationException(getClass().getSimpleName() + ", " + value);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class FilePrimitive extends FileGeneric {
         if(isString()) return new JsonPrimitive((String) value);
         if(isBoolean()) return new JsonPrimitive((Boolean) value);
         if(isNumber()) return new JsonPrimitive((Number) value);
-        throw new UnsupportedOperationException(getClass().getSimpleName());
+        throw new UnsupportedOperationException(getClass().getSimpleName() + ", " + value);
     }
 
     @Override

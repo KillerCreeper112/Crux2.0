@@ -25,6 +25,7 @@ public class FileObject extends FileElement implements Iterable<Map.Entry<String
 
     protected final Map<String, FileElement> members = new LinkedHashMap<>();
     public FileObject add(String property, FileElement value) {
+        if(value==null) return this;
         members.put(property, value);
         return this;
     }
@@ -42,14 +43,17 @@ public class FileObject extends FileElement implements Iterable<Map.Entry<String
     }
 
     public FileObject addProperty(String property, String value) {
+        if(value==null) return this;
         add(property, new FilePrimitive(value)); return this;
     }
 
     public FileObject addProperty(String property, Number value) {
+        if(value==null) return this;
         add(property, new FilePrimitive(value)); return this;
     }
 
     public FileObject addProperty(String property, Boolean value) {
+        if(value==null) return this;
         add(property, new FilePrimitive(value)); return this;
     }
 
