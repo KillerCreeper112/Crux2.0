@@ -188,6 +188,9 @@ public class BaseFileRegistry implements FileRegistry {
             if(Integer.class.isAssignableFrom(clazz)){
                 return from.getAsNumber().intValue();
             }
+            if(Byte.class.isAssignableFrom(clazz)){
+                return from.getAsNumber().byteValue();
+            }
             if(Number.class.isAssignableFrom(clazz)){
                 return from.getAsNumber();
             }
@@ -243,8 +246,8 @@ public class BaseFileRegistry implements FileRegistry {
         from.asMap().forEach((key, value) ->{
             Object parsedValue = deserializeObject(secondType, value);
             if(parsedValue == null) return;
-            Object parsedKey;
-            if(firstType == Integer.class){
+            Object parsedKey = deserializeObject(firstType, new FilePrimitive(key));
+            /*if(firstType == Integer.class){
                 parsedKey = Integer.parseInt(key);
             }else if(firstType == Double.class){
                 parsedKey = Double.parseDouble(key);
@@ -260,7 +263,7 @@ public class BaseFileRegistry implements FileRegistry {
                 parsedKey = key.charAt(0);
             }else{
                 parsedKey = deserializeObject(firstType, new FilePrimitive(key));
-            }
+            }*/
             map.put(parsedKey, parsedValue);
         });
         return createdMap;

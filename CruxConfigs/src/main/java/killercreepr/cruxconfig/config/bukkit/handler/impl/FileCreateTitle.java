@@ -39,7 +39,7 @@ public class FileCreateTitle extends SimpleFileHandler<CreateTitle> {
     }
 
     public int parseTicks(@NotNull FileObject o, @NotNull String id){
-        return o.getOrDefaultObject(id, 0)*50;
+        return o.getOrDefaultObject(id, 0);
     }
 
     @Override
