@@ -38,6 +38,15 @@ public class WorldTags implements ObjectTag<World> {
             .add(Tag.string("is_clear_weather", (args, ctx) -> object.isClearWeather() + ""))
             .add(Tag.string("weather_duration", (args, ctx) -> object.getWeatherDuration() + ""))
             .add(Tag.string("clear_weather_duration", (args, ctx) -> object.getClearWeatherDuration() + ""))
+            .add(Tag.string("players", (args, ctx) -> object.getPlayerCount() + ""))
+            .add(Tag.string("entities", (args, ctx) -> object.getEntities().size() + ""))
+            .add(Tag.string("is_bed_works", (args, ctx) -> object.isBedWorks() + ""))
+            .add(Tag.string("is_natural", (args, ctx) -> object.isNatural() + ""))
+            .add(Tag.string("is_fixed_time", (args, ctx) -> object.isFixedTime() + ""))
+            .add(Tag.string("is_hardcore", (args, ctx) -> object.isHardcore() + ""))
+            .add(Tag.string("view_distance", (args, ctx) -> object.getViewDistance() + ""))
+            .add(Tag.string("simulation_distance", (args, ctx) -> object.getSimulationDistance() + ""))
+            .add(Tag.string("send_view_distance", (args, ctx) -> object.getSendViewDistance() + ""))
             ;
     }
 
