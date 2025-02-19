@@ -32,15 +32,14 @@ public class FileCreateTitle extends SimpleFileHandler<CreateTitle> {
         String subTitle = o.getObject("lower");
         if(title == null && subTitle == null) return null;
         return CreateTitle.title(title, subTitle,
-                Title.Times.times(
-                        parseTicks(o, "fade_in"),
-                        parseTicks(o, "stay"),
-                        parseTicks(o, "fade_out")
-                ));
+            parseTicks(o, "fade_in"),
+            parseTicks(o, "stay"),
+            parseTicks(o, "fade_out")
+        );
     }
 
-    public Duration parseTicks(@NotNull FileObject o, @NotNull String id){
-        return Duration.ofMillis((long) o.getOrDefaultObject(id, 0)*50);
+    public int parseTicks(@NotNull FileObject o, @NotNull String id){
+        return o.getOrDefaultObject(id, 0)*50;
     }
 
     @Override
