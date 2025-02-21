@@ -51,10 +51,14 @@ public class FileSimpleLootTable<T> implements FileObjectHandler<LootTable<T>> {
         throw new UnsupportedOperationException("unsupported");
     }
 
+    public Class<?> parserClass(){
+        return type;
+    }
+
     @Override
     public @Nullable LootTable<T> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)){
-            T object = ctx.getRegistry().deserializeFromFile(type, e);
+            T object = (T) ctx.getRegistry().deserializeFromFile(parserClass(), e);
             if(object==null) return null;
             return new SimpleLootTable<>(Crux.key("null"), NumberProvider.constant(1),
                 List.of(

@@ -82,6 +82,8 @@ public class TextDataComponentDecoder implements DataComponentDecoder {
         StringBuilder currentProperty = new StringBuilder();
         int openBraces = 0; // Keeps track of the level of nested curly braces
         int openBrackets = 0;
+        boolean inQuotes = false;
+        boolean inSingleQuotes = false;
         //StringBuilder result = new StringBuilder();
         List<String> result = new ArrayList<>();
 
@@ -89,15 +91,25 @@ public class TextDataComponentDecoder implements DataComponentDecoder {
         for (int i = 0; i < input.length(); i++) {
             char ch = input.charAt(i);
 
-            if (ch == '{') {
-                openBraces++;  // Increase the nested structure level when encountering '{'
-            } else if (ch == '}') {
-                openBraces--;  // Decrease the nested structure level when encountering '}'
-            } else if (ch == '[') {
-                openBrackets++;  // Increase the nested structure level when encountering '{'
-            } else if (ch == ']') {
-                openBrackets--;  // Decrease the nested structure level when encountering '}'
-            } else if (ch == ',' && openBraces == 0 && openBrackets == 0) {
+            if (ch == '\"') {
+                inQuotes = !inQuotes;
+            }else if(ch == '\''){
+                inSingleQuotes = !inSingleQuotes;
+            }
+
+            if(!inQuotes && !inSingleQuotes){
+                if (ch == '{') {
+                    openBraces++;  // Increase the nested structure level when encountering '{'
+                } else if (ch == '}') {
+                    openBraces--;  // Decrease the nested structure level when encountering '}'
+                } else if (ch == '[') {
+                    openBrackets++;  // Increase the nested structure level when encountering '{'
+                } else if (ch == ']') {
+                    openBrackets--;  // Decrease the nested structure level when encountering '}'
+                }
+            }
+
+            if (ch == ',' && openBraces == 0 && openBrackets == 0 && !inQuotes && !inSingleQuotes) {
                 // Split only when the comma is outside of any nested structure
                 if(!currentProperty.isEmpty()) result.add(currentProperty.toString());
                 //result.append(currentProperty).append(',');
@@ -137,6 +149,69 @@ public class TextDataComponentDecoder implements DataComponentDecoder {
         return map;
     }
 
+    private static String removeQuotes(String text) {
+        if (text == null || text.length() < 2) {
+            return text; // Nothing to remove
+        }
+
+        char firstChar = text.charAt(0);
+        char lastChar = text.charAt(text.length() - 1);
+
+        // Check if the text is wrapped in matching single or double quotes
+        if ((firstChar == '"' && lastChar == '"') || (firstChar == '\'' && lastChar == '\'')) {
+            return text.substring(1, text.length() - 1);
+        }
+
+        return text; // Return original text if not wrapped in quotes
+    }
+
+    /*private static String[] customSplitKeyValue(String input) {
+        StringBuilder currentProperty = new StringBuilder();
+        int openBraces = 0; // Keeps track of the level of nested curly braces
+        int openBrackets = 0;
+        boolean inQuotes = false;
+        boolean inSingleQuotes = false;
+        //StringBuilder result = new StringBuilder();
+        List<String> result = new ArrayList<>();
+
+        // Traverse through the input string and split appropriately
+        for (int i = 0; i < input.length(); i++) {
+            char ch = input.charAt(i);
+
+            if (ch == '\"') {
+                inQuotes = !inQuotes;
+            }else if(ch == '\''){
+                inSingleQuotes = !inSingleQuotes;
+            }
+
+            if(!inQuotes && !inSingleQuotes){
+                if (ch == '{') {
+                    openBraces++;  // Increase the nested structure level when encountering '{'
+                } else if (ch == '}') {
+                    openBraces--;  // Decrease the nested structure level when encountering '}'
+                } else if (ch == '[') {
+                    openBrackets++;  // Increase the nested structure level when encountering '{'
+                } else if (ch == ']') {
+                    openBrackets--;  // Decrease the nested structure level when encountering '}'
+                }
+            }
+
+            if (ch == ',' && openBraces == 0 && openBrackets == 0 && !inQuotes && inSingleQuotes) {
+                // Split only when the comma is outside of any nested structure
+                if(!currentProperty.isEmpty()) result.add(currentProperty.toString());
+                //result.append(currentProperty).append(',');
+                currentProperty.setLength(0); // Reset for the next property
+                continue;
+            }
+
+            currentProperty.append(ch); // Add the current character to the property
+        }
+
+        // Add the last property (without trailing comma)
+        if(!currentProperty.isEmpty()) result.add(currentProperty.toString());
+        return result.toArray(new String[0]);
+    }*/
+
     // Parse nested key-value pairs like {sharpness:1,fortune:3}
     private static Map<String, Object> parseNestedProperties(String nestedProperties) {
         Map<String, Object> map = new HashMap<>();
@@ -151,7 +226,7 @@ public class TextDataComponentDecoder implements DataComponentDecoder {
                 continue;
             }
             String key = keyValue[0].trim();
-            String value = keyValue[1].trim();
+            String value = removeQuotes(keyValue[1]);
 
             map.put(key, parseObject(value));
         }

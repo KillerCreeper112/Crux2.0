@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class SimpleLootTable<T> implements LootTable<T>, OpenedLootObject<T> {
@@ -45,10 +46,22 @@ public class SimpleLootTable<T> implements LootTable<T>, OpenedLootObject<T> {
 
     @Override
     public @NotNull List<T> populateLoot(@NotNull LootContext context, @Nullable Predicate<LootPoolObject<T>> exclude, boolean excludeEmpty) {
+        return populateLoot(context, exclude, excludeEmpty, null);
+    }
+
+    @Override
+    public @NotNull List<T> populateLoot(@NotNull LootContext context, @Nullable Predicate<LootPoolObject<T>> exclude,
+                                         boolean excludeEmpty, @Nullable Function<LootPool<T>, Collection<T>> poolFunction) {
         List<T> list = new ArrayList<>();
         List<LootPool<T>> data = exclude == null ? this.pools : new ArrayList<>(this.pools);
         if(excludeEmpty && exclude != null) data.removeIf(x -> x.isEmptyWith(exclude));
         for(LootPool<T> pool : getPools()){
+            if(poolFunction != null){
+                Collection<T> parsed = poolFunction.apply(pool);
+                if(parsed == null || parsed.isEmpty()) continue;
+                list.addAll(parsed);
+                continue;
+            }
             list.addAll(pool.populateLoot(context));
         }
         return list;
