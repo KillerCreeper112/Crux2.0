@@ -1,7 +1,6 @@
 package killercreepr.crux.core.component.parser.hybrid.text;
 
 import killercreepr.crux.api.component.parser.InputDecodeContext;
-import killercreepr.crux.api.component.parser.hybrid.PersistTextParser;
 import killercreepr.crux.api.component.parser.hybrid.TextInputField;
 import killercreepr.crux.api.component.parser.hybrid.TextInputResultParser;
 import killercreepr.crux.core.component.parser.hybrid.text.persistence.MapDataType;

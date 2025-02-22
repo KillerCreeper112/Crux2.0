@@ -2,10 +2,7 @@ package killercreepr.cruxitems.api.item.consume;
 
 import killercreepr.cruxitems.api.item.result.GenericItemEventResult;
 import killercreepr.cruxitems.core.item.consume.ItemConsumeResultImpl;
-import killercreepr.cruxitems.core.item.interaction.impl.ItemUseResultImpl;
-import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.Nullable;
 
 public interface ItemConsumeResult extends GenericItemEventResult {
     static ItemConsumeResult cancelled(){

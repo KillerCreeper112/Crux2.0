@@ -1,7 +1,6 @@
 package killercreepr.crux.api.item;
 
 import killercreepr.crux.api.component.DataComponentDefaultAccessor;
-import killercreepr.crux.api.component.DataComponentType;
 import killercreepr.crux.api.component.serialization.PersistHolderComponentHandler;
 import killercreepr.crux.api.text.format.FormatSerializer;
 import killercreepr.crux.core.item.SimpleCruxItem;

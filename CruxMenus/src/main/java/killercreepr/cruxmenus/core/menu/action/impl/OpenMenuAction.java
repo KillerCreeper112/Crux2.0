@@ -2,8 +2,6 @@ package killercreepr.cruxmenus.core.menu.action.impl;
 
 import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.core.Crux;
-import killercreepr.crux.core.component.parser.TextDataComponentDecoder;
-import killercreepr.cruxmenus.api.menu.CfgMenu;
 import killercreepr.cruxmenus.api.menu.contex.ActionContext;
 import killercreepr.cruxmenus.api.menu.holder.MenuHolder;
 import killercreepr.cruxmenus.core.menu.action.SimpleMenuAction;

@@ -2,9 +2,7 @@ package killercreepr.cruxitems.api.event;
 
 import killercreepr.crux.api.item.CruxItem;
 import killercreepr.cruxitems.api.item.component.ConsumableComponent;
-import killercreepr.cruxitems.api.item.component.InteractableComponent;
 import killercreepr.cruxitems.api.item.consume.ItemConsumeContext;
-import killercreepr.cruxitems.api.item.interaction.ItemUseContext;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

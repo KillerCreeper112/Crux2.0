@@ -5,7 +5,6 @@ import killercreepr.cruxstatistics.api.statistic.CruxStatisticHolder;
 import killercreepr.cruxstatistics.core.statistic.DataStatisticHolder;
 import killercreepr.cruxstatistics.core.statistic.PlayerCruxStatisticHolder;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;

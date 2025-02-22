@@ -4,8 +4,6 @@ import killercreepr.crux.api.component.parser.hybrid.PersistTextParser;
 import killercreepr.crux.api.component.parser.hybrid.TextInputField;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Function;
-
 public class HolderTextInputField<B, T> implements TextInputField<B, T> {
     protected final @NotNull PersistTextParser<T> parser;
 

@@ -1,19 +1,14 @@
 package killercreepr.crux.core.text.tags.standard.object;
 
 import killercreepr.crux.api.text.format.FormatPrefix;
-import killercreepr.crux.api.text.hook.HookedObjectContainer;
 import killercreepr.crux.api.text.hook.ObjectTag;
 import killercreepr.crux.api.text.resolver.StringResolver;
 import killercreepr.crux.api.text.tags.TagParser;
 import killercreepr.crux.api.text.tags.container.TagContainer;
-import killercreepr.crux.core.text.hook.StringHookedObjectTag;
-import killercreepr.crux.core.text.hook.StringListHookedObjectTag;
 import killercreepr.crux.core.text.resolver.Tag;
 import killercreepr.crux.core.util.CruxColor;
 import killercreepr.crux.core.util.CruxMath;
 import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

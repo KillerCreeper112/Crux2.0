@@ -17,7 +17,6 @@ import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.component.parser.hybrid.text.ListPersistTextParser;
 import killercreepr.crux.core.item.predicate.ItemAllPredicate;
 import killercreepr.crux.core.item.predicate.ItemAnyPredicate;
-import killercreepr.crux.core.persistence.CruxPersistence;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.paper.ItemHolder;
 import net.kyori.adventure.key.Key;

@@ -1,8 +1,8 @@
 package killercreepr.cruxblocks.core.structure.modules;
 
+import killercreepr.crux.api.data.world.StoredChunk;
 import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.core.Crux;
-import killercreepr.crux.core.data.world.StoredChunk;
 import killercreepr.crux.core.math.BlockPos;
 import killercreepr.cruxblocks.api.block.context.PlaceBlockContext;
 import killercreepr.cruxblocks.api.block.group.CruxBlockGroup;

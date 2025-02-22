@@ -12,7 +12,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 public interface DataExchange extends Iterable<Holder<?>> {
-    DataExchange EMPTY = new SimpleDataExchange(Map.of());
+    DataExchange EMPTY = new SimpleDataExchange(Map.of(), null);
 
     static @NotNull Builder builder() {
         return new SimpleDataExchange.Builder();
@@ -23,8 +23,10 @@ public interface DataExchange extends Iterable<Holder<?>> {
     }
 
     static @NotNull DataExchange single(@NotNull String id, @NotNull Holder<?> holder) {
-        return new SimpleDataExchange(id, holder);
+        return new SimpleDataExchange(id, holder, null);
     }
+
+    boolean isExplicitlySet(@NotNull String id);
 
     boolean isEmpty();
 

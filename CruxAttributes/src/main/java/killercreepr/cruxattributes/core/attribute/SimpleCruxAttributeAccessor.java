@@ -1,7 +1,10 @@
 package killercreepr.cruxattributes.core.attribute;
 
 import com.google.common.collect.ImmutableMap;
-import killercreepr.cruxattributes.api.attribute.*;
+import killercreepr.cruxattributes.api.attribute.CruxAttribute;
+import killercreepr.cruxattributes.api.attribute.CruxAttributeAccessor;
+import killercreepr.cruxattributes.api.attribute.CruxAttributeHandler;
+import killercreepr.cruxattributes.api.attribute.CruxAttributeInstance;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

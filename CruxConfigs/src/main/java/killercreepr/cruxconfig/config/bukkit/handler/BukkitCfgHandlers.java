@@ -11,6 +11,8 @@ import killercreepr.crux.api.communication.boss.CreateBossBar;
 import killercreepr.crux.api.component.DataComponentHandler;
 import killercreepr.crux.api.component.TypedDataComponent;
 import killercreepr.crux.api.data.User;
+import killercreepr.crux.api.data.world.StoredChunk;
+import killercreepr.crux.api.data.world.StoredWorld;
 import killercreepr.crux.api.entity.CruxEntitySnapshot;
 import killercreepr.crux.api.entity.predicate.EntityPredicate;
 import killercreepr.crux.api.entity.tag.EntityTag;
@@ -29,8 +31,6 @@ import killercreepr.crux.api.math.CruxLocation;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.api.valueproviders.vector.NumberVector;
 import killercreepr.crux.core.communication.MsgContainer;
-import killercreepr.crux.core.data.world.StoredChunk;
-import killercreepr.crux.core.data.world.StoredWorld;
 import killercreepr.crux.core.item.StoredItem;
 import killercreepr.crux.core.item.dynamic.component.attribute.DynamicAttributeModifier;
 import killercreepr.crux.core.loot.item.SimpleItemLootObject;
@@ -111,6 +111,9 @@ public class BukkitCfgHandlers {
     public static final FileDynamicAttributeModifier DYNAMIC_ATTRIBUTE_MODIFIER = new FileDynamicAttributeModifier();
     public static final FileCruxLocation CRUX_LOCATION = new FileCruxLocation();
 
+    public static final FileStoredWorld STORED_WORLD = new FileStoredWorld();
+    public static final FileStoredChunk STORED_CHUNK = new FileStoredChunk();
+
     public static void initStandard(){
         CfgRegistries.FILE.forEach(BukkitCfgHandlers::init);
     }
@@ -157,6 +160,9 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(NumberLootTable.class, CommonLootTableHandlers.NUMBER);
         registry.registerFileHandler(User.class, USER);
 
+        registry.registerFileHandler(StoredWorld.class, STORED_WORLD);
+        registry.registerFileHandler(StoredChunk.class, STORED_CHUNK);
+
         StandardCfgDataComponentTypes.register(TYPED_DATA_COMPONENT.typeHandlers());
         registry.registerFileHandler(TypedDataComponent.class, TYPED_DATA_COMPONENT);
         registry.registerFileHandler(DataComponentHandler.class, DATA_COMPONENT_HANDLER);
@@ -194,8 +200,6 @@ public class BukkitCfgHandlers {
             Axis.class
         );
 
-        registry.registerFileHandler(StoredChunk.class, new AutoFileHandler<>(StoredChunk.class));
-        registry.registerFileHandler(StoredWorld.class, new AutoFileHandler<>(StoredWorld.class));
         registry.registerFileHandler(BlockPos.class, new AutoFileHandler<>(BlockPos.class));
         registry.registerFileHandler(LocationPos.class, new AutoFileHandler<>(LocationPos.class));
         registry.registerFileHandler(ArmorTrim.class, new AutoFileHandler<>(ArmorTrim.class));

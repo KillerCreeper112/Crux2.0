@@ -2,8 +2,9 @@ package killercreepr.cruxstructures.api.structure;
 
 import killercreepr.crux.api.component.DataComponentHandler;
 import killercreepr.crux.api.data.CruxKeyed;
+import killercreepr.crux.api.data.world.StoredChunk;
 import killercreepr.crux.api.math.CruxPosition;
-import killercreepr.crux.core.data.world.StoredChunk;
+import killercreepr.crux.core.data.world.SimpleStoredChunk;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxstructures.api.component.StructureComponent;
 import killercreepr.cruxstructures.api.component.StructureEditorComponent;
@@ -37,7 +38,7 @@ public interface Structure extends CruxKeyed, DataComponentHandler {
 
     default boolean isPersistent(){ return false; }
 
-    default @Nullable StoredStructure buildStored(@NotNull StoredChunk chunk, @NotNull CruxPosition center, double rotation){
+    default @Nullable StoredStructure buildStored(@NotNull SimpleStoredChunk chunk, @NotNull CruxPosition center, double rotation){
         Collection<StructureComponent> structureComponents = new HashSet<>();
         AtomicReference<StoredStructure> storedBuilt = new AtomicReference<>(
             new SimpleStoredStructure(this, chunk, center, rotation)
@@ -60,7 +61,7 @@ public interface Structure extends CruxKeyed, DataComponentHandler {
 
     default @Nullable StoredStructure buildStored(@NotNull Location center, double rotation){
         Collection<StructureComponent> structureComponents = new HashSet<>();
-        StoredChunk chunk = StoredChunk.from(center);
+        StoredChunk chunk = StoredChunk.storedChunk(center);
         CruxPosition pos = CruxPosition.block(center);
         AtomicReference<StoredStructure> storedBuilt = new AtomicReference<>(
             new SimpleStoredStructure(this, chunk, pos, rotation)

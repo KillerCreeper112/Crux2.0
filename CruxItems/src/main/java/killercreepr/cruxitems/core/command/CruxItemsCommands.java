@@ -20,7 +20,6 @@ import killercreepr.crux.core.command.argument.CruxCmdArguments;
 import killercreepr.crux.core.item.dynamic.component.DynamicItemCruxComponents;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.registries.CruxRegistries;
-import killercreepr.crux.core.util.CruxKey;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxitems.api.item.plugin.PluginItem;
 import killercreepr.cruxitems.core.command.argument.CruxItemsArguments;

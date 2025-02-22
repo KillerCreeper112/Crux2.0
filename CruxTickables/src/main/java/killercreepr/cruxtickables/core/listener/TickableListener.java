@@ -2,7 +2,6 @@ package killercreepr.cruxtickables.core.listener;
 
 import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
 import killercreepr.crux.api.entity.memory.EntityMemory;
-import killercreepr.crux.core.Crux;
 import killercreepr.cruxattributes.api.equipment.CruxSlot;
 import killercreepr.cruxtickables.core.entity.memory.EntityTickablesHolder;
 import org.bukkit.entity.Player;

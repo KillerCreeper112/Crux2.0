@@ -6,7 +6,6 @@ import killercreepr.crux.api.text.resolver.StringResolver;
 import killercreepr.crux.api.text.tags.TagParser;
 import killercreepr.crux.api.text.tags.container.TagContainer;
 import killercreepr.crux.core.text.resolver.Tag;
-import killercreepr.cruxattributes.api.attribute.CruxAttribute;
 import killercreepr.cruxattributes.api.attribute.CruxAttributeModifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -3,8 +3,6 @@ package killercreepr.cruxitems.api.event;
 import killercreepr.crux.api.item.CruxItem;
 import killercreepr.cruxitems.api.item.consume.ItemConsumeContext;
 import killercreepr.cruxitems.api.item.consume.ItemConsumeResult;
-import killercreepr.cruxitems.api.item.interaction.ItemUseContext;
-import killercreepr.cruxitems.api.item.interaction.ItemUseResult;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

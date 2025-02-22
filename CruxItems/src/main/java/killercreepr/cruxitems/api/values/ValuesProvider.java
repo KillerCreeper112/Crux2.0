@@ -2,7 +2,6 @@ package killercreepr.cruxitems.api.values;
 
 import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.api.data.Reloadable;
-import killercreepr.crux.api.item.CruxItemType;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.cruxitems.core.item.CfgItemType;
 import net.kyori.adventure.key.Key;

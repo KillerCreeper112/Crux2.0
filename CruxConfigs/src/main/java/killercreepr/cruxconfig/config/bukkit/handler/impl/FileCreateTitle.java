@@ -6,11 +6,8 @@ import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.SimpleFileHandler;
 import killercreepr.cruxconfig.config.common.json.annotation.JsonSerializer;
-import net.kyori.adventure.title.Title;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.time.Duration;
 @JsonSerializer(id = "create_title")
 public class FileCreateTitle extends SimpleFileHandler<CreateTitle> {
 

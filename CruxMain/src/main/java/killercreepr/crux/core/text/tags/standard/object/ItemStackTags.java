@@ -13,7 +13,6 @@ import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.text.container.StringTagContainer;
 import killercreepr.crux.core.text.resolver.Tag;
 import killercreepr.crux.core.util.CruxColor;
-import killercreepr.crux.core.util.CruxMath;
 import net.kyori.adventure.key.Key;
 import org.bukkit.DyeColor;
 import org.bukkit.enchantments.Enchantment;

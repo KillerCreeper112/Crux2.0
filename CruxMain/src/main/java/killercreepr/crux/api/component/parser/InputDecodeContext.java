@@ -4,7 +4,6 @@ import killercreepr.crux.core.component.parser.hybrid.SimpleInputDecodeContext;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 public interface InputDecodeContext {
     static InputDecodeContext context(Object value){

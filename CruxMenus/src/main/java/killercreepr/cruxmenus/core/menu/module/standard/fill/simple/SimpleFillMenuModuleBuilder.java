@@ -8,7 +8,6 @@ import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxmenus.api.menu.config.handler.FileMenuHolder;
 import killercreepr.cruxmenus.api.menu.holder.MenuItemHolder;
-import killercreepr.cruxmenus.api.menu.holder.MenuItems;
 import killercreepr.cruxmenus.api.menu.module.MenuModule;
 import killercreepr.cruxmenus.api.menu.module.config.MenuModuleBuilder;
 import killercreepr.cruxmenus.core.menu.config.handlers.SimpleFileMenuModuled;

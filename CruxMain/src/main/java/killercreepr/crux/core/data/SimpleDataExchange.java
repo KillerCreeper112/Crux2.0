@@ -11,13 +11,20 @@ import java.util.function.BiConsumer;
 
 public class SimpleDataExchange implements DataExchange {
     protected final @NotNull Map<String, Holder<?>> data;
+    protected final @Nullable Set<String> notExplictSet;
 
-    public SimpleDataExchange(@NotNull Map<String, Holder<?>> data) {
+    public SimpleDataExchange(@NotNull Map<String, Holder<?>> data, @Nullable Set<String> notExplictSet) {
         this.data = Collections.unmodifiableMap(data);
+        this.notExplictSet = notExplictSet == null || notExplictSet.isEmpty() ? null : Collections.unmodifiableSet(notExplictSet);
     }
 
-    public SimpleDataExchange(@NotNull String id, @NotNull Holder<?> holder) {
-        this(Map.of(id, holder));
+    public SimpleDataExchange(@NotNull String id, @NotNull Holder<?> holder, @Nullable Set<String> notExplictSet) {
+        this(Map.of(id, holder), notExplictSet);
+    }
+
+    @Override
+    public boolean isExplicitlySet(@NotNull String id) {
+        return notExplictSet == null || !notExplictSet.contains(id);
     }
 
     public boolean isEmpty() {
@@ -29,6 +36,14 @@ public class SimpleDataExchange implements DataExchange {
      */
     @Contract(pure = true)
     public @NotNull DataExchange append(@NotNull DataExchange info) {
+        if(info instanceof SimpleDataExchange d && d.notExplictSet != null){
+            Set<String> explicit = new HashSet<>();
+            if(this.notExplictSet != null) explicit.addAll(this.notExplictSet);
+            explicit.addAll(d.notExplictSet);
+            Map<String, Holder<?>> data = new HashMap<>(this.data);
+            data.putAll(info.asMap());
+            return new SimpleDataExchange(data, explicit);
+        }
         return append(info.asMap());
     }
 
@@ -39,7 +54,7 @@ public class SimpleDataExchange implements DataExchange {
     public @NotNull DataExchange append(@NotNull Map<String, Holder<?>> info) {
         Map<String, Holder<?>> data = new HashMap<>(this.data);
         data.putAll(info);
-        return new SimpleDataExchange(data);
+        return new SimpleDataExchange(data, notExplictSet);
     }
 
     /**
@@ -51,7 +66,7 @@ public class SimpleDataExchange implements DataExchange {
         info.forEach((id, value) ->{
             data.put(id, Holder.direct(value));
         });
-        return new SimpleDataExchange(data);
+        return new SimpleDataExchange(data, notExplictSet);
     }
 
     /**
@@ -61,7 +76,7 @@ public class SimpleDataExchange implements DataExchange {
     public @NotNull DataExchange append(@NotNull String id, @NotNull Holder<?> object) {
         Map<String, Holder<?>> data = new HashMap<>(this.data);
         data.put(id, object);
-        return new SimpleDataExchange(data);
+        return new SimpleDataExchange(data, notExplictSet);
     }
 
     /**
@@ -70,8 +85,15 @@ public class SimpleDataExchange implements DataExchange {
     @Contract(pure = true)
     public @NotNull DataExchange removeIf(@NotNull DataExchange.Predicate predicate) {
         Map<String, Holder<?>> data = new HashMap<>(this.data);
-        data.entrySet().removeIf((entry) -> predicate.test(entry.getKey(), entry.getValue()));
-        return new SimpleDataExchange(data);
+        Set<String> explicit = notExplictSet == null ? null : new HashSet<>(notExplictSet);
+        data.entrySet().removeIf((entry) ->{
+            if(predicate.test(entry.getKey(), entry.getValue())){
+                if(explicit != null) explicit.remove(entry.getKey());
+                return true;
+            }
+            return false;
+        });
+        return new SimpleDataExchange(data, explicit);
     }
 
     /**
@@ -80,10 +102,12 @@ public class SimpleDataExchange implements DataExchange {
     @Override
     public @NotNull DataExchange remove(@NotNull String... ids) {
         Map<String, Holder<?>> data = new HashMap<>(this.data);
+        Set<String> explicit = notExplictSet == null ? null : new HashSet<>(notExplictSet);
         for(String i : ids){
             data.remove(i);
+            if(explicit != null) explicit.remove(i);
         }
-        return new SimpleDataExchange(data);
+        return new SimpleDataExchange(data, explicit);
     }
 
     public boolean has(@NotNull String id) {
@@ -196,6 +220,7 @@ public class SimpleDataExchange implements DataExchange {
 
     public static class Builder implements DataExchange.Builder {
         protected final Map<String, Holder<?>> data = new HashMap<>();
+        protected final Set<String> notExplictSet = new HashSet<>();
 
         @Override
         public <T> T getOrDefault(Class<T> type, T fallback) {
@@ -217,7 +242,9 @@ public class SimpleDataExchange implements DataExchange {
         }
 
         public DataExchange.Builder put(@NotNull Object direct) {
-            return put(direct.getClass().getSimpleName().toLowerCase(), Holder.direct(direct));
+            String id = direct.getClass().getSimpleName().toLowerCase();
+            notExplictSet.add(id);
+            return put(id, Holder.direct(direct));
         }
 
         public DataExchange.Builder putAll(@NotNull Holder<?> holder, @NotNull String... ids) {
@@ -233,6 +260,9 @@ public class SimpleDataExchange implements DataExchange {
         }
 
         public DataExchange.Builder putAll(@Nullable DataExchange info) {
+            if(info instanceof SimpleDataExchange d && d.notExplictSet != null){
+                this.notExplictSet.addAll(d.notExplictSet);
+            }
             return info == null ? this : putAll(info.asMap());
         }
 
@@ -247,7 +277,7 @@ public class SimpleDataExchange implements DataExchange {
         }
 
         public @NotNull DataExchange build() {
-            return new SimpleDataExchange(data);
+            return new SimpleDataExchange(data, notExplictSet);
         }
     }
 }

@@ -1,9 +1,9 @@
 package killercreepr.cruxstructures.api.structure;
 
 import killercreepr.crux.api.component.DataComponentHandler;
+import killercreepr.crux.api.data.world.StoredChunk;
 import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.api.math.PositionPosed;
-import killercreepr.crux.core.data.world.StoredChunk;
 import killercreepr.cruxstructures.core.registries.StructureRegistries;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Chunk;

@@ -1,6 +1,5 @@
 package killercreepr.cruxconfig.config.bukkit.value;
 
-import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxconfig.config.common.file.DataFile;
 import killercreepr.cruxconfig.config.common.file.ICruxConfig;
 import killercreepr.cruxconfig.config.common.value.IConfigValue;

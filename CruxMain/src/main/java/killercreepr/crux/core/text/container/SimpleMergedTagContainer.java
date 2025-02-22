@@ -76,7 +76,7 @@ public class SimpleMergedTagContainer implements MergedTagContainer {
         if(info==null) return this;
         info.forEach((id, holder) ->{
             Object value = holder.value();
-            if(id.isBlank()){
+            if(id.isBlank() || !info.isExplicitlySet(id)){
                 hook(value);
                 return;
             }
