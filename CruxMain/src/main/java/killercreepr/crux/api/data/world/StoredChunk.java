@@ -10,7 +10,7 @@ import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface StoredChunk extends StoredWorld {
+public interface StoredChunk {
     static StoredChunk storedChunk(@NotNull Chunk chunk){
         return storedChunk(chunk.getWorld().key(), chunk.getX(), chunk.getZ());
     }
@@ -42,4 +42,6 @@ public interface StoredChunk extends StoredWorld {
     @NotNull Location toBukkitCenter(double y);
     boolean isLoaded(@NotNull World world);
     boolean isLoaded();
+    @NotNull Key worldKey();
+    @Nullable World toBukkitWorld();
 }

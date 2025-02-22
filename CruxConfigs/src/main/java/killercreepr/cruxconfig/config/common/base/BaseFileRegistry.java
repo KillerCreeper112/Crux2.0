@@ -102,6 +102,8 @@ public class BaseFileRegistry implements FileRegistry {
     }
 
     public @Nullable FileElement serialize(@NotNull Object object, @NotNull FileContext<?> context){
+        FileObjectHandler<?> first = HANDLER_REGISTRY.get(object.getClass());
+        if(first != null) return first.attemptSerializeToFile(context, first);
         FileObjectHandler<?> handler = findObjectHandler(object.getClass());
         if(handler == null) return null;
         return handler.attemptSerializeToFile(context, object);
