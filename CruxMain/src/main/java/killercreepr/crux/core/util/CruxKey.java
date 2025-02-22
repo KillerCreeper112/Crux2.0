@@ -14,4 +14,12 @@ public class CruxKey {
     public static @NotNull NamespacedKey key(@NotNull Key key){
         return new NamespacedKey(key.namespace(), key.value());
     }
+
+    public static String toFileName(Key key){
+        return key.asString().replaceFirst(":", "__");
+    }
+
+    public static Key fromFileName(String name){
+        return Key.key(name.replaceFirst("__", ":"));
+    }
 }

@@ -1,5 +1,6 @@
 package killercreepr.crux.api.data.world;
 
+import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.core.data.world.SimpleStoredChunk;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Chunk;
@@ -27,6 +28,10 @@ public interface StoredChunk extends StoredWorld {
 
     static StoredChunk storedChunk(@NotNull Key worldKey, int chunkX, int chunkZ){
         return new SimpleStoredChunk(worldKey, chunkX, chunkZ);
+    }
+
+    static StoredChunk storedChunkFromWorldPos(StoredWorld world, CruxPosition pos){
+        return storedChunk(world.worldKey(), pos.toChunkX(), pos.toChunkZ());
     }
 
     int chunkX();
