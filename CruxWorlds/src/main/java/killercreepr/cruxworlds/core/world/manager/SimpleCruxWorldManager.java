@@ -31,7 +31,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
@@ -52,7 +51,7 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
         this.worldTypes = worldTypes;
     }
     protected final @NotNull KeyedRegistry<CruxWorldType> worldTypes;
-    protected final @NotNull MappedRegistry<String, CruxWorldCreator> creators = new SimpleMappedRegistry<>();
+    protected final @NotNull MappedRegistry<Key, CruxWorldCreator> creators = new SimpleMappedRegistry<>();
     protected final @NotNull WorldModuleCreatorRegistry moduleCreators = new WorldModuleCreatorRegistryImpl();
     protected final @NotNull ActiveCruxWorldRegistry active = new ActiveCruxWorldRegistry();
 
@@ -74,7 +73,7 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
     }
 
     @Override
-    public @Nullable CruxWorld getOrCreateWorld(@NotNull Key worldType, @NotNull String name) {
+    public @Nullable CruxWorld getOrCreateWorld(@NotNull Key worldType, @NotNull Key name) {
         CruxWorld world = getWorld(name);
         if(world != null) return world;
         CruxWorldType type = worldTypes.get(worldType);
@@ -83,7 +82,7 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
     }
 
     @Override
-    public @Nullable CruxWorld getOrCreateWorld(@NotNull CruxWorldType type, @NotNull String name) {
+    public @Nullable CruxWorld getOrCreateWorld(@NotNull CruxWorldType type, @NotNull Key name) {
         CruxWorld world = getWorld(name);
         if(world != null) return world;
         CruxWorld crux = type.generate(name);
@@ -92,6 +91,11 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
     }
 
     @Override
+    public @Nullable CruxWorld getWorld(@NotNull Key name) {
+        return active.get(name);
+    }
+
+    /*@Override
     public @Nullable CruxWorld getWorld(@NotNull String name) {
         return active.getByName(name);
     }
@@ -99,7 +103,7 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
     @Override
     public @Nullable CruxWorld getWorld(@NotNull UUID uuid) {
         return active.get(uuid);
-    }
+    }*/
 
     @Override
     public CompletableFuture<Boolean> deleteWorld(@NotNull CruxWorld world) {
@@ -110,10 +114,10 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
     }
 
     @Override
-    public CompletableFuture<Boolean> deleteWorld(@NotNull String world) {
+    public CompletableFuture<Boolean> deleteWorld(@NotNull Key world) {
         CruxWorld crux = getWorld(world);
         if(crux != null) return deleteWorld(crux);
-        return CompletableFuture.completedFuture(CruxWorldUtil.deleteWorld(world));
+        return CompletableFuture.completedFuture(CruxWorldUtil.deleteWorld(world.value()));
     }
 
     @Override
@@ -123,8 +127,8 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
     }
 
     @Override
-    public CompletableFuture<CruxWorld> loadWorld(@NotNull String worldName) {
-        CruxWorldUtil.getOrLoadWorld(worldName);
+    public CompletableFuture<CruxWorld> loadWorld(@NotNull Key worldName) {
+        CruxWorldUtil.getOrLoadWorld(worldName.value());
         return CompletableFuture.completedFuture(getWorld(worldName));
     }
 
@@ -134,7 +138,7 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
     }
 
     @Override
-    public @NotNull MappedRegistry<String, CruxWorldCreator> getCreatorRegistry() {
+    public @NotNull MappedRegistry<Key, CruxWorldCreator> getCreatorRegistry() {
         return creators;
     }
 
@@ -149,9 +153,8 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
     }
 
     public @Nullable CruxWorld create(@NotNull World world){
-        String name = world.getName();
-        CruxWorldCreator creator = creators.get(name);
-        Collection<CruxWorldModuleCreator> moduleCreators = this.moduleCreators.get(name);
+        CruxWorldCreator creator = creators.get(world.key());
+        Collection<CruxWorldModuleCreator> moduleCreators = this.moduleCreators.get(world.key());
         if(moduleCreators == null) moduleCreators = new HashSet<>();
         else moduleCreators = new HashSet<>(moduleCreators);
 
@@ -171,7 +174,7 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
     public void onChunkLoad(ChunkLoadEvent event) {
         if(event.isNewChunk()) return;
         World world = event.getWorld();
-        CruxWorld crux = getWorld(world.getUID());
+        CruxWorld crux = getWorld(world.key());
         if(crux==null) return;
         Chunk chunk = event.getChunk();
         crux.onChunkLoad(chunk);
@@ -180,7 +183,7 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
     @EventHandler(ignoreCancelled = true)
     public void onChunkUnload(ChunkUnloadEvent event) {
         World world = event.getWorld();
-        CruxWorld crux = getWorld(world.getUID());
+        CruxWorld crux = getWorld(world.key());
         if(crux==null) return;
         Chunk chunk = event.getChunk();
         crux.onChunkUnload(chunk);
@@ -189,7 +192,7 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
     @EventHandler(ignoreCancelled = true)
     public void onChunkPopulate(ChunkPopulateEvent event) {
         World world = event.getWorld();
-        CruxWorld crux = getWorld(world.getUID());
+        CruxWorld crux = getWorld(world.key());
         if(crux==null) return;
         Chunk chunk = event.getChunk();
         crux.onChunkPopulate(chunk);
@@ -207,7 +210,7 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
     @EventHandler(ignoreCancelled = true)
     public void onWorldLoad(WorldLoadEvent event) {
         World world = event.getWorld();
-        CruxWorld crux = getWorld(world.getUID());
+        CruxWorld crux = getWorld(world.key());
         if(crux==null) return;
         crux.onLoad();
     }
@@ -215,21 +218,21 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
     @EventHandler(ignoreCancelled = true)
     public void onWorldUnload(WorldUnloadEvent event) {
         World world = event.getWorld();
-        CruxWorld crux = getWorld(world.getUID());
+        CruxWorld crux = getWorld(world.key());
         if(crux==null) return;
-        active.remove(crux.getUUID());
+        active.remove(crux.key());
         crux.onUnload(crux.shouldSaveOnNextUnload());
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onWorldSave(WorldSaveEvent event) {
         World world = event.getWorld();
-        CruxWorld crux = getWorld(world.getUID());
+        CruxWorld crux = getWorld(world.key());
         if(crux==null) return;
         crux.onSave();
     }
 
-    public @NotNull MappedRegistry<String, CruxWorldCreator> getCreators() {
+    public @NotNull MappedRegistry<Key, CruxWorldCreator> getCreators() {
         return creators;
     }
 

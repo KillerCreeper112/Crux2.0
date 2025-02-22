@@ -1,7 +1,6 @@
 package killercreepr.cruxworlds.core.command;
 
 import com.mojang.brigadier.arguments.BoolArgumentType;
-import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -18,6 +17,7 @@ import killercreepr.cruxworlds.api.world.manager.CruxWorldManager;
 import killercreepr.cruxworlds.api.world.type.CruxWorldType;
 import killercreepr.cruxworlds.core.command.arguments.CruxWorldArgs;
 import killercreepr.cruxworlds.core.command.arguments.CruxWorldArgument;
+import net.kyori.adventure.key.Key;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -65,14 +65,14 @@ public class CruxWorldsCommands {
                         .executes(ctx ->{
                             CommandSender sender = getExecutor(ctx.getSource());
                             CruxWorld world = ctx.getArgument("world", CruxWorld.class);
-                            sender.sendMessage("Unloading world " + world.getName() + "...");
+                            sender.sendMessage("Unloading world " + world.key() + "...");
                             worldManager.unloadWorld(world, true).whenComplete((success, throwable) ->{
                                 if(throwable != null) Crux.log(Level.SEVERE, throwable.getMessage());
                                 if(!success){
-                                    sender.sendMessage("Could not unload world, " + world.getName() + "...");
+                                    sender.sendMessage("Could not unload world, " + world.key() + "...");
                                     return;
                                 }
-                                sender.sendMessage("Unloaded world, " + world.getName() + ".");
+                                sender.sendMessage("Unloaded world, " + world.key() + ".");
                             });
                             return 1;
                         })
@@ -81,14 +81,14 @@ public class CruxWorldsCommands {
                                 .executes(ctx ->{
                                     CommandSender sender = getExecutor(ctx.getSource());
                                     CruxWorld world = ctx.getArgument("world", CruxWorld.class);
-                                    sender.sendMessage("Unloading world " + world.getName() + "...");
+                                    sender.sendMessage("Unloading world " + world.key() + "...");
                                     worldManager.unloadWorld(world, ctx.getArgument("save", Boolean.class)).whenComplete((success, throwable) ->{
                                         if(throwable != null) Crux.log(Level.SEVERE, throwable.getMessage());
                                         if(!success){
-                                            sender.sendMessage("Could not unload world, " + world.getName() + "...");
+                                            sender.sendMessage("Could not unload world, " + world.key() + "...");
                                             return;
                                         }
-                                        sender.sendMessage("Unloaded world, " + world.getName() + ".");
+                                        sender.sendMessage("Unloaded world, " + world.key() + ".");
                                     });
                                     return 1;
                                 })
@@ -101,14 +101,14 @@ public class CruxWorldsCommands {
                         .executes(ctx ->{
                             CommandSender sender = getExecutor(ctx.getSource());
                             CruxWorld world = ctx.getArgument("world", CruxWorld.class);
-                            sender.sendMessage("Deleting world " + world.getName() + "...");
+                            sender.sendMessage("Deleting world " + world.key() + "...");
                             worldManager.deleteWorld(world).whenComplete((success, throwable) ->{
                                 if(throwable != null) Crux.log(Level.SEVERE, throwable.getMessage());
                                 if(!success){
-                                    sender.sendMessage("Could not delete world, " + world.getName() + "...");
+                                    sender.sendMessage("Could not delete world, " + world.key() + "...");
                                     return;
                                 }
-                                sender.sendMessage("Deleted world, " + world.getName() + ".");
+                                sender.sendMessage("Deleted world, " + world.key() + ".");
                             });
                             return 1;
                         })
@@ -120,29 +120,29 @@ public class CruxWorldsCommands {
                         .executes(ctx ->{
                             CommandSender sender = getExecutor(ctx.getSource());
                             CruxWorldType type = ctx.getArgument("type", CruxWorldType.class);
-                            String name = type.defaultWorldName();
+                            Key name = type.defaultWorldKey();
                             sender.sendMessage("Getting or creating world...");
                             CruxWorld world = worldManager.getOrCreateWorld(type, name);
                             if(world == null){
                                 sender.sendMessage("Could not get or create world, " + name + " from type, " + type.key() + ".");
                                 return 0;
                             }
-                            sender.sendMessage("Got world " + world.getName() + " from type " + type.key() + "!");
+                            sender.sendMessage("Got world " + world.key() + " from type " + type.key() + "!");
                             return 1;
                         })
                         .then(
-                            Commands.argument("name", StringArgumentType.string())
+                            Commands.argument("name", ArgumentTypes.key())
                                 .executes(ctx ->{
                                     CommandSender sender = getExecutor(ctx.getSource());
                                     CruxWorldType type = ctx.getArgument("type", CruxWorldType.class);
-                                    String name = ctx.getArgument("name", String.class);
+                                    Key name = ctx.getArgument("name", Key.class);
                                     sender.sendMessage("Getting or creating world...");
                                     CruxWorld world = worldManager.getOrCreateWorld(type, name);
                                     if(world == null){
                                         sender.sendMessage("Could not get or create world, " + name + " from type, " + type.key() + ".");
                                         return 0;
                                     }
-                                    sender.sendMessage("Got world " + world.getName() + " from type " + type.key() + "!");
+                                    sender.sendMessage("Got world " + world.key() + " from type " + type.key() + "!");
                                     return 1;
                                 })
                                 .then(
@@ -150,7 +150,7 @@ public class CruxWorldsCommands {
                                         .executes(ctx ->{
                                             CommandSender sender = getExecutor(ctx.getSource());
                                             CruxWorldType type = ctx.getArgument("type", CruxWorldType.class);
-                                            String name = ctx.getArgument("name", String.class);
+                                            Key name = ctx.getArgument("name", Key.class);
                                             boolean overwrite = ctx.getArgument("overwrite", Boolean.class);
                                             if(!overwrite && worldManager.getWorld(name) != null){
                                                 sender.sendMessage(name + " world already exists.");
@@ -166,7 +166,7 @@ public class CruxWorldsCommands {
                                                 sender.sendMessage("Could not get or create world, " + name + " from type, " + type.key() + ".");
                                                 return 0;
                                             }
-                                            sender.sendMessage("Got world " + world.getName() + " from type " + type.key() + "!");
+                                            sender.sendMessage("Got world " + world.key() + " from type " + type.key() + "!");
                                             return 1;
                                         })
                                 )
@@ -175,17 +175,18 @@ public class CruxWorldsCommands {
         ).then(
             Commands.literal("load")
                 .then(
-                    Commands.argument("world", StringArgumentType.string())
+                    Commands.argument("world", ArgumentTypes.key())
                         .suggests((ctx, builder) ->{
                             for(String s : CruxWorldUtil.getWorldsFromContainer()){
-                                if(worldManager.getWorld(s) != null) continue;
-                                builder.suggest(s);
+                                Key key = Key.key(s);
+                                if(worldManager.getWorld(key) != null) continue;
+                                builder.suggest(key.asString());
                             }
                             return builder.buildFuture();
                         })
                         .executes(ctx ->{
                             CommandSender sender = getExecutor(ctx.getSource());
-                            String worldName = ctx.getArgument("world", String.class);
+                            Key worldName = ctx.getArgument("world", Key.class);
                             if(worldManager.getWorld(worldName) != null){
                                 sender.sendMessage(worldName + " is already loaded.");
                                 return 0;
@@ -212,7 +213,7 @@ public class CruxWorldsCommands {
                             CruxWorld world = ctx.getArgument("world", CruxWorld.class);
                             Location spawn = world.toBukkitWorld().getSpawnLocation();
                             e.teleportAsync(spawn);
-                            sender.sendMessage("Teleported " + e.getName() + " to " + world.getName() + ".");
+                            sender.sendMessage("Teleported " + e.getName() + " to " + world.key() + ".");
                             return 1;
                         })
                         .then(
@@ -225,7 +226,7 @@ public class CruxWorldsCommands {
                                     Location spawn = world.toBukkitWorld().getSpawnLocation();
                                     for(Entity e : targets){
                                         e.teleportAsync(spawn);
-                                        sender.sendMessage("Teleported " + e.getName() + " to " + world.getName() + ".");
+                                        sender.sendMessage("Teleported " + e.getName() + " to " + world.key() + ".");
                                     }
                                     return 1;
                                 })

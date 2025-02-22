@@ -56,7 +56,7 @@ public class StructureManager implements Listener, Reloadable {
         if(stored==null) return;
         if(!stored.shouldPersist()) return;
 
-        CruxWorld world = worldManager.getWorld(spawn.getWorld().getUID());
+        CruxWorld world = worldManager.getWorld(spawn.getWorld().key());
         if(world == null) return;
         StructureWorldModule module = world.getModule(StructureWorldModule.class);
         if(module == null) return;

@@ -172,7 +172,7 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
     }
 
     protected CruxBlocksWorldModule module(Block b){
-        CruxWorld world = worldManager.getWorld(b.getWorld().getUID());
+        CruxWorld world = worldManager.getWorld(b.getWorld().key());
         if(world == null) return null;
         return world.getModule(CruxBlocksWorldModule.class);
     }

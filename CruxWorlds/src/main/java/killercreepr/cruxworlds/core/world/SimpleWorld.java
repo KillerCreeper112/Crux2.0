@@ -9,6 +9,7 @@ import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.cruxworlds.api.world.CruxWorld;
 import killercreepr.cruxworlds.api.world.creator.CruxWorldModuleCreator;
 import killercreepr.cruxworlds.api.world.module.WorldModule;
+import net.kyori.adventure.key.Key;
 import org.bukkit.World;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +18,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Random;
-import java.util.UUID;
 
 public class SimpleWorld implements CruxWorld, PersistenceComponentHandler, Reloadable, ManagedTicked {
     protected final @NotNull World world;
@@ -81,7 +81,7 @@ public class SimpleWorld implements CruxWorld, PersistenceComponentHandler, Relo
         return random;
     }
 
-    @Override
+    /*@Override
     public @NotNull String getName() {
         return world.getName();
     }
@@ -89,7 +89,7 @@ public class SimpleWorld implements CruxWorld, PersistenceComponentHandler, Relo
     @Override
     public @NotNull UUID getUUID() {
         return world.getUID();
-    }
+    }*/
 
     @Override
     public long getSeed() {
@@ -124,5 +124,10 @@ public class SimpleWorld implements CruxWorld, PersistenceComponentHandler, Relo
     @Override
     public void clearComponents() {
         CruxPersist.COMPONENTS.remove(getComponentsPersistentContainer());
+    }
+
+    @Override
+    public @NotNull Key key() {
+        return world.key();
     }
 }

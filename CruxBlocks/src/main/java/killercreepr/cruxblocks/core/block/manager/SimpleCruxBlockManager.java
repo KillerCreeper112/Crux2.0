@@ -19,7 +19,7 @@ public class SimpleCruxBlockManager implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onChunkLoad(ChunkLoadEvent event) {
         Chunk chunk = event.getChunk();
-        CruxWorld world = worldManager.getWorld(event.getWorld().getUID());
+        CruxWorld world = worldManager.getWorld(event.getWorld().key());
         if(world == null) return;
         CruxBlocksWorldModule module = world.getModule(CruxBlocksWorldModule.class);
         if(module == null) return;
@@ -29,7 +29,7 @@ public class SimpleCruxBlockManager implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onChunkUnload(ChunkUnloadEvent event) {
         Chunk chunk = event.getChunk();
-        CruxWorld world = worldManager.getWorld(event.getWorld().getUID());
+        CruxWorld world = worldManager.getWorld(event.getWorld().key());
         if(world == null) return;
         CruxBlocksWorldModule module = world.getModule(CruxBlocksWorldModule.class);
         if(module == null) return;

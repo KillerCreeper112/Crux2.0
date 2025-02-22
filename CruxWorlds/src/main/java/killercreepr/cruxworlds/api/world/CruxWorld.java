@@ -1,6 +1,7 @@
 package killercreepr.cruxworlds.api.world;
 
 import killercreepr.crux.api.component.DataComponentHandler;
+import killercreepr.crux.api.data.CruxKeyed;
 import killercreepr.cruxworlds.api.world.module.WorldModule;
 import org.bukkit.Chunk;
 import org.bukkit.World;
@@ -10,15 +11,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Random;
-import java.util.UUID;
 
-public interface CruxWorld extends DataComponentHandler {
+public interface CruxWorld extends CruxKeyed, DataComponentHandler {
     @NotNull
     World toBukkitWorld();
     @NotNull
     Random getRandom();
-    @NotNull String getName();
-    @NotNull UUID getUUID();
+    //@NotNull String getName();
     long getSeed();
 
     boolean shouldSaveOnNextUnload();

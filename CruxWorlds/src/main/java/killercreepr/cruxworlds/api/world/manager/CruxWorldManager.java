@@ -11,25 +11,24 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public interface CruxWorldManager {
     default @Nullable CruxWorld getOrCreateWorld(@NotNull CruxWorldType type){
-        return getOrCreateWorld(type, type.defaultWorldName());
+        return getOrCreateWorld(type, type.defaultWorldKey());
     }
 
-    @Nullable CruxWorld getOrCreateWorld(@NotNull Key worldType, @NotNull String name);
-    @Nullable CruxWorld getOrCreateWorld(@NotNull CruxWorldType type, @NotNull String name);
+    @Nullable CruxWorld getOrCreateWorld(@NotNull Key worldType, @NotNull Key name);
+    @Nullable CruxWorld getOrCreateWorld(@NotNull CruxWorldType type, @NotNull Key name);
     @Nullable
-    CruxWorld getWorld(@NotNull String name);
-    @Nullable CruxWorld getWorld(@NotNull UUID uuid);
+    CruxWorld getWorld(@NotNull Key name);
+    //@Nullable CruxWorld getWorld(@NotNull UUID uuid);
     CompletableFuture<Boolean> deleteWorld(@NotNull CruxWorld world);
-    CompletableFuture<Boolean> deleteWorld(@NotNull String world);
+    CompletableFuture<Boolean> deleteWorld(@NotNull Key world);
     CompletableFuture<Boolean> unloadWorld(@NotNull CruxWorld world, boolean save);
-    CompletableFuture<CruxWorld> loadWorld(@NotNull String worldName);
+    CompletableFuture<CruxWorld> loadWorld(@NotNull Key worldName);
 
-    default <T extends CruxWorld> @Nullable T getWorldOrNull(@NotNull String name, @NotNull Class<T> type){
+    default <T extends CruxWorld> @Nullable T getWorldOrNull(@NotNull Key name, @NotNull Class<T> type){
         try{
             return getWorld(name, type);
         }catch (IllegalStateException ignored){
@@ -37,32 +36,32 @@ public interface CruxWorldManager {
         }
     }
 
-    default <T extends CruxWorld> @Nullable T getWorldOrNull(@NotNull UUID uuid, @NotNull Class<T> type){
+    /*default <T extends CruxWorld> @Nullable T getWorldOrNull(@NotNull Key uuid, @NotNull Class<T> type){
         try{
             return getWorld(uuid, type);
         }catch (IllegalStateException ignored){
             return null;
         }
-    }
+    }*/
 
-    default <T extends CruxWorld> @Nullable T getWorld(@NotNull String name, @NotNull Class<T> type){
+    default <T extends CruxWorld> @Nullable T getWorld(@NotNull Key name, @NotNull Class<T> type){
         CruxWorld world = getWorld(name);
         if(world==null) return null;
         if(type.isAssignableFrom(world.getClass())) return type.cast(world);
         throw new IllegalStateException("CruxWorld cannot be cast to " + type.getSimpleName() + "! (" + world + ")");
     }
 
-    default <T extends CruxWorld> @Nullable T getWorld(@NotNull UUID uuid, @NotNull Class<T> type){
+    /*default <T extends CruxWorld> @Nullable T getWorld(@NotNull Key uuid, @NotNull Class<T> type){
         CruxWorld world = getWorld(uuid);
         if(world==null) return null;
         if(type.isAssignableFrom(world.getClass())) return type.cast(world);
         throw new IllegalStateException("CruxWorld cannot be cast to " + type.getSimpleName() + "! (" + world + ")");
-    }
+    }*/
 
     @NotNull
     Collection<CruxWorld> getWorlds();
 
-    @NotNull MappedRegistry<String, CruxWorldCreator> getCreatorRegistry();
+    @NotNull MappedRegistry<Key, CruxWorldCreator> getCreatorRegistry();
     @NotNull
     KeyedRegistry<CruxWorldType> getWorldTypeRegistry();
     @NotNull

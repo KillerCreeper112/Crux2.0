@@ -199,10 +199,10 @@ public class StructureCommands {
                             CruxWorld world = ctx.getArgument("world", CruxWorld.class);
                             StructureWorldModule module = world.getModule(StructureWorldModule.class);
                             if(module.getStoredStructures().isEmpty()){
-                                sender.sendMessage("No stored structures in " + world.getName());
+                                sender.sendMessage("No stored structures in " + world.key());
                                 return 1;
                             }
-                            sender.sendMessage("Listing all structures in " + world.getName() + ":");
+                            sender.sendMessage("Listing all structures in " + world.key() + ":");
                             module.getStoredStructures().forEach(blockStorage ->{
                                 blockStorage.forEach(stored ->{
                                     CruxPosition pos = stored.getPosition();
@@ -221,7 +221,7 @@ public class StructureCommands {
                     CommandSender sender = getExecutor(ctx.getSource());
                     if(!(sender instanceof Player p)) return -1;
                     Block target = p.getTargetBlockExact(10);
-                    CruxWorld world = structureManager.getWorldManager().getWorld(target.getWorld().getUID());
+                    CruxWorld world = structureManager.getWorldManager().getWorld(target.getWorld().key());
                     StructureWorldModule module = world.getModule(StructureWorldModule.class);
 
                     StoredStructure stored = module.getFirstStoredAt(StoredStructure.class, target);
@@ -245,7 +245,7 @@ public class StructureCommands {
 
     public int locate(@NotNull CommandSourceStack source, @Nullable Structure structure, @Nullable String type){
         if(!(getExecutor(source) instanceof Entity p)) return -1;
-        CruxWorld world = structureManager.getWorldManager().getWorld(p.getWorld().getUID());
+        CruxWorld world = structureManager.getWorldManager().getWorld(p.getWorld().key());
         StructureWorldModule module = world.getModule(StructureWorldModule.class);
         GetNear<StoredStructure> near = new GetStructureNear(module.getStoredStructures())
             .center(p.getLocation())

@@ -20,6 +20,7 @@ import killercreepr.cruxstructures.core.data.world.StoredStructureChunkStorage;
 import killercreepr.cruxstructures.core.file.StorageChunkFile;
 import killercreepr.cruxworlds.api.world.CruxWorld;
 import killercreepr.cruxworlds.core.world.module.SimpleWorldModule;
+import net.kyori.adventure.key.Key;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Chunk;
 import org.bukkit.block.Block;
@@ -108,9 +109,9 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
                 Crux.log(Level.WARNING, "Structure generator, " + cfg.file().getName() + " does not have any worlds set for it.");
                 return;
             }
-            if(!worlds.contains(parent.getName())) return;
+            if(!worlds.contains(parent.key().asMinimalString())) return;
             structureGenerators.add(generator);
-            Crux.log(Level.INFO, "Registered structure generator: " + cfg.file().getName() + " for world: " + parent.getName());
+            Crux.log(Level.INFO, "Registered structure generator: " + cfg.file().getName() + " for world: " + parent.key());
         }).loadConfiguration(cfgFolder.file());
     }
 
@@ -125,12 +126,13 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
         //storedStructures.removeIf(storedRemoveIf);
     }
 
-    public @NotNull CruxFolder createWorldFolder(@NotNull UUID worldUUID){
-        return new CruxFolder(Crux.getMainPlugin(), "data/cruxstructures/structures/" + worldUUID);
+    //todo make support for namespace
+    public @NotNull CruxFolder createWorldFolder(@NotNull Key world){
+        return new CruxFolder(Crux.getMainPlugin(), "data/cruxstructures/structures/" + world.value());
     }
 
-    public @NotNull StorageChunkFile createChunkFile(@NotNull UUID worldUUID, long chunkKey){
-        return new StorageChunkFile(Crux.getMainPlugin(), "data/cruxstructures/structures/" + worldUUID + "/" + chunkKey);
+    public @NotNull StorageChunkFile createChunkFile(@NotNull Key worldUUID, long chunkKey){
+        return new StorageChunkFile(Crux.getMainPlugin(), "data/cruxstructures/structures/" + worldUUID.value() + "/" + chunkKey);
     }
 
     public void addStoredStructure(StoredStructure stored, long chunkKey){
@@ -155,7 +157,7 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
 
     @Override
     public void onDelete() {
-        UUID worldUUID = parent.getUUID();
+        Key worldUUID = parent.key();
         CruxFolder folder = createWorldFolder(worldUUID);
         File file = folder.file();
         if(!file.exists() || !file.isDirectory()) return;
@@ -394,12 +396,12 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
     public void onLoad() {
         super.onLoad();
         CruxWorld world = parent;
-        UUID worldUUID = world.getUUID();
+        Key worldUUID = world.key();
         CruxFolder folder = createWorldFolder(worldUUID);
         File[] files = folder.file().listFiles();
-        Crux.log(Level.INFO, "Loading structures in world, " + world.getName());
+        Crux.log(Level.INFO, "Loading structures in world, " + world.key());
         if(files==null){
-            Crux.log(Level.INFO, "No structures loaded in world, " + world.getName());
+            Crux.log(Level.INFO, "No structures loaded in world, " + world.key());
             return;
         }
 
@@ -415,7 +417,7 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
                 loaded++;
             }
         }
-        Crux.log(Level.INFO, "Loaded " + loaded + " structures in world, " + world.getName());
+        Crux.log(Level.INFO, "Loaded " + loaded + " structures in world, " + world.key());
     }
 
     @Override
@@ -423,8 +425,8 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
         super.onUnload(save);
         if(!save) return;
         CruxWorld world = parent;
-        Crux.log(Level.INFO, "Saving structures in world: " + world.getName());
-        UUID worldUUID = world.getUUID();
+        Crux.log(Level.INFO, "Saving structures in world: " + world.key());
+        Key worldUUID = world.key();
 
         CruxFolder folder = createWorldFolder(worldUUID);
         if(folder.file().exists()){
@@ -433,7 +435,7 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
             }catch (IOException ignored){}
         }
         if(storedStructures.isEmpty()){
-            Crux.log(Level.INFO, "No structures saved within world: " + world.getName());
+            Crux.log(Level.INFO, "No structures saved within world: " + world.key());
             return;
         }
         AtomicInteger saved = new AtomicInteger();
@@ -449,6 +451,6 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
                 file.save(false);
             }
         });
-        Crux.log(Level.INFO, "Saved " + saved.get() + " structures in world, " + world.getName());
+        Crux.log(Level.INFO, "Saved " + saved.get() + " structures in world, " + world.key());
     }
 }
