@@ -44,7 +44,8 @@ public class CruxStandardTags {
             new DurationFormatResolver(),
             new CurrentTimeResolver(),
             new ProgressBarResolver(),
-            new RomanNumeralResolver()
+            new RomanNumeralResolver(),
+            new HasOccurredWithinResolver()
         );
     }
 

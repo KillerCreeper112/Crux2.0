@@ -1,6 +1,6 @@
 package killercreepr.cruxstructures.core.config;
 
-import killercreepr.crux.core.data.world.SimpleStoredChunk;
+import killercreepr.crux.api.data.world.StoredChunk;
 import killercreepr.crux.core.math.BlockPos;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
@@ -45,7 +45,7 @@ public class FileSimpleStoredStructure<T extends StoredStructure> extends Simple
         Key structureKey = registry.deserializeFromFile(Key.class, o.get("structure"));
         if(structureKey==null) return null;
 
-        SimpleStoredChunk chunk = registry.deserializeFromFile(SimpleStoredChunk.class, o.get("chunk"));
+        StoredChunk chunk = registry.deserializeFromFile(StoredChunk.class, o.get("chunk"));
         BlockPos center = registry.deserializeFromFile(BlockPos.class, o.get("center"));
 
         if(chunk == null || center == null) return null;

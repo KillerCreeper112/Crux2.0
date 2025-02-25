@@ -9,6 +9,7 @@ import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.data.world.WorldBlockPosedStorage;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.util.CruxCollection;
+import killercreepr.crux.core.util.CruxKey;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxstructures.api.structure.ActiveStructure;
 import killercreepr.cruxstructures.api.structure.StoredStructure;
@@ -128,11 +129,11 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
 
     //todo make support for namespace
     public @NotNull CruxFolder createWorldFolder(@NotNull Key world){
-        return new CruxFolder(Crux.getMainPlugin(), "data/cruxstructures/structures/" + world.value());
+        return new CruxFolder(Crux.getMainPlugin(), "data/cruxstructures/structures/" + CruxKey.toFileName(world));
     }
 
-    public @NotNull StorageChunkFile createChunkFile(@NotNull Key worldUUID, long chunkKey){
-        return new StorageChunkFile(Crux.getMainPlugin(), "data/cruxstructures/structures/" + worldUUID.value() + "/" + chunkKey);
+    public @NotNull StorageChunkFile createChunkFile(@NotNull Key world, long chunkKey){
+        return new StorageChunkFile(Crux.getMainPlugin(), "data/cruxstructures/structures/" + CruxKey.toFileName(world) + "/" + chunkKey);
     }
 
     public void addStoredStructure(StoredStructure stored, long chunkKey){

@@ -1,6 +1,7 @@
 package killercreepr.crux.core.data.world;
 
 import killercreepr.crux.api.data.world.StoredChunk;
+import killercreepr.crux.core.Crux;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -10,11 +11,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public class SimpleStoredChunk extends SimpleStoredWorld implements StoredChunk {
+public class SimpleStoredChunk  implements StoredChunk {
+    protected final Key key;
     protected final int chunkX;
     protected final int chunkZ;
     public SimpleStoredChunk(@NotNull Key worldKey, int chunkX, int chunkZ) {
-        super(worldKey);
+        this.key = worldKey;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
     }
@@ -22,6 +24,16 @@ public class SimpleStoredChunk extends SimpleStoredWorld implements StoredChunk 
     public boolean isLoaded(){
         World world = toBukkitWorld();
         return world != null && isLoaded(world);
+    }
+
+    @Override
+    public @NotNull Key worldKey() {
+        return key;
+    }
+
+    @Override
+    public @Nullable World toBukkitWorld() {
+        return Crux.getServer().getWorld(key);
     }
 
     public boolean isLoaded(@NotNull World world){

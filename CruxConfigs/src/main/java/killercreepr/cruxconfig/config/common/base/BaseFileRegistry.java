@@ -102,8 +102,8 @@ public class BaseFileRegistry implements FileRegistry {
     }
 
     public @Nullable FileElement serialize(@NotNull Object object, @NotNull FileContext<?> context){
-        FileObjectHandler<?> first = HANDLER_REGISTRY.get(object.getClass());
-        if(first != null) return first.attemptSerializeToFile(context, first);
+        /*FileObjectHandler<?> first = HANDLER_REGISTRY.get(object.getClass());
+        if(first != null) return first.attemptSerializeToFile(context, first);*/
         FileObjectHandler<?> handler = findObjectHandler(object.getClass());
         if(handler == null) return null;
         return handler.attemptSerializeToFile(context, object);
@@ -192,9 +192,6 @@ public class BaseFileRegistry implements FileRegistry {
             }
             if(Byte.class.isAssignableFrom(clazz)){
                 return from.getAsNumber().byteValue();
-            }
-            if(Number.class.isAssignableFrom(clazz)){
-                return from.getAsNumber();
             }
             if(String.class.isAssignableFrom(clazz)){
                 return from.getAsString();
