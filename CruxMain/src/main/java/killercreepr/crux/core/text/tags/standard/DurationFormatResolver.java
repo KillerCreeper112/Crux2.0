@@ -3,6 +3,7 @@ package killercreepr.crux.core.text.tags.standard;
 import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.crux.api.text.resolver.StringResolver;
 import killercreepr.crux.core.text.format.FormatArgs;
+import killercreepr.crux.core.util.CruxMath;
 import killercreepr.crux.core.util.CruxString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,7 +22,7 @@ public class DurationFormatResolver implements StringResolver {
     //<duration:1000:<excluded>:false:", ":"%d days":"%h hours":"%m minutes":"%s seconds">
     @Override
     public @Nullable String resolve(@NotNull FormatArgs args, @NotNull TextParserContext ctx) {
-        long milliseconds = (long) Double.parseDouble(ctx.deserializeString(args.get(0)));
+        long milliseconds = (long) CruxMath.evaluate(ctx.deserializeString(args.get(0)));
         Collection<String> excluded;
         if(args.has(1)){
             excluded = Set.of(args.get(1).split(","));
