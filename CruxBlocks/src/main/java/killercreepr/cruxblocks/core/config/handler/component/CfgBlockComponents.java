@@ -144,9 +144,15 @@ public class CfgBlockComponents {
                 a.forEach(ele ->{
                     if(!(ele instanceof FileObject o)) return;
                     BlockPos pos = ctx.getRegistry().deserializeFromFile(BlockPos.class, o.get("offset"));
-                    if(pos==null) return;
+                    if(pos==null){
+                        Crux.log(Level.WARNING, "Placeable Check component invalid offset! " + e);
+                        return;
+                    }
                     BlockPredicate predicate = ctx.getRegistry().deserializeFromFile(BlockPredicate.class, o.get("block_predicate"));
-                    if(predicate==null) return;
+                    if(predicate==null){
+                        Crux.log(Level.WARNING, "Placeable Check component invalid block predicate! " + e);
+                        return;
+                    }
                     map.put(pos, predicate);
                 });
                 if(map.isEmpty()){

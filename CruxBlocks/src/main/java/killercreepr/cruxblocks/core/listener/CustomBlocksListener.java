@@ -38,6 +38,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -327,6 +328,15 @@ public class CustomBlocksListener implements Listener {
         if(active==null) return;
         active.breakBlock(new BlockMiner(event.getSource()));
     }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onBlockFromTo(BlockFromToEvent event) {
+        Block to = event.getToBlock();
+        ActiveCruxBlock active = manager.getActiveBlock(to);
+        if(active==null) return;
+        active.breakBlock(Miner.block(event.getBlock()));
+    }
+
 
     @EventHandler(ignoreCancelled = true)
     public void onBlockDamageAbort(BlockDamageAbortEvent event) {
