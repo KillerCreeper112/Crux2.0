@@ -1,22 +1,31 @@
 package killercreepr.cruxblocks.core.config.handler.component;
 
+import killercreepr.crux.api.block.predicate.BlockPredicate;
 import killercreepr.crux.api.block.sound.CreateBlockSoundGroup;
 import killercreepr.crux.api.component.DataComponentType;
 import killercreepr.crux.api.component.TypedDataComponent;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.math.BlockPos;
 import killercreepr.crux.core.util.CruxDirection;
 import killercreepr.cruxblocks.api.block.component.*;
 import killercreepr.cruxblocks.core.block.component.CruxBlockComponents;
 import killercreepr.cruxblocks.core.block.component.standard.EntitySpawnerComponent;
+import killercreepr.cruxblocks.core.block.component.standard.PlaceableCheckComponent;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileDataComponentType;
 import killercreepr.cruxconfig.config.bukkit.registry.FileDataComponentRegistry;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
+import killercreepr.cruxconfig.config.common.element.FileArray;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import org.bukkit.Axis;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
 
 public class CfgBlockComponents {
     //TODO change this system up probably
@@ -123,6 +132,30 @@ public class CfgBlockComponents {
                 return TypedDataComponent.create(
                     CruxBlockComponents.PISTON_IMMOVABLE,
                     e.getObject(Boolean.class, "piston_immovable", false)
+                );
+            }
+        });
+
+        registry.register("placeable_check", new FileDataComponentType<PlaceableCheckComponent>() {
+            @Override
+            public @Nullable TypedDataComponent<PlaceableCheckComponent> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
+                if(!(e.get("filter") instanceof FileArray a)) return null;
+                Map<BlockPos, BlockPredicate> map = new HashMap<>();
+                a.forEach(ele ->{
+                    if(!(ele instanceof FileObject o)) return;
+                    BlockPos pos = ctx.getRegistry().deserializeFromFile(BlockPos.class, o.get("offset"));
+                    if(pos==null) return;
+                    BlockPredicate predicate = ctx.getRegistry().deserializeFromFile(BlockPredicate.class, o.get("block_predicate"));
+                    if(predicate==null) return;
+                    map.put(pos, predicate);
+                });
+                if(map.isEmpty()){
+                    Crux.log(Level.WARNING, "Placeable Check component does not have any valid filters! " + e);
+                    return null;
+                }
+                return TypedDataComponent.create(
+                    CruxBlockComponents.PLACEABLE_CHECK,
+                    new PlaceableCheckComponent(map)
                 );
             }
         });

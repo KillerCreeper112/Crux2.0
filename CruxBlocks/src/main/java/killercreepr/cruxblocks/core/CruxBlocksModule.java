@@ -237,7 +237,7 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
     }
 
     @Override
-    public @Nullable CruxedBlock getBlock(@NotNull Block block) {
+    public @NotNull CruxedBlock getBlock(@NotNull Block block) {
         ActiveCruxBlock active = getActiveBlock(block);
         if(active == null) return new BukkitCruxedBlock(block);
         return new CruxCruxedBlock(active);

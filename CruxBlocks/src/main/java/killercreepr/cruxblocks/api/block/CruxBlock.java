@@ -7,6 +7,7 @@ import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxblocks.api.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.api.block.component.CruxBlockComponent;
+import killercreepr.cruxblocks.api.block.component.CruxBlockGroupComponent;
 import killercreepr.cruxblocks.api.block.context.BlockContext;
 import killercreepr.cruxblocks.api.block.context.PlaceBlockContext;
 import killercreepr.cruxblocks.api.block.group.CruxBlockGroup;
@@ -33,6 +34,12 @@ public interface CruxBlock extends Keyed, CruxBlockData {
         for(CruxBlockComponent c : getComponents().getAllOfType(CruxBlockComponent.class)){
             ActiveCruxBlock x = c.createActive(block, this);
             if(x != null) return x;
+        }
+        if(getGroup() != null){
+            for(CruxBlockGroupComponent c : getGroup().getComponents().getAllOfType(CruxBlockGroupComponent.class)){
+                ActiveCruxBlock x = c.createActive(block, this);
+                if(x != null) return x;
+            }
         }
         return new SimpleActiveCruxBlock(block, this);
     }

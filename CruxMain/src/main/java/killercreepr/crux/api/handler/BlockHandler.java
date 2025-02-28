@@ -24,7 +24,7 @@ public interface BlockHandler {
     @Nullable
     CruxBlockWrapper getBlockWrapper(@NotNull Key key);
 
-    @Nullable
+    @NotNull
     CruxedBlock getBlock(@NotNull Block block);
     @NotNull Key getType(@NotNull Block block, @NotNull BlockData data);
     @NotNull Key getType(@NotNull BlockState state);
@@ -56,7 +56,7 @@ public interface BlockHandler {
         }
 
         @Override
-        public @Nullable CruxedBlock getBlock(@NotNull Block block) {
+        public @NotNull CruxedBlock getBlock(@NotNull Block block) {
             return new BukkitCruxedBlock(block);
         }
 

@@ -12,6 +12,7 @@ import killercreepr.cruxblocks.api.block.component.DirectionalBlock;
 import killercreepr.cruxblocks.api.block.component.DirectionalGroup;
 import killercreepr.cruxblocks.api.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.core.block.component.standard.EntitySpawnerComponent;
+import killercreepr.cruxblocks.core.block.component.standard.PlaceableCheckComponent;
 import killercreepr.cruxblocks.core.component.PlacedCustomBlocksComponent;
 import killercreepr.cruxblocks.core.registries.CruxBlocksRegistries;
 import killercreepr.cruxblocks.core.structure.modules.PlaceCustomBlocksModule;
@@ -29,6 +30,8 @@ public class CruxBlockComponents {
     public static final DataComponentType<BushBlock> BUSH_BLOCK = register("bush_block", builder ->
         builder);
     public static final DataComponentType<BushGroup> BUSH_GROUP = register("bush_group", builder ->
+        builder);
+    public static final DataComponentType<PlaceableCheckComponent> PLACEABLE_CHECK = register("placeable_check", builder ->
         builder);
 
     public static final DataComponentType<CreateBlockSoundGroup> BLOCK_SOUND_GROUP = register("block_sound_group", builder -> builder);

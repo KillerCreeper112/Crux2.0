@@ -5,6 +5,7 @@ import killercreepr.cruxblocks.api.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.api.block.context.BlockContext;
 import killercreepr.cruxblocks.api.block.context.PlaceBlockContext;
 import killercreepr.cruxblocks.api.block.group.CruxBlockGroup;
+import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,5 +20,8 @@ public interface CruxBlockGroupComponent {
 
     default void onRegistered(@NotNull CruxBlock block, @NotNull CruxBlockGroup group){
 
+    }
+    default @Nullable ActiveCruxBlock createActive(@NotNull Block block, @NotNull CruxBlock crux){
+        return null;
     }
 }
