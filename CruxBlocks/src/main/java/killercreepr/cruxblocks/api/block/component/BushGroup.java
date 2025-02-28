@@ -49,7 +49,7 @@ public interface BushGroup extends CruxBlockGroupComponent, Iterable<CruxBlock> 
             middle.placeBlock(ctx.withBlock(current), false);
             current = current.getRelative(BlockFace.UP);
         }
-        top.placeBlock(ctx.withBlock(current), applyPhysics);
+        top.placeBlock(ctx.withBlock(current), false);
         return active;
     }
 

@@ -76,7 +76,7 @@ public interface CruxBlock extends Keyed, CruxBlockData {
         Block b = ctx.getBlock();
 
         TextureData data = getTextureData();
-        //todo add bukkit place block
+        //todo maybe add bukkit place block
         /*if(ctx.getMiner() instanceof EntityMiner m && m.getEntity() instanceof Player p){
             BlockState replacedState = b.getState(true);
             data.setBlock(b, false);

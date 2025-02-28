@@ -21,6 +21,7 @@ import java.util.function.Predicate;
 
 public class SimpleBlockGroup implements CruxBlockGroup {
     protected final @NotNull Key key;
+    //todo optimize and make map texturedata -> block
     protected final @NotNull BlockGroupBlocksRegistry<CruxBlock> group = new SimpleBlockGroupBlocksRegistry<>(this);
     protected final @NotNull CruxBlock baseBlock;
     protected final @NotNull DataComponentHandler components;
