@@ -334,6 +334,7 @@ public class CustomBlocksListener implements Listener {
         Block to = event.getToBlock();
         ActiveCruxBlock active = manager.getActiveBlock(to);
         if(active==null) return;
+        event.setCancelled(true);
         active.breakBlock(Miner.block(event.getBlock()));
     }
 
