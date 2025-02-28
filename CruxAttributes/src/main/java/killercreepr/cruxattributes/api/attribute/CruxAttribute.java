@@ -14,6 +14,7 @@ import killercreepr.cruxattributes.core.attribute.GenericAttribute;
 import killercreepr.cruxattributes.core.registries.CruxAttributeRegistries;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -414,7 +415,7 @@ public interface CruxAttribute extends Keyed {
         if(base == null) return null;
         if(path == null || path.length==0) path = modifier.getPath();
 
-        PersistentDataContainer attributeContainer = getAttributeContainer(base, attribute);
+        PersistentDataContainer attributeContainer = getAttributeContainerFromBase(base, attribute);
         if(attributeContainer == null) attributeContainer = base.getAdapterContext().newPersistentDataContainer();
 
         PersistentDataContainer modProvider = path == null || path.length < 1 ?
@@ -456,6 +457,7 @@ public interface CruxAttribute extends Keyed {
             //Finally, set the whole path into the attribute container.
             attributeContainer.set(killercreepr.crux.core.util.CruxKey.key(path[0]), PersistentDataType.TAG_CONTAINER, list.getFirst());
         }
+        Bukkit.broadcastMessage("AFTER=" + attributeContainer.getKeys());
 
         base.set(killercreepr.crux.core.util.CruxKey.key(attribute.key()), PersistentDataType.TAG_CONTAINER, attributeContainer);
         return base;
