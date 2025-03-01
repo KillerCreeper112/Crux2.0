@@ -1,0 +1,15 @@
+package killercreepr.cruxenchants.api.crafting;
+
+import killercreepr.cruxenchants.api.crafting.recipe.CruxRecipe;
+import net.kyori.adventure.key.Key;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+public interface CruxRecipeManager<T extends CruxRecipe> extends Iterable<T> {
+    /*@NotNull
+    Map<Key, CruxRecipe> getRecipes();*/
+    @Nullable T getRecipe(Key key);
+    void addRecipe(@NotNull T recipe);
+    @Nullable T removeRecipe(Key key);
+    boolean hasRecipe(@NotNull Key key);
+}
