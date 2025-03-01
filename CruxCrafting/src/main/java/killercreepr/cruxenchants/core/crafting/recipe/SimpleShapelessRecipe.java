@@ -1,6 +1,7 @@
 package killercreepr.cruxenchants.core.crafting.recipe;
 
-import killercreepr.crux.paper.ItemHolder;
+import killercreepr.crux.api.item.dynamic.DynamicItem;
+import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.cruxenchants.api.crafting.CruxCraftingMatrix;
 import killercreepr.cruxenchants.api.crafting.CruxRecipeResult;
 import killercreepr.cruxenchants.api.crafting.context.CruxCraftingRecipeContext;
@@ -20,9 +21,9 @@ import java.util.*;
 public class SimpleShapelessRecipe implements CruxShapelessRecipe, Keyed {
     protected final Key key;
     protected final Collection<CruxRecipeIngredient> ingredients;
-    protected final List<ItemHolder> results;
+    protected final List<DynamicItem> results;
 
-    public SimpleShapelessRecipe(Key key, Collection<CruxRecipeIngredient> ingredients, List<ItemHolder> results) {
+    public SimpleShapelessRecipe(Key key, Collection<CruxRecipeIngredient> ingredients, List<DynamicItem> results) {
         this.key = key;
         this.ingredients = ingredients;
         this.results = results;
@@ -76,8 +77,8 @@ public class SimpleShapelessRecipe implements CruxShapelessRecipe, Keyed {
 
     public List<ItemStack> buildBaseResultItems(){
         List<ItemStack> list = new ArrayList<>();
-        for(ItemHolder holder : results){
-            list.add(holder.value());
+        for(DynamicItem holder : results){
+            list.add(holder.buildItem(TextParserContext.empty()));
         }
         return list;
     }

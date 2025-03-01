@@ -41,6 +41,7 @@ public class SimpleRecipeIngredient implements CruxRecipeIngredient {
     public boolean test(@NotNull CruxIngredientContext ctx) {
         ItemStack ingredient = ctx.ingredient();
         if(CruxItem.isEmpty(ingredient)) return false;
+        if(ingredient.getAmount() < amount) return false;
         return predicate.test(ingredient);
     }
 }

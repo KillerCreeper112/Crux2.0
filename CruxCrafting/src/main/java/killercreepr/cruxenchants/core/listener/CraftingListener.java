@@ -1,26 +1,14 @@
 package killercreepr.cruxenchants.core.listener;
 
-import killercreepr.crux.api.item.CruxItem;
-import killercreepr.crux.core.util.CruxInv;
-import killercreepr.cruxenchants.api.crafting.CruxCraftingMatrix;
 import killercreepr.cruxenchants.api.crafting.CruxCraftingRecipeManager;
-import killercreepr.cruxenchants.api.crafting.CruxRecipeResult;
-import killercreepr.cruxenchants.api.crafting.context.CruxCraftingRecipeContext;
-import killercreepr.cruxenchants.api.crafting.context.CruxIngredientContext;
-import killercreepr.cruxenchants.api.crafting.context.CruxRecipeContext;
-import killercreepr.cruxenchants.api.crafting.recipe.CruxCraftingRecipe;
-import org.bukkit.entity.HumanEntity;
+import killercreepr.cruxenchants.api.crafting.crafter.CruxCraftingCrafter;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.CraftingInventory;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-
-import java.util.List;
 
 public class CraftingListener implements Listener {
     protected final Plugin plugin;
@@ -35,21 +23,23 @@ public class CraftingListener implements Listener {
     public void onInventoryClick(InventoryClickEvent event) {
         if(event.getClickedInventory() == null) return;
         if((event.getView().getTopInventory() instanceof CraftingInventory inv)){
-           handleCrafting(event, inv);
+            CruxCraftingCrafter crafter = CruxCraftingCrafter.craftingCrafterDelayedUpdate(craftingManager, inv, plugin, 1);
+            crafter.handleCrafting(event);
         }
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onInventoryDrag(InventoryDragEvent event) {
         if((event.getView().getTopInventory() instanceof CraftingInventory inv)){
+            CruxCraftingCrafter crafter = CruxCraftingCrafter.craftingCrafter(craftingManager, inv);
             plugin.getServer().getScheduler().runTaskLater(plugin, () ->{
-                updateCraftingInv(inv);
+                crafter.updateCraftingInv();
             }, 1L);
         }
     }
 
 
-    public CruxCraftingRecipe getRecipe(CruxCraftingMatrix matrix){
+    /*public CruxCraftingRecipe getRecipe(CruxCraftingMatrix matrix){
         CruxCraftingRecipeContext ctx = CruxRecipeContext.craftingRecipeContext(matrix);
         for(CruxCraftingRecipe recipe : craftingManager){
             CruxRecipeResult result = recipe.testResult(ctx);
@@ -131,6 +121,6 @@ public class CraftingListener implements Listener {
             inv.setResult(resultItem);
             return;
         }
-    }
+    }*/
 
 }

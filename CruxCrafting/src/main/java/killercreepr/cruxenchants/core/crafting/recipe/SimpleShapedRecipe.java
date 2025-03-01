@@ -1,6 +1,7 @@
 package killercreepr.cruxenchants.core.crafting.recipe;
 
-import killercreepr.crux.paper.ItemHolder;
+import killercreepr.crux.api.item.dynamic.DynamicItem;
+import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.cruxenchants.api.crafting.CruxCraftingMatrix;
 import killercreepr.cruxenchants.api.crafting.CruxRecipeResult;
 import killercreepr.cruxenchants.api.crafting.context.CruxCraftingRecipeContext;
@@ -23,11 +24,11 @@ import java.util.Map;
 public class SimpleShapedRecipe implements CruxShapedRecipe, Keyed {
     protected final Key key;
     protected final Map<Integer, CruxRecipeIngredient> ingredients;
-    protected final List<ItemHolder> results;
+    protected final List<DynamicItem> results;
     protected final int width;
     protected final int height;
 
-    public SimpleShapedRecipe(Key key, Map<Integer, CruxRecipeIngredient> ingredients, List<ItemHolder> results, int width, int height) {
+    public SimpleShapedRecipe(Key key, Map<Integer, CruxRecipeIngredient> ingredients, List<DynamicItem> results, int width, int height) {
         this.key = key;
         this.ingredients = ingredients;
         this.results = results;
@@ -42,8 +43,8 @@ public class SimpleShapedRecipe implements CruxShapedRecipe, Keyed {
 
     public List<ItemStack> buildBaseResultItems(){
         List<ItemStack> list = new ArrayList<>();
-        for(ItemHolder holder : results){
-            list.add(holder.value());
+        for(DynamicItem holder : results){
+            list.add(holder.buildItem(TextParserContext.empty()));
         }
         return list;
     }

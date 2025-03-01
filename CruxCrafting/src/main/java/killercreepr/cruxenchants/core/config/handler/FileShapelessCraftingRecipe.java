@@ -1,7 +1,7 @@
 package killercreepr.cruxenchants.core.config.handler;
 
 import com.google.common.reflect.TypeToken;
-import killercreepr.crux.paper.ItemHolder;
+import killercreepr.crux.api.item.dynamic.DynamicItem;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -23,8 +23,8 @@ public class FileShapelessCraftingRecipe implements FileCruxCraftingRecipe {
         if(!(e instanceof FileObject o)) return null;
 
         FileRegistry reg = ctx.getRegistry();
-        List<ItemHolder> results = reg.deserializeFromFile(
-            new TypeToken<List<ItemHolder>>(){}.getType(),
+        List<DynamicItem> results = reg.deserializeFromFile(
+            new TypeToken<List<DynamicItem>>(){}.getType(),
             o.get("results")
         );
         if(results == null || results.isEmpty()) return null;
