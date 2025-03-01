@@ -17,8 +17,10 @@ public abstract class SimpleCruxMob implements CruxMob{
 
     @Override
     public final @NotNull Entity spawn(@NotNull Location at, @Nullable Consumer<Entity> consumer) {
-        Entity e = spawnAt(at, consumer);
-        CruxEntitiesPersist.ENTITY.set(e, key);
+        Entity e = spawnAt(at,  spawn ->{
+            if(consumer != null) consumer.accept(spawn);
+            CruxEntitiesPersist.ENTITY.set(spawn, key);
+        });
         return e;
     }
 

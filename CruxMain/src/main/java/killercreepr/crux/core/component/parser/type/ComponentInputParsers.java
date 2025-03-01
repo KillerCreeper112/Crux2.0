@@ -34,6 +34,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
 
 public class ComponentInputParsers {
     public static PersistTextParser<Particle> PARTICLE = PersistTextParser.elementBuilder(Particle.class)
@@ -96,7 +97,10 @@ public class ComponentInputParsers {
             ItemPredicate p;
             if(id.startsWith("#")){
                 ItemTag tag = CruxRegistries.ITEM_TAG.get(Crux.key(id.substring(1)));
-                if(tag == null) return null;
+                if(tag == null){
+                    Crux.log(Level.SEVERE, "Cannot find item tag of " + id + "!");
+                    return null;
+                }
                 p = ItemPredicate.fromTag(tag);
             }else{
                 p = ItemPredicate.fromType(Crux.key(id));
