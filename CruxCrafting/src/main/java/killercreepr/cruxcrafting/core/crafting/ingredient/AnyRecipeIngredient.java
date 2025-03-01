@@ -12,9 +12,11 @@ import java.util.List;
 
 public class AnyRecipeIngredient implements CruxRecipeIngredient {
     protected final Collection<CruxRecipeIngredient> terms;
+    protected final List<ItemStack> displays;
 
-    public AnyRecipeIngredient(Collection<CruxRecipeIngredient> terms) {
+    public AnyRecipeIngredient(Collection<CruxRecipeIngredient> terms, List<ItemStack> displays) {
         this.terms = terms;
+        this.displays = displays;
     }
 
     @Override
@@ -34,9 +36,9 @@ public class AnyRecipeIngredient implements CruxRecipeIngredient {
         return false;
     }
 
-
     @Override
     public @Nullable List<ItemStack> getItemDisplay() {
+        if(displays != null) return displays;
         List<ItemStack> list = new ArrayList<>();
         for(CruxRecipeIngredient in : terms){
             List<ItemStack> got = in.getItemDisplay();
