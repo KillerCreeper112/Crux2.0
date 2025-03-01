@@ -37,11 +37,6 @@ public class CraftingInvCrafter extends SimpleCraftingCrafter{
     }
 
     @Override
-    public boolean isResultSlot(int slot) {
-        return craftInv.getMatrix().length == slot;
-    }
-
-    @Override
     public void setResults(List<ItemStack> items) {
         if(items == null || items.isEmpty()){
             craftInv.setResult(null);

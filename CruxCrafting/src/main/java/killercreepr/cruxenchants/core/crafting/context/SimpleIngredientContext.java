@@ -8,11 +8,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class SimpleIngredientContext implements CruxIngredientContext {
     protected final ItemStack ingredient;
-    protected final CruxRecipeContext recipeContext;
 
-    public SimpleIngredientContext(ItemStack ingredient, CruxRecipeContext recipeContext) {
+    public SimpleIngredientContext(ItemStack ingredient) {
         this.ingredient = ingredient;
-        this.recipeContext = recipeContext;
     }
 
     @Override
@@ -20,8 +18,15 @@ public class SimpleIngredientContext implements CruxIngredientContext {
         return ingredient;
     }
 
-    @Override
-    public @NotNull CruxRecipeContext recipeContext() {
-        return recipeContext;
+    public static class RecipeContexted extends SimpleIngredientContext implements CruxIngredientContext.RecipeContexted{
+        protected final CruxRecipeContext recipeContext;
+        public RecipeContexted(ItemStack ingredient, CruxRecipeContext recipeContext) {
+            super(ingredient);
+            this.recipeContext = recipeContext;
+        }
+        @Override
+        public @NotNull CruxRecipeContext recipeContext() {
+            return recipeContext;
+        }
     }
 }
