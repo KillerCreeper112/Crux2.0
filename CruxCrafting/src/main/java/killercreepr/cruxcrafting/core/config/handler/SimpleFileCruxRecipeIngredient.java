@@ -5,6 +5,7 @@ import killercreepr.crux.api.item.dynamic.DynamicItem;
 import killercreepr.crux.api.item.predicate.ItemPredicate;
 import killercreepr.crux.api.registry.MappedRegistry;
 import killercreepr.crux.api.text.context.TextParserContext;
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
@@ -13,6 +14,9 @@ import killercreepr.cruxcrafting.api.config.handler.FileCruxRecipeIngredient;
 import killercreepr.cruxcrafting.api.crafting.ingredient.CruxRecipeIngredient;
 import killercreepr.cruxcrafting.core.crafting.ingredient.SimpleKeyedRecipeIngredient;
 import killercreepr.cruxcrafting.core.crafting.ingredient.SimpleRecipeIngredient;
+import killercreepr.cruxcrafting.core.crafting.ingredient.SimpleWrappedKeyedRecipeIngredient;
+import killercreepr.cruxcrafting.core.crafting.ingredient.SimpleWrappedRecipeIngredient;
+import killercreepr.cruxcrafting.core.registries.CruxCraftingRegistries;
 import net.kyori.adventure.key.Key;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -41,6 +45,12 @@ public class SimpleFileCruxRecipeIngredient extends SimpleFileHandler<CruxRecipe
     public @Nullable CruxRecipeIngredient deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e,
                                                               @Nullable Key key) {
         if(!(e instanceof FileObject o)){
+            String id = e.getAsString();
+            if(id.startsWith("#")){
+                CruxRecipeIngredient ingredient = CruxCraftingRegistries.RECIPE_INGREDIENT.get(Crux.key(id.substring(1)));
+                if(ingredient != null) return ingredient;
+            }
+
             ItemPredicate predicate = ctx.getRegistry().deserializeFromFile(ItemPredicate.class, e);
             if(predicate==null) return null;
             return new SimpleRecipeIngredient(predicate, 1, null);
@@ -48,8 +58,8 @@ public class SimpleFileCruxRecipeIngredient extends SimpleFileHandler<CruxRecipe
         if(key == null) key = ctx.getRegistry().deserializeFromFile(Key.class, o.get("key"));
         String type = o.getObject(String.class, "ingredient_type");
         if(type == null){
-            ItemPredicate itemPredicate = ctx.getRegistry().deserializeFromFile(ItemPredicate.class, o.get("item"));
-            if(itemPredicate==null) return null;
+            CruxRecipeIngredient base = ctx.getRegistry().deserializeFromFile(CruxRecipeIngredient.class, o.get("base"));
+
             int amount = o.getObject(Integer.class, "amount", 1);
             List<DynamicItem> displays = ctx.getRegistry().deserializeFromFile(
                 new TypeToken<List<DynamicItem>>(){}.getType(), o.get("displays")
@@ -63,6 +73,14 @@ public class SimpleFileCruxRecipeIngredient extends SimpleFileHandler<CruxRecipe
                     parsed.add(built);
                 }
             }else parsed = null;
+
+            if(base != null){
+                if(key != null) return new SimpleWrappedKeyedRecipeIngredient(base, amount, key);
+                return new SimpleWrappedRecipeIngredient(base, amount);
+            }
+            ItemPredicate itemPredicate = ctx.getRegistry().deserializeFromFile(ItemPredicate.class, o.get("item"));
+            if(itemPredicate==null) return null;
+
             if(key != null) return new SimpleKeyedRecipeIngredient(itemPredicate, amount, parsed, key);
             return new SimpleRecipeIngredient(itemPredicate, amount, parsed);
         }
