@@ -4,12 +4,11 @@ import killercreepr.crux.api.item.predicate.ItemPredicate;
 import killercreepr.crux.core.Crux;
 import net.kyori.adventure.key.Key;
 import org.bukkit.inventory.ItemStack;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 
 public class ItemTypePredicate implements ItemPredicate {
-    protected final @NonNull Key type;
-    public ItemTypePredicate(@NonNull Key type) {
+    protected final @NotNull Key type;
+    public ItemTypePredicate(@NotNull Key type) {
         this.type = type;
     }
 
