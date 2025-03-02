@@ -28,6 +28,11 @@ public class CraftingInvCrafter extends SimpleCraftingCrafter{
     }
 
     @Override
+    public boolean clearResultsBeforeUpdating() {
+        return false;
+    }
+
+    @Override
     public void onHandleCraftingEnd(){
         if(plugin != null && delay > 0){
             plugin.getServer().getScheduler().runTaskLater(plugin, this::updateCraftingInv, delay);
