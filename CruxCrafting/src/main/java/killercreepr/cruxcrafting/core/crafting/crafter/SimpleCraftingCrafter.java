@@ -106,6 +106,7 @@ public abstract class SimpleCraftingCrafter implements CruxCraftingCrafter {
     public void updateCraftingInv(){
         CruxCraftingMatrix matrix = CruxCraftingMatrix.craftingMatrix(getMatrix());
         CruxCraftingRecipeContext ctx = CruxRecipeContext.craftingRecipeContext(matrix);
+        setResults(null);
         for(CruxCraftingRecipe recipe : craftingManager){
             CruxRecipeResult result = recipe.testResult(ctx);
             if(result == null) continue;

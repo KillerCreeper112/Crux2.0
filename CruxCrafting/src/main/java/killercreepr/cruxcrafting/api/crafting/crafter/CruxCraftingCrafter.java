@@ -67,7 +67,6 @@ public interface CruxCraftingCrafter extends CruxCrafter{
             ItemStack item = ctx.craftingMatrix().getItem(slot).clone();
             //if(CruxItem.isEmpty(item)) return;
             //ingredient.onRemove(item);
-            slot++;
             setItem(slot, ingredient.removeItem(CruxIngredientContext.ingredientContext(item, ctx)));
         });
     }

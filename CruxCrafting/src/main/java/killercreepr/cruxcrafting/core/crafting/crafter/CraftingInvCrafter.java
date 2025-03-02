@@ -23,6 +23,11 @@ public class CraftingInvCrafter extends SimpleCraftingCrafter{
     }
 
     @Override
+    public void setItem(int slot, ItemStack item) {
+        super.setItem(slot+1, item);
+    }
+
+    @Override
     public void onHandleCraftingEnd(){
         if(plugin != null && delay > 0){
             plugin.getServer().getScheduler().runTaskLater(plugin, this::updateCraftingInv, delay);
