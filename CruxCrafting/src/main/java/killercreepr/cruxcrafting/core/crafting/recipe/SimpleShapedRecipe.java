@@ -104,6 +104,11 @@ public class SimpleShapedRecipe implements CruxShapedRecipe, Keyed {
     }
 
     @Override
+    public @NotNull Map<Integer, CruxRecipeIngredient> mapIngredientDisplay() {
+        return ingredients;
+    }
+
+    @Override
     public @NotNull Map<Integer, CruxRecipeIngredient> getIngredients() {
         return ingredients;
     }

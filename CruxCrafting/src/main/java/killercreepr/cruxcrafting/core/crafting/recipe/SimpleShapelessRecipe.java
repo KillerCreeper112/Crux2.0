@@ -67,6 +67,17 @@ public class SimpleShapelessRecipe implements CruxShapelessRecipe, Keyed {
         return mapIngredients(matrix, CruxRecipeContext.craftingRecipeContext(matrix));
     }
 
+    @Override
+    public @NotNull Map<Integer, CruxRecipeIngredient> mapIngredientDisplay() {
+        Map<Integer, CruxRecipeIngredient> map = new HashMap<>();
+        int index = 0;
+        for(CruxRecipeIngredient in : ingredients){
+            map.put(index, in);
+            index++;
+        }
+        return map;
+    }
+
     /**
      * Only used for showcasing what items this recipe will return.
      */

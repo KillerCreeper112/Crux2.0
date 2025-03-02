@@ -13,6 +13,7 @@ import java.util.Map;
 
 public interface CruxCraftingRecipe extends CruxRecipe {
     @NotNull Map<Integer, CruxRecipeIngredient> mapIngredients(@NotNull CruxCraftingMatrix matrix);
+    @NotNull Map<Integer, CruxRecipeIngredient> mapIngredientDisplay();
     /**
      * Only used for showcasing what items this recipe will return.
      */
