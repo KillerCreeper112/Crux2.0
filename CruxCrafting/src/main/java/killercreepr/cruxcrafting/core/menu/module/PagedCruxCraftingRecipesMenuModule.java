@@ -9,10 +9,12 @@ import killercreepr.cruxmenus.api.menu.holder.MenuItems;
 import killercreepr.cruxmenus.api.menu.module.ActiveMenuModule;
 import killercreepr.cruxmenus.core.menu.module.standard.PagedMenuModule;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class PagedCruxCraftingRecipesMenuModule extends PagedMenuModule<CruxCraftingRecipe> {
@@ -27,6 +29,10 @@ public class PagedCruxCraftingRecipesMenuModule extends PagedMenuModule<CruxCraf
         this.recipeManager = recipeManager;
     }
 
+    public CruxCraftingRecipeManager getRecipeManager() {
+        return recipeManager;
+    }
+
     @Override
     public @Nullable ActiveMenuModule build(@NotNull Menu menu) {
         return new ActivePagedCruxCraftingRecipeMenuModule(
@@ -38,7 +44,12 @@ public class PagedCruxCraftingRecipesMenuModule extends PagedMenuModule<CruxCraf
     public @NotNull Holder<List<CruxCraftingRecipe>> getValues(@NotNull Menu menu) {
         return () ->{
             if(recipeManager.getRecipes() instanceof List<CruxCraftingRecipe> l) return l;
-            return new ArrayList<>(recipeManager.getRecipes());
+            var list = new ArrayList<>(recipeManager.getRecipes());
+            list.sort(Comparator.comparing(recipe ->{
+                if(recipe instanceof Keyed k) return k.key().value();
+                return "a";
+            }));
+            return list;
         };
     }
 

@@ -17,7 +17,7 @@ public class CruxMenusHook {
         menus.menuRegistry().menuHolders().register(new GenericRecipeViewMenuHolder(
             Crux.key("crafting/recipe/view"),
             "<white><crux_space:-8><font:\"crux:crafting\">0<reset><crux_space:-145>Recipe",
-            NumberProvider.constant(45),
+            NumberProvider.constant(27),
             MenuItems.items(new TreeMap<>()), DataExchange.empty(), Set.of()
         ));
     }

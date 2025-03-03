@@ -23,7 +23,7 @@ public class CraftingRecipeMenuViewer {
     }
 
     public int[] getResultSlots(){
-        return new int[]{24};
+        return new int[]{15};
     }
 
     public void setResultDisplay(int slot, @Nullable ItemStack display){
@@ -53,9 +53,9 @@ public class CraftingRecipeMenuViewer {
     }
 
     public int calculateSlotFromIngredientIndex(int index){
-        if(index <= 2) return index + 10;
-        if(index <= 5) return index + 16;
-        return index + 22;
+        if(index <= 2) return index + 1;
+        if(index <= 5) return index + 7;
+        return index + 15;
     }
 
     public void setIngredient(int index, CruxRecipeIngredient ingredient){

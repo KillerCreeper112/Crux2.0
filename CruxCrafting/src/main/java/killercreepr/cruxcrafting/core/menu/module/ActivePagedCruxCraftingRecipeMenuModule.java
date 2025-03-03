@@ -9,6 +9,7 @@ import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxcrafting.api.crafting.recipe.CruxCraftingRecipe;
 import killercreepr.cruxmenus.CruxMenusModule;
+import killercreepr.cruxmenus.api.menu.CfgMenu;
 import killercreepr.cruxmenus.api.menu.Menu;
 import killercreepr.cruxmenus.api.menu.module.MenuModule;
 import killercreepr.cruxmenus.api.menu.slot.Slot;
@@ -51,7 +52,12 @@ public class ActivePagedCruxCraftingRecipeMenuModule extends GenericActivePagedM
                 CruxMenusModule menus = CruxRegistries.MODULES.getModuleOrThrow(CruxMenusModule.class);
                 var holder = menus.menuRegistry().menuHolders().get(Crux.key("crafting/recipe/view"));
                 if(holder != null){
-                    holder.open(p, DataExchange.single("crafting_recipe", Holder.direct(value)));
+                    holder.open(p, DataExchange.builder()
+                        .put("crafting_recipe", value)
+                        .put("crafting_recipe_list_menu", ((CfgMenu) menu).getHolder())
+                        .put("crafting_recipe_manager", ((PagedCruxCraftingRecipesMenuModule) module).getRecipeManager())
+                        .build()
+                    );
                     CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
                 }
             }
