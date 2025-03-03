@@ -40,15 +40,14 @@ public class GenericRecipeListMenu extends ConfigMenu {
             NumberProvider.uniformArray(
                 NumberProvider.uniform(10, 16),
                 NumberProvider.uniform(19, 25),
-                NumberProvider.uniform(28, 34),
-                NumberProvider.uniform(37, 43)
+                NumberProvider.uniform(28, 34)
             ),
             null, null, null, Crux.key("crafting_recipe_list"), getRecipeManager()
         ).build(this);
         modules.register(module);
         module.load(this);
 
-        addSlot(new SimpleFixedSlot(this, 48){
+        addSlot(new SimpleFixedSlot(this, inventory.getSize()-6){
             @Override
             public void onClick(@NotNull HumanEntity p, @NotNull InventoryClickEvent event) {
                 super.onClick(p, event);
@@ -56,7 +55,7 @@ public class GenericRecipeListMenu extends ConfigMenu {
                 paged.addPage(-1);
             }
         });
-        addSlot(new SimpleFixedSlot(this, 50){
+        addSlot(new SimpleFixedSlot(this, inventory.getSize()-4){
             @Override
             public void onClick(@NotNull HumanEntity p, @NotNull InventoryClickEvent event) {
                 super.onClick(p, event);

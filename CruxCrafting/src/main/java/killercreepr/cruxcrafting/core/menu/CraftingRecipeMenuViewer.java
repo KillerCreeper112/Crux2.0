@@ -1,5 +1,6 @@
 package killercreepr.cruxcrafting.core.menu;
 
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxcrafting.api.crafting.ingredient.CruxRecipeIngredient;
 import killercreepr.cruxcrafting.api.crafting.recipe.CruxCraftingRecipe;
 import org.bukkit.inventory.Inventory;
@@ -37,11 +38,11 @@ public class CraftingRecipeMenuViewer {
     }
 
     public void setResultDisplay(int slot, @Nullable ItemStack display){
-        inv.setItem(slot, display);
+        inv.setItem(slot, display == null ? null : Crux.handlers().item().update(display));
     }
 
     public void setIngredientDisplay(int slot, @Nullable ItemStack display){
-        inv.setItem(slot, display);
+        inv.setItem(slot, display == null ? null : Crux.handlers().item().update(display));
     }
 
     public void setResults(@Nullable List<ItemStack> results){

@@ -41,7 +41,7 @@ public class ActivePagedCruxCraftingRecipeMenuModule extends GenericActivePagedM
     public void setPagedItem(@NotNull Menu menu, int slot, int index, int listIndex, @NotNull CruxCraftingRecipe value) {
         var display = value.getDisplayedResultItems();
         if(display.isEmpty()) return;
-        menu.setItem(slot, display.getFirst(), buildPagedItemSlot(menu, slot, value));
+        menu.setItem(slot, Crux.handlers().item().update(display.getFirst()), buildPagedItemSlot(menu, slot, value));
     }
 
     public Slot buildPagedItemSlot(@NotNull Menu menu, int slot, @NotNull CruxCraftingRecipe value){
@@ -66,6 +66,6 @@ public class ActivePagedCruxCraftingRecipeMenuModule extends GenericActivePagedM
 
     @Override
     public void setEmptyItem(@NotNull Menu menu, int slot, int index) {
-
+        menu.setItem(slot, null);
     }
 }
