@@ -5,6 +5,7 @@ import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.plugin.module.StandardModules;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxcrafting.core.config.CruxCraftingCfg;
+import killercreepr.cruxcrafting.core.menu.CruxMenusHook;
 import org.jetbrains.annotations.NotNull;
 
 public class CruxCraftingModule implements CruxModule {
@@ -18,6 +19,9 @@ public class CruxCraftingModule implements CruxModule {
     public void onLoad(@NotNull CruxPlugin plugin) {
         if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS)){
             CruxCraftingCfg.onLoad();
+        }
+        if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_MENUS)){
+            CruxMenusHook.onLoad();
         }
     }
 }

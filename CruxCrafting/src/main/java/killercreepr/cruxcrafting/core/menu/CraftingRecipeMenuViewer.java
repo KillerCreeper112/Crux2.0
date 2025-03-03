@@ -2,7 +2,6 @@ package killercreepr.cruxcrafting.core.menu;
 
 import killercreepr.cruxcrafting.api.crafting.ingredient.CruxRecipeIngredient;
 import killercreepr.cruxcrafting.api.crafting.recipe.CruxCraftingRecipe;
-import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -24,7 +23,7 @@ public class CraftingRecipeMenuViewer {
     }
 
     public int[] getResultSlots(){
-        return new int[]{0};
+        return new int[]{24};
     }
 
     public void setResultDisplay(int slot, @Nullable ItemStack display){
@@ -54,7 +53,9 @@ public class CraftingRecipeMenuViewer {
     }
 
     public int calculateSlotFromIngredientIndex(int index){
-        return index;
+        if(index <= 2) return index + 10;
+        if(index <= 5) return index + 16;
+        return index + 22;
     }
 
     public void setIngredient(int index, CruxRecipeIngredient ingredient){
@@ -64,7 +65,6 @@ public class CraftingRecipeMenuViewer {
             setIngredientDisplay(slot, null);
             return;
         }
-        Bukkit.broadcastMessage("Display= " + index + ", " + display.getFirst().getType());
         setIngredientDisplay(slot, display.getFirst());
     }
 }

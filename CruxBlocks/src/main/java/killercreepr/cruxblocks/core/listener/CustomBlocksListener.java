@@ -5,6 +5,7 @@ import com.destroystokyo.paper.MaterialTags;
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import io.papermc.paper.event.block.BlockBreakBlockEvent;
 import killercreepr.crux.api.block.sound.CreateBlockSoundGroup;
+import killercreepr.crux.api.communication.Communicator;
 import killercreepr.crux.api.communication.CreateSound;
 import killercreepr.crux.api.entity.memory.EntityMemory;
 import killercreepr.crux.api.item.CruxItem;
@@ -80,6 +81,17 @@ public class CustomBlocksListener implements Listener {
     }
 
     //private final static Map<UUID, Long> interactCooldowns = new HashMap<>();
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onBlockPlace(BlockPlaceEvent event) {
+        Block b = event.getBlockPlaced();
+        if(b.getType() == Material.TRIPWIRE){
+            event.setCancelled(true);
+            Communicator.chat("<red>Tripwire has been disabled.")
+                .use(event.getPlayer());
+        }
+    }
+
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {

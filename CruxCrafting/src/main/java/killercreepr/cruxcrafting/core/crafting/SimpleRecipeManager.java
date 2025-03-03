@@ -7,6 +7,7 @@ import net.kyori.adventure.key.Keyed;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -33,6 +34,11 @@ public class SimpleRecipeManager<T extends CruxRecipe> implements CruxRecipeMana
     @Override
     public boolean hasRecipe(@NotNull Key key) {
         return recipes.containsKey(key);
+    }
+
+    @Override
+    public @NotNull Collection<T> getRecipes() {
+        return recipes.values();
     }
 
     @NotNull

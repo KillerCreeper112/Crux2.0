@@ -5,6 +5,8 @@ import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 public interface CruxRecipeManager<T extends CruxRecipe> extends Iterable<T> {
     /*@NotNull
     Map<Key, CruxRecipe> getRecipes();*/
@@ -12,4 +14,5 @@ public interface CruxRecipeManager<T extends CruxRecipe> extends Iterable<T> {
     void addRecipe(@NotNull T recipe);
     @Nullable T removeRecipe(Key key);
     boolean hasRecipe(@NotNull Key key);
+    @NotNull Collection<T> getRecipes();
 }
