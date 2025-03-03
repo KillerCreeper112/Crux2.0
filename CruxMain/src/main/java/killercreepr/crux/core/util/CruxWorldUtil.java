@@ -2,6 +2,7 @@ package killercreepr.crux.core.util;
 
 import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.core.Crux;
+import net.kyori.adventure.key.Key;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -81,6 +82,13 @@ public class CruxWorldUtil {
             }
         }
         return list;
+    }
+
+    public static World getOrLoadWorld(@NotNull Key key){
+        World world = Crux.getServer().getWorld(key);
+        if(world != null) return world;
+
+        return getOrLoadWorld(key.value());
     }
 
     public static World getOrLoadWorld(@NotNull String name){

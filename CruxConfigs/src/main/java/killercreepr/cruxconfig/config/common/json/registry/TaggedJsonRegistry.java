@@ -3,6 +3,7 @@ package killercreepr.cruxconfig.config.common.json.registry;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import com.google.gson.internal.LazilyParsedNumber;
 import killercreepr.crux.core.util.CruxObjects;
 import killercreepr.crux.core.util.CruxReflect;
 import killercreepr.crux.core.valueproviders.number.ConstantNumber;

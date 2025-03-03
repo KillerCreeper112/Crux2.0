@@ -52,7 +52,8 @@ public class CruxStandardTags {
     public static @NotNull Collection<StringListResolver> buildGlobalStringListTags(){
         return Set.of(
             new DescriptionLoreResolver(),
-            new AddIfLoreResolver()
+            new AddIfLoreResolver(),
+            new AddIfElseLoreResolver()
         );
     }
 
