@@ -52,7 +52,7 @@ public class ActivePagedCruxCraftingRecipeMenuModule extends GenericActivePagedM
                 CruxMenusModule menus = CruxRegistries.MODULES.getModuleOrThrow(CruxMenusModule.class);
                 var holder = menus.menuRegistry().menuHolders().get(Crux.key("crafting/recipe/view"));
                 if(holder != null){
-                    holder.open(p, DataExchange.builder()
+                    holder.open(p, DataExchange.builder(((CfgMenu) menu).info())
                         .put("crafting_recipe", value)
                         .put("crafting_recipe_list_menu", ((CfgMenu) menu).getHolder())
                         .put("crafting_recipe_manager", ((PagedCruxCraftingRecipesMenuModule) module).getRecipeManager())

@@ -70,7 +70,7 @@ public class GenericRecipeViewMenu extends ConfigMenu {
 
     public void setButtons(){
         setItem(23, CruxItem.create(Material.ARROW)
-            .customName("Previous Recipe")
+            .itemName("Previous Recipe")
             .itemModel(Crux.key("gui/arrow_left"))
             .item(), new SimpleFixedSlot(this, 23){
             @Override
@@ -80,7 +80,7 @@ public class GenericRecipeViewMenu extends ConfigMenu {
             }
         });
         setItem(24, CruxItem.create(Material.ARROW)
-            .customName("Back")
+            .itemName("Back")
             .itemModel(Crux.key("gui/arrow_down"))
             .item(), new SimpleFixedSlot(this, 24){
             @Override
@@ -91,7 +91,7 @@ public class GenericRecipeViewMenu extends ConfigMenu {
             }
         });
         setItem(25, CruxItem.create(Material.ARROW)
-            .customName("Next Recipe")
+            .itemName("Next Recipe")
             .itemModel(Crux.key("gui/arrow_right"))
             .item(), new SimpleFixedSlot(this, 25){
             @Override

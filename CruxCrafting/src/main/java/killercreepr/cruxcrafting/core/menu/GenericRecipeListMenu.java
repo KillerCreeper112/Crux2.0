@@ -1,6 +1,8 @@
 package killercreepr.cruxcrafting.core.menu;
 
+import killercreepr.crux.api.communication.CreateSound;
 import killercreepr.crux.api.data.DataExchange;
+import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.Crux;
@@ -10,6 +12,8 @@ import killercreepr.cruxmenus.api.menu.holder.MenuHolder;
 import killercreepr.cruxmenus.core.menu.ConfigMenu;
 import killercreepr.cruxmenus.core.menu.module.standard.ActivePagedMenuModule;
 import killercreepr.cruxmenus.core.menu.slot.SimpleFixedSlot;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
@@ -22,6 +26,10 @@ public class GenericRecipeListMenu extends ConfigMenu {
 
     public GenericRecipeListMenu(@NotNull MenuHolder holder, @NotNull DataExchange info, @Nullable MergedTagContainer tags) {
         super(holder, info, tags);
+    }
+
+    public @Nullable MenuHolder previousMenu(){
+        return info.get("previous_menu_holder", MenuHolder.class);
     }
 
     @Override
@@ -65,5 +73,20 @@ public class GenericRecipeListMenu extends ConfigMenu {
     @Override
     public void onRefresh() {
         super.onRefresh();
+
+        if(previousMenu() == null) return;
+        setItem(inventory.getSize()-5, CruxItem.create(Material.ARROW)
+            .itemName("Back")
+            .itemModel(Crux.key("gui/arrow_down"))
+            .item(), new SimpleFixedSlot(this, inventory.getSize()-5){
+            @Override
+            public void onClick(@NotNull HumanEntity p, @NotNull InventoryClickEvent event) {
+                super.onClick(p, event);
+                MenuHolder previous = previousMenu();
+                if(previous==null) return;
+                previous.open(p);
+                CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
+            }
+        });
     }
 }

@@ -17,6 +17,9 @@ public interface DataExchange extends Iterable<Holder<?>> {
     static @NotNull Builder builder() {
         return new SimpleDataExchange.Builder();
     }
+    static @NotNull Builder builder(DataExchange info) {
+        return new SimpleDataExchange.Builder().putAll(info);
+    }
 
     static @NotNull DataExchange empty() {
         return EMPTY;
