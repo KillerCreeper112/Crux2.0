@@ -78,6 +78,11 @@ public class SimpleShapelessRecipe implements CruxShapelessRecipe, Keyed {
         return map;
     }
 
+    @Override
+    public @NotNull Map<Integer, CruxRecipeIngredient> mapIngredientDisplay(int width, int height) {
+        return mapIngredientDisplay();
+    }
+
     /**
      * Only used for showcasing what items this recipe will return.
      */

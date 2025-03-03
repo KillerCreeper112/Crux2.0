@@ -17,8 +17,18 @@ public class CraftingRecipeMenuViewer {
         this.recipe = recipe;
     }
 
+    public int craftingWidth(){
+        return 3;
+    }
+
+    public int craftingHeight(){
+        return 3;
+    }
+
     public void display(){
-        setIngredients(recipe.mapIngredientDisplay());
+        setIngredients(recipe.mapIngredientDisplay(
+            craftingWidth(), craftingHeight()
+        ));
         setResults(recipe.getDisplayedResultItems());
     }
 
@@ -55,7 +65,7 @@ public class CraftingRecipeMenuViewer {
     public int calculateSlotFromIngredientIndex(int index){
         if(index <= 2) return index + 1;
         if(index <= 5) return index + 7;
-        return index + 15;
+        return index + 13;
     }
 
     public void setIngredient(int index, CruxRecipeIngredient ingredient){

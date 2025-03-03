@@ -1,5 +1,6 @@
 package killercreepr.cruxcrafting.core.crafting.crafter;
 
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxcrafting.api.crafting.CruxCraftingRecipeManager;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
@@ -52,7 +53,7 @@ public class CraftingInvCrafter extends SimpleCraftingCrafter{
             craftInv.setResult(null);
             return;
         }
-        craftInv.setResult(items.getFirst());
+        craftInv.setResult(Crux.handlers().item().update(items.getFirst()));
     }
 
     @Override

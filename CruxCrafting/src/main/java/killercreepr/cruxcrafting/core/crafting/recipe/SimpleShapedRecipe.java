@@ -109,6 +109,53 @@ public class SimpleShapedRecipe implements CruxShapedRecipe, Keyed {
     }
 
     @Override
+    public @NotNull Map<Integer, CruxRecipeIngredient> mapIngredientDisplay(int width, int height) {
+        if(width == this.width && width == this.height) return ingredients;
+        Map<Integer, CruxRecipeIngredient> map = new HashMap<>();
+
+        int widthDifference = width - this.width;
+        int heightDifference = height - this.height;
+
+        // Calculate the offset to center the recipe
+        int horizontalOffset = widthDifference / 2;
+        int verticalOffset = heightDifference / 2;
+
+        // Iterate over all ingredients
+        ingredients.forEach((index, ingredient) -> {
+            int x = index % this.width;  // Calculate x position in the original grid
+            int y = index / this.width;  // Calculate y position in the original grid
+
+            // Calculate the new position with the offset
+            int newX = x + horizontalOffset;
+            int newY = y + verticalOffset;
+
+            // Ensure we're within the bounds of the new grid size
+            int newIndex = newY * width + newX;
+
+            // Put the ingredient at the new index in the larger grid
+            map.put(newIndex, ingredient);
+        });
+
+
+        /*ingredients.forEach((index, ingredient) -> {
+            int x = index % this.width;  // Calculate x position in the original grid
+            int y = index / this.width;  // Calculate y position in the original grid
+
+            // Calculate the new index based on the new width
+            int newX = x + widthDifference * (x / this.width);
+            int newY = y + heightDifference * (y / this.height);
+
+            // Ensure we're within the bounds of the new grid size
+            int newIndex = newY * width + newX;
+
+            // Put the ingredient at the new index in the larger grid
+            map.put(newIndex, ingredient);
+        });*/
+
+        return map;
+    }
+
+    @Override
     public @NotNull Map<Integer, CruxRecipeIngredient> getIngredients() {
         return ingredients;
     }
