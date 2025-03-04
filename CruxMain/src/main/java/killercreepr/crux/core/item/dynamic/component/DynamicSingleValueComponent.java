@@ -35,11 +35,21 @@ public abstract class DynamicSingleValueComponent extends SimpleDynamicItemCompo
             unparsed.add(s);
         }else unparsed = new ArrayList<>();
 
+        List<String> list = addStrings(unparsed);
+        return context.deserializeList(list);
+    }
+
+    public @NotNull List<String> addStrings(List<?> unparsed){
+        if(unparsed.isEmpty()) return List.of();
         List<String> list = new ArrayList<>();
         for(Object s : unparsed){
+            if(s instanceof List<?> d){
+                list.addAll(addStrings(d));
+                continue;
+            }
             list.add(s.toString());
         }
-        return context.deserializeList(list);
+        return list;
     }
 
     public @NotNull List<String> parseStringList(@NotNull TextParserContext context){
