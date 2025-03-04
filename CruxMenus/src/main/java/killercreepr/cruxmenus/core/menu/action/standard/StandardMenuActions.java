@@ -23,7 +23,9 @@ public class StandardMenuActions {
             new RemoveDataAction(Crux.key("remove_data")),
 
             new PagedAddAction(Crux.key("page_add")),
-            new PagedSetAction(Crux.key("page_set"))
+            new PagedSetAction(Crux.key("page_set")),
+
+            new OpenBookAction(Crux.key("open_book"))
         );
     }
 }
