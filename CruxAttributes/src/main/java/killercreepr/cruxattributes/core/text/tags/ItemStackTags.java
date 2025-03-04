@@ -50,18 +50,18 @@ public class ItemStackTags implements ObjectTag<ItemStack> {
                 if(attributeFormat == null || modMultiplyFormat == null) return null;
 
                 List<String> list = new ArrayList<>();
-                Map<CruxAttribute, Map<CruxSlotGroup, List<CruxAttributeModifier>>> modifiers = new TreeMap<>();
+                Map<CruxSlotGroup, Map<CruxAttribute, List<CruxAttributeModifier>>> modifiers = new TreeMap<>();
                 for(CruxAttributeInstance instance : instances){
                     for (CruxAttributeModifier modifier : instance.getModifiers()) {
-                        modifiers.computeIfAbsent(instance.getAttribute(), e -> new TreeMap<>())
-                            .computeIfAbsent(modifier.getSlotGroup(), e -> new ArrayList<>())
+                        modifiers.computeIfAbsent(modifier.getSlotGroup(), e -> new TreeMap<>())
+                            .computeIfAbsent(instance.getAttribute(), e -> new ArrayList<>())
                             //.computeIfAbsent(instance.getAttribute(), e -> new ArrayList<>())
                             .add(modifier);
                     }
 
                 }
-                modifiers.forEach((attribute, slotMap) ->{
-                    slotMap.forEach((slot, map) ->{
+                modifiers.forEach((slot, slotMap) ->{
+                    slotMap.forEach((attribute, map) ->{
                         MergedTagContainer tags = TagContainer.merged(tagParser)
                             .add(Tag.parsed("slot_group_when_in_slot", slot.getWhenInSlot()))
                             .hook(attribute);
