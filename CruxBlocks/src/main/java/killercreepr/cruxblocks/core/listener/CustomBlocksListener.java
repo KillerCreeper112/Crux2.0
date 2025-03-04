@@ -120,7 +120,6 @@ public class CustomBlocksListener implements Listener {
         float power = getExplosionPower(event.getExplodedBlockState(), 4f);
         List<Block> list = new ArrayList<>();
         event.blockList().removeIf(b ->{
-            list.add(b);
             ActiveCruxBlock crux = manager.getActiveBlock(b);
             if(crux == null){
                 list.add(b);
@@ -165,7 +164,6 @@ public class CustomBlocksListener implements Listener {
         float power = getExplosionPower(event.getEntity(), 4f);
         List<Block> list = new ArrayList<>();
         event.blockList().removeIf(b ->{
-            list.add(b);
             ActiveCruxBlock crux = manager.getActiveBlock(b);
             if(crux == null){
                 list.add(b);

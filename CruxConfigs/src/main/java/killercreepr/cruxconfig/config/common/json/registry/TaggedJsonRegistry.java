@@ -1,9 +1,9 @@
 package killercreepr.cruxconfig.config.common.json.registry;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import com.google.gson.internal.LazilyParsedNumber;
 import killercreepr.crux.core.util.CruxObjects;
 import killercreepr.crux.core.util.CruxReflect;
 import killercreepr.crux.core.valueproviders.number.ConstantNumber;
@@ -184,9 +184,20 @@ public class TaggedJsonRegistry implements FileRegistry, JsonRegistry {
         return element;
     }
 
+    protected final JsonContext ctx = new JsonContext(this);
     @Override
     public @NotNull JsonElement serializeToJson(@NotNull Object object){
+        return serializeToJson(object, ctx);
+    }
+    public @NotNull JsonElement serializeToJson(@NotNull Object object, @NotNull JsonContext context){
         if(object instanceof JsonSerializable s) return serialize(s);
+        if(object instanceof JsonElement e) return e;
+        if(object instanceof Collection<?> l) return serializeCollection(l, context);
+        if(object.getClass().isArray()){
+            return serializeCollection(Arrays.stream(((Object[]) object)).toList(), context);
+        }
+        if(object instanceof Map<?,?> l) return serializeMap(l, context);
+
         JsonElement ele = tryPrimitive(object);
         if(ele != null) return ele;
 
@@ -194,7 +205,7 @@ public class TaggedJsonRegistry implements FileRegistry, JsonRegistry {
         if(handler == null){
             throw new RuntimeException("Cannot find serialization method for " + object + " (class " + object.getClass().getName() + ")");
         }
-        JsonElement element = handler.attemptSerializeToJson(new JsonContext(this), object);
+        JsonElement element = handler.attemptSerializeToJson(context, object);
         if(element == null)
             throw new RuntimeException("Object cannot be serialized with " + handler + " (" + object + ")");
         String id = getSerializerID(handler);
@@ -202,6 +213,28 @@ public class TaggedJsonRegistry implements FileRegistry, JsonRegistry {
         o.addProperty("id", id);
         o.add("value", element);
         return o;
+    }
+
+    public @NotNull JsonArray serializeCollection(@NotNull Collection<?> list, @NotNull JsonContext context){
+        JsonArray array = new JsonArray(list.size());
+        for(Object o : list){
+            array.add(serializeToJson(o, context));
+        }
+        return array;
+    }
+
+    public @NotNull JsonObject serializeMap(@NotNull Map<?, ?> list, @NotNull JsonContext context){
+        JsonObject array = new JsonObject();
+        for(Map.Entry<?, ?> entry : list.entrySet()){
+            JsonElement serializedKey = serializeToJson(entry.getKey(), context);
+            if(!(serializedKey instanceof JsonPrimitive prim)){
+                throw new UnsupportedOperationException(entry.getKey() + " was not serialized into a primitive element! " +
+                    entry.getKey().getClass().getSimpleName() + " Maps require the key element to be serialized into a string. Got " + serializedKey);
+            }
+
+            array.add(prim.getAsString(), serializeToJson(entry.getValue(), context));
+        }
+        return array;
     }
 
     public <T extends JsonSerializable> @NotNull JsonElement serialize(@NotNull T object){
@@ -212,6 +245,41 @@ public class TaggedJsonRegistry implements FileRegistry, JsonRegistry {
         return o;
     }
 
+    public Object deserializeObject(@NotNull Object o){
+        if(o instanceof Collection<?> l){
+            return deserializeCollection(l);
+        }
+        if(o.getClass().isArray()){
+            return deserializeCollection(Arrays.stream(((Object[]) o)).toList());
+        }
+        if(o instanceof Map<?,?> l) return deserializeMap(l);
+        if(o instanceof FileElement g) return deserializeObject(g.getAsObject());
+        if(o instanceof JsonElement g) return deserializeFromJson(g);
+        return o;
+    }
+
+    public @NotNull Collection<Object> deserializeCollection(@NotNull Collection<?> list){
+        Collection<Object> array = new ArrayList<>(list.size());
+        for(Object o : list){
+            Object got = deserializeObject(o);
+            if(got==null) continue;
+            array.add(got);
+        }
+        return array;
+    }
+
+    public @NotNull Map<Object, Object> deserializeMap(@NotNull Map<?, ?> list){
+        Map<Object, Object> array = new HashMap<>();
+        for(Map.Entry<?, ?> entry : list.entrySet()){
+            Object key = deserializeObject(entry.getKey());
+            if(key==null) continue;
+            Object value = deserializeObject(entry.getValue());
+            if(value==null) continue;
+            array.put(key, value);
+        }
+        return array;
+    }
+
     @Override
     public @Nullable Object deserializeFromJson(@Nullable JsonElement from){
         if(!(from instanceof JsonObject o)){
@@ -220,15 +288,17 @@ public class TaggedJsonRegistry implements FileRegistry, JsonRegistry {
                 if(pr.isNumber()) return pr.getAsNumber();
                 if(pr.isString()) return pr.getAsString();
             }
+            if(from==null) return null;
+            if(from.isJsonArray()) return deserializeCollection(from.getAsJsonArray().asList());
             return null;
         }
         JsonElement e = o.get("id");
-        if(e == null) return null;
+        if(e == null) return deserializeMap(o.asMap());
         String id = e.getAsString();
         Class<? extends JsonSerializable> clazz = get(id);
         if(clazz == null){
             JsonObjectHandler<?> handler = OBJECT_HANDLER_REGISTRY.getByName(id);
-            return handler == null ? null : handler.deserializeFromJson(new JsonContext(this), o.get("value"));
+            return handler == null ? deserializeMap(o.asMap()) : handler.deserializeFromJson(new JsonContext(this), o.get("value"));
         }
         JsonElement value = o.get("value");
 
