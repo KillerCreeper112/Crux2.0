@@ -19,4 +19,9 @@ public class GenericAttribute implements CruxAttribute {
     public String toString() {
         return "GenericAttribute{key=" + key + "}";
     }
+
+    @Override
+    public int compareTo(@NotNull CruxAttribute o) {
+        return key().compareTo(o.key());
+    }
 }

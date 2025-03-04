@@ -67,4 +67,9 @@ public class SimpleCruxSlotGroup implements CruxSlotGroup {
     public @NotNull String translateKey() {
         return "cruxslotgroup/" + key.asString();
     }
+
+    @Override
+    public int compareTo(@NotNull CruxSlotGroup o) {
+        return key().compareTo(o.key());
+    }
 }

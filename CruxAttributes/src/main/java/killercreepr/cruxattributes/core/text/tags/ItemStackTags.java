@@ -13,6 +13,7 @@ import killercreepr.cruxattributes.api.attribute.CruxAttributeInstance;
 import killercreepr.cruxattributes.api.attribute.CruxAttributeModifier;
 import killercreepr.cruxattributes.api.equipment.CruxSlotGroup;
 import killercreepr.cruxattributes.api.values.ValuesProvider;
+import net.kyori.adventure.key.Key;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -49,32 +50,36 @@ public class ItemStackTags implements ObjectTag<ItemStack> {
                 if(attributeFormat == null || modMultiplyFormat == null) return null;
 
                 List<String> list = new ArrayList<>();
+                Map<CruxAttribute, Map<CruxSlotGroup, List<CruxAttributeModifier>>> modifiers = new TreeMap<>();
                 for(CruxAttributeInstance instance : instances){
-                    Map<CruxSlotGroup, Map<CruxAttribute, Collection<CruxAttributeModifier>>> modifiers = new HashMap<>();
                     for (CruxAttributeModifier modifier : instance.getModifiers()) {
-                        modifiers.computeIfAbsent(modifier.getSlotGroup(), e -> new HashMap<>())
-                            .computeIfAbsent(instance.getAttribute(), e -> new ArrayList<>())
+                        modifiers.computeIfAbsent(instance.getAttribute(), e -> new TreeMap<>())
+                            .computeIfAbsent(modifier.getSlotGroup(), e -> new ArrayList<>())
+                            //.computeIfAbsent(instance.getAttribute(), e -> new ArrayList<>())
                             .add(modifier);
                     }
 
-                    modifiers.forEach((slot, map) ->{
+                }
+                modifiers.forEach((attribute, slotMap) ->{
+                    slotMap.forEach((slot, map) ->{
                         MergedTagContainer tags = TagContainer.merged(tagParser)
                             .add(Tag.parsed("slot_group_when_in_slot", slot.getWhenInSlot()))
-                            .hook(instance);
+                            .hook(attribute);
                         list.addAll(ctx.deserializeStringList(attributeFormat, tags));
 
-                        map.forEach((attribute, mod) ->{
-                            for (CruxAttributeModifier m : mod) {
-                                MergedTagContainer modTags = TagContainer.merged(tagParser)
-                                    .addAll(tags)
-                                    .hook(m)
-                                    ;
-                                List<String> f = m.getOperation() == CruxAttribute.Operation.MULTIPLY ? modMultiplyFormat : modFormat;
-                                list.addAll(ctx.deserializeStringList(f, modTags));
-                            }
-                        });
+                        map.sort(Comparator.comparingDouble((CruxAttributeModifier m) ->
+                            attribute.isNegative(m.getAmount()) ? -Math.abs(m.getAmount()) : m.getAmount()
+                        ).reversed());
+                        for (CruxAttributeModifier m : map) {
+                            MergedTagContainer modTags = TagContainer.merged(tagParser)
+                                .addAll(tags)
+                                .hook(m)
+                                ;
+                            List<String> f = m.getOperation() == CruxAttribute.Operation.MULTIPLY ? modMultiplyFormat : modFormat;
+                            list.addAll(ctx.deserializeStringList(f, modTags));
+                        }
                     });
-                }
+                });
                 return list;
             }));
     }

@@ -8,6 +8,7 @@ import java.util.List;
 
 public class DefaultValues implements ValuesProvider {
     public static final Holder<List<String>> CRUX_ATTRIBUTES_ITEM_FORMAT = Holder.direct(List.of(
+        "",
         "<gray><slot_group_when_in_slot>:"
     ));
     public static final Holder<List<String>> CRUX_ATTRIBUTES_ITEM_MODIFIER_FORMAT = Holder.direct(List.of(

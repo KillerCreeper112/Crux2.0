@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-public interface CruxSlotGroup extends CruxKeyed, Translatable, Iterable<CruxSlot> {
+public interface CruxSlotGroup extends Comparable<CruxSlotGroup>, CruxKeyed, Translatable, Iterable<CruxSlot> {
     static void register(){}
 
     CruxSlotGroup ANY = register(new SimpleCruxSlotGroup(Crux.key("any"), e -> true, "When equipped"));

@@ -1,5 +1,6 @@
 package killercreepr.cruxattributes.api.attribute;
 
+import killercreepr.crux.api.data.CruxKeyed;
 import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.persistence.CruxPersist;
@@ -32,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
 import java.math.RoundingMode;
 import java.util.*;
 
-public interface CruxAttribute extends Keyed {
+public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
     static NamespacedKey k(String s){
         return Crux.key(s);
     }
@@ -42,6 +43,11 @@ public interface CruxAttribute extends Keyed {
         @Override
         public double processValue(double value) {
             return value * -1;
+        }
+
+        @Override
+        public boolean isNegative(double value) {
+            return value > 0D;
         }
     });
     CruxAttribute ATTACK_RANGE = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("attack_range")));
