@@ -67,6 +67,8 @@ public interface CruxAttribute extends Keyed {
     CruxAttribute TARGET_HALT_RANGE = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("target_halt_range")));
     CruxAttribute FIND_TARGET_RANGE = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("find_target_range")));
 
+    CruxAttribute MAGIC_POTENCY = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("magic_potency")));
+
     default double getDefaultValue(){
         return 0D;
     }
