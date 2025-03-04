@@ -83,6 +83,7 @@ public class CruxModuleRegistry extends SimpleMappedRegistry<String, CruxModule>
             try{
                 m.onDisable(plugin);
             }catch (Exception ignored){
+                Crux.log(Level.SEVERE, "ERROR WHILE UNREGISTERING CRUX MODULE" + m.name());
                 ignored.printStackTrace();
             }
         }

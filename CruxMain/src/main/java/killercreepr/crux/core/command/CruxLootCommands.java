@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class CruxLootCommands {
+    //
     public static void register(@NotNull CruxPlugin plugin){
         plugin.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event ->{
             final Commands commands = event.registrar();
