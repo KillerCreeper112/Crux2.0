@@ -49,7 +49,7 @@ public class MapDataType<T> implements PersistentDataType<PersistentDataContaine
         Map<String, Object> map;
 
         try{
-            T test =(T) complex;
+            T test = (T) complex;
             map = parser.encodeObject(complex);
         }catch (ClassCastException ignored){
             map = (Map<String, Object>) complex;

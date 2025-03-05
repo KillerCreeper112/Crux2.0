@@ -61,7 +61,7 @@ public class EntityTickableModifierDataType extends MapDataType<EntityTickableMo
         }
 
         map.forEach((id, value) ->{
-            TextInputField<EntityTickableModifier, ?> field = elements.get(id);
+            TextInputField<?, ?> field = elements.get(id);
             if(field==null || id.equalsIgnoreCase("data")) return;
             PersistTextParser<Object> serializer = (PersistTextParser<Object>) field.inputParser();
             CruxTag.set(c, id, serializer.dataType(), value);
@@ -89,10 +89,10 @@ public class EntityTickableModifierDataType extends MapDataType<EntityTickableMo
             map.put(id, serializer.encodeObject(value));
         }
 
-        TextInputField<EntityTickableModifier, ?> base = elements.get("");
+        TextInputField<?, ?> base = elements.get("");
         if(base != null){
             PersistTextParser<Object> serializer;
-            if(base instanceof TextInputField.Holder<EntityTickableModifier,?> holder){
+            if(base instanceof TextInputField.Holder<?,?> holder){
                 serializer = (PersistTextParser<Object>) holder.getInputParser(map);
             }else serializer = (PersistTextParser<Object>) base.inputParser();
 

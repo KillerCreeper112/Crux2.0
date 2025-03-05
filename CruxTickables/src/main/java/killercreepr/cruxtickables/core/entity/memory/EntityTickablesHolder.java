@@ -86,7 +86,10 @@ public class EntityTickablesHolder extends EntityTickedDataHolder {
             SetBonus bonus = mod.getSetBonus();
             if(bonus != null){
                 TrackedBonus tracked = setBonus.get(mod.getTickable().key());
-                if(tracked == null) tracked = new TrackedBonus(mod.getTickable());
+                if(tracked == null){
+                    tracked = new TrackedBonus(mod.getTickable());
+                    setBonus.put(mod.getTickable().key(), tracked);
+                }
                 if(bonus.isMain()){
                     tracked.mainBonus = bonus;
                     tracked.modifier = mod;

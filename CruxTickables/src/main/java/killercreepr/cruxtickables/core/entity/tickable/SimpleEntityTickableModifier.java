@@ -23,7 +23,6 @@ public class SimpleEntityTickableModifier implements EntityTickableModifier {
         this.data = data;
     }
 
-
     @Override
     public Object getData() {
         return data;

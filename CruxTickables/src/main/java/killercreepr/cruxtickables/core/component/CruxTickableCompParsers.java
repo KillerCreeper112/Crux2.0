@@ -23,12 +23,12 @@ import java.util.Collection;
 import java.util.Map;
 
 public class CruxTickableCompParsers {
-    public static PersistTextParser<EntityTickable> ENTITY_TICKABLE = PersistTextParser.elementBuilder(EntityTickable.class)
-        .field(TextInputField.field(PersistTextParser.KEY, EntityTickable::key))
-        .apply(ctx -> CruxTickableRegistries.ENTITY_TICKABLE.get(ctx.get()));
     public static PersistTextParser<SetBonus> SET_BONUS = PersistTextParser.mapBuilder(SetBonus.class)
         .field("key", TextInputField.field(PersistTextParser.KEY, SetBonus::key))
-        .field("equipment_amount", TextInputField.field(PersistTextParser.INTEGER, SetBonus::getEquipmentAmount))
+        .field("equipment_amount", TextInputField.field(PersistTextParser.INTEGER, e ->{
+            if(e.isMain()) return e.getEquipmentAmount();
+            return null;
+        }))
         .apply(ctx ->{
             Key key = ctx.get("key");
             if(key==null) return null;
@@ -36,6 +36,10 @@ public class CruxTickableCompParsers {
             if(equipment < 1) return new SubSetBonus(key);
             return new MainSetBonus(key, equipment);
         });
+
+    public static PersistTextParser<EntityTickable> ENTITY_TICKABLE = PersistTextParser.elementBuilder(EntityTickable.class)
+        .field(TextInputField.field(PersistTextParser.KEY, EntityTickable::key))
+        .apply(ctx -> CruxTickableRegistries.ENTITY_TICKABLE.get(ctx.get()));
 
     public static PersistTextParser<EntityTickableModifier> ENTITY_TICKABLE_MODIFIER = PersistTextParser.mapBuilder(EntityTickableModifier.class)
         .field("key", TextInputField.field(PersistTextParser.KEY, Keyed::key))
@@ -60,7 +64,7 @@ public class CruxTickableCompParsers {
             CruxSlotGroup slot = ctx.getOptional("slot");
             SetBonus setBonus = ctx.getOptional("set_bonus");
 
-            if(ctx.getOptional("data") instanceof Map<?,?> data && tickable instanceof DataEntityTickable dataTickable){
+            if(ctx.getOptional("data") instanceof Map<?,?> data && !data.isEmpty() && tickable instanceof DataEntityTickable dataTickable){
                 Object dataObject = dataTickable.getDataParser().decodeObject(data);
                 return EntityTickableModifier.modifier(key, tickable, slot, setBonus, dataObject);
             }

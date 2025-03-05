@@ -9,8 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface EntityTickableModifier extends CruxKeyed {
-    static EntityTickableModifier modifier(Key key, EntityTickable tickable, CruxSlotGroup slot, Object data){
-        return new SimpleEntityTickableModifier(key, tickable, slot, null, data);
+    static EntityTickableModifier modifier(Key key, EntityTickable tickable, CruxSlotGroup slot, SetBonus setBonus){
+        return modifier(key, tickable, slot,  setBonus, null);
     }
     static EntityTickableModifier modifier(Key key, EntityTickable tickable, CruxSlotGroup slot, SetBonus setBonus, Object data){
         return new SimpleEntityTickableModifier(key, tickable, slot, setBonus, data);
