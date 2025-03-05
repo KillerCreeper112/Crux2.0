@@ -102,7 +102,7 @@ public class EntityTickableModifierDataType extends MapDataType<EntityTickableMo
         if(dataContainer==null) return mod;
         if(!(mod.getTickable() instanceof DataEntityTickable dataTickable)) return mod;
         Object data = dataTickable.getDataParser().decode(c);
-        mod = new SimpleEntityTickableModifier(mod.key(), mod.getTickable(), mod.getSlotGroup(), data);
+        mod = new SimpleEntityTickableModifier(mod.key(), mod.getTickable(), mod.getSlotGroup(), mod.getSetBonus(), data);
         return mod;
     }
 }

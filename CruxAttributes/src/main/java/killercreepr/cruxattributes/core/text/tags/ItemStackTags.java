@@ -61,19 +61,20 @@ public class ItemStackTags implements ObjectTag<ItemStack> {
 
                 }
                 modifiers.forEach((slot, slotMap) ->{
-                    slotMap.forEach((attribute, map) ->{
-                        MergedTagContainer tags = TagContainer.merged(tagParser)
-                            .add(Tag.parsed("slot_group_when_in_slot", slot.getWhenInSlot()))
-                            .hook(attribute);
-                        list.addAll(ctx.deserializeStringList(attributeFormat, tags));
+                    MergedTagContainer tags = TagContainer.merged(tagParser)
+                        .add(Tag.parsed("slot_group_when_in_slot", slot.getWhenInSlot()));
+                    list.addAll(ctx.deserializeStringList(attributeFormat, tags));
 
+                    slotMap.forEach((attribute, map) ->{
                         map.sort(Comparator.comparingDouble((CruxAttributeModifier m) ->
                             attribute.isNegative(m.getAmount()) ? -Math.abs(m.getAmount()) : m.getAmount()
                         ).reversed());
+
                         for (CruxAttributeModifier m : map) {
                             MergedTagContainer modTags = TagContainer.merged(tagParser)
                                 .addAll(tags)
                                 .hook(m)
+                                .hook(attribute)
                                 ;
                             List<String> f = m.getOperation() == CruxAttribute.Operation.MULTIPLY ? modMultiplyFormat : modFormat;
                             list.addAll(ctx.deserializeStringList(f, modTags));

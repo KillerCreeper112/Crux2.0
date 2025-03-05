@@ -11,7 +11,9 @@ import killercreepr.cruxtickables.api.entity.tickable.DataEntityTickable;
 import killercreepr.cruxtickables.api.entity.tickable.EntityTickable;
 import killercreepr.cruxtickables.api.entity.tickable.EntityTickableModifier;
 import killercreepr.cruxtickables.api.entity.tickable.EntityTickablesContainer;
-import killercreepr.cruxtickables.core.entity.tickable.SimpleEntityTickableModifier;
+import killercreepr.cruxtickables.api.equipment.SetBonus;
+import killercreepr.cruxtickables.core.equipment.MainSetBonus;
+import killercreepr.cruxtickables.core.equipment.SubSetBonus;
 import killercreepr.cruxtickables.core.persistence.EntityTickableModifierDataType;
 import killercreepr.cruxtickables.core.registries.CruxTickableRegistries;
 import net.kyori.adventure.key.Key;
@@ -24,6 +26,16 @@ public class CruxTickableCompParsers {
     public static PersistTextParser<EntityTickable> ENTITY_TICKABLE = PersistTextParser.elementBuilder(EntityTickable.class)
         .field(TextInputField.field(PersistTextParser.KEY, EntityTickable::key))
         .apply(ctx -> CruxTickableRegistries.ENTITY_TICKABLE.get(ctx.get()));
+    public static PersistTextParser<SetBonus> SET_BONUS = PersistTextParser.mapBuilder(SetBonus.class)
+        .field("key", TextInputField.field(PersistTextParser.KEY, SetBonus::key))
+        .field("equipment_amount", TextInputField.field(PersistTextParser.INTEGER, SetBonus::getEquipmentAmount))
+        .apply(ctx ->{
+            Key key = ctx.get("key");
+            if(key==null) return null;
+            int equipment = ctx.getOptional("equipment_amount", 0);
+            if(equipment < 1) return new SubSetBonus(key);
+            return new MainSetBonus(key, equipment);
+        });
 
     public static PersistTextParser<EntityTickableModifier> ENTITY_TICKABLE_MODIFIER = PersistTextParser.mapBuilder(EntityTickableModifier.class)
         .field("key", TextInputField.field(PersistTextParser.KEY, Keyed::key))
@@ -32,6 +44,7 @@ public class CruxTickableCompParsers {
             if(e.getSlotGroup() == CruxSlotGroup.ANY) return null;
             return e.getSlotGroup();
         }))
+        .field("set_bonus", TextInputField.field(SET_BONUS, EntityTickableModifier::getSetBonus))
         .field("data", TextInputField.field(PersistTextParser.mapBuilder()
             .resultParser(InputDecodeContext::get)
             .buildUnset(), EntityTickableModifier::getData))
@@ -45,13 +58,13 @@ public class CruxTickableCompParsers {
             Key key = ctx.getOptional("key", Crux.key("base"));
             EntityTickable tickable = ctx.get("tickable");
             CruxSlotGroup slot = ctx.getOptional("slot");
+            SetBonus setBonus = ctx.getOptional("set_bonus");
 
             if(ctx.getOptional("data") instanceof Map<?,?> data && tickable instanceof DataEntityTickable dataTickable){
                 Object dataObject = dataTickable.getDataParser().decodeObject(data);
-                return new SimpleEntityTickableModifier(key, tickable, slot, dataObject);
+                return EntityTickableModifier.modifier(key, tickable, slot, setBonus, dataObject);
             }
-
-            return EntityTickableModifier.modifier(key, tickable, slot);
+            return EntityTickableModifier.modifier(key, tickable, slot, setBonus);
         });
 
     /*public static PersistTextParser<EntityTickableInstance> ENTITY_TICKABLE_INSTANCE = PersistTextParser.mapBuilder(EntityTickableInstance.class)

@@ -10,7 +10,10 @@ import killercreepr.cruxattributes.api.equipment.CruxSlot;
 import killercreepr.cruxattributes.api.equipment.CruxSlotGroup;
 import killercreepr.cruxattributes.bukkit.AttributeBukkitAdaptor;
 import killercreepr.cruxtickables.api.entity.tickable.ActiveEntityTickable;
+import killercreepr.cruxtickables.api.entity.tickable.EntityTickable;
+import killercreepr.cruxtickables.api.entity.tickable.EntityTickableModifier;
 import killercreepr.cruxtickables.api.entity.tickable.EntityTickablesContainer;
+import killercreepr.cruxtickables.api.equipment.SetBonus;
 import killercreepr.cruxtickables.core.component.CruxTickableComponents;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Entity;
@@ -68,13 +71,31 @@ public class EntityTickablesHolder extends EntityTickedDataHolder {
         });
     }
 
-    private void addTickablesFromItem(Map<Key, ActiveEntityTickable> map, Entity user, ItemStack item, CruxSlot slot){
+    private void addTickablesFromItem(Map<Key, ActiveEntityTickable> map,
+                                      Map<Key, TrackedBonus> setBonus,
+                                      Entity user,
+                                      ItemStack item,
+                                      CruxSlot slot){
         if(CruxItem.isEmpty(item)) return;
         CruxItem crux = CruxItem.wrap(item);
         EntityTickablesContainer container = crux.getOrDefaultData(CruxTickableComponents.ENTITY_TICKABLES);
         if(container== null) return;
         container.getTickableModifiers().forEach(mod ->{
             if(!mod.getSlotGroup().test(slot)) return;
+
+            SetBonus bonus = mod.getSetBonus();
+            if(bonus != null){
+                TrackedBonus tracked = setBonus.get(mod.getTickable().key());
+                if(tracked == null) tracked = new TrackedBonus(mod.getTickable());
+                if(bonus.isMain()){
+                    tracked.mainBonus = bonus;
+                    tracked.modifier = mod;
+                    tracked.slot = slot;
+                }
+                tracked.bonuses++;
+                return;
+            }
+
             ActiveEntityTickable active = mod.getTickable().buildActive(user, slot, mod);
             if(active==null) return;
             map.put(active.getTickable().key(), active);
@@ -85,18 +106,29 @@ public class EntityTickablesHolder extends EntityTickedDataHolder {
         EntityEquipment equipment = e.getEquipment();
         if(equipment==null) return Map.of();
         Map<Key, ActiveEntityTickable> map = new HashMap<>();
+        Map<Key, TrackedBonus> setBonus = new HashMap<>();
 
         for(CruxSlot slot : CruxSlotGroup.ARMOR){
             EquipmentSlot equipmentSlot = AttributeBukkitAdaptor.adapt(slot);
             if(equipmentSlot==null) continue;
-            addTickablesFromItem(map, e, equipment.getItem(equipmentSlot), slot);
+            addTickablesFromItem(map, setBonus, e, equipment.getItem(equipmentSlot), slot);
         }
 
         for(CruxSlot slot : CruxSlotGroup.HAND){
             EquipmentSlot equipmentSlot = AttributeBukkitAdaptor.adapt(slot);
             if(equipmentSlot==null) continue;
-            addTickablesFromItem(map, e, equipment.getItem(equipmentSlot), slot);
+            addTickablesFromItem(map, setBonus, e, equipment.getItem(equipmentSlot), slot);
         }
+
+        for (TrackedBonus tracked : setBonus.values()) {
+            SetBonus main = tracked.mainBonus;
+            if(main == null) continue;
+            if(tracked.bonuses < main.getEquipmentAmount()) continue;
+            ActiveEntityTickable active = tracked.tickable.buildActive(e, tracked.slot, tracked.modifier);
+            if(active==null) continue;
+            map.put(active.getTickable().key(), active);
+        }
+
         return map;
     }
 
@@ -119,6 +151,18 @@ public class EntityTickablesHolder extends EntityTickedDataHolder {
             tick = 0;
             if(!CruxMath.hasOccurredWithin(lastItemUpdate, 100)) return;
             updateTickables(e);
+        }
+    }
+
+    public static class TrackedBonus{
+        public SetBonus mainBonus;
+        public final EntityTickable tickable;
+        public EntityTickableModifier modifier;
+        public int bonuses;
+        public CruxSlot slot;
+
+        public TrackedBonus(EntityTickable tickable) {
+            this.tickable = tickable;
         }
     }
 }
