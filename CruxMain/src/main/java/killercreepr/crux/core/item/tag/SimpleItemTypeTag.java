@@ -1,5 +1,6 @@
 package killercreepr.crux.core.item.tag;
 
+import killercreepr.crux.api.item.ItemListHolder;
 import killercreepr.crux.api.item.tag.ItemTypeTag;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.paper.ItemHolder;
@@ -8,11 +9,9 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.*;
 
-public class SimpleItemTypeTag extends BaseItemTag implements ItemTypeTag {
+public class SimpleItemTypeTag extends BaseItemTag implements ItemTypeTag, ItemListHolder {
     public static SimpleItemTypeTag.Builder builder(){
         return new Builder();
     }
@@ -32,6 +31,18 @@ public class SimpleItemTypeTag extends BaseItemTag implements ItemTypeTag {
         return values.contains(Crux.handlers().item().getType(item));
     }
 
+    @Override
+    public @NotNull List<ItemStack> getItemValues() {
+        List<ItemStack> list = new ArrayList<>();
+        values.forEach(m ->{
+            ItemHolder holder = Crux.handlers().item().getItem(m);
+            if(holder==null) return;
+            list.add(holder.value());
+        });
+        return list;
+    }
+
+    @Deprecated(forRemoval = true)
     public @NotNull Collection<ItemStack> getValues() {
         Collection<ItemStack> list = new HashSet<>();
         values.forEach(m ->{

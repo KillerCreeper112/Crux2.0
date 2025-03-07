@@ -1,6 +1,7 @@
 package killercreepr.cruxcrafting.core.config.handler;
 
 import com.google.common.reflect.TypeToken;
+import killercreepr.crux.api.item.ItemListHolder;
 import killercreepr.crux.api.item.dynamic.DynamicItem;
 import killercreepr.crux.api.item.predicate.ItemPredicate;
 import killercreepr.crux.api.registry.MappedRegistry;
@@ -64,6 +65,9 @@ public class SimpleFileCruxRecipeIngredient extends SimpleFileHandler<CruxRecipe
             List<DynamicItem> displays = ctx.getRegistry().deserializeFromFile(
                 new TypeToken<List<DynamicItem>>(){}.getType(), o.get("displays")
             );
+            ItemPredicate itemPredicate = ctx.getRegistry().deserializeFromFile(ItemPredicate.class, o.get("item"));
+            if(itemPredicate==null) return null;
+
             List<ItemStack> parsed;
             if(displays != null && !displays.isEmpty()){
                 parsed = new ArrayList<>();
@@ -72,14 +76,19 @@ public class SimpleFileCruxRecipeIngredient extends SimpleFileHandler<CruxRecipe
                     if(built==null) continue;
                     parsed.add(built);
                 }
-            }else parsed = null;
+            }else{
+                if(itemPredicate instanceof ItemListHolder holder){
+                    parsed = holder.getItemValues();
+                    for(ItemStack item : parsed){
+                        item.setAmount(amount);
+                    }
+                }else parsed = null;
+            }
 
             if(base != null){
                 if(key != null) return new SimpleWrappedKeyedRecipeIngredient(base, amount, key);
                 return new SimpleWrappedRecipeIngredient(base, amount);
             }
-            ItemPredicate itemPredicate = ctx.getRegistry().deserializeFromFile(ItemPredicate.class, o.get("item"));
-            if(itemPredicate==null) return null;
 
             if(key != null) return new SimpleKeyedRecipeIngredient(itemPredicate, amount, parsed, key);
             return new SimpleRecipeIngredient(itemPredicate, amount, parsed);
