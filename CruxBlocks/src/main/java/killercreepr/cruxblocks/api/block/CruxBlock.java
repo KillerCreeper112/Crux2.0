@@ -80,6 +80,11 @@ public interface CruxBlock extends Keyed, CruxBlockData {
         if(!canPlace(ctx)) return null;
         CruxBlockPlaceEvent event = new CruxBlockPlaceEvent(this, ctx);
         if(!event.callEvent()) return null;
+        for(CruxBlockComponent component : getComponents().getAllOfType(CruxBlockComponent.class)){
+            component.onPlaced(event);
+            if(event.isCancelled()) return null;
+        }
+
         Block b = ctx.getBlock();
 
         TextureData data = getTextureData();

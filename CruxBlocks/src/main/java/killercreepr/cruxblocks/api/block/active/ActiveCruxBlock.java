@@ -8,6 +8,7 @@ import killercreepr.crux.api.item.component.ToolComponent;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.component.CruxComponents;
 import killercreepr.cruxblocks.api.block.CruxBlock;
+import killercreepr.cruxblocks.api.block.component.CruxBlockComponent;
 import killercreepr.cruxblocks.api.block.context.BlockContext;
 import killercreepr.cruxblocks.api.block.flag.BlockBreakFlag;
 import killercreepr.cruxblocks.api.block.flag.BlockBreakFlags;
@@ -65,6 +66,10 @@ public interface ActiveCruxBlock {
         else drops = null;
         CruxBlockBreakEvent event = new CruxBlockBreakEvent(this, BlockContext.context(block, miner), drops);
         if(!event.callEvent()) return event;
+        for(CruxBlockComponent component : getCruxBlock().getComponents().getAllOfType(CruxBlockComponent.class)){
+            component.onBroken(event);
+            if(event.isCancelled()) return event;
+        }
         drops = event.getDrops();
 
         BlockData data = block.getBlockData();
