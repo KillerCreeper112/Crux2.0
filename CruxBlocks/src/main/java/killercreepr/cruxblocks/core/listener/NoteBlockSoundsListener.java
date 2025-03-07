@@ -27,7 +27,9 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.UUID;
 
 public class NoteBlockSoundsListener implements Listener {
     protected final Plugin plugin;
@@ -69,14 +71,41 @@ public class NoteBlockSoundsListener implements Listener {
         sound.playAt(entity.getLocation());
     }
 
-    private final Map<Location, BukkitTask> breakerPlaySound = new HashMap<>();
+    private final Map<Block, BreakerSound> breakerPlaySound = new HashMap<>();
+    private final Map<UUID, BreakerSound> breakerPlaySoundByOwner = new HashMap<>();
+
+    private BreakerSound getBreakerSound(Block loc){
+        return breakerPlaySound.get(loc);
+    }
+    private BreakerSound getBreakerSound(UUID owner){
+        return breakerPlaySoundByOwner.get(owner);
+    }
+
+    private void setBreakerSound(BreakerSound sound){
+        BreakerSound old = breakerPlaySound.put(sound.location, sound);
+        BreakerSound old1 = breakerPlaySoundByOwner.put(sound.uuid, sound);
+
+        if(old != null && !old.isCancelled()) old.cancel();
+        if(old1 != null && !old1.isCancelled()) old1.cancel();
+    }
+
+    private BreakerSound removeBreakerSound(Block loc){
+        BreakerSound sound = breakerPlaySound.remove(loc);
+        if(sound == null) return null;
+        breakerPlaySoundByOwner.remove(sound.uuid);
+        return sound.isCancelled() ? null : sound;
+    }
 
     @EventHandler
     public void onWorldUnload(WorldUnloadEvent event) {
-        for (Map.Entry<Location, BukkitTask> entry : breakerPlaySound.entrySet()) {
-            if (entry.getKey().isWorldLoaded() || entry.getValue().isCancelled()) continue;
+        for (Map.Entry<Block, BreakerSound> entry : new HashSet<>(breakerPlaySound.entrySet())) {
+            if (entry.getKey().getLocation().isWorldLoaded()) continue;
+            if(entry.getValue().isCancelled()){
+                removeBreakerSound(entry.getKey());
+                continue;
+            }
             entry.getValue().cancel();
-            breakerPlaySound.remove(entry.getKey());
+            removeBreakerSound(entry.getKey());
         }
     }
 
@@ -99,9 +128,9 @@ public class NoteBlockSoundsListener implements Listener {
         final Block block = event.getBlock();
         Location location = block.getLocation().toCenterLocation();
 
-        if (breakerPlaySound.containsKey(location)) {
-            breakerPlaySound.get(location).cancel();
-            breakerPlaySound.remove(location);
+        if (breakerPlaySound.containsKey(block)) {
+            BreakerSound sound = removeBreakerSound(block);
+            sound.cancel();
         }
 
         CruxBlock crux = registry.getByBlock(block);
@@ -118,11 +147,8 @@ public class NoteBlockSoundsListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockDamageAbort(BlockDamageAbortEvent event) {
-        Location location = event.getBlock().getLocation().toCenterLocation();
-        if (breakerPlaySound.containsKey(location)) {
-            breakerPlaySound.get(location).cancel();
-            breakerPlaySound.remove(location);
-        }
+        BreakerSound sound = removeBreakerSound(event.getBlock());
+        if(sound != null) sound.cancel();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -140,10 +166,21 @@ public class NoteBlockSoundsListener implements Listener {
         if(soundGroup==null) return;
         CreateSound sound = soundGroup.getHitSound();
         if(sound==null) return;
-        if (breakerPlaySound.containsKey(location)) return;
+        if (breakerPlaySound.containsKey(block)) return;
 
         BukkitTask task = plugin.getServer().getScheduler().runTaskTimer(plugin, () -> sound.playAt(location), 2L, 4L);
-        breakerPlaySound.put(location, task);
+        setBreakerSound(new BreakerSound(event.getPlayer().getUniqueId(), block, task));
+        //breakerPlaySound.put(block, task);
     }
 
+
+    private record BreakerSound(UUID uuid, Block location, BukkitTask task){
+        public boolean isCancelled(){
+            return task.isCancelled();
+        }
+
+        public void cancel(){
+            task.cancel();
+        }
+    }
 }
