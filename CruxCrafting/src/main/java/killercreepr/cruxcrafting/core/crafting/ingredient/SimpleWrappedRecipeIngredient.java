@@ -30,9 +30,10 @@ public class SimpleWrappedRecipeIngredient implements CruxRecipeIngredient {
 
     @Override
     public @Nullable List<ItemStack> getItemDisplay() {
-        if(ingredient.getItemDisplay() == null) return null;
+        var display = ingredient.getItemDisplay();
+        if(display == null) return null;
         List<ItemStack> list = new ArrayList<>();
-        for(ItemStack i : ingredient.getItemDisplay()){
+        for(ItemStack i : display){
             i = i.clone();
             i.setAmount(amount);
             list.add(i);

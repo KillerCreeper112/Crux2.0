@@ -56,7 +56,8 @@ public class SimpleFileCruxRecipeIngredient extends SimpleFileHandler<CruxRecipe
 
             ItemPredicate predicate = ctx.getRegistry().deserializeFromFile(ItemPredicate.class, e);
             if(predicate==null) return null;
-            return new SimpleRecipeIngredient(predicate, 1, null);
+            return new SimpleRecipeIngredient(predicate, 1,
+                predicate instanceof ItemListHolder h ? h.getItemValues() : null);
         }
         if(key == null) key = ctx.getRegistry().deserializeFromFile(Key.class, o.get("key"));
         String type = o.getObject(String.class, "ingredient_type");

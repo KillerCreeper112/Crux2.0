@@ -1,10 +1,13 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
+import com.destroystokyo.paper.MaterialSetTag;
+import com.destroystokyo.paper.MaterialTags;
 import killercreepr.crux.api.item.tag.ItemTag;
 import killercreepr.crux.api.item.tag.ItemTypeTag;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.item.tag.SimpleItemTypeTag;
 import killercreepr.crux.core.registries.CruxRegistries;
+import killercreepr.crux.core.util.CruxKey;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileArray;
@@ -13,10 +16,7 @@ import killercreepr.cruxconfig.config.common.element.FileGeneric;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.SimpleFileHandler;
 import net.kyori.adventure.key.Key;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Tag;
+import org.bukkit.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -80,9 +80,22 @@ public class FileItemTag extends SimpleFileHandler<ItemTag> {
         a.forEach(ele ->{
             String itemKey = ele.getAsString();
             if(itemKey.startsWith("#")){
-                ItemTag itemTag = CruxRegistries.ITEM_TAG.get(Crux.key(itemKey.substring(1)));
+                Key parsedKey = Crux.key(itemKey.substring(1));
+                ItemTag itemTag = CruxRegistries.ITEM_TAG.get(parsedKey);
                 if(itemTag instanceof ItemTypeTag tag) values.addAll(tag.getTypes());
-                else Crux.log(Level.WARNING, "Could not find tag, " + itemKey + "!");
+                else{
+                    var tag = Bukkit.getTag(Tag.REGISTRY_BLOCKS, CruxKey.key(parsedKey), Material.class);
+                    if(tag == null){
+                        tag = Bukkit.getTag(Tag.REGISTRY_ITEMS, CruxKey.key(parsedKey), Material.class);
+                    }
+                    if(tag == null){
+                        Crux.log(Level.WARNING, "Could not find tag, " + itemKey + "!");
+                    }else{
+                        for(Material m : tag.getValues()){
+                            values.add(m.key());
+                        }
+                    }
+                }
                 return;
             }
             values.add(Crux.key(ele.getAsString()));
