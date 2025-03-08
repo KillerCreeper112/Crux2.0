@@ -1,9 +1,13 @@
 package killercreepr.cruxblocks.core.config.handler.component;
 
+import killercreepr.crux.api.block.CruxBlockWrapper;
 import killercreepr.crux.api.block.predicate.BlockPredicate;
 import killercreepr.crux.api.block.sound.CreateBlockSoundGroup;
+import killercreepr.crux.api.communication.CreateSound;
 import killercreepr.crux.api.component.DataComponentType;
 import killercreepr.crux.api.component.TypedDataComponent;
+import killercreepr.crux.api.item.predicate.ItemPredicate;
+import killercreepr.crux.api.loot.item.ItemLootTable;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.math.BlockPos;
@@ -11,8 +15,10 @@ import killercreepr.crux.core.util.CruxDirection;
 import killercreepr.cruxblocks.api.block.component.*;
 import killercreepr.cruxblocks.core.block.component.CruxBlockComponents;
 import killercreepr.cruxblocks.core.block.component.standard.EntitySpawnerComponent;
+import killercreepr.cruxblocks.core.block.component.standard.InteractHarvestableBlockComponent;
 import killercreepr.cruxblocks.core.block.component.standard.PlaceableCheckComponent;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileDataComponentType;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.FileItemLootTable;
 import killercreepr.cruxconfig.config.bukkit.registry.FileDataComponentRegistry;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
@@ -162,6 +168,25 @@ public class CfgBlockComponents {
                 return TypedDataComponent.create(
                     CruxBlockComponents.PLACEABLE_CHECK,
                     new PlaceableCheckComponent(map)
+                );
+            }
+        });
+
+        registry.register("interact_harvestable", new FileDataComponentType<InteractHarvestableBlockComponent>() {
+            @Override
+            public @Nullable TypedDataComponent<InteractHarvestableBlockComponent> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
+                FileRegistry reg = ctx.getRegistry();
+                return TypedDataComponent.create(
+                    CruxBlockComponents.INTERACT_HARVESTABLE,
+                    new InteractHarvestableBlockComponent(
+                        reg.deserializeFromFile(ItemPredicate.class, e.get("item")),
+                        reg.deserializeFromFile(String.class, e.get("interact_type")),
+                        e.getOrDefaultObject("break_block", false),
+                        reg.deserializeFromFile(CruxBlockWrapper.class, e.get("replace_with")),
+                        reg.deserializeFromFile(CreateSound.class, e.get("sound")),
+                        reg.deserializeFromFile(ItemLootTable.class, e.get("item_drops")),
+                        e.getOrDefaultObject("item_damage", 0)
+                    )
                 );
             }
         });

@@ -6,6 +6,8 @@ import killercreepr.crux.api.loot.LootTable;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxblocks.api.block.CruxBlock;
 import killercreepr.cruxblocks.api.block.active.ActiveCruxBlock;
+import killercreepr.cruxblocks.api.block.active.ActiveCruxInteractable;
+import killercreepr.cruxblocks.api.block.component.CruxInteractableBlockComponent;
 import killercreepr.cruxblocks.api.item.KeyedItemProvider;
 import killercreepr.cruxblocks.api.mining.user.Miner;
 import killercreepr.cruxblocks.core.CruxBlocksModule;
@@ -14,6 +16,8 @@ import net.kyori.adventure.key.Key;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.Set;
 
-public class SimpleActiveCruxBlock implements ActiveCruxBlock {
+public class SimpleActiveCruxBlock implements ActiveCruxBlock, ActiveCruxInteractable {
     protected final @NotNull Block block;
     protected final @NotNull CruxBlock cruxBlock;
 
@@ -96,5 +100,14 @@ public class SimpleActiveCruxBlock implements ActiveCruxBlock {
     @Override
     public boolean isValid() {
         return cruxBlock.getTextureData().compareTexture(block);
+    }
+
+    @Override
+    public @Nullable Event.Result interact(@NotNull PlayerInteractEvent event) {
+        for(CruxInteractableBlockComponent comp : getCruxBlock().getComponents().getAllOfType(CruxInteractableBlockComponent.class)){
+            var result = comp.interact(this, event);
+            if(result != null) return result;
+        }
+        return null;
     }
 }

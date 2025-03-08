@@ -5,7 +5,9 @@ import killercreepr.crux.api.loot.LootPool;
 import killercreepr.crux.api.loot.item.ItemLootPool;
 import killercreepr.crux.api.loot.item.ItemLootTable;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.loot.item.SimpleItemLootTable;
+import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -26,7 +28,12 @@ public class FileItemLootTable implements FileObjectHandler<ItemLootTable> {
 
     @Override
     public @Nullable ItemLootTable deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
-        if(!(e instanceof FileObject o)) return null;
+        if(!(e instanceof FileObject o)){
+            String s = ctx.getRegistry().deserializeFromFile(String.class, e);
+            if(s == null) return null;
+            if(s.startsWith("#")) s = s.substring(1);
+            return (ItemLootTable) CruxRegistries.ITEM_LOOT_TABLE.get(Crux.key(s));
+        }
         FileRegistry registry = ctx.getRegistry();
         Key key = registry.deserializeFromFile(Key.class, o.get("key"));
         if(key==null) return null;

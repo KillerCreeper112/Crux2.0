@@ -13,6 +13,7 @@ import killercreepr.cruxblocks.api.block.component.DirectionalGroup;
 import killercreepr.cruxblocks.api.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.api.structure.component.StructureCruxBlockPlaceInsideComponent;
 import killercreepr.cruxblocks.core.block.component.standard.EntitySpawnerComponent;
+import killercreepr.cruxblocks.core.block.component.standard.InteractHarvestableBlockComponent;
 import killercreepr.cruxblocks.core.block.component.standard.PlaceableCheckComponent;
 import killercreepr.cruxblocks.core.component.PlacedCustomBlocksComponent;
 import killercreepr.cruxblocks.core.registries.CruxBlocksRegistries;
@@ -62,6 +63,9 @@ public class CruxBlockComponents {
     public static final DataComponentType<PlacedCustomBlocksComponent> PLACED_CUSTOM_BLOCKS = register("structure/placed_custom_blocks",
         builder -> builder);
     public static final DataComponentType<StructureCruxBlockPlaceInsideComponent> CRUX_BLOCK_PLACE_INSIDE = register("structure/crux_block_place_inside",
+        builder -> builder);
+
+    public static final DataComponentType<InteractHarvestableBlockComponent> INTERACT_HARVESTABLE = register("interact_harvestable",
         builder -> builder);
 
     private static <T> DataComponentType<T> register(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator){
