@@ -1,6 +1,7 @@
 package killercreepr.cruxattributes.core.text.tags;
 
 import killercreepr.crux.api.data.Holder;
+import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.text.format.FormatPrefix;
 import killercreepr.crux.api.text.hook.ObjectTag;
 import killercreepr.crux.api.text.resolver.StringListResolver;
@@ -13,6 +14,7 @@ import killercreepr.cruxattributes.api.attribute.CruxAttributeInstance;
 import killercreepr.cruxattributes.api.attribute.CruxAttributeModifier;
 import killercreepr.cruxattributes.api.equipment.CruxSlotGroup;
 import killercreepr.cruxattributes.api.values.ValuesProvider;
+import killercreepr.cruxattributes.core.component.CruxAttributeComponents;
 import net.kyori.adventure.key.Key;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +43,9 @@ public class ItemStackTags implements ObjectTag<ItemStack> {
     public @Nullable TagContainer<StringListResolver> requestStringLists(@NotNull ItemStack object, @NotNull TagParser tagParser) {
         return TagContainer.stringList(tagParser)
             .add(Tag.stringList("attributes", (args,ctx) ->{
-                Collection<CruxAttributeInstance> instances = CruxAttribute.getInstances(object);
+                var comp = CruxItem.wrap(object).getOrDefaultData(CruxAttributeComponents.CRUX_ATTRIBUTES);
+                if(comp == null) return List.of();
+                Collection<CruxAttributeInstance> instances = comp.getAttributeInstances();
                 if(instances.isEmpty()) return List.of();
 
                 List<String> attributeFormat = this.cfg.value().CRUX_ATTRIBUTES_ITEM_FORMAT().value();

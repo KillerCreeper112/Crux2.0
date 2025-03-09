@@ -26,7 +26,7 @@ public class CruxAttributeListener implements Listener {
      */
     private void applyModifiersFromItem(@NotNull Player p, @NotNull ItemStack i, @NotNull CruxSlot mainSlot){
         CruxItem crux = CruxItem.wrap(i);
-        CruxAttributeContainer container = crux.get(CruxAttributeComponents.CRUX_ATTRIBUTES);
+        CruxAttributeContainer container = crux.getOrDefaultData(CruxAttributeComponents.CRUX_ATTRIBUTES);
         if(container == null) return;
 
         for(CruxAttributeInstance a : container.getAttributeInstances()){
