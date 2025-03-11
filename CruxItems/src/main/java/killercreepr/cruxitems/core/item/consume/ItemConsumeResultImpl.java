@@ -51,4 +51,40 @@ public class ItemConsumeResultImpl implements ItemConsumeResult {
         return item;
     }
 
+    public static class Builder implements ItemConsumeResult.Builder {
+        protected Boolean cancel;
+        protected boolean successful;
+        protected ItemStack resultItem;
+        protected ItemStack item;
+        @Override
+        public ItemConsumeResult.Builder cancel(Boolean cancel) {
+            this.cancel = cancel;
+            return this;
+        }
+
+        @Override
+        public ItemConsumeResult.Builder successful(boolean successful) {
+            this.successful = successful;
+            return this;
+        }
+
+        @Override
+        public ItemConsumeResult.Builder resultItem(ItemStack resultItem) {
+            this.resultItem = resultItem;
+            return this;
+        }
+
+        @Override
+        public ItemConsumeResult.Builder item(ItemStack item) {
+            this.item = item;
+            return this;
+        }
+
+        @Override
+        public ItemConsumeResult build() {
+            return new ItemConsumeResultImpl(
+                cancel, resultItem, successful, resultItem != null, item, item != null
+            );
+        }
+    }
 }

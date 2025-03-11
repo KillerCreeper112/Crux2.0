@@ -12,6 +12,10 @@ public interface ItemConsumeResult extends GenericItemEventResult {
         return new ItemConsumeResultImpl(null, null,  true, false, null, false);
     }
 
+    static Builder builder(){
+        return new ItemConsumeResultImpl.Builder();
+    }
+
     boolean successful();
     boolean replaceResultItem();
     boolean replaceItem();
@@ -22,5 +26,7 @@ public interface ItemConsumeResult extends GenericItemEventResult {
         Builder cancel(Boolean cancel);
         Builder successful(boolean successful);
         Builder resultItem(ItemStack resultItem);
+        Builder item(ItemStack item);
+        ItemConsumeResult build();
     }
 }
