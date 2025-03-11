@@ -221,7 +221,7 @@ public class ItemInteractionListener implements Listener {
         Player p = event.getPlayer();
         CruxItem crux = CruxItem.wrap(event.getItem());
 
-        ItemConsumeContext ctx = new ItemConsumeContextImpl(p, crux, event.getReplacement());
+        ItemConsumeContext ctx = new ItemConsumeContextImpl(p, crux, event.getReplacement(), event.getHand());
         ItemConsumeResult result = genericConsume(ctx);
         if(result==null) return;
 
