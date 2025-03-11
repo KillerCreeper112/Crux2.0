@@ -6,6 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 public interface InteractableComponent {
     @NotNull
-    ItemUseResult onUse(@NotNull ItemUseContext ctx);
-    boolean isUsable(@NotNull ItemUseContext ctx);
+    ItemUseResult onInteract(@NotNull ItemUseContext ctx);
+    boolean isInteractable(@NotNull ItemUseContext ctx);
 }

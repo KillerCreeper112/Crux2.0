@@ -72,11 +72,11 @@ public class ItemInteractionListener implements Listener {
 
         ItemUseResult defaultResult = preUseEvent.getUseResult();
         for(InteractableComponent c : list){
-            if(!c.isUsable(ctx)) continue;
+            if(!c.isInteractable(ctx)) continue;
             InteractableComponentUseEvent useEvent = new InteractableComponentUseEvent(ctx, c);
             if(!useEvent.callEvent()) continue;
 
-            ItemUseResult result = c.onUse(ctx);
+            ItemUseResult result = c.onInteract(ctx);
             if(!result.successful()) continue;
             return result;
         }
@@ -205,11 +205,11 @@ public class ItemInteractionListener implements Listener {
 
         ItemConsumeResult defaultResult = preUseEvent.getUseResult();
         for(ConsumableComponent c : list){
-            if(!c.isUsable(ctx)) continue;
+            if(!c.isConsumable(ctx)) continue;
             ConsumableComponentUseEvent useEvent = new ConsumableComponentUseEvent(ctx, c);
             if(!useEvent.callEvent()) continue;
 
-            ItemConsumeResult result = c.onUse(ctx);
+            ItemConsumeResult result = c.onConsume(ctx);
             if(!result.successful()) continue;
             return result;
         }

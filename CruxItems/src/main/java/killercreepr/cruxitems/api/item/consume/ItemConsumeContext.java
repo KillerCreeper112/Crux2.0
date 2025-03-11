@@ -1,15 +1,9 @@
 package killercreepr.cruxitems.api.item.consume;
 
-import killercreepr.crux.api.item.CruxItem;
-import org.bukkit.entity.Player;
+import killercreepr.cruxitems.api.item.context.PlayerItemedContext;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface ItemConsumeContext {
-    @NotNull
-    Player getPlayer();
-    @NotNull
-    CruxItem getItem();
+public interface ItemConsumeContext extends PlayerItemedContext {
     @Nullable ItemStack getReplacement();
 }

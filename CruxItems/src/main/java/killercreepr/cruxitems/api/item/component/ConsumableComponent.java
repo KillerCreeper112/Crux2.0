@@ -6,6 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 public interface ConsumableComponent {
     @NotNull
-    ItemConsumeResult onUse(@NotNull ItemConsumeContext ctx);
-    boolean isUsable(@NotNull ItemConsumeContext ctx);
+    ItemConsumeResult onConsume(@NotNull ItemConsumeContext ctx);
+    boolean isConsumable(@NotNull ItemConsumeContext ctx);
 }
