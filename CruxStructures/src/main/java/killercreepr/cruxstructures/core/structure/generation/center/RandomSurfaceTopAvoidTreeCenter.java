@@ -47,7 +47,7 @@ public class RandomSurfaceTopAvoidTreeCenter implements StructureCenter {
         if(isLeaves(block)) return false;
         if(!block.isEmpty() && !block.isReplaceable()) return false;
         Block ground = block.getRelative(BlockFace.DOWN);
-        return !isLeaves(ground) && ground.isSolid();
+        return !isLeaves(ground) && !ground.isLiquid() && ground.isSolid();
     }
 
     public boolean isLeaves(@NotNull Block block){

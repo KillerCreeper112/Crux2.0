@@ -34,7 +34,7 @@ public class RandomSurfaceCenter implements StructureCenter {
             int z = chunkZ + CruxMath.random(0, 15);
             int y = randomY(world, x, z);
             Block block = world.getBlockAt(x, y, z);
-            if(!block.getType().isSolid()) continue;
+            if(!block.getType().isSolid() || block.isLiquid()) continue;
             return block.getLocation();
         }
         return null;
@@ -49,7 +49,7 @@ public class RandomSurfaceCenter implements StructureCenter {
         return maxAttempts;
     }
 
-    public @Nullable NumberProvider getyLimit() {
+    public @Nullable NumberProvider getYLimit() {
         return yLimit;
     }
 }
