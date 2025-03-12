@@ -354,6 +354,7 @@ public class SimpleCruxItem implements CruxItem {
         CruxItemType itemType = Crux.handlers().item().getItemType(item);
         if(itemType == null || itemType.getDefaultData().isEmpty()) return getAllOfType(type);
         Collection<T> list = new ArrayList<>(getAllOfType(type));
+        //todo needs reworking
         itemType.getDefaultData().forEach(defaultType ->{
             if(has(defaultType)) return;
             Object value = itemType.getDefaultData(defaultType);
@@ -368,8 +369,10 @@ public class SimpleCruxItem implements CruxItem {
         forEachAllOfType(type, consumer);
         CruxItemType itemType = Crux.handlers().item().getItemType(item);
         if(itemType == null || itemType.getDefaultData().isEmpty()){
+            forEachAllOfType(type, consumer);
             return;
         }
+        //todo needs reworking
         itemType.getDefaultData().forEach(defaultType ->{
             if(has(defaultType)) return;
             Object value = itemType.getDefaultData(defaultType);
@@ -381,7 +384,10 @@ public class SimpleCruxItem implements CruxItem {
     @Override
     public <T> void forEachOrDefaultData(Consumer<TypedDataComponent<?>> consumer) {
         CruxItemType itemType = Crux.handlers().item().getItemType(item);
-        if(itemType == null) return;
+        if(itemType == null || itemType.getDefaultData().isEmpty()){
+            forEach(consumer);
+            return;
+        }
 
         forEach(typed ->{
             if(itemType.hasDefaultData(typed.getType())) return;
@@ -398,10 +404,7 @@ public class SimpleCruxItem implements CruxItem {
     public <T> void forEachDefaultData(Consumer<TypedDataComponent<?>> consumer) {
         CruxItemType itemType = Crux.handlers().item().getItemType(item);
         if(itemType == null || itemType.getDefaultData().isEmpty()) return;
-        itemType.getDefaultData().forEach(type ->{
-            TypedDataComponent<?> typed = TypedDataComponent.createUnchecked(type, itemType.getDefaultData(type));
-            consumer.accept(typed);
-        });
+        itemType.forEachDefaultData(consumer);
     }
 
     @Override
