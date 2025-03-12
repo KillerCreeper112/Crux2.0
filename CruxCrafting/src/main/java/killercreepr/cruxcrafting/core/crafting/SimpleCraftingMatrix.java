@@ -29,7 +29,7 @@ public class SimpleCraftingMatrix implements CruxCraftingMatrix {
 
     @Override
     public int getIngredientCount() {
-        return matrix.size();
+        return rawMatrix.size();
     }
 
     @Override
