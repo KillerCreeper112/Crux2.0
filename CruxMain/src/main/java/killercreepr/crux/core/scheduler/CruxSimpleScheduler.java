@@ -2,6 +2,7 @@ package killercreepr.crux.core.scheduler;
 
 import killercreepr.crux.api.scheduler.CruxScheduler;
 import killercreepr.crux.core.Crux;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
@@ -46,6 +47,13 @@ public class CruxSimpleScheduler implements CruxScheduler {
         Plugin p = plugin();
         if(p.isEnabled()) scheduler().runTask(p, task);
         else task.run();
+        return this;
+    }
+
+    @Override
+    public CruxScheduler runTaskMain(@NotNull Runnable task) {
+        if(Bukkit.isPrimaryThread()) task.run();
+        else return runTask(task);
         return this;
     }
 

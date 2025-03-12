@@ -2,11 +2,13 @@ package killercreepr.cruxitems.core.item;
 
 import killercreepr.crux.api.component.DataComponentAccessor;
 import killercreepr.crux.api.component.DataComponentType;
+import killercreepr.crux.api.component.TypedDataComponent;
 import killercreepr.crux.api.item.CruxItemType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.function.Consumer;
 
 public class CfgItemType implements CruxItemType {
     protected final DataComponentAccessor data;
@@ -27,6 +29,13 @@ public class CfgItemType implements CruxItemType {
     @Override
     public @NotNull Collection<DataComponentType<?>> getDefaultData() {
         return data.keySet();
+    }
+
+    @Override
+    public void forEachDefaultData(@NotNull Consumer<TypedDataComponent<?>> consumer) {
+        for (TypedDataComponent<?> typed : data) {
+            consumer.accept(typed);
+        }
     }
 
     @Override

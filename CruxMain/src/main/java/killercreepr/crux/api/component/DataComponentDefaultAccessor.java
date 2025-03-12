@@ -10,5 +10,7 @@ public interface DataComponentDefaultAccessor {
 
     <T> Collection<T> getAllOfTypeOrDefaultData(Class<T> type);
     <T> void forEachAllOfTypeOrDefaultData(Class<T> type, Consumer<T> consumer);
+    <T> void forEachOrDefaultData(Consumer<TypedDataComponent<?>> consumer);
+    <T> void forEachDefaultData(Consumer<TypedDataComponent<?>> consumer);
     boolean isDataOverridden(DataComponentType<?> type);
 }

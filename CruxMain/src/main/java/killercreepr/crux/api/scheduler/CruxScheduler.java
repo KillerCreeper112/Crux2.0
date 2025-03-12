@@ -7,6 +7,12 @@ import java.util.function.Consumer;
 
 public interface CruxScheduler {
     CruxScheduler runTask(@NotNull Runnable task);
+
+    /**
+     * Runs the task immediately if on the main thread,
+     * otherwise will schedule it.
+     */
+    CruxScheduler runTaskMain(@NotNull Runnable task);
     CruxScheduler runTask(@NotNull Consumer<? super BukkitTask> task);
     CruxScheduler runTaskLater(@NotNull Runnable task, long delay);
     CruxScheduler runTaskLater(@NotNull Consumer<? super BukkitTask> task, long delay);

@@ -1,6 +1,7 @@
 package killercreepr.crux.core.item;
 
 import killercreepr.crux.api.component.DataComponentType;
+import killercreepr.crux.api.component.TypedDataComponent;
 import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.item.CruxItemType;
 import killercreepr.crux.api.text.format.FormatSerializer;
@@ -374,6 +375,32 @@ public class SimpleCruxItem implements CruxItem {
             Object value = itemType.getDefaultData(defaultType);
             if(!type.isAssignableFrom(value.getClass())) return;
             consumer.accept(type.cast(value));
+        });
+    }
+
+    @Override
+    public <T> void forEachOrDefaultData(Consumer<TypedDataComponent<?>> consumer) {
+        CruxItemType itemType = Crux.handlers().item().getItemType(item);
+        if(itemType == null) return;
+
+        forEach(typed ->{
+            if(itemType.hasDefaultData(typed.getType())) return;
+            consumer.accept(typed);
+        });
+
+        itemType.forEachDefaultData(e ->{
+            if(has(e.getType())) return;
+            consumer.accept(e);
+        });
+    }
+
+    @Override
+    public <T> void forEachDefaultData(Consumer<TypedDataComponent<?>> consumer) {
+        CruxItemType itemType = Crux.handlers().item().getItemType(item);
+        if(itemType == null || itemType.getDefaultData().isEmpty()) return;
+        itemType.getDefaultData().forEach(type ->{
+            TypedDataComponent<?> typed = TypedDataComponent.createUnchecked(type, itemType.getDefaultData(type));
+            consumer.accept(typed);
         });
     }
 
