@@ -8,9 +8,12 @@ import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.core.util.CruxMath;
+import killercreepr.cruxcrafting.api.crafting.CrafterHolder;
 import killercreepr.cruxcrafting.api.crafting.CruxCraftingRecipeManager;
 import killercreepr.cruxcrafting.api.crafting.recipe.CruxCraftingRecipe;
 import killercreepr.cruxmenus.CruxMenusModule;
+import killercreepr.cruxmenus.api.menu.Menu;
+import killercreepr.cruxmenus.api.menu.container.MenuContainer;
 import killercreepr.cruxmenus.api.menu.holder.MenuHolder;
 import killercreepr.cruxmenus.core.menu.ConfigMenu;
 import killercreepr.cruxmenus.core.menu.slot.SimpleFixedSlot;
@@ -19,6 +22,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,8 +59,8 @@ public class GenericRecipeViewMenu extends ConfigMenu {
         return info.getOrThrow("crafting_recipe", CruxCraftingRecipe.class);
     }
 
-    public MenuHolder getPreviousMenuHolder(){
-        return info.getOrThrow("crafting_recipe_list_menu", MenuHolder.class);
+    public @Nullable MenuContainer menuContainer(){
+        return info.get("menu_container", MenuContainer.class);
     }
 
     protected CraftingRecipeMenuViewer recipeViewer;
@@ -66,6 +70,25 @@ public class GenericRecipeViewMenu extends ConfigMenu {
         recipeViewer = new CraftingRecipeMenuViewer(inventory, getRecipe());
         recipeViewer.display();
         setButtons();
+    }
+
+    @Override
+    public void onMenuClick(@NotNull InventoryClickEvent event) {
+        super.onMenuClick(event);
+
+        int slot = event.getSlot();
+        if(recipeViewer.isIngredientSlot(slot) || recipeViewer.isResultSlot(slot)){
+            MenuContainer container = menuContainer();
+            if(container==null) return;
+            for (Menu menu : container.getOpenedMenus()) {
+                if(!(menu instanceof CrafterHolder.Crafting crafter)) continue;
+                CruxCraftingRecipe recipe = getRecipe();
+                var viewer = crafter.buildRecipeViewer(recipe);
+                viewer.display();
+                container.addOpenedMenu(menu.open(event.getWhoClicked()));
+                return;
+            }
+        }
     }
 
     public void setButtons(){
@@ -86,7 +109,7 @@ public class GenericRecipeViewMenu extends ConfigMenu {
             @Override
             public void onClick(@NotNull HumanEntity p, @NotNull InventoryClickEvent event) {
                 super.onClick(p, event);
-                getPreviousMenuHolder().open(p, info);
+                menuContainer().back(p);
                 CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
             }
         });

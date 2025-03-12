@@ -11,6 +11,7 @@ import killercreepr.cruxcrafting.api.crafting.recipe.CruxCraftingRecipe;
 import killercreepr.cruxmenus.CruxMenusModule;
 import killercreepr.cruxmenus.api.menu.CfgMenu;
 import killercreepr.cruxmenus.api.menu.Menu;
+import killercreepr.cruxmenus.api.menu.container.MenuContainer;
 import killercreepr.cruxmenus.api.menu.module.MenuModule;
 import killercreepr.cruxmenus.api.menu.slot.Slot;
 import killercreepr.cruxmenus.core.menu.module.standard.GenericActivePagedMenuModule;
@@ -52,12 +53,15 @@ public class ActivePagedCruxCraftingRecipeMenuModule extends GenericActivePagedM
                 CruxMenusModule menus = CruxRegistries.MODULES.getModuleOrThrow(CruxMenusModule.class);
                 var holder = menus.menuRegistry().menuHolders().get(Crux.key("crafting/recipe/view"));
                 if(holder != null){
-                    holder.open(p, DataExchange.builder(((CfgMenu) menu).info())
+                    MenuContainer container = menu instanceof CfgMenu d ? d.info().get("menu_container", MenuContainer.class) : null;
+
+                    var opened = holder.open(p, DataExchange.builder(((CfgMenu) menu).info())
                         .put("crafting_recipe", value)
                         .put("crafting_recipe_list_menu", ((CfgMenu) menu).getHolder())
                         .put("crafting_recipe_manager", ((PagedCruxCraftingRecipesMenuModule) module).getRecipeManager())
                         .build()
                     );
+                    if(container != null) container.addOpenedMenu(opened);
                     CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
                 }
             }

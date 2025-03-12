@@ -11,6 +11,7 @@ import killercreepr.crux.core.text.resolver.Tag;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxmenus.api.menu.Menu;
 import killercreepr.cruxmenus.api.menu.module.MenuModule;
+import killercreepr.cruxmenus.api.menu.module.active.IActivePagedMenuModule;
 import killercreepr.cruxmenus.core.menu.module.SimpleActiveMenuModuled;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public abstract class GenericActivePagedMenuModule<T> extends SimpleActiveMenuModuled {
+public abstract class GenericActivePagedMenuModule<T> extends SimpleActiveMenuModuled implements IActivePagedMenuModule<T> {
     protected final @NotNull NumberProvider indexes;
     protected final @Nullable Predicate<T> valueFilter;
     protected final @NotNull Holder<List<T>> values;

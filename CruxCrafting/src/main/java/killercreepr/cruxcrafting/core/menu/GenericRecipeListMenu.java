@@ -8,10 +8,13 @@ import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.Crux;
 import killercreepr.cruxcrafting.api.crafting.CruxCraftingRecipeManager;
 import killercreepr.cruxcrafting.core.menu.module.PagedCruxCraftingRecipesMenuModule;
+import killercreepr.cruxmenus.api.menu.container.MenuContainer;
 import killercreepr.cruxmenus.api.menu.holder.MenuHolder;
+import killercreepr.cruxmenus.api.menu.module.active.IActivePagedMenuModule;
 import killercreepr.cruxmenus.core.menu.ConfigMenu;
 import killercreepr.cruxmenus.core.menu.module.standard.ActivePagedMenuModule;
 import killercreepr.cruxmenus.core.menu.slot.SimpleFixedSlot;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.HumanEntity;
@@ -28,8 +31,8 @@ public class GenericRecipeListMenu extends ConfigMenu {
         super(holder, info, tags);
     }
 
-    public @Nullable MenuHolder previousMenu(){
-        return info.get("previous_menu_holder", MenuHolder.class);
+    public @Nullable MenuContainer menuContainer(){
+        return info.get("menu_container", MenuContainer.class);
     }
 
     @Override
@@ -51,7 +54,7 @@ public class GenericRecipeListMenu extends ConfigMenu {
             @Override
             public void onClick(@NotNull HumanEntity p, @NotNull InventoryClickEvent event) {
                 super.onClick(p, event);
-                ActivePagedMenuModule<?> paged = (ActivePagedMenuModule<?>) module;
+                IActivePagedMenuModule<?> paged = (IActivePagedMenuModule<?>) module;
                 paged.addPage(-1);
             }
         });
@@ -59,7 +62,7 @@ public class GenericRecipeListMenu extends ConfigMenu {
             @Override
             public void onClick(@NotNull HumanEntity p, @NotNull InventoryClickEvent event) {
                 super.onClick(p, event);
-                ActivePagedMenuModule<?> paged = (ActivePagedMenuModule<?>) module;
+                IActivePagedMenuModule<?> paged = (IActivePagedMenuModule<?>) module;
                 paged.addPage(1);
             }
         });
@@ -73,7 +76,7 @@ public class GenericRecipeListMenu extends ConfigMenu {
     public void onRefresh() {
         super.onRefresh();
 
-        if(previousMenu() == null) return;
+        if(menuContainer() == null) return;
         setItem(inventory.getSize()-5, CruxItem.create(Material.ARROW)
             .itemName("Back")
             .itemModel(Crux.key("gui/arrow_down"))
@@ -81,9 +84,9 @@ public class GenericRecipeListMenu extends ConfigMenu {
             @Override
             public void onClick(@NotNull HumanEntity p, @NotNull InventoryClickEvent event) {
                 super.onClick(p, event);
-                MenuHolder previous = previousMenu();
+                var previous = menuContainer();
                 if(previous==null) return;
-                previous.open(p);
+                previous.back(p);
                 CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
             }
         });

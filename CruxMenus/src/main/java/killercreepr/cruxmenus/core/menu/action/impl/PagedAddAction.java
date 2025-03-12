@@ -3,6 +3,7 @@ package killercreepr.cruxmenus.core.menu.action.impl;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxmenus.api.menu.CfgMenu;
 import killercreepr.cruxmenus.api.menu.contex.ActionContext;
+import killercreepr.cruxmenus.api.menu.module.active.IActivePagedMenuModule;
 import killercreepr.cruxmenus.core.menu.action.SimpleMenuAction;
 import killercreepr.cruxmenus.core.menu.module.standard.ActivePagedMenuModule;
 import net.kyori.adventure.key.Key;
@@ -17,8 +18,8 @@ public class PagedAddAction extends SimpleMenuAction {
     public boolean execute(@NotNull ActionContext ctx, @NotNull String[] args) {
         String id = args[0];
         CfgMenu menu = ctx.getMenu();
-        if(!(menu.getModules().getByID(id) instanceof ActivePagedMenuModule<?> paged))
-            throw new UnsupportedOperationException("CfgMenu does not have a PagedMenuModule! " + id);
+        if(!(menu.getModules().getByID(id) instanceof IActivePagedMenuModule<?> paged))
+            throw new UnsupportedOperationException("CfgMenu does not have a IActivePagedMenuModule! " + id);
 
         int amount;
         if(args.length > 1) amount = (int) CruxMath.evaluate(args[1]);

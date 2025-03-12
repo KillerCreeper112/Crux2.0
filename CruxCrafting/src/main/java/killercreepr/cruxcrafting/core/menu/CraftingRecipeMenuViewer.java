@@ -7,6 +7,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +38,21 @@ public class CraftingRecipeMenuViewer {
         return new int[]{15};
     }
 
+    public boolean isIngredientSlot(int slot){
+        return Arrays.stream(getIngredientSlots()).anyMatch(d -> d == slot);
+    }
+    public boolean isResultSlot(int slot){
+        return Arrays.stream(getResultSlots()).anyMatch(d -> d == slot);
+    }
+
+    public int[] getIngredientSlots(){
+        return new int[]{
+            1, 2, 3,
+            10, 11, 12,
+            19, 20, 21
+        };
+    }
+
     public void setResultDisplay(int slot, @Nullable ItemStack display){
         inv.setItem(slot, display == null ? null : Crux.handlers().item().update(display));
     }
@@ -64,9 +80,10 @@ public class CraftingRecipeMenuViewer {
     }
 
     public int calculateSlotFromIngredientIndex(int index){
-        if(index <= 2) return index + 1;
+        /*if(index <= 2) return index + 1;
         if(index <= 5) return index + 7;
-        return index + 13;
+        return index + 13;*/
+        return getIngredientSlots()[index];
     }
 
     public void setIngredient(int index, CruxRecipeIngredient ingredient){
