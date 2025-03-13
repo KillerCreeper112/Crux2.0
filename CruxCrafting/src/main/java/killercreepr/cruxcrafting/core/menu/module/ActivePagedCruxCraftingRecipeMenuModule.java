@@ -47,7 +47,7 @@ public class ActivePagedCruxCraftingRecipeMenuModule extends GenericActivePagedM
         if(display.isEmpty()) return;
 
         if(menu instanceof CfgMenu m){
-            CruxCraftingRecipeManager manager = m.info().get("crux_crafting_manager", CruxCraftingRecipeManager.class);
+            CruxCraftingRecipeManager manager = m.info().get("crafting_recipe_manager", CruxCraftingRecipeManager.class);
             HumanEntity viewer = m.info().get("viewer", HumanEntity.class);
             if(viewer != null && manager != null){
                 if(!manager.hasRecipe(viewer, value)){
