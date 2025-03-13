@@ -150,4 +150,12 @@ public interface CruxItem extends Cloneable, PersistHolderComponentHandler, Data
     CruxItem item(@NotNull ItemStack item);
 
     @NotNull FormatSerializer getFormat();
+
+    CruxItem insertLore(int index, @Nullable Collection<Component> add);
+
+    CruxItem insertLore(int index, Component... add);
+
+    CruxItem insertLoreFromString(int index, @Nullable Collection<String> add);
+
+    CruxItem insertLoreFromString(int index, @Nullable String... add);
 }

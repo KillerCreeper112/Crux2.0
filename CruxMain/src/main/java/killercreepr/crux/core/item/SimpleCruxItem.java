@@ -108,6 +108,30 @@ public class SimpleCruxItem implements CruxItem {
         return editMeta(meta -> meta.removeItemFlags(flags));
     }
 
+    public SimpleCruxItem insertLore(int index, @Nullable Collection<Component> add){
+        if(add==null) return this;
+        List<Component> lore = lore();
+        if(lore == null) lore = new ArrayList<>(add);
+        else lore.addAll(index, add);
+        return lore(lore);
+    }
+
+    public SimpleCruxItem insertLore(int index, Component... add){
+        if(add==null || add.length < 1) return this;
+        return insertLore(index, Arrays.asList(add));
+    }
+
+    public SimpleCruxItem insertLoreFromString(int index, @Nullable Collection<String> add){
+        if(add==null) return this;
+        FormatParserContext context = buildFormatContext();
+        return insertLore(index, context.deserializeList(add));
+    }
+
+    public SimpleCruxItem insertLoreFromString(int index, @Nullable String... add){
+        if(add==null || add.length < 1) return this;
+        return insertLoreFromString(index, Arrays.asList(add));
+    }
+
     public SimpleCruxItem addLoreFromString(@Nullable Collection<String> lore){
         if(lore==null) return this;
         FormatParserContext context = buildFormatContext();
@@ -120,7 +144,7 @@ public class SimpleCruxItem implements CruxItem {
 
     public SimpleCruxItem addLoreFromString(@NotNull String @Nullable... lore){
         if(lore==null) return this;
-        return addLoreFromString(Arrays.stream(lore).toList());
+        return addLoreFromString(Arrays.asList(lore));
     }
 
     public SimpleCruxItem addLore(@Nullable Collection<Component> lore){

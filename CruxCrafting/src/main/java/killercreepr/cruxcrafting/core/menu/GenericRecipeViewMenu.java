@@ -12,6 +12,7 @@ import killercreepr.cruxcrafting.api.crafting.CrafterHolder;
 import killercreepr.cruxcrafting.api.crafting.CruxCraftingRecipeManager;
 import killercreepr.cruxcrafting.api.crafting.recipe.CruxCraftingRecipe;
 import killercreepr.cruxmenus.CruxMenusModule;
+import killercreepr.cruxmenus.api.menu.CfgMenu;
 import killercreepr.cruxmenus.api.menu.Menu;
 import killercreepr.cruxmenus.api.menu.container.MenuContainer;
 import killercreepr.cruxmenus.api.menu.holder.MenuHolder;
@@ -77,15 +78,20 @@ public class GenericRecipeViewMenu extends ConfigMenu {
         super.onMenuClick(event);
 
         int slot = event.getSlot();
-        if(recipeViewer.isIngredientSlot(slot) || recipeViewer.isResultSlot(slot)){
+        if(recipeViewer.isResultSlot(slot)){
             MenuContainer container = menuContainer();
             if(container==null) return;
             for (Menu menu : container.getOpenedMenus()) {
                 if(!(menu instanceof CrafterHolder.Crafting crafter)) continue;
                 CruxCraftingRecipe recipe = getRecipe();
                 var viewer = crafter.buildRecipeViewer(recipe);
-                viewer.display();
+                if(menu instanceof CfgMenu cfgMenu){
+                    cfgMenu.info(cfgMenu.info().append("selected_recipe", Holder.direct(recipe)));
+                }
                 container.addOpenedMenu(menu.open(event.getWhoClicked()));
+                viewer.display();
+                crafter.getCrafter().updateCraftingInv();
+                CreateSound.sound(Sound.BLOCK_DISPENSER_DISPENSE, 1.7f).playFor(event.getWhoClicked());
                 return;
             }
         }
