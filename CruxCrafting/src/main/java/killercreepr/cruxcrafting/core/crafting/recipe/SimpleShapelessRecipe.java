@@ -12,7 +12,6 @@ import killercreepr.cruxcrafting.api.crafting.recipe.CruxShapelessRecipe;
 import killercreepr.cruxcrafting.core.crafting.SimpleRecipeResult;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
-import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -77,6 +76,11 @@ public class SimpleShapelessRecipe implements CruxShapelessRecipe, Keyed {
             index++;
         }
         return map;
+    }
+
+    @Override
+    public @NotNull Collection<CruxRecipeIngredient> ingredients() {
+        return ingredients;
     }
 
     @Override

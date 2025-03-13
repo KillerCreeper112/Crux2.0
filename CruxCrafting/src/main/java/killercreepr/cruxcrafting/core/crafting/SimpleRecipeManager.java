@@ -4,6 +4,7 @@ import killercreepr.cruxcrafting.api.crafting.CruxRecipeManager;
 import killercreepr.cruxcrafting.api.crafting.recipe.CruxRecipe;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
+import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,8 +13,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class SimpleRecipeManager<T extends CruxRecipe> implements CruxRecipeManager<T> {
+public class SimpleRecipeManager<T extends CruxRecipe> implements CruxRecipeManager<T>, Keyed {
     protected final Map<Key, T> recipes = new HashMap<>();
+    protected final Key key;
+
+    public SimpleRecipeManager(Key key) {
+        this.key = key;
+    }
 
     @Override
     public @Nullable T getRecipe(Key key) {
@@ -41,9 +47,29 @@ public class SimpleRecipeManager<T extends CruxRecipe> implements CruxRecipeMana
         return recipes.values();
     }
 
+    @Override
+    public boolean hasRecipe(@NotNull Entity entity, @NotNull T recipe) {
+        return true;
+    }
+
+    @Override
+    public boolean grantRecipe(@NotNull Entity entity, @NotNull T recipe) {
+        return false;
+    }
+
+    @Override
+    public boolean revokeRecipe(@NotNull Entity entity, @NotNull T recipe) {
+        return false;
+    }
+
     @NotNull
     @Override
     public Iterator<T> iterator() {
         return recipes.values().iterator();
+    }
+
+    @Override
+    public @NotNull Key key() {
+        return key;
     }
 }

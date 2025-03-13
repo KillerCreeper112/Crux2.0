@@ -23,7 +23,6 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -84,14 +83,18 @@ public class GenericRecipeViewMenu extends ConfigMenu {
             for (Menu menu : container.getOpenedMenus()) {
                 if(!(menu instanceof CrafterHolder.Crafting crafter)) continue;
                 CruxCraftingRecipe recipe = getRecipe();
-                var viewer = crafter.buildRecipeViewer(recipe);
                 if(menu instanceof CfgMenu cfgMenu){
-                    cfgMenu.info(cfgMenu.info().append("selected_recipe", Holder.direct(recipe)));
+                    cfgMenu.info(
+                        info.append(cfgMenu.info()).append("selected_recipe", Holder.direct(recipe))
+                    );
+                    cfgMenu.refresh();
                 }
-                container.addOpenedMenu(menu.open(event.getWhoClicked()));
+                var viewer = crafter.buildRecipeViewer(recipe);
+                var p = event.getWhoClicked();
+                container.addOpenedMenu(menu.open(p));
                 viewer.display();
                 crafter.getCrafter().updateCraftingInv();
-                CreateSound.sound(Sound.BLOCK_DISPENSER_DISPENSE, 1.7f).playFor(event.getWhoClicked());
+                CreateSound.sound(Sound.BLOCK_DISPENSER_DISPENSE, 1.7f).playFor(p);
                 return;
             }
         }

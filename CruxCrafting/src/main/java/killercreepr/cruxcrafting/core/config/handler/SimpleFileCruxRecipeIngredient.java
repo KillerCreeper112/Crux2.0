@@ -1,7 +1,5 @@
 package killercreepr.cruxcrafting.core.config.handler;
 
-import com.destroystokyo.paper.MaterialSetTag;
-import com.destroystokyo.paper.MaterialTags;
 import com.google.common.reflect.TypeToken;
 import killercreepr.crux.api.item.ItemListHolder;
 import killercreepr.crux.api.item.dynamic.DynamicItem;

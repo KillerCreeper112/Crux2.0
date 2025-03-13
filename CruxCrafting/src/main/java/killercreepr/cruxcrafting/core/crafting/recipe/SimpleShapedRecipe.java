@@ -16,10 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SimpleShapedRecipe implements CruxShapedRecipe, Keyed {
     protected final Key key;
@@ -153,6 +150,11 @@ public class SimpleShapedRecipe implements CruxShapedRecipe, Keyed {
         });*/
 
         return map;
+    }
+
+    @Override
+    public @NotNull Collection<CruxRecipeIngredient> ingredients() {
+        return ingredients.values();
     }
 
     @Override
