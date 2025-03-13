@@ -3,10 +3,12 @@ package killercreepr.cruxcrafting.core.menu.module;
 import killercreepr.crux.api.communication.CreateSound;
 import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.data.Holder;
+import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.registries.CruxRegistries;
+import killercreepr.cruxcrafting.api.crafting.CruxCraftingRecipeManager;
 import killercreepr.cruxcrafting.api.crafting.recipe.CruxCraftingRecipe;
 import killercreepr.cruxmenus.CruxMenusModule;
 import killercreepr.cruxmenus.api.menu.CfgMenu;
@@ -16,6 +18,7 @@ import killercreepr.cruxmenus.api.menu.module.MenuModule;
 import killercreepr.cruxmenus.api.menu.slot.Slot;
 import killercreepr.cruxmenus.core.menu.module.standard.GenericActivePagedMenuModule;
 import killercreepr.cruxmenus.core.menu.slot.SimpleFixedSlot;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -42,6 +45,27 @@ public class ActivePagedCruxCraftingRecipeMenuModule extends GenericActivePagedM
     public void setPagedItem(@NotNull Menu menu, int slot, int index, int listIndex, @NotNull CruxCraftingRecipe value) {
         var display = value.getDisplayedResultItems();
         if(display.isEmpty()) return;
+
+        if(menu instanceof CfgMenu m){
+            CruxCraftingRecipeManager manager = m.info().get("crux_crafting_manager", CruxCraftingRecipeManager.class);
+            HumanEntity viewer = m.info().get("viewer", HumanEntity.class);
+            if(viewer != null && manager != null){
+                if(!manager.hasRecipe(viewer, value)){
+                    CruxItem item = CruxItem.create(Material.BARRIER)
+                        .itemName("<white>Unknown Recipe")
+                        .addLoreFromString(
+                            "<gray>Adventure and explore the world,",
+                            "<gray>gather ingredients to unlock",
+                            "<gray>custom recipes!"
+                        )
+                        .itemModel(Crux.key("gui/question_mark"));
+                    menu.setItem(slot, item.item());
+                    return;
+                }
+            }
+
+        }
+
         menu.setItem(slot, Crux.handlers().item().update(display.getFirst()), buildPagedItemSlot(menu, slot, value));
     }
 

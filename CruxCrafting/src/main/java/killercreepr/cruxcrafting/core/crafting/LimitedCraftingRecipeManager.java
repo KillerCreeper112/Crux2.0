@@ -18,6 +18,11 @@ public class LimitedCraftingRecipeManager extends SimpleRecipeManager<CruxCrafti
         memoryHolderKey = Crux.key(key.namespace() + ":holder/" + key.value());
     }
 
+
+    public Key getMemoryHolderKey() {
+        return memoryHolderKey;
+    }
+
     @Override
     public boolean hasRecipe(@NotNull Entity entity, @NotNull CruxCraftingRecipe recipe) {
         if(!(recipe instanceof Keyed k)) return false;
