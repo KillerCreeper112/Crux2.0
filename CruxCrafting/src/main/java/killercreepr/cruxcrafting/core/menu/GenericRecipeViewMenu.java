@@ -60,7 +60,13 @@ public class GenericRecipeViewMenu extends ConfigMenu {
     }
 
     public @Nullable MenuContainer menuContainer(){
-        return info.get("menu_container", MenuContainer.class);
+        var got = info.get("menu_container", MenuContainer.class);
+        if(got == null){
+            got = MenuContainer.createNew();
+            got.addOpenedMenu(this);
+            info(info.append("menu_container", Holder.direct(got)));
+        }
+        return got;
     }
 
     protected CraftingRecipeMenuViewer recipeViewer;

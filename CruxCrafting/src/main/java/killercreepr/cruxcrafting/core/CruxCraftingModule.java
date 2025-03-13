@@ -4,6 +4,7 @@ import killercreepr.crux.api.plugin.module.CruxModule;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.plugin.module.StandardModules;
 import killercreepr.crux.core.registries.CruxRegistries;
+import killercreepr.cruxcrafting.api.crafting.RecipeCategory;
 import killercreepr.cruxcrafting.core.config.CruxCraftingCfg;
 import killercreepr.cruxcrafting.core.menu.CruxMenusHook;
 import org.jetbrains.annotations.NotNull;
@@ -23,5 +24,6 @@ public class CruxCraftingModule implements CruxModule {
         if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_MENUS)){
             CruxMenusHook.onLoad();
         }
+        RecipeCategory.register();
     }
 }

@@ -1,7 +1,9 @@
 package killercreepr.cruxcrafting.core.registries;
 
+import killercreepr.crux.api.registry.KeyedRegistry;
 import killercreepr.crux.api.registry.MappedRegistry;
 import killercreepr.crux.core.registry.SimpleMappedRegistry;
+import killercreepr.cruxcrafting.api.crafting.RecipeCategory;
 import killercreepr.cruxcrafting.api.crafting.CruxRecipeManager;
 import killercreepr.cruxcrafting.api.crafting.ingredient.CruxRecipeIngredient;
 import net.kyori.adventure.key.Key;
@@ -35,4 +37,5 @@ public class CruxCraftingRegistries {
             return remove(k.key()) != null;
         }
     };
+    public static final KeyedRegistry<RecipeCategory> RECIPE_CATEGORY = KeyedRegistry.keyedRegistry();
 }

@@ -2,6 +2,7 @@ package killercreepr.cruxcrafting.core.menu;
 
 import killercreepr.crux.api.communication.CreateSound;
 import killercreepr.crux.api.data.DataExchange;
+import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
@@ -30,7 +31,13 @@ public class GenericRecipeListMenu extends ConfigMenu {
     }
 
     public @Nullable MenuContainer menuContainer(){
-        return info.get("menu_container", MenuContainer.class);
+        var got = info.get("menu_container", MenuContainer.class);
+        if(got == null){
+            got = MenuContainer.createNew();
+            got.addOpenedMenu(this);
+            info(info.append("menu_container", Holder.direct(got)));
+        }
+        return got;
     }
 
     @Override

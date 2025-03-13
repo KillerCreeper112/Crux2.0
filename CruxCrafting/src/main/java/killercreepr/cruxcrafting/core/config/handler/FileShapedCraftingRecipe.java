@@ -2,14 +2,19 @@ package killercreepr.cruxcrafting.core.config.handler;
 
 import com.google.common.reflect.TypeToken;
 import killercreepr.crux.api.item.dynamic.DynamicItem;
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxcrafting.api.config.handler.FileCruxCraftingRecipe;
+import killercreepr.cruxcrafting.api.crafting.CruxCraftingRecipeManager;
+import killercreepr.cruxcrafting.api.crafting.RecipeCategory;
 import killercreepr.cruxcrafting.api.crafting.ingredient.CruxRecipeIngredient;
 import killercreepr.cruxcrafting.api.crafting.recipe.CruxCraftingRecipe;
+import killercreepr.cruxcrafting.core.crafting.recipe.SimpleShapedCategorizedRecipe;
 import killercreepr.cruxcrafting.core.crafting.recipe.SimpleShapedRecipe;
+import killercreepr.cruxcrafting.core.registries.CruxCraftingRegistries;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -67,6 +72,15 @@ public class FileShapedCraftingRecipe implements FileCruxCraftingRecipe {
             if(ingredient == null) return;
             ingredients.put(slot, ingredient);
         });
+        Key category = reg.deserializeFromFile(Key.class, o.get("category"));
+        if(category != null){
+            RecipeCategory recipeCategory = CruxCraftingRegistries.RECIPE_CATEGORY.get(category);
+            if(recipeCategory == null){
+                Crux.logWarning("RecipeCategory of " + category + " not found! FileShapedCraftingRecipe" + e);
+            }else{
+                new SimpleShapedCategorizedRecipe(key, ingredients, results, width, length, recipeCategory);
+            }
+        }
 
         return new SimpleShapedRecipe(key, ingredients, results, width, length);
     }

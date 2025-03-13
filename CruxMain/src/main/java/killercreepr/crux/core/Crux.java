@@ -134,6 +134,15 @@ public final class Crux {
     public static void log(@NotNull Level level, @NotNull String msg){
         log.log(level, msg);
     }
+    public static void logInfo(@NotNull String msg){
+        log.info(msg);
+    }
+    public static void logWarning(@NotNull String msg){
+        log(Level.WARNING, msg);
+    }
+    public static void logError(@NotNull String msg){
+        log(Level.SEVERE, msg);
+    }
 
     public static String keyMinimalString(@NotNull Key key){
         if(key.namespace().equals(NAMESPACE)) return key.value();
