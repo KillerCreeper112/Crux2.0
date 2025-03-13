@@ -51,7 +51,7 @@ public class CruxRecipeArg implements CustomArgumentType.Converted<CruxRecipeRes
      */
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        for (Object t : context.getChild().getArgument("recipe_manager", CruxRecipeManager.class).getRecipes()) {
+        for (Object t : context.getArgument("recipe_manager", CruxRecipeManager.class).getRecipes()) {
             if(t instanceof Keyed k) builder.suggest(k.key().asString());
         }
         return builder.buildFuture();

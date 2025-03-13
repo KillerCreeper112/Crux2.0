@@ -8,6 +8,7 @@ import killercreepr.crux.core.command.CruxLootCommands;
 import killercreepr.cruxcrafting.api.crafting.CruxRecipeManager;
 import killercreepr.cruxcrafting.api.crafting.recipe.CruxRecipe;
 import killercreepr.cruxcrafting.core.commands.arg.CraftingArgs;
+import killercreepr.cruxcrafting.core.commands.arg.CruxRecipeResolver;
 import org.bukkit.Keyed;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -46,7 +47,7 @@ public class CruxCraftingCmds {
                                                     Collection<Entity> targets = ctx.getArgument("targets",
                                                         EntitySelectorArgumentResolver.class).resolve(ctx.getSource());
                                                     CruxRecipeManager manager = ctx.getArgument("recipe_manager", CruxRecipeManager.class);
-                                                    CruxRecipe recipe = ctx.getArgument("recipe", CruxRecipe.class);
+                                                    CruxRecipe recipe = ctx.getArgument("recipe", CruxRecipeResolver.class).resolve(manager);
                                                     String name = recipe instanceof Keyed d ? d.key().asString() : recipe.toString();
                                                     for(Entity e : targets){
                                                         boolean value = manager.revokeRecipe(e, recipe);
@@ -70,7 +71,7 @@ public class CruxCraftingCmds {
                                                     Collection<Entity> targets = ctx.getArgument("targets",
                                                         EntitySelectorArgumentResolver.class).resolve(ctx.getSource());
                                                     CruxRecipeManager manager = ctx.getArgument("recipe_manager", CruxRecipeManager.class);
-                                                    CruxRecipe recipe = ctx.getArgument("recipe", CruxRecipe.class);
+                                                    CruxRecipe recipe = ctx.getArgument("recipe", CruxRecipeResolver.class).resolve(manager);
                                                     String name = recipe instanceof Keyed d ? d.key().asString() : recipe.toString();
                                                     for(Entity e : targets){
                                                         boolean value = manager.grantRecipe(e, recipe);
