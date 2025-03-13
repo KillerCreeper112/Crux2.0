@@ -9,7 +9,6 @@ import killercreepr.cruxcrafting.api.crafting.CruxRecipeManager;
 import killercreepr.cruxcrafting.api.crafting.recipe.CruxRecipe;
 import killercreepr.cruxcrafting.core.commands.arg.CraftingArgs;
 import killercreepr.cruxcrafting.core.commands.arg.CruxRecipeResolver;
-import org.bukkit.Keyed;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
@@ -48,7 +47,7 @@ public class CruxCraftingCmds {
                                                         EntitySelectorArgumentResolver.class).resolve(ctx.getSource());
                                                     CruxRecipeManager manager = ctx.getArgument("recipe_manager", CruxRecipeManager.class);
                                                     CruxRecipe recipe = ctx.getArgument("recipe", CruxRecipeResolver.class).resolve(manager);
-                                                    String name = recipe instanceof Keyed d ? d.key().asString() : recipe.toString();
+                                                    String name = recipe instanceof net.kyori.adventure.key.Keyed d ? d.key().asString() : recipe.toString();
                                                     for(Entity e : targets){
                                                         boolean value = manager.revokeRecipe(e, recipe);
                                                         sender.sendMessage("Revoked recipe " + name + " from " + e.getName() + "?: " + value);
@@ -72,7 +71,7 @@ public class CruxCraftingCmds {
                                                         EntitySelectorArgumentResolver.class).resolve(ctx.getSource());
                                                     CruxRecipeManager manager = ctx.getArgument("recipe_manager", CruxRecipeManager.class);
                                                     CruxRecipe recipe = ctx.getArgument("recipe", CruxRecipeResolver.class).resolve(manager);
-                                                    String name = recipe instanceof Keyed d ? d.key().asString() : recipe.toString();
+                                                    String name = recipe instanceof net.kyori.adventure.key.Keyed d ? d.key().asString() : recipe.toString();
                                                     for(Entity e : targets){
                                                         boolean value = manager.grantRecipe(e, recipe);
                                                         sender.sendMessage("Granted recipe " + name + " from " + e.getName() + "?: " + value);
