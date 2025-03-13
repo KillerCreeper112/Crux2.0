@@ -84,6 +84,7 @@ public class GenericRecipeListMenu extends ConfigMenu {
                 CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
             }
         });
+        menuContainer();
     }
 
     public CruxCraftingRecipeManager getRecipeManager(){
@@ -109,7 +110,6 @@ public class GenericRecipeListMenu extends ConfigMenu {
         }*/
         if(showCategories()) setupCategories();
 
-        if(menuContainer() == null) return;
         setItem(inventory.getSize()-5, CruxItem.create(Material.ARROW)
             .itemName("Back")
             .itemModel(Crux.key("gui/arrow_down"))
@@ -118,7 +118,11 @@ public class GenericRecipeListMenu extends ConfigMenu {
             public void onClick(@NotNull HumanEntity p, @NotNull InventoryClickEvent event) {
                 super.onClick(p, event);
                 var previous = menuContainer();
-                if(previous==null) return;
+                if(previous==null || previous.getPrevious() == null){
+                    p.closeInventory();
+                    CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
+                    return;
+                }
                 previous.back(p);
                 CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
             }
@@ -126,6 +130,23 @@ public class GenericRecipeListMenu extends ConfigMenu {
     }
 
     public void setupCategories(){
+        setItem(1, CruxItem.create(Material.COMPASS)
+            .itemName("<white>All")
+            .addLoreFromString(
+                "<gray>Show all recipes.",
+                "",
+                "<yellow><latinfont:Click to view all>"
+            )
+            .item(), new SimpleFixedSlot(this, 1){
+            @Override
+            public void onClick(@NotNull HumanEntity p, @NotNull InventoryClickEvent event) {
+                super.onClick(p, event);
+                if(!info.has("selected_recipe_category")) return;
+                info(info.remove("selected_recipe_category"));
+                refresh();
+                CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
+            }
+        });
         setItem(3, CruxItem.create(Material.IRON_SWORD)
             .itemName("<white>Equipment")
             .addLoreFromString(

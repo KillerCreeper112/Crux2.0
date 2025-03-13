@@ -79,6 +79,7 @@ public class ActivePagedCruxCraftingRecipeMenuModule extends GenericActivePagedM
                 if(holder != null){
                     MenuContainer container = menu instanceof CfgMenu d ? d.info().get("menu_container", MenuContainer.class) : null;
 
+                    assert menu instanceof CfgMenu;
                     var opened = holder.open(p, DataExchange.builder(((CfgMenu) menu).info())
                         .put("crafting_recipe", value)
                         .put("crafting_recipe_list_menu", ((CfgMenu) menu).getHolder())
