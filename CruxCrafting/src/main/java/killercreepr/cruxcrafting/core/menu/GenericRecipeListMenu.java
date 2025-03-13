@@ -8,6 +8,7 @@ import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.Crux;
 import killercreepr.cruxcrafting.api.crafting.CruxCraftingRecipeManager;
+import killercreepr.cruxcrafting.api.crafting.RecipeCategory;
 import killercreepr.cruxcrafting.core.menu.module.PagedCruxCraftingRecipesMenuModule;
 import killercreepr.cruxmenus.api.menu.container.MenuContainer;
 import killercreepr.cruxmenus.api.menu.holder.MenuHolder;
@@ -40,6 +41,11 @@ public class GenericRecipeListMenu extends ConfigMenu {
         return got;
     }
 
+    public boolean showCategories(){
+        return true;
+    }
+
+    protected IActivePagedMenuModule<?> pagedModule;
     @Override
     public void load() {
         super.load();
@@ -54,13 +60,17 @@ public class GenericRecipeListMenu extends ConfigMenu {
         ).build(this);
         modules.register(module);
         module.load(this);
+        pagedModule = (IActivePagedMenuModule<?>) module;
 
         addSlot(new SimpleFixedSlot(this, inventory.getSize()-6){
             @Override
             public void onClick(@NotNull HumanEntity p, @NotNull InventoryClickEvent event) {
                 super.onClick(p, event);
                 IActivePagedMenuModule<?> paged = (IActivePagedMenuModule<?>) module;
+                int oldPage = paged.getPage();
                 paged.addPage(-1);
+                if(oldPage == paged.getPage()) return;
+                CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
             }
         });
         addSlot(new SimpleFixedSlot(this, inventory.getSize()-4){
@@ -68,7 +78,10 @@ public class GenericRecipeListMenu extends ConfigMenu {
             public void onClick(@NotNull HumanEntity p, @NotNull InventoryClickEvent event) {
                 super.onClick(p, event);
                 IActivePagedMenuModule<?> paged = (IActivePagedMenuModule<?>) module;
+                int oldPage = paged.getPage();
                 paged.addPage(1);
+                if(oldPage == paged.getPage()) return;
+                CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
             }
         });
     }
@@ -81,6 +94,21 @@ public class GenericRecipeListMenu extends ConfigMenu {
     public void onRefresh() {
         super.onRefresh();
 
+        //todo pages being dumb
+        /*if(pagedModule.getPage() > 0){
+            setItem(inventory.getSize()-6, CruxItem.create(Material.ARROW)
+                .itemName("Previous Page")
+                .itemModel(Crux.key("gui/arrow_left"))
+                .item());
+        }
+        if(pagedModule.getPage() < pagedModule.getMaxPage()){
+            setItem(inventory.getSize()-4, CruxItem.create(Material.ARROW)
+                .itemName("Next Page")
+                .itemModel(Crux.key("gui/arrow_right"))
+                .item());
+        }*/
+        if(showCategories()) setupCategories();
+
         if(menuContainer() == null) return;
         setItem(inventory.getSize()-5, CruxItem.create(Material.ARROW)
             .itemName("Back")
@@ -92,6 +120,64 @@ public class GenericRecipeListMenu extends ConfigMenu {
                 var previous = menuContainer();
                 if(previous==null) return;
                 previous.back(p);
+                CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
+            }
+        });
+    }
+
+    public void setupCategories(){
+        setItem(3, CruxItem.create(Material.IRON_SWORD)
+            .itemName("<white>Equipment")
+            .addLoreFromString(
+                "<gray>Show only recipes that",
+                "<gray>are in the <white>Equipment",
+                "<gray>category.",
+                "",
+                "<yellow><latinfont:Click to filter>"
+            )
+            .hideAttributes()
+            .item(), new SimpleFixedSlot(this, 3){
+            @Override
+            public void onClick(@NotNull HumanEntity p, @NotNull InventoryClickEvent event) {
+                super.onClick(p, event);
+                info(info.append("selected_recipe_category", Holder.direct(RecipeCategory.EQUIPMENT)));
+                refresh();
+                CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
+            }
+        });
+        setItem(4, CruxItem.create(Material.BRICKS)
+            .itemName("<white>Building")
+            .addLoreFromString(
+                "<gray>Show only recipes that",
+                "<gray>are in the <white>Building",
+                "<gray>category.",
+                "",
+                "<yellow><latinfont:Click to filter>"
+            )
+            .item(), new SimpleFixedSlot(this, 4){
+            @Override
+            public void onClick(@NotNull HumanEntity p, @NotNull InventoryClickEvent event) {
+                super.onClick(p, event);
+                info(info.append("selected_recipe_category", Holder.direct(RecipeCategory.BUILDING)));
+                refresh();
+                CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
+            }
+        });
+        setItem(5, CruxItem.create(Material.LAVA_BUCKET)
+            .itemName("<white>Misc")
+            .addLoreFromString(
+                "<gray>Show only recipes that",
+                "<gray>are in the <white>Misc",
+                "<gray>category.",
+                "",
+                "<yellow><latinfont:Click to filter>"
+            )
+            .item(), new SimpleFixedSlot(this, 5){
+            @Override
+            public void onClick(@NotNull HumanEntity p, @NotNull InventoryClickEvent event) {
+                super.onClick(p, event);
+                info(info.append("selected_recipe_category", Holder.direct(RecipeCategory.MISC)));
+                refresh();
                 CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
             }
         });

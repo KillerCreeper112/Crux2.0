@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 public class FileShapelessCraftingRecipe implements FileCruxCraftingRecipe {
@@ -40,14 +41,16 @@ public class FileShapelessCraftingRecipe implements FileCruxCraftingRecipe {
         );
         if(ingredients==null) return null;
 
-        Key category = reg.deserializeFromFile(Key.class, o.get("category"));
+        Collection<Key> category = reg.deserializeFromFile(new TypeToken<Collection<Key>>(){}.getType(), o.get("categories"));
         if(category != null){
-            RecipeCategory recipeCategory = CruxCraftingRegistries.RECIPE_CATEGORY.get(category);
-            if(recipeCategory == null){
-                Crux.logWarning("RecipeCategory of " + category + " not found! FileShapedCraftingRecipe" + e);
-            }else{
-                new SimpleShapelessCategorizedRecipe(key, ingredients, results, recipeCategory);
+            Collection<RecipeCategory> recipeCategory = new HashSet<>();
+            for(Key k : category){
+                var got = CruxCraftingRegistries.RECIPE_CATEGORY.get(k);
+                if(got == null){
+                    Crux.logWarning("RecipeCategory of " + category + " not found! FileShapelessCraftingRecipe" + e);
+                }else recipeCategory.add(got);
             }
+            return new SimpleShapelessCategorizedRecipe(key, ingredients, results, recipeCategory);
         }
 
         return new SimpleShapelessRecipe(key, ingredients, results);

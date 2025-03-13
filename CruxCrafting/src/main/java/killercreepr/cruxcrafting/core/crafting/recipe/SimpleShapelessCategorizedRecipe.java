@@ -12,16 +12,16 @@ import java.util.List;
 import java.util.Map;
 
 public class SimpleShapelessCategorizedRecipe extends SimpleShapelessRecipe implements CategorizedRecipe {
-    protected final RecipeCategory category;
+    protected final Collection<RecipeCategory> category;
 
-    public SimpleShapelessCategorizedRecipe(Key key, Collection<CruxRecipeIngredient> ingredients, List<DynamicItem> results, RecipeCategory category) {
+    public SimpleShapelessCategorizedRecipe(Key key, Collection<CruxRecipeIngredient> ingredients, List<DynamicItem> results, Collection<RecipeCategory> category) {
         super(key, ingredients, results);
         this.category = category;
     }
 
 
     @Override
-    public @NotNull RecipeCategory getRecipeCategory() {
+    public @NotNull Collection<RecipeCategory> getRecipeCategories() {
         return category;
     }
 }

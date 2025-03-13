@@ -76,8 +76,10 @@ public abstract class GenericActivePagedMenuModule<T> extends SimpleActiveMenuMo
             .build();
     }
 
+    protected List<T> currentOpened;
     public void openPage(@NotNull Menu menu, int page){
         List<T> list = buildValues(buildContext(menu));
+        currentOpened = list;
         page = CruxMath.clamp(page, 0, calculateMaxPages(list.size()));
         int index = -1;
         List<Number> indexes = this.indexes.sampleList();
@@ -93,6 +95,11 @@ public abstract class GenericActivePagedMenuModule<T> extends SimpleActiveMenuMo
 
     public abstract void setPagedItem(@NotNull Menu menu, int slot, int index,int listIndex, @NotNull T value);
     public abstract void setEmptyItem(@NotNull Menu menu, int slot, int index);
+
+    public int getMaxPage(){
+        if(currentOpened != null) return calculateMaxPages(currentOpened.size());
+        return calculateMaxPages();
+    }
 
     public int calculateMaxPages(){
         return calculateMaxPages(values.value().size());

@@ -72,14 +72,16 @@ public class FileShapedCraftingRecipe implements FileCruxCraftingRecipe {
             if(ingredient == null) return;
             ingredients.put(slot, ingredient);
         });
-        Key category = reg.deserializeFromFile(Key.class, o.get("category"));
+        Collection<Key> category = reg.deserializeFromFile(new TypeToken<Collection<Key>>(){}.getType(), o.get("categories"));
         if(category != null){
-            RecipeCategory recipeCategory = CruxCraftingRegistries.RECIPE_CATEGORY.get(category);
-            if(recipeCategory == null){
-                Crux.logWarning("RecipeCategory of " + category + " not found! FileShapedCraftingRecipe" + e);
-            }else{
-                new SimpleShapedCategorizedRecipe(key, ingredients, results, width, length, recipeCategory);
+            Collection<RecipeCategory> recipeCategory = new HashSet<>();
+            for(Key k : category){
+                var got = CruxCraftingRegistries.RECIPE_CATEGORY.get(k);
+                if(got == null){
+                    Crux.logWarning("RecipeCategory of " + category + " not found! FileShapedCraftingRecipe" + e);
+                }else recipeCategory.add(got);
             }
+            return new SimpleShapedCategorizedRecipe(key, ingredients, results, width, length, recipeCategory);
         }
 
         return new SimpleShapedRecipe(key, ingredients, results, width, length);

@@ -10,14 +10,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 public class SimpleShapedCategorizedRecipe extends SimpleShapedRecipe implements CategorizedRecipe {
-    protected final RecipeCategory category;
-    public SimpleShapedCategorizedRecipe(Key key, Map<Integer, CruxRecipeIngredient> ingredients, List<DynamicItem> results, int width, int height, RecipeCategory category) {
+    protected final Collection<RecipeCategory> category;
+    public SimpleShapedCategorizedRecipe(Key key, Map<Integer, CruxRecipeIngredient> ingredients, List<DynamicItem> results, int width, int height, Collection<RecipeCategory> category) {
         super(key, ingredients, results, width, height);
         this.category = category;
     }
 
     @Override
-    public @NotNull RecipeCategory getRecipeCategory() {
+    public @NotNull Collection<RecipeCategory> getRecipeCategories() {
         return category;
     }
 }

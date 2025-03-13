@@ -58,6 +58,11 @@ public abstract class ActivePagedMenuModule<T> extends SimpleActiveMenuModuled i
         return this;
     }
 
+    public int getMaxPage(){
+        if(currentOpened != null) return calculateMaxPages(currentOpened.size());
+        return calculateMaxPages();
+    }
+
     @Override
     public @Nullable MergedTagContainer buildTags(@NotNull Menu menu, @NotNull TagParser tagParser) {
         MergedTagContainer tags = TagContainer.merged(tagParser);
@@ -74,8 +79,10 @@ public abstract class ActivePagedMenuModule<T> extends SimpleActiveMenuModuled i
             .build();
     }
 
+    protected List<T> currentOpened;
     public void openPage(@NotNull Menu menu, int page){
         List<T> list = buildValues(buildContext(menu));
+        currentOpened = list;
         page = CruxMath.clamp(page, 0, calculateMaxPages(list.size()));
         int index = -1;
         List<Number> indexes = this.indexes.sampleList();

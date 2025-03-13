@@ -8,6 +8,7 @@ import killercreepr.cruxcrafting.api.crafting.CruxCraftingRecipeManager;
 import killercreepr.cruxcrafting.api.crafting.RecipeCategory;
 import killercreepr.cruxcrafting.api.crafting.recipe.CategorizedRecipe;
 import killercreepr.cruxcrafting.api.crafting.recipe.CruxCraftingRecipe;
+import killercreepr.cruxcrafting.core.registries.CruxCraftingRegistries;
 import killercreepr.cruxmenus.api.menu.CfgMenu;
 import killercreepr.cruxmenus.api.menu.Menu;
 import killercreepr.cruxmenus.api.menu.holder.MenuItems;
@@ -45,26 +46,26 @@ public class PagedCruxCraftingRecipesMenuModule extends PagedMenuModule<CruxCraf
         );
     }
 
-    public Key getSelectedRecipeCategory(Menu menu){
+    public RecipeCategory getSelectedRecipeCategory(Menu menu){
         if(!(menu instanceof CfgMenu cfg)) return null;
         DataExchange info = cfg.info();
         Object object = info.get("selected_recipe_category");
         if(object == null) return null;
-        if(object instanceof Key k) return k;
-        if(object instanceof RecipeCategory c) return c.key();
-        return Crux.key(object.toString());
+        if(object instanceof Key k) CruxCraftingRegistries.RECIPE_CATEGORY.get(k);
+        if(object instanceof RecipeCategory c) return c;
+        return CruxCraftingRegistries.RECIPE_CATEGORY.get(Crux.key(object.toString()));
     }
 
     @Override
     public @NotNull Holder<List<CruxCraftingRecipe>> getValues(@NotNull Menu menu) {
         return () ->{
             if(recipeManager.getRecipes() instanceof List<CruxCraftingRecipe> l) return l;
-            Key selectedCategory = getSelectedRecipeCategory(menu);
+            RecipeCategory selectedCategory = getSelectedRecipeCategory(menu);
 
             var list = new ArrayList<>(recipeManager.getRecipes());
             if(selectedCategory != null) list.removeIf(d ->{
                 if(!(d instanceof CategorizedRecipe e)) return true;
-                return !e.getRecipeCategory().key().equals(selectedCategory);
+                return !e.getRecipeCategories().contains(selectedCategory);
             });
             list.sort(Comparator.comparing(recipe ->{
                 if(recipe instanceof Keyed k) return k.key().value();
