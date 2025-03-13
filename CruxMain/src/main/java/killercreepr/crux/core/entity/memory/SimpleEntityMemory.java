@@ -77,6 +77,7 @@ public class SimpleEntityMemory implements EntityMemory {
     @Override
     public void removeDataHolders(@Nullable Entity e){
         for(DataHolder h : dataHolders.values()){
+            if(e != null) h.onMemoryUnload(e);
             h.parentRemoving(e);
         }
         dataHolders.clear();
