@@ -26,6 +26,7 @@ public class LimitedCraftingRecipeManager extends SimpleRecipeManager<CruxCrafti
     @Override
     public boolean hasRecipe(@NotNull Entity entity, @NotNull CruxCraftingRecipe recipe) {
         if(!(recipe instanceof Keyed k)) return false;
+        if(!hasRecipe(k.key())) return false;
         RecipesHolder holder = recipesHolder(entity);
         return holder != null && holder.hasRecipe(k.key());
     }
@@ -33,6 +34,7 @@ public class LimitedCraftingRecipeManager extends SimpleRecipeManager<CruxCrafti
     @Override
     public boolean grantRecipe(@NotNull Entity entity, @NotNull CruxCraftingRecipe recipe) {
         if(!(recipe instanceof Keyed k)) return false;
+        if(!hasRecipe(k.key())) return false;
         RecipesHolder holder = recipesHolder(entity);
         return holder != null && holder.grantRecipe(k.key());
     }
@@ -40,6 +42,7 @@ public class LimitedCraftingRecipeManager extends SimpleRecipeManager<CruxCrafti
     @Override
     public boolean revokeRecipe(@NotNull Entity entity, @NotNull CruxCraftingRecipe recipe) {
         if(!(recipe instanceof Keyed k)) return false;
+        if(!hasRecipe(k.key())) return false;
         RecipesHolder holder = recipesHolder(entity);
         return holder != null && holder.revokeRecipe(k.key());
     }
