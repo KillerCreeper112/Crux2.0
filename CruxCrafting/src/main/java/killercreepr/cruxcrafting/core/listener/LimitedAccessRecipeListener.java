@@ -7,6 +7,7 @@ import killercreepr.cruxcrafting.api.crafting.CruxCraftingRecipeManager;
 import killercreepr.cruxcrafting.api.crafting.context.CruxIngredientContext;
 import killercreepr.cruxcrafting.api.crafting.ingredient.CruxRecipeIngredient;
 import killercreepr.cruxcrafting.api.crafting.recipe.CruxCraftingRecipe;
+import killercreepr.cruxcrafting.api.event.EntityDiscoverRecipeEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -32,6 +33,10 @@ public class LimitedAccessRecipeListener implements Listener {
         recipeManager.forEach(recipe ->{
             if(recipeManager.hasRecipe(p, recipe)) return;
             if(!hasRecipeIngredient(item, recipe)) return;
+
+            EntityDiscoverRecipeEvent discoverEvent = new EntityDiscoverRecipeEvent(p, recipeManager, recipe);
+            if(!discoverEvent.callEvent()) return;
+
             recipeManager.grantRecipe(p, recipe);
         });
     }

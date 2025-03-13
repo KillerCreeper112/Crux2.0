@@ -69,7 +69,7 @@ public class RecipesHolder extends EntityDataHolder implements Loadable {
     public DataFile getDataFile(boolean createIfNeeded){
         return BukkitDataFile.parseFromGeneralPath(
             new CruxFolder(Crux.getMainPlugin(), "data/cruxcrafting/player/recipes/" +
-                CruxKey.toFileName(((Keyed) recipeManager).key()) +
+                CruxKey.toFileName(((Keyed) recipeManager).key()) + "/" +
                 parent.getUUID() + ".json").file(), createIfNeeded
         );
     }
