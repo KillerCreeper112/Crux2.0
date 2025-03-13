@@ -160,7 +160,7 @@ public class GenericRecipeViewMenu extends ConfigMenu {
     }
 
     public boolean isCraftingTable(Block b){
-        return b.getType() == Material.CRAFTING_TABLE || b.getType() == Material.CRAFTER;
+        return b.getType() == Material.CRAFTING_TABLE;
     }
 
     public boolean hasSightOf(Block b, Entity e){
