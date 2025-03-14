@@ -68,15 +68,15 @@ public class OfflinePlayerTags implements ObjectTag<OfflinePlayer> {
                 Player online = p.getPlayer();
                 if(online==null) return "not online";
                 //<player_attribute:(attribute):[value_to_get{value, default, base},default=value]>
-                NamespacedKey key = NamespacedKey.fromString(args.get(0));
-                if(key == null) return "invalid key - " + args.get(0);
+                NamespacedKey key = NamespacedKey.fromString(context.deserializeString(args.get(0)));
+                if(key == null) return "invalid key - " + context.deserializeString(args.get(0));
                 Attribute attribute = Registry.ATTRIBUTE.get(key);
                 if(attribute == null) return "attribute not found- " + key;
 
                 AttributeInstance instance = online.getAttribute(attribute);
                 if(instance==null) return "0";
 
-                String check = args.getOrDefault(1, "value").toLowerCase();
+                String check = context.deserializeString(args.getOrDefault(1, "value")).toLowerCase();
                 double x;
                 switch (check){
                     case "value" -> x = instance.getValue();
@@ -91,7 +91,7 @@ public class OfflinePlayerTags implements ObjectTag<OfflinePlayer> {
             .add(Tag.string("equipment", (args, context) ->{
                 Player online = p.getPlayer();
                 if(online==null) return "not online";
-                EquipmentSlot slot = EquipmentSlot.valueOf(args.get(0).toUpperCase());
+                EquipmentSlot slot = EquipmentSlot.valueOf(context.deserializeString(args.get(0)).toUpperCase());
                 ItemStack item = online.getInventory().getItem(slot);
                 if(item.isEmpty()) return item.getType().key().asString();
                 return Base64.getEncoder().encodeToString(item.serializeAsBytes());
@@ -99,13 +99,13 @@ public class OfflinePlayerTags implements ObjectTag<OfflinePlayer> {
             .add(Tag.string("has_permission", (args, ctx) ->{
                 Player online = p.getPlayer();
                 if(online==null) return "false";
-                String permission = args.get(0);
+                String permission = ctx.deserializeString(args.get(0));
                 return online.hasPermission(permission) + "";
             }))
             .add(Tag.string("has_potion_effect", (args, ctx) ->{
                 Player online = p.getPlayer();
                 if(online==null) return "false";
-                String potionName = args.get(0);
+                String potionName = ctx.deserializeString(args.get(0));
                 PotionEffectType type = RegistryAccess.registryAccess().getRegistry(RegistryKey.MOB_EFFECT).get(Key.key(potionName));
                 if(type == null) return potionName + " not found";
                 return online.hasPotionEffect(type) + "";
@@ -125,14 +125,14 @@ public class OfflinePlayerTags implements ObjectTag<OfflinePlayer> {
             }))
             .add(Tag.string("is_op", (args, ctx) -> p.isOp() + ""))
             .add(Tag.string("stat", (args, ctx) ->{
-                Key key = Key.key(args.get(0));
+                Key key = Key.key(ctx.deserializeString(args.get(0)));
                 Statistic statistic = getStat(key);
                 if(statistic == null) return key + " statistic not found";
                 return p.getStatistic(statistic) + "";
             }))
             .add(Tag.string("stat_material", (args, ctx) ->{
-                Key key = Key.key(args.get(0));
-                Key materialKey = Key.key(args.get(1));
+                Key key = Key.key(ctx.deserializeString(args.get(0)));
+                Key materialKey = Key.key(ctx.deserializeString(args.get(1)));
                 Material material = Registry.MATERIAL.get(materialKey);
                 if(material == null) return materialKey + " material not found";
                 Statistic statistic = getStat(key);
