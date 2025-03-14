@@ -52,7 +52,8 @@ public class FileGeneric extends FileElement {
 
     @Override
     public Number getAsNumber() {
-        if (value instanceof Number n) return CruxObjects.parseNumber(n);
+        if(value instanceof Number n) return n;
+        //if (value instanceof Number n) return CruxObjects.parseNumber(n);
         if(value instanceof String d) return Double.parseDouble(d);
         throw new UnsupportedOperationException("Primitive is neither a number nor a string");
     }

@@ -1,6 +1,7 @@
 package killercreepr.cruxconfig.config.common.base;
 
 import com.google.gson.JsonElement;
+import com.google.gson.internal.LazilyParsedNumber;
 import killercreepr.crux.core.util.CruxObjects;
 import killercreepr.crux.core.util.CruxReflect;
 import killercreepr.cruxconfig.config.common.FileContext;
