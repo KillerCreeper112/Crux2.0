@@ -1,18 +1,14 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
 import killercreepr.crux.api.data.world.StoredChunk;
-import killercreepr.crux.core.Crux;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
 import killercreepr.cruxconfig.config.common.json.annotation.JsonSerializer;
 import net.kyori.adventure.key.Key;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.logging.Level;
 
 @JsonSerializer(id = "stored_chunk")
 public class FileStoredChunk implements FileObjectHandler<StoredChunk> {
@@ -27,13 +23,11 @@ public class FileStoredChunk implements FileObjectHandler<StoredChunk> {
 
     @Override
     public @Nullable StoredChunk deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
-        Crux.log(Level.INFO,"chunk=" + e);
         if(!(e instanceof FileObject o)) return null;
         Key key = ctx.getRegistry().deserializeFromFile(Key.class, o.get("world"));
         if(key == null) return null;
         Integer chunkX = o.getObject(Integer.class, "chunk_x");
         Integer chunkZ = o.getObject(Integer.class, "chunk_z");
-        Crux.log(Level.INFO,"chunk=" + chunkX + ", chunkZ=" + chunkZ + ", key=" + key);
         if(chunkX == null || chunkZ == null) return null;
         return StoredChunk.storedChunk(key, chunkX, chunkZ);
     }
