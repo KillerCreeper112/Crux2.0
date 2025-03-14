@@ -4,6 +4,7 @@ import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.item.dynamic.DynamicItem;
 import killercreepr.crux.api.item.dynamic.DynamicItemComponent;
 import killercreepr.crux.api.text.context.TextParserContext;
+import killercreepr.crux.api.text.tags.container.TagContainer;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.paper.ItemHolder;
 import net.kyori.adventure.key.InvalidKeyException;
@@ -120,6 +121,8 @@ public class BukkitDynamicItem implements DynamicItem {
     public @Nullable CruxItem build(@NotNull TextParserContext context) {
         ItemStack built = buildBase(context);
         if(built==null) return null;
+        context = TextParserContext.wrapped(context, TagContainer.merged().hook(built));
+
         CruxItem item = CruxItem.wrap(built);
         if(amount != null){
             item.amount((int) Double.parseDouble(context.deserializeString(amount)));

@@ -6,6 +6,7 @@ import killercreepr.crux.api.text.provider.StringTagProvider;
 import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.text.format.FormatParserContext;
+import killercreepr.crux.core.text.format.WrappedTextParserContext;
 import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
@@ -25,6 +26,10 @@ public interface TextParserContext extends InputContext {
     static @NotNull TextParserContext empty(@NotNull FormatSerializer format){
         if(format.equals(Crux.format())) return EMPTY_CRUX; //optimize
         return new FormatParserContext(format, null, null, null);
+    }
+
+    static @NotNull TextParserContext wrapped(@NotNull TextParserContext ctx, @NotNull MergedTagContainer tags){
+        return new WrappedTextParserContext(ctx, tags);
     }
 
     static @NotNull TextParserContext empty(){
