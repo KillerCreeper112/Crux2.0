@@ -37,14 +37,11 @@ public class UniformNumber implements NumberProvider {
     public @NotNull Number sample(@NotNull Random random, @NotNull Number minInclusive, @NotNull Number maxInclusive) {
         return switch (maxInclusive) {
             case Integer v -> random.nextInt((int) maxInclusive - (int) minInclusive + 1) + (int) minInclusive;
-            case Double v ->
-                random.nextDouble() * ((double) maxInclusive - (double) minInclusive) + (double) minInclusive;
             case Float v -> random.nextFloat() * ((float) maxInclusive - (float) minInclusive) + (float) minInclusive;
             case Long v -> random.nextLong() % ((long) maxInclusive - (long) minInclusive + 1) + (long) minInclusive;
             case Short v ->
                 (short) (random.nextInt((short) maxInclusive - (short) minInclusive + 1) + (short) minInclusive);
-            default ->
-                throw new UnsupportedOperationException("Unsupported Number type " + maxInclusive.getClass().getSimpleName() + " / " + minInclusive.getClass().getSimpleName());
+            default -> random.nextDouble() * ((double) maxInclusive - (double) minInclusive) + (double) minInclusive;
         };
     }
 
@@ -59,14 +56,6 @@ public class UniformNumber implements NumberProvider {
                 int min = minInclusive.intValue();
                 int max = maxInclusive.intValue();
                 for (int i = min; i <= max; i++) {
-                    list.add(i);
-                }
-                return list;
-            }
-            case Double v -> {
-                double min = minInclusive.doubleValue();
-                double max = maxInclusive.doubleValue();
-                for (double i = min; i <= max; i++) {
                     list.add(i);
                 }
                 return list;
@@ -96,9 +85,14 @@ public class UniformNumber implements NumberProvider {
                 return list;
             }
             default -> {
+                double min = minInclusive.doubleValue();
+                double max = maxInclusive.doubleValue();
+                for (double i = min; i <= max; i++) {
+                    list.add(i);
+                }
+                return list;
             }
         }
-        throw new UnsupportedOperationException("Unsupported Number type " + maxInclusive.getClass().getSimpleName() + " / " + minInclusive.getClass().getSimpleName());
     }
 
     @Override

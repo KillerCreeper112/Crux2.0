@@ -1,5 +1,6 @@
 package killercreepr.crux.core.valueproviders.number;
 
+import com.google.gson.internal.LazilyParsedNumber;
 import killercreepr.crux.api.text.context.InputContext;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.util.CruxMath;
@@ -42,12 +43,10 @@ public class UniformSkewedNumber extends UniformNumber {
     public @NotNull Number sample(@NotNull Random random, @NotNull Number minInclusive, @NotNull Number maxInclusive, double skew) {
         return switch (maxInclusive) {
             case Integer v -> (int) CruxMath.randomSkewed(random, minInclusive.intValue(), maxInclusive.intValue(), skew);
-            case Double v -> (double) CruxMath.randomSkewed(random, minInclusive.doubleValue(), maxInclusive.doubleValue(), skew);
             case Float v -> (float) CruxMath.randomSkewed(random, minInclusive.floatValue(), maxInclusive.floatValue(), skew);
             case Long v -> (long) CruxMath.randomSkewed(random, minInclusive.longValue(), maxInclusive.longValue(), skew);
             case Short v -> (short) CruxMath.randomSkewed(random, minInclusive.shortValue(), maxInclusive.shortValue(), skew);
-            default ->
-                throw new UnsupportedOperationException("Unsupported Number type " + maxInclusive.getClass().getSimpleName() + " / " + minInclusive.getClass().getSimpleName());
+            default -> (double) CruxMath.randomSkewed(random, minInclusive.doubleValue(), maxInclusive.doubleValue(), skew);
         };
     }
 
