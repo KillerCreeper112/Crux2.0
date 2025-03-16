@@ -2,6 +2,8 @@ package killercreepr.crux.api.loot.bukkit;
 
 import io.papermc.paper.event.block.PlayerShearBlockEvent;
 import killercreepr.crux.api.data.DataExchange;
+import killercreepr.crux.api.event.CruxEntityDamageEvent;
+import killercreepr.crux.api.event.CruxEntityDeathEvent;
 import killercreepr.crux.api.loot.LootContext;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -38,14 +40,86 @@ public interface EventLootContexts {
             ;
     }
 
+    static LootContext.Builder builder(@NotNull CruxEntityDeathEvent event){
+        Entity e = event.getEntity();
+        Entity killer = event.getDamager();
+        return builder()
+            .info(
+                DataExchange.builder()
+                    .putAll(e, "victim", "entity")
+                    .putAll(killer, "killer", "attacker")
+                    .build()
+            )
+            .location(e.getLocation())
+            .looter(killer)
+            .looted(e)
+            ;
+    }
+
     static LootContext.Builder builder(@NotNull EntityDamageByEntityEvent event){
         Entity victim = event.getEntity();
         Entity attacker = event.getDamager();
+        String cause = event.getCause().toString().toLowerCase();
+        String type = event.getDamageSource().getDamageType().key().asString();
         return builder()
             .info(
                 DataExchange.builder()
                     .putAll(victim, "victim", "entity")
                     .putAll(attacker, "attacker")
+                    .putAll(cause, "damage_cause")
+                    .putAll(type, "damage_type")
+                    .putAll(event.getFinalDamage(), "damage")
+                    .putAll(event.getDamage(), "raw_damage")
+                    .build()
+            )
+            .location(victim.getLocation())
+            .looter(attacker)
+            .looted(victim)
+            ;
+    }
+
+    static LootContext.Builder builder(@NotNull CruxEntityDamageEvent event){
+        Entity victim = event.getEntity();
+        Entity attacker = event.getDamager();
+        String cause = event.getCause() == null ? "null" : event.getCause().toString().toLowerCase();
+        return builder()
+            .info(
+                DataExchange.builder()
+                    .putAll(victim, "victim", "entity")
+                    .putAll(attacker, "attacker")
+                    .putAll(cause, "damage_cause")
+                    //todo .putAll(type, "damage_type")
+                    .putAll(event.getDmg(), "damage")
+                    .putAll(event.getTrueDmg(), "raw_damage")
+                    .putAll(event.getKb(), "knockback")
+                    .putAll(event.getTrueKb(), "raw_knockback")
+                    .putAll(event.getUpKb(), "upwards_knockback")
+                    .putAll(event.getTrueUpKb(), "raw_upwards_knockback")
+                    .build()
+            )
+            .location(victim.getLocation())
+            .looter(attacker)
+            .looted(victim)
+            ;
+    }
+
+    static LootContext.Builder builder(@NotNull EntityDamageEvent event){
+        Entity victim = event.getEntity();
+        Entity attacker;
+        if(event instanceof EntityDamageByEntityEvent e){
+            attacker = e.getDamager();
+        }else attacker = null;
+        String cause = event.getCause().toString().toLowerCase();
+        String type = event.getDamageSource().getDamageType().key().asString();
+        return builder()
+            .info(
+                DataExchange.builder()
+                    .putAll(victim, "victim", "entity", "looted")
+                    .putAll(attacker, "attacker", "looter")
+                    .putAll(cause, "damage_cause")
+                    .putAll(type, "damage_type")
+                    .putAll(event.getFinalDamage(), "damage")
+                    .putAll(event.getDamage(), "raw_damage")
                     .build()
             )
             .location(victim.getLocation())

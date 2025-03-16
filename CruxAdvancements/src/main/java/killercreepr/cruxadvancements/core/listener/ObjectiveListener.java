@@ -2,6 +2,7 @@ package killercreepr.cruxadvancements.core.listener;
 
 import io.papermc.paper.event.block.PlayerShearBlockEvent;
 import killercreepr.crux.api.entity.memory.EntityMemory;
+import killercreepr.crux.api.event.CruxEntityDeathEvent;
 import killercreepr.cruxadvancements.api.event.PlayerCraftItemEvent;
 import killercreepr.cruxadvancements.core.advancement.objective.standard.*;
 import killercreepr.cruxadvancements.core.entity.memory.AdvancementHolder;
@@ -146,6 +147,27 @@ public class ObjectiveListener implements Listener {
                 });
             }
         }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onEntityDamage(EntityDamageEvent event) {
+        if(!(event.getEntity() instanceof Player e)) return;
+        AdvancementHolder holder = holder(e);
+        if(holder==null) return;
+        holder.getAdvancementTracker().apply(TakeDamageObjective.class, (manager, advancement, objective) -> {
+            objective.trigger(e.getUniqueId(), manager, advancement, event);
+        });
+    }
+
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onCruxEntityDeath(CruxEntityDeathEvent event) {
+        if(!(event.getDamager() instanceof Player killer)) return;
+        AdvancementHolder holder = holder(killer);
+        if(holder==null) return;
+        holder.getAdvancementTracker().apply(KillEntityObjective.class, (manager, advancement, objective) -> {
+            objective.trigger(killer.getUniqueId(), manager, advancement, event);
+        });
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
