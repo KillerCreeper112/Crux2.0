@@ -1,6 +1,7 @@
 package killercreepr.crux.core.entity.tag;
 
 import killercreepr.crux.api.entity.tag.EntityTag;
+import killercreepr.crux.core.Crux;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -27,7 +28,7 @@ public class SimpleEntityTypeTag extends BaseEntityTag implements EntityTag {
 
     @Override
     public boolean isTagged(@NotNull Entity item) {
-        return values.contains(item.getType());
+        return values.contains(Crux.handlers().entity().getType(item));
     }
 
     public @NotNull Collection<Key> getTypes(){

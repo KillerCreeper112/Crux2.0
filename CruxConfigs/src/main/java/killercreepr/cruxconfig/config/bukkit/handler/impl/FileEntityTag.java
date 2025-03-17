@@ -4,6 +4,8 @@ import killercreepr.crux.api.entity.tag.EntityTag;
 import killercreepr.crux.api.item.tag.ItemTag;
 import killercreepr.crux.api.item.tag.ItemTypeTag;
 import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.entity.tag.SimpleEntityTypeTag;
+import killercreepr.crux.core.entity.tag.SingleEntityTypeTag;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
@@ -66,8 +68,9 @@ public class FileEntityTag extends SimpleFileHandler<EntityTag> {
         a.forEach(ele ->{
             String itemKey = ele.getAsString();
             if(itemKey.startsWith("#")){
-                ItemTag itemTag = CruxRegistries.ITEM_TAG.get(Crux.key(itemKey.substring(1)));
-                if(itemTag instanceof ItemTypeTag tag) values.addAll(tag.getTypes());
+                EntityTag itemTag = CruxRegistries.ENTITY_TAG.get(Crux.key(itemKey.substring(1)));
+                if(itemTag instanceof SingleEntityTypeTag tag) values.add(tag.getType());
+                else if(itemTag instanceof SimpleEntityTypeTag tag) values.addAll(tag.getTypes());
                 else Crux.log(Level.WARNING, "Could not find tag, " + itemKey + "!");
                 return;
             }

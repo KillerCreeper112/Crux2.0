@@ -25,7 +25,7 @@ public class EntityTagLoader extends CfgLoader {
             );
         }
         if(table == null) return;
-        Crux.log(Level.INFO, "Registered item tag: " + table.key());
+        Crux.log(Level.INFO, "Registered entity tag: " + table.key());
         CruxRegistries.ENTITY_TAG.register(table);
     }
 }
