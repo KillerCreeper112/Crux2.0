@@ -31,7 +31,7 @@ public class CruxTags implements TagParser {
 
     protected final Cache<Class<?>, Collection<ObjectTag<?>>> cache = CacheBuilder.newBuilder()
         .expireAfterWrite(15, TimeUnit.MINUTES)
-        .maximumSize(500)
+        .maximumSize(700)
         .build();
 
 
