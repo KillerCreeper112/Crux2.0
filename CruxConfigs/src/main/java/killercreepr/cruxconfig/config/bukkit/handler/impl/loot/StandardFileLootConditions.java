@@ -99,7 +99,6 @@ public class StandardFileLootConditions {
         });
 
         file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("world")) {
-
             @Override
             public @NotNull WorldCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 FileRegistry registry = ctx.getRegistry();

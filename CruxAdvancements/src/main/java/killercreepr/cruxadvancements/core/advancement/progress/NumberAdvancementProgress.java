@@ -62,6 +62,12 @@ public class NumberAdvancementProgress extends SimpleCriterionProgress implement
     }
 
     @Override
+    public void revoke() {
+        super.revoke();
+        progress = 0;
+    }
+
+    @Override
     public @NotNull Collection<String> getAwardedCriteria() {
         throw new UnsupportedOperationException();
     }

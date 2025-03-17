@@ -34,6 +34,15 @@ public class ListAdvancementProgress extends SimpleCriterionProgress implements 
     }
 
     @Override
+    public void revoke() {
+        super.revoke();
+        progressMap.clear();
+        for(String name : criteria.getActionNames()){
+            progressMap.put(name, new SimpleCriterionProgress());
+        }
+    }
+
+    @Override
     public @NotNull Collection<String> getRemainingCriteria() {
         return assemble(s -> {
             CruxCriterionProgress progress = getCriterionProgress(s);
