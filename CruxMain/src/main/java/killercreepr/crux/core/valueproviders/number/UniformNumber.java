@@ -36,12 +36,12 @@ public class UniformNumber implements NumberProvider {
 
     public @NotNull Number sample(@NotNull Random random, @NotNull Number minInclusive, @NotNull Number maxInclusive) {
         return switch (maxInclusive) {
-            case Integer v -> random.nextInt((int) maxInclusive - (int) minInclusive + 1) + (int) minInclusive;
-            case Float v -> random.nextFloat() * ((float) maxInclusive - (float) minInclusive) + (float) minInclusive;
-            case Long v -> random.nextLong() % ((long) maxInclusive - (long) minInclusive + 1) + (long) minInclusive;
+            case Integer v -> random.nextInt((int) maxInclusive.intValue() - (int) minInclusive.intValue() + 1) + (int) minInclusive.intValue();
+            case Float v -> random.nextFloat() * ((float) maxInclusive.floatValue() - (float) minInclusive.floatValue()) + (float) minInclusive.floatValue();
+            case Long v -> random.nextLong() % ((long) maxInclusive.longValue() - (long) minInclusive.longValue() + 1) + (long) minInclusive.longValue();
             case Short v ->
-                (short) (random.nextInt((short) maxInclusive - (short) minInclusive + 1) + (short) minInclusive);
-            default -> random.nextDouble() * ((double) maxInclusive - (double) minInclusive) + (double) minInclusive;
+                (short) (random.nextInt((short) maxInclusive.shortValue() - minInclusive.shortValue() + 1) + minInclusive.shortValue());
+            default -> random.nextDouble() * (maxInclusive.doubleValue() - minInclusive.doubleValue()) + minInclusive.doubleValue();
         };
     }
 

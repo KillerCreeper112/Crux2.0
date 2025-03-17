@@ -63,9 +63,11 @@ public abstract class SimpleCraftingCrafter implements CruxCraftingCrafter {
             HumanEntity p = event.getWhoClicked();
             List<ItemStack> results = getResults();
             if(clickType.isShiftClick() || results.size() > 1){
-                //todo
                 List<ItemStack> originalResults = copy(getResults());
                 while(allEquals(originalResults, results) && hasSpaceForAll(p, results)){
+                    PlayerCruxCraftEvent craftEvent = new PlayerCruxCraftEvent(p, recipe, this, results);
+                    if(!craftEvent.callEvent()) continue;
+
                     CruxEntityUtil.giveOrDrop(p, results);
                     setResults(null);
                     CruxCraftingRecipeContext ctx = CruxRecipeContext.craftingRecipeContext(matrix);
