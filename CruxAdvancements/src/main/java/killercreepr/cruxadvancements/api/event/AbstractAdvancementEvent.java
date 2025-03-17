@@ -1,5 +1,6 @@
 package killercreepr.cruxadvancements.api.event;
 
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxadvancements.api.advancement.CruxAdvancement;
 import killercreepr.cruxadvancements.api.advancement.manager.CruxAdvancementManager;
 import org.bukkit.Bukkit;
@@ -15,7 +16,7 @@ public abstract class AbstractAdvancementEvent extends Event implements Cancella
     protected final @NotNull CruxAdvancement advancement;
     protected boolean cancel = false;
     public AbstractAdvancementEvent(@NotNull UUID who, @NotNull CruxAdvancementManager<?> manager, @NotNull CruxAdvancement advancement) {
-        super(!Bukkit.isPrimaryThread());
+        super(!Crux.isPrimaryThread());
         this.who = who;
         this.manager = manager;
         this.advancement = advancement;

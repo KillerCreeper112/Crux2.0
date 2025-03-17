@@ -2,17 +2,20 @@ package killercreepr.crux.core.loot.conditions.world;
 
 import killercreepr.crux.api.loot.LootContext;
 import killercreepr.crux.core.loot.conditions.BaseCondition;
+import net.kyori.adventure.key.Key;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class WorldCondition extends BaseCondition {
     protected final @Nullable String name;
+    protected final @Nullable Key key;
     protected final @Nullable String dimension;
 
-    public WorldCondition(@NotNull String target, @Nullable String name, @Nullable String dimension) {
+    public WorldCondition(@NotNull String target, @Nullable String name, @Nullable Key key, @Nullable String dimension) {
         super(target);
         this.name = name;
+        this.key = key;
         this.dimension = dimension;
     }
 
@@ -22,6 +25,7 @@ public class WorldCondition extends BaseCondition {
         if(b==null) return false;
         if(name != null && !b.getName().equals(name)) return false;
         if(dimension != null && !b.getEnvironment().toString().equalsIgnoreCase(dimension)) return false;
+        if(key != null && !b.key().equals(key)) return false;
         return true;
     }
 }

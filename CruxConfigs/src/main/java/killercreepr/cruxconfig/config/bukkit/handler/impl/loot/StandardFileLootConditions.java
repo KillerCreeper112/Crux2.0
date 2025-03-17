@@ -105,8 +105,9 @@ public class StandardFileLootConditions {
                 FileRegistry registry = ctx.getRegistry();
                 String name = e.getObject(String.class, "name");
                 String dimension = e.getObject(String.class, "dimension");
+                Key key = registry.deserializeFromFile(Key.class, e.get("key"));
                 return new WorldCondition(
-                    target, name, dimension
+                    target, name, key, dimension
                 );
             }
         });

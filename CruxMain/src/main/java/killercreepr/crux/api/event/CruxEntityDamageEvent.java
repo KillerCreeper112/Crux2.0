@@ -1,5 +1,6 @@
 package killercreepr.crux.api.event;
 
+import killercreepr.crux.core.Crux;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -30,7 +31,7 @@ public class CruxEntityDamageEvent extends Event implements Cancellable {
     public CruxEntityDamageEvent(@NotNull Entity victim, @Nullable Entity damager, @Nullable Location attackLoc,
                                  double trueDmg, double trueKb, double trueUpKb,
                                  double dmg, double kb, double upKb) {
-        super(!Bukkit.isPrimaryThread());
+        super(!Crux.isPrimaryThread());
         this.victim = victim;
         this.damager = damager;
         this.trueDmg = trueDmg;

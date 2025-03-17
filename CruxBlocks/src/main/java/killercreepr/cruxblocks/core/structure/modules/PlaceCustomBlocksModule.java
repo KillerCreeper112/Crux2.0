@@ -60,7 +60,7 @@ public class PlaceCustomBlocksModule implements StructureModule {
                 }
             });
         };
-        if(Bukkit.isPrimaryThread()){
+        if(Crux.isPrimaryThread()){
             run.run();
         }else Crux.scheduler().runTask(run);
     }

@@ -1,5 +1,6 @@
 package killercreepr.cruxmenus.api.event;
 
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxmenus.api.menu.Menu;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.Event;
@@ -9,6 +10,7 @@ public abstract class MenuPlayerEvent extends Event {
     protected final @NotNull Menu menu;
     protected final HumanEntity player;
     public MenuPlayerEvent(@NotNull HumanEntity who, @NotNull Menu menu) {
+        super(!Crux.isPrimaryThread());
         this.player = who;
         this.menu = menu;
     }

@@ -52,7 +52,7 @@ public class CruxSimpleScheduler implements CruxScheduler {
 
     @Override
     public CruxScheduler runTaskMain(@NotNull Runnable task) {
-        if(Bukkit.isPrimaryThread()) task.run();
+        if(Crux.isPrimaryThread()) task.run();
         else return runTask(task);
         return this;
     }

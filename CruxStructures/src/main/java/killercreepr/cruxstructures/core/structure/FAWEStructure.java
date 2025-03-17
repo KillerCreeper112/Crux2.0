@@ -119,7 +119,7 @@ public class FAWEStructure extends DataComponentHandler.Simple implements Struct
 
     @Override
     public @NotNull StructurePlaceEvent place(@NotNull Location at, double rotation) {
-        StructurePlaceEvent event = new StructurePlaceEvent(this, !Bukkit.isPrimaryThread(), at, rotation);
+        StructurePlaceEvent event = new StructurePlaceEvent(this, !Crux.isPrimaryThread(), at, rotation);
         if(!event.callEvent()) return event;
 
         pasteSchematic(at, event.getRotation(), true);

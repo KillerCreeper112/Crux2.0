@@ -101,6 +101,10 @@ public final class Crux {
         return buildTickTask(CruxRegistries.TICK, true);
     }
 
+    public static boolean isPrimaryThread(){
+        return Crux.getServer().isGlobalTickThread();
+    }
+
     public static @NotNull BukkitRunnable buildTickTask(@NotNull KeyedRegistry<CruxTick> registry, boolean includeEntityMemory){
         if(!includeEntityMemory){
             return new BukkitRunnable(){
