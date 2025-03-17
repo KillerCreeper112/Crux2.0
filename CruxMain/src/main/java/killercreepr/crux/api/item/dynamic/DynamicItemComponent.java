@@ -11,4 +11,7 @@ public interface DynamicItemComponent extends Cloneable {
         return this;
     }
     DynamicItemComponent clone();
+    default boolean isThreadBlocking(){
+        return false;
+    }
 }

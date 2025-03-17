@@ -1,5 +1,7 @@
 package killercreepr.crux.core.text.tags;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import killercreepr.crux.api.text.format.FormatPrefix;
 import killercreepr.crux.api.text.hook.HookedObjectContainer;
 import killercreepr.crux.api.text.hook.ObjectTag;
@@ -21,9 +23,17 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public class CruxTags implements TagParser {
     protected final Collection<ObjectTag<?>> tags = new HashSet<>();
+
+    protected final Cache<Class<?>, Collection<ObjectTag<?>>> cache = CacheBuilder.newBuilder()
+        .expireAfterWrite(15, TimeUnit.MINUTES)
+        .maximumSize(500)
+        .build();
+
 
     @Override
     public CruxTags register(@NotNull ObjectTag<?> tag) {
@@ -33,11 +43,15 @@ public class CruxTags implements TagParser {
 
     @Override
     public <T> @NotNull Collection<ObjectTag<T>> locateTags(@NotNull T object){
+        Collection<ObjectTag<?>> cached = cache.getIfPresent(object.getClass());
+        if(cached != null) return (Collection<ObjectTag<T>>) (Collection) cached;
+
         Collection<ObjectTag<T>> list = new HashSet<>();
         tags.forEach(tag ->{
             if(!tag.canResolve(object)) return;
             list.add((ObjectTag<T>) tag);
         });
+        cache.put(object.getClass(), list.isEmpty() ? Set.of() : (Collection<ObjectTag<?>>) (Collection) list);
         return list;
     }
     @Override

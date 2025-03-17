@@ -12,7 +12,7 @@ public class UpdateMenuAction extends SimpleMenuAction {
 
     @Override
     public boolean execute(@NotNull ActionContext ctx, @NotNull String[] args) {
-        ctx.getMenu().refresh();
+        ctx.getMenu().quickRefresh();
         return true;
     }
 }

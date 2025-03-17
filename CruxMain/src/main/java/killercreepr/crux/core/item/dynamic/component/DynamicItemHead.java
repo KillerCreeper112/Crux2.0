@@ -48,4 +48,9 @@ public class DynamicItemHead extends DynamicSingleValueComponent{
             meta.setPlayerProfile(profile);
         });
     }
+
+    @Override
+    public boolean isThreadBlocking() {
+        return true;
+    }
 }

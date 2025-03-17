@@ -30,6 +30,9 @@ public interface CfgMenu extends Menu, DataInfoHolder {
     }
 
     @ApiStatus.Experimental
+    void quickRefresh();
+
+    @ApiStatus.Experimental
     CfgMenu info(@NotNull DataExchange info);
 
     default void setItem(int slot, @Nullable MenuItem item, @NotNull Player viewer, boolean silent){
@@ -40,14 +43,14 @@ public interface CfgMenu extends Menu, DataInfoHolder {
             }
 
             item.buildItemCompletely(viewer).whenComplete((it, throwable) ->{
-                Crux.scheduler().runTask(task ->{
-                    if (throwable != null) {
-                        // An exception occurred
-                        Crux.log(Level.WARNING, "Error occurred when building MenuItem: " + throwable.getMessage());
-                        return;
-                    }
-                    setItem(slot, item, it == null ? null : it.item(), silent);
-                });
+                /*Crux.scheduler().runTask(task ->{
+                });*/
+                if (throwable != null) {
+                    // An exception occurred
+                    Crux.log(Level.WARNING, "Error occurred when building MenuItem: " + throwable.getMessage());
+                    return;
+                }
+                setItem(slot, item, it == null ? null : it.item(), silent);
             });
             return;
         }

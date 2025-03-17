@@ -23,11 +23,22 @@ public class BukkitDynamicItem implements DynamicItem {
     protected final @NotNull String material;
     protected final @Nullable String amount;
     protected final @Nullable Map<String, DynamicItemComponent> components;
+    protected final boolean isThreadBlocking;
 
     public BukkitDynamicItem(@NotNull String material, @Nullable String amount, @Nullable Map<String, DynamicItemComponent> components) {
         this.material = material;
         this.amount = amount;
         this.components = components == null ? null : Collections.unmodifiableMap(components);
+        boolean isThreadBlocking = false;
+        if(components != null) {
+            for(DynamicItemComponent c : components.values()){
+                if(c.isThreadBlocking()){
+                    isThreadBlocking = true;
+                    break;
+                }
+            }
+        }
+        this.isThreadBlocking = isThreadBlocking;
     }
 
     @Override
@@ -132,7 +143,8 @@ public class BukkitDynamicItem implements DynamicItem {
 
     @Override
     public @NotNull CompletableFuture<CruxItem> buildCompletely(@NotNull TextParserContext context) {
-        return CompletableFuture.supplyAsync(() -> build(context));
+        if(isThreadBlocking) return CompletableFuture.supplyAsync(() -> build(context));
+        return CompletableFuture.completedFuture(build(context));
     }
 
     @Override

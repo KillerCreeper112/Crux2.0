@@ -4,9 +4,11 @@ import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.text.tags.TagParser;
 import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.crux.api.text.tags.container.TagContainer;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.text.container.SimpleMergedTagContainer;
 import killercreepr.crux.core.text.context.SimpleInputContext;
 import killercreepr.crux.core.util.InvUtil;
+import killercreepr.cruxmenus.api.event.MenuRefreshEvent;
 import killercreepr.cruxmenus.api.menu.CfgMenu;
 import killercreepr.cruxmenus.api.menu.contex.MenuContext;
 import killercreepr.cruxmenus.api.menu.holder.MenuHolder;
@@ -206,6 +208,16 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
         reconstruct(InvUtil.getInventorySize(buildSize()), buildTitle(), true, true);
     }
 
+    public void quickRefresh(){
+        setRefreshing(true);
+        refreshReconstruct();
+        clearItems(true);
+        clearMenuItems(true);
+        modules.refresh();
+        setItems(holder);
+        setRefreshing(false);
+    }
+
     @Override
     public void onRefresh() {
         setRefreshing(true);
@@ -213,8 +225,10 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
 
         clearItems(true);
         clearMenuItems(true);
-        modules.refresh();
-        setItems(holder);
+        Crux.scheduler().runTaskAsync(() ->{
+            modules.refresh();
+            setItems(holder);
+        });
         setRefreshing(false);
     }
 

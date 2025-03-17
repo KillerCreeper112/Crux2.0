@@ -61,7 +61,7 @@ public class SimpleMenuHolder implements MenuHolder {
         builder.put("viewer", p);
 
         CfgMenu menu = createMenu(builder.build(), tags);
-        Crux.scheduler().runTaskAsync(() -> menu.load());
+        menu.load();
         return menu.open(p);
     }
 
