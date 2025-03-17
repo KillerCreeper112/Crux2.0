@@ -11,7 +11,6 @@ import killercreepr.cruxcrafting.api.config.handler.FileCruxCraftingRecipe;
 import killercreepr.cruxcrafting.api.crafting.RecipeCategory;
 import killercreepr.cruxcrafting.api.crafting.ingredient.CruxRecipeIngredient;
 import killercreepr.cruxcrafting.api.crafting.recipe.CruxCraftingRecipe;
-import killercreepr.cruxcrafting.core.crafting.recipe.SimpleShapedCategorizedRecipe;
 import killercreepr.cruxcrafting.core.crafting.recipe.SimpleShapelessCategorizedRecipe;
 import killercreepr.cruxcrafting.core.crafting.recipe.SimpleShapelessRecipe;
 import killercreepr.cruxcrafting.core.registries.CruxCraftingRegistries;

@@ -7,7 +7,9 @@ import killercreepr.cruxcrafting.api.crafting.recipe.CategorizedRecipe;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 public class SimpleShapedCategorizedRecipe extends SimpleShapedRecipe implements CategorizedRecipe {
     protected final Collection<RecipeCategory> category;

@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 public class SimpleShapelessCategorizedRecipe extends SimpleShapelessRecipe implements CategorizedRecipe {
     protected final Collection<RecipeCategory> category;
