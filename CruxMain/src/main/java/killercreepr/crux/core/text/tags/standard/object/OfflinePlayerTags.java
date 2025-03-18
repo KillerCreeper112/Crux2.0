@@ -148,9 +148,12 @@ public class OfflinePlayerTags implements ObjectTag<OfflinePlayer> {
                 if(statistic == null) return key + " statistic not found";
                 return p.getStatistic(statistic, entityType) + "";
             }))
-            .add(Tag.string("first_played", (args, ctx) ->{
-                return p.getFirstPlayed() + "";
-            }))
+            .add(Tag.string("first_played", (args, ctx) -> p.getFirstPlayed() + ""))
+            .add(Tag.string("last_seen", (args, context) -> p.getLastSeen() + ""))
+            .add(Tag.string("last_login", (args, context) -> p.getLastLogin() + ""))
+            .add(Tag.string("is_banned", (args, context) -> p.isBanned() + ""))
+            .add(Tag.string("is_connected", (args, context) -> p.isConnected() + ""))
+            .add(Tag.string("is_whitelisted", (args, context) -> p.isWhitelisted() + ""))
             ;
     }
 
