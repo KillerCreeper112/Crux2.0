@@ -32,10 +32,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.logging.Level;
 
 public class ComponentInputParsers {
@@ -301,23 +298,35 @@ public class ComponentInputParsers {
             );
             return all.encodeToParser().getFirst();
         }))
-        .apply(ctx ->{
-            String id = ctx.get();
-            boolean invert = id.startsWith("!");
-            if(invert) id = id.substring(1);
-            KeyPredicate p;
-            if(id.startsWith("#")){
-                KeyTag tag = CruxRegistries.KEY_TAG.get(Crux.key(id.substring(1)));
-                if(tag == null){
-                    Crux.log(Level.SEVERE, "Cannot find key tag of " + id + "!");
-                    return null;
-                }
-                p = KeyPredicate.fromTag(tag);
-            }else{
-                p = KeyPredicate.fromType(Crux.key(id));
+        .apply(ctx -> parseKeyPredicate(ctx.get()));
+
+    private static KeyPredicate parseKeyPredicate(Object o){
+        if(o instanceof List<?> list){
+            Collection<KeyPredicate> parsed = new ArrayList<>();
+            for(Object oo : list){
+                KeyPredicate pp = SIMPLE_KEY_PREDICATE.decodeObject(oo);
+                if(pp==null) continue;
+                parsed.add(pp);
             }
-            return invert ? KeyPredicate.fromInverted(p) : p;
-        });
+            return KeyPredicate.fromAllOf(parsed);
+        }
+
+        String id = o.toString();
+        boolean invert = id.startsWith("!");
+        if(invert) id = id.substring(1);
+        KeyPredicate p;
+        if(id.startsWith("#")){
+            KeyTag tag = CruxRegistries.KEY_TAG.get(Crux.key(id.substring(1)));
+            if(tag == null){
+                Crux.log(Level.SEVERE, "Cannot find key tag of " + id + "!");
+                return null;
+            }
+            p = KeyPredicate.fromTag(tag);
+        }else{
+            p = KeyPredicate.fromType(Crux.key(id));
+        }
+        return invert ? KeyPredicate.fromInverted(p) : p;
+    }
 
     public static PersistTextParser<KeyPredicate> KEY_PREDICATE = PersistTextParser.mapBuilder(KeyPredicate.class)
         .field("type", TextInputField.field(PersistTextParser.STRING, e ->{
