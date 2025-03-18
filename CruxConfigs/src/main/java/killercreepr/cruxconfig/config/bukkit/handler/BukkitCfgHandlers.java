@@ -20,6 +20,7 @@ import killercreepr.crux.api.item.dynamic.DynamicItem;
 import killercreepr.crux.api.item.dynamic.component.persistence.TypedDynamicPersistentTag;
 import killercreepr.crux.api.item.predicate.ItemPredicate;
 import killercreepr.crux.api.item.tag.ItemTag;
+import killercreepr.crux.api.key.tag.KeyTag;
 import killercreepr.crux.api.loot.conditions.LootCondition;
 import killercreepr.crux.api.loot.item.ItemLootFunction;
 import killercreepr.crux.api.loot.item.ItemLootPool;
@@ -100,6 +101,7 @@ public class BukkitCfgHandlers {
     public static final FileItemPredicate ITEM_PREDICATE = new FileItemPredicate();
     public static final FileBlockTag BLOCK_TAG = new FileBlockTag();
     public static final FileEntityTag ENTITY_TAG = new FileEntityTag();
+    public static final FileKeyTag KEY_TAG = new FileKeyTag();
     public static final FileBlockPredicate BLOCK_PREDICATE = new FileBlockPredicate();
     public static final FileEntityPredicate ENTITY_PREDICATE = new FileEntityPredicate();
     public static final FileCruxBlockWrapper CRUX_BLOCK_WRAPPER = new FileCruxBlockWrapper();
@@ -148,6 +150,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(ItemPredicate.class, ITEM_PREDICATE);
         registry.registerFileHandler(BlockTag.class, BLOCK_TAG);
         registry.registerFileHandler(EntityTag.class, ENTITY_TAG);
+        registry.registerFileHandler(KeyTag.class, KEY_TAG);
         registry.registerFileHandler(BlockPredicate.class, BLOCK_PREDICATE);
         registry.registerFileHandler(EntityPredicate.class, ENTITY_PREDICATE);
         registry.registerFileHandler(CruxBlockWrapper.class, CRUX_BLOCK_WRAPPER);

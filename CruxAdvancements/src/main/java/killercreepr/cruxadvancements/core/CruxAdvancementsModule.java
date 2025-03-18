@@ -76,7 +76,11 @@ public class CruxAdvancementsModule implements CruxModule {
         );
     }
 
-
+    @Override
+    public void reload(@NotNull CruxPlugin plugin) {
+        CruxModule.super.reload(plugin);
+        values.reload(plugin);
+    }
 
     public void registerTags(TagParser tags){
         tags.register(
