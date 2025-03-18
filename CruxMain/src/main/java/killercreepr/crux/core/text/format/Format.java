@@ -18,6 +18,7 @@ import killercreepr.crux.core.text.container.StringListTagContainer;
 import killercreepr.crux.core.text.container.StringTagContainer;
 import killercreepr.crux.core.text.tags.standard.NumberFormatResolver;
 import killercreepr.crux.core.util.CruxMath;
+import killercreepr.crux.core.util.CruxString;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
@@ -553,7 +554,121 @@ public class Format implements FormatSerializer {
     }
 
     public @NotNull String processEvalExBool(@NotNull String text) {
-        Matcher matcher = EVAL_EQUATION_PATTERN.matcher(text);
+        return processEvalExBool(text, new ArrayDeque<>(), new ArrayDeque<>());
+    }
+
+    //todo transfer normal equation {{1+1}} to use this new system as well
+    public @NotNull String processEvalExBool(@NotNull String text, @NotNull Deque<Integer> stack, @NotNull Deque<Integer> squareStack) {
+        StringBuilder result = new StringBuilder();
+        int startingIndex = stack.isEmpty() ? 0 : stack.pop();
+        Integer round = null;
+        Integer firstSquareIndex = null;
+        for (int i = startingIndex; i < text.length(); i++) {
+            char c = text.charAt(i);
+
+            if(!squareStack.isEmpty()){
+                if(c == ']'){
+                    int start = squareStack.pop();
+                    firstSquareIndex = start;
+                    String fullExpression = text.substring(start+2, i);
+                    round = (int) CruxMath.evaluate(processEquations(fullExpression));
+                    continue;
+                }
+                continue;
+            }
+
+            if (c == '{') {
+                if(i + 2 < text.length() && text.startsWith("e{", i + 1)){
+                    stack.push(i);
+                }
+                continue;
+            }
+
+            if(c == '}' && !stack.isEmpty()){
+                if(i+1 >= text.length() && round == null) continue;
+                char checkChar = round != null ? '}' : text.charAt(i+1);
+                if(checkChar == '}'){
+                    int start = stack.pop();
+                    int end = i;
+                    int expressionEnd = firstSquareIndex == null ? end : firstSquareIndex-1;
+                    String fullExpression = text.substring(start + 3, expressionEnd); // Extract inside {e{...}}
+
+                    //fullExpression = processEvalExBool(fullExpression);
+
+                    String evaluatedValue;
+                    try {
+                        evaluatedValue = CruxMath.tryEvaluateEvalEx(fullExpression);
+                    } catch (EvaluationException | ParseException e) {
+                        Crux.logError("SAD FACE MAN );");
+                        e.printStackTrace();
+                        continue;
+                    }
+
+                    if(round != null){
+                        evaluatedValue = NumberFormatResolver.resolve(Double.parseDouble(evaluatedValue), round);
+                        squareStack.clear();
+                    }
+
+                    result.append(text, 0, start); // Append text before `{e{...}}`
+                    result.append(evaluatedValue); // Replace `{e{...}}` with result
+                    int endTextIndex;
+                    if(firstSquareIndex == null) endTextIndex = end+2;
+                    else endTextIndex = end+1;
+                    text = text.substring(endTextIndex); // Remove processed `{e{...}}`
+                    break;
+                }
+                if(checkChar == '['){
+                    squareStack.push(i);
+                    continue;
+                }
+            }
+        }
+        result.append(text); // Append remaining text
+        text = result.toString();
+        return stack.isEmpty() ? text : processEvalExBool(text, stack, squareStack);
+    }
+
+    /*public @NotNull String processEvalExBool(@NotNull String text) {
+        StringBuilder result = new StringBuilder();
+        Stack<Integer> stack = new Stack<>();
+        int start = -1;
+
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+
+            if (c == '{' && i + 2 < text.length() && text.startsWith("e{", i + 1)) {
+                stack.push(i);
+                if (start == -1) {
+                    start = i; // Mark the start of the outermost `{e{`
+                }
+            } else if (c == '}' && !stack.isEmpty()) {
+                int openingIndex = stack.pop();
+                if (stack.isEmpty()) {
+                    // We've found a full {e{...}} expression
+                    int end = i;  // Closing `}` index
+                    String fullExpression = text.substring(start + 3, end); // Extract content inside {e{...}}
+                    String evaluatedValue;
+                    try{
+                        evaluatedValue = CruxMath.tryEvaluateEvalEx(fullExpression);
+                    }catch (EvaluationException | ParseException e){
+                        Crux.logError("SAD FACE MAN );");
+                        e.printStackTrace();
+                        continue;
+                    }
+
+                    result.append(text, 0, start); // Append text before {e{...}}
+                    result.append(evaluatedValue); // Replace {e{...}} with evaluated value
+                    text = text.substring(end + 2);  // Remove processed `{e{...}}`
+                    i = -1; // Restart loop with updated text
+                    start = -1;
+                }
+            }
+        }
+
+        result.append(text); // Append remaining text
+        return result.toString();
+
+        *//*Matcher matcher = EVAL_EQUATION_PATTERN.matcher(text);
         StringBuilder result = new StringBuilder();
         while (matcher.find()) {
             String expression = matcher.group(1);
@@ -579,8 +694,8 @@ public class Format implements FormatSerializer {
             matcher.appendReplacement(result, Matcher.quoteReplacement(evaluatedValue));
         }
         matcher.appendTail(result);
-        return result.toString();
-    }
+        return result.toString();*//*
+    }*/
 
     public static class Builder implements FormatSerializer.Builder{
         protected MiniMessage miniMessage;

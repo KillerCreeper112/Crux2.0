@@ -104,8 +104,13 @@ public class CruxString {
 
         // Escape the delimiter for regex if it's a special character
         String regexDelimiter = Pattern.quote(delimiter);
+        Pattern pattern = Pattern.compile(
+            "[^\\s" + regexDelimiter + "\"]+" +
+                "|\"(.*?)\"(?=\\s|$)" +
+                "|'(.*?)'(?=\\s|$)"
+        );
 
-        Pattern pattern = Pattern.compile("[^\\s" + regexDelimiter + "\"]+|\"([^\"]*)\"|'([^']*)'");
+        //Pattern pattern = Pattern.compile("[^\\s" + regexDelimiter + "\"]+|\"([^\"]*)\"|'([^']*)'");
         Matcher matcher = pattern.matcher(input);
 
         while (matcher.find()) {

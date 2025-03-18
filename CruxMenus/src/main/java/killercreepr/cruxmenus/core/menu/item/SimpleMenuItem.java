@@ -172,11 +172,15 @@ public class SimpleMenuItem implements MenuItem {
                                  @NotNull ActionContext actionInfo, @NotNull Registry<MenuAction> actions){
         String actionName = extractAction(action);
         if(actionName == null) return false;
-        String result = getFormat().deserializeString(action.replaceFirst("\\[.*?]\\s*", ""),
-                actionInfo.getAllMergedResolvers());
+        MergedTagContainer tags = actionInfo.getAllMergedResolvers();
+        String result = getFormat().deserializeString(action.replaceFirst("\\[.*?]\\s*", ""), tags);
         for(MenuAction a : actions){
             if(!a.has(actionName)) continue;
             String[] args = CruxString.quoteSplit(result, " ");
+            /*for(int i = 0; i < args.length; i++){
+                String s = args[i];
+                args[i] = getFormat().deserializeString(s, tags);
+            }*/
             if(a.execute(actionInfo, args)) return true;
         }
         return false;
