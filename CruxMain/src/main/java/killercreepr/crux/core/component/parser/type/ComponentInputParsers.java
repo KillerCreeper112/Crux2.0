@@ -10,6 +10,8 @@ import killercreepr.crux.api.data.ParticleBuilderSupplier;
 import killercreepr.crux.api.item.component.ToolComponent;
 import killercreepr.crux.api.item.predicate.ItemPredicate;
 import killercreepr.crux.api.item.tag.ItemTag;
+import killercreepr.crux.api.key.tag.KeyPredicate;
+import killercreepr.crux.api.key.tag.KeyTag;
 import killercreepr.crux.api.loot.item.ItemLootTable;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.api.valueproviders.vector.NumberVector;
@@ -290,6 +292,63 @@ public class ComponentInputParsers {
             float volume = ctx.getOptional("volume", 2f);
             float pitch = ctx.getOptional("pitch", 1f);
             return CreateSound.sound(key, Sound.Source.MASTER, volume, pitch);
+        });
+
+    public static PersistTextParser<KeyPredicate> SIMPLE_KEY_PREDICATE = PersistTextParser.elementBuilder(KeyPredicate.class)
+        .field(TextInputField.field(PersistTextParser.STRING, e ->{
+            if(!(e instanceof StringListEncodeComponent all)) throw new IllegalArgumentException(
+                "KeyPredicate must implement StringListEncode! " + e
+            );
+            return all.encodeToParser().getFirst();
+        }))
+        .apply(ctx ->{
+            String id = ctx.get();
+            boolean invert = id.startsWith("!");
+            if(invert) id = id.substring(1);
+            KeyPredicate p;
+            if(id.startsWith("#")){
+                KeyTag tag = CruxRegistries.KEY_TAG.get(Crux.key(id.substring(1)));
+                if(tag == null){
+                    Crux.log(Level.SEVERE, "Cannot find key tag of " + id + "!");
+                    return null;
+                }
+                p = KeyPredicate.fromTag(tag);
+            }else{
+                p = KeyPredicate.fromType(Crux.key(id));
+            }
+            return invert ? KeyPredicate.fromInverted(p) : p;
+        });
+
+    public static PersistTextParser<KeyPredicate> KEY_PREDICATE = PersistTextParser.mapBuilder(KeyPredicate.class)
+        .field("type", TextInputField.field(PersistTextParser.STRING, e ->{
+            if(e instanceof ItemAllPredicate) return "all_of";
+            if(e instanceof ItemAnyPredicate) return "any_of";
+            return null;
+        }))
+        .field("terms", TextInputField.field(PersistTextParser.LIST.STRING, e ->{
+            if(!(e instanceof StringListEncodeComponent c)) return null;
+            return c.encodeToParser();
+        }))
+        .apply(ctx ->{
+            if(!(ctx.getOptional("terms") instanceof List<?> list)){
+                return SIMPLE_KEY_PREDICATE.decodeObject(ctx.get());
+            }
+
+            Collection<KeyPredicate> parsed = new HashSet<>();
+            for(Object s : list){
+                KeyPredicate predicate = SIMPLE_KEY_PREDICATE.decodeObject(s);
+                parsed.add(predicate);
+            }
+            String type = ctx.getOptional("type", "all_of");
+            switch (type.toLowerCase()){
+                case "all_of" ->{
+                    return KeyPredicate.fromAllOf(parsed);
+                }
+                case "any_of" ->{
+                    return KeyPredicate.fromAnyOf(parsed);
+                }
+            }
+            return KeyPredicate.fromAllOf(parsed);
         });
 
     public static final ComponentInputListParsers LIST = new ComponentInputListParsers();
