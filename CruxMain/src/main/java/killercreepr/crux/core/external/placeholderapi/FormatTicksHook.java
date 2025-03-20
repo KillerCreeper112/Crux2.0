@@ -1,7 +1,5 @@
 package killercreepr.crux.core.external.placeholderapi;
 
-import killercreepr.crux.core.text.tags.standard.DateFormatResolver;
-import killercreepr.crux.core.text.tags.standard.DurationFormatResolver;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
