@@ -57,10 +57,6 @@ public interface CruxPosition {
     static @NotNull CruxPosition block(@NotNull CruxPosition v){
         return new BlockPos(v.blockX(), v.blockY(), v.blockZ());
     }
-    static @NotNull CruxPosition blockWrap(@NotNull CruxPosition v){
-        if(v instanceof BlockPos d) return d;
-        return new BlockPos(v.blockX(), v.blockY(), v.blockZ());
-    }
 
     @Contract(pure = true)
     static CruxPosition getMaximum(@NotNull CruxPosition v1, @NotNull CruxPosition v2) {
