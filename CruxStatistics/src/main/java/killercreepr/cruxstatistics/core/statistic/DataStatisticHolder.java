@@ -9,11 +9,9 @@ import killercreepr.cruxconfig.config.bukkit.file.CruxJson;
 import killercreepr.cruxstatistics.api.statistic.CruxStatistic;
 import killercreepr.cruxstatistics.api.statistic.CruxStatisticType;
 import killercreepr.cruxstatistics.api.statistic.EntityStatisticHolder;
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -47,7 +45,6 @@ public class DataStatisticHolder implements EntityStatisticHolder {
     public void load() {
         CruxJson data = getDataFile();
         Map<CruxStatistic<?>, Integer> stats = data.deserialize("statistics", new TypeToken<Map<CruxStatistic, Integer>>(){}.getType());
-        Bukkit.broadcastMessage("loaded=" + stats);
         data.close();
         if(stats == null || stats.isEmpty()) return;
         this.stats.putAll(stats);
