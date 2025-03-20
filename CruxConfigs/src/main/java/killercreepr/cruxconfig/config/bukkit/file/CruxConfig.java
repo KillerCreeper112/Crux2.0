@@ -86,6 +86,12 @@ public class CruxConfig extends CruxFolder implements IYamlCfg<MemoryConfigurati
     }
 
     @Override
+    public boolean delete() {
+        close();
+        return file.delete();
+    }
+
+    @Override
     public final boolean createDefault(){
         if(file.exists()) return false;
         setDefaults();

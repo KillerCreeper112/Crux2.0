@@ -19,4 +19,5 @@ public interface DataFile extends ICruxFile {
     void setPathSeparator(char separator);
     void close();
     boolean save();
+    boolean delete();
 }
