@@ -9,6 +9,7 @@ dependencies {
     paperweight.paperDevBundle(libs.versions.paper)
     implementation(libs.crunch)
     implementation("com.ezylang:EvalEx:3.3.0")
+    compileOnly(files("E:\\Plugins\\YO\\CruxCore\\run\\plugins\\PlaceholderAPI-2.11.6.jar"))
 }
 
 tasks{

@@ -6,18 +6,20 @@ import killercreepr.crux.api.text.hook.ObjectTag;
 import killercreepr.crux.api.text.resolver.StringResolver;
 import killercreepr.crux.api.text.resolver.TagResolver;
 import killercreepr.crux.api.text.tags.container.TagContainer;
+import killercreepr.crux.core.text.format.Format;
 import killercreepr.crux.core.text.format.FormatArgs;
 import killercreepr.crux.core.text.format.FormatParserContext;
 import killercreepr.crux.core.text.hook.StringHookedObjectTag;
+import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-//todo test this out
-public class TagsExpansionHook /*extends PlaceholderExpansion */{
+public class TagsExpansionHook extends PlaceholderExpansion{
     protected final @NotNull String identifier;
     protected final @NotNull FormatSerializer format;
 
@@ -26,19 +28,24 @@ public class TagsExpansionHook /*extends PlaceholderExpansion */{
         this.format = format;
     }
 
-    //@Override
+    @Override
     public @NotNull String getIdentifier() {
         return identifier;
     }
 
-    //@Override
+    @Override
     public @NotNull String getAuthor() {
         return "killercreepr";
     }
 
-    //@Override
+    @Override
     public @NotNull String getVersion() {
         return "1.0";
+    }
+
+    @Override
+    public boolean persist() {
+        return true;
     }
 
     public @Nullable StringResolver findResolver(@NotNull TagContainer<?> container,
@@ -53,17 +60,21 @@ public class TagsExpansionHook /*extends PlaceholderExpansion */{
         return null;
     }
 
-    //@Override
+    @Override
     public @Nullable String onRequest(OfflinePlayer player, @NotNull String params) {
         //<player_name> = %crux_player_name%
         //<player_max_health>
         //<claimer_max_claims_per_outpost> = %crux_claimer_maxclaimsperoutpost%
         if(player == null) return null;
-        List<String> argsList = new ArrayList<>(List.of(params.split("_")));
+        //<player_name> = %crux_player:name%
+        //<player_attribute:attack_damage> = %crux_player:attribute:attack_damage%
+        //<claimer_max_claims_per_outpost> = %crux_claimer:maxclaimsperoutpost%
+        String[] rawArgs = params.split("_", 1);
+        List<String> argsList = new ArrayList<>(Arrays.asList(rawArgs[0].split(":")));
         String objectIdentifier = argsList.get(0);
         String hookIdentifier = argsList.get(1);
-        argsList.remove(0);
-        argsList.remove(0);
+        argsList.removeFirst();
+        argsList.removeFirst();
         FormatArgs hookArgs = new FormatArgs(argsList.toArray(new String[0]));
         for(ObjectTag<OfflinePlayer> tag : format.tags().locateTags(player)){
             //test offline player tags

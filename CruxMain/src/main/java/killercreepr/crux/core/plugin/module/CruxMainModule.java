@@ -6,6 +6,7 @@ import killercreepr.crux.api.plugin.module.CruxModule;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.command.CruxLootCommands;
 import killercreepr.crux.core.component.CruxComponents;
+import killercreepr.crux.core.external.placeholderapi.TagsExpansionHook;
 import killercreepr.crux.core.listener.EntityDataListener;
 import killercreepr.crux.core.listener.EntitySpawnListener;
 import killercreepr.crux.core.listener.LootContainerListener;
@@ -79,6 +80,10 @@ public class CruxMainModule implements CruxModule, Listener {
     public void onLoad(@NotNull CruxPlugin plugin) {
         CruxComponents.register();
         CruxLootCommands.register(plugin);
+
+        if(plugin.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null){
+            new TagsExpansionHook("crux", Crux.format()).register();
+        }
     }
 
     @Override

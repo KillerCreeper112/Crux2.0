@@ -6,6 +6,7 @@ import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.plugin.module.StandardModules;
 import killercreepr.crux.core.registries.CruxRegistries;
+import killercreepr.cruxstatistics.core.command.CruxStatisticsCommands;
 import killercreepr.cruxstatistics.core.config.CruxConfigHook;
 import killercreepr.cruxstatistics.core.tags.object.StatisticPlayerTags;
 import org.jetbrains.annotations.NotNull;
@@ -23,6 +24,8 @@ public class CruxStatisticsModule implements CruxModule {
             CruxConfigHook.register();
         }
         registerTags(Crux.tags());
+
+        CruxStatisticsCommands.register(plugin);
     }
 
     public void registerTags(TagParser tags){
