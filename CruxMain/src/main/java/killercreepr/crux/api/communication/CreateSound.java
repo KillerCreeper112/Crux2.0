@@ -17,7 +17,7 @@ public interface CreateSound {
     }
 
     static CreateSound sound(@NotNull Key key, float pitch){
-        return sound(key, Sound.Source.MASTER, 2f, pitch);
+        return sound(key, Sound.Source.MASTER, 1f, pitch);
     }
 
     static CreateSound sound(@NotNull Key key, @NotNull Sound.Source source, float volume, float pitch){
@@ -29,7 +29,7 @@ public interface CreateSound {
     }
 
     static CreateSound sound(@NotNull String key, float pitch){
-        return sound(Key.key(key), Sound.Source.MASTER, 2f, pitch);
+        return sound(Key.key(key), Sound.Source.MASTER, 1f, pitch);
     }
 
     static CreateSound sound(@NotNull String key, @NotNull Sound.Source source, float volume, float pitch){

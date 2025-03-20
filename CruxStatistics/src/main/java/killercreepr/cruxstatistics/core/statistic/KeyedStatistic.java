@@ -25,6 +25,6 @@ public class KeyedStatistic<T extends Keyed> implements CruxStatistic<T> {
 
     @Override
     public String getName() {
-        return type.key().asString() + "/" + value.key().asString();
+        return type.key().asString() + " " + value.key().asString();
     }
 }

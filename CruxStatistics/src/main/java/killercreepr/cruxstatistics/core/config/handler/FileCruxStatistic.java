@@ -44,9 +44,10 @@ public class FileCruxStatistic implements FileObjectHandler<CruxStatistic<?>> {
                 Crux.log(Level.SEVERE, type + " CruxStatisticType value of " + split[1] + " not found!");
                 return null;
             }
-            return CruxStatistic.statisticKeyedUnchecked(typed, value);
+            return typed.getUnchecked(value);
+            //return CruxStatistic.statisticKeyedUnchecked(typed, value);
         }
 
-        return CruxStatistic.statistic(type);
+        return type.get(null);
     }
 }

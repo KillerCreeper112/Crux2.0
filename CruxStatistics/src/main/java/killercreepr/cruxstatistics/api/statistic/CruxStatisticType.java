@@ -21,6 +21,10 @@ public interface CruxStatisticType<T> extends CruxKeyed {
         return new KeyedCruxStatisticType<>(key, registry);
     }
 
+    default CruxStatistic<T> getUnchecked(Object value){
+        return get((T) value);
+    }
+
     CruxStatistic<T> get(T value);
     boolean contains(T value);
 }
