@@ -1,16 +1,19 @@
 package killercreepr.crux.core.external.placeholderapi;
 
+import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.crux.api.text.format.FormatSerializer;
 import killercreepr.crux.api.text.hook.HookedObjectContainer;
 import killercreepr.crux.api.text.hook.ObjectTag;
 import killercreepr.crux.api.text.resolver.StringResolver;
 import killercreepr.crux.api.text.resolver.TagResolver;
 import killercreepr.crux.api.text.tags.container.TagContainer;
+import killercreepr.crux.core.text.container.StringTagContainer;
 import killercreepr.crux.core.text.format.Format;
 import killercreepr.crux.core.text.format.FormatArgs;
 import killercreepr.crux.core.text.format.FormatParserContext;
 import killercreepr.crux.core.text.hook.StringHookedObjectTag;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -52,12 +55,15 @@ public class TagsExpansionHook extends PlaceholderExpansion{
                                                  @NotNull ObjectTag<OfflinePlayer> tag,
                                                  @NotNull String objectIdentifier,
                                                  @NotNull String hookIdentifier){
-        for(TagResolver<?> resolver : container){
+        Bukkit.broadcastMessage(container.asMap().keySet() + " tags");
+        return (StringResolver) container.get(objectIdentifier);
+
+        /*for(TagResolver<?> resolver : container){
             if(!noUnderscore(tag.defaultPrefix().buildPrefix(resolver)).equalsIgnoreCase(objectIdentifier)) continue;
             if(!noUnderscore(resolver.identifier()).equalsIgnoreCase(hookIdentifier)) continue;
             return (StringResolver) resolver;
-        }
-        return null;
+        }*/
+        //return null;
     }
 
     @Override
@@ -69,26 +75,36 @@ public class TagsExpansionHook extends PlaceholderExpansion{
         //<player_name> = %crux_player:name%
         //<player_attribute:attack_damage> = %crux_player:attribute:attack_damage%
         //<claimer_max_claims_per_outpost> = %crux_claimer:maxclaimsperoutpost%
-        String[] rawArgs = params.split("_", 1);
-        List<String> argsList = new ArrayList<>(Arrays.asList(rawArgs[0].split(":")));
+        List<String> argsList = new ArrayList<>(Arrays.asList(params.split(":")));
         String objectIdentifier = argsList.get(0);
-        String hookIdentifier = argsList.get(1);
         argsList.removeFirst();
-        argsList.removeFirst();
+        /*String hookIdentifier = argsList.get(1);
+        Bukkit.broadcastMessage(objectIdentifier + " ");
+        Bukkit.broadcastMessage(hookIdentifier + " ");*/
+        //Bukkit.broadcastMessage(Arrays.toString(rawArgs[0].split(":")) + "");
+        StringTagContainer container = format.tags().buildStringTags(player);
+        if(container==null) return null;
+
+        StringResolver resolver = container.get(objectIdentifier);
+        if(resolver==null) return null;
+
         FormatArgs hookArgs = new FormatArgs(argsList.toArray(new String[0]));
+
+        if(true) return resolver.resolve(hookArgs, TextParserContext.builder().format(format).viewer(player).build());
+
         for(ObjectTag<OfflinePlayer> tag : format.tags().locateTags(player)){
             //test offline player tags
-            TagContainer<StringResolver> container = tag.requestStrings(player, format.tags());
+            /*TagContainer<StringResolver> container = tag.requestStrings(player, format.tags());
             if(container != null){
-                StringResolver resolver = findResolver(container, tag, objectIdentifier, hookIdentifier);
+                StringResolver resolver = findResolver(container, tag, objectIdentifier, null);
                 if(resolver != null) return resolver.resolve(hookArgs, new FormatParserContext.Builder(format).viewer(player).build());
             }
 
             HookedObjectContainer<StringHookedObjectTag<?>> hookedContainer = tag.hookStrings(player, format.tags());
             if(hookedContainer != null){
-                StringResolver resolver = findResolver(hookedContainer.toTags(format.tags()), tag, objectIdentifier, hookIdentifier);
+                StringResolver resolver = findResolver(hookedContainer.toTags(format.tags()), tag, objectIdentifier, null);
                 if(resolver != null) return resolver.resolve(hookArgs, new FormatParserContext.Builder(format).viewer(player).build());
-            }
+            }*/
 
             /*if(noUnderscore(tag.defaultPrefix().prefix(tag, player)).equalsIgnoreCase(objectIdentifier)){
                 Collection<StringHook<OfflinePlayer>> tagHooks = tag.requestStrings(player, format.getTags());
@@ -123,6 +139,6 @@ public class TagsExpansionHook extends PlaceholderExpansion{
     }
 
     private @NotNull String noUnderscore(@NotNull String text){
-        return text.replace("_", "");
+        return text;//.replace("_", "");
     }
 }

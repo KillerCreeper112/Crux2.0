@@ -309,7 +309,7 @@ public class Format implements FormatSerializer {
     //
     //... its not fine );
     //todo FIXED IT :D
-    private static final String placeholderSplit = ":(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
+    public static final String placeholderSplit = ":(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
     public @NotNull String processPlaceholders(@NotNull String text, @NotNull TagContainer<StringResolver> tags) {
         return processPlaceholders(text, tags, Map.of(), Set.of());
         /*StringTagContainer resolvers = new StringTagContainer(this.tags);
