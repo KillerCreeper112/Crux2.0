@@ -1,5 +1,6 @@
 package killercreepr.crux.core.item.predicate;
 
+import killercreepr.crux.api.component.parser.StringListEncodeComponent;
 import killercreepr.crux.api.item.ItemListHolder;
 import killercreepr.crux.api.item.predicate.ItemPredicate;
 import org.bukkit.inventory.ItemStack;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class ItemAllPredicate implements ItemPredicate, ItemListHolder {
+public class ItemAllPredicate implements ItemPredicate, ItemListHolder, StringListEncodeComponent {
     protected final @NotNull Collection<ItemPredicate> children;
     public ItemAllPredicate(@NotNull Collection<ItemPredicate> children) {
         this.children = children;
@@ -31,6 +32,16 @@ public class ItemAllPredicate implements ItemPredicate, ItemListHolder {
                 list.addAll(holder.getItemValues());
             }
         }
+        return list;
+    }
+
+    @Override
+    public @NotNull List<String> encodeToParser() {
+        List<String> list = new ArrayList<>();
+        children.forEach(i ->{
+            if(!(i instanceof StringListEncodeComponent d)) return;
+            list.addAll(d.encodeToParser());
+        });
         return list;
     }
 }

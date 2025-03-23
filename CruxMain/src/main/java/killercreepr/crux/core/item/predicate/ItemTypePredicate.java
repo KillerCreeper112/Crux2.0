@@ -1,5 +1,6 @@
 package killercreepr.crux.core.item.predicate;
 
+import killercreepr.crux.api.component.parser.StringListEncodeComponent;
 import killercreepr.crux.api.item.ItemListHolder;
 import killercreepr.crux.api.item.predicate.ItemPredicate;
 import killercreepr.crux.core.Crux;
@@ -9,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class ItemTypePredicate implements ItemPredicate, ItemListHolder {
+public class ItemTypePredicate implements ItemPredicate, ItemListHolder, StringListEncodeComponent {
     protected final @NotNull Key type;
     public ItemTypePredicate(@NotNull Key type) {
         this.type = type;
@@ -25,5 +26,11 @@ public class ItemTypePredicate implements ItemPredicate, ItemListHolder {
         var i = Crux.handlers().item().getItem(type);
         if(i == null) return List.of();
         return List.of(i.value());
+    }
+
+
+    @Override
+    public @NotNull List<String> encodeToParser() {
+        return List.of(type.asString());
     }
 }
