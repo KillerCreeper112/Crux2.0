@@ -17,4 +17,8 @@ public interface LootPool<T> extends ConditionedObject, FunctionedObject<T>  {
     boolean isEmptyWith(@Nullable Predicate<LootPoolObject<T>> exclude);
 
     @NotNull List<LootPoolObject<T>> random(@NotNull List<LootPoolObject<T>> data, int rolls, @NotNull LootContext context, @Nullable Predicate<LootPoolObject<T>> exclude);
+
+    interface Accessible<T> extends LootPool<T>{
+        @NotNull Collection<LootPoolObject<T>> getData();
+    }
 }

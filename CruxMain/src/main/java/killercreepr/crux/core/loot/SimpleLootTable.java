@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class SimpleLootTable<T> implements LootTable<T>, OpenedLootObject<T> {
+public class SimpleLootTable<T> implements LootTable.Accessible<T>, OpenedLootObject<T> {
     private final Key key;
     private final NumberProvider rolls;
     private final List<LootPool<T>> pools;

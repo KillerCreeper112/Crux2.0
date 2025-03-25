@@ -14,6 +14,11 @@ public interface LootTable<T> extends Keyed {
     @NotNull List<T> populateLoot(@NotNull LootContext context, @Nullable Predicate<LootPoolObject<T>> exclude, boolean excludeEmpty);
     @NotNull List<T> populateLoot(@NotNull LootContext context, @Nullable Predicate<LootPoolObject<T>> exclude, boolean excludeEmpty,
                                   @Nullable Function<LootPool<T>,Collection<T>> poolFunction);
+
+    interface Accessible<T> extends LootTable<T>{
+        @NotNull Collection<LootPool<T>> getPools();
+    }
+
     //void fillInventory(@NotNull Inventory inventory, @NotNull GrimLootContext context);
     /*@NotNull
     List<LootPool<T>> random(int rolls, @NotNull LootContext context);*/

@@ -17,7 +17,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class SimpleLootPool<T> extends SimpleFunctionedConditionedObject<T> implements LootPool<T>, OpenedLootObject<T> {
+public class SimpleLootPool<T> extends SimpleFunctionedConditionedObject<T> implements LootPool.Accessible<T>, OpenedLootObject<T> {
     private final @NotNull NumberProvider rolls;
     private final @NotNull List<LootPoolObject<T>> data;
 
@@ -48,6 +48,7 @@ public class SimpleLootPool<T> extends SimpleFunctionedConditionedObject<T> impl
         return "SimpleLootPool{rolls=" + rolls + ", data=" + data + "}";
     }
 
+    @Override
     public @NotNull List<LootPoolObject<T>> getData() {
         return data;
     }
