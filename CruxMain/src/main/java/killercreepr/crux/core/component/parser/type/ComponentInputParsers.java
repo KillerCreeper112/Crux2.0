@@ -1,5 +1,7 @@
 package killercreepr.crux.core.component.parser.type;
 
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import killercreepr.crux.api.block.predicate.BlockPredicate;
 import killercreepr.crux.api.block.tag.BlockTag;
 import killercreepr.crux.api.communication.CreateSound;
@@ -28,6 +30,8 @@ import org.bukkit.Color;
 import org.bukkit.Particle;
 import org.bukkit.Registry;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -262,6 +266,17 @@ public class ComponentInputParsers {
             Key key = ctx.get();
             return Registry.MOB_EFFECT.get(key);
         });
+
+    public static PersistTextParser<EquipmentSlot> EQUIPMENT_SLOT = PersistTextParser.elementBuilder(EquipmentSlot.class)
+        .field(TextInputField.field(PersistTextParser.STRING, e -> e.toString().toLowerCase()))
+        .apply(ctx ->{
+            String id = ctx.get();
+            return EquipmentSlot.valueOf(id.toUpperCase());
+        });
+
+    public static PersistTextParser<EntityType> ENTITY_TYPE = PersistTextParser.elementBuilder(EntityType.class)
+        .field(TextInputField.field(PersistTextParser.KEY, EntityType::getKey))
+        .apply(ctx -> RegistryAccess.registryAccess().getRegistry(RegistryKey.ENTITY_TYPE).get((Key) ctx.get()));
 
     public static PersistTextParser<PotionEffect> POTION_EFFECT = PersistTextParser.mapBuilder(PotionEffect.class)
         .field("type", TextInputField.field(POTION_EFFECT_TYPE, PotionEffect::getType))
