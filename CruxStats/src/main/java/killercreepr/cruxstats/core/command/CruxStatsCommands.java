@@ -34,6 +34,48 @@ public class CruxStatsCommands {
     public static LiteralCommandNode<CommandSourceStack> build(LiteralArgumentBuilder<CommandSourceStack> dispatcher,
                                                                   LifecycleEventManager<?> manager){
         dispatcher.then(
+            Commands.literal("query")
+                .then(
+                    Commands.argument("target", StatsArgs.STAT_HOLDER)
+                        .then(
+                            Commands.literal("value")
+                                .then(
+                                    Commands.argument("stat", StatsArgs.STAT)
+                                        .executes(ctx ->{
+                                            CommandSourceStack source = ctx.getSource();
+                                            CommandSender sender = getExecutor(source);
+                                            CruxStatHolder holder = ctx.getArgument("target", StatHolderResolver.class)
+                                                .resolve(source);
+                                            CruxStat stat = ctx.getArgument("stat", CruxStat.class);
+                                            sender.sendMessage(stat.key() + " = " + holder.getStatValue(stat));
+                                            return 1;
+                                        })
+                                )
+                        ).then(
+                            Commands.literal("modifiers")
+                                .then(
+                                    Commands.argument("stat", StatsArgs.STAT)
+                                        .executes(ctx ->{
+                                            CommandSourceStack source = ctx.getSource();
+                                            CommandSender sender = getExecutor(source);
+                                            CruxStatHolder holder = ctx.getArgument("target", StatHolderResolver.class)
+                                                .resolve(source);
+                                            CruxStat stat = ctx.getArgument("stat", CruxStat.class);
+                                            var instance = holder.getStat(stat);
+                                            if(instance == null){
+                                                sender.sendMessage("No modifiers for " + stat.key() + ".");
+                                                return 1;
+                                            }
+                                            sender.sendMessage("Showing all modifiers for " + stat.key() + ": (value=" + instance.getValue() + ", base value=" + instance.getBaseValue() + ")");
+                                            for (CruxStatModifier mod : instance.getModifiers()) {
+                                                sender.sendMessage(mod.key() + " -> " + mod.getAmount() + ", operation=" + mod.getOperation().toString().toLowerCase());
+                                            }
+                                            return 1;
+                                        })
+                                )
+                        )
+                )
+        ).then(
             Commands.literal("add")
                 .then(
                     Commands.argument("target", StatsArgs.STAT_HOLDER)
