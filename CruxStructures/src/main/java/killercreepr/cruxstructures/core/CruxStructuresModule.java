@@ -114,12 +114,14 @@ public class CruxStructuresModule implements CruxModule {
         fileStructureCenter.TYPE_HANDLERS.register("random_surface", new FileRandomSurfaceCenter());
         fileStructureCenter.TYPE_HANDLERS.register("random_surface_determined", new FileRandomSurfaceDeterminedCenter());
         fileStructureCenter.TYPE_HANDLERS.register("random_surface_avoid_trees", new FileRandomSurfaceTopAvoidTreeCenter());
+        fileStructureCenter.TYPE_HANDLERS.register("random_anywhere", new FileRandomAnywhereCenter());
 
         fileStructureRequirement.TYPE_HANDLERS.register("biome", new FileBiomeRequirement());
         fileStructureRequirement.TYPE_HANDLERS.register("solid_nearby", new FileSolidNearbyRequirement());
         fileStructureRequirement.TYPE_HANDLERS.register("replaceable_nearby", new FileReplaceableNearbyRequirement());
         fileStructureRequirement.TYPE_HANDLERS.register("chance", new FileChanceRequirement());
         fileStructureRequirement.TYPE_HANDLERS.register("replaceable_directions", new FileReplaceableDirectionTestRequirement());
+        fileStructureRequirement.TYPE_HANDLERS.register("solid_directions", new FileSolidDirectionTestRequirement());
 
         fileStructureChunkRequirement.TYPE_HANDLERS.register("noise", new FileChunkNoiseRequirement());
         fileStructureChunkRequirement.TYPE_HANDLERS.register("chance", new FileChunkChanceRequirement());
