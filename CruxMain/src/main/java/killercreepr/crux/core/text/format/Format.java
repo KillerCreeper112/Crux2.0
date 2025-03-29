@@ -599,7 +599,7 @@ public class Format implements FormatSerializer {
                     try {
                         evaluatedValue = CruxMath.tryEvaluateEvalEx(fullExpression);
                     } catch (EvaluationException | ParseException e) {
-                        Crux.logError("SAD FACE MAN );");
+                        Crux.logError("SAD FACE MAN ); " + fullExpression);
                         e.printStackTrace();
                         continue;
                     }

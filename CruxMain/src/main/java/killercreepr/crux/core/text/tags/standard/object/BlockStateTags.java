@@ -2,15 +2,19 @@ package killercreepr.crux.core.text.tags.standard.object;
 
 import killercreepr.crux.api.text.format.FormatPrefix;
 import killercreepr.crux.api.text.hook.ObjectTag;
+import killercreepr.crux.api.text.hook.SimpleObjectTag;
 import killercreepr.crux.api.text.tags.TagParser;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.text.container.StringTagContainer;
 import killercreepr.crux.core.text.resolver.Tag;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.data.BlockData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class BlockStateTags implements ObjectTag<BlockState> {
+import java.util.Map;
+
+public class BlockStateTags implements SimpleObjectTag<BlockState> {
     @Override
     public @NotNull Class<BlockState> getObjectType() {
         return BlockState.class;
@@ -26,5 +30,12 @@ public class BlockStateTags implements ObjectTag<BlockState> {
         return new StringTagContainer(tags)
             .add(Tag.string("type", (args, context) -> Crux.handlers().block().getType(item).asString()))
             ;
+    }
+
+    @Override
+    public @Nullable Map<Object, FormatPrefix> hookObjects(BlockState object) {
+        return Map.of(
+            object.getBlockData(), FormatPrefix.simple("data/")
+        );
     }
 }

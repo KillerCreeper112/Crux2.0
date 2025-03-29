@@ -5,6 +5,7 @@ import killercreepr.crux.api.block.predicate.BlockPredicate;
 import killercreepr.crux.api.entity.predicate.EntityPredicate;
 import killercreepr.crux.api.item.predicate.ItemPredicate;
 import killercreepr.crux.api.loot.conditions.LootCondition;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.loot.conditions.EntityOrItemCondition;
 import killercreepr.crux.core.loot.conditions.block.BlockCondition;
@@ -62,8 +63,8 @@ public class StandardFileLootConditions {
             @Override
             public @NotNull BlockStateCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 FileRegistry registry = ctx.getRegistry();
-                Key type = registry.deserializeFromFile(Key.class, e.get("block"));
-                Integer age = registry.deserializeFromFile(Integer.class, e.get("age"));
+                BlockPredicate type = registry.deserializeFromFile(BlockPredicate.class, e.get("block"));
+                NumberProvider age = registry.deserializeFromFile(NumberProvider.class, e.get("age"));
                 return new BlockStateCondition(target, type, age);
             }
         });

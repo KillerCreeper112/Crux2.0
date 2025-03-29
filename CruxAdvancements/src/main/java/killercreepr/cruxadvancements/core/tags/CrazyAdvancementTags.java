@@ -18,6 +18,7 @@ import killercreepr.cruxadvancements.api.advancement.objective.progress.Objectiv
 import killercreepr.cruxadvancements.api.advancement.progress.CruxAdvancementProgress;
 import killercreepr.cruxadvancements.core.advancement.objective.NumberObjective;
 import killercreepr.cruxadvancements.core.advancement.objective.progress.NumberObjectiveProgress;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,6 +51,7 @@ public class CrazyAdvancementTags implements ObjectTag<ObjectiveAdvancement> {
                     return list;
                 }
                 list.add("");
+                String argFormat = args.get(2);
                 display.getFormat().forEach((criterion, format) ->{
                     AdvancementObjective obj = object.getObjective(criterion);
                     if(!(obj instanceof NumberObjective num)) return;
@@ -61,13 +63,12 @@ public class CrazyAdvancementTags implements ObjectTag<ObjectiveAdvancement> {
                         .add(Tag.parsed("progress", progressNum + ""))
                         ;
 
-                    list.add(ctx.deserializeString(args.get(2), tagContainer.add(
+                    list.add(ctx.deserializeString(argFormat, tagContainer.add(
                         Tag.parsed("format", ctx.deserializeString(format, tagContainer))
                     )));
                 });
                 return list;
-            }))
-            ;
+            }));
     }
 
     @Override
