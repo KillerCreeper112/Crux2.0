@@ -13,6 +13,6 @@ public class AdvancementGrantListener implements Listener {
     public void onCruxAdvancementGrant(CruxAdvancementGrantEvent event) {
         AdvancementHolder data = EntityMemory.getDataHolder(event.getWho(), AdvancementHolder.class);
         if(data==null) return;
-        data.getAdvancementTracker().untrack(event.getAdvancement());
+        data.onAdvancementComplete(event.getManager(), event.getAdvancement());
     }
 }

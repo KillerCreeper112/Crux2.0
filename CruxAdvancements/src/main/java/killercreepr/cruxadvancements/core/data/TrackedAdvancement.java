@@ -25,6 +25,10 @@ public class TrackedAdvancement {
         this(managerKey, advancementKey, false, timeStarted);
     }
 
+    public long getTimeStarted() {
+        return timeStarted;
+    }
+
     public boolean isGlobal() {
         return isGlobal;
     }

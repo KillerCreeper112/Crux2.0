@@ -8,6 +8,7 @@ import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.entity.memory.PlayerDataHolder;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxadvancements.api.advancement.CruxAdvancement;
+import killercreepr.cruxadvancements.api.advancement.manager.CruxAdvancementManager;
 import killercreepr.cruxadvancements.api.values.ValuesProvider;
 import killercreepr.cruxadvancements.core.CruxAdvancementsModule;
 import killercreepr.cruxadvancements.core.data.AdvancementTracker;
@@ -24,7 +25,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 public class AdvancementHolder extends PlayerDataHolder implements Loadable {
     public static final Key KEY = Crux.key("advancement");
@@ -36,6 +39,14 @@ public class AdvancementHolder extends PlayerDataHolder implements Loadable {
         super(key, parent);
         this.plugin = plugin;
         load();
+    }
+
+    protected final Map<Key, Long> timeAdvancementCompleted = new HashMap<>();
+    public void onAdvancementComplete(CruxAdvancementManager<?> manager, CruxAdvancement advancement){
+        TrackedAdvancement tracked = advancementTracker.getNonGlobalTrackedAdvancement(manager.key(), advancement.key());
+        advancementTracker.untrack(manager.key(), advancement.key());
+        if(tracked == null) return;
+        timeAdvancementCompleted.put(tracked.getAdvancementKey(), tracked.getTimeStarted());
     }
 
     protected final AdvancementTracker advancementTracker = new AdvancementTracker();
@@ -75,6 +86,12 @@ public class AdvancementHolder extends PlayerDataHolder implements Loadable {
             a.add(registry.serializeToJson(tracked));
         });
         json.add("tracked_advancements", a);
+
+        JsonObject timeStarted;
+        if(json.get("time_started") instanceof JsonObject e) timeStarted = e;
+        else timeStarted = new JsonObject();
+        timeAdvancementCompleted.forEach((key, time) -> timeStarted.addProperty(key.asString(), time));
+        json.add("time_started", timeStarted);
         cfg.save();
     }
 

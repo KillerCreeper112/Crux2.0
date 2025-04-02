@@ -33,6 +33,13 @@ public class AdvancementTracker {
         return isTracking(new TrackedAdvancement(manager, advancement, 0L));
     }
 
+    public TrackedAdvancement getNonGlobalTrackedAdvancement(Key manager, Key advancement){
+        for(var tracked : trackedAdvancements){
+            if(tracked.getManagerKey().equals(manager) && tracked.getAdvancementKey().equals(advancement)) return tracked;
+        }
+        return null;
+    }
+
     public Collection<TrackedAdvancement> getTrackedAdvancements() {
         return trackedAdvancements;
     }
@@ -58,13 +65,14 @@ public class AdvancementTracker {
         untrack(manager.key(), advancement.key());
     }
 
-    public void untrack(@NotNull Key advancement){
-        trackedAdvancements.removeIf(d -> d.getAdvancementKey().equals(advancement));
-        globalTracked.removeIf(d -> d.getAdvancementKey().equals(advancement));
+    public boolean untrack(@NotNull Key advancement){
+        boolean x = trackedAdvancements.removeIf(d -> d.getAdvancementKey().equals(advancement));
+        boolean x1 = globalTracked.removeIf(d -> d.getAdvancementKey().equals(advancement));
+        return x || x1;
     }
 
-    public void untrack(@NotNull CruxAdvancement advancement){
-        untrack(advancement.key());
+    public boolean untrack(@NotNull CruxAdvancement advancement){
+        return untrack(advancement.key());
     }
 
     public void untrack(@NotNull Key manager, @NotNull Key advancement){
