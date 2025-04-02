@@ -28,7 +28,8 @@ public class FileTrackedAdvancement implements FileObjectHandler<TrackedAdvancem
         Key manager = registry.deserializeFromFile(Key.class, o.get("manager"));
         Key advancement = registry.deserializeFromFile(Key.class, o.get("advancement"));
         if(CruxObjects.checkNull(manager, advancement)) return null;
-        return new TrackedAdvancement(manager, advancement);
+        long time = o.getOrDefaultObject(Long.class,"time_started", System.currentTimeMillis());
+        return new TrackedAdvancement(manager, advancement, time);
     }
 
     @Override

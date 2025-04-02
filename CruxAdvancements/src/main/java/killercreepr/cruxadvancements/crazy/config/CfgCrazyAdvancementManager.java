@@ -90,7 +90,7 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
             registerAdvancement(a);
 
             if(a.hasFlag(CruxAdvancementFlag.GLOBAL)){
-                TrackedAdvancement tracked = new TrackedAdvancement(key(), a.key(), true);
+                TrackedAdvancement tracked = new TrackedAdvancement(key(), a.key(), true, System.currentTimeMillis());
                 AdvancementRegistries.GLOBAL_ADVANCEMENTS.register(tracked);
             }
 

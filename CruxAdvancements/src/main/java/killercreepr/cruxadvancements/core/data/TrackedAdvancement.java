@@ -13,14 +13,16 @@ public class TrackedAdvancement {
     protected final @NotNull Key managerKey;
     protected final @NotNull Key advancementKey;
     protected final boolean isGlobal;
-    public TrackedAdvancement(@NotNull Key managerKey, @NotNull Key advancementKey, boolean isGlobal) {
+    protected final long timeStarted;
+    public TrackedAdvancement(@NotNull Key managerKey, @NotNull Key advancementKey, boolean isGlobal, long timeStarted) {
         this.managerKey = managerKey;
         this.advancementKey = advancementKey;
         this.isGlobal = isGlobal;
+        this.timeStarted = timeStarted;
     }
 
-    public TrackedAdvancement(@NotNull Key managerKey, @NotNull Key advancementKey) {
-        this(managerKey, advancementKey, false);
+    public TrackedAdvancement(@NotNull Key managerKey, @NotNull Key advancementKey, long timeStarted) {
+        this(managerKey, advancementKey, false, timeStarted);
     }
 
     public boolean isGlobal() {
@@ -76,7 +78,7 @@ public class TrackedAdvancement {
 
     @Override
     public String toString() {
-        return "TrackedAdvancement{managerKey=" + managerKey + ", advancementKey=" + advancementKey + "}";
+        return "TrackedAdvancement{managerKey=" + managerKey + ", advancementKey=" + advancementKey + ", timeStarted=" + timeStarted + "}";
     }
 
     @Override

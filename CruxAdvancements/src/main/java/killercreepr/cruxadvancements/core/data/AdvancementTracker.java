@@ -30,7 +30,7 @@ public class AdvancementTracker {
     }
 
     public boolean isTracking(Key manager, Key advancement){
-        return isTracking(new TrackedAdvancement(manager, advancement));
+        return isTracking(new TrackedAdvancement(manager, advancement, 0L));
     }
 
     public Collection<TrackedAdvancement> getTrackedAdvancements() {
@@ -68,7 +68,7 @@ public class AdvancementTracker {
     }
 
     public void untrack(@NotNull Key manager, @NotNull Key advancement){
-        untrack(new TrackedAdvancement(manager, advancement));
+        untrack(new TrackedAdvancement(manager, advancement, 0L));
     }
 
     public void track(@NotNull CruxAdvancementManager<?> manager, @NotNull CruxAdvancement advancement){
@@ -76,7 +76,7 @@ public class AdvancementTracker {
     }
 
     public void track(@NotNull Key manager, @NotNull Key advancement){
-        track(new TrackedAdvancement(manager, advancement));
+        track(new TrackedAdvancement(manager, advancement, System.currentTimeMillis()));
     }
 
     public void track(@NotNull TrackedAdvancement tracked){
