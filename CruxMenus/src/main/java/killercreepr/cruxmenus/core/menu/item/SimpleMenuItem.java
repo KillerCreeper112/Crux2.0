@@ -28,6 +28,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -93,12 +94,24 @@ public class SimpleMenuItem implements MenuItem {
         return resolvers;
     }
 
-    public TagContainer<?> buildPrimitiveTags(DataExchange info){
+    public MergedTagContainer buildPrimitiveTags(DataExchange info){
         if(info.isEmpty()) return null;
-        TagContainer<StringResolver> tags = TagContainer.string();
+        MergedTagContainer tags = TagContainer.merged();
 
         info.forEach((id, holder) ->{
             Object o = holder.value();
+            if(o instanceof List<?> e){
+                List<String> stringed;
+                try{
+                    stringed = (List<String>) o;
+                }catch (Exception ignored){
+                    stringed = new ArrayList<>();
+                    List<String> finalStringed = stringed;
+                    e.forEach(ee -> finalStringed.add(e + ""));
+                }
+                tags.add(Tag.parsed(FORMAT_DATA_PREFIX + id, stringed));
+                return;
+            }
             if(!isPrimitive(o)) return;
             tags.add(Tag.parsed(FORMAT_DATA_PREFIX + id, o + ""));
         });
