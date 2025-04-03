@@ -17,6 +17,7 @@ import killercreepr.cruxadvancements.core.entity.memory.AdvancementHolder;
 import killercreepr.cruxadvancements.core.registries.AdvancementRegistries;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerKickEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,8 +41,8 @@ public class AdvancementPlayerTags implements ObjectTag<Player> {
                 AdvancementHolder holder = EntityMemory.getOrCreateDataHolder(p, AdvancementHolder.class);
                 if(holder == null) return "false";
                 AdvancementTracker tracker = holder.getAdvancementTracker();
-                Key manager = Crux.key(ctx.deserializeString(args.get(0)));
-                Key advancement = Crux.key(ctx.deserializeString(args.get(1)));
+                Key manager = Crux.key(ctx.deserializeString(ctx.deserializeString(args.get(0))));
+                Key advancement = Crux.key(ctx.deserializeString(ctx.deserializeString(args.get(1))));
                 return tracker.isTracking(manager, advancement) + "";
             }))
             .add(Tag.string("tracked_advancements", (args, ctx) ->{
@@ -56,8 +57,8 @@ public class AdvancementPlayerTags implements ObjectTag<Player> {
                 return holder.getMaxTrackedAdvancements() + "";
             }))
             .add(Tag.string("has_completed_advancement", (args, ctx) ->{
-                Key manager = Crux.key(args.get(0));
-                Key advancement = Crux.key(args.get(1));
+                Key manager = Crux.key(ctx.deserializeString(args.get(0)));
+                Key advancement = Crux.key(ctx.deserializeString(args.get(1)));
                 CruxAdvancementManager<?> foundManager = AdvancementRegistries.ADVANCEMENT_MANAGERS.get(manager);
                 if(foundManager == null){
                     Crux.log(Level.WARNING, "CruxAdvancementManager not found! " + manager);

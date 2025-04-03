@@ -6,11 +6,13 @@ import killercreepr.crux.api.text.format.FormatPrefix;
 import killercreepr.crux.api.text.hook.HookedObjectContainer;
 import killercreepr.crux.api.text.hook.ObjectTag;
 import killercreepr.crux.api.text.tags.TagParser;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.text.container.StringTagContainer;
 import killercreepr.crux.core.text.hook.StringHookedObjectTag;
 import killercreepr.crux.core.text.resolver.Tag;
 import net.kyori.adventure.key.Key;
 import org.bukkit.*;
+import org.bukkit.advancement.Advancement;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.EntityType;
@@ -53,7 +55,24 @@ public class OfflinePlayerTags implements ObjectTag<OfflinePlayer> {
                 if(online==null) return "not online";
                 return online.getGameMode().toString().toLowerCase();
             }))
+            .add(Tag.string("is_advancement_done", (args, ctx) ->{
+                if(!p.isOnline()) return "false";
+                var advanceKey = NamespacedKey.fromString(ctx.deserializeString(args.get(0)));
+                Advancement advancement = Crux.getServer().getAdvancement(advanceKey);
+                if(advancement == null) return advanceKey + " not found";
+                var progress = p.getPlayer().getAdvancementProgress(advancement);
+                if(progress == null) return "false";
+                return progress.isDone() + "";
+            }))
             .add(Tag.string("ping", (args, context) -> p.isOnline()?p.getPlayer().getPing()+"" :"0"))
+            .add(Tag.string("spectator_target_name", (args, context) ->{
+                if(!p.isOnline()) return "none";
+                var target = p.getPlayer().getSpectatorTarget();
+                if(target == null) return "none";
+                return target.getName();
+            }))
+            .add(Tag.string("idle_ticks", (args, context) -> p.isOnline()?(p.getPlayer().getIdleDuration().toMillis()/50L)+"" :"0"))
+            .add(Tag.string("ping", (args, context) -> p.isOnline()?p.getPlayer().getIdleDuration()+"" :"0"))
             .add(Tag.string("uuid", (args, context) -> p.getUniqueId().toString()))
             .add(Tag.string("health", (args, context) -> p.isOnline() ? p.getPlayer().getHealth()+"" : "0"))
             .add(Tag.string("exp", (args, context) -> p.isOnline() ? p.getPlayer().getExp()+"" : "0"))
