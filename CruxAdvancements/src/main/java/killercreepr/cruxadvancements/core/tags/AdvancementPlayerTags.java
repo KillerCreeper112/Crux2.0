@@ -12,6 +12,7 @@ import killercreepr.cruxadvancements.api.advancement.CruxAdvancement;
 import killercreepr.cruxadvancements.api.advancement.manager.CruxAdvancementManager;
 import killercreepr.cruxadvancements.api.advancement.progress.CruxAdvancementProgress;
 import killercreepr.cruxadvancements.core.data.AdvancementTracker;
+import killercreepr.cruxadvancements.core.data.TrackedAdvancement;
 import killercreepr.cruxadvancements.core.entity.memory.AdvancementHolder;
 import killercreepr.cruxadvancements.core.registries.AdvancementRegistries;
 import net.kyori.adventure.key.Key;
@@ -69,6 +70,24 @@ public class AdvancementPlayerTags implements ObjectTag<Player> {
                 }
                 CruxAdvancementProgress progress = a.getProgressIfPresent(p.getUniqueId());
                 return (progress != null && progress.isDone()) + "";
+            }))
+            .add(Tag.string("global_advancements_completed", (args, ctx) ->{
+                int total = 0;
+                for(TrackedAdvancement a : AdvancementRegistries.GLOBAL_ADVANCEMENTS){
+                    var advance = a.getAdvancement();
+                    if(advance == null) continue;
+                    if(advance.isGranted(p)) total++;
+                }
+                return total + "";
+            }))
+            .add(Tag.string("total_advancements_completed", (args, ctx) ->{
+                int total = 0;
+                for(CruxAdvancementManager<?> manager : AdvancementRegistries.ADVANCEMENT_MANAGERS){
+                    for (CruxAdvancement advancement : manager.getAdvancements()) {
+                        if(advancement.isGranted(p)) total++;
+                    }
+                }
+                return total + "";
             }))
             ;
     }
