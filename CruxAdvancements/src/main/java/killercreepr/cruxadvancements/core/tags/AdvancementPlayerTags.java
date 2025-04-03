@@ -90,6 +90,18 @@ public class AdvancementPlayerTags implements ObjectTag<Player> {
                 }
                 return total + "";
             }))
+            .add(Tag.string("non_global_advancements_completed", (args, ctx) ->{
+                int total = 0;
+                for(CruxAdvancementManager<?> manager : AdvancementRegistries.ADVANCEMENT_MANAGERS){
+                    for (CruxAdvancement advancement : manager.getAdvancements()) {
+                        if(advancement.isGranted(p)){
+                            if(AdvancementRegistries.GLOBAL_ADVANCEMENTS.values().contains(new TrackedAdvancement(manager.key(), advancement.key(), 0L))) continue;
+                            total++;
+                        }
+                    }
+                }
+                return total + "";
+            }))
             ;
     }
 }
