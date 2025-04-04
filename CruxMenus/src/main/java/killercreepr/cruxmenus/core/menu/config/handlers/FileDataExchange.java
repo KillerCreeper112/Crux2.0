@@ -5,6 +5,7 @@ import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.api.registry.MappedRegistry;
 import killercreepr.crux.core.registry.SimpleMappedRegistry;
 import killercreepr.cruxconfig.config.common.FileContext;
+import killercreepr.cruxconfig.config.common.element.FileArray;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileGeneric;
 import killercreepr.cruxconfig.config.common.element.FileObject;
@@ -15,7 +16,9 @@ import killercreepr.cruxmenus.api.menu.item.requirement.ViewCondition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class FileDataExchange extends SimpleFileMenuModuled<DataExchange> {
@@ -61,10 +64,35 @@ public class FileDataExchange extends SimpleFileMenuModuled<DataExchange> {
                 if(object != null) builder.put(s, Holder.directObject(object));
                 return;
             }
-            if(!(element instanceof FileGeneric generic)) return;
+            if(!(element instanceof FileGeneric generic)){
+                try{
+                    builder.put(s, Holder.directObject(parseObject(element)));
+                }catch (Exception ignored){}
+                return;
+            }
             builder.put(s, Holder.directObject(generic.getAsObject()));
         });
         return builder.build();
+    }
+
+    public Object parseObject(FileElement ele){
+        if(ele instanceof FileArray a) return parseList(a);
+        if(ele instanceof FileObject o) return parseMap(o);
+        return ele.getAsObject();
+    }
+
+    public Map<Object, Object> parseMap(FileObject a){
+        Map<Object, Object> map = new HashMap<>();
+        a.forEach((key, value) ->{
+            map.put(key, parseObject(value));
+        });
+        return map;
+    }
+
+    public List<Object> parseList(FileArray a){
+        List<Object> list = new ArrayList<>();
+        a.forEach(e -> list.add(parseObject(e)));
+        return list;
     }
 
     @Override
