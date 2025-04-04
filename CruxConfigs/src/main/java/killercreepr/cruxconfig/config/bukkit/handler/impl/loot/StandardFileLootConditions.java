@@ -7,7 +7,9 @@ import killercreepr.crux.api.item.predicate.ItemPredicate;
 import killercreepr.crux.api.loot.conditions.LootCondition;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.loot.conditions.BoolCondition;
 import killercreepr.crux.core.loot.conditions.EntityOrItemCondition;
+import killercreepr.crux.core.loot.conditions.InvertCondition;
 import killercreepr.crux.core.loot.conditions.block.BlockCondition;
 import killercreepr.crux.core.loot.conditions.block.BlockStateCondition;
 import killercreepr.crux.core.loot.conditions.entity.EntityCondition;
@@ -194,6 +196,26 @@ public class StandardFileLootConditions {
                 String type = e.getObject(String.class, "type");
                 if(type == null) type = "all_of";
                 return new killercreepr.crux.core.loot.conditions.CollectionCondition(target, condition, type);
+            }
+        });
+
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("invert")) {
+
+            @Override
+            public @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                LootCondition condition = ctx.getRegistry().deserializeFromFile(
+                    LootCondition.class, e.get("term")
+                );
+                if(condition == null) return null;
+                return new InvertCondition(target, condition);
+            }
+        });
+
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("bool")) {
+
+            @Override
+            public @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                return new BoolCondition(target);
             }
         });
     }
