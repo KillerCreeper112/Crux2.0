@@ -15,5 +15,5 @@ public interface ClickActions {
     List<String> getOrDefault(@Nullable ClickType click, @Nullable List<String> defaultValue);
 
     List<String> clickOrDefault(@NotNull InventoryClickEvent event, @Nullable List<String> defaultValue);
-    Map<ClickType, Collection<String>> getActions();
+    Map<ClickType, List<String>> getActions();
 }

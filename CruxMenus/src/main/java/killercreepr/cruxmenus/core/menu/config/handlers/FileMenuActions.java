@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -33,7 +34,7 @@ public class FileMenuActions extends SimpleFileMenuModuled<ClickActions> {
     public @Nullable ClickActions deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e, @Nullable Collection<MenuItemHolder> base) {
         if (!(e instanceof FileObject o)){
             if(base != null) {
-                Map<ClickType, Collection<String>> map = new HashMap<>();
+                Map<ClickType, List<String>> map = new HashMap<>();
                 base.forEach(b ->{
                     ClickActions actions = b.getClickActions();
                     if(actions==null) return;
@@ -45,7 +46,7 @@ public class FileMenuActions extends SimpleFileMenuModuled<ClickActions> {
         }
         FileRegistry registry = context.getRegistry();
 
-        Map<ClickType, Collection<String>> map = new HashMap<>();
+        Map<ClickType, List<String>> map = new HashMap<>();
         if(base != null) {
             base.forEach(b ->{
                 ClickActions actions = b.getClickActions();
@@ -66,8 +67,8 @@ public class FileMenuActions extends SimpleFileMenuModuled<ClickActions> {
                     return;
                 }
             }else type = null;
-            Collection<String> actions = registry.deserializeFromFile(
-                new TypeToken<Collection<String>>(){}.getType(), o.get(key));
+            List<String> actions = registry.deserializeFromFile(
+                new TypeToken<List<String>>(){}.getType(), o.get(key));
             if (actions != null) map.put(type, actions);
         });
         return map.isEmpty() ? null : new SimpleClickActions(map);
