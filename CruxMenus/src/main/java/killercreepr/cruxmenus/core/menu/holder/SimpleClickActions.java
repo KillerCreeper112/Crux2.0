@@ -7,28 +7,29 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public class SimpleClickActions implements ClickActions {
-    protected final @NotNull Map<ClickType, Collection<String>> actions;
+    protected final @NotNull Map<ClickType, List<String>> actions;
 
-    public SimpleClickActions(@NotNull Map<ClickType, Collection<String>> actions) {
+    public SimpleClickActions(@NotNull Map<ClickType, List<String>> actions) {
         this.actions = actions;
     }
 
-    public @NotNull Map<ClickType, Collection<String>> getActions() {
+    public @NotNull Map<ClickType, List<String>> getActions() {
         return actions;
     }
 
-    public @Nullable Collection<String> get(@Nullable ClickType click){
+    public @Nullable List<String> get(@Nullable ClickType click){
         return actions.get(click);
     }
 
-    public Collection<String> getOrDefault(@Nullable ClickType click, @Nullable Collection<String> defaultValue){
+    public List<String> getOrDefault(@Nullable ClickType click, @Nullable List<String> defaultValue){
         return actions.getOrDefault(click, defaultValue);
     }
 
-    public Collection<String> clickOrDefault(@NotNull InventoryClickEvent event, @Nullable Collection<String> defaultValue){
+    public List<String> clickOrDefault(@NotNull InventoryClickEvent event, @Nullable List<String> defaultValue){
         return getOrDefault(event.getClick(), getOrDefault(null, defaultValue));
     }
 }

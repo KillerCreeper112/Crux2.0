@@ -30,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -165,7 +166,9 @@ public class SimpleMenuItem implements MenuItem {
         if(actions == null) return clickEvent;
 
         ActionContext context = clickEvent.getContext();
-        actions.clickOrDefault(event, List.of()).forEach(s -> performAction(p, s, context));
+        Collection<String> parsedActions = actions.clickOrDefault(event, List.of());
+        if(parsedActions.isEmpty()) return clickEvent;
+        actionInfo.parserCtx().deserializeStringList(parsedActions).forEach(s -> performAction(p, s, context));
         return clickEvent;
     }
 

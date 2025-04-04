@@ -14,6 +14,7 @@ import killercreepr.crux.api.text.tags.container.TagContainer;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.data.util.Pair;
 import killercreepr.crux.core.registry.SimpleRegistry;
+import killercreepr.crux.core.text.container.SimpleStringTagProvider;
 import killercreepr.crux.core.text.container.StringListTagContainer;
 import killercreepr.crux.core.text.container.StringTagContainer;
 import killercreepr.crux.core.text.tags.standard.NumberFormatResolver;
@@ -403,6 +404,7 @@ public class Format implements FormatSerializer {
         StringTagContainer resolvers = new StringTagContainer(this.tags);
         resolvers.addAll(STRING_RESOLVERS.values());
         resolvers.addAll(tags);
+        StringTagProvider resolveProvider = StringTagProvider.build(resolvers);
 
         if(Crux.debug >= 3){
             Bukkit.broadcastMessage(resolvers.asMap().keySet() + "");
@@ -448,7 +450,7 @@ public class Format implements FormatSerializer {
                 //Bukkit.broadcastMessage("placeholder: " + placeholder + " - " + Arrays.toString(arguments));
 
                 FormatArgs args = new FormatArgs(arguments);
-                String replacement = resolvePlaceholder(placeholder, args, context, resolvers);
+                String replacement = resolvePlaceholder(placeholder, args, context, resolveProvider);
                 //Bukkit.broadcastMessage(placeholder + ": " + replacement + " ---   " + Arrays.toString(arguments));
                 if(replacement == null){
                     already.add(placeholder);
@@ -486,14 +488,15 @@ public class Format implements FormatSerializer {
         return text;
     }
 
-    private @Nullable String resolvePlaceholder(String placeholderID, FormatArgs args, TextParserContext context, TagContainer<StringResolver> resolvers) {
+    private @Nullable String resolvePlaceholder(String placeholderID, FormatArgs args, TextParserContext context, StringTagProvider resolvers) {
         List<String> replacementList = new ArrayList<>();
-        StringResolver resolver = resolvers.get(placeholderID);
+        StringResolver resolver = resolvers.getStringTags().get(placeholderID);
         if(resolver != null){
             String request = resolver.resolve(args, context);
             if (request != null) {
                 // Recursively process nested placeholders
-                request = processPlaceholders(request, resolvers);
+                request = deserializeString(request, resolvers);
+                //request = processPlaceholders(request, resolvers);
                 replacementList.add(request);
             }
         }

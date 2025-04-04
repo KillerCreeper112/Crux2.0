@@ -6,13 +6,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public interface ClickActions {
-    @Nullable Collection<String> get(@Nullable ClickType click);
+    @Nullable List<String> get(@Nullable ClickType click);
 
-    Collection<String> getOrDefault(@Nullable ClickType click, @Nullable Collection<String> defaultValue);
+    List<String> getOrDefault(@Nullable ClickType click, @Nullable List<String> defaultValue);
 
-    Collection<String> clickOrDefault(@NotNull InventoryClickEvent event, @Nullable Collection<String> defaultValue);
+    List<String> clickOrDefault(@NotNull InventoryClickEvent event, @Nullable List<String> defaultValue);
     Map<ClickType, Collection<String>> getActions();
 }
