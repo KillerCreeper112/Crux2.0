@@ -10,6 +10,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Projectile;
 import org.bukkit.util.Vector;
@@ -33,7 +34,19 @@ public interface EntityDamager {
         }
         if(base instanceof Projectile p){
             if(p.getShooter() instanceof Entity e) return e;
-            return null;
+        }
+        if(base instanceof Item i){
+            ownerUUID = i.getOwner();
+            if(ownerUUID != null){
+                var e = Crux.getServer().getEntity(ownerUUID);
+                if(e != null) return e;
+            }
+
+            ownerUUID = i.getThrower();
+            if(ownerUUID != null){
+                var e = Crux.getServer().getEntity(ownerUUID);
+                if(e != null) return e;
+            }
         }
         return base;
     }
