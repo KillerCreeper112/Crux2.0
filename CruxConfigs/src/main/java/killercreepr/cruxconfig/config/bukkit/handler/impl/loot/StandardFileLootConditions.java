@@ -7,9 +7,7 @@ import killercreepr.crux.api.item.predicate.ItemPredicate;
 import killercreepr.crux.api.loot.conditions.LootCondition;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.Crux;
-import killercreepr.crux.core.loot.conditions.BoolCondition;
-import killercreepr.crux.core.loot.conditions.EntityOrItemCondition;
-import killercreepr.crux.core.loot.conditions.InvertCondition;
+import killercreepr.crux.core.loot.conditions.*;
 import killercreepr.crux.core.loot.conditions.block.BlockCondition;
 import killercreepr.crux.core.loot.conditions.block.BlockStateCondition;
 import killercreepr.crux.core.loot.conditions.entity.EntityCondition;
@@ -216,6 +214,50 @@ public class StandardFileLootConditions {
             @Override
             public @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 return new BoolCondition(target);
+            }
+        });
+
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("string")) {
+            @Override
+            public @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                String match = e.getObject(String.class, "match");
+                boolean ignoreCase = e.getOrDefaultObject(Boolean.class, "ignore_case", false);
+                return new StringCondition(
+                    target, match, ignoreCase
+                );
+            }
+        });
+
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("int")) {
+            @Override
+            public @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                String operation = e.getObject(String.class, "operation");
+                int value = e.getObject(Integer.class, "value");
+                return new IntegerCondition(
+                    target, value, operation
+                );
+            }
+        });
+
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("double")) {
+            @Override
+            public @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                String operation = e.getObject(String.class, "operation");
+                double value = e.getObject(Double.class, "value");
+                return new DoubleCondition(
+                    target, value, operation
+                );
+            }
+        });
+
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("long")) {
+            @Override
+            public @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                String operation = e.getObject(String.class, "operation");
+                long value = e.getObject(Long.class, "value");
+                return new LongCondition(
+                    target, value, operation
+                );
             }
         });
     }
