@@ -222,8 +222,9 @@ public class StandardFileLootConditions {
             public @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 String match = e.getObject(String.class, "match");
                 boolean ignoreCase = e.getOrDefaultObject(Boolean.class, "ignore_case", false);
+                boolean parseVariables = e.getOrDefaultObject(Boolean.class, "parse_variables", false);
                 return new StringCondition(
-                    target, match, ignoreCase
+                    target, match, ignoreCase, parseVariables
                 );
             }
         });

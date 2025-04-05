@@ -1,17 +1,20 @@
 package killercreepr.crux.core.text.container;
 
+import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.text.format.FormatPrefix;
 import killercreepr.crux.api.text.resolver.StringResolver;
 import killercreepr.crux.api.text.tags.TagParser;
 import killercreepr.crux.api.text.tags.TagsPrefixBuilder;
 import killercreepr.crux.api.text.tags.container.StringTagContainProvider;
 import killercreepr.crux.api.text.tags.container.TagContainer;
+import killercreepr.crux.core.text.resolver.Tag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.function.Function;
 
 public class SimpleStringTagProvider implements StringTagContainProvider {
     protected final @NotNull TagParser tags;
@@ -83,6 +86,28 @@ public class SimpleStringTagProvider implements StringTagContainProvider {
     public StringTagContainProvider addAll(@Nullable TagContainer<StringResolver> tags, @Nullable FormatPrefix prefix) {
         strings.addAll(tags, prefix);
         return this;
+    }
+
+    @Override
+    public StringTagContainProvider hookAllWithPrefix(@Nullable DataExchange info, @Nullable Function<String, TagsPrefixBuilder> prefixConsumer) {
+        if(info==null) return this;
+        info.forEach((id, holder) ->{
+            Object value = holder.value();
+            if(id.isBlank() || !info.isExplicitlySet(id)){
+                hook(value);
+                return;
+            }
+            TagsPrefixBuilder prefix = prefixConsumer == null ? TagsPrefixBuilder.overwriteBase(id + "_") : prefixConsumer.apply(id);
+
+            if(isPrimitive(value)) add(Tag.parsed(id, value.toString()));
+
+            hook(value, prefix);
+        });
+        return this;
+    }
+
+    private boolean isPrimitive(Object o){
+        return o instanceof String || o instanceof Number || o instanceof Boolean || o instanceof Character;
     }
 
     @Override

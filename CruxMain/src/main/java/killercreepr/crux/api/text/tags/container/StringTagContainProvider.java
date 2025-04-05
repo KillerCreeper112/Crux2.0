@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.function.Function;
 
 public interface StringTagContainProvider extends TagContainer<StringResolver>, StringTagProvider {
     default StringTagContainProvider hookAll(@NotNull DataExchange info){
@@ -25,4 +26,9 @@ public interface StringTagContainProvider extends TagContainer<StringResolver>, 
     StringTagContainProvider addExact(@NotNull StringResolver resolver, @NotNull String id);
 
     StringTagContainProvider addAll(@Nullable TagContainer<StringResolver> tags, @Nullable FormatPrefix prefix);
+
+    default StringTagContainProvider hookAllWithPrefix(@Nullable DataExchange info){
+        return hookAllWithPrefix(info, null);
+    }
+    StringTagContainProvider hookAllWithPrefix(@Nullable DataExchange info, @Nullable Function<String, TagsPrefixBuilder> prefixConsumer);
 }
