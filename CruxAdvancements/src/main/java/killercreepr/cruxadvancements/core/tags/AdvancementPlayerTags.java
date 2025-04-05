@@ -17,7 +17,6 @@ import killercreepr.cruxadvancements.core.entity.memory.AdvancementHolder;
 import killercreepr.cruxadvancements.core.registries.AdvancementRegistries;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerKickEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,17 +55,29 @@ public class AdvancementPlayerTags implements ObjectTag<Player> {
                 if(holder == null) return "0";
                 return holder.getMaxTrackedAdvancements() + "";
             }))
-            .add(Tag.string("has_completed_advancement", (args, ctx) ->{
-                Key manager = Crux.key(ctx.deserializeString(args.get(0)));
-                Key advancement = Crux.key(ctx.deserializeString(args.get(1)));
+            .add(Tag.string("is_crux_advancement_done", (args, ctx) ->{
+                Key advanceKey;
+                if(!args.has(1)){
+                    advanceKey = Crux.key(ctx.deserializeString(args.get(0)));
+                }else advanceKey = Crux.key(ctx.deserializeString(args.get(1)));
+
+                Key manager;
+                if(args.has(1)){
+                    manager = Crux.key(ctx.deserializeString(args.get(0)));
+                }else{
+                    String value = advanceKey.value();
+                    String[] valueArgs = value.split("/", 2);
+                    manager = Crux.key(advanceKey.namespace() + ":" + valueArgs[0]);
+                }
+
                 CruxAdvancementManager<?> foundManager = AdvancementRegistries.ADVANCEMENT_MANAGERS.get(manager);
                 if(foundManager == null){
                     Crux.log(Level.WARNING, "CruxAdvancementManager not found! " + manager);
                     return "false";
                 }
-                CruxAdvancement a = foundManager.getAdvancement(advancement);
+                CruxAdvancement a = foundManager.getAdvancement(advanceKey);
                 if(a == null){
-                    Crux.log(Level.WARNING, "CruxAdvancement not found! " + advancement);
+                    Crux.log(Level.WARNING, "CruxAdvancement not found! " + advanceKey);
                     return "false";
                 }
                 CruxAdvancementProgress progress = a.getProgressIfPresent(p.getUniqueId());
