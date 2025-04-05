@@ -25,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 public class StandardFileLootConditions {
     public static void register(@NotNull FileLootCondition file){
@@ -225,6 +226,20 @@ public class StandardFileLootConditions {
                 boolean parseVariables = e.getOrDefaultObject(Boolean.class, "parse_variables", false);
                 return new StringCondition(
                     target, match, ignoreCase, parseVariables
+                );
+            }
+        });
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("select_string")) {
+            @Override
+            public @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                String match = e.getObject(String.class, "match");
+                String check = e.getObject(String.class, "check");
+                Collection<String> targets = ctx.getRegistry().deserializeFromFile(
+                    new TypeToken<Set<String>>(){}.getType(), e.get("targets")
+                );
+                boolean ignoreCase = e.getOrDefaultObject(Boolean.class, "ignore_case", false);
+                return new SelectStringCondition(
+                    target, match, check, targets, ignoreCase
                 );
             }
         });

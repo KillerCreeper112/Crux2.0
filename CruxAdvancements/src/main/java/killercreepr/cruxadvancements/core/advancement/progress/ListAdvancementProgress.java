@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Predicate;
-//todo fix
+
 public class ListAdvancementProgress extends SimpleCriterionProgress implements CruxAdvancementProgress {
     protected final @NotNull Map<String, CruxCriterionProgress> progressMap = new HashMap<>();
     protected final @NotNull ListCriteria criteria;

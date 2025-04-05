@@ -128,7 +128,7 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
             values.add(a.key().asString(), completeProgress);
         }
         json.add("values", values);
-        cfg.save(true);
+        cfg.save();
     }
 
     @Override
