@@ -46,7 +46,9 @@ public class EntityTags implements ObjectTag<Entity> {
                 var type = CruxRegistries.DATA_COMPONENT_TYPE.get(key);
                 if(type == null) return "datacomponenttype " + key + " not found";
                 CruxEntity crux = CruxEntity.entity(p);
-                return crux.get(type) + "";
+                var got = crux.get(type);
+                if(got == null) return args.has(1) ? ctx.deserializeString(args.get(1)) : "null";
+                return got + "";
             }))
             ;
     }

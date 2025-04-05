@@ -115,9 +115,13 @@ public class ItemStackTags implements ObjectTag<ItemStack> {
                 Key key = Crux.key(ctx.deserializeString(args.get(0)));
                 var type = CruxRegistries.DATA_COMPONENT_TYPE.get(key);
                 if(type == null) return "datacomponenttype " + key + " not found";
-                boolean defaultData = !args.has(1) || CruxString.parseBoolean(ctx.deserializeString(args.get(1)));
-                if(defaultData) return CruxItem.wrap(item).getOrDefaultData(type) + "";
-                return CruxItem.wrap(item).get(type) + "";
+                boolean defaultData = !args.has(2) || CruxString.parseBoolean(ctx.deserializeString(args.get(2)));
+
+                Object got;
+                if(defaultData) got = CruxItem.wrap(item).getOrDefaultData(type);
+                else got = CruxItem.wrap(item).get(type);
+                if(got == null) return args.has(1) ? ctx.deserializeString(args.get(1)) : "null";
+                return got + "";
             }))
             ;
     }
