@@ -1,6 +1,8 @@
 package killercreepr.crux.core.persistence;
 
+import killercreepr.crux.api.registry.MappedRegistry;
 import killercreepr.crux.api.registry.Registry;
+import killercreepr.crux.core.registry.SimpleMappedRegistry;
 import killercreepr.crux.core.registry.SimpleRegistry;
 import killercreepr.crux.core.util.CruxTag;
 import org.bukkit.inventory.ItemStack;
@@ -14,7 +16,17 @@ import java.util.Collection;
 import java.util.function.Supplier;
 
 public class PersistTag<T> {
-    public static final Registry<PersistTag<?>> REGISTRY = SimpleRegistry.fromSet();
+    public static final MappedRegistry<String, PersistTag<?>> REGISTRY = new SimpleMappedRegistry<>(){
+        @Override
+        public boolean unregister(@NotNull PersistTag<?> object) {
+            return super.remove(object.tagName) != null;
+        }
+
+        @Override
+        public <E extends PersistTag<?>> @NotNull E register(@NotNull E object) {
+            return super.register(object.tagName, object);
+        }
+    };
 
     public static <E extends PersistTag<?>> @NotNull E register(@NotNull E e){
         REGISTRY.register(e);

@@ -5,14 +5,17 @@ import io.papermc.paper.datacomponent.item.DyedItemColor;
 import io.papermc.paper.datacomponent.item.MapItemColor;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
+import killercreepr.crux.api.entity.CruxEntity;
 import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.text.format.FormatPrefix;
 import killercreepr.crux.api.text.hook.ObjectTag;
 import killercreepr.crux.api.text.tags.TagParser;
 import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.core.text.container.StringTagContainer;
 import killercreepr.crux.core.text.resolver.Tag;
 import killercreepr.crux.core.util.CruxColor;
+import killercreepr.crux.core.util.CruxString;
 import net.kyori.adventure.key.Key;
 import org.bukkit.DyeColor;
 import org.bukkit.enchantments.Enchantment;
@@ -107,6 +110,14 @@ public class ItemStackTags implements ObjectTag<ItemStack> {
                     }
                 }
                 return null;
+            }))
+            .add(Tag.string("crux_component", (args, ctx) ->{
+                Key key = Crux.key(ctx.deserializeString(args.get(0)));
+                var type = CruxRegistries.DATA_COMPONENT_TYPE.get(key);
+                if(type == null) return "datacomponenttype " + key + " not found";
+                boolean defaultData = !args.has(1) || CruxString.parseBoolean(ctx.deserializeString(args.get(1)));
+                if(defaultData) return CruxItem.wrap(item).getOrDefaultData(type) + "";
+                return CruxItem.wrap(item).get(type) + "";
             }))
             ;
     }
