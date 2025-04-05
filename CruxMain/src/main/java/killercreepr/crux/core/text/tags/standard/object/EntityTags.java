@@ -39,7 +39,9 @@ public class EntityTags implements ObjectTag<Entity> {
                 String tagID = ctx.deserializeString(args.get(0));
                 PersistTag<?> tag = PersistTag.REGISTRY.get(tagID);
                 if(tag == null) return "persisttag " + tagID + " not found";
-                return tag.get(p) + "";
+                var got = tag.get(p);
+                if(got == null) return args.has(1) ? ctx.deserializeString(args.get(1)) : "null";
+                return got + "";
             }))
             .add(Tag.string("crux_component", (args, ctx) ->{
                 Key key = Crux.key(ctx.deserializeString(args.get(0)));
