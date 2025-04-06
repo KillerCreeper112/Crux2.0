@@ -1,5 +1,6 @@
 package killercreepr.cruxadvancements.core.listener;
 
+import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import io.papermc.paper.event.block.PlayerShearBlockEvent;
 import killercreepr.crux.api.entity.memory.EntityMemory;
 import killercreepr.crux.api.event.CruxEntityDeathEvent;
@@ -36,6 +37,16 @@ public class ObjectiveListener implements Listener {
         AdvancementHolder holder = holder(p);
         if(holder==null) return;
         holder.getAdvancementTracker().apply(PickupItemObjective.class, (manager, advancement, objective) -> {
+            objective.trigger(p.getUniqueId(), manager, advancement, event);
+        });
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerArmorChange(PlayerArmorChangeEvent event) {
+        Player p = event.getPlayer();
+        AdvancementHolder holder = holder(p);
+        if(holder==null) return;
+        holder.getAdvancementTracker().apply(ArmorChangeObjective.class, (manager, advancement, objective) -> {
             objective.trigger(p.getUniqueId(), manager, advancement, event);
         });
     }

@@ -1,5 +1,6 @@
 package killercreepr.crux.api.loot.bukkit;
 
+import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import io.papermc.paper.event.block.PlayerShearBlockEvent;
 import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.event.CruxEntityDamageEvent;
@@ -37,6 +38,21 @@ public interface EventLootContexts {
             .location(e.getLocation())
             .looter(killer)
             .looted(e)
+            ;
+    }
+    static LootContext.Builder builder(@NotNull PlayerArmorChangeEvent event){
+        LivingEntity e = event.getPlayer();
+        return builder()
+            .info(
+                DataExchange.builder()
+                    .putAll(event.getNewItem(), "new_item")
+                    .putAll(event.getOldItem(), "old_item")
+                    .putAll(event.getSlot(), "slot")
+                    .build()
+            )
+            .location(e.getLocation())
+            .looted(event.getNewItem())
+            .looter(e)
             ;
     }
 

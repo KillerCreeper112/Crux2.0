@@ -207,6 +207,15 @@ public class CruxConfigHook {
                 return new TakeDamageObjective(data, maxProgress);
             }
         });
+
+        fileAdvancementObjective.registerCustomHandler(new FileSimpleAdvanceObjective<>(Crux.key("armor_change")) {
+            @Override
+            public @Nullable AdvancementObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new ArmorChangeObjective(data, maxProgress);
+            }
+        });
     }
 
     public static void registerHandlers(){
