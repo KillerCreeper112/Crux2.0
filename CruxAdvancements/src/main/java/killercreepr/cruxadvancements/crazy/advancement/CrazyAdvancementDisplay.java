@@ -8,6 +8,7 @@ import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.crux.core.Crux;
 import killercreepr.cruxadvancements.api.advancement.icon.CriterionDisplay;
 import killercreepr.cruxadvancements.api.advancement.icon.CruxAdvancementIcon;
+import killercreepr.cruxadvancements.api.crazy.advancement.AdvancementFrame;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -29,6 +30,19 @@ public class CrazyAdvancementDisplay implements CruxAdvancementIcon {
     protected final float y;
     protected final @Nullable Key positionOrigin;
     protected final @Nullable CriterionDisplay criterionDisplay;
+
+    public CrazyAdvancementDisplay(@NotNull DynamicItem icon, @NotNull String title, @NotNull String description, @NotNull AdvancementFrame frame, @NotNull killercreepr.cruxadvancements.api.crazy.advancement.AdvancementVisibility visibility, @Nullable String backgroundTexture, float x, float y, @Nullable Key positionOrigin, @Nullable CriterionDisplay criterionDisplay) {
+        this.icon = icon;
+        this.title = title;
+        this.description = description;
+        this.frame = AdvancementDisplay.AdvancementFrame.valueOf(frame.key().value().toUpperCase());
+        this.visibility = ((SimpleAdvancementVisibility)visibility).toCrazy();
+        this.backgroundTexture = backgroundTexture;
+        this.x = x;
+        this.y = y;
+        this.positionOrigin = positionOrigin;
+        this.criterionDisplay = criterionDisplay;
+    }
 
     public CrazyAdvancementDisplay(@NotNull DynamicItem icon, @NotNull String title, @NotNull String description, @NotNull AdvancementDisplay.AdvancementFrame frame, @NotNull AdvancementVisibility visibility, @Nullable String backgroundTexture, float x, float y, @Nullable Key positionOrigin, @Nullable CriterionDisplay criterionDisplay) {
         this.icon = icon;

@@ -10,6 +10,10 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public interface CruxLocation extends CruxPosition {
+    static @NotNull CruxLocation zero(){
+        return zero;
+    }
+    CruxLocation zero = location(0, 0,0);
     static @NotNull CruxLocation location(double x, double y, double z, float yaw, float pitch){
         return new SimpleCruxLocation(x, y, z, yaw, pitch);
     }

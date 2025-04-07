@@ -23,6 +23,11 @@ public class CfgCrazyAdvancementManagerCfgLoader {
 
     protected final Map<Key, CfgCrazyAdvancementManager> advancementManagers = new HashMap<>();
 
+
+    public Map<Key, CfgCrazyAdvancementManager> getAdvancementManagers() {
+        return advancementManagers;
+    }
+
     public void load(Player p){
         advancementManagers.values().forEach(advancementManager ->{
             advancementManager.loadProgress(p.getUniqueId());
@@ -50,7 +55,15 @@ public class CfgCrazyAdvancementManagerCfgLoader {
     }
 
     public void refresh(){
+        refresh(true);
+    }
+
+    public void refresh(boolean refreshManagers){
         loadConfiguration(CruxFolder.file(plugin, "advancements"));
+        if(refreshManagers) refreshManagers();
+    }
+
+    public void refreshManagers(){
         advancementManagers.values().forEach(c -> c.refresh(plugin));
     }
 

@@ -1,6 +1,7 @@
 package killercreepr.cruxadvancements.core.advancement;
 
 import killercreepr.cruxadvancements.api.advancement.CruxAdvancement;
+import killercreepr.cruxadvancements.api.advancement.CruxRewardAdvancement;
 import killercreepr.cruxadvancements.api.advancement.criteria.CruxCriteria;
 import killercreepr.cruxadvancements.api.advancement.icon.CruxAdvancementIcon;
 import killercreepr.cruxadvancements.api.advancement.progress.CruxAdvancementProgress;
@@ -17,7 +18,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class SimpleAdvancement implements CruxAdvancement {
+public class SimpleAdvancement implements CruxAdvancement, CruxRewardAdvancement {
     protected final @NotNull Key key;
     protected final @Nullable Key parentKey;
     protected final @NotNull CruxAdvancementIcon icon;
@@ -33,6 +34,11 @@ public class SimpleAdvancement implements CruxAdvancement {
         this.icon = icon;
         this.criteria = criteria;
         this.reward = reward;
+    }
+
+    @Override
+    public @Nullable CruxAdvanceReward getReward() {
+        return reward;
     }
 
     @Override

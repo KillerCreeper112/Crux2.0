@@ -12,6 +12,11 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public interface CruxPosition {
+    static @NotNull CruxPosition zero(){
+        return zero;
+    }
+    CruxPosition zero = block(0, 0,0);
+
     static @NotNull CruxPosition location(double x, double y, double z){
         return precise(x, y, z);
     }
