@@ -2,6 +2,7 @@ package killercreepr.cruxadvancements.core.config.loader;
 
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.plugin.CruxPlugin;
+import killercreepr.cruxadvancements.api.advancement.manager.CruxAdvancementManager;
 import killercreepr.cruxadvancements.core.registries.AdvancementRegistries;
 import killercreepr.cruxadvancements.crazy.config.CfgCrazyAdvancementManager;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
@@ -13,6 +14,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 
 public class CfgCrazyAdvancementManagerCfgLoader {
@@ -55,16 +57,12 @@ public class CfgCrazyAdvancementManagerCfgLoader {
     }
 
     public void refresh(){
-        refresh(true);
+        refresh(null);
     }
 
-    public void refresh(boolean refreshManagers){
+    public void refresh(Consumer<CruxAdvancementManager<?>> loadConsumer){
         loadConfiguration(CruxFolder.file(plugin, "advancements"));
-        if(refreshManagers) refreshManagers();
-    }
-
-    public void refreshManagers(){
-        advancementManagers.values().forEach(c -> c.refresh(plugin));
+        advancementManagers.values().forEach(c -> c.refresh(plugin, loadConsumer));
     }
 
     public void loadConfiguration(@NotNull File folder){

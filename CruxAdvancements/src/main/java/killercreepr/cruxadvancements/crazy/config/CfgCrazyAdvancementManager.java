@@ -8,6 +8,7 @@ import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.cruxadvancements.api.advancement.ObjectiveAdvancement;
 import killercreepr.cruxadvancements.api.advancement.flag.CruxAdvancementFlag;
+import killercreepr.cruxadvancements.api.advancement.manager.CruxAdvancementManager;
 import killercreepr.cruxadvancements.api.advancement.objective.progress.ObjectiveProgression;
 import killercreepr.cruxadvancements.api.advancement.progress.CruxAdvancementProgress;
 import killercreepr.cruxadvancements.core.advancement.objective.progress.SimpleObjectiveProgression;
@@ -34,6 +35,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 
 public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdvancement> {
@@ -84,8 +86,29 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
         crazyManager.updateAdvancement(crazyAdvancements.values().toArray(new Advancement[0]));
     }
 
+    public void refresh(@NotNull Plugin plugin, Consumer<CruxAdvancementManager<?>> loadConsumer) {
+        for(Player p : plugin.getServer().getOnlinePlayers()){
+            saveProgress(p.getUniqueId());
+        }
+        for(CrazyAdvancement a : new HashSet<>(advancements.values())){
+            unregisterAdvancement(a);
+        }
+        load(plugin, loadConsumer);
+
+        for(Player p : plugin.getServer().getOnlinePlayers()){
+            loadProgress(p.getUniqueId());
+        }
+
+        crazyManager.updateAdvancement(crazyAdvancements.values().toArray(new Advancement[0]));
+    }
+
     @Override
     public void load(@NotNull Plugin plugin) {
+        load(plugin, null);
+    }
+
+
+    public void load(@NotNull Plugin plugin, Consumer<CruxAdvancementManager<?>> loadConsumer) {
         for(CrazyAdvancement a : parseAdvancements(getAdvancementsFolder(plugin).file())){
             registerAdvancement(a);
 
@@ -98,6 +121,7 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
 
             //a.load(getAdvancementSaveFile(plugin, a).file());
         }
+        if(loadConsumer != null) loadConsumer.accept(this);
         loadAllCrazyAdvancements();
     }
 
