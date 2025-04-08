@@ -32,6 +32,7 @@ public class BlockDirectionalInfoCondition extends BaseCondition {
         if(!(b.getBlockData() instanceof Directional dir)) return false;
         BlockFace direction = ctx.info().getOrDefault("direction", BlockFace.class, defaultDirection);
         if(direction == null) return false;
+        if(opposite) direction = direction.getOppositeFace();
         return dir.getFacing() == direction;
     }
 }
