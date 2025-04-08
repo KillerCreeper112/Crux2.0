@@ -71,19 +71,7 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
 
     @Override
     public void refresh(@NotNull Plugin plugin) {
-        for(Player p : plugin.getServer().getOnlinePlayers()){
-            saveProgress(p.getUniqueId());
-        }
-        for(CrazyAdvancement a : new HashSet<>(advancements.values())){
-            unregisterAdvancement(a);
-        }
-        load(plugin);
-
-        for(Player p : plugin.getServer().getOnlinePlayers()){
-            loadProgress(p.getUniqueId());
-        }
-
-        crazyManager.updateAdvancement(crazyAdvancements.values().toArray(new Advancement[0]));
+        refresh(plugin, null);
     }
 
     public void refresh(@NotNull Plugin plugin, Consumer<CruxAdvancementManager<?>> loadConsumer) {
@@ -97,6 +85,7 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
 
         for(Player p : plugin.getServer().getOnlinePlayers()){
             loadProgress(p.getUniqueId());
+            crazyManager.addPlayer(p);
         }
 
         crazyManager.updateAdvancement(crazyAdvancements.values().toArray(new Advancement[0]));
@@ -106,7 +95,6 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
     public void load(@NotNull Plugin plugin) {
         load(plugin, null);
     }
-
 
     public void load(@NotNull Plugin plugin, Consumer<CruxAdvancementManager<?>> loadConsumer) {
         for(CrazyAdvancement a : parseAdvancements(getAdvancementsFolder(plugin).file())){

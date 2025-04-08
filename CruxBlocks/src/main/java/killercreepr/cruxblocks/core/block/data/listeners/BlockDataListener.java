@@ -148,7 +148,6 @@ public final class BlockDataListener implements Listener {
         callAndRemoveBlockList(event.blockList(),event);
     }
 
-
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onExplode(BlockExplodeEvent event) {
         callAndRemoveBlockList(event.blockList(),event);

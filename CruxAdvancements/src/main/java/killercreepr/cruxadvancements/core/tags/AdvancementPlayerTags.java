@@ -40,9 +40,21 @@ public class AdvancementPlayerTags implements ObjectTag<Player> {
                 AdvancementHolder holder = EntityMemory.getOrCreateDataHolder(p, AdvancementHolder.class);
                 if(holder == null) return "false";
                 AdvancementTracker tracker = holder.getAdvancementTracker();
-                Key manager = Crux.key(ctx.deserializeString(ctx.deserializeString(args.get(0))));
-                Key advancement = Crux.key(ctx.deserializeString(ctx.deserializeString(args.get(1))));
-                return tracker.isTracking(manager, advancement) + "";
+
+                Key advanceKey;
+                if(!args.has(1)){
+                    advanceKey = Crux.key(ctx.deserializeString(args.get(0)));
+                }else advanceKey = Crux.key(ctx.deserializeString(args.get(1)));
+
+                Key manager;
+                if(args.has(1)){
+                    manager = Crux.key(ctx.deserializeString(args.get(0)));
+                }else{
+                    String value = advanceKey.value();
+                    String[] valueArgs = value.split("/", 2);
+                    manager = Crux.key(advanceKey.namespace() + ":" + valueArgs[0]);
+                }
+                return tracker.isTracking(manager, advanceKey) + "";
             }))
             .add(Tag.string("tracked_advancements", (args, ctx) ->{
                 AdvancementHolder holder = EntityMemory.getOrCreateDataHolder(p, AdvancementHolder.class);
