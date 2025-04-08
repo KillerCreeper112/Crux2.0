@@ -17,11 +17,13 @@ import killercreepr.cruxadvancements.core.hook.menu.CruxMenuHook;
 import killercreepr.cruxadvancements.core.listener.AdvancementGrantListener;
 import killercreepr.cruxadvancements.core.listener.ObjectiveListener;
 import killercreepr.cruxadvancements.core.listener.PlayerCraftItemListener;
+import killercreepr.cruxadvancements.core.menu.module.TrackedAdvancementMenuModuleBuilder;
 import killercreepr.cruxadvancements.core.stat.AdvancementStats;
 import killercreepr.cruxadvancements.core.tags.*;
 import killercreepr.cruxadvancements.core.values.DefaultValues;
 import killercreepr.cruxadvancements.crazy.advancement.CrazyAdvancementsHook;
 import killercreepr.cruxmenus.CruxMenusModule;
+import killercreepr.cruxmenus.api.menu.registry.MenuRegistry;
 import org.jetbrains.annotations.NotNull;
 
 public class CruxAdvancementsModule implements CruxModule {
@@ -54,6 +56,11 @@ public class CruxAdvancementsModule implements CruxModule {
             if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_MENUS)){
                 CruxMenuHook.register(CruxRegistries.MODULES.getModuleOrThrow(CruxMenusModule.class));
             }
+        }
+        if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_MENUS)){
+            CruxMenusModule menus = CruxRegistries.MODULES.getModule(CruxMenusModule.class);
+            MenuRegistry registry = menus.menuRegistry();
+            menus.menuModuleRegistry().register(new TrackedAdvancementMenuModuleBuilder(registry.menuModule(), Crux.key("tracked_advance")));
         }
         EntityMemory.registerFunction(plugin, mem ->{
             if(!(mem instanceof PlayerMemory data)) return;
