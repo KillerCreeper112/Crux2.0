@@ -76,6 +76,13 @@ public interface PersistTextParser<T> extends ComponentTextInputParser<T>{
         }
     };
 
+    PersistTextParser<byte[]> BYTE_ARRAY = new PrimitivePersistTextParser<>(PersistentDataType.BYTE_ARRAY) {
+        @Override
+        public byte[] decodeObject(@NotNull Object object) throws IllegalArgumentException {
+            return (byte[]) object;
+        }
+    };
+
     PersistTextParser<Key> KEY = new PrimitivePersistTextParser<>(CruxPersistence.CRUX_KEY) {
         @Override
         public @NotNull Key decodeObject(@NotNull Object object) throws IllegalArgumentException {
@@ -101,6 +108,13 @@ public interface PersistTextParser<T> extends ComponentTextInputParser<T>{
         @Override
         public @NotNull Long decodeObject(@NotNull Object object) throws IllegalArgumentException {
             return Long.parseLong(object.toString());
+        }
+    };
+
+    PersistTextParser<Byte> BYTE = new PrimitivePersistTextParser<>(PersistentDataType.BYTE) {
+        @Override
+        public @NotNull Byte decodeObject(@NotNull Object object) throws IllegalArgumentException {
+            return Byte.parseByte(object.toString());
         }
     };
 

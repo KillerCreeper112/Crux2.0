@@ -13,6 +13,7 @@ import killercreepr.crux.core.registries.CruxRegistries;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.function.UnaryOperator;
 
 public class CruxComponents {
@@ -44,6 +45,9 @@ public class CruxComponents {
 
     public static final DataComponentType<Long> LOOT_GENERATED_TIME = register("loot_generated_time", builder -> builder
         .persistTextParser(PersistTextParser.LONG.createInput(Crux.key("loot_generated_time"))));
+
+    public static final DataComponentType<UUID> OWNER = register("owner", builder -> builder
+        .persistTextParser(ComponentInputParsers.UUID.createInput(Crux.key("owner"))));
 
     private static <T> DataComponentType<T> register(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator){
         return CruxRegistries.DATA_COMPONENT_TYPE.register(Crux.key(id), builderOperator.apply(DataComponentType.builder()).build());

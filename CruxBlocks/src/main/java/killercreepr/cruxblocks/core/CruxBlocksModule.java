@@ -137,6 +137,7 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
             new NoteBlockSoundsListener(plugin, CruxBlocksRegistries.BLOCK),
             new CustomBlockClientSyncListener(plugin, CruxBlocksRegistries.BLOCK)
         );
+        CustomBlockData.registerListener(plugin);
 
         if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_ADVANCEMENTS)){
             plugin.registerListeners(

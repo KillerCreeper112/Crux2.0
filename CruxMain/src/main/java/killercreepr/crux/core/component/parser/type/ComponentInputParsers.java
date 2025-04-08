@@ -21,6 +21,7 @@ import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.component.parser.hybrid.text.ListPersistTextParser;
 import killercreepr.crux.core.item.predicate.ItemAllPredicate;
 import killercreepr.crux.core.item.predicate.ItemAnyPredicate;
+import killercreepr.crux.core.persistence.type.UUIDTagType;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.paper.ItemHolder;
 import net.kyori.adventure.key.Key;
@@ -36,6 +37,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -45,6 +47,20 @@ public class ComponentInputParsers {
         .apply(ctx ->{
             Key key = ctx.get();
             return Registry.PARTICLE_TYPE.get(key);
+        });
+
+    public static PersistTextParser<UUID> UUID = PersistTextParser.elementBuilder(UUID.class)
+        .field(TextInputField.field(PersistTextParser.BYTE_ARRAY, d ->{
+            ByteBuffer bb = ByteBuffer.wrap(new byte[16]);
+            bb.putLong(d.getMostSignificantBits());
+            bb.putLong(d.getLeastSignificantBits());
+            return bb.array();
+        }))
+        .apply(ctx ->{
+            ByteBuffer bb = ByteBuffer.wrap(ctx.get());
+            long firstLong = bb.getLong();
+            long secondLong = bb.getLong();
+            return new UUID(firstLong, secondLong);
         });
 
     public static PersistTextParser<NumberProvider> NUMBER_PROVIDER = PersistTextParser.elementBuilder(NumberProvider.class)

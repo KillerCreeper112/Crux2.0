@@ -24,6 +24,10 @@ package killercreepr.cruxblocks.core.block.data.listeners;
 
 import killercreepr.cruxblocks.api.block.data.events.CustomBlockDataMoveEvent;
 import killercreepr.cruxblocks.api.block.data.events.CustomBlockDataRemoveEvent;
+import killercreepr.cruxblocks.api.event.CruxBlockBreakEvent;
+import killercreepr.cruxblocks.api.event.CruxBlockPlaceEvent;
+import killercreepr.cruxblocks.api.event.CustomBlockExplodeEvent;
+import killercreepr.cruxblocks.api.event.CustomExplodeEvent;
 import killercreepr.cruxblocks.core.block.data.CustomBlockData;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -90,6 +94,7 @@ public final class BlockDataListener implements Listener {
     }
 
     private void callAndRemoveBlockList(List<Block> blocks, Event bukkitEvent) {
+        if(blocks.isEmpty()) return;
         blocks.stream()
                 .filter(customDataPredicate)
                 .forEach(block -> callAndRemove(block,bukkitEvent));
@@ -100,6 +105,19 @@ public final class BlockDataListener implements Listener {
             getCbd(block).clear();
         }
     }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onCruxBlockBreak(CruxBlockBreakEvent event) {
+        callAndRemove(event.getContext().getBlock(), event);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onCruxBlockPlace(CruxBlockPlaceEvent event) {
+        if(!CustomBlockData.isDirty(event.getContext().getBlock())) {
+            callAndRemove(event.getContext().getBlock(), event);
+        }
+    }
+
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBreak(BlockBreakEvent event) {
@@ -119,6 +137,17 @@ public final class BlockDataListener implements Listener {
             callAndRemove(event.getBlock(), event);
         }
     }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onTNTPrime(TNTPrimeEvent event) {
+        callAndRemove(event);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onCustomExplode(CustomExplodeEvent event) {
+        callAndRemoveBlockList(event.blockList(),event);
+    }
+
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onExplode(BlockExplodeEvent event) {
