@@ -16,6 +16,9 @@ public class CruxBlockContexts {
                 .putAll(ctx.getBlock(), "block", "block_broken")
                 .putAll(event.getBlock(), "crux_block")
                 .putAll(entityMiner, "miner", "entity")
-                .build());
+                .build())
+            .location(ctx.getBlock().getLocation())
+            .looted(ctx.getBlock())
+            .looter(entityMiner);
     }
 }
