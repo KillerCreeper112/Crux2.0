@@ -9,6 +9,7 @@ import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.loot.conditions.*;
 import killercreepr.crux.core.loot.conditions.block.BlockCondition;
+import killercreepr.crux.core.loot.conditions.block.BlockDirectionalInfoCondition;
 import killercreepr.crux.core.loot.conditions.block.BlockDirectionalNearbyCondition;
 import killercreepr.crux.core.loot.conditions.block.BlockStateCondition;
 import killercreepr.crux.core.loot.conditions.entity.EntityCondition;
@@ -283,10 +284,20 @@ public class StandardFileLootConditions {
             @Override
             public @NotNull LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 FileRegistry registry = ctx.getRegistry();
-                BlockPredicate type = registry.deserializeFromFile(BlockPredicate.class, e.get("block"));
+                LootCondition type = registry.deserializeFromFile(LootCondition.class, e.get("block"));
                 Collection<BlockFace> faces = registry.deserializeFromFile(
                     new TypeToken<Collection<BlockFace>>(){}.getType(), e.get("faces"));
+                if(faces == null) faces = Set.of(BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST);
                 return new BlockDirectionalNearbyCondition(target, type, faces);
+            }
+        });
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("block_directional_info")) {
+            @Override
+            public @NotNull LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                FileRegistry registry = ctx.getRegistry();
+                BlockFace face = registry.deserializeFromFile(BlockFace.class, e.get("default_direction"));
+                return new BlockDirectionalInfoCondition(target, face,
+                    e.getOrDefaultObject(Boolean.class, "opposite", false));
             }
         });
     }

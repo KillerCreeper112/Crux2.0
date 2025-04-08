@@ -1,29 +1,23 @@
 package killercreepr.crux.core.loot.conditions.block;
 
-import killercreepr.crux.api.block.CruxedBlock;
-import killercreepr.crux.api.block.predicate.BlockPredicate;
+import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.api.loot.LootContext;
-import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.loot.conditions.LootCondition;
 import killercreepr.crux.core.loot.conditions.BaseCondition;
-import killercreepr.crux.core.loot.conditions.CollectionCondition;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
 public class BlockDirectionalNearbyCondition extends BaseCondition {
-    protected final @NotNull BlockPredicate blockPredicate;
+    protected final @NotNull LootCondition nearCondition;
     protected final @NotNull Collection<BlockFace> faces;
-    public BlockDirectionalNearbyCondition(@NotNull String target, @NotNull BlockPredicate blockPredicate, @NotNull Collection<BlockFace> faces) {
+    public BlockDirectionalNearbyCondition(@NotNull String target, @NotNull LootCondition nearCondition, @NotNull Collection<BlockFace> faces) {
         super(target);
-        this.blockPredicate = blockPredicate;
+        this.nearCondition = nearCondition;
         this.faces = faces;
-    }
-
-    public @NotNull BlockPredicate getBlockPredicate() {
-        return blockPredicate;
     }
 
     public @NotNull Collection<BlockFace> getFaces() {
@@ -33,11 +27,18 @@ public class BlockDirectionalNearbyCondition extends BaseCondition {
     @Override
     public boolean test(@NotNull LootContext ctx) {
         Block b = ctx.info().get(target, Block.class);
+        if(b == null){
+            var state = ctx.info().get(target, BlockState.class);
+            if(state == null) return false;
+            try{
+                b = state.getBlock();
+            }catch (IllegalStateException ignored){}
+        }
         if(b==null) return false;
         for(BlockFace face : faces){
             Block near = b.getRelative(face);
-            CruxedBlock cruxed = Crux.handlers().block().getBlock(near);
-            if(blockPredicate.test(cruxed)) return true;
+            if(nearCondition.test(ctx.withInfo(ctx.info().append("this", Holder.directObject(near))
+                .append("direction", Holder.directObject(face))))) return true;
         }
         return false;
     }
