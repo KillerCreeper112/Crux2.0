@@ -69,6 +69,7 @@ public class ActiveTrackedAdvancementMenuModule extends SimpleActiveMenuModule {
                         DataExchange.builder()
                             .put("advancement", advance)
                             .put("slot", slot)
+                            .put("level", level)
                             .build(),
                         TagContainer.merged()));
                 }
@@ -79,6 +80,7 @@ public class ActiveTrackedAdvancementMenuModule extends SimpleActiveMenuModule {
                     DataExchange.builder()
                         .put("advancement", advance)
                         .put("slot", slot)
+                        .put("level", level)
                         .build(),
                     TagContainer.merged()));
             }
@@ -91,6 +93,7 @@ public class ActiveTrackedAdvancementMenuModule extends SimpleActiveMenuModule {
                 DataExchange.builder()
                     .put("advancement", advance)
                     .put("slot", slot)
+                    .put("level", maxLevel)
                     .build(),
                 TagContainer.merged()));
         }
