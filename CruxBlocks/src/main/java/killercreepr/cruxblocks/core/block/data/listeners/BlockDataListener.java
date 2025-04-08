@@ -24,10 +24,7 @@ package killercreepr.cruxblocks.core.block.data.listeners;
 
 import killercreepr.cruxblocks.api.block.data.events.CustomBlockDataMoveEvent;
 import killercreepr.cruxblocks.api.block.data.events.CustomBlockDataRemoveEvent;
-import killercreepr.cruxblocks.api.event.CruxBlockBreakEvent;
-import killercreepr.cruxblocks.api.event.CruxBlockPlaceEvent;
-import killercreepr.cruxblocks.api.event.CustomBlockExplodeEvent;
-import killercreepr.cruxblocks.api.event.CustomExplodeEvent;
+import killercreepr.cruxblocks.api.event.*;
 import killercreepr.cruxblocks.core.block.data.CustomBlockData;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -112,7 +109,7 @@ public final class BlockDataListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onCruxBlockPlace(CruxBlockPlaceEvent event) {
+    public void onCruxBlockPlace(CruxBlockPostPlaceEvent event) {
         if(!CustomBlockData.isDirty(event.getContext().getBlock())) {
             callAndRemove(event.getContext().getBlock(), event);
         }

@@ -13,6 +13,7 @@ import killercreepr.cruxblocks.api.block.context.PlaceBlockContext;
 import killercreepr.cruxblocks.api.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.api.block.texture.TextureData;
 import killercreepr.cruxblocks.api.event.CruxBlockPlaceEvent;
+import killercreepr.cruxblocks.api.event.CruxBlockPostPlaceEvent;
 import killercreepr.cruxblocks.api.event.CruxBlockSetEvent;
 import killercreepr.cruxblocks.core.CruxBlocksModule;
 import killercreepr.cruxblocks.core.block.active.SimpleActiveCruxBlock;
@@ -124,6 +125,8 @@ public interface CruxBlock extends Keyed, CruxBlockData {
                 }
             }
             active.placed(ctx);
+            CruxBlockPostPlaceEvent postEvent = new CruxBlockPostPlaceEvent(this, ctx);
+            postEvent.callEvent();
             //if(active instanceof ActiveTickable) DP.blocks().addTickedBlock(active);
         }
         return active;
