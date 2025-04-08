@@ -1,6 +1,7 @@
 package killercreepr.cruxworlds.core.command;
 
 import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -19,6 +20,9 @@ import killercreepr.cruxworlds.core.command.arguments.CruxWorldArgs;
 import killercreepr.cruxworlds.core.command.arguments.CruxWorldArgument;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.WorldCreator;
+import org.bukkit.WorldType;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
@@ -230,6 +234,53 @@ public class CruxWorldsCommands {
                                     }
                                     return 1;
                                 })
+                        )
+                )
+        ).then(
+            Commands.literal("createworld")
+                .then(
+                    Commands.argument("name", StringArgumentType.word())
+                        .then(
+                            Commands.argument("environment", StringArgumentType.word())
+                                .suggests((ct, b) ->{
+                                    for(var e : World.Environment.values()){
+                                        b.suggest(e.toString().toLowerCase());
+                                    }
+                                    return b.buildFuture();
+                                })
+                                .then(
+                                    Commands.argument("type", StringArgumentType.word())
+                                        .suggests((ct, b) ->{
+                                            for(var e : WorldType.values()){
+                                                b.suggest(e.toString().toLowerCase());
+                                            }
+                                            return b.buildFuture();
+                                        })
+                                        .executes(ctx ->{
+                                            String name = ctx.getArgument("name", String.class);
+                                            var env = World.Environment.valueOf(ctx.getArgument("environment", String.class).toUpperCase());
+                                            var type = WorldType.valueOf(ctx.getArgument("type", String.class).toUpperCase());
+                                            WorldCreator creator = new WorldCreator(name);
+                                            creator.type(type).environment(env);
+                                            getExecutor(ctx.getSource()).sendMessage("Creating world " + name + "...");
+                                            creator.createWorld();
+                                            return 1;
+                                        })
+                                        .then(
+                                            Commands.argument("options", StringArgumentType.greedyString())
+                                                .executes(ctx ->{
+                                                    String name = ctx.getArgument("name", String.class);
+                                                    var env = World.Environment.valueOf(ctx.getArgument("environment", String.class).toUpperCase());
+                                                    var type = WorldType.valueOf(ctx.getArgument("type", String.class).toUpperCase());
+                                                    WorldCreator creator = new WorldCreator(name);
+                                                    creator.type(type).environment(env)
+                                                        .generatorSettings(ctx.getArgument("options", String.class));
+                                                    getExecutor(ctx.getSource()).sendMessage("Creating world " + name + "...");
+                                                    creator.createWorld();
+                                                    return 1;
+                                                })
+                                        )
+                                )
                         )
                 )
         )
