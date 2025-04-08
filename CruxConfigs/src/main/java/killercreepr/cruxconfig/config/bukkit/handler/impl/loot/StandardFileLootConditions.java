@@ -193,8 +193,9 @@ public class StandardFileLootConditions {
                 );
                 if(condition == null) return null;
                 String type = e.getObject(String.class, "type");
-                if(type == null) type = "all_of";
-                return new killercreepr.crux.core.loot.conditions.CollectionCondition(target, condition, type);
+                if(type == null) type = "any_of";
+                return new killercreepr.crux.core.loot.conditions.CollectionCondition(target, condition, type,
+                    e.getOrDefaultObject(Boolean.class, "use_map_keys", false));
             }
         });
 

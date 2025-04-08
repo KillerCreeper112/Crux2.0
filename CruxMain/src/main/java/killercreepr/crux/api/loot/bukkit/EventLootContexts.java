@@ -13,10 +13,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.event.player.PlayerShearEntityEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -169,6 +166,24 @@ public interface EventLootContexts {
                     .putAll(player, "player", "miner", "entity")
                     .putAll(block, "block", "block_broken")
                     .putAll(event.getExpToDrop(), "exp_to_drop")
+                    .build()
+            )
+            .location(block.getLocation())
+            .looter(player)
+            .looted(block)
+            ;
+    }
+
+    static LootContext.Builder builder(@NotNull PlayerHarvestBlockEvent event){
+        Block block = event.getHarvestedBlock();
+        Entity player = event.getPlayer();
+        return builder()
+            .info(
+                DataExchange.builder()
+                    .putAll(player, "player", "miner", "entity")
+                    .putAll(block, "block", "block_harvested")
+                    .putAll(event.getItemsHarvested(), "items", "drops")
+                    .putAll(event.getHand(), "hand")
                     .build()
             )
             .location(block.getLocation())
