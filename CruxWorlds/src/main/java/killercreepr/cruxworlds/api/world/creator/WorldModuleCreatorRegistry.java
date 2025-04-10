@@ -8,4 +8,5 @@ import java.util.Collection;
 
 public interface WorldModuleCreatorRegistry extends MappedRegistry<Key, Collection<CruxWorldModuleCreator>> {
     <T extends CruxWorldModuleCreator> T register(@NotNull Key worldName, @NotNull T creator);
+    <T extends CruxWorldModuleCreator> void register(@NotNull Key worldName, @NotNull T... creators);
 }

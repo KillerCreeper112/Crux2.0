@@ -6,6 +6,7 @@ import killercreepr.cruxworlds.api.world.creator.WorldModuleCreatorRegistry;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -22,5 +23,10 @@ public class WorldModuleCreatorRegistryImpl extends SimpleMappedRegistry<Key, Co
     public <T extends CruxWorldModuleCreator> T register(@NotNull Key worldName, @NotNull T creator) {
         computeIfAbsent(worldName, (name) -> new HashSet<>()).add(creator);
         return creator;
+    }
+
+    @Override
+    public <T extends CruxWorldModuleCreator> void register(@NotNull Key worldName, @NotNull T... creators) {
+        computeIfAbsent(worldName, (name) -> new HashSet<>()).addAll(Arrays.asList(creators));
     }
 }
