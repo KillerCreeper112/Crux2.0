@@ -49,7 +49,14 @@ public class CruxWorldUtil {
     public static boolean deleteWorld(@NotNull String name){
         for(File f : Crux.getServer().getWorldContainer().listFiles()){
             if(!f.getName().equals(name) || !f.isDirectory()) continue;
-            boolean foundLevel = false;
+            try{
+                FileUtils.deleteDirectory(f);
+                return true;
+            }catch (IOException e){
+                e.printStackTrace();
+                return false;
+            }
+            /*boolean foundLevel = false;
             for(File folderF : f.listFiles()){
                 if(folderF.getName().equals("level.dat")){
                     foundLevel = true;
@@ -64,8 +71,7 @@ public class CruxWorldUtil {
                     e.printStackTrace();
                     return false;
                 }
-            }
-            break;
+            }*/
         }
         return false;
     }

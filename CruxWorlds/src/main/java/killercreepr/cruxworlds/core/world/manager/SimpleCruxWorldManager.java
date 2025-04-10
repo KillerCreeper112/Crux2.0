@@ -32,6 +32,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
     protected final Plugin plugin;
@@ -53,7 +54,7 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
     protected final @NotNull KeyedRegistry<CruxWorldType> worldTypes;
     protected final @NotNull MappedRegistry<Key, CruxWorldCreator> creators = new SimpleMappedRegistry<>();
     protected final @NotNull WorldModuleCreatorRegistry moduleCreators = new WorldModuleCreatorRegistryImpl();
-    protected final @NotNull ActiveCruxWorldRegistry active = new ActiveCruxWorldRegistry();
+    protected final @NotNull ActiveCruxWorldRegistry active = new ActiveCruxWorldRegistry(new ConcurrentHashMap<>());
 
     public BukkitRunnable buildRunnable(){
         return new BukkitRunnable() {
