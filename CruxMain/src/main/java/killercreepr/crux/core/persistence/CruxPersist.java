@@ -1,6 +1,7 @@
 package killercreepr.crux.core.persistence;
 
 import killercreepr.crux.api.loot.item.ItemLootTable;
+import net.kyori.adventure.key.Key;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -16,5 +17,7 @@ public class CruxPersist {
     public static final PersistTag<UUID> OWNER = PersistTag.register(new PersistTag<>(CruxPersistence.UUID, "owner"));
     public static final PersistTag<Integer> RICOCHET_ENTITY = PersistTag.register(new PersistTag<>(PersistentDataType.INTEGER, "ricochet_entity"));
     public static final PersistTag<Integer> RICOCHET_BLOCK = PersistTag.register(new PersistTag<>(PersistentDataType.INTEGER, "ricochet_block"));
+    public static final PersistTag<Key> RICOCHET_LAST_HIT_BLOCK_TYPE = PersistTag.register(new PersistTag<>(CruxPersistence.CRUX_KEY, "ricochet_last_hit_block_type"));
+    public static final PersistTag<Key> RICOCHET_LAST_HIT_ENTITY_TYPE = PersistTag.register(new PersistTag<>(CruxPersistence.CRUX_KEY, "ricochet_last_hit_entity_type"));
     public static final PersistTag<PersistentDataContainer> COMPONENTS = PersistTag.register(new PersistTag<>(PersistentDataType.TAG_CONTAINER, "components"));
 }
