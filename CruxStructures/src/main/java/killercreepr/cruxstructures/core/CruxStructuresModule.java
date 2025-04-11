@@ -2,6 +2,7 @@ package killercreepr.cruxstructures.core;
 
 import killercreepr.crux.api.component.TypedDataComponent;
 import killercreepr.crux.api.plugin.module.CruxModule;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.plugin.module.StandardModules;
 import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
@@ -36,6 +37,7 @@ import killercreepr.cruxstructures.core.structure.component.StructureTickedStore
 import killercreepr.cruxstructures.core.structure.module.WallsModule;
 import killercreepr.cruxstructures.core.structure.stored.SimpleStoredStructure;
 import killercreepr.cruxstructures.core.structure.stored.SimpleTickedStoredStructure;
+import killercreepr.cruxstructures.core.text.tags.object.StoredStructureTags;
 import net.kyori.adventure.key.Key;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -92,6 +94,9 @@ public class CruxStructuresModule implements CruxModule {
 
     @Override
     public void onLoad(@NotNull CruxPlugin plugin) {
+        Crux.tags().register(
+            new StoredStructureTags()
+        );
         StructureComponents.register();
         registerCfgComponents(BukkitCfgHandlers.TYPED_DATA_COMPONENT.typeHandlers());
         CfgRegistries.SIMPLE_REGISTRY.forEach(registry -> {
