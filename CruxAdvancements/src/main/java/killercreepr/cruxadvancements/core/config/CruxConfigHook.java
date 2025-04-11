@@ -225,6 +225,51 @@ public class CruxConfigHook {
                 return new HarvestBlockObjective(data, maxProgress);
             }
         });
+
+        fileAdvancementObjective.registerCustomHandler(new FileSimpleAdvanceObjective<>(Crux.key("trade")) {
+            @Override
+            public @Nullable AdvancementObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new TradeObjective(data, maxProgress);
+            }
+        });
+
+        fileAdvancementObjective.registerCustomHandler(new FileSimpleAdvanceObjective<>(Crux.key("complete_advancement")) {
+            @Override
+            public @Nullable AdvancementObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new CompleteAdvancementObjective(data, maxProgress);
+            }
+        });
+
+        fileAdvancementObjective.registerCustomHandler(new FileSimpleAdvanceObjective<>(Crux.key("hanging_break")) {
+            @Override
+            public @Nullable AdvancementObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new HangingBreakObjective(data, maxProgress);
+            }
+        });
+
+        fileAdvancementObjective.registerCustomHandler(new FileSimpleAdvanceObjective<>(Crux.key("hanging_place")) {
+            @Override
+            public @Nullable AdvancementObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new HangingPlaceObjective(data, maxProgress);
+            }
+        });
+
+        fileAdvancementObjective.registerCustomHandler(new FileSimpleAdvanceObjective<>(Crux.key("place_entity")) {
+            @Override
+            public @Nullable AdvancementObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new PlaceEntityObjective(data, maxProgress);
+            }
+        });
     }
 
     public static void registerHandlers(){

@@ -2,6 +2,7 @@ package killercreepr.cruxadvancements.core.listener;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import io.papermc.paper.event.block.PlayerShearBlockEvent;
+import io.papermc.paper.event.player.PlayerTradeEvent;
 import killercreepr.crux.api.entity.memory.EntityMemory;
 import killercreepr.crux.api.event.CruxEntityDeathEvent;
 import killercreepr.cruxadvancements.api.event.PlayerCraftItemEvent;
@@ -18,6 +19,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.player.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,6 +37,27 @@ public class ObjectiveListener implements Listener {
         AdvancementHolder holder = holder(p);
         if(holder==null) return;
         holder.getAdvancementTracker().apply(PickupItemObjective.class, (manager, advancement, objective) -> {
+            objective.trigger(p.getUniqueId(), manager, advancement, event);
+        });
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerAdvancementDone(PlayerAdvancementDoneEvent event) {
+        Player p = event.getPlayer();
+        AdvancementHolder holder = holder(p);
+        if(holder==null) return;
+        holder.getAdvancementTracker().apply(CompleteAdvancementObjective.class, (manager, advancement, objective) -> {
+            objective.trigger(p.getUniqueId(), manager, advancement, event);
+        });
+    }
+
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerTrade(PlayerTradeEvent event) {
+        Player p = event.getPlayer();
+        AdvancementHolder holder = holder(p);
+        if(holder==null) return;
+        holder.getAdvancementTracker().apply(TradeObjective.class, (manager, advancement, objective) -> {
             objective.trigger(p.getUniqueId(), manager, advancement, event);
         });
     }
@@ -66,6 +90,38 @@ public class ObjectiveListener implements Listener {
         AdvancementHolder holder = holder(p);
         if(holder==null) return;
         holder.getAdvancementTracker().apply(BreedEntityObjective.class, (manager, advancement, objective) -> {
+            objective.trigger(p.getUniqueId(), manager, advancement, event);
+        });
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onHangingPlace(HangingPlaceEvent event) {
+        Player p = event.getPlayer();
+        if(p == null) return;
+        AdvancementHolder holder = holder(p);
+        if(holder==null) return;
+        holder.getAdvancementTracker().apply(HangingPlaceObjective.class, (manager, advancement, objective) -> {
+            objective.trigger(p.getUniqueId(), manager, advancement, event);
+        });
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onHangingBreakByEntity(HangingBreakByEntityEvent event) {
+        if(!(event.getRemover() instanceof Player p)) return;
+        AdvancementHolder holder = holder(p);
+        if(holder==null) return;
+        holder.getAdvancementTracker().apply(HangingBreakObjective.class, (manager, advancement, objective) -> {
+            objective.trigger(p.getUniqueId(), manager, advancement, event);
+        });
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onEntityPlace(EntityPlaceEvent event) {
+        Player p = event.getPlayer();
+        if(p==null) return;
+        AdvancementHolder holder = holder(p);
+        if(holder==null) return;
+        holder.getAdvancementTracker().apply(PlaceEntityObjective.class, (manager, advancement, objective) -> {
             objective.trigger(p.getUniqueId(), manager, advancement, event);
         });
     }

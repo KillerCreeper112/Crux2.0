@@ -2,6 +2,7 @@ package killercreepr.crux.api.loot.bukkit;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import io.papermc.paper.event.block.PlayerShearBlockEvent;
+import io.papermc.paper.event.player.PlayerTradeEvent;
 import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.event.CruxEntityDamageEvent;
 import killercreepr.crux.api.event.CruxEntityDeathEvent;
@@ -13,6 +14,10 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.hanging.HangingBreakEvent;
+import org.bukkit.event.hanging.HangingEvent;
+import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
@@ -35,6 +40,73 @@ public interface EventLootContexts {
             .location(e.getLocation())
             .looter(killer)
             .looted(e)
+            ;
+    }
+    static LootContext.Builder builder(@NotNull EntityPlaceEvent event){
+        LivingEntity e = event.getPlayer();
+        return builder()
+            .info(
+                DataExchange.builder()
+                    .putAll(event.getBlock(), "block")
+                    .putAll(event.getHand(), "hand")
+                    .putAll(event.getBlockFace(), "block_face")
+                    .build()
+            )
+            .location(event.getEntity().getLocation())
+            .looter(e)
+            .looted(event.getEntity())
+            ;
+    }
+
+    static LootContext.Builder builder(@NotNull HangingPlaceEvent event){
+        LivingEntity e = event.getPlayer();
+        return builder()
+            .info(
+                DataExchange.builder()
+                    .putAll(event.getBlock(), "block")
+                    .putAll(event.getHand(), "hand")
+                    .putAll(event.getBlockFace(), "block_face")
+                    .putAll(event.getItemStack(), "item")
+                    .build()
+            )
+            .location(event.getEntity().getLocation())
+            .looter(e)
+            .looted(event.getEntity())
+            ;
+    }
+    static LootContext.Builder builder(@NotNull HangingBreakByEntityEvent event){
+        Entity e = event.getRemover();
+        return builder()
+            .info(
+                DataExchange.builder()
+                    .putAll(event.getCause(), "cause", "remove_cause")
+                    .build()
+            )
+            .location(event.getEntity().getLocation())
+            .looter(e)
+            .looted(event.getEntity())
+            ;
+    }
+    static LootContext.Builder builder(@NotNull PlayerTradeEvent event){
+        LivingEntity e = event.getPlayer();
+        var merchant = event.getVillager();
+        return builder()
+            .info(
+                DataExchange.builder()
+                    .putAll(event.getTrade(), "recipe", "trade")
+                    .build()
+            )
+            .location(merchant.getLocation())
+            .looter(e)
+            .looted(merchant)
+            ;
+    }
+    static LootContext.Builder builder(@NotNull PlayerAdvancementDoneEvent event){
+        LivingEntity e = event.getPlayer();
+        return builder()
+            .location(e.getLocation())
+            .looter(e)
+            .looted(event.getAdvancement())
             ;
     }
     static LootContext.Builder builder(@NotNull PlayerArmorChangeEvent event){

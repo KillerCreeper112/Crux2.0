@@ -35,7 +35,7 @@ public class CrazyAdvancementTags implements ObjectTag<ObjectiveAdvancement> {
 
     @Override
     public @NotNull FormatPrefix defaultPrefix() {
-        return FormatPrefix.simple("advancement_");
+        return FormatPrefix.simple("crux_advancement_");
     }
 
     @Override

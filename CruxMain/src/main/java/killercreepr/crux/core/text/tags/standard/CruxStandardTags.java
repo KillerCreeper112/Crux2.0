@@ -30,7 +30,8 @@ public class CruxStandardTags {
             new ServerTags(),
             new LivingEntityTags(),
             new PotionEffectTags(),
-            new ColorTags()
+            new ColorTags(),
+            new AdvancementTags()
         );
     }
 
