@@ -12,6 +12,7 @@ import killercreepr.crux.core.loot.conditions.block.BlockCondition;
 import killercreepr.crux.core.loot.conditions.block.BlockDirectionalInfoCondition;
 import killercreepr.crux.core.loot.conditions.block.BlockDirectionalNearbyCondition;
 import killercreepr.crux.core.loot.conditions.block.BlockStateCondition;
+import killercreepr.crux.core.loot.conditions.debug.DevStringCondition;
 import killercreepr.crux.core.loot.conditions.entity.EntityCondition;
 import killercreepr.crux.core.loot.conditions.evaluation.EvaluationCondition;
 import killercreepr.crux.core.loot.conditions.item.ItemStackCondition;
@@ -180,10 +181,10 @@ public class StandardFileLootConditions {
             @Override
             public @Nullable EvaluationCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 String eva = e.getObject(String.class, "check");
-                Map<String, String> prefixes = ctx.getRegistry().deserializeFromFile(
+                /*Map<String, String> prefixes = ctx.getRegistry().deserializeFromFile(
                     new TypeToken<Map<String, String>>(){}.getType(), e.get("prefixes")
-                );
-                return new EvaluationCondition(target, eva, prefixes);
+                );*/
+                return new EvaluationCondition(target, eva);
             }
         });
 
@@ -243,6 +244,20 @@ public class StandardFileLootConditions {
                 );
                 boolean ignoreCase = e.getOrDefaultObject(Boolean.class, "ignore_case", false);
                 return new SelectStringCondition(
+                    target, match, check, targets, ignoreCase
+                );
+            }
+        });
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("debug/string")) {
+            @Override
+            public @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                String match = e.getObject(String.class, "match");
+                String check = e.getObject(String.class, "check");
+                Collection<String> targets = ctx.getRegistry().deserializeFromFile(
+                    new TypeToken<Set<String>>(){}.getType(), e.get("targets")
+                );
+                boolean ignoreCase = e.getOrDefaultObject(Boolean.class, "ignore_case", false);
+                return new DevStringCondition(
                     target, match, check, targets, ignoreCase
                 );
             }

@@ -16,7 +16,7 @@ import java.util.Map;
 public class EvaluationCondition extends BaseCondition {
     protected final @NotNull String eva;
     //protected final @Nullable Map<String, String> targetPrefixes;
-    public EvaluationCondition(@NotNull String target, @NotNull String eva, @Nullable Map<String, String> targetPrefixes) {
+    public EvaluationCondition(@NotNull String target, @NotNull String eva) {
         super(target);
         this.eva = eva;
         //this.targetPrefixes = targetPrefixes;
