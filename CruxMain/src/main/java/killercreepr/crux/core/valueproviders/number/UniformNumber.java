@@ -38,7 +38,7 @@ public class UniformNumber implements NumberProvider {
         return switch (maxInclusive) {
             case Integer v -> random.nextInt((int) maxInclusive.intValue() - (int) minInclusive.intValue() + 1) + (int) minInclusive.intValue();
             case Float v -> random.nextFloat() * ((float) maxInclusive.floatValue() - (float) minInclusive.floatValue()) + (float) minInclusive.floatValue();
-            case Long v -> random.nextLong() % ((long) maxInclusive.longValue() - (long) minInclusive.longValue() + 1) + (long) minInclusive.longValue();
+            case Long v -> random.nextLong((long) maxInclusive.longValue() - (long) minInclusive.longValue() + 1) + (long) minInclusive.longValue();
             case Short v ->
                 (short) (random.nextInt((short) maxInclusive.shortValue() - minInclusive.shortValue() + 1) + minInclusive.shortValue());
             default -> random.nextDouble() * (maxInclusive.doubleValue() - minInclusive.doubleValue()) + minInclusive.doubleValue();
