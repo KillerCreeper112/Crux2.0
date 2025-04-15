@@ -5,6 +5,7 @@ import killercreepr.crux.api.registry.KeyedRegistry;
 import killercreepr.crux.api.registry.MappedRegistry;
 import killercreepr.crux.core.registry.SimpleMappedRegistry;
 import killercreepr.crux.core.util.CruxWorldUtil;
+import killercreepr.cruxworlds.api.event.CruxWorldDeleteEvent;
 import killercreepr.cruxworlds.api.event.CruxWorldPreCreateEvent;
 import killercreepr.cruxworlds.api.world.CruxWorld;
 import killercreepr.cruxworlds.api.world.creator.CruxWorldCreator;
@@ -110,7 +111,10 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
     public CompletableFuture<Boolean> deleteWorld(@NotNull CruxWorld world) {
         unloadWorld(world, false);
         boolean x = CruxWorldUtil.deleteWorld(world.toBukkitWorld());
-        if(x) world.onDelete();
+        if(x){
+            new CruxWorldDeleteEvent(world).callEvent();
+            world.onDelete();
+        }
         return CompletableFuture.completedFuture(x);
     }
 
