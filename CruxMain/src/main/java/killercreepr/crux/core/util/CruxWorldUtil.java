@@ -103,14 +103,14 @@ public class CruxWorldUtil {
         for(File f : Crux.getServer().getWorldContainer().listFiles()){
             if(!f.getName().equals(name)) continue;
             if(!f.isDirectory()) continue;
-            boolean foundLevel = false;
+            /*boolean foundLevel = false;
             for(File folderF : f.listFiles()){
                 if(folderF.getName().equals("level.dat")){
                     foundLevel = true;
                     break;
                 }
             }
-            if(!foundLevel) break;
+            if(!foundLevel) break;*/
             return Crux.getServer().createWorld(new WorldCreator(name));
         }
         return null;

@@ -1,5 +1,6 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
+import com.destroystokyo.paper.MaterialTags;
 import killercreepr.crux.api.block.tag.BlockTag;
 import killercreepr.crux.api.block.tag.BlockTypeTag;
 import killercreepr.crux.core.Crux;
@@ -80,7 +81,7 @@ public class FileBlockTag extends SimpleFileHandler<BlockTag> {
         a.forEach(ele ->{
             String itemKey = ele.getAsString();
             if(itemKey.startsWith("#")){
-                BlockTag itemTag = CruxRegistries.BLOCK_TAG.get(Crux.key(itemKey.substring(1)));
+                BlockTag itemTag = reference(ctx, ele);//CruxRegistries.BLOCK_TAG.get(Crux.key(itemKey.substring(1)));
                 if(itemTag instanceof BlockTypeTag tag) values.addAll(tag.getTypes());
                 else Crux.log(Level.WARNING, "Could not find tag, " + itemKey + "!");
                 return;
