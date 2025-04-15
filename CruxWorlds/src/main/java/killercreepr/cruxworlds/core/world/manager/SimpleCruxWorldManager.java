@@ -169,8 +169,10 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
         CruxWorld cruxWorld;
         if(creator == null){
             cruxWorld = new SimpleWorld(world, moduleCreators);
-
         }else cruxWorld = creator.create(world, moduleCreators);
+        if(!cruxWorld.has(CruxWorldsComponents.WORLD_CREATED_AT_TIME)){
+            cruxWorld.set(CruxWorldsComponents.WORLD_CREATED_AT_TIME, System.currentTimeMillis());
+        }
         cruxWorld.onCreate();
         return cruxWorld;
     }
