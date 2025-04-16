@@ -54,7 +54,7 @@ public class InstantLocationSetListStructureGen extends LocationSetListStructure
                 @Override
                 public void run() {
                     double tps = Crux.getServer().getTPS()[0];
-                    if(tps < 15){
+                    if(tps < 14.5){
                         Crux.log(Level.INFO, world.getName() + " - Instant set location list " + id +
                             ": TPS low, skipping... " + tps);
                         return;
