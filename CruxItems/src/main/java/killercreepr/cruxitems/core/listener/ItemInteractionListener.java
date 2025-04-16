@@ -201,7 +201,7 @@ public class ItemInteractionListener implements Listener {
 
     public ItemConsumeResult genericConsume(ItemConsumeContext ctx, Collection<ConsumableComponent> list){
         CustomItemPreConsumeEvent preUseEvent = new CustomItemPreConsumeEvent(ctx, ItemConsumeResult.empty());
-        if(!preUseEvent.callEvent()) return preUseEvent.getUseResult();
+        if(!preUseEvent.callEvent()) return ItemConsumeResult.cancelled();
 
         ItemConsumeResult defaultResult = preUseEvent.getUseResult();
         for(ConsumableComponent c : list){
