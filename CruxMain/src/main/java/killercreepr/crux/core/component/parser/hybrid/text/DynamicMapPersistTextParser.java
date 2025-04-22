@@ -142,6 +142,7 @@ public class DynamicMapPersistTextParser<T> extends MapPersistTextParser<T> {
 
         @Override
         public DynamicMapBuilder<T> dataTypeClass(Class<T> type) {
+            this.dataTypeClass = type;
             return this;
         }
 
