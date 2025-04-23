@@ -432,9 +432,11 @@ public class Format implements FormatSerializer {
                 String[] parts = placeholder.split(placeholderSplit);
                 placeholder = parts[0];
 
-                if(already.contains(placeholder)) continue;
+                /*if(already.contains(placeholder)){
+                    continue;
+                }*/
 
-                found = true;
+                found = !already.contains(placeholder);
 
                 String[] arguments = new String[parts.length - 1];
                 System.arraycopy(parts, 1, arguments, 0, parts.length - 1);
@@ -450,7 +452,7 @@ public class Format implements FormatSerializer {
                 //Bukkit.broadcastMessage("placeholder: " + placeholder + " - " + Arrays.toString(arguments));
 
                 FormatArgs args = new FormatArgs(arguments);
-                String replacement = resolvePlaceholder(placeholder, args, context, resolveProvider);
+                String replacement = found ? resolvePlaceholder(placeholder, args, context, resolveProvider) : null;
                 //Bukkit.broadcastMessage(placeholder + ": " + replacement + " ---   " + Arrays.toString(arguments));
                 if(replacement == null){
                     already.add(placeholder);

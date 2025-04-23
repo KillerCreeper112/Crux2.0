@@ -56,6 +56,14 @@ public interface TagContainer<T extends TagResolver<?>> extends Iterable<T> {
         return strings == null ? null : merged().addAll(strings.getStringTags());
     }
 
+    static @Nullable MergedTagContainer mergedString(@Nullable TagContainer<StringResolver> strings){
+        return strings == null ? null : merged().addAll(strings);
+    }
+
+    static @Nullable MergedTagContainer mergedStringList(@Nullable TagContainer<StringListResolver> strings){
+        return strings == null ? null : merged().addAll(strings);
+    }
+
     static @Nullable MergedTagContainer merged(@Nullable StringListTagProvider strings){
         return strings == null ? null : merged().addAll(strings.getStringListTags());
     }

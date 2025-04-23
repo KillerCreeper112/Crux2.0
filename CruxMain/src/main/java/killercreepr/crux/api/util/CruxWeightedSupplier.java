@@ -1,6 +1,6 @@
 package killercreepr.crux.api.util;
 
-import killercreepr.crux.api.loot.WeightedObject;
+import killercreepr.crux.core.util.CruxCollection;
 import killercreepr.crux.core.util.SimpleWeightedSupplier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -11,10 +11,17 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public interface CruxWeightedSupplier<T extends WeightedObject> {
-    static <T extends WeightedObject> CruxWeightedSupplierBuilder<T> builder(@NotNull Collection<T> pool){
+public interface CruxWeightedSupplier<T> {
+    static <T> CruxWeightedSupplierBuilder<T> builder(@NotNull Collection<T> pool){
         return new SimpleWeightedSupplier.Builder<>(pool);
     }
+    default @Nullable T rollFirst(@Nullable Predicate<T> filter){
+        return CruxCollection.getFirst(rollList(filter));
+    }
+    default @Nullable T rollFirst(){
+        return rollFirst(null);
+    }
+
     @NotNull List<T> rollList();
 
     @NotNull List<T> rollList(@Nullable Predicate<T> filter);
