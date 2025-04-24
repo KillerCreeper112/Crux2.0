@@ -31,6 +31,10 @@ public interface ApplicableItemGroup {
         ApplicableItemType.SWORD
     ).build();
 
+    ApplicableItemGroup BOWS_N_CROSSBOWS = builder().add(
+        ApplicableItemType.BOW, ApplicableItemType.CROSSBOW
+    ).build();
+
     @NotNull Collection<ApplicableItemType> types();
 
     @NotNull String formatSymbols();

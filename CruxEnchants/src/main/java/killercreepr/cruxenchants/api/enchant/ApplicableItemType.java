@@ -19,6 +19,8 @@ public interface ApplicableItemType extends Keyed {
     ApplicableItemType HOE = register(itemType(Crux.key("hoe"), ""));
     ApplicableItemType MACE = register(itemType(Crux.key("mace"), ""));
     ApplicableItemType TRIDENT = register(itemType(Crux.key("trident"), ""));
+    ApplicableItemType BOW = register(itemType(Crux.key("bow"), ""));
+    ApplicableItemType CROSSBOW = register(itemType(Crux.key("crossbow"), ""));
 
     ApplicableItemType HELMET = register(itemType(Crux.key("helmet"), ""));
     ApplicableItemType CHESTPLATE = register(itemType(Crux.key("chestplate"), ""));

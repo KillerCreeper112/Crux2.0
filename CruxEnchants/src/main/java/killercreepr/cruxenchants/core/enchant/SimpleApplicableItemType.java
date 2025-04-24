@@ -17,7 +17,6 @@ public class SimpleApplicableItemType implements ApplicableItemType {
     public @NotNull String symbol() {
         return symbol;
     }
-
     @Override
     public @NotNull Key key() {
         return key;
