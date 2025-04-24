@@ -16,7 +16,8 @@ public interface ApplicableItemType extends Keyed {
 
     List<String> PRIORITY_ORDER = List.of(
         "sword", "axe", "mace", "trident", "bow", "crossbow",
-        "pickaxe", "shovel", "hoe", "helmet", "chestplate", "leggings", "boots"
+        "pickaxe", "shovel", "hoe", "fishing_rod",
+        "helmet", "chestplate", "leggings", "boots"
     );
 
     ApplicableItemType SWORD = register(itemType(Crux.key("sword"), "4"));
@@ -28,6 +29,8 @@ public interface ApplicableItemType extends Keyed {
     ApplicableItemType TRIDENT = register(itemType(Crux.key("trident"), "b"));
     ApplicableItemType BOW = register(itemType(Crux.key("bow"), "9"));
     ApplicableItemType CROSSBOW = register(itemType(Crux.key("crossbow"), "a"));
+
+    ApplicableItemType FISHING_ROD = register(itemType(Crux.key("fishing_rod"), "d"));
 
     ApplicableItemType HELMET = register(itemType(Crux.key("helmet"), "5"));
     ApplicableItemType CHESTPLATE = register(itemType(Crux.key("chestplate"), "6"));
