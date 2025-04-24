@@ -7,7 +7,11 @@ import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
 import io.papermc.paper.registry.event.RegistryEvents;
 import io.papermc.paper.registry.keys.tags.ItemTypeTagKeys;
 import killercreepr.crux.api.plugin.module.CruxModule;
+import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.plugin.module.StandardModules;
+import killercreepr.cruxenchants.core.text.tags.object.ApplicableItemGroupTags;
+import killercreepr.cruxenchants.core.text.tags.object.CruxEnchantTags;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.EquipmentSlotGroup;
@@ -18,6 +22,15 @@ public class CruxEnchantsModule implements CruxModule {
     @Override
     public @NotNull String name() {
         return NAMESPACE;
+    }
+
+    @Override
+    public void onLoad(@NotNull CruxPlugin plugin) {
+        CruxModule.super.onLoad(plugin);
+        Crux.tags().register(
+            new CruxEnchantTags(),
+            new ApplicableItemGroupTags()
+        );
     }
 
     public void bootstrap(@NotNull BootstrapContext context) {
