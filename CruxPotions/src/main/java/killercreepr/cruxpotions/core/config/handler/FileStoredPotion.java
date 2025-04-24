@@ -26,7 +26,7 @@ public class FileStoredPotion implements FileObjectHandler<StoredPotion> {
         o.add("potion", reg.serializeToFile(potion.getPotion().key()));
         o.addProperty("duration", potion.getDuration());
         o.addProperty("amplifier", potion.getAmplifier());
-        var data = potion.serializeDataToFile();
+        var data = potion.serializeDataToFile(ctx);
         if(data != null) o.add("data", data);
         return o;
     }

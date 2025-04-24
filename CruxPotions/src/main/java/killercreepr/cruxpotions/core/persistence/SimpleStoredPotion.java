@@ -1,5 +1,6 @@
 package killercreepr.cruxpotions.core.persistence;
 
+import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxpotions.api.potion.ActivePotion;
 import killercreepr.cruxpotions.api.potion.CruxPotion;
@@ -9,6 +10,7 @@ import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class SimpleStoredPotion implements StoredPotion {
@@ -16,9 +18,9 @@ public class SimpleStoredPotion implements StoredPotion {
     protected final int duration;
     protected final int amplifier;
     protected final Creator creator;
-    protected final Supplier<FileObject> fileSerializer;
+    protected final Function<FileContext<?>,FileObject> fileSerializer;
 
-    public SimpleStoredPotion(@NotNull CruxPotion potion, int duration, int amplifier, Creator creator, Supplier<FileObject> fileSerializer) {
+    public SimpleStoredPotion(@NotNull CruxPotion potion, int duration, int amplifier, Creator creator, Function<FileContext<?>,FileObject> fileSerializer) {
         this.potion = potion;
         this.duration = duration;
         this.amplifier = amplifier;
@@ -66,8 +68,8 @@ public class SimpleStoredPotion implements StoredPotion {
     }
 
     @Override
-    public @Nullable FileObject serializeDataToFile() {
-        return fileSerializer == null ? null : fileSerializer.get();
+    public @Nullable FileObject serializeDataToFile(FileContext<?> ctx) {
+        return fileSerializer == null ? null : fileSerializer.apply(ctx);
     }
 
     public static class Builder implements StoredPotion.Builder{
@@ -75,7 +77,7 @@ public class SimpleStoredPotion implements StoredPotion {
         protected int duration;
         protected int amplifier;
         protected Creator creator;
-        protected Supplier<FileObject> fileSerializer;
+        protected Function<FileContext<?>,FileObject> fileSerializer;
         @Override
         public StoredPotion.Builder potion(CruxPotion potion) {
             this.potion = potion;
@@ -101,7 +103,7 @@ public class SimpleStoredPotion implements StoredPotion {
         }
 
         @Override
-        public StoredPotion.Builder fileSerializer(Supplier<FileObject> serializer) {
+        public StoredPotion.Builder fileSerializer(Function<FileContext<?>,FileObject> serializer) {
             this.fileSerializer = serializer;
             return this;
         }

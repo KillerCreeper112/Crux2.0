@@ -1,5 +1,6 @@
 package killercreepr.cruxpotions.api.potion;
 
+import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxpotions.api.potion.inflictor.PotionInflictor;
 import killercreepr.cruxpotions.core.persistence.SimpleStoredPotion;
@@ -9,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public interface StoredPotion {
@@ -20,7 +22,7 @@ public interface StoredPotion {
         return storedPotion(potion, duration, amplifier, creator, null);
     }
     static StoredPotion storedPotion(@NotNull CruxPotion potion, int duration, int amplifier, Creator creator,
-                                     Supplier<FileObject> serializer){
+                                     Function<FileContext<?>,FileObject> serializer){
         return new SimpleStoredPotion(potion, duration, amplifier, creator, serializer);
     }
     static StoredPotion storedPotion(@NotNull CruxPotion potion, int duration, int amplifier){
@@ -39,14 +41,14 @@ public interface StoredPotion {
     @Contract(pure = true)
     @NotNull StoredPotion withPotion(@NotNull CruxPotion potion);
 
-    @Nullable FileObject serializeDataToFile();
+    @Nullable FileObject serializeDataToFile(FileContext<?> ctx);
 
     interface Builder{
         Builder potion(CruxPotion potion);
         Builder duration(int duration);
         Builder amplifier(int amplifier);
         Builder creator(Creator creator);
-        Builder fileSerializer(Supplier<FileObject> serializer);
+        Builder fileSerializer(Function<FileContext<?>,FileObject> serializer);
         StoredPotion build();
     }
 

@@ -12,6 +12,9 @@ public class BlockPos implements CruxPosition {
     public static @NotNull BlockPos at(int x, int y, int z){
         return new BlockPos(x, y, z);
     }
+    public static BlockPos at(Block b){
+        return at(b.getX(), b.getY(), b.getZ());
+    }
     public static @NotNull BlockPos asBlock(@NotNull CruxPosition v){
         if(v instanceof BlockPos d) return d;
         return new BlockPos(v.blockX(), v.blockY(), v.blockZ());
