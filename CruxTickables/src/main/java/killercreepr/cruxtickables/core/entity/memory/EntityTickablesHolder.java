@@ -14,6 +14,7 @@ import killercreepr.cruxtickables.api.entity.tickable.EntityTickable;
 import killercreepr.cruxtickables.api.entity.tickable.EntityTickableModifier;
 import killercreepr.cruxtickables.api.entity.tickable.EntityTickablesContainer;
 import killercreepr.cruxtickables.api.equipment.SetBonus;
+import killercreepr.cruxtickables.api.event.EntityTickablesCalculateEvent;
 import killercreepr.cruxtickables.core.component.CruxTickableComponents;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Entity;
@@ -132,6 +133,8 @@ public class EntityTickablesHolder extends EntityTickedDataHolder {
             map.put(active.getTickable().key(), active);
         }
 
+        EntityTickablesCalculateEvent event = new EntityTickablesCalculateEvent(e, map);
+        event.callEvent();
         return map;
     }
 

@@ -24,7 +24,8 @@ public class SimpleWeightedSupplier<T> implements CruxWeightedSupplier<T> {
     protected final @Nullable Predicate<T> filter;
     protected final @NotNull Function<T, Integer> weightFunction;
     protected final @NotNull Function<T, Float> qualityFunction;
-    public SimpleWeightedSupplier(@NotNull Collection<T> poll, int rolls, float luck, @Nullable Consumer<T> onAccepted, @Nullable Predicate<T> filter, @NotNull Function<T, Integer> weightFunction, @NotNull Function<T, Float> qualityFunction) {
+    protected final Random random;
+    public SimpleWeightedSupplier(@NotNull Collection<T> poll, int rolls, float luck, @Nullable Consumer<T> onAccepted, @Nullable Predicate<T> filter, @NotNull Function<T, Integer> weightFunction, @NotNull Function<T, Float> qualityFunction, Random random) {
         this.poll = poll;
         this.rolls = rolls;
         this.luck = luck;
@@ -32,6 +33,7 @@ public class SimpleWeightedSupplier<T> implements CruxWeightedSupplier<T> {
         this.filter = filter;
         this.weightFunction = weightFunction;
         this.qualityFunction = qualityFunction;
+        this.random = random;
     }
 
     @Override
@@ -40,21 +42,50 @@ public class SimpleWeightedSupplier<T> implements CruxWeightedSupplier<T> {
     }
     @Override
     public @NotNull List<T> rollList(@Nullable Predicate<T> filter){
+        return rollList(random, filter);
+    }
+
+    @Override
+    public @NotNull List<T> rollList(@NotNull Random random) {
+        return rollList(random, filter);
+    }
+
+    @Override
+    public @NotNull List<T> rollList(@NotNull Random random, @Nullable Predicate<T> filter) {
         List<T> list = new ArrayList<>();
-        roll(list::add, filter);
+        roll(random, list::add, filter);
         return list;
     }
+
     @Override
     public @NotNull Map<T, Integer> roll(){
         return roll(filter);
     }
+
+    @Override
+    public @NotNull Map<T, Integer> roll(@NotNull Random random) {
+        return roll(random, filter);
+    }
+
     @Override
     public @NotNull Map<T, Integer> roll(@Nullable Predicate<T> filter){
         Objects.requireNonNull(onAccepted, "onAccepted must not be null!");
         return roll(onAccepted, filter);
     }
+
     @Override
-    public @NotNull Map<T, Integer> roll(@NotNull Consumer<T> onAccepted, @Nullable Predicate<T> filter){
+    public @NotNull Map<T, Integer> roll(@NotNull Random random, @Nullable Predicate<T> filter) {
+        Objects.requireNonNull(onAccepted, "onAccepted must not be null!");
+        return roll(random, onAccepted, filter);
+    }
+
+    @Override
+    public @NotNull Map<T, Integer> roll(@NotNull Consumer<T> onAccepted, @Nullable Predicate<T> filter) {
+        return roll(random, onAccepted, filter);
+    }
+
+    @Override
+    public @NotNull Map<T, Integer> roll(@NotNull Random random, @NotNull Consumer<T> onAccepted, @Nullable Predicate<T> filter){
         if(poll.isEmpty()) return Map.of();
 
         LinkedHashMap<T, Integer> data = new LinkedHashMap<>();
@@ -81,7 +112,7 @@ public class SimpleWeightedSupplier<T> implements CruxWeightedSupplier<T> {
                 totalWeight += weight;
                 data.put(item, weight);
             }
-            int chance = CruxMath.random(0, totalWeight);
+            int chance = CruxMath.random(0, totalWeight, random);
             for(Map.Entry<T, Integer> entry : new HashSet<>(data.entrySet())){
                 if(chance <= entry.getValue()){
                     data.remove(entry.getKey());
@@ -99,6 +130,7 @@ public class SimpleWeightedSupplier<T> implements CruxWeightedSupplier<T> {
         private @NotNull Collection<T> pool;
         private int rolls;
         private float luck;
+        private Random random;
         private @Nullable Consumer<T> onAccepted;
         private @Nullable Predicate<T> filter;
         private Function<T, Integer> weightFunction;
@@ -144,6 +176,13 @@ public class SimpleWeightedSupplier<T> implements CruxWeightedSupplier<T> {
             this.rolls = rolls;
             return this;
         }
+
+        @Override
+        public CruxWeightedSupplierBuilder<T> random(Random random) {
+            this.random = random;
+            return this;
+        }
+
         @Override
         public Builder<T> luck(float luck) {
             this.luck = luck;
@@ -181,7 +220,7 @@ public class SimpleWeightedSupplier<T> implements CruxWeightedSupplier<T> {
                 qualityFunction = object -> ((WeightedObject) object).getQuality();
             }
             return new SimpleWeightedSupplier<>(pool, rolls, luck, onAccepted, filter,
-                weightFunction, qualityFunction);
+                weightFunction, qualityFunction, random == null ? CruxMath.random() : random);
         }
     }
 }

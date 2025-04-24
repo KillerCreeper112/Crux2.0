@@ -1,6 +1,7 @@
 package killercreepr.cruxtickables.api.entity.tickable;
 
 import killercreepr.crux.api.data.CruxKeyed;
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxattributes.api.equipment.CruxSlotGroup;
 import killercreepr.cruxtickables.api.equipment.SetBonus;
 import killercreepr.cruxtickables.core.entity.tickable.SimpleEntityTickableModifier;
@@ -20,6 +21,10 @@ public interface EntityTickableModifier extends CruxKeyed {
     }
     static EntityTickableModifier modifier(Key key, EntityTickable tickable){
         return modifier(key, tickable, null);
+    }
+
+    static EntityTickableModifier empty(EntityTickable tickable){
+        return modifier(Crux.key("empty"), tickable);
     }
 
     Object getData();
