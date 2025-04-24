@@ -21,7 +21,11 @@ public class SimpleApplicableItemGroup implements ApplicableItemGroup {
 
     public List<ApplicableItemType> sort(Collection<ApplicableItemType> types){
         List<ApplicableItemType> sorted = new ArrayList<>(types);
-        sorted.sort(Comparator.comparing(e -> e.key().value()));
+        sorted.sort(Comparator.comparingInt((ApplicableItemType type) -> {
+            String key = type.key().value();
+            int index = ApplicableItemType.PRIORITY_ORDER.indexOf(key);
+            return index == -1 ? Integer.MAX_VALUE : index;
+        }).thenComparing(e -> e.key().value()));
         return sorted;
     }
 
