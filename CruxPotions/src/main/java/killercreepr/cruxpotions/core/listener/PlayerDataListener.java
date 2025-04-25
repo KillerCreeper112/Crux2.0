@@ -31,7 +31,9 @@ public class PlayerDataListener implements Listener {
         Player p = event.getPlayer();
         PlayerMemory memory = PlayerMemory.getOrCreate(p);
         if(memory.getDataHolder(SimplePotionHolder.KEY) instanceof SimplePotionHolder data){
-            var file = new PlayerDataFile(plugin, p.getUniqueId());
+            var file = new PlayerDataFile(plugin, "data/cruxpotions/player/" + p.getUniqueId());
+            file.reloadIfNeeded();
+            file.register();
             var stored = file.CRUX_POTIONS.value();
             file.close();
             if(stored == null || stored.isEmpty()) return;
@@ -48,7 +50,7 @@ public class PlayerDataListener implements Listener {
         SimplePotionHolder data = EntityMemory.getDataHolder(p, SimplePotionHolder.class);
         if(data != null){
             data.stopPotions();
-            var file = new PlayerDataFile(plugin, p.getUniqueId());
+            var file = new PlayerDataFile(plugin, "data/cruxpotions/player/" + p.getUniqueId());
             if(data.getActiveEffects().isEmpty()){
                 file.CRUX_POTIONS.setValue(null);
             }else{
@@ -58,7 +60,7 @@ public class PlayerDataListener implements Listener {
                 });
                 file.CRUX_POTIONS.setValue(stored);
             }
-            file.save();
+            if(file.setupContents(true, true)) file.save();
             //new PlayerDataFile(plugin, p.getUniqueId()).savePotions(data.getActiveEffects()).save();
         }
     }

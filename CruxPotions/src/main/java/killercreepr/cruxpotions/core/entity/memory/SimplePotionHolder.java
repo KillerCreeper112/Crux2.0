@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.logging.Level;
 
 /**
  * Represents an object/entity that can have custom potion effects applied to it.
@@ -111,7 +112,13 @@ public class SimplePotionHolder extends EntityTickedDataHolder implements Potion
             getParent().value(), e, null, EntityCruxPotionEvent.Action.REMOVED
         );
         if(!skipEventCall && !event.callEvent()) return event;
-        e.stop();
+
+        try{
+            e.stop();
+        }catch (Exception ignored){
+            Crux.log(Level.SEVERE, "EXCEPTION WHEN STOPPING ACTIVE POTION!");
+            ignored.printStackTrace();
+        }
         effects.remove(type.key());
         return event;
     }
@@ -137,7 +144,12 @@ public class SimplePotionHolder extends EntityTickedDataHolder implements Potion
             );
             list.add(event);
             if(!skipEventCall && !event.callEvent()) return false;
-            e.stop();
+            try{
+                e.stop();
+            }catch (Exception ignored){
+                Crux.log(Level.SEVERE, "EXCEPTION WHEN STOPPING ACTIVE POTION!");
+                ignored.printStackTrace();
+            }
             return true;
         });
         return list;
@@ -151,7 +163,12 @@ public class SimplePotionHolder extends EntityTickedDataHolder implements Potion
      */
     public void stopPotions(){
         for(ActivePotion e : effects.values()){
-            e.stop();
+            try{
+                e.stop();
+            }catch (Exception ignored){
+                Crux.log(Level.SEVERE, "EXCEPTION WHEN STOPPING ACTIVE POTION!");
+                ignored.printStackTrace();
+            }
         }
     }
 
@@ -180,8 +197,14 @@ public class SimplePotionHolder extends EntityTickedDataHolder implements Potion
     @Override
     public void tick(@NotNull Entity entity) {
         effects.values().removeIf(a ->{
-            if(a.tick()){
-                a.stop();
+            try{
+                if(a.tick()){
+                    a.stop();
+                    return true;
+                }
+            }catch (Exception e){
+                Crux.log(Level.SEVERE, "EXCEPTION WHEN TICKING ACTIVE POTION!");
+                e.printStackTrace();
                 return true;
             }
             return false;
