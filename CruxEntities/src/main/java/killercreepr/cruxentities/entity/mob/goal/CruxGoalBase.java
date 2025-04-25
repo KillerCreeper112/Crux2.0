@@ -151,12 +151,16 @@ public class CruxGoalBase implements ICruxGoal {
         return lastKnownTargetLocation == null && target != null;
     }
 
+    public double getDefaultMoveSpeedMultiplier(){
+        return 1D;
+    }
+
     public void moveTo(@Nullable LivingEntity target){
-        moveTo(target, 1D);
+        moveTo(target, getDefaultMoveSpeedMultiplier());
     }
 
     public void moveTo(@Nullable Location target){
-        moveTo(target, 1D);
+        moveTo(target, getDefaultMoveSpeedMultiplier());
     }
 
     public void moveTo(@Nullable LivingEntity target, double speed){
@@ -176,7 +180,7 @@ public class CruxGoalBase implements ICruxGoal {
     }
 
     public void moveTo(){
-        moveTo(1D);
+        moveTo(getDefaultMoveSpeedMultiplier());
     }
 
     public void moveTo(double speed){
