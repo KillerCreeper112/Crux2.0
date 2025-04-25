@@ -8,6 +8,7 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.EntitySelectorArgumentResolver;
+import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
@@ -23,16 +24,19 @@ import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxitems.api.item.plugin.PluginItem;
 import killercreepr.cruxitems.core.command.argument.CruxItemsArguments;
+import net.kyori.adventure.inventory.Book;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -71,6 +75,32 @@ public class CruxItemsCommands {
                                             ctx.getArgument("item", PluginItem.class),
                                             ctx.getArgument("amount", Integer.class)
                                         ))
+                                )
+                        )
+                )
+        ).then(
+            Commands.literal("book")
+                .then(
+                    Commands.literal("open")
+                        .then(
+                            Commands.argument("targets", ArgumentTypes.players())
+                                .then(
+                                    Commands.argument("item", CruxItemsArguments.pluginItem())
+                                        .executes(ctx ->{
+                                            var sender = getExecutor(ctx.getSource());
+                                            var targets = ctx.getArgument("targets", PlayerSelectorArgumentResolver.class)
+                                                .resolve(ctx.getSource());
+                                            var item = ctx.getArgument("item", PluginItem.class);
+                                            if(!(item.buildItem().getItemMeta() instanceof BookMeta meta)){
+                                                sender.sendMessage(item.key() + " is not a book.");
+                                                return 0;
+                                            }
+                                            for(HumanEntity p : targets){
+                                                p.openBook(meta);
+                                            }
+                                            sender.sendMessage("Opened " + item.key() + " book for " + targets.size() + " targets.");
+                                            return 1;
+                                        })
                                 )
                         )
                 )
