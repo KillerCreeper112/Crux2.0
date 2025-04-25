@@ -5,7 +5,6 @@ import killercreepr.cruxattributes.api.attribute.CruxAttributeInstance;
 import killercreepr.cruxattributes.api.attribute.CruxAttributeModifier;
 import killercreepr.cruxattributes.api.attribute.DynamicCruxAttributeInstance;
 import net.kyori.adventure.key.Key;
-import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -95,7 +94,7 @@ public class SimpleCruxAttributeInstance implements CruxAttributeInstance {
         return attribute;
     }
 
-    public @Nullable CruxAttributeModifier getModifier(@NotNull NamespacedKey key){
+    public @Nullable CruxAttributeModifier getModifier(@NotNull Key key){
         for(CruxAttributeModifier m : modifiers){
             if(m.key().equals(key)) return m;
         }

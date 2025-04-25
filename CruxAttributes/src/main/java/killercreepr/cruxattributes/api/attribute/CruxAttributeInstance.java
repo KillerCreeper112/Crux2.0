@@ -2,7 +2,6 @@ package killercreepr.cruxattributes.api.attribute;
 
 import killercreepr.cruxattributes.core.attribute.SimpleCruxAttributeInstance;
 import net.kyori.adventure.key.Key;
-import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,7 +39,7 @@ public interface CruxAttributeInstance {
     @NotNull CruxAttribute getAttribute();
 
     @Nullable
-    CruxAttributeModifier getModifier(@NotNull NamespacedKey key);
+    CruxAttributeModifier getModifier(@NotNull Key key);
     @NotNull List<CruxAttributeModifier> getModifiers(@NotNull CruxAttribute attribute, @NotNull Key... path);
 
     @NotNull Collection<CruxAttributeModifier> getModifiers();
