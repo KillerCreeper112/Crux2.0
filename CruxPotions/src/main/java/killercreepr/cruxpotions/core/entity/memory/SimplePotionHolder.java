@@ -6,7 +6,7 @@ import killercreepr.crux.core.entity.memory.EntityTickedDataHolder;
 import killercreepr.cruxpotions.api.entity.PotionHolder;
 import killercreepr.cruxpotions.api.potion.ActivePotion;
 import killercreepr.cruxpotions.api.potion.CruxPotion;
-import killercreepr.cruxpotions.core.event.EntityCruxPotionEvent;
+import killercreepr.cruxpotions.api.event.EntityCruxPotionEvent;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;

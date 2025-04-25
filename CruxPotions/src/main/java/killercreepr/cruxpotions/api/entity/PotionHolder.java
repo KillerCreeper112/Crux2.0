@@ -2,7 +2,7 @@ package killercreepr.cruxpotions.api.entity;
 
 import killercreepr.cruxpotions.api.potion.ActivePotion;
 import killercreepr.cruxpotions.api.potion.CruxPotion;
-import killercreepr.cruxpotions.core.event.EntityCruxPotionEvent;
+import killercreepr.cruxpotions.api.event.EntityCruxPotionEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

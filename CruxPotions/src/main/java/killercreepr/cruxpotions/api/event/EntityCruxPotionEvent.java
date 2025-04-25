@@ -1,25 +1,32 @@
-package killercreepr.cruxpotions.core.event;
+package killercreepr.cruxpotions.api.event;
 
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxpotions.api.potion.ActivePotion;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.entity.EntityEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class EntityCruxPotionEvent extends EntityEvent implements Cancellable {
+public class EntityCruxPotionEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     protected boolean cancel;
+    protected final @NotNull Entity entity;
     protected final @NotNull ActivePotion effect;
     protected final @Nullable ActivePotion effectToAdd;
     protected final @NotNull Action action;
 
     public EntityCruxPotionEvent(@NotNull Entity what, @NotNull ActivePotion effect, @Nullable ActivePotion effectToAdd, @NotNull Action action) {
-        super(what);
+        super(!Crux.isPrimaryThread());
+        this.entity = what;
         this.effect = effect;
         this.effectToAdd = effectToAdd;
         this.action = action;
+    }
+
+    public @NotNull Entity getEntity() {
+        return entity;
     }
 
     public @NotNull ActivePotion getEffect() {

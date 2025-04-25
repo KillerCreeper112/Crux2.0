@@ -75,7 +75,7 @@ public class CruxPotionsModule implements CruxModule {
         EntityMemory.registerFunction(plugin, e -> e.getDataHolders().register(new SimplePotionHolder(e)));
 
         plugin.registerListeners(
-                new PotionListener(plugin, values)
+            new PotionListener(plugin, values)
         );
         if(cruxConfigs) plugin.registerListeners(new PlayerDataListener(plugin, values));
 
