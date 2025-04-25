@@ -3,11 +3,14 @@ package killercreepr.cruxentities.api.combat;
 import killercreepr.crux.api.event.CruxEntityDamageEvent;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.persistence.CruxPersist;
+import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxattributes.api.attribute.CruxAttribute;
 import killercreepr.cruxentities.combat.CruxEntityDamager;
+import killercreepr.cruxentities.command.argument.CruxMobArgument;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.craftbukkit.entity.CraftAbstractArrow;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.entity.*;
 import org.bukkit.util.Vector;
@@ -99,7 +102,14 @@ public interface EntityDamager {
         if(instance != null) return instance.getValue();
 
         if(dmger instanceof AbstractArrow d){
-            return d.getDamage();
+            double damage = d.getDamage();
+            double f = d.getVelocity().length();
+            damage = Math.ceil(Math.clamp(f * damage, 0f, Integer.MAX_VALUE));
+            if(d.isCritical()){
+                long l = CruxMath.random().nextLong((long)damage / 2L + 2L);
+                damage = (int)Math.min(l + (long)damage, 2147483647L);
+            }
+            return damage;
         }
         return 0D;
     }

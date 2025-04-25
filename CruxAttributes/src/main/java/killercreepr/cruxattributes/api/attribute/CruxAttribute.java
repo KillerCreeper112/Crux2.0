@@ -59,6 +59,7 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
     CruxAttribute LUCK = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("luck")));
     CruxAttribute BLOCK_BREAK_SPEED = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("block_break_speed")));
 
+
     CruxAttribute ATTACK_KNOCKBACK = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("attack_knockback")));
     CruxAttribute ATTACK_KNOCKBACK_UP = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("attack_upwards_knockback")));
     CruxAttribute ARMOR = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("armor")));
@@ -74,6 +75,29 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
     CruxAttribute FIND_TARGET_RANGE = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("find_target_range")));
 
     CruxAttribute MAGIC_POTENCY = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("magic_potency")));
+
+    CruxAttribute FOLLOW_RANGE = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("follow_range")));
+    CruxAttribute FLYING_SPEED = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("flying_speed")));
+    CruxAttribute FALL_DAMAGE_MULTIPLIER = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("fall_damage_multiplier")));
+    CruxAttribute SAFE_FALL_DISTANCE = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("safe_fall_distance")));
+    CruxAttribute SCALE = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("scale")));
+    CruxAttribute STEP_HEIGHT = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("step_height")));
+    CruxAttribute GRAVITY = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("gravity")));
+    CruxAttribute JUMP_STRENGTH = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("jump_strength")));
+    CruxAttribute BURNING_TIME = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("burning_time")));
+    CruxAttribute EXPLOSION_KNOCKBACK_RESISTANCE = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("explosion_knockback_resistance")));
+    CruxAttribute MOVEMENT_EFFICIENCY = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("movement_efficiency")));
+    CruxAttribute OXYGEN_BONUS = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("oxygen_bonus")));
+    CruxAttribute WATER_MOVEMENT_EFFICIENCY = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("water_movement_efficiency")));
+    CruxAttribute TEMPT_RANGE = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("tempt_range")));
+    CruxAttribute BLOCK_INTERACTION_RANGE = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("block_interaction_range")));
+    CruxAttribute ENTITY_INTERACTION_RANGE = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("entity_interaction_range")));
+    CruxAttribute MINING_EFFICIENCY = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("mining_efficiency")));
+    CruxAttribute SNEAKING_SPEED = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("sneaking_speed")));
+    CruxAttribute SUBMERGED_MINING_SPEED = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("submerged_mining_speed")));
+    CruxAttribute SWEEPING_DAMAGE_RATIO = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("sweeping_damage_ratio")));
+    CruxAttribute SPAWN_REINFORCEMENTS = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("spawn_reinforcements")));
+
 
     default double getDefaultValue(){
         return 0D;
