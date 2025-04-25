@@ -53,6 +53,6 @@ public interface StoredPotion {
     }
 
     interface Creator{
-        @NotNull ActivePotion create(@NotNull Entity e, @Nullable PotionInflictor inflictor);
+        @NotNull ActivePotion create(@NotNull Entity e, @Nullable PotionInflictor inflictor, @NotNull StoredPotion stored);
     }
 }

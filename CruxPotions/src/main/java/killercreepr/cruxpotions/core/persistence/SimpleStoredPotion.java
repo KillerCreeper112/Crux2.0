@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class SimpleStoredPotion implements StoredPotion {
     protected final CruxPotion potion;
@@ -25,7 +24,7 @@ public class SimpleStoredPotion implements StoredPotion {
         this.duration = duration;
         this.amplifier = amplifier;
         this.creator = creator == null ?
-            (e, inflict) -> potion.create(e, duration, amplifier, inflict) : creator;
+            (e, inflict, stored) -> potion.create(e, stored.getDuration(), stored.getAmplifier(), inflict) : creator;
         this.fileSerializer = fileSerializer;
     }
 
@@ -35,7 +34,7 @@ public class SimpleStoredPotion implements StoredPotion {
     }
     @Override
     public @NotNull ActivePotion create(@NotNull Entity e, @Nullable PotionInflictor inflictor){
-        return creator.create(e, inflictor);
+        return creator.create(e, inflictor, this);
         //return potion.create(e, duration, amplifier, inflictor);
     }
     @Override

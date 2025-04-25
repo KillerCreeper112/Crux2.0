@@ -132,7 +132,7 @@ public class PotionListener implements Listener {
                 .find().forEach(hit ->{
                     if(hit.equals(potion)) return;
 
-                    double intensity = 1 - Math.sqrt(hit.getLocation().distanceSquared(potion.getLocation())) / 4;
+                    double intensity = 1 - hit.getLocation().distance(potion.getLocation()) / 4;
                     event.setIntensity(hit, intensity);
                 });
         }
@@ -142,7 +142,7 @@ public class PotionListener implements Listener {
         if(potions == null || potions.isEmpty()) return;
         PotionInflictor inflictor = new EntityInflictor(potion);
         for(LivingEntity e : event.getAffectedEntities()){
-            SimplePotionHolder data = EntityMemory.getOrCreateDataHolder(e, SimplePotionHolder.class);
+            PotionHolder data = EntityMemory.getOrCreateDataHolder(e, SimplePotionHolder.class);
             if(data==null) continue;
             double intensity = event.getIntensity(e);
             for(StoredPotion h : potions){
@@ -168,7 +168,7 @@ public class PotionListener implements Listener {
         if(potions == null || potions.isEmpty()) return;
         PotionInflictor inflictor = new EntityInflictor(cloud);
         for(Entity e : event.getAffectedEntities()){
-            SimplePotionHolder data = EntityMemory.getOrCreateDataHolder(e, SimplePotionHolder.class);
+            PotionHolder data = EntityMemory.getOrCreateDataHolder(e, SimplePotionHolder.class);
             if(data==null) continue;
             for(StoredPotion h : potions){
                 data.addPotion(h.create(e, inflictor));
