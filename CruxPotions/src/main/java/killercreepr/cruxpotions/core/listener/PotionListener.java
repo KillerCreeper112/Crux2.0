@@ -61,7 +61,7 @@ public class PotionListener implements Listener {
         if(!CruxPotions.canApplyPotion(p)) return;
         PotionHolder data = EntityMemory.getOrCreateDataHolder(p, SimplePotionHolder.class);
         if(data==null) return;
-        Collection<StoredPotion> potions = CruxItem.wrap(item).get(PotionComponents.STORED_CRUX_POTIONS);
+        Collection<StoredPotion> potions = CruxItem.wrap(item).getOrDefaultData(PotionComponents.STORED_CRUX_POTIONS);
         if(potions == null || potions.isEmpty()) return;
         PotionInflictor inflictor = new EntityInflictor(p);
         for(StoredPotion h : potions){
@@ -113,7 +113,7 @@ public class PotionListener implements Listener {
     public boolean isCustomWateredPotion(ItemStack item){
         if(CruxItem.isEmpty(item)) return false;
         if(!(item.getItemMeta() instanceof PotionMeta meta)) return false;
-        if(meta.hasCustomEffects()) return false;
+        if(meta.hasCustomEffects() && !meta.getCustomEffects().isEmpty()) return false;
         var type = meta.getBasePotionType();
         return type == PotionType.WATER || type == PotionType.AWKWARD || type == PotionType.MUNDANE || type == PotionType.THICK;
     }
@@ -123,20 +123,22 @@ public class PotionListener implements Listener {
         if(event.getAffectedEntities().isEmpty()){
             ThrownPotion potion = event.getPotion();
             ItemStack item = potion.getItem();
-            Collection<StoredPotion> potions = CruxItem.wrap(item).get(PotionComponents.STORED_CRUX_POTIONS);
+            Collection<StoredPotion> potions = CruxItem.wrap(item).getOrDefaultData(PotionComponents.STORED_CRUX_POTIONS);
             if(potions == null || potions.isEmpty()) return;
             if(!isCustomWateredPotion(item)) return;
+            new GetEntityNear<>(LivingEntity.class)
+                .range(8D)
+                .center(potion)
+                .find().forEach(hit ->{
+                    if(hit.equals(potion)) return;
 
-            event.getAffectedEntities().addAll(
-                new GetEntityNear<>(LivingEntity.class)
-                    .range(8D)
-                    .center(event.getPotion())
-                    .find()
-            );
+                    double intensity = 1 - Math.sqrt(hit.getLocation().distanceSquared(potion.getLocation())) / 4;
+                    event.setIntensity(hit, intensity);
+                });
         }
         ThrownPotion potion = event.getPotion();
         ItemStack item = potion.getItem();
-        Collection<StoredPotion> potions = CruxItem.wrap(item).get(PotionComponents.STORED_CRUX_POTIONS);
+        Collection<StoredPotion> potions = CruxItem.wrap(item).getOrDefaultData(PotionComponents.STORED_CRUX_POTIONS);
         if(potions == null || potions.isEmpty()) return;
         PotionInflictor inflictor = new EntityInflictor(potion);
         for(LivingEntity e : event.getAffectedEntities()){
@@ -153,7 +155,7 @@ public class PotionListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onLingeringPotionSplash(LingeringPotionSplashEvent event) {
-        List<StoredPotion> potions = CruxItem.wrap(event.getEntity().getItem()).get(PotionComponents.STORED_CRUX_POTIONS);
+        List<StoredPotion> potions = CruxItem.wrap(event.getEntity().getItem()).getOrDefaultData(PotionComponents.STORED_CRUX_POTIONS);
         if(potions == null || potions.isEmpty()) return;
         Entity cloud = event.getAreaEffectCloud();
         CruxEntity.entity(cloud).set(PotionComponents.STORED_CRUX_POTIONS, potions);
