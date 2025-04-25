@@ -9,10 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.damage.DamageSource;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Projectile;
+import org.bukkit.entity.*;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -98,7 +95,13 @@ public interface EntityDamager {
         if(dmger instanceof LivingEntity d && d.getAttribute(Attribute.ATTACK_DAMAGE) != null){
             return d.getAttribute(Attribute.ATTACK_DAMAGE).getValue() + CruxAttribute.get(dmger, CruxAttribute.ATTACK_DAMAGE);
         }
-        return CruxAttribute.get(dmger, CruxAttribute.ATTACK_DAMAGE);
+        var instance = CruxAttribute.getInstance(dmger, CruxAttribute.ATTACK_DAMAGE);
+        if(instance != null) return instance.getValue();
+
+        if(dmger instanceof AbstractArrow d){
+            return d.getDamage();
+        }
+        return 0D;
     }
 
     @Nullable
