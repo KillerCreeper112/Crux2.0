@@ -14,7 +14,6 @@ import killercreepr.cruxattributes.api.equipment.CruxSlotGroup;
 import killercreepr.cruxattributes.core.attribute.GenericAttribute;
 import killercreepr.cruxattributes.core.registries.CruxAttributeRegistries;
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.key.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
