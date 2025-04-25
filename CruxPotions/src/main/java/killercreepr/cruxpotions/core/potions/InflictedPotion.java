@@ -31,8 +31,8 @@ public class InflictedPotion extends SimpleActivePotion {
 
     @Override
     public @NotNull StoredPotion store() {
-        return StoredPotion.storedPotion(potion, duration, amplifier, (e, inflictor) ->{
-            return new InflictedPotion(potion, e, duration, amplifier, inflictor);
+        return StoredPotion.storedPotion(potion, duration, amplifier, (e, inflictor, stored) ->{
+            return new InflictedPotion(stored.getPotion(), e, stored.getDuration(), stored.getAmplifier(), inflictor);
         }, ctx ->{
             if(inflictor == null) return null;
             var reg = ctx.getRegistry();
