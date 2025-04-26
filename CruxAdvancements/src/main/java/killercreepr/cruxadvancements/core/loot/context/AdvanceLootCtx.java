@@ -1,5 +1,6 @@
 package killercreepr.cruxadvancements.core.loot.context;
 
+import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.loot.LootContext;
 import killercreepr.cruxadvancements.api.event.PlayerCraftItemEvent;
 import org.bukkit.entity.HumanEntity;
@@ -10,13 +11,13 @@ public class AdvanceLootCtx {
         HumanEntity p = event.getWhoClicked();
         ItemStack item = event.getItemResult();
         return LootContext.builder()
-            /*todo maybe something to do with result amount .info(
+            .info(
                 DataExchange.builder()
                     .putAll(p, "player")
                     .putAll(item, "item", "crafted", "result")
                     .putAll(event.getResultAmount(), "result_amount", "amount")
                     .build()
-            )*/
+            )
             .location(p.getLocation())
             .looter(p)
             .looted(item)
