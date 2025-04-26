@@ -32,7 +32,7 @@ public abstract class CruxGoalSounds implements Ticked {
         if(a == null) return;
         a.playAt(e);
     }
-
+    public @Nullable CreateSound step(){ return null; }
     public @Nullable CreateSound ambient(){ return null; }
     public @Nullable CreateSound attack(){ return null; }
     public @Nullable CreateSound hurt(){ return null; }
