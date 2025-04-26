@@ -14,6 +14,7 @@ import killercreepr.cruxpotions.api.potion.StoredPotion;
 import killercreepr.cruxpotions.api.potion.inflictor.PotionInflictor;
 import killercreepr.cruxpotions.api.values.ValuesProvider;
 import killercreepr.cruxpotions.core.command.CruxPotionCommands;
+import killercreepr.cruxpotions.core.component.PotionComponents;
 import killercreepr.cruxpotions.core.config.Config;
 import killercreepr.cruxpotions.core.config.CruxPotionCfgHandler;
 import killercreepr.cruxpotions.core.config.handler.FileStoredPotion;
@@ -55,6 +56,7 @@ public class CruxPotionsModule implements CruxModule {
     @Override
     public void onLoad(@NotNull CruxPlugin plugin) {
         CruxPotionCommands.register(plugin);
+        PotionComponents.register();
         if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS)){
             CruxPotionCfgHandler.POTION_INFLICTOR.register(BlockInflictor.ID, new AutoFileHandler<>(BlockInflictor.class));
             CruxPotionCfgHandler.POTION_INFLICTOR.register(BlockInflictor.ID, new AutoFileHandler<>(EntityInflictor.class,

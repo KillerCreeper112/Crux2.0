@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.function.UnaryOperator;
 
 public class PotionComponents {
+    public static void register(){}
     public static final DataComponentType<StoredPotion> STORED_CRUX_POTION = register("stored_crux_potion", builder -> builder
         .persistTextParser(PotionCompParsers.STORED_CRUX_POTION.createInput(Crux.key("stored_crux_potion"))));
 
