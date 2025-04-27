@@ -1,5 +1,6 @@
 package killercreepr.crux.api.entity.memory;
 
+import io.netty.util.concurrent.CompleteFuture;
 import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.api.registry.KeyedRegistry;
 import killercreepr.crux.api.registry.MappedRegistry;
@@ -14,10 +15,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -108,6 +107,8 @@ public interface EntityMemory extends Holder<Entity> {
         EntityMemory mem = getOrCreate(entity);
         return mem.getDataHolderOrCompute(clazz, function);
     }
+
+    Map<UUID, CompletableFuture<Void>> REMOVING_FUTURES = new HashMap<>();
 
     @NotNull KeyedRegistry<DataHolder> getDataHolders();
     @Nullable DataHolder getDataHolder(@NotNull Key key);

@@ -9,7 +9,10 @@ import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SimpleEntityMemory implements EntityMemory {
@@ -80,18 +83,28 @@ public class SimpleEntityMemory implements EntityMemory {
 
     @Override
     public void removeDataHolders(@Nullable Entity e){
+        List<CompletableFuture<Void>> futures = new ArrayList<>();
         for(DataHolder h : dataHolders.values()){
-            try{
-                if(e != null) h.onMemoryUnload(e);
-            }catch (Exception ignored){
-                ignored.printStackTrace();
-            }
-            try{
-                h.parentRemoving(e);
-            }catch (Exception ignored){
-                ignored.printStackTrace();;
-            }
+            futures.add(CompletableFuture.runAsync(() ->{
+                try{
+                    if(e != null) h.onMemoryUnload(e);
+                }catch (Exception ignored){
+                    ignored.printStackTrace();
+                }
+                try{
+                    h.parentRemoving(e);
+                }catch (Exception ignored){
+                    ignored.printStackTrace();;
+                }
+            }));
         }
+
+        CompletableFuture<Void> combined = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
+        combined.exceptionally(ex -> {
+            ex.printStackTrace();
+            return null;
+        });
+        EntityMemory.REMOVING_FUTURES.put(uuid, combined);
         dataHolders.clear();
     }
 

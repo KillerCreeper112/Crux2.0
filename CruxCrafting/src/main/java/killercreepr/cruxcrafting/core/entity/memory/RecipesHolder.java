@@ -14,6 +14,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -36,6 +37,12 @@ public class RecipesHolder extends EntityDataHolder implements Loadable {
     @Override
     public void onMemoryUnload(@NotNull Entity e) {
         super.onMemoryUnload(e);
+        //save();
+    }
+
+    @Override
+    protected void removingFromMemory(@Nullable Entity e) {
+        super.removingFromMemory(e);
         save();
     }
 
