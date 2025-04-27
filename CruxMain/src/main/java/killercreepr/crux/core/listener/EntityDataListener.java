@@ -10,14 +10,25 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.util.concurrent.CompletableFuture;
+
 public class EntityDataListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player p = event.getPlayer();
         PlayerMemory data = PlayerMemory.get(p);
         if(data==null) return;
-        data.scheduleForRemoval(p);
-        data.onMemoryUnload(p);
+        try{
+            data.scheduleForRemoval(p);
+        }catch (Exception ignored){
+            ignored.printStackTrace();
+        }
+
+        try{
+            data.onMemoryUnload(p);
+        }catch (Exception ignored){
+            ignored.printStackTrace();
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -25,6 +36,10 @@ public class EntityDataListener implements Listener {
         Entity e = event.getEntity();
         EntityMemory mem = EntityMemory.get(e);
         if(mem == null) return;
-        mem.onMemoryUnload(e);
+        try{
+            mem.onMemoryUnload(e);
+        }catch (Exception ignored){
+            ignored.printStackTrace();
+        }
     }
 }
