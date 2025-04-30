@@ -357,15 +357,15 @@ public class CruxGoalBase implements ICruxGoal {
         return true;
     }
 
-    protected void attacked(@NotNull CruxEntityDamageEvent event){}
+    public void attacked(@NotNull CruxEntityDamageEvent event){}
 
-    protected @Nullable EntityHit.Result attemptAttack(){
+    public @Nullable EntityHit.Result attemptAttack(){
         EntityHit.Result result = hit(true);
         if(result != null) attackCooldown = (int) Math.ceil(CruxAttribute.ATTACK_SPEED.get(mob));
         return result;
     }
 
-    protected @Nullable EntityHit.Result attemptAttack(@Nullable LivingEntity target, double distance){
+    public @Nullable EntityHit.Result attemptAttack(@Nullable LivingEntity target, double distance){
         CruxAttributeInstance instance = CruxAttribute.getInstance(mob, CruxAttribute.ATTACK_RANGE);
         if(instance == null) return null;
 

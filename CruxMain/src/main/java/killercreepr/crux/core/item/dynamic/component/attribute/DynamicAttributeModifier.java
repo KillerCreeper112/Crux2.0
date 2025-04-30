@@ -30,8 +30,13 @@ public class DynamicAttributeModifier {
 
         double a = amount instanceof Number n ? n.doubleValue() : CruxMath.evaluate(context.deserializeString(amount.toString()));
         AttributeModifier.Operation o;
+        String opString = operation == null ? null : operation.toString();
         if(operation == null) o = AttributeModifier.Operation.ADD_NUMBER;
-        else{
+        else if("add".equalsIgnoreCase(opString)){
+          o = AttributeModifier.Operation.ADD_NUMBER;
+        }else if("multiply".equalsIgnoreCase(opString)){
+            o = AttributeModifier.Operation.MULTIPLY_SCALAR_1;
+        }else{
             o = AttributeModifier.Operation.valueOf(context.deserializeString(operation.toString()).toUpperCase());
         }
 
