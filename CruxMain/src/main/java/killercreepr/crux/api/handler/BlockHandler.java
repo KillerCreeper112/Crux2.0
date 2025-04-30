@@ -3,6 +3,7 @@ package killercreepr.crux.api.handler;
 import killercreepr.crux.api.block.CruxBlockWrapper;
 import killercreepr.crux.api.block.CruxedBlock;
 import killercreepr.crux.paper.block.BukkitCruxedBlock;
+import killercreepr.crux.paper.block.BukkitStateCruxedBlock;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Material;
 import org.bukkit.Registry;
@@ -26,6 +27,8 @@ public interface BlockHandler {
 
     @NotNull
     CruxedBlock getBlock(@NotNull Block block);
+    @NotNull
+    CruxedBlock getByBlockState(@NotNull BlockState block);
     @NotNull Key getType(@NotNull Block block, @NotNull BlockData data);
     @NotNull Key getType(@NotNull BlockState state);
     @NotNull Key getType(@NotNull BlockData data);
@@ -58,6 +61,11 @@ public interface BlockHandler {
         @Override
         public @NotNull CruxedBlock getBlock(@NotNull Block block) {
             return new BukkitCruxedBlock(block);
+        }
+
+        @Override
+        public @NotNull CruxedBlock getByBlockState(@NotNull BlockState block) {
+            return new BukkitStateCruxedBlock(block);
         }
 
         @Override

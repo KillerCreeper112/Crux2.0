@@ -12,6 +12,7 @@ import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.plugin.module.StandardModules;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.paper.block.BukkitCruxedBlock;
+import killercreepr.crux.paper.block.BukkitStateCruxedBlock;
 import killercreepr.cruxblocks.api.block.CruxBlock;
 import killercreepr.cruxblocks.api.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.api.block.data.events.CustomBlockDataRemoveEvent;
@@ -21,6 +22,7 @@ import killercreepr.cruxblocks.api.block.registry.CruxBlockRegistry;
 import killercreepr.cruxblocks.api.item.KeyedItemProvider;
 import killercreepr.cruxblocks.api.world.module.CruxBlocksWorldModule;
 import killercreepr.cruxblocks.core.block.CruxCruxedBlock;
+import killercreepr.cruxblocks.core.block.CruxCruxedBlockState;
 import killercreepr.cruxblocks.core.block.data.CustomBlockData;
 import killercreepr.cruxblocks.core.block.wrapper.CruxBlockCruxWrapper;
 import killercreepr.cruxblocks.core.block.wrapper.CruxGroupBlockWrapper;
@@ -242,6 +244,13 @@ public class CruxBlocksModule implements CruxModule, CruxBlockManager, BlockHand
         ActiveCruxBlock active = getActiveBlock(block);
         if(active == null) return new BukkitCruxedBlock(block);
         return new CruxCruxedBlock(active);
+    }
+
+    @Override
+    public @NotNull CruxedBlock getByBlockState(@NotNull BlockState block) {
+        CruxBlock cruxBlock = getBlockRegistry().getByBlockState(block);
+        if(cruxBlock != null) return new CruxCruxedBlockState(cruxBlock, block);
+        return new BukkitStateCruxedBlock(block);
     }
 
     @Override
