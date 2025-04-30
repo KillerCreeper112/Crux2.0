@@ -22,6 +22,7 @@
 
 package killercreepr.cruxblocks.core.block.data.listeners;
 
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxblocks.api.block.data.events.CustomBlockDataMoveEvent;
 import killercreepr.cruxblocks.api.block.data.events.CustomBlockDataRemoveEvent;
 import killercreepr.cruxblocks.api.event.*;
@@ -118,7 +119,7 @@ public final class BlockDataListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBreak(BlockBreakEvent event) {
-        callAndRemove(event);
+        Crux.scheduler().runTask(() -> callAndRemove(event));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
