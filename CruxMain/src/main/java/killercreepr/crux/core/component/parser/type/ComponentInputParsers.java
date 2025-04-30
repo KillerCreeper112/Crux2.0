@@ -9,6 +9,7 @@ import killercreepr.crux.api.component.parser.StringListEncodeComponent;
 import killercreepr.crux.api.component.parser.hybrid.PersistTextParser;
 import killercreepr.crux.api.component.parser.hybrid.TextInputField;
 import killercreepr.crux.api.data.ParticleBuilderSupplier;
+import killercreepr.crux.api.entity.predicate.EntityPredicate;
 import killercreepr.crux.api.item.component.ToolComponent;
 import killercreepr.crux.api.item.predicate.ItemPredicate;
 import killercreepr.crux.api.item.tag.ItemTag;
@@ -19,6 +20,8 @@ import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.api.valueproviders.vector.NumberVector;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.component.parser.hybrid.text.ListPersistTextParser;
+import killercreepr.crux.core.entity.predicate.EntityAllPredicate;
+import killercreepr.crux.core.entity.predicate.EntityAnyPredicate;
 import killercreepr.crux.core.item.predicate.ItemAllPredicate;
 import killercreepr.crux.core.item.predicate.ItemAnyPredicate;
 import killercreepr.crux.core.persistence.type.UUIDTagType;
@@ -100,6 +103,63 @@ public class ComponentInputParsers {
                 CruxRegistries.ITEM_LOOT_TABLE.get(key),
                 "ItemLootTable of " + key + " not found!"
             );
+        });
+
+    public static PersistTextParser<EntityPredicate> SIMPLE_ENTITY_PREDICATE = PersistTextParser.elementBuilder(EntityPredicate.class)
+        .field(TextInputField.field(PersistTextParser.STRING, e ->{
+            if(!(e instanceof StringListEncodeComponent all)) throw new IllegalArgumentException(
+                "EntityPredicate must implement StringListEncode! " + e
+            );
+            return all.encodeToParser().getFirst();
+        }))
+        .apply(ctx ->{
+            String id = ctx.get();
+            boolean invert = id.startsWith("!");
+            if(invert) id = id.substring(1);
+            EntityPredicate p;
+            if(id.startsWith("#")){
+                var tag = CruxRegistries.ENTITY_TAG.get(Crux.key(id.substring(1)));
+                if(tag == null){
+                    Crux.log(Level.SEVERE, "Cannot find item tag of " + id + "!");
+                    return null;
+                }
+                p = EntityPredicate.fromTag(tag);
+            }else{
+                p = EntityPredicate.fromType(Crux.key(id));
+            }
+            return invert ? EntityPredicate.fromInverted(p) : p;
+        });
+
+    public static PersistTextParser<EntityPredicate> ENTITY_PREDICATE = PersistTextParser.mapBuilder(EntityPredicate.class)
+        .field("type", TextInputField.field(PersistTextParser.STRING, e ->{
+            if(e instanceof EntityAllPredicate) return "all_of";
+            if(e instanceof EntityAnyPredicate) return "any_of";
+            return null;
+        }))
+        .field("terms", TextInputField.field(PersistTextParser.LIST.STRING, e ->{
+            if(!(e instanceof StringListEncodeComponent c)) return null;
+            return c.encodeToParser();
+        }))
+        .apply(ctx ->{
+            if(!(ctx.getOptional("terms") instanceof List<?> list)){
+                return SIMPLE_ENTITY_PREDICATE.decodeObject(ctx.get());
+            }
+
+            Collection<EntityPredicate> parsed = new HashSet<>();
+            for(Object s : list){
+                var predicate = SIMPLE_ENTITY_PREDICATE.decodeObject(s);
+                parsed.add(predicate);
+            }
+            String type = ctx.getOptional("type", "all_of");
+            switch (type.toLowerCase()){
+                case "all_of" ->{
+                    return EntityPredicate.fromAllOf(parsed);
+                }
+                case "any_of" ->{
+                    return EntityPredicate.fromAnyOf(parsed);
+                }
+            }
+            return EntityPredicate.fromAllOf(parsed);
         });
 
     public static PersistTextParser<ItemPredicate> SIMPLE_ITEM_PREDICATE = PersistTextParser.elementBuilder(ItemPredicate.class)
