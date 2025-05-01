@@ -5,6 +5,7 @@ import io.papermc.paper.event.block.PlayerShearBlockEvent;
 import io.papermc.paper.event.player.PlayerTradeEvent;
 import killercreepr.crux.api.entity.memory.EntityMemory;
 import killercreepr.crux.api.event.CruxEntityDeathEvent;
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxadvancements.api.event.PlayerCraftItemEvent;
 import killercreepr.cruxadvancements.core.advancement.objective.standard.*;
 import killercreepr.cruxadvancements.core.entity.memory.AdvancementHolder;
@@ -24,15 +25,30 @@ import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.player.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.UUID;
+
 public class ObjectiveListener implements Listener {
     /*todo when Paper PR merges https://github.com/PaperMC/Paper/pull/5736 @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPiglinBarter(PiglinBarterEvent event) {
     }*/
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEntityPickupItem(EntityPickupItemEvent event) {
-        if(!(event.getEntity() instanceof Player p)) return;
         Item item = event.getItem();
-        if(p.getUniqueId().equals(item.getThrower())) return;
+        UUID thrower = item.getThrower();
+        if(thrower != null){
+            Player p = Crux.getServer().getPlayer(thrower);
+            if(p != null){
+                AdvancementHolder holder = holder(p);
+                if(holder!=null){
+                    holder.getAdvancementTracker().apply(EntityPickupItemObjective.class, (manager, advancement, objective) -> {
+                        objective.trigger(p.getUniqueId(), manager, advancement, event);
+                    });
+                }
+            }
+        }
+
+        if(!(event.getEntity() instanceof Player p)) return;
+        if(p.getUniqueId().equals(thrower)) return;
 
         AdvancementHolder holder = holder(p);
         if(holder==null) return;

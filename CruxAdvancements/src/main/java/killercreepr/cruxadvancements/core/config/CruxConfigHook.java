@@ -188,6 +188,16 @@ public class CruxConfigHook {
             }
         });
 
+        fileAdvancementObjective.registerCustomHandler(new FileSimpleAdvanceObjective<>(Crux.key("entity_pickup_item")){
+
+            @Override
+            public @Nullable AdvancementObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new EntityPickupItemObjective(data, maxProgress);
+            }
+        });
+
         fileAdvancementObjective.registerCustomHandler(new FileSimpleAdvanceObjective<>(Crux.key("craft_item")) {
 
             @Override

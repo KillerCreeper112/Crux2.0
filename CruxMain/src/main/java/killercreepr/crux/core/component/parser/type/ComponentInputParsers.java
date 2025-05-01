@@ -141,6 +141,9 @@ public class ComponentInputParsers {
             return c.encodeToParser();
         }))
         .apply(ctx ->{
+            if(!(ctx.get() instanceof List<?>) && !(ctx.get() instanceof Map<?,?>)){
+                return SIMPLE_ENTITY_PREDICATE.decodeObject(ctx.get());
+            }
             if(!(ctx.getOptional("terms") instanceof List<?> list)){
                 return SIMPLE_ENTITY_PREDICATE.decodeObject(ctx.get());
             }
