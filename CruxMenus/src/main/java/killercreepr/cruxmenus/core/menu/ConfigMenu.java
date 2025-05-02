@@ -10,12 +10,17 @@ import killercreepr.crux.core.text.context.SimpleInputContext;
 import killercreepr.crux.core.util.InvUtil;
 import killercreepr.cruxmenus.api.event.MenuRefreshEvent;
 import killercreepr.cruxmenus.api.menu.CfgMenu;
+import killercreepr.cruxmenus.api.menu.Menu;
 import killercreepr.cruxmenus.api.menu.contex.MenuContext;
 import killercreepr.cruxmenus.api.menu.holder.MenuHolder;
 import killercreepr.cruxmenus.api.menu.holder.MenuItemHolder;
 import killercreepr.cruxmenus.api.menu.holder.MenuItems;
 import killercreepr.cruxmenus.api.menu.item.MenuItem;
+import killercreepr.cruxmenus.core.menu.types.ViewMenuType;
+import killercreepr.cruxmenus.core.registries.MenuRegistries;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -202,6 +207,20 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
     public void reset(){
         super.reset();
         items.clear();
+    }
+
+    @Override
+    public Menu reconstruct(int size, @NotNull Component name) {
+        if(info().has("menu_type")){
+            ViewMenuType viewMenuType = MenuRegistries.VIEW_MENU_TYPE.get(
+                Crux.key(holder.getRegistry().getFormat().deserializeString(info().get("menu_type") + "",buildTags()))
+            );
+            if(viewMenuType != null){
+                return reconstruct(viewMenuType.create(info().getOrThrow("viewer",HumanEntity.class), name).getView().getTopInventory());
+            }else Crux.logWarning("ViewMenuType of " + holder.getRegistry().getFormat().deserializeString(info().get("menu_type") + "",buildTags()) + " (" + info().get("menu_type") +  ")");
+        }
+
+        return super.reconstruct(size, name);
     }
 
     protected void refreshReconstruct(){

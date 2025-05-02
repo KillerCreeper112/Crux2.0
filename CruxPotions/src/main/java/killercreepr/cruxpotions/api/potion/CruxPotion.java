@@ -16,6 +16,10 @@ public interface CruxPotion extends CruxKeyed {
     @NotNull String getName();
     @NotNull PotionEffectType.Category getCategory();
 
+    default @Nullable String getDescription(){
+        return null;
+    }
+
     /**
      * A null value signifies that this potion will not have any effect
      * on a potion's color.
