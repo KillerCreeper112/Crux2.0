@@ -216,7 +216,7 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
                 Crux.key(holder.getRegistry().getFormat().deserializeString(holder.info().get("menu_type") + "",buildTags()))
             );
             if(viewMenuType != null){
-                return reconstruct(viewMenuType.create(holder.info().getOrThrow("viewer",HumanEntity.class), name).getView().getTopInventory());
+                return reconstruct(viewMenuType.create(info().getOrThrow("viewer",HumanEntity.class), name).getView().getTopInventory());
             }else Crux.logWarning("No ViewMenuType found of " + holder.getRegistry().getFormat().deserializeString(holder.info().get("menu_type") + "",buildTags()) + " (" + holder.info().get("menu_type") +  ")");
         }
 
