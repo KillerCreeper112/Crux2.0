@@ -211,13 +211,13 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
 
     @Override
     public Menu reconstruct(int size, @NotNull Component name) {
-        if(info().has("menu_type")){
+        if(holder.info().has("menu_type")){
             ViewMenuType viewMenuType = MenuRegistries.VIEW_MENU_TYPE.get(
-                Crux.key(holder.getRegistry().getFormat().deserializeString(info().get("menu_type") + "",buildTags()))
+                Crux.key(holder.getRegistry().getFormat().deserializeString(holder.info().get("menu_type") + "",buildTags()))
             );
             if(viewMenuType != null){
-                return reconstruct(viewMenuType.create(info().getOrThrow("viewer",HumanEntity.class), name).getView().getTopInventory());
-            }else Crux.logWarning("ViewMenuType of " + holder.getRegistry().getFormat().deserializeString(info().get("menu_type") + "",buildTags()) + " (" + info().get("menu_type") +  ")");
+                return reconstruct(viewMenuType.create(holder.info().getOrThrow("viewer",HumanEntity.class), name).getView().getTopInventory());
+            }else Crux.logWarning("No ViewMenuType found of " + holder.getRegistry().getFormat().deserializeString(holder.info().get("menu_type") + "",buildTags()) + " (" + holder.info().get("menu_type") +  ")");
         }
 
         return super.reconstruct(size, name);

@@ -6,6 +6,8 @@ import net.kyori.adventure.key.Key;
 import org.bukkit.inventory.MenuType;
 
 public class BukkitViewMenuTypes {
+    public static void register(){}
+
     public static final ViewMenuType ANVIL = register(Crux.key("anvil"), MenuType.ANVIL);
     public static final ViewMenuType FURNACE = register(Crux.key("furnace"), MenuType.FURNACE);
     public static final ViewMenuType HOPPER = register(Crux.key("furnace"), MenuType.HOPPER);
