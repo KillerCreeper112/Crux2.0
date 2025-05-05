@@ -6,10 +6,9 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.key.Keyed;
 import org.jetbrains.annotations.NotNull;
 
-public interface CruxKeyedArgument<T extends Keyed> extends CustomArgumentType<T, Key> {
+public interface CruxKeyedArgument<T> extends CustomArgumentType<T, Key> {
     @Override
     default @NotNull T parse(@NotNull StringReader reader) throws CommandSyntaxException {
         return parse(CruxCmdArguments.CRUX_KEY.parse(reader));
