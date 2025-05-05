@@ -4,10 +4,7 @@ import net.minecraft.util.Mth;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BoundingBox;
@@ -16,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class CruxEntityUtil {
@@ -86,12 +84,20 @@ public class CruxEntityUtil {
     }
 
     public static void giveOrDrop(@NotNull HumanEntity p, @NotNull Collection<ItemStack> items){
-        giveOrDrop(p, items.toArray(new ItemStack[0]));
+        giveOrDrop(p, null, items);
+    }
+
+    public static void giveOrDrop(@NotNull HumanEntity p, @Nullable Consumer<Item> spawnConsumer, @NotNull Collection<ItemStack> items){
+        giveOrDrop(p, spawnConsumer, items.toArray(new ItemStack[0]));
     }
 
     public static void giveOrDrop(@NotNull HumanEntity p, @NotNull ItemStack... items){
+        giveOrDrop(p, null, items);
+    }
+
+    public static void giveOrDrop(@NotNull HumanEntity p, @Nullable Consumer<Item> spawnConsumer, @NotNull ItemStack... items){
         for(ItemStack drop : p.getInventory().addItem(items).values()){
-            p.getWorld().dropItem(p.getLocation(), drop);
+            p.getWorld().dropItem(p.getLocation(), drop, spawnConsumer);
         }
     }
 

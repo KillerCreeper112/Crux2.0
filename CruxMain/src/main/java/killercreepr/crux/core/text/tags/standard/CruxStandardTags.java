@@ -55,7 +55,8 @@ public class CruxStandardTags {
         return Set.of(
             new DescriptionLoreResolver(),
             new AddIfLoreResolver(),
-            new AddIfElseLoreResolver()
+            new AddIfElseLoreResolver(),
+            new AddIfAllLoreResolver()
         );
     }
 
