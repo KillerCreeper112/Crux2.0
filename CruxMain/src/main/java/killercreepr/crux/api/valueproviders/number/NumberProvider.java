@@ -69,6 +69,8 @@ public interface NumberProvider extends NumberHolder {
         try{
             return NumberProvider.constant(Double.parseDouble(text));
         }catch (IllegalArgumentException ignored){}
+        if(text.startsWith("\"")) text = text.substring(1);
+        if(text.endsWith("\"")) text = text.substring(0, text.length()-1);
 
         if(text.startsWith("[") && text.endsWith("]")){
             List<String> elements = parseElements(text.substring(1, text.length() - 1));
