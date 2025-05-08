@@ -83,6 +83,7 @@ public class NumberObjective extends SimpleAdvancementObjective {
     }
 
     public boolean isDone(@NotNull UUID who, @NotNull ObjectiveAdvancement advancement){
+        if(advancement.isGranted(who)) return true;
         ObjectiveProgression progression = advancement.getObjectiveProgressIfPresent(who);
         if(progression == null) return false;
         ObjectiveProgress progress = progression.getProgressIfPresent(getCriterion());
