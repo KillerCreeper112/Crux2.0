@@ -6,6 +6,7 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,8 +23,9 @@ public class ItemClickContextImpl implements ItemClickContext {
     protected final int hotbarButton;
     protected final @NotNull InventoryAction action;
     protected final @NotNull ClickType clickType;
+    protected final @NotNull InventoryView view;
 
-    public ItemClickContextImpl(@NotNull HumanEntity whoClicked, @NotNull CruxedItem item, @Nullable Inventory clickedInventory, int slot, int rawSlot, int hotbarButton, @NotNull InventoryAction action, @NotNull ClickType clickType) {
+    public ItemClickContextImpl(@NotNull HumanEntity whoClicked, @NotNull CruxedItem item, @Nullable Inventory clickedInventory, int slot, int rawSlot, int hotbarButton, @NotNull InventoryAction action, @NotNull ClickType clickType, @NotNull InventoryView view) {
         this.whoClicked = whoClicked;
         this.item = item;
         this.clickedInventory = clickedInventory;
@@ -32,6 +34,7 @@ public class ItemClickContextImpl implements ItemClickContext {
         this.hotbarButton = hotbarButton;
         this.action = action;
         this.clickType = clickType;
+        this.view = view;
     }
 
     @Override
@@ -74,6 +77,11 @@ public class ItemClickContextImpl implements ItemClickContext {
         return clickType;
     }
 
+    @Override
+    public @NotNull InventoryView getView() {
+        return view;
+    }
+
     public static final class Builder {
         private @NotNull HumanEntity whoClicked;
         private @NotNull CruxedItem item;
@@ -83,6 +91,7 @@ public class ItemClickContextImpl implements ItemClickContext {
         private int hotbarButton;
         private @NotNull InventoryAction action;
         private @NotNull ClickType clickType;
+        private InventoryView view;
 
         private Builder() {
         }
@@ -131,8 +140,13 @@ public class ItemClickContextImpl implements ItemClickContext {
             return this;
         }
 
+        public Builder view(InventoryView view) {
+            this.view = view;
+            return this;
+        }
+
         public ItemClickContextImpl build() {
-            return new ItemClickContextImpl(whoClicked, item, clickedInventory, slot, rawSlot, hotbarButton, action, clickType);
+            return new ItemClickContextImpl(whoClicked, item, clickedInventory, slot, rawSlot, hotbarButton, action, clickType, view);
         }
     }
 }

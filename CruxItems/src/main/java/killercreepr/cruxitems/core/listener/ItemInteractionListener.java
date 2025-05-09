@@ -172,6 +172,7 @@ public class ItemInteractionListener implements Listener {
             .rawSlot(event.getRawSlot())
             .action(event.getAction())
             .item(crux)
+            .view(event.getView())
             .build();
         ItemUseResult result = i.onClick(ctx);
         Boolean cancel = result.getCancelled();
