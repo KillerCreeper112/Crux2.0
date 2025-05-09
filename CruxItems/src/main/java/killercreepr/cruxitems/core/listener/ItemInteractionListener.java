@@ -8,15 +8,15 @@ import killercreepr.cruxitems.api.event.InteractableComponentUseEvent;
 import killercreepr.cruxitems.api.item.CruxedItem;
 import killercreepr.cruxitems.api.item.component.ConsumableComponent;
 import killercreepr.cruxitems.api.item.component.InteractableComponent;
+import killercreepr.cruxitems.api.item.component.SwapHandsComponent;
 import killercreepr.cruxitems.api.item.consume.ItemConsumeContext;
 import killercreepr.cruxitems.api.item.consume.ItemConsumeResult;
-import killercreepr.cruxitems.api.item.interaction.InteractableItem;
-import killercreepr.cruxitems.api.item.interaction.ItemUseContext;
-import killercreepr.cruxitems.api.item.interaction.ItemUseResult;
+import killercreepr.cruxitems.api.item.interaction.*;
 import killercreepr.cruxitems.api.item.inventory.InventoryItem;
 import killercreepr.cruxitems.api.item.inventory.ItemClickContext;
 import killercreepr.cruxitems.core.item.consume.ItemConsumeContextImpl;
 import killercreepr.cruxitems.core.item.interaction.impl.ItemUseContextImpl;
+import killercreepr.cruxitems.core.item.interaction.impl.SwapHandsContextImpl;
 import killercreepr.cruxitems.core.item.inventory.ItemClickContextImpl;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -26,9 +26,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
@@ -83,10 +81,94 @@ public class ItemInteractionListener implements Listener {
         return defaultResult;
     }
 
+    public SwapHandsResult genericSwapHands(SwapHandsContext ctx){
+        Collection<SwapHandsComponent> list = ctx.getItem().getAllOfTypeOrDefaultData(SwapHandsComponent.class);
+        if(list == null) return null;
+        return genericSwapHands(ctx, list);
+    }
+
+    public SwapHandsResult genericSwapHands(SwapHandsContext ctx, Collection<SwapHandsComponent> list){
+        /*CustomItemPreUseEvent preUseEvent = new CustomItemPreUseEvent(ctx, ItemUseResult.empty());
+        if(!preUseEvent.callEvent()) return preUseEvent.getUseResult();*/
+
+        SwapHandsResult defaultResult = SwapHandsResult.empty();//preUseEvent.getUseResult();
+        for(SwapHandsComponent c : list){
+            if(!c.isHandSwappable(ctx)) continue;
+            /*InteractableComponentUseEvent useEvent = new InteractableComponentUseEvent(ctx, c);
+            if(!useEvent.callEvent()) continue;*/
+
+            SwapHandsResult result = c.onSwapHands(ctx);
+            if(!result.successful()) continue;
+            return result;
+        }
+        return defaultResult;
+    }
+
     public ItemUseResult genericUse(ItemUseContext ctx){
         Collection<InteractableComponent> list = ctx.getItem().getAllOfTypeOrDefaultData(InteractableComponent.class);
         if(list == null) return null;
         return genericUse(ctx, list);
+    }
+
+    @EventHandler
+    public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
+        Player p = event.getPlayer();
+        ItemStack item = event.getMainHandItem();
+        if(!CruxItem.isEmpty(item)){
+            CruxedItem crux = CruxedItem.cruxed(item);
+
+            SwapHandsContext ctx = SwapHandsContextImpl.builder()
+                .player(p)
+                .item(crux)
+                .mainHandItem(event.getMainHandItem())
+                .offHandItem(event.getOffHandItem())
+                .build();
+
+            SwapHandsResult result = genericSwapHands(ctx);
+            if(result != null){
+                Boolean cancel = result.getCancelled();
+                if(cancel != null) event.setCancelled(cancel);
+            }
+
+            if(!(crux.getPluginItem() instanceof SwapHandsItem pluginItem)) return;
+
+            result = pluginItem.onSwapHands(ctx);
+            Boolean cancel = result.getCancelled();
+            if(cancel != null) event.setCancelled(cancel);
+        }
+    }
+
+
+    @EventHandler
+    public void onPlayerArmorStandManipulate(PlayerArmorStandManipulateEvent event) {
+        Player p = event.getPlayer();
+        Entity rightClicked = event.getRightClicked();
+        ItemStack item = p.getInventory().getItem(event.getHand());
+        if(CruxItem.isEmpty(item)) return;
+        CruxedItem crux = CruxedItem.cruxed(item);
+
+        ItemUseContext ctx = ItemUseContextImpl.builder()
+            .player(p)
+            .blockClicked(null)
+            .action(Action.RIGHT_CLICK_AIR)
+            .blockFace(null)
+            .clickedPosition(null)
+            .hand(event.getHand())
+            .entityClicked(rightClicked)
+            .item(crux)
+            .build();
+
+        ItemUseResult result = genericUse(ctx);
+        if(result != null){
+            Boolean cancel = result.getCancelled();
+            if(cancel != null) event.setCancelled(cancel);
+        }
+
+        if(!(crux.getPluginItem() instanceof InteractableItem pluginItem)) return;
+
+        result = pluginItem.onUse(ctx);
+        Boolean cancel = result.getCancelled();
+        if(cancel != null) event.setCancelled(cancel);
     }
 
 
