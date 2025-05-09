@@ -5,6 +5,7 @@ import killercreepr.cruxmenus.api.menu.Menu;
 import killercreepr.cruxmenus.core.registries.Menus;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -18,7 +19,7 @@ public class MenuListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     private void inventoryDrag(InventoryDragEvent event){
         if(!(event.getWhoClicked() instanceof Player p)) return;
         Menu menu = Menus.getOpened(p);
@@ -27,7 +28,7 @@ public class MenuListener implements Listener {
         menu.onDrag(event);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     private void inventoryClick(InventoryClickEvent event){
         if(!(event.getWhoClicked() instanceof Player p)) return;
         Menu menu = Menus.getOpened(p);
