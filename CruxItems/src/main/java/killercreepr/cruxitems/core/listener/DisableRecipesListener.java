@@ -7,13 +7,11 @@ import org.bukkit.Keyed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.CrafterCraftEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.inventory.PrepareSmithingEvent;
-import org.bukkit.inventory.AnvilInventory;
-import org.bukkit.inventory.CraftingInventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.SmithingInventory;
+import org.bukkit.inventory.*;
 import org.jetbrains.annotations.Nullable;
 
 public class DisableRecipesListener implements Listener {
@@ -24,6 +22,18 @@ public class DisableRecipesListener implements Listener {
         for(ItemStack item : inv.getMatrix()){
             if(check(item)){
                 inv.setResult(null);
+                return;
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onCrafterCraft(CrafterCraftEvent event) {
+        if(!(event.getBlock().getState() instanceof InventoryHolder inventory)) return;
+
+        for(ItemStack item : inventory.getInventory()){
+            if(check(item)){
+                event.setCancelled(true);
                 return;
             }
         }
