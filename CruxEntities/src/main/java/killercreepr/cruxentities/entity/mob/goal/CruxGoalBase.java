@@ -270,7 +270,7 @@ public class CruxGoalBase implements ICruxGoal {
         return hit(false, (Entity[]) null);
     }
 
-    protected @Nullable EntityHit.Result hit(boolean lookAt, @Nullable Entity @Nullable... targets){
+    public @Nullable EntityHit.Result hitLogic(boolean lookAt, @Nullable Predicate<Entity> filter, @Nullable Entity @Nullable... targets){
         if(!preAttemptAttack()) return null;
         float attackCooldown = 1f; //Could be used for something down the road.
 
@@ -288,10 +288,11 @@ public class CruxGoalBase implements ICruxGoal {
         if(targets != null && targets.length > 0 && (targets.length > 1 || targets[0] != null)) specifiedTargets = Arrays.asList(targets);
         else specifiedTargets = null;
         EntityHit.Result result = new EntityHit(mob.getEyeLocation(), direction.length() <= 0D ? mob.getEyeLocation().getDirection() : direction, range, aoe, pierce)
-                .getHitEntities(e ->{
-                    if(specifiedTargets != null) return specifiedTargets.contains(e);
-                    return isValidHitTarget(e); /*&& !TeamUtility.areMatchingOrAlly(mob, e);*/
-                });
+            .getHitEntities(e ->{
+                if(filter != null && !filter.test(e)) return false;
+                if(specifiedTargets != null) return specifiedTargets.contains(e);
+                return isValidHitTarget(e); /*&& !TeamUtility.areMatchingOrAlly(mob, e);*/
+            });
         Entity e = mob.getTargetEntity(1);
         if(e != null && !result.getHit().contains(e)){
             if((specifiedTargets == null && isValidHitTarget(e)) || (specifiedTargets != null && specifiedTargets.contains(e))){
@@ -299,6 +300,12 @@ public class CruxGoalBase implements ICruxGoal {
                 result.getResults().add(new RayTraceResult(mob.getEyeLocation().toVector(), e, null));
             }
         }
+        return result;
+    }
+
+    protected @Nullable EntityHit.Result hit(boolean lookAt, @Nullable Entity @Nullable... targets){
+        var result = hitLogic(lookAt, null, targets);
+        if(result == null) return null;
         if(result.getHit().isEmpty()) return result;
         attack(result.getHit());
         /*double trueDmg = (
