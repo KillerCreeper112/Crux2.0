@@ -270,8 +270,7 @@ public class CruxGoalBase implements ICruxGoal {
         return hit(false, (Entity[]) null);
     }
 
-    public @Nullable EntityHit.Result hitLogic(boolean lookAt, @Nullable Predicate<Entity> filter, @Nullable Entity @Nullable... targets){
-        if(!preAttemptAttack()) return null;
+    public @Nullable EntityHit.Result rawHitLogic(boolean lookAt, @Nullable Predicate<Entity> filter, @Nullable Entity @Nullable... targets){
         float attackCooldown = 1f; //Could be used for something down the road.
 
         double range = CruxAttribute.ATTACK_RANGE.get(mob) * Math.max(attackCooldown, .25f);
@@ -301,6 +300,11 @@ public class CruxGoalBase implements ICruxGoal {
             }
         }
         return result;
+    }
+
+    public @Nullable EntityHit.Result hitLogic(boolean lookAt, @Nullable Predicate<Entity> filter, @Nullable Entity @Nullable... targets){
+        if(!preAttemptAttack()) return null;
+        return rawHitLogic(lookAt, filter, targets);
     }
 
     protected @Nullable EntityHit.Result hit(boolean lookAt, @Nullable Entity @Nullable... targets){
