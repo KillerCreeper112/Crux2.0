@@ -480,6 +480,8 @@ public class CustomBlocksListener implements Listener {
                     );
                     return;
                 }
+                Material itemType = item.getType();
+
 
                 UseOnContext ctx = new UseOnContext(nmsPlayer, hand, result);
                 InteractionResult nmsResult = nmsItem.useOn(ctx);
@@ -487,7 +489,12 @@ public class CustomBlocksListener implements Listener {
                     nmsSkip.put(p.getUniqueId(), true);
                     InteractionResult result2 = nmsItem.use(nmsPlayer.getCommandSenderWorld(), nmsPlayer, hand);
                     if(result2 instanceof InteractionResult.Success success && success.heldItemTransformedTo() != null){
-                        nmsPlayer.setItemInHand(hand, success.heldItemTransformedTo());
+                        if(MaterialSetTag.ITEMS_BOATS.isTagged(itemType)){
+                            ItemStack gotted = p.getInventory().getItemInMainHand();
+                            if(!CruxItem.isEmpty(gotted)){
+                                gotted.setAmount(gotted.getAmount()-1);
+                            }
+                        }else nmsPlayer.setItemInHand(hand, success.heldItemTransformedTo());
                     }
                     nmsSkip.remove(p.getUniqueId());
                 }
