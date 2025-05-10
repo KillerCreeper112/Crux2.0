@@ -157,7 +157,7 @@ public class CruxEntityDamager implements EntityDamager {
         if(target instanceof LivingEntity e && e.getNoDamageTicks() > 0) return null;
         CruxEntityDamageEvent event = new CruxEntityDamageEvent(target, damager, attackLoc,
                 damage, kb, upkb,
-                calculateDamage(damage), calculateKnockback(kb), calculateUpKnockback(upkb))
+                /*calculateDamage(damage)*/damage, calculateKnockback(kb), calculateUpKnockback(upkb))
                 .setCause(cause);
         if(!event.callEvent()) return event;
         double dmg = event.getDmg();
