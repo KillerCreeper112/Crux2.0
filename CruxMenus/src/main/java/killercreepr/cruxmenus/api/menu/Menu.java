@@ -87,8 +87,8 @@ public interface Menu extends CommonMenu, InventoryHolder {
      * Called after creation.
      */
     default void load(){
-        getModules().load();
         refresh();
+        getModules().load();
     }
 
     @Nullable Slot getSlot(int index);

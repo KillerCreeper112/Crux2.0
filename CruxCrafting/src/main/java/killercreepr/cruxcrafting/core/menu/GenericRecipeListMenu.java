@@ -48,7 +48,6 @@ public class GenericRecipeListMenu extends ConfigMenu {
     protected IActivePagedMenuModule<?> pagedModule;
     @Override
     public void load() {
-        super.load();
         var module = new PagedCruxCraftingRecipesMenuModule(
             "crafting_recipe_list",
             NumberProvider.uniformArray(
@@ -59,32 +58,10 @@ public class GenericRecipeListMenu extends ConfigMenu {
             null, null, null, Crux.key("crafting_recipe_list"), getRecipeManager()
         ).build(this);
         modules.register(module);
-        module.load(this);
         pagedModule = (IActivePagedMenuModule<?>) module;
-
-        addSlot(new SimpleFixedSlot(this, inventory.getSize()-6){
-            @Override
-            public void onClick(@NotNull HumanEntity p, @NotNull InventoryClickEvent event) {
-                super.onClick(p, event);
-                IActivePagedMenuModule<?> paged = (IActivePagedMenuModule<?>) module;
-                int oldPage = paged.getPage();
-                paged.addPage(-1);
-                if(oldPage == paged.getPage()) return;
-                CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
-            }
-        });
-        addSlot(new SimpleFixedSlot(this, inventory.getSize()-4){
-            @Override
-            public void onClick(@NotNull HumanEntity p, @NotNull InventoryClickEvent event) {
-                super.onClick(p, event);
-                IActivePagedMenuModule<?> paged = (IActivePagedMenuModule<?>) module;
-                int oldPage = paged.getPage();
-                paged.addPage(1);
-                if(oldPage == paged.getPage()) return;
-                CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
-            }
-        });
         menuContainer();
+        super.load();
+        //module.load(this);
     }
 
     public CruxCraftingRecipeManager getRecipeManager(){
@@ -95,19 +72,45 @@ public class GenericRecipeListMenu extends ConfigMenu {
     public void onRefresh() {
         super.onRefresh();
 
-        //todo pages being dumb
-        /*if(pagedModule.getPage() > 0){
-            setItem(inventory.getSize()-6, CruxItem.create(Material.ARROW)
-                .itemName("Previous Page")
-                .itemModel(Crux.key("gui/arrow_left"))
-                .item());
+        addSlot(new SimpleFixedSlot(this, inventory.getSize()-6){
+            @Override
+            public void onClick(@NotNull HumanEntity p, @NotNull InventoryClickEvent event) {
+                super.onClick(p, event);
+                IActivePagedMenuModule<?> paged = (IActivePagedMenuModule<?>) pagedModule;
+                int oldPage = paged.getPage();
+                paged.addPage(-1);
+                if(oldPage == paged.getPage()) return;
+                refresh();
+                CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
+            }
+        });
+        addSlot(new SimpleFixedSlot(this, inventory.getSize()-4){
+            @Override
+            public void onClick(@NotNull HumanEntity p, @NotNull InventoryClickEvent event) {
+                super.onClick(p, event);
+                IActivePagedMenuModule<?> paged = (IActivePagedMenuModule<?>) pagedModule;
+                int oldPage = paged.getPage();
+                paged.addPage(1);
+                if(oldPage == paged.getPage()) return;
+                refresh();
+                CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
+            }
+        });
+
+        if(pagedModule != null){
+            if(pagedModule.getPage() > 0){
+                setItem(inventory.getSize()-6, CruxItem.create(Material.ARROW)
+                    .itemName("Previous Page")
+                    .itemModel(Crux.key("gui/arrow_left"))
+                    .item());
+            }else setItem(inventory.getSize()-6, CruxItem.create(Material.AIR).item());
+            if(pagedModule.getPage() < pagedModule.getMaxPage()){
+                setItem(inventory.getSize()-4, CruxItem.create(Material.ARROW)
+                    .itemName("Next Page")
+                    .itemModel(Crux.key("gui/arrow_right"))
+                    .item());
+            }else setItem(inventory.getSize()-4, CruxItem.create(Material.AIR).item());
         }
-        if(pagedModule.getPage() < pagedModule.getMaxPage()){
-            setItem(inventory.getSize()-4, CruxItem.create(Material.ARROW)
-                .itemName("Next Page")
-                .itemModel(Crux.key("gui/arrow_right"))
-                .item());
-        }*/
         if(showCategories()) setupCategories();
 
         setItem(inventory.getSize()-5, CruxItem.create(Material.ARROW)
@@ -143,6 +146,7 @@ public class GenericRecipeListMenu extends ConfigMenu {
                 super.onClick(p, event);
                 if(!info.has("selected_recipe_category")) return;
                 info(info.remove("selected_recipe_category"));
+                pagedModule.setPage(0);
                 refresh();
                 CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
             }
@@ -162,6 +166,7 @@ public class GenericRecipeListMenu extends ConfigMenu {
             public void onClick(@NotNull HumanEntity p, @NotNull InventoryClickEvent event) {
                 super.onClick(p, event);
                 info(info.append("selected_recipe_category", Holder.direct(RecipeCategory.EQUIPMENT)));
+                pagedModule.setPage(0);
                 refresh();
                 CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
             }
@@ -180,6 +185,7 @@ public class GenericRecipeListMenu extends ConfigMenu {
             public void onClick(@NotNull HumanEntity p, @NotNull InventoryClickEvent event) {
                 super.onClick(p, event);
                 info(info.append("selected_recipe_category", Holder.direct(RecipeCategory.BUILDING)));
+                pagedModule.setPage(0);
                 refresh();
                 CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
             }
@@ -198,6 +204,7 @@ public class GenericRecipeListMenu extends ConfigMenu {
             public void onClick(@NotNull HumanEntity p, @NotNull InventoryClickEvent event) {
                 super.onClick(p, event);
                 info(info.append("selected_recipe_category", Holder.direct(RecipeCategory.MISC)));
+                pagedModule.setPage(0);
                 refresh();
                 CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
             }
