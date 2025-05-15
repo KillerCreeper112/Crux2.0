@@ -79,8 +79,7 @@ public class CruxEntitiesCommands {
     }
 
     public static int spawn(@NotNull CommandSourceStack source, @NotNull CruxMob mob, @NotNull Location spawn, int amount){
-        for(int i = amount; i > 0; i--){
-            i--;
+        for(int i = 0; i < amount; i++){
             mob.spawn(spawn);
         }
         Communicator.chat("Spawned " + amount + " " + mob.getName() + "'s at " +
