@@ -68,35 +68,14 @@ public class GenericRecipeListMenu extends ConfigMenu {
         return info.getOrThrow("crafting_recipe_manager", CruxCraftingRecipeManager.class);
     }
 
+    /**
+     * Sets the MenuHolder's items and click actions.
+     *
+     * @param holder
+     */
     @Override
-    public void onRefresh() {
-        super.onRefresh();
-
-        addSlot(new SimpleFixedSlot(this, inventory.getSize()-6){
-            @Override
-            public void onClick(@NotNull HumanEntity p, @NotNull InventoryClickEvent event) {
-                super.onClick(p, event);
-                IActivePagedMenuModule<?> paged = (IActivePagedMenuModule<?>) pagedModule;
-                int oldPage = paged.getPage();
-                paged.addPage(-1);
-                if(oldPage == paged.getPage()) return;
-                refresh();
-                CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
-            }
-        });
-        addSlot(new SimpleFixedSlot(this, inventory.getSize()-4){
-            @Override
-            public void onClick(@NotNull HumanEntity p, @NotNull InventoryClickEvent event) {
-                super.onClick(p, event);
-                IActivePagedMenuModule<?> paged = (IActivePagedMenuModule<?>) pagedModule;
-                int oldPage = paged.getPage();
-                paged.addPage(1);
-                if(oldPage == paged.getPage()) return;
-                refresh();
-                CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
-            }
-        });
-
+    public void setItems(@NotNull MenuHolder holder) {
+        super.setItems(holder);
         if(pagedModule != null){
             if(pagedModule.getPage() > 0){
                 setItem(inventory.getSize()-6, CruxItem.create(Material.ARROW)
@@ -111,6 +90,36 @@ public class GenericRecipeListMenu extends ConfigMenu {
                     .item());
             }else setItem(inventory.getSize()-4, CruxItem.create(Material.AIR).item());
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        super.onRefresh();
+
+        addSlot(new SimpleFixedSlot(this, inventory.getSize()-6){
+            @Override
+            public void onClick(@NotNull HumanEntity p, @NotNull InventoryClickEvent event) {
+                super.onClick(p, event);
+                IActivePagedMenuModule<?> paged = pagedModule;
+                int oldPage = paged.getPage();
+                paged.addPage(-1);
+                if(oldPage == paged.getPage()) return;
+                refresh();
+                CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
+            }
+        });
+        addSlot(new SimpleFixedSlot(this, inventory.getSize()-4){
+            @Override
+            public void onClick(@NotNull HumanEntity p, @NotNull InventoryClickEvent event) {
+                super.onClick(p, event);
+                IActivePagedMenuModule<?> paged = pagedModule;
+                int oldPage = paged.getPage();
+                paged.addPage(1);
+                if(oldPage == paged.getPage()) return;
+                refresh();
+                CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
+            }
+        });
         if(showCategories()) setupCategories();
 
         setItem(inventory.getSize()-5, CruxItem.create(Material.ARROW)
