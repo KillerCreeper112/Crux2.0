@@ -27,6 +27,12 @@ public class CruxEntityUtil {
         return GENERAL_SLOTS;
     }
 
+    public static boolean isNonSurvivalPlayer(Entity e){
+        if(!(e instanceof HumanEntity p)) return false;
+        GameMode mode = p.getGameMode();
+        return mode == GameMode.CREATIVE || mode == GameMode.SPECTATOR;
+    }
+
     public static boolean isValid(Entity e){
         if(e == null) return false;
         if(!e.isValid()) return false;
