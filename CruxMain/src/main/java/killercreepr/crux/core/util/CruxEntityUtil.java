@@ -73,8 +73,8 @@ public class CruxEntityUtil {
     public static @Nullable Block getBlockStandingOn(@NotNull Entity entity) {
         Block block = entity.getLocation().getBlock();
         Block blockBelow = block.getRelative(BlockFace.DOWN);
-        if (!block.getType().isAir() && block.getType() != Material.LIGHT) return block;
-        if (!blockBelow.getType().isAir()) return blockBelow;
+        if (!block.getType().isEmpty() && block.getType() != Material.LIGHT) return block;
+        if (!blockBelow.getType().isEmpty()) return blockBelow;
 
         // Expand players hitbox by 0.3, which is the maximum size a player can be off a block
         // Whilst not falling off

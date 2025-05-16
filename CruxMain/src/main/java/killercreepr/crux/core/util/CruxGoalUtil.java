@@ -113,7 +113,11 @@ public class CruxGoalUtil {
     public static <T extends Goal<Mob>> @Nullable T getGoal(@NotNull Mob mob, @NotNull Class<T> clazz, @NotNull GoalKey<Mob> key){
         Goal<Mob> goal = Bukkit.getMobGoals().getGoal(mob, key);
         if(goal==null) return null;
-        return clazz.cast(goal);
+        try{
+            return clazz.cast(goal);
+        }catch (ClassCastException ignored){
+            return null;
+        }
     }
 
     public static <T extends Goal<Mob>> @NotNull T getOrAddGoal(@NotNull Mob mob, @NotNull Class<T> clazz, @NotNull GoalKey<Mob> key, int priority,

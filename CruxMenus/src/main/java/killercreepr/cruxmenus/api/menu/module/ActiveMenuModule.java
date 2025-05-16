@@ -15,7 +15,7 @@ public interface ActiveMenuModule extends Keyed, StringIdentifiable {
     default void onUpdate(@NotNull Menu menu){}
 
     default void load(@NotNull Menu menu){
-        refresh(menu);
+        //refresh(menu);
     }
     default void refresh(@NotNull Menu menu){}
     default @Nullable MergedTagContainer buildTags(@NotNull Menu menu, @NotNull TagParser tagParser){ return null; }
