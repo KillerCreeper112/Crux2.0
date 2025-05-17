@@ -43,7 +43,9 @@ public class FileItemTag extends SimpleFileHandler<ItemTag> {
                         return ItemTag.itemTag(tag);
                     }
                 }
-                return CruxRegistries.ITEM_TAG.get(Crux.key(itemKey.substring(1)));
+                var got = CruxRegistries.ITEM_TAG.get(Crux.key(itemKey.substring(1)));
+                if(got == null) Crux.logError("No item tag of " + itemKey + " found!");
+                return got;
             }
         }
         return null;
