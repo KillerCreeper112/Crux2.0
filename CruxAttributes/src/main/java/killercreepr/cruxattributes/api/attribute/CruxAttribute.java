@@ -267,6 +267,13 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
         return container != null && !container.isEmpty();
     }
 
+    static <P extends PersistentDataHolder> boolean hasAttributeData(@Nullable P i, @NotNull CruxAttribute attribute){
+        PersistentDataContainer components = getComponents(i);
+        if(components == null) return false;
+        PersistentDataContainer container = getContainer(components);
+        return container != null && getAttributeContainerFromBase(container, attribute) != null;
+    }
+
     static <P extends PersistentDataHolder> P clearAttributes(@Nullable P i){
         if(i == null) return null;
         PersistentDataContainer components = getComponents(i);
