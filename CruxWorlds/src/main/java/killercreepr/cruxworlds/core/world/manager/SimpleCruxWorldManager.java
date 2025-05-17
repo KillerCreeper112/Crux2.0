@@ -109,6 +109,8 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
 
     @Override
     public CompletableFuture<Boolean> deleteWorld(@NotNull CruxWorld world) {
+        if(!world.toBukkitWorld().getPlayers().isEmpty()) return CompletableFuture.completedFuture(false);
+        world.onPreDelete();
         unloadWorld(world, false);
         boolean x = CruxWorldUtil.deleteWorld(world.toBukkitWorld());
         if(x){

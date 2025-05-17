@@ -41,6 +41,9 @@ public interface CruxWorld extends CruxKeyed, DataComponentHandler {
     default void onDelete(){
         getModules().forEach(WorldModule::onDelete);
     }
+    default void onPreDelete(){
+        getModules().forEach(WorldModule::onPreDelete);
+    }
     default void onChunkLoad(@NotNull Chunk chunk){
         getModules().forEach(module -> module.onChunkLoad(chunk));
     }
