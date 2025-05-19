@@ -28,12 +28,14 @@ public class MinerHolder extends PlayerTickedDataHolder {
         this(KEY, parent, blockManager);
     }
 
-    protected @Nullable Double lastBreakSpeed;
-    protected @Nullable Long lastMine;
+    //protected @Nullable Double lastBreakSpeed;
+    protected @Nullable Byte lastMine;
     @Override
     public void onTick(@NotNull Player e) {
         if(lastMine == null) return;
-        if(hasMinedWithin(2)) return;
+        lastMine--;
+        if(lastMine > 0) return;
+        //if(hasMinedWithin(3)) return;
         lastMine = null;
         resetBreakSpeed(e);
     }
@@ -46,10 +48,11 @@ public class MinerHolder extends PlayerTickedDataHolder {
     }
 
     public void resetBreakSpeed(@NotNull Player p){
-        if(lastBreakSpeed != null){
+        /*if(lastBreakSpeed != null){
             p.getAttribute(Attribute.BLOCK_BREAK_SPEED).setBaseValue(lastBreakSpeed);
             lastBreakSpeed = null;
-        }
+        }*/
+        p.getAttribute(Attribute.BLOCK_BREAK_SPEED).setBaseValue(1D);
     }
 
     public int getBlockInteractionRange(@NotNull Player p){
@@ -71,12 +74,12 @@ public class MinerHolder extends PlayerTickedDataHolder {
     }
 
     public void onMine(@NotNull Player p, @NotNull ActiveCruxBlock block){
-        lastMine = System.currentTimeMillis();
+        lastMine = 2;
         float mineSpeed = block.getCruxBlock().getComponents().getOrDefault(CruxComponents.UNBREAKABLE, false) ?
             0f : block.getMineSpeed(Miner.entity(p.getInventory().getItemInMainHand(), p), true);
-        if(lastBreakSpeed == null){
+        /*if(lastBreakSpeed == null){
             lastBreakSpeed = p.getAttribute(Attribute.BLOCK_BREAK_SPEED).getBaseValue();
-        }
+        }*/
         setMineSpeed(p, mineSpeed);
     }
 
@@ -86,28 +89,28 @@ public class MinerHolder extends PlayerTickedDataHolder {
         p.getAttribute(Attribute.BLOCK_BREAK_SPEED).setBaseValue(mineSpeed);
     }
 
-    public boolean hasMinedWithin(int ticks){
+    /*public boolean hasMinedWithin(int ticks){
         if(lastMine == null) return false;
         return CruxMath.hasOccurredWithin(lastMine, ticks);
-    }
+    }*/
 
-    public @Nullable Long getLastMine() {
+    /*public @Nullable Long getLastMine() {
         return lastMine;
-    }
+    }*/
 
     public @NotNull CruxBlockManager getBlockManager() {
         return blockManager;
     }
 
-    public @Nullable Double getLastBreakSpeed() {
+    /*public @Nullable Double getLastBreakSpeed() {
         return lastBreakSpeed;
     }
 
     public void setLastBreakSpeed(@Nullable Double lastBreakSpeed) {
         this.lastBreakSpeed = lastBreakSpeed;
-    }
+    }*/
 
-    public void setLastMine(@Nullable Long lastMine) {
+    public void setLastMine(@Nullable Byte lastMine) {
         this.lastMine = lastMine;
     }
 }
