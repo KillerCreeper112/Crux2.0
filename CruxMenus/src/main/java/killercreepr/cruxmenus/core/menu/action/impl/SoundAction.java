@@ -20,7 +20,7 @@ public class SoundAction extends SimpleMenuAction {
         if(args.length > 1){
             try{ pitch = Float.parseFloat(args[1]); } catch (IllegalArgumentException ignored){}
         }
-        float volume = 0.3f;
+        float volume = 0.2f;
         if(args.length > 2){
             try{ volume = Float.parseFloat(args[2]); } catch (IllegalArgumentException ignored){}
         }
