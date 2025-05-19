@@ -233,6 +233,10 @@ public class CruxMath {
         return (System.currentTimeMillis() - (50L * ticks)) <= value;
     }
 
+    public static boolean hasOccurredWithin(long value, long ticks){
+        return (System.currentTimeMillis() - (50L * ticks)) <= value;
+    }
+
     public static boolean testChance(double chance){
         return testChance(RANDOM, chance);
     }

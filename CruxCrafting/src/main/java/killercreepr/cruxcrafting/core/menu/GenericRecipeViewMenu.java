@@ -212,11 +212,11 @@ public class GenericRecipeViewMenu extends ConfigMenu {
                 super.onClick(p, event);
                 if(menuContainer() ==null || menuContainer().getPrevious() == null){
                     p.closeInventory();
-                    CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
+                    CreateSound.sound(Sound.UI_BUTTON_CLICK, 0.2f, 1f).playFor(p);
                     return;
                 }
                 menuContainer().back(p);
-                CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
+                CreateSound.sound(Sound.UI_BUTTON_CLICK, 0.2f, 1f).playFor(p);
             }
         });
         setItem(25, CruxItem.create(Material.ARROW)
@@ -234,7 +234,7 @@ public class GenericRecipeViewMenu extends ConfigMenu {
         CruxMenusModule menus = CruxRegistries.MODULES.getModuleOrThrow(CruxMenusModule.class);
         menus.menuRegistry().menuHolders().get(Crux.key("crafting/recipe/view"))
             .open(p, info.append("crafting_recipe", Holder.direct(newRecipe)));
-        CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
+        CreateSound.sound(Sound.UI_BUTTON_CLICK, 0.2f, 1f).playFor(p);
     }
 
     public CruxCraftingRecipe nextRecipe(int add){

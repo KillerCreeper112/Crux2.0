@@ -87,7 +87,7 @@ public class ActivePagedCruxCraftingRecipeMenuModule extends GenericActivePagedM
                         .build()
                     );
                     if(container != null) container.addOpenedMenu(opened);
-                    CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
+                    CreateSound.sound(Sound.UI_BUTTON_CLICK, 0.2f, 1f).playFor(p);
                 }
             }
         };

@@ -105,7 +105,7 @@ public class GenericRecipeListMenu extends ConfigMenu {
                 paged.addPage(-1);
                 if(oldPage == paged.getPage()) return;
                 refresh();
-                CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
+                CreateSound.sound(Sound.UI_BUTTON_CLICK, 0.2f, 1f).playFor(p);
             }
         });
         addSlot(new SimpleFixedSlot(this, inventory.getSize()-4){
@@ -117,7 +117,7 @@ public class GenericRecipeListMenu extends ConfigMenu {
                 paged.addPage(1);
                 if(oldPage == paged.getPage()) return;
                 refresh();
-                CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
+                CreateSound.sound(Sound.UI_BUTTON_CLICK, 0.2f, 1f).playFor(p);
             }
         });
         if(showCategories()) setupCategories();
@@ -132,11 +132,11 @@ public class GenericRecipeListMenu extends ConfigMenu {
                 var previous = menuContainer();
                 if(previous==null || previous.getPrevious() == null){
                     p.closeInventory();
-                    CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
+                    CreateSound.sound(Sound.UI_BUTTON_CLICK, 0.2f, 1f).playFor(p);
                     return;
                 }
                 previous.back(p);
-                CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
+                CreateSound.sound(Sound.UI_BUTTON_CLICK, 0.2f, 1f).playFor(p);
             }
         });
     }
@@ -157,7 +157,7 @@ public class GenericRecipeListMenu extends ConfigMenu {
                 info(info.remove("selected_recipe_category"));
                 pagedModule.setPage(0);
                 refresh();
-                CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
+                CreateSound.sound(Sound.UI_BUTTON_CLICK, 0.2f, 1f).playFor(p);
             }
         });
         setItem(3, CruxItem.create(Material.IRON_SWORD)
@@ -177,7 +177,7 @@ public class GenericRecipeListMenu extends ConfigMenu {
                 info(info.append("selected_recipe_category", Holder.direct(RecipeCategory.EQUIPMENT)));
                 pagedModule.setPage(0);
                 refresh();
-                CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
+                CreateSound.sound(Sound.UI_BUTTON_CLICK, 0.2f, 1f).playFor(p);
             }
         });
         setItem(4, CruxItem.create(Material.BRICKS)
@@ -196,7 +196,7 @@ public class GenericRecipeListMenu extends ConfigMenu {
                 info(info.append("selected_recipe_category", Holder.direct(RecipeCategory.BUILDING)));
                 pagedModule.setPage(0);
                 refresh();
-                CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
+                CreateSound.sound(Sound.UI_BUTTON_CLICK, 0.2f, 1f).playFor(p);
             }
         });
         setItem(5, CruxItem.create(Material.LAVA_BUCKET)
@@ -215,7 +215,7 @@ public class GenericRecipeListMenu extends ConfigMenu {
                 info(info.append("selected_recipe_category", Holder.direct(RecipeCategory.MISC)));
                 pagedModule.setPage(0);
                 refresh();
-                CreateSound.sound(Sound.UI_BUTTON_CLICK).playFor(p);
+                CreateSound.sound(Sound.UI_BUTTON_CLICK, 0.2f, 1f).playFor(p);
             }
         });
     }
