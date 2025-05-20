@@ -51,6 +51,7 @@ public class SimpleNaturalEntitySpawner implements NaturalEntitySpawner {
         int attempts = 0;
         while(attempt == null){
             Block b = random(centerBlock, radius, innerRadius);
+            if(b == null) continue;
             SpawnContext ctx = SpawnContext.simple(b, random);
             attempt = attemptFind(b, ctx, yCheckMin, yCheckMax);
             attempts++;
@@ -114,10 +115,14 @@ public class SimpleNaturalEntitySpawner implements NaturalEntitySpawner {
         });
     }
 
-    public @NotNull Block random(@NotNull Block center, int radius, int innerRadius){
+    public @Nullable Block random(@NotNull Block center, int radius, int innerRadius){
         int x = CruxMath.random(innerRadius, radius, random) * (random.nextBoolean() ? -1 : 1);
         int y = 0;
         int z = CruxMath.random(innerRadius, radius, random) * (random.nextBoolean() ? -1 : 1);
+
+        int chunkX = (center.getX() + x) >> 4;
+        int chunkZ = (center.getZ() + z) >> 4;
+        if(!center.getWorld().isChunkLoaded(chunkX, chunkZ)) return null;
         return center.getRelative(x,y,z);
     }
 }
