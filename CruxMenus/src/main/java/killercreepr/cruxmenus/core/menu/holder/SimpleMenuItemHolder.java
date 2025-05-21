@@ -9,6 +9,7 @@ import killercreepr.cruxmenus.api.menu.action.click.ClickActions;
 import killercreepr.cruxmenus.api.menu.contex.MenuContext;
 import killercreepr.cruxmenus.api.menu.holder.MenuItemHolder;
 import killercreepr.cruxmenus.api.menu.item.MenuItem;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,7 +30,7 @@ public class SimpleMenuItemHolder implements MenuItemHolder {
         return info;
     }
 
-    public @NotNull MenuItem getDisplayItem(@NotNull Player p, @NotNull MenuContext info) {
+    public @NotNull MenuItem getDisplayItem(@NotNull Entity p, @NotNull MenuContext info) {
         Evaluation evaluation = new Evaluation(this, p, info);
         return MenuItem.item(this, info, evaluation.evaluateInfo());
     }
@@ -44,10 +45,10 @@ public class SimpleMenuItemHolder implements MenuItemHolder {
 
     public static class Evaluation implements MenuItemHolder.InfoEvaluator{
         private final @NotNull MenuItemHolder item;
-        private final @NotNull Player p;
+        private final @NotNull Entity p;
         private final @NotNull MenuContext context;
 
-        public Evaluation(@NotNull MenuItemHolder item, @NotNull Player p, @NotNull MenuContext context) {
+        public Evaluation(@NotNull MenuItemHolder item, @NotNull Entity p, @NotNull MenuContext context) {
             this.item = item;
             this.p = p;
             this.context = context;
