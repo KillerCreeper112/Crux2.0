@@ -1,13 +1,13 @@
 package killercreepr.cruxmenus.api.event;
 
 import killercreepr.cruxmenus.api.menu.Menu;
-import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.Cancellable;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class MenuPlayerCancellableEvent extends MenuPlayerEvent implements Cancellable {
+public abstract class MenuEntityCancellableEvent extends MenuEntityEvent implements Cancellable {
     protected boolean cancel = false;
-    public MenuPlayerCancellableEvent(@NotNull HumanEntity who, @NotNull Menu menu) {
+    public MenuEntityCancellableEvent(@NotNull Entity who, @NotNull Menu menu) {
         super(who, menu);
     }
 

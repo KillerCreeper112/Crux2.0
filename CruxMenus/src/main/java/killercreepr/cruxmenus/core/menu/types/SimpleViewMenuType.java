@@ -4,6 +4,7 @@ import killercreepr.crux.core.data.SimpleKeyed;
 import killercreepr.cruxmenus.api.menu.ViewedMenu;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.MenuType;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +17,7 @@ public class SimpleViewMenuType extends SimpleKeyed implements ViewMenuType{
     }
 
     @Override
-    public @NotNull ViewedMenu create(@NotNull HumanEntity viewer, @NotNull Component title) {
+    public @NotNull ViewedMenu create(@NotNull Entity viewer, @NotNull Component title) {
         return new SimpleViewMenu(type).reconstruct(viewer, title);
     }
 }

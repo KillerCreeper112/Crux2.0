@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when an opened menu is closed.
  */
-public class MenuCloseEvent extends MenuPlayerCancellableEvent{
+public class MenuCloseEvent extends MenuEntityCancellableEvent {
     private static final HandlerList HANDLER_LIST = new HandlerList();
     public MenuCloseEvent(@NotNull HumanEntity who, @NotNull Menu menu) {
         super(who, menu);

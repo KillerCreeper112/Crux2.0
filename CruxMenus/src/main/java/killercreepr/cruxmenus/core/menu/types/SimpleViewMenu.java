@@ -5,6 +5,7 @@ import killercreepr.cruxmenus.api.menu.ViewedMenu;
 import killercreepr.cruxmenus.core.menu.BukkitViewMenu;
 import killercreepr.cruxmenus.core.registries.Menus;
 import net.kyori.adventure.text.Component;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.MenuType;
 import org.jetbrains.annotations.NotNull;
@@ -16,8 +17,8 @@ public class SimpleViewMenu extends BukkitViewMenu {
     }
 
     @Override
-    public ViewedMenu reconstruct(@NotNull HumanEntity p, @NotNull Component name) {
-        return super.reconstruct(type.create(p, name));
+    public ViewedMenu reconstruct(@NotNull Entity p, @NotNull Component name) {
+        return super.reconstruct(type.create((HumanEntity) p, name));
     }
 
     @Override

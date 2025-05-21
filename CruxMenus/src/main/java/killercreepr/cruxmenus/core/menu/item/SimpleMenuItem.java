@@ -6,7 +6,6 @@ import killercreepr.crux.api.item.dynamic.DynamicItem;
 import killercreepr.crux.api.registry.Registry;
 import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.crux.api.text.format.FormatSerializer;
-import killercreepr.crux.api.text.resolver.StringResolver;
 import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.crux.api.text.tags.container.TagContainer;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
@@ -23,6 +22,7 @@ import killercreepr.cruxmenus.api.menu.item.MenuItem;
 import killercreepr.cruxmenus.api.menu.item.requirement.ViewCondition;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -128,7 +128,7 @@ public class SimpleMenuItem implements MenuItem {
         return false;
     }
 
-    public @Nullable ItemStack buildItem(@NotNull HumanEntity p){
+    public @Nullable ItemStack buildItem(@NotNull Entity p){
         DynamicItem item = base.getItem().value();
         if(item == null) return null;
         item = item.clone();
@@ -141,7 +141,7 @@ public class SimpleMenuItem implements MenuItem {
         return item.buildItem(context);
     }
 
-    public @NotNull CompletableFuture<CruxItem> buildItemCompletely(@NotNull HumanEntity p){
+    public @NotNull CompletableFuture<CruxItem> buildItemCompletely(@NotNull Entity p){
         DynamicItem item = base.getItem().value();
         if(item == null) return CompletableFuture.completedFuture(null);
         item = item.clone();
@@ -154,7 +154,7 @@ public class SimpleMenuItem implements MenuItem {
         return item.buildCompletely(context);
     }
 
-    public @NotNull MenuItemClickEvent click(@NotNull HumanEntity p, @NotNull InventoryClickEvent event){
+    public @NotNull MenuItemClickEvent click(@NotNull Entity p, @NotNull InventoryClickEvent event){
         ActionContext actionInfo = ActionContext.context(
             evaluatedContext.getMenu(),
             inputtedContext.info().append(evaluatedContext.info()),
@@ -182,11 +182,11 @@ public class SimpleMenuItem implements MenuItem {
         return null;
     }
 
-    public boolean performAction(@NotNull HumanEntity p, @NotNull String action, @NotNull ActionContext actionInfo){
+    public boolean performAction(@NotNull Entity p, @NotNull String action, @NotNull ActionContext actionInfo){
         return performAction(p, action, actionInfo, evaluatedContext.getMenu().getHolder().getRegistry().menuActions());
     }
 
-    public boolean performAction(@NotNull HumanEntity p, @NotNull String action,
+    public boolean performAction(@NotNull Entity p, @NotNull String action,
                                  @NotNull ActionContext actionInfo, @NotNull Registry<MenuAction> actions){
         String actionName = extractAction(action);
         if(actionName == null) return false;

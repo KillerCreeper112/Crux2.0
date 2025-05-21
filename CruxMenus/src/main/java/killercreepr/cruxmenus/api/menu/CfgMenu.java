@@ -9,7 +9,7 @@ import killercreepr.cruxmenus.api.menu.holder.MenuHolder;
 import killercreepr.cruxmenus.api.menu.holder.MenuItemHolder;
 import killercreepr.cruxmenus.api.menu.holder.MenuItems;
 import killercreepr.cruxmenus.api.menu.item.MenuItem;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +25,7 @@ public interface CfgMenu extends Menu, DataInfoHolder {
     void setItems(@NotNull MenuHolder holder, @NotNull MenuContext ctx);
     void setItems(@NotNull MenuItems items);
     void setItems(@NotNull MenuItems items, @NotNull MenuContext ctx);
-    default void setItem(int slot, @Nullable MenuItem item, @NotNull Player viewer){
+    default void setItem(int slot, @Nullable MenuItem item, @NotNull Entity viewer){
         setItem(slot, item, viewer, false);
     }
 
@@ -35,7 +35,7 @@ public interface CfgMenu extends Menu, DataInfoHolder {
     @ApiStatus.Experimental
     CfgMenu info(@NotNull DataExchange info);
 
-    default void setItem(int slot, @Nullable MenuItem item, @NotNull Player viewer, boolean silent){
+    default void setItem(int slot, @Nullable MenuItem item, @NotNull Entity viewer, boolean silent){
         if(true){//todo
             if(item==null){
                 setItem(slot, null, silent);
@@ -70,9 +70,9 @@ public interface CfgMenu extends Menu, DataInfoHolder {
     @Nullable
     MenuItem setItem(@NotNull MenuHolder holder, int index);
     @Nullable
-    MenuItem setItem(@NotNull MenuHolder holder, int index, @NotNull Player viewer, @NotNull MenuContext menuContext);
+    MenuItem setItem(@NotNull MenuHolder holder, int index, @NotNull Entity viewer, @NotNull MenuContext menuContext);
     @Nullable
-    MenuItem setItem(@NotNull MenuItemHolder menuItem, @NotNull Player viewer, @NotNull MenuContext menuContext);
+    MenuItem setItem(@NotNull MenuItemHolder menuItem, @NotNull Entity viewer, @NotNull MenuContext menuContext);
     @Nullable
     MenuItem setItem(@NotNull MenuItemHolder menuItem, @NotNull MenuContext menuContext);
 }

@@ -10,6 +10,7 @@ import killercreepr.cruxmenus.api.menu.contex.ActionContext;
 import killercreepr.cruxmenus.api.menu.contex.MenuContext;
 import killercreepr.cruxmenus.api.menu.holder.MenuItemHolder;
 import killercreepr.cruxmenus.core.menu.item.SimpleMenuItem;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -34,15 +35,15 @@ public interface MenuItem {
 
     @NotNull MergedTagContainer buildTags();
 
-    @Nullable ItemStack buildItem(@NotNull HumanEntity p);
+    @Nullable ItemStack buildItem(@NotNull Entity p);
 
-    @NotNull CompletableFuture<CruxItem> buildItemCompletely(@NotNull HumanEntity p);
+    @NotNull CompletableFuture<CruxItem> buildItemCompletely(@NotNull Entity p);
 
-    @NotNull MenuItemClickEvent click(@NotNull HumanEntity p, @NotNull InventoryClickEvent event);
+    @NotNull MenuItemClickEvent click(@NotNull Entity p, @NotNull InventoryClickEvent event);
 
-    boolean performAction(@NotNull HumanEntity p, @NotNull String action, @NotNull ActionContext actionInfo);
+    boolean performAction(@NotNull Entity p, @NotNull String action, @NotNull ActionContext actionInfo);
 
-    boolean performAction(@NotNull HumanEntity p, @NotNull String action,
+    boolean performAction(@NotNull Entity p, @NotNull String action,
                           @NotNull ActionContext actionInfo, @NotNull Registry<MenuAction> actions);
 
     @NotNull

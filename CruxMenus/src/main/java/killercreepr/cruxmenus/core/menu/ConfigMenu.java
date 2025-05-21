@@ -8,7 +8,6 @@ import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.text.container.SimpleMergedTagContainer;
 import killercreepr.crux.core.text.context.SimpleInputContext;
 import killercreepr.crux.core.util.InvUtil;
-import killercreepr.cruxmenus.api.event.MenuRefreshEvent;
 import killercreepr.cruxmenus.api.menu.CfgMenu;
 import killercreepr.cruxmenus.api.menu.Menu;
 import killercreepr.cruxmenus.api.menu.contex.MenuContext;
@@ -19,9 +18,7 @@ import killercreepr.cruxmenus.api.menu.item.MenuItem;
 import killercreepr.cruxmenus.core.menu.types.ViewMenuType;
 import killercreepr.cruxmenus.core.registries.MenuRegistries;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -106,7 +103,7 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
 
     //
     public Map<Integer, MenuItem> buildItems(@NotNull MenuItems items, @NotNull MenuContext menuContext){
-        Player viewer = info.getOrThrow("viewer", Player.class);
+        Entity viewer = info.getOrThrow("viewer", Entity.class);
         Map<Integer, MenuItem> map = new HashMap<>();
         items.forEach(list -> list.forEach(menuItem ->{
             MenuItem i = menuItem.getDisplayItem(viewer, menuContext);
@@ -122,7 +119,7 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
 
     @Override
     public void setItems(@NotNull MenuItems items, @NotNull MenuContext menuContext) {
-        Player viewer = info.getOrThrow("viewer", Player.class);
+        Entity viewer = info.getOrThrow("viewer", Entity.class);
         buildItems(items, menuContext).forEach((slot, item) ->{
             setItem(slot, item, viewer);
         });
@@ -141,7 +138,7 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
         return this;
     }
 
-    public @Nullable MenuItem setItem(@NotNull MenuItemHolder menuItem, @NotNull Player viewer, @NotNull MenuContext menuContext){
+    public @Nullable MenuItem setItem(@NotNull MenuItemHolder menuItem, @NotNull Entity viewer, @NotNull MenuContext menuContext){
         MenuItem i = menuItem.getDisplayItem(viewer, menuContext);
         Optional<List<Number>> slot = i.getSlots();
         if(slot.isEmpty() || !i.canDisplay()) return i;
@@ -154,10 +151,10 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
 
     @Override
     public @Nullable MenuItem setItem(@NotNull MenuItemHolder menuItem, @NotNull MenuContext menuContext) {
-        return setItem(menuItem, info.getOrThrow("viewer", Player.class), menuContext);
+        return setItem(menuItem, info.getOrThrow("viewer", Entity.class), menuContext);
     }
 
-    public void setItem(int index, @NotNull MenuItemHolder menuItem, @NotNull Player viewer, @NotNull MenuContext menuContext){
+    public void setItem(int index, @NotNull MenuItemHolder menuItem, @NotNull Entity viewer, @NotNull MenuContext menuContext){
         MenuItem i = menuItem.getDisplayItem(viewer, menuContext);
         if(!i.canDisplay()) return;
         setItem(index, i, viewer);
@@ -165,12 +162,12 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
 
     @Override
     public @Nullable MenuItem setItem(@NotNull MenuHolder holder, int index){
-        Player viewer = info.getOrThrow("viewer", Player.class);
+        Entity viewer = info.getOrThrow("viewer", Entity.class);
         MenuContext menuContext = MenuContext.context(this, info, tags);
         return setItem(holder, index, viewer, menuContext);
     }
 
-    public @Nullable MenuItem setItem(@NotNull MenuHolder holder, int index, @NotNull Player viewer, @NotNull MenuContext menuContext){
+    public @Nullable MenuItem setItem(@NotNull MenuHolder holder, int index, @NotNull Entity viewer, @NotNull MenuContext menuContext){
         AtomicReference<MenuItem> reference = new AtomicReference<>();
         holder.getItems().forEach(list -> list.forEach(menuItem ->{
             MenuItem i = menuItem.getDisplayItem(viewer, menuContext);
@@ -216,7 +213,7 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
                 Crux.key(holder.getRegistry().getFormat().deserializeString(holder.info().get("menu_type") + "",buildTags()))
             );
             if(viewMenuType != null){
-                return reconstruct(viewMenuType.create(info().getOrThrow("viewer",HumanEntity.class), name).getView().getTopInventory());
+                return reconstruct(viewMenuType.create(info().getOrThrow("viewer", Entity.class), name).getView().getTopInventory());
             }else Crux.logWarning("No ViewMenuType found of " + holder.getRegistry().getFormat().deserializeString(holder.info().get("menu_type") + "",buildTags()) + " (" + holder.info().get("menu_type") +  ")");
         }
 
@@ -288,7 +285,7 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
 
         MenuItem menuItem = items.get(event.getSlot());
         if(menuItem==null) return;
-        if(!(event.getWhoClicked() instanceof Player p)) return;
-        menuItem.click(p, event);
+        //if(!(event.getWhoClicked() instanceof Entity p)) return;
+        menuItem.click(event.getWhoClicked(), event);
     }
 }
