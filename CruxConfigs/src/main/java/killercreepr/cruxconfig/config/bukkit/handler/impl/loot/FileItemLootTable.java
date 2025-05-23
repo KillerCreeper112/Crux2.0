@@ -32,7 +32,9 @@ public class FileItemLootTable implements FileObjectHandler<ItemLootTable> {
             String s = ctx.getRegistry().deserializeFromFile(String.class, e);
             if(s == null) return null;
             if(s.startsWith("#")) s = s.substring(1);
-            return (ItemLootTable) CruxRegistries.ITEM_LOOT_TABLE.get(Crux.key(s));
+            var item = (ItemLootTable) CruxRegistries.ITEM_LOOT_TABLE.get(Crux.key(s));
+            if(item == null) Crux.logError(s + " item loot table not found!");
+            return item;
         }
         FileRegistry registry = ctx.getRegistry();
         Key key = registry.deserializeFromFile(Key.class, o.get("key"));
