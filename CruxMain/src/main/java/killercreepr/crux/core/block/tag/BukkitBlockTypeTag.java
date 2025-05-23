@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 
 public class BukkitBlockTypeTag implements BlockTag, BlockTypeTag {
     protected final @NotNull Tag<Material> tag;

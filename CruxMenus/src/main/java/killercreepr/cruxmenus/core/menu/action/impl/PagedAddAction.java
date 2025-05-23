@@ -5,7 +5,6 @@ import killercreepr.cruxmenus.api.menu.CfgMenu;
 import killercreepr.cruxmenus.api.menu.contex.ActionContext;
 import killercreepr.cruxmenus.api.menu.module.active.IActivePagedMenuModule;
 import killercreepr.cruxmenus.core.menu.action.SimpleMenuAction;
-import killercreepr.cruxmenus.core.menu.module.standard.ActivePagedMenuModule;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 

@@ -3,7 +3,6 @@ package killercreepr.cruxmenus.core.menu.holder;
 import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
-import killercreepr.crux.core.Crux;
 import killercreepr.cruxmenus.api.event.MenuOpenEvent;
 import killercreepr.cruxmenus.api.menu.CfgMenu;
 import killercreepr.cruxmenus.api.menu.holder.MenuHolder;

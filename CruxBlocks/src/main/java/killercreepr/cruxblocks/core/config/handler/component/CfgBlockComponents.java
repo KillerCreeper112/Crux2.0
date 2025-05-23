@@ -18,7 +18,6 @@ import killercreepr.cruxblocks.core.block.component.standard.EntitySpawnerCompon
 import killercreepr.cruxblocks.core.block.component.standard.InteractHarvestableBlockComponent;
 import killercreepr.cruxblocks.core.block.component.standard.PlaceableCheckComponent;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileDataComponentType;
-import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.FileItemLootTable;
 import killercreepr.cruxconfig.config.bukkit.registry.FileDataComponentRegistry;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;

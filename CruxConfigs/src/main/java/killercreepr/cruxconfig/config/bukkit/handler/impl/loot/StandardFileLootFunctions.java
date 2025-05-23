@@ -1,6 +1,7 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 
 import com.google.common.reflect.TypeToken;
+import killercreepr.crux.api.enchantment.DropFormula;
 import killercreepr.crux.api.loot.conditions.LootCondition;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.Crux;
@@ -114,6 +115,28 @@ public class StandardFileLootFunctions {
                     enchant,
                     slots,
                     registry.deserializeFromFile(NumberProvider.class, e.get("max"))
+                );
+            }
+        });
+        file.registerCustomHandler(new SimpleFileItemLootFunction<>(Crux.key("enchant_bonus_count")) {
+
+            @Override
+            public @Nullable EnchantBonusCountFunction deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                FileRegistry registry = ctx.getRegistry();
+                Collection<LootCondition> conditions = registry.deserializeFromFile(
+                    new TypeToken<Collection<LootCondition>>(){}.getType(), e.get("conditions")
+                );
+                Collection<EquipmentSlot> slots = registry.deserializeFromFile(
+                    new TypeToken<Collection<EquipmentSlot>>(){}.getType(), e.get("slots")
+                );
+                Key enchant = registry.deserializeFromFile(Key.class, e.get("enchantment"));
+                if(slots == null) slots = Set.of(EquipmentSlot.HAND);
+                return new EnchantBonusCountFunction(
+                    conditions,
+                    target,
+                    registry.deserializeFromFile(DropFormula.class, e.get("formula")),
+                    enchant,
+                    slots
                 );
             }
         });

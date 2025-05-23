@@ -2,7 +2,6 @@ package killercreepr.crux.core.scheduler;
 
 import killercreepr.crux.api.scheduler.CruxScheduler;
 import killercreepr.crux.core.Crux;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;

@@ -6,7 +6,6 @@ import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.List;
 
 public class SimpleKeyTag implements KeyTag, KeyTypeTag {
     protected final Key key;

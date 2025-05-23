@@ -1,6 +1,5 @@
 package killercreepr.crux.core.item.tag;
 
-import killercreepr.crux.api.component.parser.StringListEncodeComponent;
 import killercreepr.crux.api.item.ItemListHolder;
 import killercreepr.crux.api.item.tag.ItemTag;
 import net.kyori.adventure.key.Key;

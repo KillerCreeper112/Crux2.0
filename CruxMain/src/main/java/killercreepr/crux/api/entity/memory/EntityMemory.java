@@ -1,6 +1,5 @@
 package killercreepr.crux.api.entity.memory;
 
-import io.netty.util.concurrent.CompleteFuture;
 import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.api.registry.KeyedRegistry;
 import killercreepr.crux.api.registry.MappedRegistry;

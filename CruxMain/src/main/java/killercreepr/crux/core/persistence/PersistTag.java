@@ -1,9 +1,7 @@
 package killercreepr.crux.core.persistence;
 
 import killercreepr.crux.api.registry.MappedRegistry;
-import killercreepr.crux.api.registry.Registry;
 import killercreepr.crux.core.registry.SimpleMappedRegistry;
-import killercreepr.crux.core.registry.SimpleRegistry;
 import killercreepr.crux.core.util.CruxTag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;

@@ -6,7 +6,6 @@ import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 public class SingleBlockTypeTag extends BaseBlockTag implements BlockTypeTag {

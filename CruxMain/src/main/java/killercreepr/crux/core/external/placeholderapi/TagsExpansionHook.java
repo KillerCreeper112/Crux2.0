@@ -2,16 +2,11 @@ package killercreepr.crux.core.external.placeholderapi;
 
 import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.crux.api.text.format.FormatSerializer;
-import killercreepr.crux.api.text.hook.HookedObjectContainer;
 import killercreepr.crux.api.text.hook.ObjectTag;
 import killercreepr.crux.api.text.resolver.StringResolver;
-import killercreepr.crux.api.text.resolver.TagResolver;
 import killercreepr.crux.api.text.tags.container.TagContainer;
 import killercreepr.crux.core.text.container.StringTagContainer;
-import killercreepr.crux.core.text.format.Format;
 import killercreepr.crux.core.text.format.FormatArgs;
-import killercreepr.crux.core.text.format.FormatParserContext;
-import killercreepr.crux.core.text.hook.StringHookedObjectTag;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;

@@ -1,7 +1,6 @@
 package killercreepr.crux.core.item.predicate;
 
 import killercreepr.crux.api.item.predicate.ItemAmountPredicate;
-import killercreepr.crux.api.item.predicate.ItemPredicate;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 

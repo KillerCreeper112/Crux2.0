@@ -1,7 +1,6 @@
 package killercreepr.crux.core.text.tags.standard.object;
 
 import killercreepr.crux.api.text.format.FormatPrefix;
-import killercreepr.crux.api.text.hook.ObjectTag;
 import killercreepr.crux.api.text.hook.SimpleObjectTag;
 import killercreepr.crux.api.text.tags.TagParser;
 import killercreepr.crux.core.Crux;

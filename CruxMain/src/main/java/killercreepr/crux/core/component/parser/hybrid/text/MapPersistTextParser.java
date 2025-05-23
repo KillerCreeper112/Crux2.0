@@ -4,9 +4,7 @@ import killercreepr.crux.api.component.parser.InputDecodeContext;
 import killercreepr.crux.api.component.parser.hybrid.PersistTextParser;
 import killercreepr.crux.api.component.parser.hybrid.TextInputField;
 import killercreepr.crux.api.component.parser.hybrid.TextInputResultParser;
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.component.parser.hybrid.text.persistence.MapDataType;
-import org.bukkit.Bukkit;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.logging.Level;
 
 public class MapPersistTextParser<T> implements PersistTextParser<T> {
     protected final @NotNull Map<String, TextInputField<T, ?>> elements;

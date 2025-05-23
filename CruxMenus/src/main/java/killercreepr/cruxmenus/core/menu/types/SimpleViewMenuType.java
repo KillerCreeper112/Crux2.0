@@ -5,7 +5,6 @@ import killercreepr.cruxmenus.api.menu.ViewedMenu;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.MenuType;
 import org.jetbrains.annotations.NotNull;
 

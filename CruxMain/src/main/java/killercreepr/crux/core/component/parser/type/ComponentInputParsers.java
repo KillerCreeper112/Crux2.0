@@ -24,7 +24,6 @@ import killercreepr.crux.core.entity.predicate.EntityAllPredicate;
 import killercreepr.crux.core.entity.predicate.EntityAnyPredicate;
 import killercreepr.crux.core.item.predicate.ItemAllPredicate;
 import killercreepr.crux.core.item.predicate.ItemAnyPredicate;
-import killercreepr.crux.core.persistence.type.UUIDTagType;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.paper.ItemHolder;
 import net.kyori.adventure.key.Key;

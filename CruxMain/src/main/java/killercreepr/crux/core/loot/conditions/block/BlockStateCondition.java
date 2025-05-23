@@ -5,14 +5,11 @@ import killercreepr.crux.api.loot.LootContext;
 import killercreepr.crux.api.text.context.InputContext;
 import killercreepr.crux.api.text.tags.container.TagContainer;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
-import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.loot.conditions.BaseCondition;
 import killercreepr.crux.paper.block.BukkitStateCruxedBlock;
-import net.kyori.adventure.key.Key;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.Ageable;
-import org.bukkit.block.data.BlockData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -14,6 +14,7 @@ import killercreepr.crux.api.data.User;
 import killercreepr.crux.api.data.world.StoredChunk;
 import killercreepr.crux.api.data.world.StoredWorld;
 import killercreepr.crux.api.enchantment.CruxLevelBasedValue;
+import killercreepr.crux.api.enchantment.DropFormula;
 import killercreepr.crux.api.entity.CruxEntitySnapshot;
 import killercreepr.crux.api.entity.predicate.EntityPredicate;
 import killercreepr.crux.api.entity.tag.EntityTag;
@@ -113,6 +114,7 @@ public class BukkitCfgHandlers {
     public static final FileUser USER = new FileUser();
     public static final FileDynamicAttributeModifier DYNAMIC_ATTRIBUTE_MODIFIER = new FileDynamicAttributeModifier();
     public static final FileCruxLocation CRUX_LOCATION = new FileCruxLocation();
+    public static final FileDropFormula DROP_FORMULA = new FileDropFormula();
 
 
     public static final FileCruxLevelBasedValue CRUX_LEVEL_BASED_VALUE = new FileCruxLevelBasedValue();
@@ -167,6 +169,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(NumberLootTable.class, CommonLootTableHandlers.NUMBER);
         registry.registerFileHandler(User.class, USER);
         registry.registerFileHandler(CruxLevelBasedValue.class, CRUX_LEVEL_BASED_VALUE);
+        registry.registerFileHandler(DropFormula.class, DROP_FORMULA);
 
         registry.registerFileHandler(StoredWorld.class, STORED_WORLD);
         registry.registerFileHandler(StoredChunk.class, STORED_CHUNK);

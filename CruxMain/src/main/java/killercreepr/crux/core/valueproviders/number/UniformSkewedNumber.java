@@ -1,6 +1,5 @@
 package killercreepr.crux.core.valueproviders.number;
 
-import com.google.gson.internal.LazilyParsedNumber;
 import killercreepr.crux.api.text.context.InputContext;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.util.CruxMath;

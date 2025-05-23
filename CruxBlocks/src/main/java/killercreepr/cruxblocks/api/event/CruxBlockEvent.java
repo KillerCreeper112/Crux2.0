@@ -3,7 +3,6 @@ package killercreepr.cruxblocks.api.event;
 import killercreepr.crux.core.Crux;
 import killercreepr.cruxblocks.api.block.CruxBlock;
 import killercreepr.cruxblocks.api.block.context.BlockContext;
-import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 

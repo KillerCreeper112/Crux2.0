@@ -1,6 +1,5 @@
 package killercreepr.crux.core.loot.conditions;
 
-import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.api.loot.LootContext;
 import killercreepr.crux.api.loot.conditions.LootCondition;

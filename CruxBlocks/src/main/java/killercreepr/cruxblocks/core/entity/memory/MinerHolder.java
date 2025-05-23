@@ -4,7 +4,6 @@ import killercreepr.crux.api.entity.memory.PlayerMemory;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.component.CruxComponents;
 import killercreepr.crux.core.entity.memory.PlayerTickedDataHolder;
-import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxblocks.api.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.api.block.manager.CruxBlockManager;
 import killercreepr.cruxblocks.api.mining.user.Miner;
