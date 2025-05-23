@@ -4,21 +4,20 @@ import com.google.common.reflect.TypeToken;
 import killercreepr.crux.api.loot.conditions.LootCondition;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.Crux;
-import killercreepr.crux.core.loot.item.functions.ItemAmountFunction;
-import killercreepr.crux.core.loot.item.functions.ItemDamageFunction;
-import killercreepr.crux.core.loot.item.functions.ItemEnchantFunction;
-import killercreepr.crux.core.loot.item.functions.ItemEnchantRandomlyFunction;
+import killercreepr.crux.core.loot.item.functions.*;
 import killercreepr.crux.core.util.CruxObjects;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileArray;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import net.kyori.adventure.key.Key;
+import org.bukkit.inventory.EquipmentSlot;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 public class StandardFileLootFunctions {
     public static void register(@NotNull FileItemLootFunction file){
@@ -90,6 +89,32 @@ public class StandardFileLootFunctions {
                     new TypeToken<Collection<LootCondition>>(){}.getType(), e.get("conditions")
                 );
                 return new ItemEnchantRandomlyFunction(conditions, rolls, distinct);
+            }
+        });
+        file.registerCustomHandler(new SimpleFileItemLootFunction<>(Crux.key("enchanted_count")) {
+
+            @Override
+            public @Nullable EnchantedCountFunction deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                FileRegistry registry = ctx.getRegistry();
+                NumberProvider amount = registry.deserializeFromFile(NumberProvider.class, e.get("amount"));
+                if(amount==null) return null;
+                Collection<LootCondition> conditions = registry.deserializeFromFile(
+                    new TypeToken<Collection<LootCondition>>(){}.getType(), e.get("conditions")
+                );
+                Collection<EquipmentSlot> slots = registry.deserializeFromFile(
+                    new TypeToken<Collection<EquipmentSlot>>(){}.getType(), e.get("slots")
+                );
+                Key enchant = registry.deserializeFromFile(Key.class, e.get("enchant"));
+                if(slots == null) slots = Set.of(EquipmentSlot.HAND);
+                return new EnchantedCountFunction(
+                    conditions,
+                    target,
+                    amount,
+                    e.getObject(Boolean.class, "add", true),
+                    enchant,
+                    slots,
+                    registry.deserializeFromFile(NumberProvider.class, e.get("max"))
+                );
             }
         });
     }
