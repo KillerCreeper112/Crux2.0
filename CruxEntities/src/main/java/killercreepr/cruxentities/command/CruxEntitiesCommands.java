@@ -7,7 +7,9 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.resolvers.BlockPositionResolver;
+import io.papermc.paper.command.brigadier.argument.resolvers.FinePositionResolver;
 import io.papermc.paper.math.BlockPosition;
+import io.papermc.paper.math.Position;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import killercreepr.crux.api.communication.Communicator;
@@ -46,11 +48,11 @@ public class CruxEntitiesCommands {
                             1
                         ))
                         .then(
-                            Commands.argument("location", ArgumentTypes.blockPosition())
+                            Commands.argument("location", ArgumentTypes.finePosition())
                                 .executes(ctx -> spawn(
                                     ctx.getSource(),
                                     ctx.getArgument("entity", CruxMob.class),
-                                    ctx.getArgument("location", BlockPositionResolver.class).resolve(ctx.getSource()),
+                                    ctx.getArgument("location", FinePositionResolver.class).resolve(ctx.getSource()),
                                     1
                                 ))
                                 .then(
@@ -58,7 +60,7 @@ public class CruxEntitiesCommands {
                                         .executes(ctx -> spawn(
                                             ctx.getSource(),
                                             ctx.getArgument("entity", CruxMob.class),
-                                            ctx.getArgument("location", BlockPositionResolver.class).resolve(ctx.getSource()),
+                                            ctx.getArgument("location", FinePositionResolver.class).resolve(ctx.getSource()),
                                             ctx.getArgument("amount", Integer.class)
                                         ))
                                 )
@@ -73,7 +75,7 @@ public class CruxEntitiesCommands {
         return Objects.requireNonNullElse(source.getExecutor(), source.getSender());
     }
 
-    public static int spawn(@NotNull CommandSourceStack source, @NotNull CruxMob mob, @NotNull BlockPosition location, int amount){
+    public static int spawn(@NotNull CommandSourceStack source, @NotNull CruxMob mob, @NotNull Position location, int amount){
         Location spawn = location.toLocation(source.getLocation().getWorld());
         return spawn(source, mob, spawn, amount);
     }
