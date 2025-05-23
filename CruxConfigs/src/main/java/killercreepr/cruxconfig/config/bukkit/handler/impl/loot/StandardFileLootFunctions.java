@@ -96,7 +96,7 @@ public class StandardFileLootFunctions {
             @Override
             public @Nullable EnchantedCountFunction deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 FileRegistry registry = ctx.getRegistry();
-                NumberProvider amount = registry.deserializeFromFile(NumberProvider.class, e.get("amount"));
+                NumberProvider amount = registry.deserializeFromFile(NumberProvider.class, e.get("count"));
                 if(amount==null) return null;
                 Collection<LootCondition> conditions = registry.deserializeFromFile(
                     new TypeToken<Collection<LootCondition>>(){}.getType(), e.get("conditions")

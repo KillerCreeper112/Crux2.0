@@ -65,6 +65,10 @@ public class RandomChanceEnchantedBonusCondition implements LootCondition {
         return enchant;
     }
 
+    public float getAddonChance(LootContext ctx){
+        return 0f;
+    }
+
     @Override
     public boolean test(@NotNull LootContext context) {
         var entity = context.info().get(target);
@@ -78,6 +82,7 @@ public class RandomChanceEnchantedBonusCondition implements LootCondition {
         }
 
         float f = level > 0 ? this.enchantedChance.calculate(level) : this.unenchantedChance;
+        f+= getAddonChance(context);
         return context.getRandom().nextFloat() < f;
     }
 }
