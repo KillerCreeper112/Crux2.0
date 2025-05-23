@@ -104,7 +104,7 @@ public class StandardFileLootFunctions {
                 Collection<EquipmentSlot> slots = registry.deserializeFromFile(
                     new TypeToken<Collection<EquipmentSlot>>(){}.getType(), e.get("slots")
                 );
-                Key enchant = registry.deserializeFromFile(Key.class, e.get("enchant"));
+                Key enchant = registry.deserializeFromFile(Key.class, e.get("enchantment"));
                 if(slots == null) slots = Set.of(EquipmentSlot.HAND);
                 return new EnchantedCountFunction(
                     conditions,

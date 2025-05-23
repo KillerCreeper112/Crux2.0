@@ -10,7 +10,7 @@ public interface CruxLevelBasedValue {
         }
 
         public float calculate(int level) {
-            return this.base + this.perLevelAboveFirst * (float)(level - 1);
+            return this.base + (this.perLevelAboveFirst * (float)(level - 1));
         }
 
         public float base() {

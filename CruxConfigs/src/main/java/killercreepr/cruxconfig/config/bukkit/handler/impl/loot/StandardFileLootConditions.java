@@ -198,7 +198,7 @@ public class StandardFileLootConditions {
                 if(chance==null) return null;
                 Float unenchanted = e.getObject(Float.class, "unenchanted_chance");
                 if(unenchanted==null) return null;
-                Key key = ctx.getRegistry().deserializeFromFile(Key.class, e.get("enchant"));
+                Key key = ctx.getRegistry().deserializeFromFile(Key.class, e.get("enchantment"));
                 if(key == null) return null;
                 Collection<EquipmentSlot> slots = ctx.getRegistry().deserializeFromFile(
                     new TypeToken<Collection<EquipmentSlot>>(){}.getType(),
