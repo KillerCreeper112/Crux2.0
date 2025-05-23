@@ -5,9 +5,7 @@ import killercreepr.cruxentities.entity.CruxMob;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.entity.EntityTransformEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 public class EntityLogicListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)

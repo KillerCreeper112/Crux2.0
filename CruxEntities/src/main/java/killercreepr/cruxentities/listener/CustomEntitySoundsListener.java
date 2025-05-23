@@ -1,6 +1,5 @@
 package killercreepr.cruxentities.listener;
 
-import killercreepr.crux.api.block.sound.CreateBlockSoundGroup;
 import killercreepr.crux.api.communication.CreateSound;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.util.CruxEntityUtil;
@@ -10,7 +9,6 @@ import killercreepr.cruxentities.entity.mob.goal.sound.SoundedMob;
 import org.bukkit.GameEvent;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

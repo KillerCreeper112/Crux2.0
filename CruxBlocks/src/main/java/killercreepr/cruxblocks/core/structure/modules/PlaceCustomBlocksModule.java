@@ -15,7 +15,6 @@ import killercreepr.cruxstructures.api.structure.module.StructureModule;
 import killercreepr.cruxstructures.core.registries.StructureRegistries;
 import killercreepr.cruxstructures.core.util.CruxStructureUtil;
 import net.kyori.adventure.key.Key;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;

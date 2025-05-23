@@ -18,7 +18,6 @@ import killercreepr.cruxadvancements.api.advancement.objective.progress.Objectiv
 import killercreepr.cruxadvancements.api.advancement.progress.CruxAdvancementProgress;
 import killercreepr.cruxadvancements.core.advancement.objective.NumberObjective;
 import killercreepr.cruxadvancements.core.advancement.objective.progress.NumberObjectiveProgress;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

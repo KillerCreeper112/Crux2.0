@@ -1,22 +1,18 @@
 package killercreepr.cruxadvancements.core.menu.module;
 
 import killercreepr.cruxconfig.config.common.FileContext;
-import killercreepr.cruxconfig.config.common.element.FileArray;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxmenus.api.menu.config.handler.FileMenuHolder;
-import killercreepr.cruxmenus.api.menu.holder.MenuItemHolder;
 import killercreepr.cruxmenus.api.menu.holder.MenuItems;
 import killercreepr.cruxmenus.api.menu.module.MenuModule;
 import killercreepr.cruxmenus.api.menu.module.config.MenuModuleBuilder;
 import killercreepr.cruxmenus.core.menu.config.handlers.SimpleFileMenuModuled;
-import killercreepr.cruxmenus.core.menu.module.standard.container.ItemsContainerMenuModule;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
-import java.util.function.Function;
+import java.util.UUID;
 
 public class TrackedAdvancementMenuModuleBuilder extends SimpleFileMenuModuled<MenuModule> implements MenuModuleBuilder {
     protected final @NotNull Key key;

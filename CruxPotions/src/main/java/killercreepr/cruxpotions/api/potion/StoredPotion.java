@@ -9,9 +9,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public interface StoredPotion {
     static Builder builder(){

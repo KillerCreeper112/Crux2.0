@@ -4,7 +4,6 @@ import killercreepr.crux.api.loot.LootContext;
 import killercreepr.crux.api.loot.bukkit.EventLootContexts;
 import killercreepr.cruxadvancements.core.advancement.objective.ObjectiveCommonData;
 import org.bukkit.event.entity.EntityPlaceEvent;
-import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class PlaceEntityObjective extends GenericEventObjective<EntityPlaceEvent> {

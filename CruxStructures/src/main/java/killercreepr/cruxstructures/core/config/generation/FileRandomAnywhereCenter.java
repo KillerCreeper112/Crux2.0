@@ -6,7 +6,6 @@ import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.PureYamlFileHandler;
 import killercreepr.cruxstructures.core.structure.generation.center.RandomAnywhereCenter;
-import killercreepr.cruxstructures.core.structure.generation.center.RandomSurfaceTopCenter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

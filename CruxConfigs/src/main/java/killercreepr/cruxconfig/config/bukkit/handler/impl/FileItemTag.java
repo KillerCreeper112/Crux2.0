@@ -1,6 +1,5 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
-import com.destroystokyo.paper.MaterialSetTag;
 import killercreepr.crux.api.item.tag.ItemTag;
 import killercreepr.crux.api.item.tag.ItemTypeTag;
 import killercreepr.crux.core.Crux;
@@ -15,7 +14,10 @@ import killercreepr.cruxconfig.config.common.element.FileGeneric;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.SimpleFileHandler;
 import net.kyori.adventure.key.Key;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Tag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

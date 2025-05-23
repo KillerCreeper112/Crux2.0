@@ -3,7 +3,6 @@ package killercreepr.cruxadvancements.api.event;
 import killercreepr.crux.core.Crux;
 import killercreepr.cruxadvancements.api.advancement.CruxAdvancement;
 import killercreepr.cruxadvancements.api.advancement.manager.CruxAdvancementManager;
-import org.bukkit.Bukkit;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;

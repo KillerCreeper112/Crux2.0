@@ -1,6 +1,5 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
-import com.destroystokyo.paper.MaterialTags;
 import killercreepr.crux.api.block.tag.BlockTag;
 import killercreepr.crux.api.block.tag.BlockTypeTag;
 import killercreepr.crux.core.Crux;

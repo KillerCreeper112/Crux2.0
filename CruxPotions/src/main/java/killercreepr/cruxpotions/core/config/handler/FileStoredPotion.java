@@ -1,6 +1,5 @@
 package killercreepr.cruxpotions.core.config.handler;
 
-import killercreepr.crux.api.component.parser.DataComponentDecoder;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileArray;
 import killercreepr.cruxconfig.config.common.element.FileElement;

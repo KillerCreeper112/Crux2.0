@@ -6,8 +6,6 @@ import killercreepr.crux.api.item.dynamic.DynamicItem;
 import killercreepr.crux.core.util.CruxObjects;
 import killercreepr.cruxadvancements.api.advancement.icon.CriterionDisplay;
 import killercreepr.cruxadvancements.crazy.advancement.CrazyAdvancementDisplay;
-import killercreepr.cruxadvancements.crazy.advancement.SimpleAdvancementFrame;
-import killercreepr.cruxadvancements.crazy.advancement.SimpleAdvancementVisibility;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;

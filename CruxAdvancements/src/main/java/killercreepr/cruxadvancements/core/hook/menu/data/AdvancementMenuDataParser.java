@@ -13,7 +13,6 @@ import killercreepr.cruxmenus.api.menu.holder.MenuItemHolder;
 import killercreepr.cruxmenus.core.menu.data.SimpleItemDataParser;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class AdvancementMenuDataParser extends SimpleItemDataParser {

@@ -1,13 +1,11 @@
 package killercreepr.cruxenchants.core.text.tags.object;
 
 import killercreepr.crux.api.text.format.FormatPrefix;
-import killercreepr.crux.api.text.hook.ObjectTag;
 import killercreepr.crux.api.text.hook.SimpleObjectTag;
 import killercreepr.crux.api.text.resolver.StringResolver;
 import killercreepr.crux.api.text.tags.TagParser;
 import killercreepr.crux.api.text.tags.container.TagContainer;
 import killercreepr.crux.core.text.resolver.Tag;
-import killercreepr.cruxenchants.api.enchant.ApplicableItemGroup;
 import killercreepr.cruxenchants.api.enchant.CruxEnchant;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

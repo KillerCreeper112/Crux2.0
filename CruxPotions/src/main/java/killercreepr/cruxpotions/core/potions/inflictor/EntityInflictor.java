@@ -4,13 +4,10 @@ import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.core.Crux;
 import killercreepr.cruxpotions.api.potion.inflictor.PotionInflictor;
 import net.kyori.adventure.key.Key;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
 import java.util.UUID;
 
 public class EntityInflictor implements PotionInflictor, Holder<Entity> {

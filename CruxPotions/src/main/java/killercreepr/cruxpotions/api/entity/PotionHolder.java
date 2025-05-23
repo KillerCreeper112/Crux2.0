@@ -1,8 +1,8 @@
 package killercreepr.cruxpotions.api.entity;
 
+import killercreepr.cruxpotions.api.event.EntityCruxPotionEvent;
 import killercreepr.cruxpotions.api.potion.ActivePotion;
 import killercreepr.cruxpotions.api.potion.CruxPotion;
-import killercreepr.cruxpotions.api.event.EntityCruxPotionEvent;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

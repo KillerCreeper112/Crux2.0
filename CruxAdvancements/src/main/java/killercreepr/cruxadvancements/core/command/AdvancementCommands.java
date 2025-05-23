@@ -26,7 +26,6 @@ import killercreepr.cruxadvancements.core.command.argument.CruxAdvancementResolv
 import killercreepr.cruxadvancements.core.data.AdvancementPair;
 import killercreepr.cruxadvancements.core.entity.memory.AdvancementHolder;
 import killercreepr.cruxconfig.config.bukkit.file.CruxJson;
-import killercreepr.cruxconfig.config.common.element.FileArray;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import net.kyori.adventure.key.Key;
 import org.bukkit.command.CommandSender;

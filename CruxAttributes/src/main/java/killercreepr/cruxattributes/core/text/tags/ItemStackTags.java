@@ -15,7 +15,6 @@ import killercreepr.cruxattributes.api.attribute.CruxAttributeModifier;
 import killercreepr.cruxattributes.api.equipment.CruxSlotGroup;
 import killercreepr.cruxattributes.api.values.ValuesProvider;
 import killercreepr.cruxattributes.core.component.CruxAttributeComponents;
-import net.kyori.adventure.key.Key;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -4,9 +4,8 @@ import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.core.Crux;
 import killercreepr.cruxitems.api.item.CruxedItemUpdater;
 import killercreepr.cruxitems.core.item.CruxedItemUpdateContext;
-import killercreepr.cruxpotions.core.component.PotionComponents;
-import killercreepr.cruxpotions.core.persistence.PotionPersistTags;
 import killercreepr.cruxpotions.api.potion.StoredPotion;
+import killercreepr.cruxpotions.core.component.PotionComponents;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Color;
 import org.bukkit.inventory.ItemStack;
@@ -17,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 public class PotionItemUpdater implements CruxedItemUpdater {
     public static final Key KEY = Crux.key("crux_potions");

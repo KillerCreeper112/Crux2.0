@@ -22,7 +22,6 @@ import killercreepr.crux.core.math.BlockPos;
 import killercreepr.cruxstructures.api.event.StructurePlaceEvent;
 import killercreepr.cruxstructures.api.structure.Structure;
 import net.kyori.adventure.key.Key;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.util.BoundingBox;

@@ -4,7 +4,6 @@ import com.google.common.reflect.TypeToken;
 import killercreepr.crux.api.loot.conditions.LootCondition;
 import killercreepr.crux.api.registry.KeyedRegistry;
 import killercreepr.crux.core.loot.conditions.AllOfCondition;
-import killercreepr.crux.core.text.tags.standard.minimessage.DurationTag;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileArray;
