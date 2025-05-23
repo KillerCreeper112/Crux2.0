@@ -157,6 +157,18 @@ public class StandardFileLootConditions {
             }
         });
 
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("if_target")) {
+            @Override
+            public @Nullable killercreepr.crux.core.loot.conditions.IfTargetCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                FileRegistry registry = ctx.getRegistry();
+                String targetType = e.getObject(String.class, "target_type");
+                if(targetType==null) return null;
+                LootCondition ifTrue = registry.deserializeFromFile(LootCondition.class, e.get("if"));
+                return new killercreepr.crux.core.loot.conditions.IfTargetCondition(target, targetType, ifTrue);
+            }
+        });
+
+
         file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("random_chance")) {
             @Override
             public @Nullable killercreepr.crux.core.loot.conditions.RandomChanceCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
