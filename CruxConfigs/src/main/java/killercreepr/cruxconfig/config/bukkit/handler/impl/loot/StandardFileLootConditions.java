@@ -2,6 +2,7 @@ package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 
 import com.google.common.reflect.TypeToken;
 import killercreepr.crux.api.block.predicate.BlockPredicate;
+import killercreepr.crux.api.enchantment.CruxLevelBasedValue;
 import killercreepr.crux.api.entity.predicate.EntityPredicate;
 import killercreepr.crux.api.item.predicate.ItemPredicate;
 import killercreepr.crux.api.loot.conditions.LootCondition;
@@ -175,6 +176,27 @@ public class StandardFileLootConditions {
                 return new killercreepr.crux.core.loot.conditions.RandomLuckChanceCondition(chance, luckMultiplier);
             }
         });
+
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("random_chance_with_enchanted_bonus")) {
+
+            @Override
+            public @Nullable RandomChanceEnchantedBonusCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                CruxLevelBasedValue chance = ctx.getRegistry().deserializeFromFile(CruxLevelBasedValue.class, e.get("enchanted_chance"));
+                if(chance==null) return null;
+                Float unenchanted = e.getObject(Float.class, "unenchanted_chance");
+                if(unenchanted==null) return null;
+                Key key = ctx.getRegistry().deserializeFromFile(Key.class, e.get("enchant"));
+                if(key == null) return null;
+                Collection<EquipmentSlot> slots = ctx.getRegistry().deserializeFromFile(
+                    new TypeToken<Collection<EquipmentSlot>>(){}.getType(),
+                    e.get("slots"));
+                if(slots == null) slots = Set.of(EquipmentSlot.HAND);
+                return new RandomChanceEnchantedBonusCondition(
+                    target, chance, unenchanted, key, slots
+                );
+            }
+        });
+
 
         file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("evaluation")) {
 
