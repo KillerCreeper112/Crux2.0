@@ -23,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 public class CruxMainModule implements CruxModule, Listener {
@@ -64,9 +65,11 @@ public class CruxMainModule implements CruxModule, Listener {
 
     public void onStop(){
         Crux.log(Level.INFO, "Server is shutting down!");
+
         for(EntityMemory data : EntityMemory.REGISTRY){
-            data.removeDataHolders(data.value());
+            data.forceRemoveDataHolders(data.value());
         }
+
         ServerShutDownEvent event = new ServerShutDownEvent();
         event.callEvent();
     }

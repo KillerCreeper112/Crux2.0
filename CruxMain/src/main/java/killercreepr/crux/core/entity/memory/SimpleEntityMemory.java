@@ -14,8 +14,11 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class SimpleEntityMemory implements EntityMemory {
+
     protected final DataHolderRegistry dataHolders;
     protected final UUID uuid;
     protected final Holder<? extends Entity> entity;
@@ -96,7 +99,7 @@ public class SimpleEntityMemory implements EntityMemory {
                 }catch (Exception ignored){
                     ignored.printStackTrace();;
                 }
-            }));
+            }, CLEANUP_EXECUTOR));
         }
 
         CompletableFuture<Void> combined = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
@@ -105,6 +108,23 @@ public class SimpleEntityMemory implements EntityMemory {
             return null;
         });
         EntityMemory.REMOVING_FUTURES.put(uuid, combined);
+        dataHolders.clear();
+    }
+
+    @Override
+    public void forceRemoveDataHolders(@Nullable Entity e){
+        for(DataHolder h : dataHolders.values()){
+            try{
+                if(e != null) h.onMemoryUnload(e);
+            }catch (Exception ignored){
+                ignored.printStackTrace();
+            }
+            try{
+                h.parentRemoving(e);
+            }catch (Exception ignored){
+                ignored.printStackTrace();;
+            }
+        }
         dataHolders.clear();
     }
 

@@ -16,6 +16,8 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -108,6 +110,7 @@ public interface EntityMemory extends Holder<Entity> {
     }
 
     Map<UUID, CompletableFuture<Void>> REMOVING_FUTURES = new HashMap<>();
+    ExecutorService CLEANUP_EXECUTOR = Executors.newFixedThreadPool(4);
 
     @NotNull KeyedRegistry<DataHolder> getDataHolders();
     @Nullable DataHolder getDataHolder(@NotNull Key key);
@@ -145,6 +148,7 @@ public interface EntityMemory extends Holder<Entity> {
      */
     boolean tick();
 
+    void forceRemoveDataHolders(@Nullable Entity e);
     void removeDataHolders(@Nullable Entity e);
 
     /**
