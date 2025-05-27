@@ -25,6 +25,7 @@ public interface CruxAttributeHandler extends CruxAttributeAccessor, CruxAttribu
         Builder add(CruxAttribute attribute, CruxAttributeModifier... modifiers);
         Builder add(CruxAttribute attribute, Collection<CruxAttributeModifier> modifiers);
         Builder add(CruxAttributeInstance instance);
+        Builder addAll(Collection<CruxAttributeInstance> instance);
         CruxAttributeHandler build();
         CruxAttributeAccessor buildImmutable();
     }

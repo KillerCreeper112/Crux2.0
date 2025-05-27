@@ -1,23 +1,24 @@
 package killercreepr.cruxattributes.core.listener;
 
 import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
+import killercreepr.crux.api.entity.CruxEntity;
 import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.core.Crux;
-import killercreepr.cruxattributes.api.attribute.CruxAttribute;
-import killercreepr.cruxattributes.api.attribute.CruxAttributeContainer;
-import killercreepr.cruxattributes.api.attribute.CruxAttributeInstance;
-import killercreepr.cruxattributes.api.attribute.CruxAttributeModifier;
+import killercreepr.cruxattributes.api.attribute.*;
 import killercreepr.cruxattributes.api.equipment.CruxSlot;
 import killercreepr.cruxattributes.core.component.CruxAttributeComponents;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.world.EntitiesUnloadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.UUID;
 
 public class CruxAttributeListener implements Listener {
@@ -70,5 +71,20 @@ public class CruxAttributeListener implements Listener {
             CosmeticHelmet cosmetic = data.getCosmeticHolder().getHelmet();
             if(cosmetic != null) cosmetic.update(event.getNewItemStack());
         }*/
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onEntitiesUnload(EntitiesUnloadEvent event) {
+        var handler = CruxAttributeCacheHandler.attributeCacheHandler();
+        event.getEntities().forEach(e ->{
+            var cache =  handler.removeCache(e);
+            if(cache == null) return;
+            saveAttributes(e, cache);
+        });
+    }
+
+    public void saveAttributes(Entity e, CruxAttributeHandler handler){
+        CruxEntity.entity(e).set(CruxAttributeComponents.CRUX_ATTRIBUTES,
+            CruxAttributeContainer.container((Collection<CruxAttributeInstance>) handler.getInstances()));
     }
 }

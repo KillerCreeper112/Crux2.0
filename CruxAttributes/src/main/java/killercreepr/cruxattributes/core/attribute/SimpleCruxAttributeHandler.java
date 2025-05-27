@@ -42,6 +42,16 @@ public class SimpleCruxAttributeHandler implements CruxAttributeHandler {
     }
 
     @Override
+    public CruxAttributeEditor removeModifiers(@NotNull Key @NotNull ... path) {
+        if(path.length < 1) throw new IllegalStateException("No path has been provided to remove CruxAttributeModifiers!");
+        instances.values().removeIf(instance -> {
+            instance.removeModifiers(path);
+            return instance.isEmpty();
+        });
+        return this;
+    }
+
+    @Override
     public CruxAttributeEditor clearModifiers(@NotNull CruxAttribute attribute) {
         instances.remove(attribute);
         return this;
@@ -127,6 +137,14 @@ public class SimpleCruxAttributeHandler implements CruxAttributeHandler {
         @Override
         public CruxAttributeHandler.Builder add(CruxAttributeInstance instance) {
             return add(instance.getAttribute(), instance.getModifiers());
+        }
+
+        @Override
+        public CruxAttributeHandler.Builder addAll(Collection<CruxAttributeInstance> instance) {
+            for (CruxAttributeInstance i : instance) {
+                add(i);
+            }
+            return this;
         }
 
         @Override

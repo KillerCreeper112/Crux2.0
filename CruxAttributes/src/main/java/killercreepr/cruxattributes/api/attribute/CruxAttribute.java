@@ -124,6 +124,10 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
     default double round(double value){ return killercreepr.crux.core.util.CruxMath.round(value, getRoundMultiple()); }
     default double round(double value, @NotNull RoundingMode roundingMode){ return CruxMath.round(value, getRoundMultiple(), roundingMode); }
 
+    static <P extends PersistentDataHolder> CruxAttributeHandler getOrCreateCache(P item){
+        return CruxAttributeCacheHandler.attributeCacheHandler().getOrCreateCache(item);
+    }
+
     static ItemStack updateItem(@Nullable ItemStack i){
         if(CruxItem.isEmpty(i)) return i;
         ItemMeta meta = i.getItemMeta();
@@ -172,13 +176,13 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
     }
 
     static @NotNull Collection<CruxAttributeInstance>
-    getInstances(@Nullable ItemStack i, @Nullable CruxSlot @Nullable... slots){
+    getInstances(@Nullable ItemStack i, @NotNull CruxSlot @Nullable... slots){
         if(CruxItem.isEmpty(i)) return new ArrayList<>();
         return getInstances(i.getItemMeta(), slots);
     }
 
     static
-    double get(@Nullable ItemStack i, @NotNull CruxAttribute attribute, @Nullable CruxSlot @Nullable... slots){
+    double get(@Nullable ItemStack i, @NotNull CruxAttribute attribute, @NotNull CruxSlot @Nullable... slots){
         return get(i, attribute, 0D, slots);
     }
 
@@ -193,7 +197,7 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
     }
 
     static
-    double get(@Nullable ItemStack i, @NotNull CruxAttribute attribute, double defaultValue, @Nullable CruxSlot @Nullable... slots){
+    double get(@Nullable ItemStack i, @NotNull CruxAttribute attribute, double defaultValue, @NotNull CruxSlot @Nullable... slots){
         if(CruxItem.isEmpty(i)) return defaultValue;
         return get(i.getItemMeta(), attribute, defaultValue, slots);
     }
@@ -232,7 +236,7 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
     }
 
     static <P extends PersistentDataHolder>
-    double get(@Nullable P i, @NotNull CruxAttribute attribute, @Nullable CruxSlot @Nullable... slots){
+    double get(@Nullable P i, @NotNull CruxAttribute attribute, @NotNull CruxSlot @Nullable... slots){
         return get(i, attribute, 0D, slots);
     }
 
@@ -242,7 +246,7 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
     }
 
     static <P extends PersistentDataHolder>
-    double get(@Nullable P i, @NotNull CruxAttribute attribute, double defaultValue, @Nullable CruxSlot @Nullable... slots){
+    double get(@Nullable P i, @NotNull CruxAttribute attribute, double defaultValue, @NotNull CruxSlot @Nullable... slots){
         CruxAttributeInstance x = getInstance(i, attribute, slots);
         if(x == null) return defaultValue;
         return x.getValue();
@@ -261,6 +265,11 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
     }
 
     static <P extends PersistentDataHolder> boolean hasAttributeData(@Nullable P i){
+        if(i==null) return false;
+
+        var cache = getOrCreateCache(i);
+        if(cache != null) return true;
+
         PersistentDataContainer components = getComponents(i);
         if(components == null) return false;
         PersistentDataContainer container = getContainer(components);
@@ -268,6 +277,11 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
     }
 
     static <P extends PersistentDataHolder> boolean hasAttributeData(@Nullable P i, @NotNull CruxAttribute attribute){
+        if(i==null) return false;
+
+        var cache = getOrCreateCache(i);
+        if(cache != null) return cache.getInstance(attribute) != null && !cache.getInstance(attribute).isEmpty();
+
         PersistentDataContainer components = getComponents(i);
         if(components == null) return false;
         PersistentDataContainer container = getContainer(components);
@@ -275,6 +289,17 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
     }
 
     static <P extends PersistentDataHolder> P clearAttributes(@Nullable P i){
+        if(i == null) return i;
+        var cache = getOrCreateCache(i);
+        if(cache != null){
+            cache.clearAllModifiers();
+            return i;
+        }
+
+        return clearAttributesRaw(i);
+    }
+
+    static <P extends PersistentDataHolder> P clearAttributesRaw(@Nullable P i){
         if(i == null) return null;
         PersistentDataContainer components = getComponents(i);
         if(components == null) return i;
@@ -284,6 +309,16 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
     }
 
     static <P extends PersistentDataHolder> P clearModifiers(@Nullable P i, @NotNull CruxAttribute attribute){
+        if(i == null) return i;
+        var cache = getOrCreateCache(i);
+        if(cache != null){
+            cache.clearModifiers(attribute);
+            return i;
+        }
+        return clearModifiersRaw(i, attribute);
+    }
+
+    static <P extends PersistentDataHolder> P clearModifiersRaw(@Nullable P i, @NotNull CruxAttribute attribute){
         PersistentDataContainer components = getComponents(i);
         if(components == null) return i;
         PersistentDataContainer container = getContainer(components);
@@ -308,6 +343,12 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
     static <P extends PersistentDataHolder> P removeModifiers(@Nullable P i,
                                                                      @NotNull Key @NotNull... path){
         if(i == null || path.length < 1) return i;
+        var cache = getOrCreateCache(i);
+        if(cache != null){
+            cache.removeModifiers(path);
+            return i;
+        }
+
         PersistentDataContainer components = getComponents(i);
         if(components==null) return i;
         PersistentDataContainer container = getContainer(components);
@@ -336,6 +377,19 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
      */
     static <P extends PersistentDataHolder> P removeModifier(@Nullable P i, @NotNull CruxAttribute attribute,
                                                                     @NotNull Key @NotNull... path){
+        if(i == null || path.length < 1) return i;
+
+        var cache = getOrCreateCache(i);
+        if(cache != null){
+            cache.removeModifier(attribute, path);
+            return i;
+        }
+
+        return removeModifierRaw(i, attribute, path);
+    }
+
+    static <P extends PersistentDataHolder> P removeModifierRaw(@Nullable P i, @NotNull CruxAttribute attribute,
+                                                             @NotNull Key @NotNull... path){
         if(i == null || path.length < 1) return i;
         PersistentDataContainer components = getComponents(i);
         if(components == null) return i;
@@ -434,6 +488,13 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
     static <P extends PersistentDataHolder> P addModifier(@Nullable P i, @NotNull CruxAttribute attribute,
                                                           @NotNull CruxAttributeModifier modifier, @NotNull Key... path){
         if(i == null) return null;
+
+        var cache = getOrCreateCache(i);
+        if(cache != null){
+            cache.addModifier(attribute, modifier.withPath(path));
+            return i;
+        }
+
         PersistentDataContainer components = getComponents(i);
         if(components == null) components = i.getPersistentDataContainer().getAdapterContext().newPersistentDataContainer();
         PersistentDataContainer container = getContainer(components);
@@ -547,6 +608,38 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
 
     static <P extends PersistentDataHolder> @NotNull Collection<CruxAttributeModifier>
     getModifiers(@Nullable P i, @NotNull CruxAttribute attribute, @NotNull CruxSlot @Nullable... slots){
+        if(i == null) return Set.of();
+        var cache = getOrCreateCache(i);
+        if(cache != null){
+            var instance = cache.getInstance(attribute);
+            if(instance == null) return Set.of();
+
+            if(slots != null && slots.length > 0){
+                Collection<CruxAttributeModifier> list = new ArrayList<>(instance.getModifiers());
+                list.removeIf(e -> !e.getSlotGroup().anyMatch(slots));
+                return list;
+            }
+            return instance.getModifiers();
+        }
+        return getModifiersRaw(i, attribute, slots);
+    }
+
+    static <P extends PersistentDataHolder> @NotNull Collection<CruxAttributeModifier>
+    getModifiersRaw(@Nullable P i, @NotNull CruxAttribute attribute, @NotNull CruxSlot @Nullable... slots){
+        if(i == null) return Set.of();
+        var cache = getOrCreateCache(i);
+        if(cache != null){
+            var instance = cache.getInstance(attribute);
+            if(instance == null) return Set.of();
+
+            if(slots != null && slots.length > 0){
+                Collection<CruxAttributeModifier> list = new ArrayList<>(instance.getModifiers());
+                list.removeIf(e -> !e.getSlotGroup().anyMatch(slots));
+                return list;
+            }
+            return instance.getModifiers();
+        }
+
         PersistentDataContainer components = getComponents(i);
         if(components==null) return Set.of();
         Collection<CruxAttributeModifier> list = new ArrayList<>();
@@ -566,6 +659,22 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
 
     static <P extends PersistentDataHolder> @NotNull Collection<CruxAttributeInstance>
     getInstances(@Nullable P i, @NotNull CruxSlot @Nullable... slots){
+        if(i == null) return Set.of();
+        var cache = getOrCreateCache(i);
+        if(cache != null){
+            if(slots == null || slots.length < 1) return (Collection<CruxAttributeInstance>) cache.getInstances();
+            Collection<CruxAttributeInstance> list = new HashSet<>();
+            for(var attribute : cache.getInstances()){
+                var instance = getInstance(i, attribute.getAttribute(), slots);
+                if(instance == null) continue;
+                list.add(instance);
+            }
+            return list;
+        }
+        return getInstancesRaw(i, slots);
+    }
+    static <P extends PersistentDataHolder> @NotNull Collection<CruxAttributeInstance>
+    getInstancesRaw(@Nullable P i, @NotNull CruxSlot @Nullable... slots){
         PersistentDataContainer components = getComponents(i);
         if(components==null) return Set.of();
         PersistentDataContainer container = getContainer(components);
@@ -587,6 +696,23 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
 
     static <P extends PersistentDataHolder>
     @Nullable CruxAttributeInstance getInstance(@Nullable P i, @NotNull CruxAttribute attribute, @NotNull CruxSlot @Nullable... slots){
+        if(i == null) return null;
+        var cache = getOrCreateCache(i);
+        if(cache != null){
+            var instance = cache.getInstance(attribute);
+            if(instance == null) return null;
+            if(slots != null && slots.length > 0){
+                Collection<CruxAttributeModifier> list = new ArrayList<>(instance.getModifiers());
+                list.removeIf(e -> !e.getSlotGroup().anyMatch(slots));
+                return CruxAttributeInstance.instance(attribute, list);
+            }
+            return instance;
+        }
+        return getInstanceRaw(i, attribute, slots);
+    }
+
+    static <P extends PersistentDataHolder>
+    @Nullable CruxAttributeInstance getInstanceRaw(@Nullable P i, @NotNull CruxAttribute attribute, @NotNull CruxSlot @Nullable... slots){
         PersistentDataContainer components = getComponents(i);
         if(components==null) return null;
         PersistentDataContainer modifierProvider = getAttributeContainer(components, attribute);
@@ -601,6 +727,27 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
     static <P extends PersistentDataHolder>
     @Nullable CruxAttributeInstance getInstance(@Nullable P i, @NotNull CruxAttribute attribute, @Nullable Collection<@Nullable CruxSlot> slots,
                                                       @Nullable Collection<@NotNull Operation> operations){
+        if(i==null) return null;
+        var cache = getOrCreateCache(i);
+        if(cache != null){
+            var instance = cache.getInstance(attribute);
+            if(instance == null) return null;
+
+            Collection<CruxAttributeModifier> list = new ArrayList<>(instance.getModifiers());
+            if(slots != null && !slots.isEmpty()){
+                list.removeIf(e -> !e.getSlotGroup().anyMatch(slots));
+            }
+            if(operations != null && !operations.isEmpty()){
+                list.removeIf(e -> !operations.contains(e.getOperation()));
+            }
+            return CruxAttributeInstance.instance(attribute, list);
+        }
+        return getInstanceRaw(i, attribute, slots, operations);
+    }
+
+    static <P extends PersistentDataHolder>
+    @Nullable CruxAttributeInstance getInstanceRaw(@Nullable P i, @NotNull CruxAttribute attribute, @Nullable Collection<@Nullable CruxSlot> slots,
+                                                @Nullable Collection<@NotNull Operation> operations){
         PersistentDataContainer components = getComponents(i);
         if(components==null) return null;
         PersistentDataContainer container = getContainer(components);
