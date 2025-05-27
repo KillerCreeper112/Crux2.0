@@ -65,7 +65,7 @@ public interface CruxAttributeCacheHandler {
             if(!(item instanceof Entity e)) return null;
             try{
                 var got = CACHE.get(e.getUniqueId(), () ->
-                    new Value(new WeakReference<>(e), CruxAttributeHandler.builder().addAll(CruxAttribute.getInstances(item)).build()));
+                    new Value(new WeakReference<>(e), CruxAttributeHandler.builder().addAll(CruxAttribute.getInstancesRaw(item)).build()));
                 return got.handler();
             } catch (ExecutionException ex) {
                 ex.printStackTrace();

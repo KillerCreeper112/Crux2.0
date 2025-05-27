@@ -658,6 +658,11 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
     }
 
     static <P extends PersistentDataHolder> @NotNull Collection<CruxAttributeInstance>
+    getInstancesRaw(@Nullable P i){
+        return getInstancesRaw(i, (CruxSlot[]) null);
+    }
+
+    static <P extends PersistentDataHolder> @NotNull Collection<CruxAttributeInstance>
     getInstances(@Nullable P i, @NotNull CruxSlot @Nullable... slots){
         if(i == null) return Set.of();
         var cache = getOrCreateCache(i);
@@ -683,7 +688,7 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
         for(NamespacedKey k : container.getKeys()){
             CruxAttribute attribute = CruxAttributeRegistries.ATTRIBUTES.get(k);
             if(attribute == null) continue;
-            CruxAttributeInstance instance = getInstance(i, attribute, slots);
+            CruxAttributeInstance instance = getInstanceRaw(i, attribute, slots);
             if(instance != null) list.add(instance);
         }
         return list;
