@@ -18,6 +18,12 @@ public class EntityDataListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onAsyncPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
         UUID uuid = event.getUniqueId();
+        PlayerMemory mem = PlayerMemory.get(uuid);
+        if(mem != null){
+            event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_OTHER);
+            event.kickMessage(Component.text("Please wait before joining! Code: 101"));
+            return;
+        }
         var future = EntityMemory.REMOVING_FUTURES.get(uuid);
         if(future == null) return;
         if(future.isDone() || future.isCancelled()){
@@ -25,7 +31,7 @@ public class EntityDataListener implements Listener {
             return;
         }
         event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_OTHER);
-        event.kickMessage(Component.text("Please wait before joining!"));
+        event.kickMessage(Component.text("Please wait before joining! Code: 102"));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
