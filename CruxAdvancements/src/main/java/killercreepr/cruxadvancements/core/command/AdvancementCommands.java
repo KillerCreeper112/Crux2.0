@@ -25,6 +25,7 @@ import killercreepr.cruxadvancements.core.command.argument.CruxAdvancementListRe
 import killercreepr.cruxadvancements.core.command.argument.CruxAdvancementResolver;
 import killercreepr.cruxadvancements.core.data.AdvancementPair;
 import killercreepr.cruxadvancements.core.entity.memory.AdvancementHolder;
+import killercreepr.cruxadvancements.core.registries.AdvancementRegistries;
 import killercreepr.cruxconfig.config.bukkit.file.CruxJson;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import net.kyori.adventure.key.Key;
@@ -221,6 +222,16 @@ public class AdvancementCommands {
                                             var pair = ctx.getArgument("advancements", AdvancementPair.class);
                                             return revoke(ctx.getSource(), targets, pair.getManager(), List.of(pair.getAdvancement()));
                                         })
+                                ).then(
+                                    Commands.literal("*")
+                                        .executes(ctx ->{
+                                            Collection<Player> targets = ctx.getArgument("targets", PlayerSelectorArgumentResolver.class)
+                                                .resolve(ctx.getSource());
+                                            for(var manager : AdvancementRegistries.ADVANCEMENT_MANAGERS){
+                                                revoke(ctx.getSource(), targets, manager, (Collection<CruxAdvancement>) manager.getAdvancements().values());
+                                            }
+                                            return 1;
+                                        })
                                 )
                         )
                 ).then(
@@ -234,6 +245,16 @@ public class AdvancementCommands {
                                                 .resolve(ctx.getSource());
                                             var pair = ctx.getArgument("advancements", AdvancementPair.class);
                                             return grant(ctx.getSource(), targets, pair.getManager(), List.of(pair.getAdvancement()));
+                                        })
+                                ).then(
+                                    Commands.literal("*")
+                                        .executes(ctx ->{
+                                            Collection<Player> targets = ctx.getArgument("targets", PlayerSelectorArgumentResolver.class)
+                                                .resolve(ctx.getSource());
+                                            for(var manager : AdvancementRegistries.ADVANCEMENT_MANAGERS){
+                                                grant(ctx.getSource(), targets, manager, (Collection<CruxAdvancement>) manager.getAdvancements().values());
+                                            }
+                                            return 1;
                                         })
                                 )
                         )
