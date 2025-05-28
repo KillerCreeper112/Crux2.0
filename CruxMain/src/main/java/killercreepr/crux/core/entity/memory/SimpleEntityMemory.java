@@ -107,6 +107,9 @@ public class SimpleEntityMemory implements EntityMemory {
             ex.printStackTrace();
             return null;
         });
+        combined.whenCompleteAsync((unused, throwable) -> {
+            EntityMemory.REMOVING_FUTURES.remove(uuid);
+        });
         EntityMemory.REMOVING_FUTURES.put(uuid, combined);
         dataHolders.clear();
     }
