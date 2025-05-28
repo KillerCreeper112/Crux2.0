@@ -5,6 +5,7 @@ import killercreepr.crux.api.entity.memory.EntityMemory;
 import killercreepr.crux.api.entity.memory.PlayerMemory;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -55,6 +56,7 @@ public class EntityDataListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityRemoveFromWorld(EntityRemoveFromWorldEvent event) {
         Entity e = event.getEntity();
+        if(e instanceof HumanEntity) return;
         EntityMemory mem = EntityMemory.get(e);
         if(mem == null) return;
         try{

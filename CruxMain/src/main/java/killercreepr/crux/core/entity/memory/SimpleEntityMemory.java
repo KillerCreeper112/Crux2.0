@@ -89,11 +89,13 @@ public class SimpleEntityMemory implements EntityMemory {
         List<CompletableFuture<Void>> futures = new ArrayList<>();
         for(DataHolder h : dataHolders.values()){
             futures.add(CompletableFuture.runAsync(() ->{
-                try{
-                    if(e != null) h.onMemoryUnload(e);
-                }catch (Exception ignored){
-                    ignored.printStackTrace();
-                }
+                /*if(instantUnload){
+                    try{
+                        if(e != null) h.onMemoryUnload(e);
+                    }catch (Exception ignored){
+                        ignored.printStackTrace();
+                    }
+                }*/
                 try{
                     h.parentRemoving(e);
                 }catch (Exception ignored){

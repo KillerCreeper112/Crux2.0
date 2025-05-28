@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 
@@ -46,6 +47,13 @@ public class CfgCrazyAdvancementManagerCfgLoader {
             advancementManager.saveProgress(p.getUniqueId());
             advancementManager.getCrazyManager().removePlayer(p);
             advancementManager.unloadProgress(p.getUniqueId());
+        });
+    }
+    public void saveAndUnload(UUID p){
+        advancementManagers.values().forEach(advancementManager ->{
+            advancementManager.saveProgress(p);
+            advancementManager.getCrazyManager().getPlayers();
+            advancementManager.unloadProgress(p);
         });
     }
 
