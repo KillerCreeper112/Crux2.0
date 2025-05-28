@@ -49,6 +49,16 @@ public class CfgCrazyAdvancementManagerCfgLoader {
             advancementManager.unloadProgress(p.getUniqueId());
         });
     }
+    public void save(Player p){
+        advancementManagers.values().forEach(advancementManager ->{
+            advancementManager.saveProgress(p.getUniqueId());
+        });
+    }
+    public void save(UUID p){
+        advancementManagers.values().forEach(advancementManager ->{
+            advancementManager.saveProgress(p);
+        });
+    }
     public void saveAndUnload(UUID p){
         advancementManagers.values().forEach(advancementManager ->{
             advancementManager.saveProgress(p);

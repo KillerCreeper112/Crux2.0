@@ -1,5 +1,6 @@
 package killercreepr.cruxadvancements.core.command;
 
+import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
@@ -186,6 +187,16 @@ public class AdvancementCommands {
                                                 .resolve(manager);
                                             return grant(ctx.getSource(), targets, manager, advancements);
                                         })
+                                ).then(
+                                    Commands.literal("*")
+                                        .executes(ctx ->{
+                                            Collection<Player> targets = ctx.getArgument("targets", PlayerSelectorArgumentResolver.class)
+                                                .resolve(ctx.getSource());
+                                            CruxAdvancementManager<?> manager = ctx.getArgument("manager", CruxAdvancementManager.class);
+                                            Collection<CruxAdvancement> advancements = AdvancementArguments.ADVANCEMENT_LIST.parse(new StringReader("*"))
+                                                .resolve(manager);
+                                            return grant(ctx.getSource(), targets, manager, advancements);
+                                        })
                                 )
                         )
                 )
@@ -202,6 +213,16 @@ public class AdvancementCommands {
                                                 .resolve(ctx.getSource());
                                             CruxAdvancementManager<?> manager = ctx.getArgument("manager", CruxAdvancementManager.class);
                                             Collection<CruxAdvancement> advancements = ctx.getArgument("advancements", CruxAdvancementListResolver.class)
+                                                .resolve(manager);
+                                            return revoke(ctx.getSource(), targets, manager, advancements);
+                                        })
+                                ).then(
+                                    Commands.literal("*")
+                                        .executes(ctx ->{
+                                            Collection<Player> targets = ctx.getArgument("targets", PlayerSelectorArgumentResolver.class)
+                                                .resolve(ctx.getSource());
+                                            CruxAdvancementManager<?> manager = ctx.getArgument("manager", CruxAdvancementManager.class);
+                                            Collection<CruxAdvancement> advancements = AdvancementArguments.ADVANCEMENT_LIST.parse(new StringReader("*"))
                                                 .resolve(manager);
                                             return revoke(ctx.getSource(), targets, manager, advancements);
                                         })
