@@ -148,7 +148,10 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
         if(advancements.length == 0) advancements = this.advancements.values().toArray(new CrazyAdvancement[0]);
 
         CruxJson cfg = getSaveFile(plugin, uuid);
-        if(!cfg.file().exists()) return;
+        if(!cfg.file().exists()){
+            cfg.close();
+            return;
+        }
         JsonObject json = cfg.json();
         if(json==null){
             cfg.close();

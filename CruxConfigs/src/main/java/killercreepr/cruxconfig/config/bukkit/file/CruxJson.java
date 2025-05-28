@@ -22,7 +22,7 @@ import java.lang.reflect.Type;
 public class CruxJson extends CruxFolder implements DataFile, ICruxJson {
     protected final @NotNull JsonRegistry jsonRegistry;
     protected JsonObject json;
-    protected FileReader reader;
+    //protected FileReader reader;
     protected final Gson parser = new Gson();
     protected final boolean existedBefore;
     protected boolean isClosed = false;
@@ -68,15 +68,15 @@ public class CruxJson extends CruxFolder implements DataFile, ICruxJson {
         return jsonRegistry;
     }
 
-    @Override
+    /*@Override
     public @Nullable FileReader reader() {
-        return reader;
+        return null;//return reader;
     }
 
     @Override
     public void reader(@Nullable FileReader reader) {
-        this.reader = reader;
-    }
+        //this.reader = reader;
+    }*/
 
     @Override
     public @Nullable JsonObject json() {

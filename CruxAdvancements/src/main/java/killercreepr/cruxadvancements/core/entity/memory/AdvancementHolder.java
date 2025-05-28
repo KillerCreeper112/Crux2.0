@@ -46,6 +46,10 @@ public class AdvancementHolder extends PlayerDataHolder implements Loadable {
         timeAdvancementCompleted.put(tracked.getAdvancementKey(), tracked.getTimeStarted());
     }
 
+    public Map<Key, Long> getTimeAdvancementCompleted() {
+        return timeAdvancementCompleted;
+    }
+
     protected final AdvancementTracker advancementTracker = new AdvancementTracker();
 
     public @NotNull Plugin getPlugin() {
