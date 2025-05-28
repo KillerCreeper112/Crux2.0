@@ -51,7 +51,8 @@ public class InteractHarvestableBlockComponent implements CruxInteractableBlockC
         }
         Player p = event.getPlayer();
         if(breakBlock){
-            block.breakBlock(Miner.entity(event.getItem(), p, event.getHand()));
+            var breakEvent = block.breakBlock(Miner.entity(event.getItem(), p, event.getHand()));
+            if(breakEvent.isCancelled()) return null;
         }
 
         if(replaceWith != null){
