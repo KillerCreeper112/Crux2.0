@@ -23,6 +23,8 @@ public interface CruxAttributeCacheHandler {
     <P extends PersistentDataHolder> CruxAttributeHandler getCache(P item);
     <P extends PersistentDataHolder> CruxAttributeHandler removeCache(P item);
     <P extends PersistentDataHolder> CruxAttributeHandler getOrCreateCache(P item);
+    void saveAll();
+
 
     class Simple implements CruxAttributeCacheHandler{
         private final Cache<UUID, Value> CACHE = CacheBuilder.newBuilder()
@@ -71,6 +73,14 @@ public interface CruxAttributeCacheHandler {
                 ex.printStackTrace();
             }
             return null;
+        }
+
+        @Override
+        public void saveAll() {
+            CACHE.asMap().values().forEach(value ->{
+                Entity e = value.entity().get();
+                if(e != null) saveAttributes(e, value.handler());
+            });
         }
 
         private record Value(Reference<Entity> entity, CruxAttributeHandler handler){ }

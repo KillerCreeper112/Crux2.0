@@ -2,6 +2,7 @@ package killercreepr.cruxattributes.core.listener;
 
 import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
 import killercreepr.crux.api.entity.CruxEntity;
+import killercreepr.crux.api.event.ServerShutDownEvent;
 import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.core.Crux;
 import killercreepr.cruxattributes.api.attribute.*;
@@ -87,4 +88,10 @@ public class CruxAttributeListener implements Listener {
         CruxEntity.entity(e).set(CruxAttributeComponents.CRUX_ATTRIBUTES,
             CruxAttributeContainer.container((Collection<CruxAttributeInstance>) handler.getInstances()));
     }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onServerShutDown(ServerShutDownEvent event) {
+        CruxAttributeCacheHandler.attributeCacheHandler().saveAll();
+    }
+
 }

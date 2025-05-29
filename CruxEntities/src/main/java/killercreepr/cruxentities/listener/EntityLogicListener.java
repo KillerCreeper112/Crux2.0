@@ -17,5 +17,4 @@ public class EntityLogicListener implements Listener {
     public void onEntityZap(EntityZapEvent event) {
         if(CruxMob.is(event.getEntity())) event.setCancelled(true);
     }
-
 }

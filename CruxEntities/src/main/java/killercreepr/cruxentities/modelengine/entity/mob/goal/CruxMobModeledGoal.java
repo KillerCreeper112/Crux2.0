@@ -14,6 +14,9 @@ import killercreepr.cruxentities.modelengine.wrapper.IModelEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -165,5 +168,17 @@ public class CruxMobModeledGoal extends CruxMobGoal implements IModelEntity {
     @Override
     public @NotNull Entity entity() {
         return mob;
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void eventPlayerPreventInteract(PlayerInteractEntityEvent event) {
+        if(event.getRightClicked().equals(mob) || isModelPart(event.getRightClicked())){
+            event.setCancelled(true);
+            onPlayerInteractLow(event);
+        }
+    }
+
+    public void onPlayerInteractLow(PlayerInteractEntityEvent event){
+
     }
 }
