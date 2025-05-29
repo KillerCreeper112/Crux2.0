@@ -2,6 +2,7 @@ package killercreepr.cruxblocks.core.block.active.standard;
 
 import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.persistence.CruxPersist;
 import killercreepr.cruxblocks.api.block.CruxBlock;
 import killercreepr.cruxblocks.api.block.active.ActiveCruxTickedBlock;
 import killercreepr.cruxblocks.core.block.active.SimpleActiveCruxBlock;
@@ -12,6 +13,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
@@ -60,7 +62,9 @@ public class ActiveEntitySpawner extends SimpleActiveCruxBlock implements Active
     }
 
     public void navigateSpawner(){
-        spawner.navigate(block.getWorld(), CruxPosition.block(block));
+        spawner.navigate(block.getWorld(), CruxPosition.block(block), null, null, e ->{
+            CruxPersist.SPAWN_REASON.set(e, "crux_spawner");
+        });
     }
 
     protected int delay = 0;

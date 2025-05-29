@@ -3,6 +3,7 @@ package killercreepr.cruxworlds.core.world.entity;
 import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.api.registry.Registry;
 import killercreepr.crux.api.util.CruxWeightedSupplier;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.persistence.CruxPersist;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxworlds.api.world.entity.NaturalEntitySpawnGroup;
@@ -72,7 +73,7 @@ public class SimpleNaturalEntityWorldSpawner implements NaturalEntityWorldSpawne
     public CompletableFuture<Boolean> checkIsBelowGlobalCap(@NotNull World world){
         return CompletableFuture.supplyAsync(() ->{
             CompletableFuture<Boolean> future = new CompletableFuture<>();
-            plugin.getServer().getScheduler().runTask(plugin, task ->{
+            Crux.scheduler().runTask(() ->{
                 Collection<Mob> mobs = world.getEntitiesByClass(Mob.class);
                 CompletableFuture.supplyAsync(() -> future.complete(belowGlobalCap(mobs)));
             });
@@ -140,7 +141,7 @@ public class SimpleNaturalEntityWorldSpawner implements NaturalEntityWorldSpawne
                         list = CACHE;
                     }else{
                         list = CruxWeightedSupplier.builder(registry.values())
-                            .rolls(CruxMath.random(1, 5))
+                            .rolls(1)//1,5
                             .filter(check -> check.canSpawn(ctx))
                             .build().rollList();
                     }
@@ -151,10 +152,13 @@ public class SimpleNaturalEntityWorldSpawner implements NaturalEntityWorldSpawne
                         continue;
                     }
 
-                    plugin.getServer().getScheduler().runTask(plugin, task ->{
+                    Crux.scheduler().runTask(() ->{
                         for(NaturalEntitySpawnGroup m : list){
-                            NaturalEntitySpawner.spawn(
+                            /*NaturalEntitySpawner.spawn(
                                 m.selectRandom(CruxMath.random(1, 5), ctx), ctx, spawnConsumer
+                            );*/
+                            NaturalEntitySpawner.spawnCreature(
+                                m.selectRandom(1, ctx), ctx, spawnConsumer
                             );
                         }
                     });

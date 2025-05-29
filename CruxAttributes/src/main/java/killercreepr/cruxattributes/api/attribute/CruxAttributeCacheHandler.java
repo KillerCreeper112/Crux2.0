@@ -28,7 +28,7 @@ public interface CruxAttributeCacheHandler {
 
     class Simple implements CruxAttributeCacheHandler{
         private final Cache<UUID, Value> CACHE = CacheBuilder.newBuilder()
-            .maximumSize(500)
+            .maximumSize(3000)
             .expireAfterAccess(15, TimeUnit.MINUTES)
             .softValues()
             .initialCapacity(50)
@@ -66,6 +66,12 @@ public interface CruxAttributeCacheHandler {
         public <P extends PersistentDataHolder> CruxAttributeHandler getOrCreateCache(P item) {
             if(!(item instanceof Entity e)) return null;
             try{
+                var gotted = getCache(item);
+                if(gotted != null) return gotted;
+                if(!e.isValid()){
+                    return null;
+                }
+
                 var got = CACHE.get(e.getUniqueId(), () ->
                     new Value(new WeakReference<>(e), CruxAttributeHandler.builder().addAll(CruxAttribute.getInstancesRaw(item)).build()));
                 return got.handler();

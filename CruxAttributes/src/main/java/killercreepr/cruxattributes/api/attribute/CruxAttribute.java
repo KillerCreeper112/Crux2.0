@@ -127,6 +127,9 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
     static <P extends PersistentDataHolder> CruxAttributeHandler getOrCreateCache(P item){
         return CruxAttributeCacheHandler.attributeCacheHandler().getOrCreateCache(item);
     }
+    static <P extends PersistentDataHolder> CruxAttributeHandler getCache(P item){
+        return CruxAttributeCacheHandler.attributeCacheHandler().getCache(item);
+    }
 
     static ItemStack updateItem(@Nullable ItemStack i){
         if(CruxItem.isEmpty(i)) return i;
@@ -267,7 +270,7 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
     static <P extends PersistentDataHolder> boolean hasAttributeData(@Nullable P i){
         if(i==null) return false;
 
-        var cache = getOrCreateCache(i);
+        var cache = getCache(i);
         if(cache != null) return true;
 
         PersistentDataContainer components = getComponents(i);

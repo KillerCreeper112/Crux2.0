@@ -3,6 +3,7 @@ package killercreepr.cruxworlds.core.world;
 import killercreepr.crux.api.data.tick.Ticked;
 import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.persistence.CruxPersist;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxworlds.api.world.CruxWorld;
 import killercreepr.cruxworlds.api.world.entity.NaturalEntityWorldSpawner;
@@ -61,6 +62,8 @@ public class NaturalEntitySpawnManager implements Ticked, Listener {
                 recentlyCheckedMobSpawns.add(position);
                 naturalEntitySpawner.navigate(world, position, spawner -> p.isOnline() && p.isValid(), spawner ->{
                     naturalSpawnerChecked(p);
+                }, e ->{
+                    CruxPersist.SPAWN_REASON.set(e, "natural");
                 });
             }
         });
