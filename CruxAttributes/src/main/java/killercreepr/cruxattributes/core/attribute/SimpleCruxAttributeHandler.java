@@ -2,6 +2,7 @@ package killercreepr.cruxattributes.core.attribute;
 
 import killercreepr.cruxattributes.api.attribute.*;
 import net.kyori.adventure.key.Key;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

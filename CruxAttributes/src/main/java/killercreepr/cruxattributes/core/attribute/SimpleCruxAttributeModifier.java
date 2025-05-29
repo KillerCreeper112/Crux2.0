@@ -68,7 +68,7 @@ public class SimpleCruxAttributeModifier implements CruxAttributeModifier {
     @Override
     public CruxAttributeModifier withPath(@NotNull Key @Nullable ... path) {
         return new SimpleCruxAttributeModifier(
-            key, amount, operation, slot, path
+            key, amount, operation, slot, (path == null || path.length < 1) ? null : path
         );
     }
 
