@@ -109,7 +109,7 @@ public class CustomBlocksListener implements Listener {
                 ActiveCruxBlock active = manager.getActiveBlock(check);
                 if(!(active instanceof ActiveCruxRedstonePowerable powerable)) continue;
                 if(!powerable.isRedstonePowerable()) return;
-                powerable.powerChanged(block,event.getNewCurrent());
+                powerable.redstonePowerChanged(block,event.getNewCurrent());
             }
             return;
         }
@@ -119,7 +119,7 @@ public class CustomBlocksListener implements Listener {
                 ActiveCruxBlock active = manager.getActiveBlock(check);
                 if(!(active instanceof ActiveCruxRedstonePowerable powerable)) continue;
                 if(!powerable.isRedstonePowerable()) return;
-                powerable.powerChanged(block,event.getNewCurrent());
+                powerable.redstonePowerChanged(block,event.getNewCurrent());
             }
         }
     }

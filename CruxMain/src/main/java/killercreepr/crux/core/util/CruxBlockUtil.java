@@ -1,5 +1,7 @@
 package killercreepr.crux.core.util;
 
+import com.destroystokyo.paper.MaterialSetTag;
+import com.destroystokyo.paper.MaterialTags;
 import killercreepr.crux.core.data.util.Pair;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -8,6 +10,10 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.data.AnaloguePowerable;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Lightable;
+import org.bukkit.block.data.Powerable;
+import org.bukkit.block.data.type.Comparator;
+import org.bukkit.block.data.type.RedstoneWire;
+import org.bukkit.block.data.type.Repeater;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -68,6 +74,26 @@ public class CruxBlockUtil {
         if(type == Material.REDSTONE_BLOCK){
             return CruxBlockFace.CARTESIAN.contains(face);
         }
+        if(type == Material.LEVER || MaterialSetTag.BUTTONS.isTagged(type) || type == Material.DAYLIGHT_DETECTOR){
+            return CruxBlockFace.CARTESIAN.contains(face);
+        }
+        if(MaterialSetTag.PRESSURE_PLATES.isTagged(type)){
+            return face == BlockFace.UP;
+        }
+        BlockData data = check.getBlockData();
+        if(data instanceof RedstoneWire wire){
+            if(!wire.getAllowedFaces().contains(face)) return false;
+            var connection = wire.getFace(face.getOppositeFace());
+            if(connection == RedstoneWire.Connection.NONE) return false;
+            BlockFace dir = connection == RedstoneWire.Connection.UP ? BlockFace.DOWN : face;
+            return dir == face;
+        }
+        if(data instanceof Repeater repeater){
+            return repeater.getFacing() == face;
+        }
+        if(data instanceof Comparator comparator){
+            return comparator.getFacing() == face;
+        }
         return false;
     }
 
@@ -75,6 +101,9 @@ public class CruxBlockUtil {
         BlockData data = block.getBlockData();
         if(data instanceof AnaloguePowerable powerable){
             return powerable.getPower() > 0;
+        }
+        if(data instanceof Powerable powerable){
+            return powerable.isPowered();
         }
         var type = block.getType();
         if(type == Material.REDSTONE_BLOCK) return true;

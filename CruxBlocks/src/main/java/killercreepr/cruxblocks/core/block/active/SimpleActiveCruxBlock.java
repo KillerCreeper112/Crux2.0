@@ -119,9 +119,9 @@ public class SimpleActiveCruxBlock implements ActiveCruxBlock, ActiveCruxInterac
     }
 
     @Override
-    public void powerChanged(Block from, int newPower) {
+    public void redstonePowerChanged(Block from, int newPower) {
         for(CruxRedstonePowerableComponent comp : getCruxBlock().getComponents().getAllOfType(CruxRedstonePowerableComponent.class)){
-            comp.powerChanged(from, newPower);
+            comp.redstonePowerChanged(from, newPower);
         }
     }
 }
