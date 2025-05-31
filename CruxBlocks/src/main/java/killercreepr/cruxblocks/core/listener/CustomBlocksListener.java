@@ -4,6 +4,7 @@ import com.destroystokyo.paper.MaterialSetTag;
 import com.destroystokyo.paper.MaterialTags;
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import io.papermc.paper.event.block.BlockBreakBlockEvent;
+import io.papermc.paper.event.entity.EntityMoveEvent;
 import killercreepr.crux.api.block.sound.CreateBlockSoundGroup;
 import killercreepr.crux.api.communication.Communicator;
 import killercreepr.crux.api.communication.CreateSound;
@@ -12,9 +13,11 @@ import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.core.component.CruxComponents;
 import killercreepr.crux.core.util.CruxBlockFace;
 import killercreepr.crux.core.util.CruxBlockUtil;
+import killercreepr.crux.core.util.CruxEntityUtil;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxblocks.api.block.CruxBlock;
 import killercreepr.cruxblocks.api.block.active.ActiveCruxBlock;
+import killercreepr.cruxblocks.api.block.active.ActiveCruxEntityMove;
 import killercreepr.cruxblocks.api.block.active.ActiveCruxInteractable;
 import killercreepr.cruxblocks.api.block.active.ActiveCruxRedstonePowerable;
 import killercreepr.cruxblocks.api.block.context.PlaceBlockContext;
@@ -59,10 +62,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.player.PlayerAnimationEvent;
-import org.bukkit.event.player.PlayerAnimationType;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
@@ -176,6 +176,27 @@ public class CustomBlocksListener implements Listener {
         }
         handleCustomExplosion(customEvent, Miner.block(event.getBlock()));
     }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerMove(PlayerMoveEvent event) {
+        if(!event.hasChangedPosition()) return;
+        var p = event.getPlayer();
+        Block ground = CruxEntityUtil.getBlockStandingOn(p);
+        if(ground == null) return;
+        ActiveCruxBlock active = manager.getActiveBlock(ground);
+        if(active instanceof ActiveCruxEntityMove move) move.onEntityMove(p);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onEntityMove(EntityMoveEvent event) {
+        if(!event.hasChangedPosition()) return;
+        var p = event.getEntity();
+        Block ground = CruxEntityUtil.getBlockStandingOn(p);
+        if(ground == null) return;
+        ActiveCruxBlock active = manager.getActiveBlock(ground);
+        if(active instanceof ActiveCruxEntityMove move) move.onEntityMove(p);
+    }
+
 
     public void handleCustomExplosion(CustomExplodeEvent event, Miner miner){
         switch (event.getResult()){
