@@ -16,10 +16,7 @@ import killercreepr.crux.core.util.CruxBlockUtil;
 import killercreepr.crux.core.util.CruxEntityUtil;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxblocks.api.block.CruxBlock;
-import killercreepr.cruxblocks.api.block.active.ActiveCruxBlock;
-import killercreepr.cruxblocks.api.block.active.ActiveCruxEntityMove;
-import killercreepr.cruxblocks.api.block.active.ActiveCruxInteractable;
-import killercreepr.cruxblocks.api.block.active.ActiveCruxRedstonePowerable;
+import killercreepr.cruxblocks.api.block.active.*;
 import killercreepr.cruxblocks.api.block.context.PlaceBlockContext;
 import killercreepr.cruxblocks.api.block.flag.BlockBreakFlag;
 import killercreepr.cruxblocks.api.block.flag.BlockBreakFlags;
@@ -61,6 +58,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
@@ -95,6 +93,18 @@ public class CustomBlocksListener implements Listener {
                 .use(event.getPlayer());
         }
     }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityDamage(EntityDamageEvent event) {
+        Entity e = event.getEntity();
+        Block block = CruxEntityUtil.getBlockStandingOn(e);
+        if(block == null) return;
+        var active = manager.getActiveBlock(block);
+        if(active instanceof ActiveCruxEntityDamageOn dmg){
+            dmg.onEntityDamage(event);
+        }
+    }
+
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onBlockRedstone(BlockRedstoneEvent event) {
