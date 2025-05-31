@@ -1,7 +1,13 @@
 package killercreepr.crux.core.util;
 
+import killercreepr.crux.core.data.util.Pair;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.data.AnaloguePowerable;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Lightable;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,5 +28,61 @@ public class CruxBlockUtil {
     public static @NotNull BoundingBox getBlockBox(@NotNull Block b){
         return new BoundingBox(b.getX(), b.getY(), b.getZ(),
             b.getX() + 1, b.getY() + 1, b.getZ() + 1);
+    }
+
+    public static Pair<Block, Integer> findPowerAndSource(Block center){
+        Block block = findPowerSource(center);
+        if(block == null) return null;
+        int power;
+        BlockData data = block.getBlockData();
+        if(data instanceof AnaloguePowerable p) power = p.getPower();
+        else power = 15;
+        return Pair.of(block, power);
+    }
+
+    public static Block findPowerSource(Block center){
+        for(BlockFace face : CruxBlockFace.CARTESIAN){
+            Block check = center.getRelative(face);
+            if(!canPowerThrough(check, face)) continue;
+            if(!isPowered(check)) continue;
+            return check;
+        }
+        //redstone torch check
+
+        Block check = center.getRelative(0, -2, 0);
+        var type = check.getType();
+        if(type == Material.REDSTONE_TORCH || type == Material.REDSTONE_WALL_TORCH){
+            if(isPowered(check)){
+                Block inBetween = center.getRelative(0, -1, 0);
+                if(inBetween.isSolid() && !inBetween.isLiquid()) return check;
+            }
+        }
+        return null;
+    }
+
+    public static boolean canPowerThrough(Block check, BlockFace face){
+        var type = check.getType();
+        if(type == Material.REDSTONE_TORCH || type == Material.REDSTONE_WALL_TORCH){
+            return face != BlockFace.UP && CruxBlockFace.CARTESIAN.contains(face);
+        }
+        if(type == Material.REDSTONE_BLOCK){
+            return CruxBlockFace.CARTESIAN.contains(face);
+        }
+        return false;
+    }
+
+    public static boolean isPowered(Block block){
+        BlockData data = block.getBlockData();
+        if(data instanceof AnaloguePowerable powerable){
+            return powerable.getPower() > 0;
+        }
+        var type = block.getType();
+        if(type == Material.REDSTONE_BLOCK) return true;
+        if(type == Material.REDSTONE_TORCH || type == Material.REDSTONE_WALL_TORCH){
+            if(data instanceof Lightable light){
+                return light.isLit();
+            }
+        }
+        return false;
     }
 }

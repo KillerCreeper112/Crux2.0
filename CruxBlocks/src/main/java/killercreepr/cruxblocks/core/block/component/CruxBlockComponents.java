@@ -6,10 +6,7 @@ import killercreepr.crux.api.component.parser.hybrid.PersistTextParser;
 import killercreepr.crux.api.component.parser.hybrid.TextInputField;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.registries.CruxRegistries;
-import killercreepr.cruxblocks.api.block.component.BushBlock;
-import killercreepr.cruxblocks.api.block.component.BushGroup;
-import killercreepr.cruxblocks.api.block.component.DirectionalBlock;
-import killercreepr.cruxblocks.api.block.component.DirectionalGroup;
+import killercreepr.cruxblocks.api.block.component.*;
 import killercreepr.cruxblocks.api.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.api.structure.component.StructureCruxBlockPlaceInsideComponent;
 import killercreepr.cruxblocks.core.block.component.standard.EntitySpawnerComponent;
@@ -66,6 +63,9 @@ public class CruxBlockComponents {
         builder -> builder);
 
     public static final DataComponentType<InteractHarvestableBlockComponent> INTERACT_HARVESTABLE = register("interact_harvestable",
+        builder -> builder);
+
+    public static final DataComponentType<CruxRedstonePowerableComponent> GENERIC_REDSTONE_POWERABLE = register("generic_redstone_powerable",
         builder -> builder);
 
     private static <T> DataComponentType<T> register(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator){

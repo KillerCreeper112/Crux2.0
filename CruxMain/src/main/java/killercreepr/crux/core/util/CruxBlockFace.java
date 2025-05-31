@@ -3,9 +3,19 @@ package killercreepr.crux.core.util;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Map;
 
 public class CruxBlockFace {
+    public static final List<BlockFace> CARTESIAN = List.of(
+        BlockFace.NORTH,
+        BlockFace.SOUTH,
+        BlockFace.EAST,
+        BlockFace.WEST,
+        BlockFace.UP,
+        BlockFace.DOWN
+    );
+
     private static final Map<BlockFace, BlockFace[]> rotationMap = Map.of(
         BlockFace.NORTH, new BlockFace[]{BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST},
         BlockFace.EAST, new BlockFace[]{BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.NORTH},

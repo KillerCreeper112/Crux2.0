@@ -7,7 +7,9 @@ import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxblocks.api.block.CruxBlock;
 import killercreepr.cruxblocks.api.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.api.block.active.ActiveCruxInteractable;
+import killercreepr.cruxblocks.api.block.active.ActiveCruxRedstonePowerable;
 import killercreepr.cruxblocks.api.block.component.CruxInteractableBlockComponent;
+import killercreepr.cruxblocks.api.block.component.CruxRedstonePowerableComponent;
 import killercreepr.cruxblocks.api.item.KeyedItemProvider;
 import killercreepr.cruxblocks.api.mining.user.Miner;
 import killercreepr.cruxblocks.core.CruxBlocksModule;
@@ -25,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.Set;
 
-public class SimpleActiveCruxBlock implements ActiveCruxBlock, ActiveCruxInteractable {
+public class SimpleActiveCruxBlock implements ActiveCruxBlock, ActiveCruxInteractable, ActiveCruxRedstonePowerable {
     protected final @NotNull Block block;
     protected final @NotNull CruxBlock cruxBlock;
 
@@ -109,5 +111,17 @@ public class SimpleActiveCruxBlock implements ActiveCruxBlock, ActiveCruxInterac
             if(result != null) return result;
         }
         return null;
+    }
+
+    @Override
+    public boolean isRedstonePowerable() {
+        return getCruxBlock().getComponents().hasAnyOfType(CruxRedstonePowerableComponent.class);
+    }
+
+    @Override
+    public void powerChanged(Block from, int newPower) {
+        for(CruxRedstonePowerableComponent comp : getCruxBlock().getComponents().getAllOfType(CruxRedstonePowerableComponent.class)){
+            comp.powerChanged(from, newPower);
+        }
     }
 }

@@ -10,11 +10,13 @@ import killercreepr.crux.api.communication.CreateSound;
 import killercreepr.crux.api.entity.memory.EntityMemory;
 import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.core.component.CruxComponents;
+import killercreepr.crux.core.util.CruxBlockFace;
 import killercreepr.crux.core.util.CruxBlockUtil;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxblocks.api.block.CruxBlock;
 import killercreepr.cruxblocks.api.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.api.block.active.ActiveCruxInteractable;
+import killercreepr.cruxblocks.api.block.active.ActiveCruxRedstonePowerable;
 import killercreepr.cruxblocks.api.block.context.PlaceBlockContext;
 import killercreepr.cruxblocks.api.block.flag.BlockBreakFlag;
 import killercreepr.cruxblocks.api.block.flag.BlockBreakFlags;
@@ -45,6 +47,9 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.data.AnaloguePowerable;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.type.RedstoneWire;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.entity.*;
@@ -91,6 +96,33 @@ public class CustomBlocksListener implements Listener {
         }
     }
 
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    public void onBlockRedstone(BlockRedstoneEvent event) {
+        Block block = event.getBlock();
+        BlockData data = block.getBlockData();
+        if(data instanceof RedstoneWire wire){
+            for(BlockFace face : wire.getAllowedFaces()){
+                var connection = wire.getFace(face);
+                if(connection == RedstoneWire.Connection.NONE) continue;
+                BlockFace dir = connection == RedstoneWire.Connection.UP ? BlockFace.UP :  face;
+                Block check = block.getRelative(dir);
+                ActiveCruxBlock active = manager.getActiveBlock(check);
+                if(!(active instanceof ActiveCruxRedstonePowerable powerable)) continue;
+                if(!powerable.isRedstonePowerable()) return;
+                powerable.powerChanged(block,event.getNewCurrent());
+            }
+            return;
+        }
+        if(data instanceof AnaloguePowerable){
+            for(BlockFace face : CruxBlockFace.CARTESIAN){
+                Block check = block.getRelative(face);
+                ActiveCruxBlock active = manager.getActiveBlock(check);
+                if(!(active instanceof ActiveCruxRedstonePowerable powerable)) continue;
+                if(!powerable.isRedstonePowerable()) return;
+                powerable.powerChanged(block,event.getNewCurrent());
+            }
+        }
+    }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {

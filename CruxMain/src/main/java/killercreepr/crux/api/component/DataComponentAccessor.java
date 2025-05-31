@@ -26,6 +26,15 @@ public interface DataComponentAccessor extends Iterable<TypedDataComponent<?>> {
         }
         return list;
     }
+    default <T> boolean hasAnyOfType(Class<T> type){
+        if(isEmpty()) return false;
+        for(TypedDataComponent<?> typed : this){
+            Object o = typed.getValue();
+            if(o == null) continue;
+            if(type.isAssignableFrom(o.getClass())) return true;
+        }
+        return false;
+    }
 
     default <T> void forEachAllOfType(Class<T> type, Consumer<T> consumer){
         if(isEmpty()) return;
