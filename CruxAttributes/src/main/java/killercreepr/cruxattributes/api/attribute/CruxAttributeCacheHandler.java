@@ -5,6 +5,7 @@ import com.google.common.cache.CacheBuilder;
 import killercreepr.crux.api.entity.CruxEntity;
 import killercreepr.cruxattributes.core.component.CruxAttributeComponents;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.persistence.PersistentDataHolder;
 
 import java.lang.ref.Reference;
@@ -71,6 +72,7 @@ public interface CruxAttributeCacheHandler {
                 if(!e.isValid()){
                     return null;
                 }
+                if(e instanceof HumanEntity) return null;
 
                 var got = CACHE.get(e.getUniqueId(), () ->
                     new Value(new WeakReference<>(e), CruxAttributeHandler.builder().addAll(CruxAttribute.getInstancesRaw(item)).build()));

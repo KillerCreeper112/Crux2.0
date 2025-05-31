@@ -13,7 +13,7 @@ import java.util.*;
 
 
 public class SimpleCruxAttributeInstance implements CruxAttributeInstance {
-    public static boolean matchesPath(@NotNull CruxAttributeModifier modifier, @NotNull Key... path){
+    /*public static boolean matchesPath(@NotNull CruxAttributeModifier modifier, @NotNull Key... path){
         int lengthOne = path.length-1;
         Key key = path.length > 1 ? null : path[lengthOne];
         Key[] modPath = modifier.getPath();
@@ -30,7 +30,37 @@ public class SimpleCruxAttributeInstance implements CruxAttributeInstance {
         }
         if(modPath.length < path.length) return modifier.key().equals(path[lengthOne]);
         return modPath[lengthOne].equals(path[lengthOne]);
+    }*/
+    public static boolean matchesPath(@NotNull CruxAttributeModifier modifier, @NotNull Key... path) {
+        if (path.length == 0) return false;
+
+        Key[] modPath = modifier.getPath(); // Can be null
+        Key modKey = modifier.key();
+
+        // Full modifier path is modPath + modKey
+        int fullLength = (modPath == null ? 0 : modPath.length) + 1;
+
+        // If the input path is longer than the modifier's full path, it cannot match
+        if (path.length > fullLength) return false;
+
+        // Check each key in the input path
+        for (int i = 0; i < path.length; i++) {
+            Key current = path[i];
+
+            // Match against modPath[i] or modKey
+            if (modPath == null || i < modPath.length) {
+                if (modPath == null || !modPath[i].equals(current)) return false;
+            } else {
+                // Last one: compare to modifier.key()
+                if (!modKey.equals(current)) return false;
+            }
+        }
+
+        return true;
     }
+
+
+
     protected final CruxAttribute attribute;
     protected final Collection<CruxAttributeModifier> modifiers = new ArrayList<>();
     public SimpleCruxAttributeInstance(@NotNull CruxAttribute attribute, @NotNull Collection<CruxAttributeModifier> modifiers) {
