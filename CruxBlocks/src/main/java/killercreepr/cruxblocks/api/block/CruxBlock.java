@@ -63,11 +63,18 @@ public interface CruxBlock extends Keyed, CruxBlockData {
      * Skips the can place check and event call.
      */
     default @Nullable ActiveCruxBlock setBlock(@NotNull BlockContext ctx, boolean applyPhysics){
+        return setBlock(ctx, applyPhysics, true);
+    }
+
+    /**
+     * Skips the can place check and event call.
+     */
+    default @Nullable ActiveCruxBlock setBlock(@NotNull BlockContext ctx, boolean applyPhysics, boolean clearData){
         CruxBlockSetEvent event = new CruxBlockSetEvent(!Crux.getServer().isPrimaryThread(),this, ctx);
         if(!event.callEvent()) return null;
 
         TextureData data = getTextureData();
-        data.setBlock(ctx.getBlock(), applyPhysics);
+        data.setBlock(ctx.getBlock(), applyPhysics, clearData);
         if(CruxBlocksRegistries.BLOCK.getPossibleBlocks(data).size() > 1){
             CustomBlockData blockData = CustomBlockData.wrap(ctx.getBlock());
             CruxBlocksPersistTags.CRUX_BLOCK_KEY.set(blockData, key());
