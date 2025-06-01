@@ -36,6 +36,16 @@ public class CustomExplodeEvent extends Event implements Cancellable {
         return blocks;
     }
 
+    public void addBlock(Block block){
+        if(!blocks.contains(block)) blocks.add(block);
+        if(!wrappedBlocks.contains(block)) wrappedBlocks.add(block);
+    }
+
+    public void clearBlocks(){
+        blocks.clear();
+        wrappedBlocks.clear();
+    }
+
     public boolean removeBlockIf(Predicate<Block> filter){
         return blocks.removeIf(b ->{
             if(filter.test(b)){

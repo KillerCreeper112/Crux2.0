@@ -112,23 +112,39 @@ public class CustomBlocksListener implements Listener {
         BlockData data = block.getBlockData();
         if(data instanceof RedstoneWire wire){
             for(BlockFace face : wire.getAllowedFaces()){
+                if(face.isCartesian() && face != BlockFace.UP && face != BlockFace.DOWN){
+                    Block check = block.getRelative(face).getRelative(BlockFace.DOWN);
+                    ActiveCruxBlock active = manager.getActiveBlock(check);
+                    if(active instanceof ActiveCruxRedstonePowerable powerable && powerable.isRedstonePowerable()){
+                        powerable.redstonePowerChanged(block,event.getNewCurrent());
+                    }
+                }
+
                 var connection = wire.getFace(face);
                 if(connection == RedstoneWire.Connection.NONE) continue;
                 BlockFace dir = connection == RedstoneWire.Connection.UP ? BlockFace.UP :  face;
                 Block check = block.getRelative(dir);
                 ActiveCruxBlock active = manager.getActiveBlock(check);
                 if(!(active instanceof ActiveCruxRedstonePowerable powerable)) continue;
-                if(!powerable.isRedstonePowerable()) return;
+                if(!powerable.isRedstonePowerable()) continue;
                 powerable.redstonePowerChanged(block,event.getNewCurrent());
             }
             return;
         }
         if(data instanceof AnaloguePowerable){
             for(BlockFace face : CruxBlockFace.CARTESIAN){
+                if(face.isCartesian() && face != BlockFace.UP && face != BlockFace.DOWN){
+                    Block check = block.getRelative(face).getRelative(BlockFace.DOWN);
+                    ActiveCruxBlock active = manager.getActiveBlock(check);
+                    if(active instanceof ActiveCruxRedstonePowerable powerable && powerable.isRedstonePowerable()){
+                        powerable.redstonePowerChanged(block,event.getNewCurrent());
+                    }
+                }
+
                 Block check = block.getRelative(face);
                 ActiveCruxBlock active = manager.getActiveBlock(check);
                 if(!(active instanceof ActiveCruxRedstonePowerable powerable)) continue;
-                if(!powerable.isRedstonePowerable()) return;
+                if(!powerable.isRedstonePowerable()) continue;
                 powerable.redstonePowerChanged(block,event.getNewCurrent());
             }
         }

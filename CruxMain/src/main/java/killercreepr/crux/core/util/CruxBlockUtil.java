@@ -1,7 +1,6 @@
 package killercreepr.crux.core.util;
 
 import com.destroystokyo.paper.MaterialSetTag;
-import com.destroystokyo.paper.MaterialTags;
 import killercreepr.crux.core.data.util.Pair;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -49,6 +48,13 @@ public class CruxBlockUtil {
     public static Block findPowerSource(Block center){
         for(BlockFace face : CruxBlockFace.CARTESIAN){
             Block check = center.getRelative(face);
+            if(face != BlockFace.DOWN && face != BlockFace.UP){
+                Block up = check.getRelative(BlockFace.UP);
+                if((up.getBlockData() instanceof RedstoneWire || canPowerThrough(up, face)) && isPowered(up)){
+                    return up;
+                }
+            }
+
             if(!canPowerThrough(check, face)) continue;
             if(!isPowered(check)) continue;
             return check;
@@ -63,6 +69,8 @@ public class CruxBlockUtil {
                 if(inBetween.isSolid() && !inBetween.isLiquid()) return check;
             }
         }
+
+
         return null;
     }
 
