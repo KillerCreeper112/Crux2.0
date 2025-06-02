@@ -25,6 +25,7 @@ import killercreepr.crux.core.entity.predicate.EntityAnyPredicate;
 import killercreepr.crux.core.item.predicate.ItemAllPredicate;
 import killercreepr.crux.core.item.predicate.ItemAnyPredicate;
 import killercreepr.crux.core.registries.CruxRegistries;
+import killercreepr.crux.core.util.CruxKey;
 import killercreepr.crux.paper.ItemHolder;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
@@ -32,9 +33,12 @@ import net.kyori.adventure.sound.Sound;
 import org.bukkit.Color;
 import org.bukkit.Particle;
 import org.bukkit.Registry;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -451,6 +455,40 @@ public class ComponentInputParsers {
                 }
             }
             return KeyPredicate.fromAllOf(parsed);
+        });
+
+
+    public static PersistTextParser<AttributeModifier.Operation> ATTRIBUTE_OPERATION = PersistTextParser.elementBuilder(AttributeModifier.Operation.class)
+        .field(TextInputField.field(PersistTextParser.STRING, e -> e.toString().toLowerCase()))
+        .apply(ctx ->{
+            String s = ctx.get();
+            if(s.equalsIgnoreCase("add")) return AttributeModifier.Operation.ADD_NUMBER;
+            if(s.equalsIgnoreCase("multiply")) return AttributeModifier.Operation.MULTIPLY_SCALAR_1;
+            return AttributeModifier.Operation.valueOf(s.toUpperCase());
+        });
+
+    public static PersistTextParser<EquipmentSlotGroup> EQUIPMENT_SLOT_GROUP = PersistTextParser.elementBuilder(EquipmentSlotGroup.class)
+        .field(TextInputField.field(PersistTextParser.STRING, e -> e.toString().toLowerCase()))
+        .apply(ctx -> EquipmentSlotGroup.getByName(ctx.get()));
+
+    public static PersistTextParser<Attribute> ATTRIBUTE = PersistTextParser.elementBuilder(Attribute.class)
+        .field(TextInputField.field(PersistTextParser.KEY, org.bukkit.Keyed::key))
+        .apply(ctx ->{
+            Key key = ctx.get();
+            return Registry.ATTRIBUTE.get(key);
+        });
+
+    public static PersistTextParser<AttributeModifier> ATTRIBUTE_MODIFIER = PersistTextParser.mapBuilder(AttributeModifier.class)
+        .field("key",TextInputField.field(PersistTextParser.KEY, e -> e.getKey()))
+        .field("amount",TextInputField.field(PersistTextParser.DOUBLE, e -> e.getAmount()))
+        .field("operation",TextInputField.field(ATTRIBUTE_OPERATION, e -> e.getOperation()))
+        .field("slot",TextInputField.field(EQUIPMENT_SLOT_GROUP, e -> e.getSlotGroup()))
+        .apply(ctx ->{
+            Key key = ctx.get("key");
+            double amount = ctx.get("amount");
+            AttributeModifier.Operation operation = ctx.getOptional("operation", AttributeModifier.Operation.ADD_NUMBER);
+            EquipmentSlotGroup slot = ctx.getOptional("slot", EquipmentSlotGroup.ANY);
+            return new AttributeModifier(CruxKey.key(key), amount, operation, slot);
         });
 
     public static final ComponentInputListParsers LIST = new ComponentInputListParsers();

@@ -39,8 +39,8 @@ public class FileStoredPotion implements FileObjectHandler<StoredPotion> {
         CruxPotion potion = CruxPotionRegistries.POTION.get(key);
         if(potion == null) return null;
         Integer duration = o.getObject(Integer.class, "duration");
-        Integer amplifier = o.getObject(Integer.class, "amplifier");
-        if(duration == null || amplifier == null) return null;
+        int amplifier = o.getOrDefaultObject(Integer.class, "amplifier", 0);
+        if(duration == null) return null;
         if(o.get("data") instanceof FileObject data){
             return potion.deserializeFromFile(duration, amplifier, data);
         }
