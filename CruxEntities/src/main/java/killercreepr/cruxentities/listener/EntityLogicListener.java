@@ -4,6 +4,7 @@ import com.destroystokyo.paper.event.entity.EntityZapEvent;
 import killercreepr.crux.core.persistence.CruxPersist;
 import killercreepr.cruxentities.entity.CruxMob;
 import killercreepr.cruxentities.entity.CruxMobMountable;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -24,6 +25,7 @@ public class EntityLogicListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
     public void onEntityMount(EntityMountEvent event) {
         var entity = event.getEntity();
+        if(entity instanceof HumanEntity) return;
         var cruxMob = CruxMob.get(entity);
         if(!(cruxMob instanceof CruxMobMountable mount) || !mount.canMount(entity, event.getMount())){
             if(CruxPersist.ALLOW_MOUNT.get(entity, false)) return;
