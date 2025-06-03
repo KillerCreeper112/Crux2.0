@@ -80,6 +80,68 @@ public class TextDataComponentDecoder implements DataComponentDecoder {
     // Custom split method to handle nested structures
     private static String[] customSplit(String input) {
         StringBuilder currentProperty = new StringBuilder();
+        int openBraces = 0;
+        int openBrackets = 0;
+        boolean inQuotes = false;
+        boolean inSingleQuotes = false;
+
+        List<String> result = new ArrayList<>();
+
+        for (int i = 0; i < input.length(); i++) {
+            char ch = input.charAt(i);
+
+            // Count preceding backslashes to determine if current char is escaped
+            boolean isEscaped;
+            int backslashCount = 0;
+            for (int j = i - 1; j >= 0 && input.charAt(j) == '\\'; j--) {
+                backslashCount++;
+            }
+            isEscaped = (backslashCount % 2 == 1);
+
+            if (!isEscaped) {
+                if (ch == '"' && !inSingleQuotes) {
+                    inQuotes = !inQuotes;
+                } else if (ch == '\'' && !inQuotes) {
+                    inSingleQuotes = !inSingleQuotes;
+                }
+            }
+
+            if (!inQuotes && !inSingleQuotes) {
+                if (ch == '{') {
+                    openBraces++;
+                } else if (ch == '}') {
+                    openBraces--;
+                } else if (ch == '[') {
+                    openBrackets++;
+                } else if (ch == ']') {
+                    openBrackets--;
+                }
+            }
+
+            if (ch == ',' && openBraces == 0 && openBrackets == 0 && !inQuotes && !inSingleQuotes) {
+                if (!currentProperty.isEmpty()) result.add(currentProperty.toString());
+                currentProperty.setLength(0);
+                continue;
+            }
+
+            currentProperty.append(ch);
+        }
+
+        if (!currentProperty.isEmpty()){
+            result.add(unescapeQuotes(currentProperty.toString()));
+        }
+        return result.toArray(new String[0]);
+    }
+
+    private static String unescapeQuotes(String str) {
+        return str
+            .replace("\\\"", "\"")
+            .replace("\\\'", "'")
+            .replace("\\\\", "\\");
+    }
+
+    /*private static String[] customSplit(String input) {
+        StringBuilder currentProperty = new StringBuilder();
         int openBraces = 0; // Keeps track of the level of nested curly braces
         int openBrackets = 0;
         boolean inQuotes = false;
@@ -123,7 +185,7 @@ public class TextDataComponentDecoder implements DataComponentDecoder {
         // Add the last property (without trailing comma)
         if(!currentProperty.isEmpty()) result.add(currentProperty.toString());
         return result.toArray(new String[0]);
-    }
+    }*/
 
     private static Object parseObject(String value){
         if(value.startsWith("{")){
@@ -220,7 +282,7 @@ public class TextDataComponentDecoder implements DataComponentDecoder {
         // Split by commas to handle key-value pairs inside the curly braces
         String[] pairs = customSplit(nestedProperties);
         for (String pair : pairs) {
-            String[] keyValue = pair.split(":", 2); // Split only on the first ':'
+            String[] keyValue = splitKeyValueRespectingQuotes(pair);//pair.split(":", 2); // Split only on the first ':'
             if(keyValue.length < 2){
                 Crux.log(Level.SEVERE, "Cannot parse nested property: " + pair + ", keyValue=" + Arrays.toString(keyValue));
                 continue;
@@ -233,4 +295,70 @@ public class TextDataComponentDecoder implements DataComponentDecoder {
 
         return map;
     }
+
+
+    private static String[] splitKeyValueRespectingQuotes(String pair) {
+        StringBuilder key = new StringBuilder();
+        StringBuilder value = new StringBuilder();
+
+        boolean inOuterDoubleQuotes = false;
+        boolean inOuterSingleQuotes = false;
+        boolean foundSeparator = false;
+        int openBraces = 0;
+        int openBrackets = 0;
+
+        for (int i = 0; i < pair.length(); i++) {
+            char ch = pair.charAt(i);
+            char prev = i > 0 ? pair.charAt(i - 1) : '\0';
+            boolean isEscaped = prev == '\\';
+
+            // Track quote state
+            if (!isEscaped) {
+                if (ch == '"' && !inOuterSingleQuotes) {
+                    inOuterDoubleQuotes = !inOuterDoubleQuotes;
+                } else if (ch == '\'' && !inOuterDoubleQuotes) {
+                    inOuterSingleQuotes = !inOuterSingleQuotes;
+                }
+            }
+
+            // Only count braces/brackets if we're not inside quotes
+            if (!inOuterDoubleQuotes && !inOuterSingleQuotes) {
+                if (ch == '{') openBraces++;
+                else if (ch == '}') openBraces--;
+                else if (ch == '[') openBrackets++;
+                else if (ch == ']') openBrackets--;
+            }
+
+            // Split at the first colon outside of quotes/brackets/braces
+            if (!foundSeparator && ch == ':' && !inOuterDoubleQuotes && !inOuterSingleQuotes
+                && openBraces == 0 && openBrackets == 0) {
+                foundSeparator = true;
+                continue;
+            }
+
+            if (!foundSeparator) key.append(ch);
+            else value.append(ch);
+        }
+
+        return new String[]{
+            stripOuterQuotes(key.toString().trim()),
+            value.toString().trim()
+        };
+    }
+
+    private static String stripOuterQuotes(String input) {
+        if (input.length() >= 2) {
+            char first = input.charAt(0);
+            char last = input.charAt(input.length() - 1);
+
+
+            if ((first == '"' && last == '"') || (first == '\'' && last == '\'')) {
+                return input.substring(1, input.length() - 1);
+            }
+        }
+        return input;
+    }
+
+
+
 }
