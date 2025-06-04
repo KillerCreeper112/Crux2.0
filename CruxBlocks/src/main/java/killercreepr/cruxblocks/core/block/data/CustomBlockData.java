@@ -22,7 +22,10 @@
 
 package killercreepr.cruxblocks.core.block.data;
 
+import killercreepr.crux.api.component.DataComponentHandler;
 import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.component.SimplePersistentComponentWrapper;
+import killercreepr.crux.core.component.SimplePersistentDataComponentWrapper;
 import killercreepr.crux.core.math.BlockPos;
 import killercreepr.crux.core.persistence.CruxPersistence;
 import killercreepr.cruxblocks.api.block.data.events.CustomBlockDataRemoveEvent;

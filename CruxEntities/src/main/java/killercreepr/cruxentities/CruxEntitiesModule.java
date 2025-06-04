@@ -5,6 +5,7 @@ import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.plugin.module.StandardModules;
 import killercreepr.cruxentities.command.CruxEntitiesCommands;
+import killercreepr.cruxentities.component.CruxEntityComponents;
 import killercreepr.cruxentities.entity.MobCategory;
 import killercreepr.cruxentities.handler.CruxEntitiesEntityHandler;
 import killercreepr.cruxentities.listener.*;
@@ -21,6 +22,7 @@ public class CruxEntitiesModule implements CruxModule {
     @Override
     public void onLoad(@NotNull CruxPlugin plugin) {
         MobCategory.register();
+        CruxEntityComponents.register();
         Crux.handlers().setEntity(new CruxEntitiesEntityHandler());
     }
 
@@ -31,7 +33,8 @@ public class CruxEntitiesModule implements CruxModule {
             new CustomEntitySoundsListener(),
             new EntityComponentListener(),
             new EntityLogicListener(),
-            new EntityCombatListener()
+            new EntityCombatListener(),
+            new ComponentsListener()
         );
         ModelEngineHook.register(plugin);
         CruxEntitiesCommands.register(plugin);
