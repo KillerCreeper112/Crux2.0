@@ -7,20 +7,10 @@ import killercreepr.crux.core.persistence.CruxPersist;
 import killercreepr.cruxentities.component.CruxEntityComponents;
 import killercreepr.cruxentities.entity.CruxMob;
 import killercreepr.cruxentities.registries.CruxEntityRegistries;
-import net.kyori.adventure.key.Key;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.TrialSpawnerBlock;
 import net.minecraft.world.level.block.entity.TrialSpawnerBlockEntity;
-import net.minecraft.world.level.block.entity.trialspawner.TrialSpawner;
-import net.minecraft.world.level.block.entity.trialspawner.TrialSpawnerData;
-import net.minecraft.world.level.block.entity.trialspawner.TrialSpawnerState;
-import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.block.CraftBlock;
 import org.bukkit.craftbukkit.block.CraftBlockState;
-import org.bukkit.craftbukkit.block.CraftTrialSpawner;
-import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
@@ -32,7 +22,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 public class ComponentsListener implements Listener {
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onBlockPlace(BlockPlaceEvent event) {
         Block b = event.getBlockPlaced();
         ItemStack item = event.getItemInHand();

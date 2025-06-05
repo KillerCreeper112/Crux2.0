@@ -19,6 +19,7 @@ import killercreepr.cruxitems.api.item.ItemDisplayFormatter;
 import killercreepr.cruxitems.api.item.plugin.PluginItem;
 import killercreepr.cruxitems.api.values.ValuesProvider;
 import killercreepr.cruxitems.core.command.CruxItemsCommands;
+import killercreepr.cruxitems.core.component.CruxItemsComponents;
 import killercreepr.cruxitems.core.config.Config;
 import killercreepr.cruxitems.core.config.CruxItemsConfigHook;
 import killercreepr.cruxitems.core.config.handler.FileCfgItemType;
@@ -27,6 +28,7 @@ import killercreepr.cruxitems.core.item.GeneralCruxedItemDisplayUpdater;
 import killercreepr.cruxitems.core.item.PluginItemHolder;
 import killercreepr.cruxitems.core.listener.DisableRecipesListener;
 import killercreepr.cruxitems.core.listener.ItemInteractionListener;
+import killercreepr.cruxitems.core.listener.OtherInteractionListener;
 import killercreepr.cruxitems.core.registries.CruxItemRegistries;
 import killercreepr.cruxitems.core.text.tags.object.ItemStackTags;
 import killercreepr.cruxitems.core.values.DefaultValues;
@@ -69,6 +71,7 @@ public class CruxItemsModule implements CruxModule, ItemHandler {
 
     @Override
     public void onLoad(@NotNull CruxPlugin plugin) {
+        CruxItemsComponents.register();
         if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS)){
             CruxItemsConfigHook.register();
             CfgRegistries.SIMPLE_REGISTRY.forEach(reg ->{
@@ -91,7 +94,8 @@ public class CruxItemsModule implements CruxModule, ItemHandler {
 
         plugin.registerListeners(
             new DisableRecipesListener(),
-            new ItemInteractionListener()
+            new ItemInteractionListener(),
+            new OtherInteractionListener()
         );
 
         CruxItemsCommands.register(plugin);
