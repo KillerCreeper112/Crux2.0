@@ -13,6 +13,7 @@ import org.bukkit.block.Vault;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockDispenseLootEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.VaultDisplayItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -52,6 +53,26 @@ public class OtherInteractionListener implements Listener {
         if(!lootTableData.isOverrideVanilla() && CruxMath.random().nextBoolean()) return;
         event.setDisplayItem(getRandomItem(event, lootTableData.getLootTable()));
     }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onBlockDispenseLoot(BlockDispenseLootEvent event) {
+        Block b = event.getBlock();
+        var components = new SimpleBlockComponentWrapper(b.getState());
+        var lootTableData = components.get(CruxItemsComponents.VAULT_BLOCK_LOOT_TABLE);
+        if(lootTableData == null) return;
+
+        if(lootTableData.isOverrideVanilla()) event.setDispensedLoot(null);
+
+        var table = lootTableData.getLootTable();
+        event.getDispensedLoot().addAll(table.populateLoot(
+            LootContext.builder()
+                .location(b.getLocation())
+                .looted(b)
+                .looter(event.getPlayer())
+                .build()
+        ));
+    }
+
 
     public ItemStack getRandomItem(VaultDisplayItemEvent event, ItemLootTable table){
         Block b = event.getBlock();
