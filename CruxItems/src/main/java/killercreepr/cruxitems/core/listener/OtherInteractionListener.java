@@ -1,18 +1,20 @@
 package killercreepr.cruxitems.core.listener;
 
 import killercreepr.crux.api.item.CruxItem;
-import killercreepr.crux.api.item.predicate.ItemPredicate;
-import killercreepr.crux.core.Crux;
+import killercreepr.crux.api.loot.LootContext;
+import killercreepr.crux.api.loot.item.ItemLootTable;
 import killercreepr.crux.core.component.SimpleBlockComponentWrapper;
+import killercreepr.crux.core.util.CruxCollection;
+import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxitems.core.component.CruxItemsComponents;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Vault;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.VaultDisplayItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -23,13 +25,43 @@ public class OtherInteractionListener implements Listener {
         ItemStack item = event.getItemInHand();
         CruxItem cruxItem = CruxItem.wrap(item);
 
+        var state = b.getState();
+        var components = new SimpleBlockComponentWrapper(state);
         var spawnerData = cruxItem.get(CruxItemsComponents.VAULT_BLOCK_KEY);
-        if(spawnerData == null) return;
+        if(spawnerData != null){
+            components.set(CruxItemsComponents.VAULT_BLOCK_KEY, spawnerData);
+        }
 
-        var components = new SimpleBlockComponentWrapper(b.getState());
-        components.set(CruxItemsComponents.VAULT_BLOCK_KEY, spawnerData);
+        var lootTable = cruxItem.get(CruxItemsComponents.VAULT_BLOCK_LOOT_TABLE);
+        if(lootTable != null){
+            components.set(CruxItemsComponents.VAULT_BLOCK_LOOT_TABLE, lootTable);
+        }
+
+
+        if(spawnerData == null || !(state instanceof Vault vault)) return;
+
+        vault.setKeyItem(spawnerData.value());
+        vault.update();
     }
 
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onVaultDisplayItem(VaultDisplayItemEvent event) {
+        var components = new SimpleBlockComponentWrapper(event.getBlock().getState());
+        var lootTableData = components.get(CruxItemsComponents.VAULT_BLOCK_LOOT_TABLE);
+        if(lootTableData == null) return;
+        if(!lootTableData.isOverrideVanilla() && CruxMath.random().nextBoolean()) return;
+        event.setDisplayItem(getRandomItem(event, lootTableData.getLootTable()));
+    }
+
+    public ItemStack getRandomItem(VaultDisplayItemEvent event, ItemLootTable table){
+        Block b = event.getBlock();
+        return CruxCollection.getRandom(table.populateLoot(
+            LootContext.builder()
+                .location(b.getLocation())
+                .looted(b)
+                .build()
+        ));
+    }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
@@ -39,16 +71,13 @@ public class OtherInteractionListener implements Listener {
         ItemStack item = event.getItem();
         if(CruxItem.isEmpty(item)) return;
         BlockState state = b.getState();
-        if(!(state instanceof Vault)) return;
-        Player p = event.getPlayer();
+        if(!(state instanceof Vault vault)) return;
 
         var components = new SimpleBlockComponentWrapper(state);
-        ItemPredicate validKeys = components.get(CruxItemsComponents.VAULT_BLOCK_KEY);
-        if(validKeys == null) return;
-        if(!validKeys.test(item)){
-            event.setCancelled(true);
-            p.sendMessage(Crux.format().deserialize("<red>This item cannot be used to open this vault."));
-        }
+        var validKey = components.get(CruxItemsComponents.VAULT_BLOCK_KEY);
+        if(validKey == null) return;
+        vault.setKeyItem(validKey.value());
+        vault.update();
     }
 
 }

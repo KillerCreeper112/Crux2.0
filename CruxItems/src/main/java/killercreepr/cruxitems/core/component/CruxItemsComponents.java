@@ -4,23 +4,32 @@ import killercreepr.crux.api.component.DataComponentType;
 import killercreepr.crux.api.component.parser.InputDecodeContext;
 import killercreepr.crux.api.component.parser.hybrid.PersistTextParser;
 import killercreepr.crux.api.component.parser.hybrid.TextInputField;
-import killercreepr.crux.api.item.predicate.ItemPredicate;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.component.parser.type.ComponentInputParsers;
 import killercreepr.crux.core.registries.CruxRegistries;
+import killercreepr.crux.paper.ItemHolder;
 
 import java.util.function.UnaryOperator;
 
 public class CruxItemsComponents {
     public static void register(){}
 
-    public static final DataComponentType<ItemPredicate> VAULT_BLOCK_KEY = register("vault_block_key", builder -> builder
-        .persistTextParser(PersistTextParser.elementBuilder(ItemPredicate.class)
+    public static final DataComponentType<ItemHolder> VAULT_BLOCK_KEY = register("vault_block_key", builder -> builder
+        .persistTextParser(PersistTextParser.elementBuilder(ItemHolder.class)
             .field(TextInputField.field(
-                ComponentInputParsers.ITEM_PREDICATE, e -> e
+                ComponentInputParsers.ITEM_HOLDER, e -> e
             ))
             .apply(InputDecodeContext::get)
             .createInput(Crux.key("vault_block_key"))));
+
+    public static final DataComponentType<VaultBlockLootTable> VAULT_BLOCK_LOOT_TABLE = register("vault_block_loot_table", builder -> builder
+        .persistTextParser(PersistTextParser.mapBuilder(VaultBlockLootTable.class)
+            .field("loot_table", TextInputField.field(ComponentInputParsers.ITEM_LOOT_TABLE, VaultBlockLootTable::getLootTable))
+            .field("override_vanilla", TextInputField.field(PersistTextParser.BOOLEAN, VaultBlockLootTable::isOverrideVanilla))
+            .apply(ctx ->{
+                return new VaultBlockLootTable(ctx.get("loot_table"), ctx.getOptional("override_vanilla", true));
+            })
+            .createInput(Crux.key("vault_block_loot_table"))));
 
     private static <T> DataComponentType<T> register(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator){
         return CruxRegistries.DATA_COMPONENT_TYPE.register(Crux.key(id), builderOperator.apply(DataComponentType.builder()).build());
