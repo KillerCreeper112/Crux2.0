@@ -5,7 +5,6 @@ import killercreepr.cruxattributes.api.attribute.CruxAttributeInstance;
 import killercreepr.cruxattributes.api.attribute.CruxAttributeModifier;
 import killercreepr.cruxattributes.api.attribute.DynamicCruxAttributeInstance;
 import net.kyori.adventure.key.Key;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,30 +33,30 @@ public class SimpleCruxAttributeInstance implements CruxAttributeInstance {
     public static boolean matchesPath(@NotNull CruxAttributeModifier modifier, @NotNull Key... path) {
         if (path.length == 0) return false;
 
-        Key[] modPath = modifier.getPath(); // Can be null
+        Key[] modPath = modifier.getPath(); // May be null
         Key modKey = modifier.key();
 
-        // Full modifier path is modPath + modKey
-        int fullLength = (modPath == null ? 0 : modPath.length) + 1;
+        // Case: modifier has no path, just a key
+        if (modPath == null) {
+            return path.length == 1 && modKey.equals(path[0]);
+        }
 
-        // If the input path is longer than the modifier's full path, it cannot match
+        // Full modifier path = modPath + modKey
+        int fullLength = modPath.length + 1;
         if (path.length > fullLength) return false;
 
-        // Check each key in the input path
         for (int i = 0; i < path.length; i++) {
-            Key current = path[i];
-
-            // Match against modPath[i] or modKey
-            if (modPath == null || i < modPath.length) {
-                if (modPath == null || !modPath[i].equals(current)) return false;
+            if (i < modPath.length) {
+                if (!modPath[i].equals(path[i])) return false;
             } else {
-                // Last one: compare to modifier.key()
-                if (!modKey.equals(current)) return false;
+                // Compare to modKey
+                if (!modKey.equals(path[i])) return false;
             }
         }
 
         return true;
     }
+
 
 
 

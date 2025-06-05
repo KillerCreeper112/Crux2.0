@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 
 public class CruxGoalUtil {
     public static @NotNull Location findRandomAwayLocation(@NotNull Location center, @NotNull Location current, double range, double maxAngleDegrees) {
-        Random random = CruxMath.RANDOM;
+        Random random = CruxMath.random();
 
         // Calculate direction vector from center to current location
         double dx = current.getX() - center.getX();
@@ -62,7 +62,7 @@ public class CruxGoalUtil {
         return new Location(center.getWorld(), newX, newY, newZ);
     }
     public static @NotNull Location findRandomTowardsLocation(@NotNull Location center, @NotNull Location current, double range, double maxAngleDegrees) {
-        Random random = CruxMath.RANDOM;
+        Random random = CruxMath.random();
 
         // Calculate direction vector from current location to center
         double dx = center.getX() - current.getX();

@@ -196,7 +196,7 @@ public interface NumberProvider extends NumberHolder {
     @NotNull Number sample(@NotNull Random random, @Nullable InputContext ev);
 
     default @NotNull List<Number> sampleList(){
-        return sampleList(CruxMath.RANDOM);
+        return sampleList(CruxMath.random());
     }
 
     default @NotNull List<Number> sampleList(@NotNull Random random){
@@ -208,14 +208,14 @@ public interface NumberProvider extends NumberHolder {
     }
 
     default @NotNull List<Number> sampleList(@Nullable InputContext ev){
-        return sampleList(CruxMath.RANDOM, ev);
+        return sampleList(CruxMath.random(), ev);
     }
 
     default @NotNull Number sample(@Nullable InputContext ev){
-        return sample(CruxMath.RANDOM, ev);
+        return sample(CruxMath.random(), ev);
     }
     default @NotNull Number sample(@NotNull Random random){
         return sample(random, null);
     }
-    default @NotNull Number sample(){ return sample(CruxMath.RANDOM); }
+    default @NotNull Number sample(){ return sample(CruxMath.random()); }
 }
