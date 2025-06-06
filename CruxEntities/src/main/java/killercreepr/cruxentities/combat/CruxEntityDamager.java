@@ -6,6 +6,7 @@ import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.util.CruxEntityUtil;
 import killercreepr.cruxattributes.api.attribute.CruxAttribute;
 import killercreepr.cruxentities.api.combat.EntityDamager;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -154,7 +155,9 @@ public class CruxEntityDamager implements EntityDamager {
     public @Nullable CruxEntityDamageEvent attack(double damage, double kb, double upkb,
                                                   @NotNull Entity target,
                                                   @Nullable Entity damager, @Nullable Location attackLoc){
-        if(target instanceof LivingEntity e && e.getNoDamageTicks() > 0) return null;
+        if(target instanceof LivingEntity e && e.getNoDamageTicks() > 6){
+            return null;
+        }
         CruxEntityDamageEvent event = new CruxEntityDamageEvent(target, damager, attackLoc,
                 damage, kb, upkb,
                 /*calculateDamage(damage)*/damage, calculateKnockback(kb), calculateUpKnockback(upkb))

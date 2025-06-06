@@ -80,6 +80,11 @@ public class SimplePotionHolder extends EntityTickedDataHolder implements Potion
         return event;
     }
 
+    @Override
+    public @Nullable ActivePotion getPotion(@NotNull Key key) {
+        return effects.get(key);
+    }
+
     public void setPotions(@Nullable Collection<ActivePotion> effects){
         clearPotions();
         if(effects == null) return;

@@ -15,6 +15,7 @@ public interface PotionHolder {
     @NotNull EntityCruxPotionEvent addPotion(@NotNull ActivePotion potion);
     @NotNull EntityCruxPotionEvent addPotion(@NotNull ActivePotion potion, boolean override);
     @NotNull EntityCruxPotionEvent addPotion(@NotNull ActivePotion potion, boolean override, boolean skipEventCall);
+    @Nullable ActivePotion getPotion(@NotNull Key key);
     void setPotions(@Nullable Collection<ActivePotion> effects);
     boolean removePotionCheck(@NotNull CruxPotion type);
     @Nullable EntityCruxPotionEvent removePotion(@NotNull CruxPotion type);
