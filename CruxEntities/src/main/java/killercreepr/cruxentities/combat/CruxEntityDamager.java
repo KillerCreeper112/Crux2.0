@@ -158,10 +158,20 @@ public class CruxEntityDamager implements EntityDamager {
         if(target instanceof LivingEntity e && e.getNoDamageTicks() > 6){
             return null;
         }
+        DamageSource source;
+        if(this.source == null){
+            DamageSource.Builder builder = DamageSource.builder(damager == null ? DamageType.GENERIC : DamageType.MOB_ATTACK);
+            if(damager != null) builder.withDirectEntity(damager).withCausingEntity(damager);
+            if(attackLoc == null){
+                if(damager != null) builder.withDamageLocation(damager.getLocation());
+            }else builder.withDamageLocation(attackLoc);
+            source = builder.build();
+        }else source = this.source;
         CruxEntityDamageEvent event = new CruxEntityDamageEvent(target, damager, attackLoc,
                 damage, kb, upkb,
-                /*calculateDamage(damage)*/damage, calculateKnockback(kb), calculateUpKnockback(upkb))
+                /*calculateDamage(damage)*/damage, calculateKnockback(kb), calculateUpKnockback(upkb), this.source)
                 .setCause(cause);
+        event.setSource(source);
         if(!event.callEvent()) return event;
         double dmg = event.getDmg();
 
@@ -174,15 +184,14 @@ public class CruxEntityDamager implements EntityDamager {
                     return event;
                 }
             }
-            DamageSource source;
-            if(this.source == null){
+            if(event.getSource() == null){
                 DamageSource.Builder builder = DamageSource.builder(damager == null ? DamageType.GENERIC : DamageType.MOB_ATTACK);
                 if(damager != null) builder.withDirectEntity(damager).withCausingEntity(damager);
                 if(attackLoc == null){
                     if(damager != null) builder.withDamageLocation(damager.getLocation());
                 }else builder.withDamageLocation(attackLoc);
                 source = builder.build();
-            }else source = this.source;
+            }else source = event.getSource();
 
             e.damage(dmg, source);
             e.setNoDamageTicks(0);

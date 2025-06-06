@@ -12,6 +12,7 @@ import java.util.Collection;
 public interface PotionHolder {
     @NotNull Collection<ActivePotion> getActiveEffects();
     boolean hasPotion(Key key);
+    boolean hasPotion(CruxPotion type);
     @NotNull EntityCruxPotionEvent addPotion(@NotNull ActivePotion potion);
     @NotNull EntityCruxPotionEvent addPotion(@NotNull ActivePotion potion, boolean override);
     @NotNull EntityCruxPotionEvent addPotion(@NotNull ActivePotion potion, boolean override, boolean skipEventCall);

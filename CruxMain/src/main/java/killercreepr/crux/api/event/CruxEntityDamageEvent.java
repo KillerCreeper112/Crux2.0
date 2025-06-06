@@ -4,11 +4,13 @@ import killercreepr.crux.core.Crux;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.WorldBorder;
+import org.bukkit.damage.DamageSource;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,10 +28,12 @@ public class CruxEntityDamageEvent extends Event implements Cancellable {
     protected final double trueKb;
     protected final double trueUpKb;
     protected DamageCause cause;
+    protected final DamageSource trueSource;
+    protected DamageSource source;
 
     public CruxEntityDamageEvent(@NotNull Entity victim, @Nullable Entity damager, @Nullable Location attackLoc,
                                  double trueDmg, double trueKb, double trueUpKb,
-                                 double dmg, double kb, double upKb) {
+                                 double dmg, double kb, double upKb, DamageSource trueSource) {
         super(!Crux.isPrimaryThread());
         this.victim = victim;
         this.damager = damager;
@@ -40,14 +44,19 @@ public class CruxEntityDamageEvent extends Event implements Cancellable {
         this.kb = kb;
         this.upKb = upKb;
         this.attackLoc = attackLoc;
+        this.trueSource = trueSource;
         if(damager != null) hitPosition = damager.getLocation();
     }
 
     public CruxEntityDamageEvent(@NotNull Entity victim, @Nullable Entity damager, @Nullable Location attackLoc,
                                  double trueDmg, double trueKb, double trueUpKb,
-                                 double dmg, double kb, double upKb, @Nullable Location hitPosition) {
-        this(victim, damager, attackLoc, trueDmg, trueKb, trueUpKb, dmg, kb, upKb);
+                                 double dmg, double kb, double upKb, @Nullable Location hitPosition, DamageSource trueSource) {
+        this(victim, damager, attackLoc, trueDmg, trueKb, trueUpKb, dmg, kb, upKb, trueSource);
         this.hitPosition = hitPosition;
+    }
+
+    public DamageSource getTrueSource() {
+        return trueSource;
     }
 
     public @NotNull Entity getEntity() {
@@ -64,6 +73,18 @@ public class CruxEntityDamageEvent extends Event implements Cancellable {
 
     public CruxEntityDamageEvent setCause(@Nullable DamageCause cause) {
         this.cause = cause; return this;
+    }
+
+    /**
+     * Could mess up things if you mess with this
+     */
+    @ApiStatus.Experimental
+    public void setSource(DamageSource source) {
+        this.source = source;
+    }
+
+    public DamageSource getSource() {
+        return source;
     }
 
     public @Nullable Location getHitPosition() {
