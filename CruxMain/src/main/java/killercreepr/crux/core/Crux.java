@@ -123,13 +123,13 @@ public final class Crux {
         return new BukkitRunnable(){
             @Override
             public void run() {
-                for(CruxTick t : new HashSet<>(registry.values())){
+                registry.values().removeIf(t ->{
                     if(t.markedForRemoval()){
-                        registry.remove(t.key());
-                        continue;
+                        return true;
                     }
                     t.tick();
-                }
+                    return false;
+                });
                 EntityMemory.REGISTRY.values().removeIf(EntityMemory::tick);
             }
         };

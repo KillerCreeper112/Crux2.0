@@ -1,9 +1,9 @@
 package killercreepr.crux.api.event;
 
+import killercreepr.crux.api.data.CruxKeyed;
 import killercreepr.crux.core.Crux;
+import net.kyori.adventure.key.Key;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.WorldBorder;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Cancellable;
@@ -165,217 +165,31 @@ public class CruxEntityDamageEvent extends Event implements Cancellable {
         this.cancel = cancel;
     }
 
-    public enum DamageCause {
-
-        /**
-         * Damage caused by /kill command
-         * <p>
-         * Damage: {@link Float#MAX_VALUE}
-         */
-        KILL,
-        /**
-         * Damage caused by the World Border
-         * <p>
-         * Damage: {@link WorldBorder#getDamageAmount()}
-         */
-        WORLD_BORDER,
-        /**
-         * Damage caused when an entity contacts a block such as a Cactus,
-         * Dripstone (Stalagmite) or Berry Bush.
-         * <p>
-         * Damage: variable
-         */
-        CONTACT,
-        /**
-         * Damage caused when an entity attacks another entity.
-         * <p>
-         * Damage: variable
-         */
-        ENTITY_ATTACK,
-        /**
-         * Damage caused when an entity attacks another entity in a sweep attack.
-         * <p>
-         * Damage: variable
-         */
-        ENTITY_SWEEP_ATTACK,
-        /**
-         * Damage caused when attacked by a projectile.
-         * <p>
-         * Damage: variable
-         */
-        PROJECTILE,
-        /**
-         * Damage caused by being put in a block
-         * <p>
-         * Damage: 1
-         */
-        SUFFOCATION,
-        /**
-         * Damage caused when an entity falls a distance greater than 3 blocks
-         * <p>
-         * Damage: fall height - 3.0
-         */
-        FALL,
-        /**
-         * Damage caused by direct exposure to fire
-         * <p>
-         * Damage: 1
-         */
-        FIRE,
-        /**
-         * Damage caused due to burns caused by fire
-         * <p>
-         * Damage: 1
-         */
-        FIRE_TICK,
-        /**
-         * Damage caused due to a snowman melting
-         * <p>
-         * Damage: 1
-         */
-        MELTING,
-        /**
-         * Damage caused by direct exposure to lava
-         * <p>
-         * Damage: 4
-         */
-        LAVA,
-        /**
-         * Damage caused by running out of air while in water
-         * <p>
-         * Damage: 2
-         */
-        DROWNING,
-        /**
-         * Damage caused by being in the area when a block explodes.
-         * <p>
-         * Damage: variable
-         */
-        BLOCK_EXPLOSION,
-        /**
-         * Damage caused by being in the area when an entity, such as a
-         * Creeper, explodes.
-         * <p>
-         * Damage: variable
-         */
-        ENTITY_EXPLOSION,
-        /**
-         * Damage caused by falling into the void
-         * <p>
-         * Damage: 4 for players
-         */
-        VOID,
-        /**
-         * Damage caused by being struck by lightning
-         * <p>
-         * Damage: 5
-         */
-        LIGHTNING,
-        /**
-         * Damage caused by committing suicide.
-         * <p>
-         * <b>Note:</b> This is currently only used by plugins, default commands
-         * like /minecraft:kill use {@link #KILL} to damage players.
-         * <p>
-         * Damage: variable
-         */
-        SUICIDE,
-        /**
-         * Damage caused by starving due to having an empty hunger bar
-         * <p>
-         * Damage: 1
-         */
-        STARVATION,
-        /**
-         * Damage caused due to an ongoing poison effect
-         * <p>
-         * Damage: 1
-         */
-        POISON,
-        /**
-         * Damage caused by being hit by a damage potion or spell
-         * <p>
-         * Damage: variable
-         */
-        MAGIC,
-        /**
-         * Damage caused by Wither potion effect
-         */
-        WITHER,
-        /**
-         * Damage caused by being hit by a falling block which deals damage
-         * <p>
-         * <b>Note:</b> Not every block deals damage
-         * <p>
-         * Damage: variable
-         */
-        FALLING_BLOCK,
-        /**
-         * Damage caused in retaliation to another attack by the Thorns
-         * enchantment.
-         * <p>
-         * Damage: 1-4 (Thorns)
-         */
-        THORNS,
-        /**
-         * Damage caused by a dragon breathing fire.
-         * <p>
-         * Damage: variable
-         */
-        DRAGON_BREATH,
-        /**
-         * Custom damage.
-         * <p>
-         * Damage: variable
-         */
-        CUSTOM,
-        /**
-         * Damage caused when an entity runs into a wall.
-         * <p>
-         * Damage: variable
-         */
-        FLY_INTO_WALL,
-        /**
-         * Damage caused when an entity steps on {@link Material#MAGMA_BLOCK}.
-         * <p>
-         * Damage: 1
-         */
-        HOT_FLOOR,
-        /**
-         * Damage caused when an entity is colliding with too many entities due
-         * to the maxEntityCramming game rule.
-         * <p>
-         * Damage: 6
-         */
-        CRAMMING,
-        /**
-         * Damage caused when an entity that should be in water is not.
-         * <p>
-         * Damage: 1
-         */
-        DRYOUT,
-        /**
-         * Damage caused from freezing.
-         * <p>
-         * Damage: 1 or 5
-         */
-        FREEZE,
-        /**
-         * Damage caused by the Sonic Boom attack from {@link org.bukkit.entity.Warden}
-         * <p>
-         * Damage: 10
-         */
-        SONIC_BOOM;
-
-        public @Nullable EntityDamageEvent.DamageCause bukkit(){
-            try{ return EntityDamageEvent.DamageCause.valueOf(this.toString()); }
-            catch (IllegalArgumentException e){ return null; }
+    public interface DamageCause extends CruxKeyed {
+        static DamageCause fromBukkit(EntityDamageEvent.DamageCause cause){
+            return new BukkitCause(cause);
         }
 
-        public static @Nullable DamageCause grim(@Nullable EntityDamageEvent.DamageCause convert){
-            if(convert == null) return null;
-            try{ return DamageCause.valueOf(convert.toString()); }
-            catch (IllegalArgumentException e){ return null; }
+        static EntityDamageEvent.DamageCause toBukkit(DamageCause cause){
+            if(!cause.key().namespace().equalsIgnoreCase(Key.MINECRAFT_NAMESPACE)) return null;
+            try{
+                return EntityDamageEvent.DamageCause.valueOf(cause.key().value().toUpperCase());
+            }catch (IllegalArgumentException ignored){
+                return null;
+            }
+        }
+
+        class BukkitCause implements DamageCause{
+            public final EntityDamageEvent.DamageCause cause;
+
+            public BukkitCause(EntityDamageEvent.DamageCause cause) {
+                this.cause = cause;
+            }
+
+            @Override
+            public @NotNull Key key() {
+                return Key.key(cause.toString().toLowerCase());
+            }
         }
     }
 }
