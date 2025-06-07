@@ -52,10 +52,7 @@ public class EntityHit {
     }
 
     public @Nullable RayTraceResult rayTraceEntity(Location loc, Vector dir, @Nullable Predicate<Entity> predicate, List<Entity> allChecked){
-        var entityResult = loc.getWorld().rayTraceEntities(loc, dir, maxRange, thickness, (e -> {
-            if(predicate != null && !predicate.test(e)) return false;
-            return !allChecked.contains(e);
-        }));
+        var entityResult = loc.getWorld().rayTraceEntities(loc, dir, maxRange, thickness, predicate);
 
         double blockRange = entityResult == null ? maxRange : (loc.toVector().distance(entityResult.getHitPosition()));
 
@@ -88,10 +85,10 @@ public class EntityHit {
                     return !allChecked.contains(e);
                 }));
             }else{
-                result = rayTraceEntity(loc, dir, (e -> {
+                result = rayTraceEntity(loc, dir, e -> {
                         if(predicate != null && !predicate.test(e)) return false;
                         return !allChecked.contains(e);
-                    }), allChecked);
+                    }, allChecked);
             }
 
             if(result != null){
