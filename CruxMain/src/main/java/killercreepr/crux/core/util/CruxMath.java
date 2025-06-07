@@ -240,6 +240,37 @@ public class CruxMath {
     public static boolean testChance(double chance){
         return testChance(RANDOM, chance);
     }
+
+    public static int randomSigned(int min, int max){
+        return randomSigned(min, max, RANDOM);
+    }
+
+    public static int randomSigned(int min, int max, @NotNull Random random){
+        int x = random(min, max, random);
+        if(random.nextBoolean()) x *= -1;
+        return x;
+    }
+
+    public static float randomSigned(float min, float max){
+        return randomSigned(min, max, RANDOM);
+    }
+
+    public static float randomSigned(float min, float max, @NotNull Random random){
+        float x = random(min, max, random);
+        if(random.nextBoolean()) x *= -1f;
+        return x;
+    }
+
+    public static double randomSigned(double min, double max){
+        return randomSigned(min, max, RANDOM);
+    }
+
+    public static double randomSigned(double min, double max, @NotNull Random random){
+        double x = random(min, max, random);
+        if(random.nextBoolean()) x *= -1D;
+        return x;
+    }
+
     /**
      * @param chance The probability from 0-100.
      */

@@ -11,7 +11,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
@@ -137,6 +136,19 @@ public class CruxMobGoal extends CruxGoalBase implements Goal<Mob>, ICruxMobGoal
         return eyeLoc.toVector().distanceSquared(closest);
     }
 
+    protected double getDistanceFromTargetHitbox(){
+        if(target == null) return 0D;
+        BoundingBox hitbox = target.getBoundingBox();
+        Location eyeLoc = getGeneralHitPoint();
+        Vector closest = new Vector(
+            Math.max(hitbox.getMinX(), Math.min(eyeLoc.getX(), hitbox.getMaxX())),
+            Math.max(hitbox.getMinY(), Math.min(eyeLoc.getY(), hitbox.getMaxY())),
+            Math.max(hitbox.getMinZ(), Math.min(eyeLoc.getZ(), hitbox.getMaxZ()))
+        );
+
+        return eyeLoc.toVector().distance(closest);
+    }
+
     protected double getDistanceFromTarget(){
         if(target != null && target.getWorld().equals(mob.getWorld())) return mob.getLocation().distance(target.getLocation());
         return 0D;
@@ -161,7 +173,7 @@ public class CruxMobGoal extends CruxGoalBase implements Goal<Mob>, ICruxMobGoal
     protected void targetLogic(){
         super.targetLogic();
         if(target == null) return;
-        double distance = getSquaredDistanceFromTargetHitbox();
+        double distance = getDistanceFromTargetHitbox();
         if(distance > getForgetTargetDistance()){
             setTarget(null);
             return;
