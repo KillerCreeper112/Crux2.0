@@ -7,15 +7,19 @@ import killercreepr.crux.core.Crux;
 import killercreepr.cruxentities.entity.mob.goal.sound.CruxGoalSounds;
 import killercreepr.cruxentities.entity.mob.goal.sound.SoundedMob;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.util.BoundingBox;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -116,6 +120,23 @@ public class CruxMobGoal extends CruxGoalBase implements Goal<Mob>, ICruxMobGoal
         return 0D;
     }
 
+    public Location getGeneralHitPoint(){
+        return mob.getEyeLocation();
+    }
+
+    protected double getSquaredDistanceFromTargetHitbox(){
+        if(target == null) return 0D;
+        BoundingBox hitbox = target.getBoundingBox();
+        Location eyeLoc = getGeneralHitPoint();
+        Vector closest = new Vector(
+            Math.max(hitbox.getMinX(), Math.min(eyeLoc.getX(), hitbox.getMaxX())),
+            Math.max(hitbox.getMinY(), Math.min(eyeLoc.getY(), hitbox.getMaxY())),
+            Math.max(hitbox.getMinZ(), Math.min(eyeLoc.getZ(), hitbox.getMaxZ()))
+        );
+
+        return eyeLoc.toVector().distanceSquared(closest);
+    }
+
     protected double getDistanceFromTarget(){
         if(target != null && target.getWorld().equals(mob.getWorld())) return mob.getLocation().distance(target.getLocation());
         return 0D;
@@ -140,7 +161,7 @@ public class CruxMobGoal extends CruxGoalBase implements Goal<Mob>, ICruxMobGoal
     protected void targetLogic(){
         super.targetLogic();
         if(target == null) return;
-        double distance = getDistanceFromTarget();
+        double distance = getSquaredDistanceFromTargetHitbox();
         if(distance > getForgetTargetDistance()){
             setTarget(null);
             return;

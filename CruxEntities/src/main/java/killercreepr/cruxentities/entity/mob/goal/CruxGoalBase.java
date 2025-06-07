@@ -286,7 +286,8 @@ public class CruxGoalBase implements ICruxGoal {
         List<Entity> specifiedTargets;
         if(targets != null && targets.length > 0 && (targets.length > 1 || targets[0] != null)) specifiedTargets = Arrays.asList(targets);
         else specifiedTargets = null;
-        EntityHit.Result result = new EntityHit(mob.getEyeLocation(), direction.length() <= 0D ? mob.getEyeLocation().getDirection() : direction, range, aoe, pierce)
+        EntityHit.Result result = new EntityHit(mob.getEyeLocation(), direction.length() <= 0D ?
+            mob.getEyeLocation().getDirection() : direction, range, aoe, pierce)
             .getHitEntities(e ->{
                 if(filter != null && !filter.test(e)) return false;
                 if(specifiedTargets != null) return specifiedTargets.contains(e);

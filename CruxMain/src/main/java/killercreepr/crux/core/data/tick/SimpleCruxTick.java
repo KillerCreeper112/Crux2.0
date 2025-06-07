@@ -1,15 +1,14 @@
 package killercreepr.crux.core.data.tick;
 
-import killercreepr.crux.api.data.tick.Ticked;
+import killercreepr.crux.api.data.CruxTick;
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.key.Keyed;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class CruxTick implements Keyed, Ticked {
+public abstract class SimpleCruxTick implements CruxTick {
     protected final Key key;
     protected boolean remove = false;
 
-    public CruxTick(@NotNull Key key) {
+    public SimpleCruxTick(@NotNull Key key) {
         this.key = key;
     }
 

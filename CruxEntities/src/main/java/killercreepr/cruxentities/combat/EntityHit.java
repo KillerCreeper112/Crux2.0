@@ -51,24 +51,55 @@ public class EntityHit {
         this.ignoreBlocks = ignoreBlocks;
     }
 
+    public @Nullable RayTraceResult rayTraceEntity(Location loc, Vector dir, @Nullable Predicate<Entity> predicate, List<Entity> allChecked){
+        var entityResult = loc.getWorld().rayTraceEntities(loc, dir, maxRange, thickness, (e -> {
+            if(predicate != null && !predicate.test(e)) return false;
+            return !allChecked.contains(e);
+        }));
+
+        double blockRange = entityResult == null ? maxRange : (loc.toVector().distance(entityResult.getHitPosition()));
+
+        var blockResult = loc.getWorld().rayTraceBlocks(loc, dir, blockRange, FluidCollisionMode.NEVER, true);
+
+        if (entityResult == null) return blockResult;
+        if (blockResult == null) return entityResult;
+
+        double entityDistanceSq = entityResult.getHitPosition().distanceSquared(loc.toVector());
+        double blockDistanceSq = blockResult.getHitPosition().distanceSquared(loc.toVector());
+
+        if (blockDistanceSq < entityDistanceSq) {
+            //Don't check the entity again
+            if(entityResult.getHitEntity() != null) allChecked.add(entityResult.getHitEntity());
+            return blockResult;
+        }
+
+        return entityResult;
+    }
+
     public @NotNull Result getHitEntities(@NotNull final Location loc, @NotNull final Vector dir, @Nullable Predicate<Entity> predicate){
+        final List<Entity> allChecked = new ArrayList<>();
         final List<Entity> entities = new ArrayList<>();
         final List<RayTraceResult> results = new ArrayList<>();
         RayTraceResult result;
         for(int maxMobs = maxHitMobs; maxMobs > 0; maxMobs--){
-            result = ignoreBlocks ?
-                    loc.getWorld().rayTraceEntities(loc, dir, maxMobs, thickness, (e ->{
+            if(ignoreBlocks){
+                result = loc.getWorld().rayTraceEntities(loc, dir, maxMobs, thickness, (e ->{
+                    if(predicate != null && !predicate.test(e)) return false;
+                    return !allChecked.contains(e);
+                }));
+            }else{
+                result = rayTraceEntity(loc, dir, (e -> {
                         if(predicate != null && !predicate.test(e)) return false;
-                        return !entities.contains(e);
-                    })) :
-                    loc.getWorld().rayTrace(loc, dir, maxRange, FluidCollisionMode.NEVER, true, thickness, (e -> {
-                if(predicate != null && !predicate.test(e)) return false;
-                return !entities.contains(e);
-            }));
+                        return !allChecked.contains(e);
+                    }), allChecked);
+            }
 
             if(result != null){
                 results.add(result);
-                if(result.getHitEntity() != null) entities.add(result.getHitEntity());
+                if(result.getHitEntity() != null){
+                    entities.add(result.getHitEntity());
+                    allChecked.add(result.getHitEntity());
+                }
             }
         }
         return new Result(entities, results);
