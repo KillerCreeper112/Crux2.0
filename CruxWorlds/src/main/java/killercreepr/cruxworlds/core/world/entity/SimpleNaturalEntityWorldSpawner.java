@@ -191,7 +191,7 @@ public class SimpleNaturalEntityWorldSpawner implements NaturalEntityWorldSpawne
                 z = CruxMath.random(-radius, radius);
             }*/
             Block b = center.getRelative(x,y,z);
-            if(b.getChunk().isLoaded()) list.add(b);
+            if(b.getChunk().isLoaded() && b.getWorld().getWorldBorder().isInside(b.getLocation())) list.add(b);
         }
         return list;
     }
