@@ -66,6 +66,12 @@ public interface Holder <T>{
         return t;
     }
 
+    default T valueOrSupply(Supplier<T> supplier){
+        T t = value();
+        if(t==null) return supplier.get();
+        return t;
+    }
+
     record Direct<T>(T value) implements Holder<T> {
         @Override
         public T value() {
