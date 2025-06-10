@@ -12,6 +12,7 @@ public class CruxKey {
      * But we're preparing for the future!
      */
     public static @NotNull NamespacedKey key(@NotNull Key key){
+        if(key instanceof NamespacedKey n) return n;
         return new NamespacedKey(key.namespace(), key.value());
     }
 

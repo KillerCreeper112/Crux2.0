@@ -8,6 +8,7 @@ import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.component.parser.type.ComponentInputParsers;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.paper.ItemHolder;
+import net.kyori.adventure.key.Key;
 
 import java.util.function.UnaryOperator;
 
@@ -30,6 +31,10 @@ public class CruxItemsComponents {
                 return new VaultBlockLootTable(ctx.get("loot_table"), ctx.getOptional("override_vanilla", true));
             })
             .createInput(Crux.key("vault_block_loot_table"))));
+
+
+    public static final DataComponentType<Key> PLUGIN_ITEM_REFERENCE = register("plugin_item_reference", builder -> builder
+        .persistTextParser(PersistTextParser.KEY.createInput(Crux.key("plugin_item_reference"))));
 
     private static <T> DataComponentType<T> register(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator){
         return CruxRegistries.DATA_COMPONENT_TYPE.register(Crux.key(id), builderOperator.apply(DataComponentType.builder()).build());
