@@ -25,6 +25,8 @@ public interface DataComponentType<T> {
         DataComponentType<T> build();
         Builder<T> persistent(@Nullable ComponentSerializer<?, T> serializer);
         Builder<T> textParser(@Nullable ComponentTextInputParser<T> parser);
+        Builder<T> onRemove(@Nullable NotifyReceiverRemove<T> parser);
+        Builder<T> onApply(@Nullable NotifyReceiverApply<T> parser);
         default Builder<T> persistTextParser(@Nullable PersistParser<T> parser){
             return persistent(parser).textParser(parser);
         }
@@ -37,8 +39,13 @@ public interface DataComponentType<T> {
 
             protected @Nullable ComponentSerializer<?, T> serializer;
             protected @Nullable ComponentTextInputParser<T> textParser;
+            protected @Nullable NotifyReceiverApply<T> notifyReceiverApply;
+            protected @Nullable NotifyReceiverRemove<T> notifyReceiverRemove;
             @Override
             public DataComponentType<T> build() {
+                if(notifyReceiverApply != null || notifyReceiverRemove != null){
+                    return new SimpleNotify<>(serializer, textParser, notifyReceiverApply, notifyReceiverRemove);
+                }
                 return new Simple<>(serializer, textParser);
             }
 
@@ -51,6 +58,18 @@ public interface DataComponentType<T> {
             @Override
             public Builder<T> textParser(@Nullable ComponentTextInputParser<T> parser) {
                 this.textParser = parser;
+                return this;
+            }
+
+            @Override
+            public Builder<T> onRemove(@Nullable NotifyReceiverRemove<T> parser) {
+                notifyReceiverRemove = parser;
+                return this;
+            }
+
+            @Override
+            public Builder<T> onApply(@Nullable NotifyReceiverApply<T> parser) {
+                notifyReceiverApply = parser;
                 return this;
             }
         }
@@ -74,5 +93,33 @@ public interface DataComponentType<T> {
         public @Nullable ComponentTextInputParser<T> textParser() {
             return textParser;
         }
+    }
+
+    class SimpleNotify<T> extends Simple<T> implements Notify<T>{
+        protected final @Nullable NotifyReceiverApply<T> notifyReceiverApply;
+        protected final @Nullable NotifyReceiverRemove<T> notifyReceiverRemove;
+
+        public SimpleNotify(@Nullable ComponentSerializer<?, T> serializer, @Nullable ComponentTextInputParser<T> textParser, @Nullable NotifyReceiverApply<T> notifyReceiverApply, @Nullable NotifyReceiverRemove<T> notifyReceiverRemove) {
+            super(serializer, textParser);
+            this.notifyReceiverApply = notifyReceiverApply;
+            this.notifyReceiverRemove = notifyReceiverRemove;
+        }
+
+        @Override
+        public void onComponentApplied(DataComponentAccessor holder, T value, T previousValue) {
+            if(notifyReceiverApply != null) notifyReceiverApply.onComponentApplied(holder, value, previousValue);
+        }
+
+        @Override
+        public void onComponentRemoved(DataComponentAccessor holder, T previousValue) {
+            if(notifyReceiverRemove != null) notifyReceiverRemove.onComponentRemoved(holder, previousValue);
+        }
+    }
+
+    interface NotifyReceiverApply<T>{
+        void onComponentApplied(DataComponentAccessor holder, T value, T previousValue);
+    }
+    interface NotifyReceiverRemove<T>{
+        void onComponentRemoved(DataComponentAccessor holder, T previousValue);
     }
 }
