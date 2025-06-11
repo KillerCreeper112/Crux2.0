@@ -1,20 +1,18 @@
 package killercreepr.cruxentities.entity.mob.goal.path;
 
+import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxentities.api.entity.mob.goal.path.GoalNode;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
-public class DistanceGoalNode implements GoalNode {
-    protected final double x;
-    protected final double y;
-    protected final double z;
+public class DynamicDistanceGoalNode implements GoalNode {
+    protected final Holder<Location> locationHolder;
     protected final double distance;
     protected final double distanceSquared;
 
-    public DistanceGoalNode(double x, double y, double z, double distance) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+    public DynamicDistanceGoalNode(Holder<Location> locationHolder, double distance) {
+        this.locationHolder = locationHolder;
         this.distance = distance;
         this.distanceSquared = distance * distance;
     }
@@ -29,21 +27,22 @@ public class DistanceGoalNode implements GoalNode {
 
     @Override
     public double x() {
-        return x;
+        return locationHolder.value().x();
     }
 
     @Override
     public double y() {
-        return y;
+        return locationHolder.value().y();
     }
 
     @Override
     public double z() {
-        return z;
+        return locationHolder.value().z();
     }
 
     @Override
     public boolean canMoveOn(Entity mob) {
-        return CruxMath.distanceSquared(mob.getLocation(), x, y, z) <= distanceSquared;
+        Location loc = locationHolder.value();
+        return CruxMath.distanceSquared(mob.getLocation(), loc.getX(), loc.getY(), loc.getZ()) <= distanceSquared;
     }
 }

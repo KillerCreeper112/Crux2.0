@@ -1,10 +1,13 @@
 package killercreepr.cruxentities.api.entity.mob.goal.path;
 
+import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.cruxentities.entity.mob.goal.path.DistanceGoalNode;
+import killercreepr.cruxentities.entity.mob.goal.path.DynamicDistanceGoalNode;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 public interface GoalNode {
     static GoalNode distanceGoalNode(double x, double y, double z, double distance){
@@ -18,6 +21,10 @@ public interface GoalNode {
     }
     static GoalNode distanceGoalNode(CruxPosition loc, double distance){
         return distanceGoalNode(loc.x(), loc.y(), loc.z(), distance);
+    }
+
+    static GoalNode dynamicDistanceGoalNode(@NotNull Holder<Location> locationHolder, double distance){
+        return new DynamicDistanceGoalNode(locationHolder, distance);
     }
 
     double x();

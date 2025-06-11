@@ -1,5 +1,7 @@
 package killercreepr.cruxentities.combat;
 
+import com.destroystokyo.paper.event.entity.EntityKnockbackByEntityEvent;
+import io.papermc.paper.event.entity.EntityKnockbackEvent;
 import killercreepr.crux.api.event.CruxEntityDamageEvent;
 import killercreepr.crux.api.event.CruxEntityDeathEvent;
 import killercreepr.crux.core.Crux;
@@ -100,9 +102,28 @@ public class CruxEntityDamager implements EntityDamager {
     }
 
     public @NotNull Vector applyKnockback(@NotNull Entity target, @NotNull Location attackLoc, double kb, double upKb, boolean add){
+        return applyKnockback(target, attackLoc, kb, upKb, add, false);
+    }
+
+    public @NotNull Vector applyKnockback(@NotNull Entity target, @NotNull Location attackLoc, double kb, double upKb, boolean add,
+                                          boolean skipEventCall){
         Vector delta = EntityDamager.calculateEntityVelocity(attackLoc, target, kb, upKb);
         if(add) delta = target.getVelocity().add(delta);
-        try{ target.setVelocity(delta); }
+        try{
+
+            if(!skipEventCall){
+                EntityKnockbackEvent event;
+                if(damager != null && target instanceof LivingEntity living){
+                    event = new EntityKnockbackByEntityEvent(living, damager, EntityKnockbackEvent.Cause.DAMAGE, (float) kb, delta);
+                }else{
+                    event = new EntityKnockbackEvent(target, EntityKnockbackEvent.Cause.DAMAGE, delta);
+                }
+                if(!event.callEvent()) return new Vector();
+                delta = event.getKnockback();
+            }
+
+            target.setVelocity(delta);
+        }
         catch (IllegalArgumentException ignored){}
         return delta;
     }
