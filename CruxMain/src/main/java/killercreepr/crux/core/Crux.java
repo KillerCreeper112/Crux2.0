@@ -104,6 +104,10 @@ public final class Crux {
         return buildMainThreadTickTask(CruxRegistries.MAIN_THREAD_TICK, true);
     }
 
+    public static int getCurrentTick(){
+        return getServer().getCurrentTick();
+    }
+
     public static boolean isPrimaryThread(){
         return Crux.getServer().isGlobalTickThread();
     }
