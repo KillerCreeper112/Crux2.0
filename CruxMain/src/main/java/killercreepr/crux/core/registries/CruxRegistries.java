@@ -39,6 +39,7 @@ public class CruxRegistries {
     public static final CruxModuleRegistry MODULES = new CruxModuleRegistry();
 
     public static final KeyedRegistry<CruxTick> TICK = new SimpleKeyedRegistry<>();
+    public static final KeyedRegistry<CruxTick> MAIN_THREAD_TICK = new SimpleKeyedRegistry<>();
 
     public static final MappedRegistry<String, Boolean> BOOLEAN_MAPPED = SimpleMappedRegistry.fromHashMap();
 

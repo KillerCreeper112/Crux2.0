@@ -100,6 +100,9 @@ public final class Crux {
     public static @NotNull BukkitRunnable buildTickTask(){
         return buildTickTask(CruxRegistries.TICK, true);
     }
+    public static @NotNull BukkitRunnable buildMainThreadTickTask(){
+        return buildMainThreadTickTask(CruxRegistries.MAIN_THREAD_TICK, true);
+    }
 
     public static boolean isPrimaryThread(){
         return Crux.getServer().isGlobalTickThread();
@@ -110,13 +113,13 @@ public final class Crux {
             return new BukkitRunnable(){
                 @Override
                 public void run() {
-                    for(CruxTick t : new HashSet<>(registry.values())){
+                    registry.values().removeIf(t ->{
                         if(t.markedForRemoval()){
-                            registry.remove(t.key());
-                            continue;
+                            return true;
                         }
                         t.tick();
-                    }
+                        return false;
+                    });
                 }
             };
         }
@@ -131,6 +134,36 @@ public final class Crux {
                     return false;
                 });
                 EntityMemory.REGISTRY.values().removeIf(EntityMemory::tick);
+            }
+        };
+    }
+
+    public static @NotNull BukkitRunnable buildMainThreadTickTask(@NotNull KeyedRegistry<CruxTick> registry, boolean includeEntityMemory){
+        if(!includeEntityMemory){
+            return new BukkitRunnable(){
+                @Override
+                public void run() {
+                    registry.values().removeIf(t ->{
+                        if(t.markedForRemoval()){
+                            return true;
+                        }
+                        t.tick();
+                        return false;
+                    });
+                }
+            };
+        }
+        return new BukkitRunnable(){
+            @Override
+            public void run() {
+                registry.values().removeIf(t ->{
+                    if(t.markedForRemoval()){
+                        return true;
+                    }
+                    t.tick();
+                    return false;
+                });
+                EntityMemory.MAIN_THREAD_REGISTRY.values().removeIf(EntityMemory::tick);
             }
         };
     }

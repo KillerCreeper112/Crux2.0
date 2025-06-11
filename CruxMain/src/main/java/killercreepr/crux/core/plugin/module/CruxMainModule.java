@@ -102,5 +102,6 @@ public class CruxMainModule implements CruxModule, Listener {
             this
         );
         Crux.buildTickTask().runTaskTimerAsynchronously(plugin, 20L, 1L);
+        Crux.buildMainThreadTickTask().runTaskTimer(plugin, 20L, 1L);
     }
 }

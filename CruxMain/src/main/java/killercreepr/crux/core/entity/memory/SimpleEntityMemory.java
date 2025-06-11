@@ -88,6 +88,15 @@ public class SimpleEntityMemory implements EntityMemory {
     public void removeDataHolders(@Nullable Entity e){
         List<CompletableFuture<Void>> futures = new ArrayList<>();
         for(DataHolder h : dataHolders.values()){
+            if(!isAsync()){
+                try{
+                    h.parentRemoving(e);
+                }catch (Exception ignored){
+                    ignored.printStackTrace();;
+                }
+                return;
+            }
+
             futures.add(CompletableFuture.runAsync(() ->{
                 /*if(instantUnload){
                     try{
@@ -102,6 +111,10 @@ public class SimpleEntityMemory implements EntityMemory {
                     ignored.printStackTrace();;
                 }
             }, CLEANUP_EXECUTOR));
+        }
+        if(futures.isEmpty()){
+            dataHolders.clear();
+            return;
         }
 
         CompletableFuture<Void> combined = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));

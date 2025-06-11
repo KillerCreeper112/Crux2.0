@@ -41,6 +41,7 @@ public interface EntityMemory extends Holder<Entity> {
     static @NotNull MappedRegistry<Plugin, Set<Consumer<EntityMemory>>> getAddFunctions(){ return ADD_FUNCTIONS; }
 
     EntityMemoryRegistry<EntityMemory> REGISTRY = new EntityMemoryRegistry<>();
+    EntityMemoryRegistry<EntityMemory> MAIN_THREAD_REGISTRY = new EntityMemoryRegistry<>(new HashMap<>());
 
     static @Nullable EntityMemory get(@NotNull Entity p){
         if(p instanceof Player player) return PlayerMemory.get(player);
@@ -75,17 +76,37 @@ public interface EntityMemory extends Holder<Entity> {
                 d.accept(tick);
             }
         }
+        if(!tick.isAsync()){
+            MAIN_THREAD_REGISTRY.register(tick.getUUID(), tick);
+            return tick;
+        }
         REGISTRY.register(tick.getUUID(), tick);
         return tick;
     }
 
     static boolean register(@NotNull EntityMemory tick, boolean override){
+        if(!tick.isAsync()){
+            if(!override && MAIN_THREAD_REGISTRY.containsKey(tick.getUUID())) return false;
+            register(tick);
+            return true;
+        }
+
         if(!override && REGISTRY.containsKey(tick.getUUID())) return false;
         register(tick);
         return true;
     }
 
     static @Nullable EntityMemory get(@NotNull UUID uuid){
+        var mem = REGISTRY.get(uuid);
+        if(mem != null) return mem;
+        return MAIN_THREAD_REGISTRY.get(uuid);
+    }
+
+    static @Nullable EntityMemory getMain(@NotNull UUID uuid){
+        return MAIN_THREAD_REGISTRY.get(uuid);
+    }
+
+    static @Nullable EntityMemory getAsync(@NotNull UUID uuid){
         return REGISTRY.get(uuid);
     }
 
@@ -114,6 +135,10 @@ public interface EntityMemory extends Holder<Entity> {
 
     @NotNull KeyedRegistry<DataHolder> getDataHolders();
     @Nullable DataHolder getDataHolder(@NotNull Key key);
+
+    default boolean isAsync(){
+        return true;
+    }
 
     default <T extends DataHolder> @Nullable T getDataHolder(@NotNull Class<T> clazz){
         try{
