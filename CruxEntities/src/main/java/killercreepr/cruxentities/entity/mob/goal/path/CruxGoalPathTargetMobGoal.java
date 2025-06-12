@@ -31,8 +31,8 @@ public class CruxGoalPathTargetMobGoal implements PathTargetMobGoal {
 
     @Override
     public void setPath(@Nullable GoalPath path) {
-        if(path != null){
-            GoalNode current = path.getCurrentNode();
+        if(this.path != null){
+            GoalNode current = this.path.getCurrentNode();
             if(current != null) current.onFinish(this);
         }
         this.path = path;
@@ -44,6 +44,7 @@ public class CruxGoalPathTargetMobGoal implements PathTargetMobGoal {
 
     @Override
     public void tick() {
+        if(path==null) return;
         if(path.canMoveOn(getMob())){
             GoalNode current = path.getCurrentNode();
             if(current != null) current.onFinish(this);

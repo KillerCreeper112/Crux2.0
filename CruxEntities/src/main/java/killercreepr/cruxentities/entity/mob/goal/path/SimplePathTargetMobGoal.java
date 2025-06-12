@@ -39,6 +39,7 @@ public class SimplePathTargetMobGoal implements PathTargetMobGoal {
 
     @Override
     public void tick() {
+        if(path==null) return;
         if(path.canMoveOn(mob)){
             GoalNode current = path.getCurrentNode();
             if(current != null) current.onFinish(this);
