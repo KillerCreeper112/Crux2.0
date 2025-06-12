@@ -26,6 +26,10 @@ public class SimplePathTargetMobGoal implements PathTargetMobGoal {
 
     @Override
     public void setPath(@Nullable GoalPath path) {
+        if(path != null){
+            GoalNode current = path.getCurrentNode();
+            if(current != null) current.onFinish(this);
+        }
         this.path = path;
     }
 
@@ -36,7 +40,12 @@ public class SimplePathTargetMobGoal implements PathTargetMobGoal {
     @Override
     public void tick() {
         if(path.canMoveOn(mob)){
+            GoalNode current = path.getCurrentNode();
+            if(current != null) current.onFinish(this);
             path.nextNode();
+
+            current = path.getCurrentNode();
+            if(current != null) current.onStart(this);
         }
         if(path.hasFinished()){
             onPathFinish();
@@ -53,6 +62,8 @@ public class SimplePathTargetMobGoal implements PathTargetMobGoal {
     }
 
     public void onCurrentNodeTick(GoalNode node){
+        node.onTick(this);
+
         Location loc = new Location(mob.getWorld(), node.x(), node.y(), node.z());
         mob.getPathfinder().moveTo(loc, getSpeed());
     }

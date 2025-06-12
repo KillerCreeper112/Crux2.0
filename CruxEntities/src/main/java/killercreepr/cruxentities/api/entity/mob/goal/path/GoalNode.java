@@ -2,6 +2,7 @@ package killercreepr.cruxentities.api.entity.mob.goal.path;
 
 import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.api.math.CruxPosition;
+import killercreepr.cruxentities.api.entity.mob.goal.PathTargetMobGoal;
 import killercreepr.cruxentities.entity.mob.goal.path.DistanceGoalNode;
 import killercreepr.cruxentities.entity.mob.goal.path.DynamicDistanceGoalNode;
 import org.bukkit.Location;
@@ -25,6 +26,18 @@ public interface GoalNode {
 
     static GoalNode dynamicDistanceGoalNode(@NotNull Holder<Location> locationHolder, double distance){
         return new DynamicDistanceGoalNode(locationHolder, distance);
+    }
+
+    default void onTick(PathTargetMobGoal goal){
+
+    }
+
+    default void onStart(PathTargetMobGoal goal){
+
+    }
+
+    default void onFinish(PathTargetMobGoal goal){
+
     }
 
     double x();

@@ -25,13 +25,17 @@ public class CruxGoalPathTargetMobGoal implements PathTargetMobGoal {
         return path;
     }
 
-    @Override
-    public void setPath(@Nullable GoalPath path) {
-        this.path = path;
-    }
-
     public Mob getMob(){
         return goal.getMob();
+    }
+
+    @Override
+    public void setPath(@Nullable GoalPath path) {
+        if(path != null){
+            GoalNode current = path.getCurrentNode();
+            if(current != null) current.onFinish(this);
+        }
+        this.path = path;
     }
 
     public void onPathFinish(){
@@ -40,9 +44,13 @@ public class CruxGoalPathTargetMobGoal implements PathTargetMobGoal {
 
     @Override
     public void tick() {
-        if(path == null) return;
         if(path.canMoveOn(getMob())){
+            GoalNode current = path.getCurrentNode();
+            if(current != null) current.onFinish(this);
             path.nextNode();
+
+            current = path.getCurrentNode();
+            if(current != null) current.onStart(this);
         }
         if(path.hasFinished()){
             onPathFinish();
@@ -59,8 +67,9 @@ public class CruxGoalPathTargetMobGoal implements PathTargetMobGoal {
     }
 
     public void onCurrentNodeTick(GoalNode node){
-        Mob mob = getMob();
-        Location loc = new Location(mob.getWorld(), node.x(), node.y(), node.z());
-        mob.getPathfinder().moveTo(loc, getSpeed());
+        node.onTick(this);
+
+        Location loc = new Location(getMob().getWorld(), node.x(), node.y(), node.z());
+        getMob().getPathfinder().moveTo(loc, getSpeed());
     }
 }
