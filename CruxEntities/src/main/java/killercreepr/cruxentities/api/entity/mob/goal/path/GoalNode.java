@@ -5,12 +5,20 @@ import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.cruxentities.api.entity.mob.goal.PathTargetMobGoal;
 import killercreepr.cruxentities.entity.mob.goal.path.DistanceGoalNode;
 import killercreepr.cruxentities.entity.mob.goal.path.DynamicDistanceGoalNode;
+import killercreepr.cruxentities.entity.mob.goal.path.VariableGoalNode;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Consumer;
+import java.util.function.Function;
+
 public interface GoalNode {
+    static Builder builder(){
+        return new VariableGoalNode.SimpleBuilder();
+    }
+
     static GoalNode distanceGoalNode(double x, double y, double z, double distance){
         return new DistanceGoalNode(x, y, z, distance);
     }
@@ -44,4 +52,13 @@ public interface GoalNode {
     double y();
     double z();
     boolean canMoveOn(Entity mob);
+
+    interface Builder{
+        Builder onTick(Consumer<PathTargetMobGoal> onTick);
+        Builder onStart(Consumer<PathTargetMobGoal> onStart);
+        Builder onFinish(Consumer<PathTargetMobGoal> onFinish);
+        GoalNode buildDynamicDistance(@NotNull Holder<Location> locationHolder, double distance);
+        GoalNode buildDistance(double x, double y, double z, double distance);
+        GoalNode buildDistance(@NotNull Location loc, double distance);
+    }
 }

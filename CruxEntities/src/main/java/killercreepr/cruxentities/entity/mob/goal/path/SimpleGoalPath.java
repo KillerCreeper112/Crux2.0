@@ -39,4 +39,14 @@ public class SimpleGoalPath implements GoalPath {
         if(hasFinished()) return;
         currentIndex++;
     }
+
+    @Override
+    public void finish() {
+        currentIndex = nodes.size();
+    }
+
+    @Override
+    public void reset() {
+        currentIndex = 0;
+    }
 }
