@@ -1,5 +1,6 @@
 package killercreepr.cruxentities.api.entity.mob.goal.path;
 
+import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.cruxentities.api.entity.mob.goal.PathTargetMobGoal;
@@ -12,7 +13,6 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public interface GoalNode {
     static Builder builder(){
@@ -57,6 +57,7 @@ public interface GoalNode {
         Builder onTick(Consumer<PathTargetMobGoal> onTick);
         Builder onStart(Consumer<PathTargetMobGoal> onStart);
         Builder onFinish(Consumer<PathTargetMobGoal> onFinish);
+        Builder info(DataExchange info);
         GoalNode buildDynamicDistance(@NotNull Holder<Location> locationHolder, double distance);
         GoalNode buildDistance(double x, double y, double z, double distance);
         GoalNode buildDistance(@NotNull Location loc, double distance);

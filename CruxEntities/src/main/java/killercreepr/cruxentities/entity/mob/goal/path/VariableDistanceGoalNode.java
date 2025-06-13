@@ -1,5 +1,6 @@
 package killercreepr.cruxentities.entity.mob.goal.path;
 
+import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxentities.api.entity.mob.goal.PathTargetMobGoal;
 import org.bukkit.entity.Entity;
@@ -12,8 +13,8 @@ public class VariableDistanceGoalNode extends VariableGoalNode {
     protected final double z;
     protected final double distance;
     protected final double distanceSquared;
-    public VariableDistanceGoalNode(Consumer<PathTargetMobGoal> onTick, Consumer<PathTargetMobGoal> onStart, Consumer<PathTargetMobGoal> onFinish, double x, double y, double z, double distance) {
-        super(onTick, onStart, onFinish);
+    public VariableDistanceGoalNode(Consumer<PathTargetMobGoal> onTick, Consumer<PathTargetMobGoal> onStart, Consumer<PathTargetMobGoal> onFinish, DataExchange info, double x, double y, double z, double distance) {
+        super(onTick, onStart, onFinish, info);
         this.x = x;
         this.y = y;
         this.z = z;
