@@ -2,7 +2,6 @@ package killercreepr.crux.core.persistence.type;
 
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.persistence.CruxPersistence;
-import killercreepr.crux.core.util.CruxEntityUtil;
 import killercreepr.crux.core.util.CruxTag;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -35,7 +34,6 @@ public class LocationTagType implements PersistentDataType<PersistentDataContain
         c.set(k("y"), PersistentDataType.DOUBLE, complex.getY());
         c.set(k("z"), PersistentDataType.DOUBLE, complex.getZ());
         c.set(k("yaw"), PersistentDataType.FLOAT, complex.getYaw());
-        CruxEntityUtil
         c.set(k("pitch"), PersistentDataType.FLOAT, complex.getPitch());
         return c;
     }
