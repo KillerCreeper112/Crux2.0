@@ -33,4 +33,12 @@ public class ApplyPotionEffectsEntityPhysicalInteractComponent implements CruxIn
         if(filter != null && !filter.test(e)) return;
         lv.addPotionEffects(potionEffects);
     }
+
+    public Collection<PotionEffect> getPotionEffects() {
+        return potionEffects;
+    }
+
+    public EntityPredicate getFilter() {
+        return filter;
+    }
 }
