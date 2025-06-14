@@ -6,9 +6,11 @@ import killercreepr.crux.api.loot.LootTable;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxblocks.api.block.CruxBlock;
 import killercreepr.cruxblocks.api.block.active.ActiveCruxBlock;
+import killercreepr.cruxblocks.api.block.active.ActiveCruxEntityPhysicalInteract;
 import killercreepr.cruxblocks.api.block.active.ActiveCruxInteractable;
 import killercreepr.cruxblocks.api.block.active.ActiveCruxRedstonePowerable;
 import killercreepr.cruxblocks.api.block.component.CruxInteractableBlockComponent;
+import killercreepr.cruxblocks.api.block.component.CruxInteractablePhysicalBlockComponent;
 import killercreepr.cruxblocks.api.block.component.CruxRedstonePowerableComponent;
 import killercreepr.cruxblocks.api.item.KeyedItemProvider;
 import killercreepr.cruxblocks.api.mining.user.Miner;
@@ -19,6 +21,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +30,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.Set;
 
-public class SimpleActiveCruxBlock implements ActiveCruxBlock, ActiveCruxInteractable, ActiveCruxRedstonePowerable {
+public class SimpleActiveCruxBlock implements ActiveCruxBlock, ActiveCruxInteractable, ActiveCruxRedstonePowerable,
+    ActiveCruxEntityPhysicalInteract {
     protected final @NotNull Block block;
     protected final @NotNull CruxBlock cruxBlock;
 
@@ -122,6 +126,20 @@ public class SimpleActiveCruxBlock implements ActiveCruxBlock, ActiveCruxInterac
     public void redstonePowerChanged(Block from, int newPower) {
         for(CruxRedstonePowerableComponent comp : getCruxBlock().getComponents().getAllOfType(CruxRedstonePowerableComponent.class)){
             comp.redstonePowerChanged(from, newPower);
+        }
+    }
+
+    @Override
+    public void onEntityPhysicalInteract(@NotNull Entity e, @NotNull PlayerInteractEvent event) {
+        for(CruxInteractablePhysicalBlockComponent comp : getCruxBlock().getComponents().getAllOfType(CruxInteractablePhysicalBlockComponent.class)){
+            comp.onEntityPhysicalInteract(e, event);
+        }
+    }
+
+    @Override
+    public void onEntityPhysicalInteract(@NotNull Entity e, @NotNull EntityInteractEvent event) {
+        for(CruxInteractablePhysicalBlockComponent comp : getCruxBlock().getComponents().getAllOfType(CruxInteractablePhysicalBlockComponent.class)){
+            comp.onEntityPhysicalInteract(e, event);
         }
     }
 }

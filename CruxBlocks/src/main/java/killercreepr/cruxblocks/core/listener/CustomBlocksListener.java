@@ -60,6 +60,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -491,6 +492,22 @@ public class CustomBlocksListener implements Listener {
         Vec3 vec3 = eyePosition.add(player.calculateViewVector(player.getXRot(), player.getYRot()).scale(player.blockInteractionRange()));
         return level.clip(new ClipContext(eyePosition, vec3, net.minecraft.world.level.ClipContext.Block.OUTLINE, fluidMode, player));
     }
+
+    @EventHandler
+    public void onEntityInteract(EntityInteractEvent event) {
+        Block b = event.getBlock();
+        if(b != null){
+            Material type = b.getType();
+            if(type == Material.TRIPWIRE){
+                event.setCancelled(true);
+                ActiveCruxBlock active = manager.getActiveBlock(b);
+                if(active instanceof ActiveCruxEntityPhysicalInteract i){
+                    i.onEntityPhysicalInteract(event.getEntity(), event);
+                }
+            }
+        }
+    }
+
 
     protected final Map<UUID, Boolean> nmsSkip = new HashMap<>();
     @EventHandler

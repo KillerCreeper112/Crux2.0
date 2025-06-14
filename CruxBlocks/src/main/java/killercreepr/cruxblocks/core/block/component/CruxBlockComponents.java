@@ -68,6 +68,9 @@ public class CruxBlockComponents {
     public static final DataComponentType<CruxRedstonePowerableComponent> GENERIC_REDSTONE_POWERABLE = register("generic_redstone_powerable",
         builder -> builder);
 
+    public static final DataComponentType<CruxInteractablePhysicalBlockComponent> GENERIC_ENTITY_PHYSICAL_INTERACT = register("generic_entity_physical_interact",
+        builder -> builder);
+
     private static <T> DataComponentType<T> register(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator){
         return CruxRegistries.DATA_COMPONENT_TYPE.register(Crux.key(id), builderOperator.apply(DataComponentType.builder()).build());
     }

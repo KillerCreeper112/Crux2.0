@@ -1,11 +1,13 @@
 package killercreepr.cruxblocks.core.config.handler.component;
 
+import com.google.common.reflect.TypeToken;
 import killercreepr.crux.api.block.CruxBlockWrapper;
 import killercreepr.crux.api.block.predicate.BlockPredicate;
 import killercreepr.crux.api.block.sound.CreateBlockSoundGroup;
 import killercreepr.crux.api.communication.CreateSound;
 import killercreepr.crux.api.component.DataComponentType;
 import killercreepr.crux.api.component.TypedDataComponent;
+import killercreepr.crux.api.entity.predicate.EntityPredicate;
 import killercreepr.crux.api.item.predicate.ItemPredicate;
 import killercreepr.crux.api.loot.item.ItemLootTable;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
@@ -14,6 +16,7 @@ import killercreepr.crux.core.math.BlockPos;
 import killercreepr.crux.core.util.CruxDirection;
 import killercreepr.cruxblocks.api.block.component.*;
 import killercreepr.cruxblocks.core.block.component.CruxBlockComponents;
+import killercreepr.cruxblocks.core.block.component.standard.ApplyPotionEffectsEntityPhysicalInteractComponent;
 import killercreepr.cruxblocks.core.block.component.standard.EntitySpawnerComponent;
 import killercreepr.cruxblocks.core.block.component.standard.InteractHarvestableBlockComponent;
 import killercreepr.cruxblocks.core.block.component.standard.PlaceableCheckComponent;
@@ -25,9 +28,11 @@ import killercreepr.cruxconfig.config.common.element.FileArray;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import org.bukkit.Axis;
 import org.bukkit.block.BlockFace;
+import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -186,6 +191,22 @@ public class CfgBlockComponents {
                         reg.deserializeFromFile(ItemLootTable.class, e.get("item_drops")),
                         e.getOrDefaultObject("item_damage", 0)
                     )
+                );
+            }
+        });
+
+        registry.register("physical_interact_potion_effects", new FileDataComponentType<CruxInteractablePhysicalBlockComponent>() {
+            @Override
+            public @Nullable TypedDataComponent<CruxInteractablePhysicalBlockComponent> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
+                Collection<PotionEffect> potions = ctx.getRegistry().deserializeFromFile(
+                    new TypeToken<Collection<PotionEffect>>(){}.getType(),
+                    e.get("potion_effects")
+                );
+                if(potions == null || potions.isEmpty()) return null;
+                EntityPredicate filter = ctx.getRegistry().deserializeFromFile(EntityPredicate.class, e.get("filter"));
+                return TypedDataComponent.create(
+                    CruxBlockComponents.GENERIC_ENTITY_PHYSICAL_INTERACT,
+                    new ApplyPotionEffectsEntityPhysicalInteractComponent(potions, filter)
                 );
             }
         });
