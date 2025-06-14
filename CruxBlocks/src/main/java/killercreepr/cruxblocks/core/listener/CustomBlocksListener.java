@@ -498,7 +498,13 @@ public class CustomBlocksListener implements Listener {
         if(event.getAction() == Action.PHYSICAL){
             if(event.getClickedBlock() != null){
                 Material type = event.getClickedBlock().getType();
-                if(type == Material.TRIPWIRE) event.setCancelled(true);
+                if(type == Material.TRIPWIRE){
+                    event.setCancelled(true);
+                    ActiveCruxBlock active = manager.getActiveBlock(event.getClickedBlock());
+                    if(active instanceof ActiveCruxEntityPhysicalInteract i){
+                        i.onEntityPhysicalInteract(event.getPlayer(), event);
+                    }
+                }
             }
             return;
         }
