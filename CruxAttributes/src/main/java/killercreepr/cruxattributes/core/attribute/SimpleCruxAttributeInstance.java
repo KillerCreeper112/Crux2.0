@@ -57,9 +57,6 @@ public class SimpleCruxAttributeInstance implements CruxAttributeInstance {
         return true;
     }
 
-
-
-
     protected final CruxAttribute attribute;
     protected final Collection<CruxAttributeModifier> modifiers = new ArrayList<>();
     public SimpleCruxAttributeInstance(@NotNull CruxAttribute attribute, @NotNull Collection<CruxAttributeModifier> modifiers) {
@@ -90,7 +87,11 @@ public class SimpleCruxAttributeInstance implements CruxAttributeInstance {
         return x;
     }
 
+    protected double cachedValue;
+    protected boolean dirty = true;
     public double getValue(){
+        if(!dirty) return cachedValue;
+        dirty = false;
         double x = 0D;
         double multiply = 0D;
         Collection<CruxAttributeModifier> ADD = new ArrayList<>();
@@ -110,7 +111,7 @@ public class SimpleCruxAttributeInstance implements CruxAttributeInstance {
             x += m.getAmount();
         }
         if(multiply != 0D) x *= (1D + multiply);
-        return attribute.processValue(x); //attribute.equals(CruxAttribute.ATTACK_SPEED) ? x*-1D : x;
+        return cachedValue = attribute.processValue(x); //attribute.equals(CruxAttribute.ATTACK_SPEED) ? x*-1D : x;
     }
 
     public double getBaseValue(){
@@ -156,7 +157,7 @@ public class SimpleCruxAttributeInstance implements CruxAttributeInstance {
 
         @Override
         public boolean removeModifiers(@NotNull Key... path) {
-            return modifiers.removeIf(m -> SimpleCruxAttributeInstance.matchesPath(m, path));
+            return dirty = modifiers.removeIf(m -> SimpleCruxAttributeInstance.matchesPath(m, path));
         }
 
         @Override
@@ -173,6 +174,7 @@ public class SimpleCruxAttributeInstance implements CruxAttributeInstance {
 
             this.modifiers.removeAll(toRemove);
             Collections.addAll(this.modifiers, modifiers);
+            dirty = true;
 
             /*for(CruxAttributeModifier mod : modifiers){
                 this.modifiers.removeIf(compare -> compare.key().equals(mod.key()) && Arrays.equals(compare.getPath(), mod.getPath()));
@@ -183,7 +185,10 @@ public class SimpleCruxAttributeInstance implements CruxAttributeInstance {
         @Override
         public @NotNull DynamicCruxAttributeInstance copy() {
             Collection<CruxAttributeModifier> list = new ArrayList<>(modifiers);
-            return new SimpleCruxAttributeInstance.Dynamic(attribute, list);
+            var copy = new SimpleCruxAttributeInstance.Dynamic(attribute, list);
+            copy.dirty = dirty;
+            copy.cachedValue = cachedValue;
+            return copy;
         }
     }
 }
