@@ -41,7 +41,6 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -209,6 +208,13 @@ public class CustomBlocksListener implements Listener {
     public void onPlayerMove(PlayerMoveEvent event) {
         if(!event.hasChangedPosition()) return;
         var p = event.getPlayer();
+
+        Block b = p.getLocation().getBlock();
+        if(b.getType() == Material.TRIPWIRE){
+            ActiveCruxBlock active = manager.getActiveBlock(b);
+            if(active instanceof ActiveCruxEntityMoveInside move) move.onEntityMoveInside(p);
+        }
+
         Block ground = CruxEntityUtil.getBlockStandingOn(p);
         if(ground == null) return;
         ActiveCruxBlock active = manager.getActiveBlock(ground);
@@ -219,6 +225,13 @@ public class CustomBlocksListener implements Listener {
     public void onEntityMove(EntityMoveEvent event) {
         if(!event.hasChangedPosition()) return;
         var p = event.getEntity();
+
+        Block b = p.getLocation().getBlock();
+        if(b.getType() == Material.TRIPWIRE){
+            ActiveCruxBlock active = manager.getActiveBlock(b);
+            if(active instanceof ActiveCruxEntityMoveInside move) move.onEntityMoveInside(p);
+        }
+
         Block ground = CruxEntityUtil.getBlockStandingOn(p);
         if(ground == null) return;
         ActiveCruxBlock active = manager.getActiveBlock(ground);

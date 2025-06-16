@@ -16,10 +16,7 @@ import killercreepr.crux.core.math.BlockPos;
 import killercreepr.crux.core.util.CruxDirection;
 import killercreepr.cruxblocks.api.block.component.*;
 import killercreepr.cruxblocks.core.block.component.CruxBlockComponents;
-import killercreepr.cruxblocks.core.block.component.standard.ApplyPotionEffectsEntityPhysicalInteractComponent;
-import killercreepr.cruxblocks.core.block.component.standard.EntitySpawnerComponent;
-import killercreepr.cruxblocks.core.block.component.standard.InteractHarvestableBlockComponent;
-import killercreepr.cruxblocks.core.block.component.standard.PlaceableCheckComponent;
+import killercreepr.cruxblocks.core.block.component.standard.*;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileDataComponentType;
 import killercreepr.cruxconfig.config.bukkit.registry.FileDataComponentRegistry;
 import killercreepr.cruxconfig.config.common.FileContext;
@@ -207,6 +204,22 @@ public class CfgBlockComponents {
                 return TypedDataComponent.create(
                     CruxBlockComponents.GENERIC_ENTITY_PHYSICAL_INTERACT,
                     new ApplyPotionEffectsEntityPhysicalInteractComponent(potions, filter)
+                );
+            }
+        });
+
+        registry.register("entity_move_inside_potion_effects", new FileDataComponentType<CruxEntityMoveInsideBlockComponent>() {
+            @Override
+            public @Nullable TypedDataComponent<CruxEntityMoveInsideBlockComponent> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
+                Collection<PotionEffect> potions = ctx.getRegistry().deserializeFromFile(
+                    new TypeToken<Collection<PotionEffect>>(){}.getType(),
+                    e.get("potion_effects")
+                );
+                if(potions == null || potions.isEmpty()) return null;
+                EntityPredicate filter = ctx.getRegistry().deserializeFromFile(EntityPredicate.class, e.get("filter"));
+                return TypedDataComponent.create(
+                    CruxBlockComponents.GENERIC_ENTITY_MOVE_INSIDE,
+                    new ApplyPotionEffectsEntityMoveInsideBlockComponent(potions, filter)
                 );
             }
         });

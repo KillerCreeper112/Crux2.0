@@ -5,10 +5,8 @@ import killercreepr.crux.api.loot.LootContext;
 import killercreepr.crux.api.loot.LootTable;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxblocks.api.block.CruxBlock;
-import killercreepr.cruxblocks.api.block.active.ActiveCruxBlock;
-import killercreepr.cruxblocks.api.block.active.ActiveCruxEntityPhysicalInteract;
-import killercreepr.cruxblocks.api.block.active.ActiveCruxInteractable;
-import killercreepr.cruxblocks.api.block.active.ActiveCruxRedstonePowerable;
+import killercreepr.cruxblocks.api.block.active.*;
+import killercreepr.cruxblocks.api.block.component.CruxEntityMoveInsideBlockComponent;
 import killercreepr.cruxblocks.api.block.component.CruxInteractableBlockComponent;
 import killercreepr.cruxblocks.api.block.component.CruxInteractablePhysicalBlockComponent;
 import killercreepr.cruxblocks.api.block.component.CruxRedstonePowerableComponent;
@@ -31,7 +29,7 @@ import java.util.Collection;
 import java.util.Set;
 
 public class SimpleActiveCruxBlock implements ActiveCruxBlock, ActiveCruxInteractable, ActiveCruxRedstonePowerable,
-    ActiveCruxEntityPhysicalInteract {
+    ActiveCruxEntityPhysicalInteract, ActiveCruxEntityMoveInside {
     protected final @NotNull Block block;
     protected final @NotNull CruxBlock cruxBlock;
 
@@ -140,6 +138,13 @@ public class SimpleActiveCruxBlock implements ActiveCruxBlock, ActiveCruxInterac
     public void onEntityPhysicalInteract(@NotNull Entity e, @NotNull EntityInteractEvent event) {
         for(CruxInteractablePhysicalBlockComponent comp : getCruxBlock().getComponents().getAllOfType(CruxInteractablePhysicalBlockComponent.class)){
             comp.onEntityPhysicalInteract(e, event);
+        }
+    }
+
+    @Override
+    public void onEntityMoveInside(@NotNull Entity e) {
+        for(CruxEntityMoveInsideBlockComponent comp : getCruxBlock().getComponents().getAllOfType(CruxEntityMoveInsideBlockComponent.class)){
+            comp.onEntityMoveInside(e);
         }
     }
 }
