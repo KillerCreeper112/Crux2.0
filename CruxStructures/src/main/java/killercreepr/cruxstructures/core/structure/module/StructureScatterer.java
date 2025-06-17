@@ -2,6 +2,7 @@ package killercreepr.cruxstructures.core.structure.module;
 
 import killercreepr.crux.api.text.context.InputContext;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
+import killercreepr.crux.core.data.util.Pair;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.crux.core.util.CruxedBoundingBox;
 import killercreepr.cruxstructures.api.event.StructurePlaceEvent;
@@ -40,36 +41,50 @@ public class StructureScatterer {
     protected @Nullable InputContext inputContext;
 
     public void addPlacedStructure(@NotNull Structure structure, @NotNull Location spawn, double rotation){
-        BoundingBox box = CruxedBoundingBox.wrap(structure.boundingBox())
+        addPlacedStructure(structure, spawn, rotation, getBoundingBox(structure, spawn, rotation));
+    }
+
+    public void addPlacedStructure(@NotNull Structure structure, @NotNull Location spawn, double rotation,
+                                   BoundingBox box){
+        /*BoundingBox box = CruxedBoundingBox.wrap(structure.boundingBox())
             .centerPoint(structure.originPos())
             .moveTo(spawn)
             .rotateY(
                 rotation, spawn.x()+.5, spawn.y()+.5, spawn.z()+.5
             )
-            .box();
+            .box();*/
         placed.put(spawn, box);
     }
 
     public void scatter(){
+        int i = 0;
         for(Structure structure : structures){
-            Location spawn = findRandomSpot(structure, maxScatterAttempts.sample(inputContext).intValue());
+            i++;
+            if(i > 5) break;
+            double rotation = CruxMath.random().nextInt(4) * 90;
+            Pair<Location, BoundingBox> spawn = findRandomSpot(structure, maxScatterAttempts.sample(inputContext).intValue(), rotation);
             if(spawn==null) continue;
 
-            double rotation = CruxMath.random().nextInt(4) * 90;
             StructurePlaceEvent event = structure.place(
-                spawn, rotation
+                spawn.getFirst(), rotation
             );
             if(event.isCancelled()) continue;
             rotation = event.getRotation();
-            addPlacedStructure(structure, spawn, rotation);
+            addPlacedStructure(structure, spawn.getFirst(), rotation, spawn.getSecond());
         }
     }
 
-    public boolean impedesOnAlreadyPlacedStructures(@NotNull Structure structure, @NotNull Location at){
-        BoundingBox box = CruxedBoundingBox.wrap(structure.boundingBox())
+    public BoundingBox getBoundingBox(Structure structure, Location at, double rotation){
+        return CruxedBoundingBox.wrap(structure.boundingBox())
             .centerPoint(structure.originPos())
             .moveTo(at)
+            .rotateY(
+                rotation, at.x()+.5, at.y()+.5, at.z()+.5
+            )
             .box();
+    }
+
+    public boolean impedesOnAlreadyPlacedStructures(BoundingBox box){
         for(BoundingBox placedBox : placed.values()){
             if(box.overlaps(placedBox)) return true;
         }
@@ -88,13 +103,16 @@ public class StructureScatterer {
         return center.clone().add(xRange, yRange, zRange);
     }
 
-    public @Nullable Location findRandomSpot(@NotNull Structure forStructure, int attempts){
+    public @Nullable Pair<Location, BoundingBox> findRandomSpot(@NotNull Structure forStructure, int attempts, double rotation){
         while(attempts > 0){
             attempts--;
             Location potentialSpawn = getRandomSpotUnchecked();
-            if(impedesOnAlreadyPlacedStructures(forStructure, potentialSpawn)) continue;
             potentialSpawn = locationFinder.find(potentialSpawn);
-            if(potentialSpawn != null) return potentialSpawn;
+            if(potentialSpawn == null) continue;
+
+            BoundingBox box = getBoundingBox(forStructure, potentialSpawn, rotation);
+            if(impedesOnAlreadyPlacedStructures(box)) continue;
+            /*if(potentialSpawn != null) */return new Pair<>(potentialSpawn, box);
         }
         return null;
     }
