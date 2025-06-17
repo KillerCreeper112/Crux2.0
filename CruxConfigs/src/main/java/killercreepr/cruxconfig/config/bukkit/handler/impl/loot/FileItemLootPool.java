@@ -53,8 +53,9 @@ public class FileItemLootPool implements FileObjectHandler<ItemLootPool> {
             }
         }
 
+        boolean allowDuplicates = o.getOrDefaultObject(Boolean.class, "allow_duplicates",false);
         return new SimpleItemLootPool(
-            conditions, functions, rolls, entries
+            conditions, functions, rolls, entries, allowDuplicates
         );
     }
 

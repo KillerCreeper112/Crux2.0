@@ -20,27 +20,31 @@ import java.util.function.Predicate;
 public class SimpleLootPool<T> extends SimpleFunctionedConditionedObject<T> implements LootPool.Accessible<T>, OpenedLootObject<T> {
     private final @NotNull NumberProvider rolls;
     private final @NotNull List<LootPoolObject<T>> data;
+    private final boolean allowDuplicates;
 
     public SimpleLootPool(@Nullable List<LootCondition> conditions,
                           @Nullable List<LootFunction<T>> lootFunctions,
-                          @NotNull NumberProvider rolls, @NotNull List<LootPoolObject<T>> data) {
+                          @NotNull NumberProvider rolls, @NotNull List<LootPoolObject<T>> data, boolean allowDuplicates) {
         super(conditions, lootFunctions);
         this.rolls = rolls;
         this.data = data;
+        this.allowDuplicates = allowDuplicates;
     }
 
     public SimpleLootPool(@Nullable List<LootFunction<T>> lootFunctions,
                           @NotNull NumberProvider rolls,
-                          @NotNull List<LootPoolObject<T>> data) {
+                          @NotNull List<LootPoolObject<T>> data, boolean allowDuplicates) {
         super(null, lootFunctions);
         this.rolls = rolls;
         this.data = data;
+        this.allowDuplicates = allowDuplicates;
     }
 
-    public SimpleLootPool(@NotNull NumberProvider rolls, @NotNull List<LootPoolObject<T>> data) {
+    public SimpleLootPool(@NotNull NumberProvider rolls, @NotNull List<LootPoolObject<T>> data, boolean allowDuplicates) {
         super(null, null);
         this.rolls = rolls;
         this.data = data;
+        this.allowDuplicates = allowDuplicates;
     }
 
     @Override
@@ -104,6 +108,7 @@ public class SimpleLootPool<T> extends SimpleFunctionedConditionedObject<T> impl
         return CruxWeightedSupplier.builder(newData)
             .rolls(rolls)
             .applyContext(context)
+            .allowDuplicates(allowDuplicates)
             .build().rollList();
     }
 

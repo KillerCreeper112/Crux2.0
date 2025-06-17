@@ -64,7 +64,7 @@ public class FileSimpleLootTable<T> implements FileObjectHandler<LootTable<T>> {
                 List.of(
                     new SimpleLootPool<>(NumberProvider.constant(1), List.of(
                         new SimpleLootPoolObject<>(1, 0f, Holder.direct(Set.of(object)))
-                    ))
+                    ), false)
                 ));
         }
         FileRegistry registry = ctx.getRegistry();

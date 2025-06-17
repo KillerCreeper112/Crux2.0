@@ -40,9 +40,9 @@ public class FileSimpleLootPool<T> implements FileObjectHandler<SimpleLootPool<T
                 T object = ctx.getRegistry().deserializeFromFile(type, g);
                 if(object==null) return null;
                 Collection<T> objects = Set.of(object);
-                return new SimpleLootPool<>( NumberProvider.constant(1), List.of(
+                return new SimpleLootPool<>(NumberProvider.constant(1), List.of(
                     new SimpleLootPoolObject<>(1, 0f, Holder.direct(objects))
-                ));
+                ), false);
             }
             return null;
         }
@@ -65,16 +65,9 @@ public class FileSimpleLootPool<T> implements FileObjectHandler<SimpleLootPool<T
         });
         if(entries.isEmpty()) return null;
 
-        Integer entriesDupeCount = o.getObject(Integer.class,"entries_dupe_count", 0);
-        if(entriesDupeCount > 0){
-            List<LootPoolObject<T>> copy = new ArrayList<>(entries);
-            for(int i = 0; i < entriesDupeCount; i++){
-                entries.addAll(copy);
-            }
-        }
-
+        boolean allowDuplicates = o.getOrDefaultObject(Boolean.class, "allow_duplicates",false);
         return new SimpleLootPool<>(
-            conditions, null, rolls, entries
+            conditions, null, rolls, entries, allowDuplicates
         );
     }
 
