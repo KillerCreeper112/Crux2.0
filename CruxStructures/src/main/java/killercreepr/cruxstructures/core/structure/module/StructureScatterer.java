@@ -57,10 +57,7 @@ public class StructureScatterer {
     }
 
     public void scatter(){
-        int i = 0;
         for(Structure structure : structures){
-            i++;
-            if(i > 5) break;
             double rotation = CruxMath.random().nextInt(4) * 90;
             Pair<Location, BoundingBox> spawn = findRandomSpot(structure, maxScatterAttempts.sample(inputContext).intValue(), rotation);
             if(spawn==null) continue;
