@@ -25,7 +25,8 @@ public class SimpleWeightedSupplier<T> implements CruxWeightedSupplier<T> {
     protected final @NotNull Function<T, Integer> weightFunction;
     protected final @NotNull Function<T, Float> qualityFunction;
     protected final Random random;
-    public SimpleWeightedSupplier(@NotNull Collection<T> poll, int rolls, float luck, @Nullable Consumer<T> onAccepted, @Nullable Predicate<T> filter, @NotNull Function<T, Integer> weightFunction, @NotNull Function<T, Float> qualityFunction, Random random) {
+    protected final boolean allowDuplicates;
+    public SimpleWeightedSupplier(@NotNull Collection<T> poll, int rolls, float luck, @Nullable Consumer<T> onAccepted, @Nullable Predicate<T> filter, @NotNull Function<T, Integer> weightFunction, @NotNull Function<T, Float> qualityFunction, Random random, boolean allowDuplicates) {
         this.poll = poll;
         this.rolls = rolls;
         this.luck = luck;
@@ -34,6 +35,7 @@ public class SimpleWeightedSupplier<T> implements CruxWeightedSupplier<T> {
         this.weightFunction = weightFunction;
         this.qualityFunction = qualityFunction;
         this.random = random;
+        this.allowDuplicates = allowDuplicates;
     }
 
     @Override
@@ -51,9 +53,21 @@ public class SimpleWeightedSupplier<T> implements CruxWeightedSupplier<T> {
     }
 
     @Override
+    public @NotNull List<T> rollList(boolean allowDuplicates) {
+        return rollList(random, filter, allowDuplicates);
+    }
+
+    @Override
     public @NotNull List<T> rollList(@NotNull Random random, @Nullable Predicate<T> filter) {
         List<T> list = new ArrayList<>();
         roll(random, list::add, filter);
+        return list;
+    }
+
+    @Override
+    public @NotNull List<T> rollList(@NotNull Random random, @Nullable Predicate<T> filter, boolean allowDuplicates) {
+        List<T> list = new ArrayList<>();
+        roll(random, list::add, filter, allowDuplicates);
         return list;
     }
 
@@ -65,6 +79,12 @@ public class SimpleWeightedSupplier<T> implements CruxWeightedSupplier<T> {
     @Override
     public @NotNull Map<T, Integer> roll(@NotNull Random random) {
         return roll(random, filter);
+    }
+
+    @Override
+    public @NotNull Map<T, Integer> roll(boolean allowDuplicates) {
+        Objects.requireNonNull(onAccepted, "onAccepted must not be null!");
+        return roll(random, onAccepted, filter, allowDuplicates);
     }
 
     @Override
@@ -86,45 +106,65 @@ public class SimpleWeightedSupplier<T> implements CruxWeightedSupplier<T> {
 
     @Override
     public @NotNull Map<T, Integer> roll(@NotNull Random random, @NotNull Consumer<T> onAccepted, @Nullable Predicate<T> filter){
-        if(poll.isEmpty()) return Map.of();
+        return roll(random, onAccepted, filter, allowDuplicates);
+    }
+
+    @Override
+    public @NotNull Map<T, Integer> roll(
+        @NotNull Random random,
+        @NotNull Consumer<T> onAccepted,
+        @Nullable Predicate<T> filter,
+        boolean allowDuplicates
+    ) {
+        if (poll.isEmpty()) return Map.of();
 
         LinkedHashMap<T, Integer> data = new LinkedHashMap<>();
-        for(T p : poll){
+        for (T p : poll) {
             data.put(p, weightFunction.apply(p));
         }
-        for(int i = 0; i < rolls; i++){
+
+        for (int i = 0; i < rolls; i++) {
             int totalWeight = 0;
             int weight;
             float quality;
-            for(T item : new HashSet<>(data.keySet())){
-                if(filter != null && !filter.test(item)){
-                    data.remove(item);
+
+            // Build a temporary pool that respects filters and updates weights
+            Map<T, Integer> tempPool = new LinkedHashMap<>();
+            for (T item : data.keySet()) {
+                if (filter != null && !filter.test(item)) {
                     continue;
                 }
 
                 weight = weightFunction.apply(item);
                 quality = qualityFunction.apply(item);
                 weight += (int) (quality * luck);
-                if(weight < 0){
-                    data.remove(item);
-                    continue;
-                }
+
+                if (weight <= 0) continue;
+
                 totalWeight += weight;
-                data.put(item, weight);
+                tempPool.put(item, weight);
             }
+
+            if (tempPool.isEmpty()) break;
+
             int chance = CruxMath.random(0, totalWeight, random);
-            for(Map.Entry<T, Integer> entry : new HashSet<>(data.entrySet())){
-                if(chance <= entry.getValue()){
-                    data.remove(entry.getKey());
+            for (Map.Entry<T, Integer> entry : tempPool.entrySet()) {
+                if (chance <= entry.getValue()) {
                     onAccepted.accept(entry.getKey());
+                    if (!allowDuplicates) {
+                        data.remove(entry.getKey());
+                    }
                     break;
                 }
                 chance -= entry.getValue();
             }
-            if(data.isEmpty()) break;
+
+            if (!allowDuplicates && data.isEmpty()) break;
         }
+
         return data;
     }
+
 
     public static final class Builder<T> implements CruxWeightedSupplierBuilder<T> {
         private @NotNull Collection<T> pool;
@@ -135,6 +175,7 @@ public class SimpleWeightedSupplier<T> implements CruxWeightedSupplier<T> {
         private @Nullable Predicate<T> filter;
         private Function<T, Integer> weightFunction;
         private Function<T, Float> qualityFunction;
+        private boolean allowDuplicates;
 
         public Builder(@NotNull Collection<T> pool) {
             this.pool = pool;
@@ -174,6 +215,11 @@ public class SimpleWeightedSupplier<T> implements CruxWeightedSupplier<T> {
         @Override
         public Builder<T> rolls(int rolls) {
             this.rolls = rolls;
+            return this;
+        }
+        @Override
+        public Builder<T> allowDuplicates(boolean allowDuplicates) {
+            this.allowDuplicates = allowDuplicates;
             return this;
         }
 
@@ -219,8 +265,11 @@ public class SimpleWeightedSupplier<T> implements CruxWeightedSupplier<T> {
             if(qualityFunction == null){
                 qualityFunction = object -> ((WeightedObject) object).getQuality();
             }
-            return new SimpleWeightedSupplier<>(pool, rolls, luck, onAccepted, filter,
-                weightFunction, qualityFunction, random == null ? CruxMath.random() : random);
+            return new SimpleWeightedSupplier<>(
+                pool, rolls, luck, onAccepted, filter,
+                weightFunction, qualityFunction, random == null ? CruxMath.random() : random,
+                allowDuplicates
+            );
         }
     }
 }

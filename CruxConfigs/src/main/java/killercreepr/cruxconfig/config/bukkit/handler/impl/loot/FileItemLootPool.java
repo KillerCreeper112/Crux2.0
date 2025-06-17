@@ -18,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FileItemLootPool implements FileObjectHandler<ItemLootPool> {
@@ -43,6 +44,15 @@ public class FileItemLootPool implements FileObjectHandler<ItemLootPool> {
             new TypeToken<List<ItemLootPoolObject>>(){}.getType(), o.get("entries")
         );
         if(entries==null) return null;
+
+        Integer entriesDupeCount = o.getObject(Integer.class,"entries_dupe_count", 0);
+        if(entriesDupeCount > 0){
+            List<LootPoolObject<ItemStack>> copy = new ArrayList<>(entries);
+            for(int i = 0; i < entriesDupeCount; i++){
+                entries.addAll(copy);
+            }
+        }
+
         return new SimpleItemLootPool(
             conditions, functions, rolls, entries
         );

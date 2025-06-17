@@ -20,14 +20,24 @@ public interface CruxWeightedSupplier<T> {
 
     @NotNull List<T> rollList(@Nullable Predicate<T> filter);
     @NotNull List<T> rollList(@NotNull Random random);
+    @NotNull List<T> rollList(boolean allowDuplicates);
     @NotNull List<T> rollList(@NotNull Random random, @Nullable Predicate<T> filter);
+    @NotNull List<T> rollList(@NotNull Random random, @Nullable Predicate<T> filter, boolean allowDuplicates);
 
     @NotNull Map<T, Integer> roll();
     @NotNull Map<T, Integer> roll(@NotNull Random random);
+    @NotNull Map<T, Integer> roll(boolean allowDuplicates);
 
     @NotNull Map<T, Integer> roll(@Nullable Predicate<T> filter);
     @NotNull Map<T, Integer> roll(@NotNull Random random, @Nullable Predicate<T> filter);
 
     @NotNull Map<T, Integer> roll(@NotNull Consumer<T> onAccepted, @Nullable Predicate<T> filter);
     @NotNull Map<T, Integer> roll(@NotNull Random random, @NotNull Consumer<T> onAccepted, @Nullable Predicate<T> filter);
+
+    @NotNull Map<T, Integer> roll(
+        @NotNull Random random,
+        @NotNull Consumer<T> onAccepted,
+        @Nullable Predicate<T> filter,
+        boolean allowDuplicates
+    );
 }

@@ -1,6 +1,7 @@
 package killercreepr.crux.api.util;
 
 import killercreepr.crux.api.loot.LootContext;
+import killercreepr.crux.core.util.SimpleWeightedSupplier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,6 +26,7 @@ public interface CruxWeightedSupplierBuilder<T> {
     CruxWeightedSupplierBuilder<T> filter(@Nullable Predicate<T> filter);
     CruxWeightedSupplierBuilder<T> weightFunction(@Nullable Function<T, Integer> filter);
     CruxWeightedSupplierBuilder<T> qualityFunction(@Nullable Function<T, Float> filter);
+    SimpleWeightedSupplier.Builder<T> allowDuplicates(boolean allowDuplicates);
 
     @NotNull CruxWeightedSupplier<T> build();
 }
