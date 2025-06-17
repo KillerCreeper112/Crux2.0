@@ -64,6 +64,15 @@ public class FileSimpleLootPool<T> implements FileObjectHandler<SimpleLootPool<T
             entries.add(object);
         });
         if(entries.isEmpty()) return null;
+
+        Integer entriesDupeCount = o.getObject(Integer.class,"entries_dupe_count", 0);
+        if(entriesDupeCount > 0){
+            List<LootPoolObject<T>> copy = new ArrayList<>(entries);
+            for(int i = 0; i < entriesDupeCount; i++){
+                entries.addAll(copy);
+            }
+        }
+
         return new SimpleLootPool<>(
             conditions, null, rolls, entries
         );
