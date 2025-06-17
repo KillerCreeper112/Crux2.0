@@ -67,7 +67,7 @@ public class StructureScatterModule implements StructureModule {
         if(!ignoreCenterStructure){
             scatterer.addPlacedStructure(structure, at, rotation);
         }
-        scatterer.setInputContext(InputContext.simple(
+        scatterer.setInputContext(InputContext.inputContext(
             StringTagProvider.build(TagContainer.string(
                 Tag.string("center_width_x", (args, context) -> structure.boundingBox().getWidthX() + ""),
                 Tag.string("center_width_z", (args, context) -> structure.boundingBox().getWidthZ() + ""),
