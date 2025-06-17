@@ -109,6 +109,7 @@ public class SimpleWeightedSupplier<T> implements CruxWeightedSupplier<T> {
         return roll(random, onAccepted, filter, allowDuplicates);
     }
 
+
     @Override
     public @NotNull Map<T, Integer> roll(
         @NotNull Random random,
@@ -117,6 +118,45 @@ public class SimpleWeightedSupplier<T> implements CruxWeightedSupplier<T> {
         boolean allowDuplicates
     ) {
         if (poll.isEmpty()) return Map.of();
+
+        if(!allowDuplicates){
+            LinkedHashMap<T, Integer> data = new LinkedHashMap<>();
+            for(T p : poll){
+                data.put(p, weightFunction.apply(p));
+            }
+            for(int i = 0; i < rolls; i++){
+                int totalWeight = 0;
+                int weight;
+                float quality;
+                for(T item : new HashSet<>(data.keySet())){
+                    if(filter != null && !filter.test(item)){
+                        data.remove(item);
+                        continue;
+                    }
+
+                    weight = weightFunction.apply(item);
+                    quality = qualityFunction.apply(item);
+                    weight += (int) (quality * luck);
+                    if(weight < 0){
+                        data.remove(item);
+                        continue;
+                    }
+                    totalWeight += weight;
+                    data.put(item, weight);
+                }
+                int chance = CruxMath.random(0, totalWeight, random);
+                for(Map.Entry<T, Integer> entry : new HashSet<>(data.entrySet())){
+                    if(chance <= entry.getValue()){
+                        data.remove(entry.getKey());
+                        onAccepted.accept(entry.getKey());
+                        break;
+                    }
+                    chance -= entry.getValue();
+                }
+                if(data.isEmpty()) break;
+            }
+            return data;
+        }
 
         LinkedHashMap<T, Integer> data = new LinkedHashMap<>();
         for (T p : poll) {
@@ -128,8 +168,6 @@ public class SimpleWeightedSupplier<T> implements CruxWeightedSupplier<T> {
             int weight;
             float quality;
 
-            // Build a temporary pool that respects filters and updates weights
-            Map<T, Integer> tempPool = new LinkedHashMap<>();
             for (T item : data.keySet()) {
                 if (filter != null && !filter.test(item)) {
                     continue;
@@ -142,24 +180,19 @@ public class SimpleWeightedSupplier<T> implements CruxWeightedSupplier<T> {
                 if (weight <= 0) continue;
 
                 totalWeight += weight;
-                tempPool.put(item, weight);
+                data.put(item, weight);
             }
 
-            if (tempPool.isEmpty()) break;
+            if (data.isEmpty()) break;
 
             int chance = CruxMath.random(0, totalWeight, random);
-            for (Map.Entry<T, Integer> entry : tempPool.entrySet()) {
+            for (Map.Entry<T, Integer> entry : data.entrySet()) {
                 if (chance <= entry.getValue()) {
                     onAccepted.accept(entry.getKey());
-                    if (!allowDuplicates) {
-                        data.remove(entry.getKey());
-                    }
                     break;
                 }
                 chance -= entry.getValue();
             }
-
-            if (!allowDuplicates && data.isEmpty()) break;
         }
 
         return data;
