@@ -82,8 +82,9 @@ public class StructureScatterer {
     }
 
     public boolean impedesOnAlreadyPlacedStructures(BoundingBox box){
+        BoundingBox below = box.clone().expand(1, 1, 1);
         for(BoundingBox placedBox : placed.values()){
-            if(box.overlaps(placedBox)) return true;
+            if(box.overlaps(placedBox) || below.overlaps(placedBox)) return true;
         }
         return false;
     }
