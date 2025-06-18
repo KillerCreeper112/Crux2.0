@@ -32,9 +32,9 @@ public class ApplyCruxPotionEffectsEntityMoveInsideBlockComponent implements Cru
 
     @Override
     public void onEntityMoveInside(@NotNull Entity e) {
-        if(!(e instanceof LivingEntity lv)) return;
+        if(!(e instanceof LivingEntity)) return;
         if(filter != null && !filter.test(e)) return;
-        PotionHolder potionHolder = EntityMemory.getOrCreateDataHolder(e, SimplePotionHolder.class);
+        PotionHolder potionHolder = EntityMemory.getDataHolder(e, SimplePotionHolder.class);
         if(potionHolder == null) return;
         PotionInflictor inflictor = new BlockInflictor(e.getLocation().getBlock());
 

@@ -3,12 +3,10 @@ package killercreepr.cruxpotions.core.config;
 import com.google.common.reflect.TypeToken;
 import killercreepr.crux.api.component.TypedDataComponent;
 import killercreepr.crux.api.entity.predicate.EntityPredicate;
-import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.cruxblocks.api.block.component.CruxEntityMoveInsideBlockComponent;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileDataComponentType;
 import killercreepr.cruxconfig.config.bukkit.registry.FileDataComponentRegistry;
 import killercreepr.cruxconfig.config.common.FileContext;
-import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxpotions.api.potion.StoredPotion;
 import killercreepr.cruxpotions.core.component.CruxBlocksPotionComponents;
@@ -35,11 +33,5 @@ public class CruxBlocksCfgHook {
                 );
             }
         });
-    }
-
-    private static NumberProvider num(FileRegistry registry, FileObject o, String x, NumberProvider fallback){
-        NumberProvider v = registry.deserializeFromFile(NumberProvider.class, o.get(x));
-        if(v == null) return fallback;
-        return v;
     }
 }
