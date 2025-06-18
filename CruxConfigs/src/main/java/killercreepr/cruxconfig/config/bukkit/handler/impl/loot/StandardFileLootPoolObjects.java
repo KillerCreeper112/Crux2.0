@@ -36,10 +36,8 @@ public class StandardFileLootPoolObjects {
                         new TypeToken<Collection<DynamicItem>>(){}.getType(),
                         e.get("items")
                     );
-                    if(items == null) return null;
                 }
 
-                if(items.isEmpty()) return null;
                 return new ListItemPoolObject(
                     loot.getWeight(), loot.getQuality(), loot.getConditions(), loot.getFunctions(), items
                 );

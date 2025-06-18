@@ -101,12 +101,34 @@ public class CfgBlockComponents {
             }
         });
 
+        registry.register("vine_block", new FileDataComponentType<VineBlock>() {
+            @Override
+            public @Nullable TypedDataComponent<VineBlock> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
+                VineType bushType = ctx.getRegistry().deserializeFromFile(VineType.class, e.get("vine_type"));
+                if(bushType == null) return null;
+                return TypedDataComponent.create(
+                    CruxBlockComponents.VINE_BLOCK,
+                    new VineBlock.Simple(bushType)
+                );
+            }
+        });
+
         registry.register("bush_group", new FileDataComponentType<BushGroup>() {
             @Override
             public @Nullable TypedDataComponent<BushGroup> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
                 return TypedDataComponent.create(
                     CruxBlockComponents.BUSH_GROUP,
                     new BushGroup.Simple()
+                );
+            }
+        });
+
+        registry.register("vine_group", new FileDataComponentType<VineGroup>() {
+            @Override
+            public @Nullable TypedDataComponent<VineGroup> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
+                return TypedDataComponent.create(
+                    CruxBlockComponents.VINE_GROUP,
+                    new VineGroup.Simple()
                 );
             }
         });

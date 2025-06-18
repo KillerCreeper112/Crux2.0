@@ -30,6 +30,10 @@ public class CruxBlockComponents {
         builder);
     public static final DataComponentType<BushGroup> BUSH_GROUP = register("bush_group", builder ->
         builder);
+    public static final DataComponentType<VineBlock> VINE_BLOCK = register("vine_block", builder ->
+        builder);
+    public static final DataComponentType<VineGroup> VINE_GROUP = register("vine_group", builder ->
+        builder);
     public static final DataComponentType<PlaceableCheckComponent> PLACEABLE_CHECK = register("placeable_check", builder ->
         builder);
 

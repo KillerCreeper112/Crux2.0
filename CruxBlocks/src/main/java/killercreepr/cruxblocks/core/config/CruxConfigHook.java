@@ -2,6 +2,7 @@ package killercreepr.cruxblocks.core.config;
 
 import killercreepr.cruxblocks.api.block.CruxBlock;
 import killercreepr.cruxblocks.api.block.component.BushType;
+import killercreepr.cruxblocks.api.block.component.VineType;
 import killercreepr.cruxblocks.api.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.api.block.texture.TextureData;
 import killercreepr.cruxblocks.core.config.handler.*;
@@ -41,6 +42,7 @@ public class CruxConfigHook {
         registry.registerFileHandler(CruxBlock.class, new FileCruxBlock());
         registry.registerFileHandler(CruxBlockGroup.class, new FileCruxBlockGroup());
         registry.registerFileHandler(BushType.class, new FileGenericEnum<>(BushType.class));
+        registry.registerFileHandler(VineType.class, new FileGenericEnum<>(VineType.class));
     }
 
     public static final CruxBlockGroupLoader loader = new CruxBlockGroupLoader();

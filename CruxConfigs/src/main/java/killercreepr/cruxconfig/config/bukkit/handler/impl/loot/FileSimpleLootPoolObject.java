@@ -68,9 +68,6 @@ public class FileSimpleLootPoolObject<T> implements FileObjectHandler<SimpleLoot
         }else itemKeys = registry.deserializeFromFile(
             new TypeToken<Collection<T>>(){}.getType(), o.get("item")
         );*/
-
-        if(itemKeys == null || itemKeys.isEmpty()) return null;
-
         return new SimpleLootPoolObject<>(loot.getWeight(), loot.getQuality(), Holder.direct(itemKeys));
     }
 

@@ -14,10 +14,11 @@ import java.util.Collection;
 import java.util.List;
 
 public class ListItemPoolObject extends SimpleItemLootPoolObject{
-    protected final @NotNull Collection<DynamicItem> items;
+    protected final @Nullable Collection<DynamicItem> items;
     public ListItemPoolObject(int weight, float quality, @Nullable List<LootCondition> conditions,
-                              @Nullable List<LootFunction<ItemStack>> lootFunctions, @NotNull Collection<DynamicItem> item) {
+                              @Nullable List<LootFunction<ItemStack>> lootFunctions, @Nullable Collection<DynamicItem> item) {
         super(weight, quality, conditions, lootFunctions, (ctx) ->{
+            if(item == null) return List.of();
             Collection<ItemStack> items = new ArrayList<>();
             TextParserContext parserCtx = TextParserContext.builder()
                 .tags(TagContainer.merged().hookAllWithPrefix(ctx.info()))
@@ -42,7 +43,7 @@ public class ListItemPoolObject extends SimpleItemLootPoolObject{
         this(weight, quality, null, item);
     }
 
-    public @NotNull Collection<DynamicItem> getItems() {
+    public @Nullable Collection<DynamicItem> getItems() {
         return items;
     }
 }
