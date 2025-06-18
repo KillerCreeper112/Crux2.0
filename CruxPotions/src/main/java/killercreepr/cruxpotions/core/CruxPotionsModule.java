@@ -6,6 +6,7 @@ import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.plugin.module.StandardModules;
 import killercreepr.crux.core.registries.CruxRegistries;
+import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
 import killercreepr.cruxconfig.config.common.handler.AutoFileHandler;
 import killercreepr.cruxconfig.config.common.handler.AutoFileOptions;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
@@ -14,8 +15,10 @@ import killercreepr.cruxpotions.api.potion.StoredPotion;
 import killercreepr.cruxpotions.api.potion.inflictor.PotionInflictor;
 import killercreepr.cruxpotions.api.values.ValuesProvider;
 import killercreepr.cruxpotions.core.command.CruxPotionCommands;
+import killercreepr.cruxpotions.core.component.CruxBlocksPotionComponents;
 import killercreepr.cruxpotions.core.component.PotionComponents;
 import killercreepr.cruxpotions.core.config.Config;
+import killercreepr.cruxpotions.core.config.CruxBlocksCfgHook;
 import killercreepr.cruxpotions.core.config.CruxPotionCfgHandler;
 import killercreepr.cruxpotions.core.config.handler.FileStoredPotion;
 import killercreepr.cruxpotions.core.entity.memory.SimplePotionHolder;
@@ -66,6 +69,14 @@ public class CruxPotionsModule implements CruxModule {
                 reg.registerFileHandler(PotionInflictor.class, CruxPotionCfgHandler.POTION_INFLICTOR);
                 reg.registerFileHandler(StoredPotion.class, new FileStoredPotion());
             });
+
+            if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_BLOCKS)){
+                CruxBlocksCfgHook.register(BukkitCfgHandlers.TYPED_DATA_COMPONENT.typeHandlers());
+            }
+        }
+
+        if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_BLOCKS)){
+            CruxBlocksPotionComponents.register();
         }
     }
 

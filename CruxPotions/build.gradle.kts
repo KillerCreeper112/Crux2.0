@@ -10,6 +10,7 @@ dependencies {
     compileOnly(project(":CruxMain"))
     compileOnly(project(":CruxConfigs"))
     compileOnly(project(":CruxItems"))
+    compileOnly(project(":CruxBlocks"))
 }
 
 tasks.getByName<JavaCompile>("compileJava") {
