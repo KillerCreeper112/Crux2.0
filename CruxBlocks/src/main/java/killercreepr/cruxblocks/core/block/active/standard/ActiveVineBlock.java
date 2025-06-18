@@ -59,23 +59,12 @@ public class ActiveVineBlock extends SimpleActiveCruxBlock {
         }
     }
 
-    /*@Override
+    @Override
     public boolean isPlacementValid() {
-        switch (getVineType()){
-            case BOTTOM, MIDDLE ->{
-                Block above = block.getRelative(BlockFace.UP);
-                CruxBlock cruxAbove = CruxBlocksRegistries.BLOCK.getByBlock(above);
-                if(cruxAbove == null || !cruxBlock.getGroup().containsBlock(cruxAbove)) return false;
-            }
-        }
         Block ground = block.getRelative(BlockFace.DOWN);
-        if(getVineType() == VineType.BOTTOM) return ground.isSolid();
-
         CruxBlock active = CruxBlocksRegistries.BLOCK.getByBlock(ground);
-
-        if(active == null) return false;
-        return cruxBlock.getGroup().containsBlock(active);
-    }*/
+        return (active != null && cruxBlock.getGroup().containsBlock(active)) || ground.isSolid();
+    }
 
     public @NotNull VineType getVineType(){
         return vineType;

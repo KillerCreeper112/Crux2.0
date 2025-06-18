@@ -1,8 +1,12 @@
 package killercreepr.cruxblocks.api.block.component;
 
 import killercreepr.cruxblocks.api.block.CruxBlock;
+import killercreepr.cruxblocks.api.block.context.BlockContext;
 import killercreepr.cruxblocks.api.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.core.block.component.CruxBlockComponents;
+import killercreepr.cruxblocks.core.registries.CruxBlocksRegistries;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,24 +18,12 @@ public interface VineGroup extends CruxBlockGroupComponent, Iterable<CruxBlock> 
     @Nullable
     CruxBlock getBlock(@NotNull VineType type);
 
-    /*@Override
+    @Override
     default @Nullable Boolean canPlace(@NotNull BlockContext ctx, @NotNull CruxBlockGroup group) {
-        Block b = ctx.getBlock();
-        Block check = b;
-        if(!check.isEmpty() && !check.isReplaceable()) return false;
-
-        if(group.getBlocks().size() > 1){
-            check = b.getRelative(BlockFace.UP);
-            if(!check.isEmpty() && !check.isReplaceable()) return false;
-        }
-
-        if(group.getBlocks().size() > 2){
-            check = check.getRelative(BlockFace.UP);
-            if(!check.isEmpty() && !check.isReplaceable()) return false;
-        }
-
-        return b.getRelative(BlockFace.DOWN).isSolid();
-    }*/
+        Block ground = ctx.getBlock().getRelative(BlockFace.DOWN);
+        CruxBlock active = CruxBlocksRegistries.BLOCK.getByBlock(ground);
+        return (active != null && group.containsBlock(active)) || ground.isSolid();
+    }
 
    /* default @Nullable ActiveCruxBlock placeBlock(@NotNull PlaceBlockContext ctx, boolean applyPhysics, @NotNull CruxBlockGroup group) {
         CruxBlock middle = getBlock(VineType.MIDDLE);
