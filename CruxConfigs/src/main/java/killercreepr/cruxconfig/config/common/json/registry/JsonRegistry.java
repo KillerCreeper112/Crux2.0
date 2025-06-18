@@ -14,7 +14,7 @@ public interface JsonRegistry extends FileRegistry {
             registerJsonHandler(object.getType(), object);
         }
     }*/
-    @NotNull JsonElement serializeToJson(@NotNull Object object);
+    @NotNull JsonElement serializeToJson(@Nullable Object object);
     @Nullable Object deserializeFromJson(@Nullable JsonElement o);
     <T> @Nullable T deserializeFromJson(@NotNull Type type, @Nullable JsonElement o);
     <T> @Nullable T deserializeFromJson(@NotNull Type type, @Nullable JsonElement o, @NotNull JsonContext context);

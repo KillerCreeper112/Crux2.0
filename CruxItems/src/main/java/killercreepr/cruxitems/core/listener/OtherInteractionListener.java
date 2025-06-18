@@ -33,9 +33,9 @@ public class OtherInteractionListener implements Listener {
             components.set(CruxItemsComponents.VAULT_BLOCK_KEY, spawnerData);
         }
 
-        var lootTable = cruxItem.get(CruxItemsComponents.VAULT_BLOCK_LOOT_TABLE);
+        var lootTable = cruxItem.get(CruxItemsComponents.DISPENSE_BLOCK_LOOT_TABLE);
         if(lootTable != null){
-            components.set(CruxItemsComponents.VAULT_BLOCK_LOOT_TABLE, lootTable);
+            components.set(CruxItemsComponents.DISPENSE_BLOCK_LOOT_TABLE, lootTable);
         }
 
 
@@ -48,7 +48,7 @@ public class OtherInteractionListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onVaultDisplayItem(VaultDisplayItemEvent event) {
         var components = new SimpleBlockComponentWrapper(event.getBlock().getState());
-        var lootTableData = components.get(CruxItemsComponents.VAULT_BLOCK_LOOT_TABLE);
+        var lootTableData = components.get(CruxItemsComponents.DISPENSE_BLOCK_LOOT_TABLE);
         if(lootTableData == null) return;
         if(!lootTableData.isOverrideVanilla() && CruxMath.random().nextBoolean()) return;
         event.setDisplayItem(getRandomItem(event, lootTableData.getLootTable()));
@@ -58,7 +58,7 @@ public class OtherInteractionListener implements Listener {
     public void onBlockDispenseLoot(BlockDispenseLootEvent event) {
         Block b = event.getBlock();
         var components = new SimpleBlockComponentWrapper(b.getState());
-        var lootTableData = components.get(CruxItemsComponents.VAULT_BLOCK_LOOT_TABLE);
+        var lootTableData = components.get(CruxItemsComponents.DISPENSE_BLOCK_LOOT_TABLE);
         if(lootTableData == null) return;
 
         if(lootTableData.isOverrideVanilla()) event.setDispensedLoot(null);

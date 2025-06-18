@@ -15,7 +15,7 @@ public interface YamlRegistry extends FileRegistry {
         }
     }*/
     @NotNull
-    YamlElement serializeToYaml(@NotNull Object object);
+    YamlElement serializeToYaml(@Nullable Object object);
     <T> @Nullable T deserializeFromYaml(@NotNull Type type, @Nullable YamlElement o);
     <T> @Nullable T deserializeFromYaml(@NotNull Class<T> clazz, @Nullable YamlElement o);
     <T> @Nullable T deserializeFromYaml(@NotNull Class<T> clazz, @Nullable YamlElement o, @NotNull YamlContext context);

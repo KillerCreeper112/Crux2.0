@@ -11,7 +11,7 @@ import java.lang.reflect.Type;
 
 public class SimpleJsonRegistry extends BaseFileRegistry implements JsonRegistry {
     @Override
-    public @NotNull JsonElement serializeToJson(@NotNull Object object) {
+    public @NotNull JsonElement serializeToJson(@Nullable Object object) {
         return serializeToFile(object).toJson();
     }
 

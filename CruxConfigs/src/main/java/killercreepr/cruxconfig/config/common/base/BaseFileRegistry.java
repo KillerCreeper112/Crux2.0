@@ -7,10 +7,7 @@ import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.base.registry.FileObjectHandlerRegistry;
 import killercreepr.cruxconfig.config.common.base.registry.FileParsedObjectRegistry;
-import killercreepr.cruxconfig.config.common.element.FileArray;
-import killercreepr.cruxconfig.config.common.element.FileElement;
-import killercreepr.cruxconfig.config.common.element.FileObject;
-import killercreepr.cruxconfig.config.common.element.FilePrimitive;
+import killercreepr.cruxconfig.config.common.element.*;
 import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlElement;
 import org.jetbrains.annotations.Contract;
@@ -300,7 +297,9 @@ public class BaseFileRegistry implements FileRegistry {
         return o;
     }
 
-    public @NotNull FileElement serializeObject(@NotNull Object o, @NotNull FileContext<?> context){
+    public @NotNull FileElement serializeObject(@Nullable Object o, @NotNull FileContext<?> context){
+        if(o == null) return FileNull.INSTANCE;
+
         if(o instanceof FileElement d) return d;
         if(o instanceof YamlElement d) return FileElement.fromYaml(d);
         if(o instanceof JsonElement d) return FileElement.fromJson(d);
@@ -319,12 +318,12 @@ public class BaseFileRegistry implements FileRegistry {
     }
 
     @Override
-    public @NotNull FileElement serializeToFile(@NotNull Object object) {
+    public @NotNull FileElement serializeToFile(@Nullable Object object) {
         return serializeObject(object, new FileContext<>(this));
     }
 
     @Override
-    public @NotNull FileElement serializeToFile(@NotNull Object object, @NotNull FileContext<?> context) {
+    public @NotNull FileElement serializeToFile(@Nullable Object object, @NotNull FileContext<?> context) {
         return serializeObject(object, context);
     }
 

@@ -11,7 +11,7 @@ import java.lang.reflect.Type;
 
 public class SimpleYamlRegistry extends BaseFileRegistry implements YamlRegistry {
     @Override
-    public @NotNull YamlElement serializeToYaml(@NotNull Object object) {
+    public @NotNull YamlElement serializeToYaml(@Nullable Object object) {
         return serializeToFile(object).toYaml();
     }
 

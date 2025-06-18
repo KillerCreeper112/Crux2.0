@@ -1,9 +1,6 @@
 package killercreepr.cruxconfig.config.common.json.registry;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
+import com.google.gson.*;
 import killercreepr.crux.core.util.CruxObjects;
 import killercreepr.crux.core.util.CruxReflect;
 import killercreepr.crux.core.valueproviders.number.ConstantNumber;
@@ -186,10 +183,12 @@ public class TaggedJsonRegistry implements FileRegistry, JsonRegistry {
 
     protected final JsonContext ctx = new JsonContext(this);
     @Override
-    public @NotNull JsonElement serializeToJson(@NotNull Object object){
+    public @NotNull JsonElement serializeToJson(@Nullable Object object){
         return serializeToJson(object, ctx);
     }
-    public @NotNull JsonElement serializeToJson(@NotNull Object object, @NotNull JsonContext context){
+    public @NotNull JsonElement serializeToJson(@Nullable Object object, @NotNull JsonContext context){
+        if(object == null) return JsonNull.INSTANCE;
+
         if(object instanceof JsonSerializable s) return serialize(s);
         if(object instanceof JsonElement e) return e;
         if(object instanceof Collection<?> l) return serializeCollection(l, context);
