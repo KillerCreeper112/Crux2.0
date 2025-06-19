@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.CrafterCraftEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -39,6 +40,15 @@ public class CruxBlocksObjectiveListener implements Listener {
         if(CruxItem.isEmpty(result)) return;
         if(Crux.handlers().item().getType(result).equals(Key.key("note_block"))){
             event.getInventory().setResult(null);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onCrafterCraft(CrafterCraftEvent event) {
+        ItemStack result = event.getResult();
+        if(CruxItem.isEmpty(result)) return;
+        if(Crux.handlers().item().getType(result).equals(Key.key("note_block"))){
+            event.setCancelled(true);
         }
     }
 

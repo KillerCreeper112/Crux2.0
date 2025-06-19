@@ -30,14 +30,14 @@ public class MinerHolder extends PlayerTickedDataHolder {
     }
 
     //protected @Nullable Double lastBreakSpeed;
-    protected @Nullable Byte lastMine;
+    protected byte lastMine;
     @Override
     public void onTick(@NotNull Player e) {
-        if(lastMine == null) return;
+        if(lastMine == -1) return;
         lastMine--;
         if(lastMine > 0) return;
         //if(hasMinedWithin(3)) return;
-        lastMine = null;
+        lastMine = -1;
         resetBreakSpeed(e);
     }
 
@@ -66,11 +66,16 @@ public class MinerHolder extends PlayerTickedDataHolder {
     }
 
     public void onMine(@NotNull Player p, @Nullable Block block){
-        lastMine = null;
-        resetBreakSpeed(p);
-        if(block == null) return;
+        lastMine = -1;
+        if(block == null){
+            resetBreakSpeed(p);
+            return;
+        }
         ActiveCruxBlock active = blockManager.getActiveBlock(block);
-        if(active== null) return;
+        if(active== null){
+            resetBreakSpeed(p);
+            return;
+        }
         onMine(p, active);
     }
 
@@ -87,7 +92,7 @@ public class MinerHolder extends PlayerTickedDataHolder {
     }
 
     public void onMine(@NotNull Player p, @NotNull ActiveCruxBlock block){
-        lastMine = 2;
+        lastMine = 3;
         float mineSpeed = getMineSpeed(p, block);
         /*if(lastBreakSpeed == null){
             lastBreakSpeed = p.getAttribute(Attribute.BLOCK_BREAK_SPEED).getBaseValue();
