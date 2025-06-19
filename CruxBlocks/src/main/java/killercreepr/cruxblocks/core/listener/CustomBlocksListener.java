@@ -421,6 +421,13 @@ public class CustomBlocksListener implements Listener {
                 event.setCancelled(true);
                 return;
             }
+            MinerHolder data = EntityMemory.getOrCreateDataHolder(p, MinerHolder.class);
+            if(data != null){
+                if(data.getMineSpeed(p, active) <= 0f){
+                    event.setCancelled(true);
+                    return;
+                }
+            }
         }
 
         BlockBreakFlags flags = BlockBreakFlags.flags();

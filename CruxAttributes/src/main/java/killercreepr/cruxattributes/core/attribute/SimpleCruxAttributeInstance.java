@@ -157,7 +157,9 @@ public class SimpleCruxAttributeInstance implements CruxAttributeInstance {
 
         @Override
         public boolean removeModifiers(@NotNull Key... path) {
-            return dirty = modifiers.removeIf(m -> SimpleCruxAttributeInstance.matchesPath(m, path));
+            boolean x = modifiers.removeIf(m -> SimpleCruxAttributeInstance.matchesPath(m, path));
+            if(x && !dirty) dirty = true;
+            return x;
         }
 
         @Override

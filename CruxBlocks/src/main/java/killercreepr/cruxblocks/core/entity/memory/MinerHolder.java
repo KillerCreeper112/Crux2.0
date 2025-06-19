@@ -74,9 +74,7 @@ public class MinerHolder extends PlayerTickedDataHolder {
         onMine(p, active);
     }
 
-    public void onMine(@NotNull Player p, @NotNull ActiveCruxBlock block){
-        lastMine = 2;
-
+    public float getMineSpeed(@NotNull Player p, @NotNull ActiveCruxBlock block){
         Float newSpeed = block.onMine(new EntityMiner(
             p.getInventory().getItemInMainHand(), p, EquipmentSlot.HAND
         ));
@@ -85,7 +83,12 @@ public class MinerHolder extends PlayerTickedDataHolder {
             mineSpeed = block.getCruxBlock().getComponents().getOrDefault(CruxComponents.UNBREAKABLE, false) ?
                 0f : block.getMineSpeed(Miner.entity(p.getInventory().getItemInMainHand(), p), true);
         }else mineSpeed = newSpeed;
+        return mineSpeed;
+    }
 
+    public void onMine(@NotNull Player p, @NotNull ActiveCruxBlock block){
+        lastMine = 2;
+        float mineSpeed = getMineSpeed(p, block);
         /*if(lastBreakSpeed == null){
             lastBreakSpeed = p.getAttribute(Attribute.BLOCK_BREAK_SPEED).getBaseValue();
         }*/
