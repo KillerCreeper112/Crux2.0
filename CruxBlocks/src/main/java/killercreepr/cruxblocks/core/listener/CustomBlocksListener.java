@@ -458,7 +458,7 @@ public class CustomBlocksListener implements Listener {
         Player p = event.getPlayer();
         MinerHolder data = EntityMemory.getOrCreateDataHolder(p, MinerHolder.class);
         if(data==null) return;
-        data.setLastMine(null);
+        data.setLastMine((byte)-1);
         data.resetBreakSpeed(p);
     }
 

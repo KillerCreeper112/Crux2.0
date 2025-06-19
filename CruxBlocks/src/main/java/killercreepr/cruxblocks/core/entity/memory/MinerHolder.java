@@ -127,7 +127,7 @@ public class MinerHolder extends PlayerTickedDataHolder {
         this.lastBreakSpeed = lastBreakSpeed;
     }*/
 
-    public void setLastMine(@Nullable Byte lastMine) {
+    public void setLastMine(byte lastMine) {
         this.lastMine = lastMine;
     }
 }

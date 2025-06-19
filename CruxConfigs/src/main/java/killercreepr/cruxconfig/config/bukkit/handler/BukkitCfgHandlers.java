@@ -10,6 +10,7 @@ import killercreepr.crux.api.communication.CreateTitle;
 import killercreepr.crux.api.communication.boss.CreateBossBar;
 import killercreepr.crux.api.component.DataComponentHandler;
 import killercreepr.crux.api.component.TypedDataComponent;
+import killercreepr.crux.api.data.ParticleBuilderSupplier;
 import killercreepr.crux.api.data.User;
 import killercreepr.crux.api.data.world.StoredChunk;
 import killercreepr.crux.api.data.world.StoredWorld;
@@ -115,6 +116,8 @@ public class BukkitCfgHandlers {
     public static final FileDynamicAttributeModifier DYNAMIC_ATTRIBUTE_MODIFIER = new FileDynamicAttributeModifier();
     public static final FileCruxLocation CRUX_LOCATION = new FileCruxLocation();
     public static final FileDropFormula DROP_FORMULA = new FileDropFormula();
+    public static final FileParticle PARTICLE = new FileParticle();
+    public static final FileParticleBuilderSupplier PARTICLE_BUILDER_SUPPLIER = new FileParticleBuilderSupplier();
 
 
     public static final FileCruxLevelBasedValue CRUX_LEVEL_BASED_VALUE = new FileCruxLevelBasedValue();
@@ -170,6 +173,8 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(User.class, USER);
         registry.registerFileHandler(CruxLevelBasedValue.class, CRUX_LEVEL_BASED_VALUE);
         registry.registerFileHandler(DropFormula.class, DROP_FORMULA);
+        registry.registerFileHandler(Particle.class, PARTICLE);
+        registry.registerFileHandler(ParticleBuilderSupplier.class, PARTICLE_BUILDER_SUPPLIER);
 
         registry.registerFileHandler(StoredWorld.class, STORED_WORLD);
         registry.registerFileHandler(StoredChunk.class, STORED_CHUNK);
