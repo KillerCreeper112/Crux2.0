@@ -7,11 +7,13 @@ import killercreepr.crux.core.entity.memory.PlayerTickedDataHolder;
 import killercreepr.cruxblocks.api.block.active.ActiveCruxBlock;
 import killercreepr.cruxblocks.api.block.manager.CruxBlockManager;
 import killercreepr.cruxblocks.api.mining.user.Miner;
+import killercreepr.cruxblocks.core.mining.user.EntityMiner;
 import net.kyori.adventure.key.Key;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -74,8 +76,16 @@ public class MinerHolder extends PlayerTickedDataHolder {
 
     public void onMine(@NotNull Player p, @NotNull ActiveCruxBlock block){
         lastMine = 2;
-        float mineSpeed = block.getCruxBlock().getComponents().getOrDefault(CruxComponents.UNBREAKABLE, false) ?
-            0f : block.getMineSpeed(Miner.entity(p.getInventory().getItemInMainHand(), p), true);
+
+        Float newSpeed = block.onMine(new EntityMiner(
+            p.getInventory().getItemInMainHand(), p, EquipmentSlot.HAND
+        ));
+        float mineSpeed;
+        if(newSpeed == null){
+            mineSpeed = block.getCruxBlock().getComponents().getOrDefault(CruxComponents.UNBREAKABLE, false) ?
+                0f : block.getMineSpeed(Miner.entity(p.getInventory().getItemInMainHand(), p), true);
+        }else mineSpeed = newSpeed;
+
         /*if(lastBreakSpeed == null){
             lastBreakSpeed = p.getAttribute(Attribute.BLOCK_BREAK_SPEED).getBaseValue();
         }*/

@@ -48,6 +48,14 @@ public interface ActiveCruxBlock {
     @NotNull
     CruxBlock getCruxBlock();
 
+    /**
+     *
+     * @return The overriding mine speed.
+     */
+    default Float onMine(@Nullable Miner miner){
+        return null;
+    }
+
     default @NotNull CruxBlockBreakEvent breakBlock(@Nullable Miner miner){
         return breakBlock(miner, BlockBreakFlags.standard());
     }

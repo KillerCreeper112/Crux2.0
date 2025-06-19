@@ -2,6 +2,9 @@ package killercreepr.cruxentities.combat;
 
 import com.destroystokyo.paper.event.entity.EntityKnockbackByEntityEvent;
 import io.papermc.paper.event.entity.EntityKnockbackEvent;
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
+import io.papermc.paper.registry.keys.tags.DamageTypeTagKeys;
 import killercreepr.crux.api.event.CruxEntityDamageEvent;
 import killercreepr.crux.api.event.CruxEntityDeathEvent;
 import killercreepr.crux.core.Crux;
@@ -10,8 +13,10 @@ import killercreepr.cruxattributes.api.attribute.CruxAttribute;
 import killercreepr.cruxentities.api.combat.EntityDamager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Registry;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.craftbukkit.entity.CraftLivingEntity;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Entity;
@@ -188,6 +193,13 @@ public class CruxEntityDamager implements EntityDamager {
             }else builder.withDamageLocation(attackLoc);
             source = builder.build();
         }else source = this.source;
+
+        //todo MAY NEED TO DO SOMETHING HERE DUUUUUDDDEE
+        /*Bukkit.broadcastMessage(
+            RegistryAccess.registryAccess().getRegistry(RegistryKey.DAMAGE_TYPE)
+                .getTag(DamageTypeTagKeys.BYPASSES_ARMOR).values()+ ""
+        );*/
+
         CruxEntityDamageEvent event = new CruxEntityDamageEvent(target, damager, attackLoc,
                 damage, kb, upkb,
                 /*calculateDamage(damage)*/damage, calculateKnockback(kb), calculateUpKnockback(upkb), this.source)

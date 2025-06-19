@@ -78,6 +78,9 @@ public class CruxBlockComponents {
     public static final DataComponentType<CruxEntityMoveInsideBlockComponent> GENERIC_ENTITY_MOVE_INSIDE = register("generic_entity_move_inside",
         builder -> builder);
 
+    public static final DataComponentType<CruxMinerMineComponent> GENERIC_MINER_MINE = register("generic_miner_mine",
+        builder -> builder);
+
     private static <T> DataComponentType<T> register(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator){
         return CruxRegistries.DATA_COMPONENT_TYPE.register(Crux.key(id), builderOperator.apply(DataComponentType.builder()).build());
     }

@@ -6,10 +6,7 @@ import killercreepr.crux.api.loot.LootTable;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxblocks.api.block.CruxBlock;
 import killercreepr.cruxblocks.api.block.active.*;
-import killercreepr.cruxblocks.api.block.component.CruxEntityMoveInsideBlockComponent;
-import killercreepr.cruxblocks.api.block.component.CruxInteractableBlockComponent;
-import killercreepr.cruxblocks.api.block.component.CruxInteractablePhysicalBlockComponent;
-import killercreepr.cruxblocks.api.block.component.CruxRedstonePowerableComponent;
+import killercreepr.cruxblocks.api.block.component.*;
 import killercreepr.cruxblocks.api.item.KeyedItemProvider;
 import killercreepr.cruxblocks.api.mining.user.Miner;
 import killercreepr.cruxblocks.core.CruxBlocksModule;
@@ -113,6 +110,15 @@ public class SimpleActiveCruxBlock implements ActiveCruxBlock, ActiveCruxInterac
             if(result != null) return result;
         }
         return null;
+    }
+
+    @Override
+    public Float onMine(@Nullable Miner miner) {
+        for(var comp : getCruxBlock().getComponents().getAllOfType(CruxMinerMineComponent.class)){
+            Float got = comp.onMinerMine(miner, this);
+            if(got != null) return got;
+        }
+        return ActiveCruxBlock.super.onMine(miner);
     }
 
     @Override

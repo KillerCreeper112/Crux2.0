@@ -245,6 +245,23 @@ public class CfgBlockComponents {
                 );
             }
         });
+
+        registry.register("miner_mine_potion_effects", new FileDataComponentType<CruxMinerMineComponent>() {
+            @Override
+            public @Nullable TypedDataComponent<CruxMinerMineComponent> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
+                Collection<PotionEffect> potions = ctx.getRegistry().deserializeFromFile(
+                    new TypeToken<Collection<PotionEffect>>(){}.getType(),
+                    e.get("potion_effects")
+                );
+                if(potions == null || potions.isEmpty()) return null;
+                EntityPredicate filter = ctx.getRegistry().deserializeFromFile(EntityPredicate.class, e.get("filter"));
+                return TypedDataComponent.create(
+                    CruxBlockComponents.GENERIC_MINER_MINE,
+                    new ApplyPotionEffectsMinerMIneComponent(potions, filter,
+                        e.getOrDefaultObject(Float.class, "mine_speed", null))
+                );
+            }
+        });
     }
 
     private static NumberProvider num(FileRegistry registry, FileObject o, String x, NumberProvider fallback){

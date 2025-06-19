@@ -4,6 +4,7 @@ import com.google.common.reflect.TypeToken;
 import killercreepr.crux.api.component.TypedDataComponent;
 import killercreepr.crux.api.entity.predicate.EntityPredicate;
 import killercreepr.cruxblocks.api.block.component.CruxEntityMoveInsideBlockComponent;
+import killercreepr.cruxblocks.api.block.component.CruxMinerMineComponent;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileDataComponentType;
 import killercreepr.cruxconfig.config.bukkit.registry.FileDataComponentRegistry;
 import killercreepr.cruxconfig.config.common.FileContext;
@@ -11,6 +12,7 @@ import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxpotions.api.potion.StoredPotion;
 import killercreepr.cruxpotions.core.component.CruxBlocksPotionComponents;
 import killercreepr.cruxpotions.core.cruxblocks.ApplyCruxPotionEffectsEntityMoveInsideBlockComponent;
+import killercreepr.cruxpotions.core.cruxblocks.ApplyCruxPotionEffectsMinerMineComponent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,6 +32,22 @@ public class CruxBlocksCfgHook {
                 return TypedDataComponent.create(
                     CruxBlocksPotionComponents.GENERIC_CRUX_POTIONS_ENTITY_MOVE_INSIDE,
                     new ApplyCruxPotionEffectsEntityMoveInsideBlockComponent(potions, filter)
+                );
+            }
+        });
+        registry.register("miner_mine_crux_potion_effects", new FileDataComponentType<CruxMinerMineComponent>() {
+            @Override
+            public @Nullable TypedDataComponent<CruxMinerMineComponent> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
+                Collection<StoredPotion> potions = ctx.getRegistry().deserializeFromFile(
+                    new TypeToken<Collection<StoredPotion>>(){}.getType(),
+                    e.get("potion_effects")
+                );
+                if(potions == null || potions.isEmpty()) return null;
+                EntityPredicate filter = ctx.getRegistry().deserializeFromFile(EntityPredicate.class, e.get("filter"));
+                return TypedDataComponent.create(
+                    CruxBlocksPotionComponents.GENERIC_CRUX_POTIONS_MINER_MINE,
+                    new ApplyCruxPotionEffectsMinerMineComponent(potions, filter,
+                        e.getOrDefaultObject(Float.class, "mine_speed", null))
                 );
             }
         });
