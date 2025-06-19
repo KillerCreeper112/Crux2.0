@@ -4,6 +4,7 @@ import killercreepr.crux.api.component.DataComponentHandler;
 import killercreepr.cruxblocks.api.block.CruxBlock;
 import killercreepr.cruxblocks.api.block.texture.TextureData;
 import killercreepr.cruxblocks.core.block.SimpleBlock;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileDataComponentHandler;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
