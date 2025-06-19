@@ -4,6 +4,8 @@ import killercreepr.crux.api.data.world.StoredChunk;
 import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.math.BlockPos;
+import killercreepr.crux.core.util.CruxCollection;
+import killercreepr.cruxblocks.api.block.component.DirectionalGroup;
 import killercreepr.cruxblocks.api.block.context.PlaceBlockContext;
 import killercreepr.cruxblocks.api.block.group.CruxBlockGroup;
 import killercreepr.cruxblocks.core.block.component.CruxBlockComponents;
@@ -55,7 +57,16 @@ public class PlaceCustomBlocksModule implements StructureModule {
                 for(BlockPos pos : positions){
                     CruxPosition place = center.add(pos).rotateAroundY(center, rotation);
                     Block block = place.getBlock(world);
-                    group.placeBlock(PlaceBlockContext.context(block, null, BlockFace.DOWN));
+
+                    if(group.getComponents().has(CruxBlockComponents.DIRECTIONAL_GROUP)){
+                        BlockFace face = CruxCollection.getRandom(
+                            group.getComponents().get(CruxBlockComponents.DIRECTIONAL_GROUP)
+                                .getFaces()
+                        );
+                        group.placeBlock(PlaceBlockContext.context(block, null, face == null ? BlockFace.DOWN : face));
+                    }else{
+                        group.placeBlock(PlaceBlockContext.context(block, null, BlockFace.DOWN));
+                    }
                 }
             });
         };

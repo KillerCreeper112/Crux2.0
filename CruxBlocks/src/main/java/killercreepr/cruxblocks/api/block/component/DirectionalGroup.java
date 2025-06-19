@@ -51,7 +51,12 @@ public interface DirectionalGroup extends CruxBlockGroupComponent, Iterable<Crux
     @Override
     default @Nullable ActiveCruxBlock placeBlock(@NotNull PlaceBlockContext ctx, boolean applyPhysics, @NotNull CruxBlockGroup group) {
         CruxBlock base = group.getBaseBlock();
-        if(!(ctx.getMiner() instanceof EntityMiner m) || !(m.getEntity() instanceof LivingEntity p)) return base.placeBlock(ctx);
+        if(!(ctx.getMiner() instanceof EntityMiner m) || !(m.getEntity() instanceof LivingEntity p)){
+            BlockFace blockFace = ctx.getBlockFace();
+            CruxBlock toPlace = getBlock(blockFace);
+            if(toPlace==null) return base.placeBlock(ctx);
+            return toPlace.placeBlock(ctx);
+        }
         BlockFace blockFace = ctx.getBlockFace();
         float pitch = p.getLocation().getPitch();
         BlockFace face = isOrientable() ? blockFace.getOppositeFace() : p.getFacing().getOppositeFace();
