@@ -31,7 +31,7 @@ public class FileParticleBuilderSupplier extends SimpleFileHandler<ParticleBuild
         if(!(e instanceof FileObject o)) return null;
         Double extra = context.getRegistry().deserializeFromFile(Double.class, o.get("extra"));
         NumberProvider count = context.getRegistry().deserializeFromFile(NumberProvider.class, o.get("count"));
-        NumberVector offset = context.getRegistry().deserializeFromFile(NumberVector.class, o);
+        NumberVector offset = context.getRegistry().deserializeFromFile(NumberVector.class, o.get("offset"));
         if(extra == null) extra = 0D;
         if(offset == null) NumberVector.vector(0,0,0);
         if(count == null) NumberProvider.constant(1);
