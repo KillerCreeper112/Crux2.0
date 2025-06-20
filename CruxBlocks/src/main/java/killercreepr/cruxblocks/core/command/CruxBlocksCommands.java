@@ -12,13 +12,17 @@ import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import killercreepr.crux.api.communication.Communicator;
 import killercreepr.crux.core.plugin.CruxPlugin;
+import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxblocks.api.block.CruxBlock;
 import killercreepr.cruxblocks.api.block.context.BlockContext;
 import killercreepr.cruxblocks.api.block.context.PlaceBlockContext;
 import killercreepr.cruxblocks.api.block.group.CruxBlockGroup;
+import killercreepr.cruxblocks.api.block.registry.CruxBlockRegistry;
+import killercreepr.cruxblocks.core.block.data.CustomBlockData;
 import killercreepr.cruxblocks.core.command.argument.CruxBlocksArguments;
 import killercreepr.cruxblocks.core.persistence.CruxBlocksPersistTags;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -59,6 +63,44 @@ public class CruxBlocksCommands {
                                     ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
                                     ctx.getArgument("block", CruxBlockGroup.class)
                                 ))
+                        )
+                )
+        ).then(
+            Commands.literal("data")
+                .then(
+                    Commands.literal("get")
+                        .then(
+                            Commands.argument("block", ArgumentTypes.blockPosition())
+                                .executes(ctx ->{
+                                    var sender = getExecutor(ctx.getSource());
+                                    BlockPosition pos = ctx.getArgument("block", BlockPositionResolver.class)
+                                        .resolve(ctx.getSource());
+                                    World world;
+                                    if(ctx.getSource().getExecutor() != null){
+                                        world = ctx.getSource().getExecutor().getWorld();
+                                    }else if(sender instanceof Entity e){
+                                        world = e.getWorld();
+                                    }else if(sender instanceof Block b){
+                                        world = b.getWorld();
+                                    }else return -1;
+
+                                    Block block = world.getBlockAt(pos.blockX(), pos.blockY(), pos.blockZ());
+                                    CustomBlockData data = new CustomBlockData(block);
+                                    sender.sendMessage("Block Data: " + data.getKeys().size());
+                                    for (NamespacedKey key : data.getKeys()) {
+                                        boolean found = false;
+                                        for(var type : CruxRegistries.PERSISTENT_DATA_TYPE){
+                                            Object obj = data.get(key, type, null);
+                                            if(obj == null) continue;
+                                            sender.sendMessage(key.asString() + " = " + obj);
+                                            found = true;
+                                            break;
+                                        }
+                                        if(found) continue;
+                                        sender.sendMessage(key.asString() + " (data type not registered in CruxRegistries)");
+                                    }
+                                    return 1;
+                                })
                         )
                 )
         ).then(

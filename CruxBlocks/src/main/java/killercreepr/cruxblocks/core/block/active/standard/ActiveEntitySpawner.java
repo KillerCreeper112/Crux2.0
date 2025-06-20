@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -23,10 +24,15 @@ public class ActiveEntitySpawner extends SimpleActiveCruxBlock implements Active
     protected final @NotNull EntitySpawnerComponent data;
     protected final @NotNull NaturalEntitySpawner spawner;
     protected final Consumer<Entity> spawnConsumer;
-    public ActiveEntitySpawner(@NotNull Block block, @NotNull CruxBlock cruxBlock, @NotNull EntitySpawnerComponent data, @NotNull NaturalEntitySpawner spawner) {
+    public ActiveEntitySpawner(@NotNull Block block, @NotNull CruxBlock cruxBlock,
+                               @Nullable EntitySpawnerComponent data, @Nullable NaturalEntitySpawner spawner) {
         super(block, cruxBlock);
         this.data = data;
         this.spawner = spawner;
+        if(data == null || spawner == null){
+            this.spawnConsumer = null;
+            return;
+        }
         this.spawnConsumer = data.persistEntities ? e ->{
             e.setPersistent(true);
             if(e instanceof Mob m) m.setRemoveWhenFarAway(false);
@@ -64,7 +70,12 @@ public class ActiveEntitySpawner extends SimpleActiveCruxBlock implements Active
     public void navigateSpawner(){
         spawner.navigate(block.getWorld(), CruxPosition.block(block), null, null, e ->{
             CruxPersist.SPAWN_REASON.set(e, "crux_spawner");
+            onEntitySpawned(e);
         });
+    }
+
+    public void onEntitySpawned(Entity e){
+
     }
 
     public void spawnerTick(){
