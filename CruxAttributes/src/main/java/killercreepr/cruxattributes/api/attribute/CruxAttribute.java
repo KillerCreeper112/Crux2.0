@@ -494,6 +494,10 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
 
         var cache = getOrCreateCache(i);
         if(cache != null){
+            if (path == null || path.length == 0) {
+                path = modifier.getPath();
+            }
+
             cache.addModifier(attribute, modifier.withPath(path));
             return i;
         }

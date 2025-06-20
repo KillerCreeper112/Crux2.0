@@ -6,6 +6,7 @@ import com.ezylang.evalex.parser.ParseException;
 import killercreepr.crux.api.math.CruxPosition;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
 import org.bukkit.util.NumberConversions;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -63,6 +64,28 @@ public class CruxMath {
     public static int randomSkewed(Random random, int minValue, int maxValue, double skewFactor) {
         return (int) randomSkewed(random, (double) minValue, maxValue, skewFactor);
     }
+
+    public static double distanceFalloff(@NotNull Entity hit, @NotNull Entity hitFrom, double maxRange, double effectiveness){
+        return distanceFalloff(hit.getLocation(), hitFrom.getLocation(), maxRange, effectiveness);
+    }
+
+    public static double distanceFalloff(@NotNull Location hit, @NotNull Location hitFrom, double maxRange, double effectiveness){
+        double dis = hit.distanceSquared(hitFrom);
+        return distanceFalloff(dis, maxRange, effectiveness);
+    }
+
+    /**
+     *
+     * @param effectiveness The higher this is, the slower the result will drop off
+     *                      The lower it is, the faster it will drop off
+     *                      1 = linear drop off
+     *                      2 = slower drop off
+     *                      0.5 = faster drop off
+     */
+    public static double distanceFalloff(double distanceSquared, double maxRange, double effectiveness){
+        return Math.max(1D-(distanceSquared/((maxRange*maxRange)*effectiveness)), 0D);
+    }
+
     /**
      * @param skewFactor The higher this number, the more likely it will be that
      *                   this function generates a higher number. The lower it is, the more likely
