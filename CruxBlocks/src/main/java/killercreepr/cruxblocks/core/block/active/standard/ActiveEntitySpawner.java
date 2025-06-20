@@ -67,9 +67,7 @@ public class ActiveEntitySpawner extends SimpleActiveCruxBlock implements Active
         });
     }
 
-    protected int delay = 0;
-    @Override
-    public void tick() {
+    public void spawnerTick(){
         if(delay < 0) return;
         if(delay > 0){
             delay--;
@@ -77,6 +75,12 @@ public class ActiveEntitySpawner extends SimpleActiveCruxBlock implements Active
         }
         delay = data.spawnDelay.value().intValue();
         Crux.getServer().getScheduler().runTask(Crux.getMainPlugin(), task);
+    }
+
+    protected int delay = 0;
+    @Override
+    public void tick() {
+        spawnerTick();
     }
 
     public boolean isActive(){

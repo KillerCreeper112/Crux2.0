@@ -3,6 +3,7 @@ package killercreepr.cruxblocks.api.block;
 import killercreepr.crux.api.block.sound.CreateBlockSoundGroup;
 import killercreepr.crux.api.communication.CreateSound;
 import killercreepr.crux.api.component.DataComponentHandler;
+import killercreepr.crux.api.data.CruxKeyed;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxblocks.api.block.active.ActiveCruxBlock;
@@ -30,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public interface CruxBlock extends Keyed, CruxBlockData {
+public interface CruxBlock extends CruxKeyed, CruxBlockData {
     default @NotNull ActiveCruxBlock createActive(@NotNull Block block){
         for(CruxBlockComponent c : getComponents().getAllOfType(CruxBlockComponent.class)){
             ActiveCruxBlock x = c.createActive(block, this);

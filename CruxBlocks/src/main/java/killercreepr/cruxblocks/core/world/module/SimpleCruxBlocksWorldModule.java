@@ -92,8 +92,15 @@ public class SimpleCruxBlocksWorldModule extends SimpleWorldModule implements Cr
 
     @Override
     public @Nullable ActiveCruxBlock getActiveBlock(@NotNull Block at, @NotNull BlockData data) {
-        if(hasActiveBlock(at)) return active.get(CruxPosition.block(at));
         CruxBlock block = blockRegistry.getByBlockData(at, data);
+        if(hasActiveBlock(at)){
+            CruxPosition pos = CruxPosition.block(at);
+            ActiveCruxBlock first = active.get(pos);
+            if(first.getCruxBlock().compare(block)){
+                return first;
+            }
+            removeActiveBlock(pos);
+        }
         if(block==null) return null;
         ActiveCruxBlock active = block.createActive(at);
 

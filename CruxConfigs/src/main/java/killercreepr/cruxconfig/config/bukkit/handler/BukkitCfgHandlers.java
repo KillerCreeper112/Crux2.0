@@ -210,7 +210,6 @@ public class BukkitCfgHandlers {
             World.Environment.class,
             ItemRarity.class,
             PotionEffectType.Category.class,
-            Particle.class,
             Instrument.class,
             BlockFace.class,
             Axis.class
