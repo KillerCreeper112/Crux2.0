@@ -118,6 +118,13 @@ public interface PersistTextParser<T> extends ComponentTextInputParser<T>{
         }
     };
 
+    PersistTextParser<Short> SHORT = new PrimitivePersistTextParser<>(PersistentDataType.SHORT) {
+        @Override
+        public @NotNull Short decodeObject(@NotNull Object object) throws IllegalArgumentException {
+            return Short.parseShort(object.toString());
+        }
+    };
+
     PersistTextParser<Integer> INTEGER = new PrimitivePersistTextParser<>(PersistentDataType.INTEGER) {
         @Override
         public @NotNull Integer decodeObject(@NotNull Object object) throws IllegalArgumentException {
