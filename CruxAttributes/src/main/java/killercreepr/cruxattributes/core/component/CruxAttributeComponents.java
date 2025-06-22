@@ -16,9 +16,15 @@ public class CruxAttributeComponents {
         new CruxAttributesComponentType(
             CruxAttributeCompParsers.CRUX_ATTRIBUTES.createInput(Crux.key("attributes"))
         ));
+
     public static final DataComponentType<CruxAttributeContainer> STORED_CRUX_ATTRIBUTES = register("stored_attributes",
         new CruxAttributesComponentType(
             CruxAttributeCompParsers.CRUX_ATTRIBUTES.createInput(Crux.key("stored_attributes"))
+        ));
+
+    public static final DataComponentType<CruxAttributeContainer> PROJECTILE_CRUX_ATTRIBUTES = register("projectile_crux_attributes",
+        new CruxAttributesComponentType(
+            CruxAttributeCompParsers.CRUX_ATTRIBUTES.createInput(Crux.key("projectile_crux_attributes"))
         ));
 
     private static <T> DataComponentType<T> register(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator){

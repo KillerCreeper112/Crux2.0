@@ -37,6 +37,8 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
         return Crux.key(s);
     }
 
+    CruxAttribute SHIELD_PIERCING = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("shield_piercing")));
+
     CruxAttribute ATTACK_DAMAGE = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("attack_damage")));
     CruxAttribute ATTACK_SPEED = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("attack_speed")){
         @Override
