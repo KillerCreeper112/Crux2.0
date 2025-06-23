@@ -51,6 +51,11 @@ public class CruxEntityUtil {
         return new Vector((f5 * f6), (-f7), (f4 * f6));
     }
 
+    public static boolean isBlocking(@Nullable Entity e){
+        if(!(e instanceof HumanEntity living)) return false;
+        return living.isBlocking();
+    }
+
     public static boolean isDamageSourceBlocked(@NotNull Entity entity, @NotNull Entity damager) {
         Vector vec3d = damager.getLocation().toVector();
         return isDamageSourceBlocked(entity, vec3d);

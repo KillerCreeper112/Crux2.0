@@ -32,6 +32,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.function.Consumer;
 
+//todo change MobCategory[] to a set or list ._.
 public interface CruxMob extends Keyed {
     static boolean is(@NotNull Entity e, @NotNull CruxMob@NotNull... grim){
         for(CruxMob x : grim){

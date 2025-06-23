@@ -18,6 +18,7 @@ import killercreepr.cruxworlds.core.registries.WorldsRegistries;
 import killercreepr.cruxworlds.core.registry.ActiveCruxWorldRegistry;
 import killercreepr.cruxworlds.core.world.SimpleWorld;
 import killercreepr.cruxworlds.core.world.creator.WorldModuleCreatorRegistryImpl;
+import killercreepr.cruxworlds.core.world.type.DefaultWorldType;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Chunk;
 import org.bukkit.Server;
@@ -30,8 +31,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -72,6 +72,28 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
 
     public void tick(){
         active.getTicked().forEach(Ticked::tick);
+    }
+
+    protected final Map<Key, CruxWorldType> defaultWorldTypes = new HashMap<>();
+    @Override
+    public CruxWorldType getWorldType(@NotNull World world) {
+        var crux = getWorld(world.key());
+        if(crux == null) return null;
+        return getWorldType(crux);
+    }
+
+    @Override
+    public CruxWorldType getWorldType(@NotNull CruxWorld world) {
+        CruxWorldType type = world.get(CruxWorldsComponents.WORLD_TYPE);
+        if(type != null) return type;
+
+        Key environmentKey = Key.key(world.toBukkitWorld().getEnvironment().toString().toLowerCase());
+        type = defaultWorldTypes.get(environmentKey);
+        if(type != null) return type;
+
+        type = new DefaultWorldType(environmentKey, this, world.toBukkitWorld().getEnvironment());
+        defaultWorldTypes.put(environmentKey, type);
+        return type;
     }
 
     @Override

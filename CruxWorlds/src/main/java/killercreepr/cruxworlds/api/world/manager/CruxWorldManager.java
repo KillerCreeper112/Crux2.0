@@ -7,6 +7,7 @@ import killercreepr.cruxworlds.api.world.creator.CruxWorldCreator;
 import killercreepr.cruxworlds.api.world.creator.WorldModuleCreatorRegistry;
 import killercreepr.cruxworlds.api.world.type.CruxWorldType;
 import net.kyori.adventure.key.Key;
+import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,6 +18,9 @@ public interface CruxWorldManager {
     default @Nullable CruxWorld getOrCreateWorld(@NotNull CruxWorldType type){
         return getOrCreateWorld(type, type.defaultWorldKey());
     }
+
+    CruxWorldType getWorldType(@NotNull World world);
+    CruxWorldType getWorldType(@NotNull CruxWorld world);
 
     @Nullable CruxWorld getOrCreateWorld(@NotNull Key worldType, @NotNull Key name);
     @Nullable CruxWorld getOrCreateWorld(@NotNull CruxWorldType type, @NotNull Key name);
