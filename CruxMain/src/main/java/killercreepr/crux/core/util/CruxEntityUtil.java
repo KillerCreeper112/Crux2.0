@@ -54,7 +54,7 @@ public class CruxEntityUtil {
         return le == null || !le.hasPotionEffect(PotionEffectType.INVISIBILITY);
     }*/
 
-    public static boolean isRealisticallyVisibleTo(Entity e, Entity target){
+    public static boolean isRealisticallyVisibleTo(Entity target, Entity e){
         if(e instanceof Player p){
             if(!p.canSee(target)) return false;
         }

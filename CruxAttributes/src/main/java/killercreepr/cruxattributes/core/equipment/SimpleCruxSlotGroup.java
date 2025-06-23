@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 public class SimpleCruxSlotGroup implements CruxSlotGroup {
@@ -40,6 +41,27 @@ public class SimpleCruxSlotGroup implements CruxSlotGroup {
         this.filter = slots::contains;
         this.slots = slots;
         this.whenInSlot = whenInSlot;
+    }
+
+    @Override
+    public String toString() {
+        return "SimpleCruxSlotGroup{" +
+            "key=" + key +
+            ", filter=" + filter +
+            ", slots=" + slots +
+            ", whenInSlot='" + whenInSlot + '\'' +
+            '}';
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof SimpleCruxSlotGroup cruxSlots)) return false;
+        return Objects.equals(key, cruxSlots.key) && Objects.equals(filter, cruxSlots.filter) && Objects.equals(slots, cruxSlots.slots) && Objects.equals(whenInSlot, cruxSlots.whenInSlot);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(key, filter, slots, whenInSlot);
     }
 
     @Override
