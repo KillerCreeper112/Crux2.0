@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.Map;
 
-public interface CruxAttributeContainer {
+public interface CruxAttributeContainer extends CruxAttributeAccessor {
     static CruxAttributeContainer container(@NotNull Collection<CruxAttributeInstance> attributes){
         return new SimpleCruxAttributeContainer(attributes);
     }

@@ -2,6 +2,7 @@ package killercreepr.cruxattributes.core.attribute;
 
 import killercreepr.cruxattributes.api.attribute.CruxAttribute;
 import killercreepr.cruxattributes.api.attribute.CruxAttributeContainer;
+import killercreepr.cruxattributes.api.attribute.CruxAttributeHandler;
 import killercreepr.cruxattributes.api.attribute.CruxAttributeInstance;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -51,6 +52,32 @@ public class SimpleCruxAttributeContainer implements CruxAttributeContainer {
     @Override
     public double getValue(CruxAttribute attribute) {
         return getValue(attribute, 0D);
+    }
+
+    @Override
+    public double getValueOrDefault(@NotNull CruxAttribute attribute, double fallback) {
+        return getValue(attribute, fallback);
+    }
+
+    @Override
+    public @Nullable CruxAttributeInstance getInstance(@NotNull CruxAttribute attribute) {
+        return attributes.get(attribute);
+    }
+
+    @Override
+    public @NotNull Collection<? extends CruxAttributeInstance> getInstances() {
+        return attributes.values();
+    }
+
+    @Override
+    public @NotNull CruxAttributeHandler copyToHandler(@NotNull CruxAttributeHandler handler) {
+        handler.addAllModifiers(this);
+        return handler;
+    }
+
+    @Override
+    public @NotNull CruxAttributeHandler copyToNewHandler() {
+        return copyToHandler(CruxAttributeHandler.attributeHandler());
     }
 
     @Override

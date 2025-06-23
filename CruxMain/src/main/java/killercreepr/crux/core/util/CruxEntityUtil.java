@@ -7,6 +7,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -38,6 +39,35 @@ public class CruxEntityUtil {
         if(!e.isValid()) return false;
         if(e instanceof Player p) return p.isOnline();
         return true;
+    }
+
+    /*public static boolean isRealisticallyVisible(Entity target){
+        if(target == null) return false;
+        if(target.isInvisible()) return false;
+        LivingEntity le;
+        if(target instanceof LivingEntity d) le = d;
+        else le = null;
+
+        if(le != null){
+            if(le.hasPotionEffect(PotionEffectType.GLOWING)) return true;
+        }
+        return le == null || !le.hasPotionEffect(PotionEffectType.INVISIBILITY);
+    }*/
+
+    public static boolean isRealisticallyVisibleTo(Entity e, Entity target){
+        if(e instanceof Player p){
+            if(!p.canSee(target)) return false;
+        }
+        if(target == null) return false;
+        if(target.isInvisible()) return false;
+        LivingEntity le;
+        if(target instanceof LivingEntity d) le = d;
+        else le = null;
+
+        if(le != null){
+            if(le.hasPotionEffect(PotionEffectType.GLOWING)) return true;
+        }
+        return le == null || !le.hasPotionEffect(PotionEffectType.INVISIBILITY);
     }
 
     public static Vector calculateViewVector(float pitch, float yaw) {
