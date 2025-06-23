@@ -20,6 +20,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public class CruxTickableCompParsers {
@@ -71,6 +72,8 @@ public class CruxTickableCompParsers {
             return EntityTickableModifier.modifier(key, tickable, slot, setBonus);
         });
 
+    public static PersistTextParser<Collection<EntityTickableModifier>> ENTITY_TICKABLE_COLLECTION_LIST = PersistTextParser.collectionList(ENTITY_TICKABLE_MODIFIER);
+
     /*public static PersistTextParser<EntityTickableInstance> ENTITY_TICKABLE_INSTANCE = PersistTextParser.mapBuilder(EntityTickableInstance.class)
         .field("tickable", TextInputField.field(ENTITY_TICKABLE, EntityTickableInstance::getTickable))
         .field("modifiers", TextInputField.field(PersistTextParser.collectionList(ENTITY_TICKABLE_MODIFIER), EntityTickableInstance::getModifiers))
@@ -81,7 +84,7 @@ public class CruxTickableCompParsers {
         });*/
 
     public static PersistTextParser<EntityTickablesContainer> ENTITY_TICKABLES_CONTAINER = PersistTextParser.elementBuilder(EntityTickablesContainer.class)
-        .field(TextInputField.field(PersistTextParser.collectionList(ENTITY_TICKABLE_MODIFIER), EntityTickablesContainer::getTickableModifiers))
+        .field(TextInputField.field(ENTITY_TICKABLE_COLLECTION_LIST, EntityTickablesContainer::getTickableModifiers))
         .apply(ctx ->{
             Collection<EntityTickableModifier> modifiers = ctx.get();
             return EntityTickablesContainer.container(modifiers);

@@ -187,7 +187,7 @@ public class TextDataComponentDecoder implements DataComponentDecoder {
         return result.toArray(new String[0]);
     }*/
 
-    private static Object parseObject(String value){
+    public static Object parseObject(String value){
         if(value.startsWith("{")){
             return parseNestedProperties(value);
         }
@@ -197,7 +197,7 @@ public class TextDataComponentDecoder implements DataComponentDecoder {
         return value;
     }
 
-    private static List<Object> parseListProperties(String nestedProperties){
+    public static List<Object> parseListProperties(String nestedProperties){
         List<Object> map = new ArrayList<>();
         nestedProperties = nestedProperties.substring(1, nestedProperties.length() - 1).trim();
         if(nestedProperties.isEmpty()) return map;
@@ -211,7 +211,7 @@ public class TextDataComponentDecoder implements DataComponentDecoder {
         return map;
     }
 
-    private static String removeQuotes(String text) {
+    public static String removeQuotes(String text) {
         if (text == null || text.length() < 2) {
             return text; // Nothing to remove
         }
