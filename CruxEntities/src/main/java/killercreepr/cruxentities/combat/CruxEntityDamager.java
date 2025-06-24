@@ -2,21 +2,16 @@ package killercreepr.cruxentities.combat;
 
 import com.destroystokyo.paper.event.entity.EntityKnockbackByEntityEvent;
 import io.papermc.paper.event.entity.EntityKnockbackEvent;
-import io.papermc.paper.registry.RegistryAccess;
-import io.papermc.paper.registry.RegistryKey;
-import io.papermc.paper.registry.keys.tags.DamageTypeTagKeys;
 import killercreepr.crux.api.event.CruxEntityDamageEvent;
 import killercreepr.crux.api.event.CruxEntityDeathEvent;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.util.CruxEntityUtil;
 import killercreepr.cruxattributes.api.attribute.CruxAttribute;
 import killercreepr.cruxentities.api.combat.EntityDamager;
-import org.bukkit.Bukkit;
+import killercreepr.cruxentities.damage.type.CruxEntityDamageTypes;
 import org.bukkit.Location;
-import org.bukkit.Registry;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.craftbukkit.entity.CraftLivingEntity;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Entity;
@@ -44,6 +39,22 @@ public class CruxEntityDamager implements EntityDamager {
         this.damager = damager;
         this.target = target;
         if(damager != null) hitPosition = damager.getLocation();
+    }
+
+    public DamageSource.Builder calculateCustomDamageBuilder(){
+        DamageSource.Builder builder = DamageSource.builder(CruxEntityDamageTypes.ENTITY_ATTACK_CALCULATE_CUSTOM);
+        if(damager != null) builder.withDirectEntity(damager).withCausingEntity(damager);
+        if(hitPosition == null){
+            if(damager != null) builder.withDamageLocation(damager.getLocation());
+        }else builder.withDamageLocation(hitPosition);
+        return builder;
+    }
+
+    @Override
+    public EntityDamager setCalculateCustomDamage() {
+        DamageSource.Builder builder = calculateCustomDamageBuilder();
+        source = builder.build();
+        return this;
     }
 
     public @Nullable Location getHitPosition() {
@@ -142,6 +153,10 @@ public class CruxEntityDamager implements EntityDamager {
     }
 
     public double calculateDamage(double trueDamage){
+        return calculateDamage(trueDamage, CruxAttribute.get(damager, CruxAttribute.ARMOR_PENETRATION));
+    }
+
+    public double calculateDamage(double trueDamage, double armorPenetration){
         double dmg = trueDamage;
         double armor = CruxAttribute.get(target, CruxAttribute.ARMOR);
         double toughness = CruxAttribute.get(target, CruxAttribute.ARMOR_TOUGHNESS);
@@ -151,6 +166,8 @@ public class CruxEntityDamager implements EntityDamager {
             i = e.getAttribute(Attribute.ARMOR_TOUGHNESS);
             if(i != null) toughness += i.getValue();
         }
+
+        armor *= Math.max(0D, 1D - (armorPenetration/100D));
 
         double var =  armor - (dmg / (2f + (toughness / 4f)));
         double def5 = armor / 5f;
@@ -200,10 +217,13 @@ public class CruxEntityDamager implements EntityDamager {
                 .getTag(DamageTypeTagKeys.BYPASSES_ARMOR).values()+ ""
         );*/
 
+        double calculatedDmg =
+            (source == null || source.getDamageType() != CruxEntityDamageTypes.ENTITY_ATTACK_CALCULATE_CUSTOM) ?
+            damage : calculateDamage(damage);
         CruxEntityDamageEvent event = new CruxEntityDamageEvent(target, damager, attackLoc,
-                damage, kb, upkb,
-                /*calculateDamage(damage)*/damage, calculateKnockback(kb), calculateUpKnockback(upkb), this.source)
-                .setCause(cause);
+            damage, kb, upkb,
+            calculatedDmg, calculateKnockback(kb), calculateUpKnockback(upkb), this.source)
+            .setCause(cause);
         event.setSource(source);
         if(!event.callEvent()) return event;
         double dmg = event.getDmg();

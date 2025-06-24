@@ -112,6 +112,8 @@ public interface EntityDamager {
         return 0D;
     }
 
+    EntityDamager setCalculateCustomDamage();
+
     @Nullable
     Location getHitPosition();
 
@@ -160,6 +162,7 @@ public interface EntityDamager {
     double calculateUpKnockback(double trueUpKb);
 
     double calculateDamage(double trueDamage);
+    double calculateDamage(double trueDamage, double armorPenetration);
 
     boolean isDamageSourceBlocked();
 

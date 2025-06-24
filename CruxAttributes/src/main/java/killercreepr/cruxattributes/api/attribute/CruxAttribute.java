@@ -54,6 +54,7 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
     CruxAttribute ATTACK_RANGE = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("attack_range")));
     CruxAttribute ATTACK_AOE = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("attack_aoe")));
     CruxAttribute ATTACK_PIERCE = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("attack_pierce")));
+    CruxAttribute ARMOR_PENETRATION = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("armor_penetration")));
 
     CruxAttribute MAX_HEALTH = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("max_health")));
     CruxAttribute MAX_ABSORPTION = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("max_absorption")));
