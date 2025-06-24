@@ -9,6 +9,7 @@ import killercreepr.crux.core.util.CruxEntityUtil;
 import killercreepr.cruxattributes.api.attribute.CruxAttribute;
 import killercreepr.cruxentities.api.combat.EntityDamager;
 import killercreepr.cruxentities.damage.type.CruxEntityDamageTypes;
+import killercreepr.cruxentities.registries.CruxEntityRegistries;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -218,7 +219,7 @@ public class CruxEntityDamager implements EntityDamager {
         );*/
 
         double calculatedDmg =
-            (source == null || source.getDamageType() != CruxEntityDamageTypes.ENTITY_ATTACK_CALCULATE_CUSTOM) ?
+            (source == null || !CruxEntityRegistries.DAMAGE_TYPE_CALCULATE_CUSTOM.containsKey(source.getDamageType().key())) ?
             damage : calculateDamage(damage);
         CruxEntityDamageEvent event = new CruxEntityDamageEvent(target, damager, attackLoc,
             damage, kb, upkb,
