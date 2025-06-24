@@ -65,6 +65,7 @@ import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -81,6 +82,7 @@ public class BukkitCfgHandlers {
     public static final FileCreateTitle CREATE_TITLE = new FileCreateTitle();
     public static final FileCreateBossBar CREATE_BOSS_BAR = new FileCreateBossBar();
     public static final FilePotionEffectType POTION_EFFECT_TYPE = new FilePotionEffectType();
+    public static final FilePotionType POTION_TYPE = new FilePotionType();
     public static final FileMaterial MATERIAL = new FileMaterial();
     public static final FileEntityType ENTITY_TYPE = new FileEntityType();
     public static final FileComponent COMPONENT = new FileComponent();
@@ -175,6 +177,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(DropFormula.class, DROP_FORMULA);
         registry.registerFileHandler(Particle.class, PARTICLE);
         registry.registerFileHandler(ParticleBuilderSupplier.class, PARTICLE_BUILDER_SUPPLIER);
+        registry.registerFileHandler(PotionType.class, POTION_TYPE);
 
         registry.registerFileHandler(StoredWorld.class, STORED_WORLD);
         registry.registerFileHandler(StoredChunk.class, STORED_CHUNK);

@@ -1,6 +1,8 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 
 import com.google.common.reflect.TypeToken;
+import killercreepr.crux.api.component.parser.DataComponentDecoder;
+import killercreepr.crux.api.component.parser.DataComponentEncoder;
 import killercreepr.crux.api.enchantment.DropFormula;
 import killercreepr.crux.api.loot.conditions.LootCondition;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
@@ -13,6 +15,7 @@ import killercreepr.cruxconfig.config.common.element.FileArray;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import net.kyori.adventure.key.Key;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -137,6 +140,34 @@ public class StandardFileLootFunctions {
                     registry.deserializeFromFile(DropFormula.class, e.get("formula")),
                     enchant,
                     slots
+                );
+            }
+        });
+        file.registerCustomHandler(new SimpleFileItemLootFunction<>(Crux.key("set_base_potion")) {
+
+            @Override
+            public @Nullable SetBasePotionFunction deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                FileRegistry registry = ctx.getRegistry();
+                Collection<LootCondition> conditions = registry.deserializeFromFile(
+                    new TypeToken<Collection<LootCondition>>(){}.getType(), e.get("conditions")
+                );
+                return new SetBasePotionFunction(
+                    conditions,
+                    registry.deserializeFromFile(PotionType.class, e.get("potion"))
+                );
+            }
+        });
+        file.registerCustomHandler(new SimpleFileItemLootFunction<>(Crux.key("set_crux_components")) {
+
+            @Override
+            public @Nullable SetCruxComponentFunction deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                FileRegistry registry = ctx.getRegistry();
+                Collection<LootCondition> conditions = registry.deserializeFromFile(
+                    new TypeToken<Collection<LootCondition>>(){}.getType(), e.get("conditions")
+                );
+                return new SetCruxComponentFunction(
+                    conditions,
+                    DataComponentDecoder.componentDecoder().parseComponents(e.get("components").getAsString())
                 );
             }
         });
