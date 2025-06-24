@@ -142,6 +142,7 @@ public interface CruxItem extends Cloneable, PersistHolderComponentHandler, Data
 
     CruxItem editMeta(@NotNull Consumer<ItemMeta> consumer);
     CruxItem edit(@NotNull Consumer<ItemStack> consumer);
+    CruxItem editThis(@NotNull Consumer<CruxItem> consumer);
 
     <T extends ItemMeta> CruxItem editMeta(@NotNull Class<T> clazz, @NotNull Consumer<T> consumer);
 

@@ -315,6 +315,11 @@ public class SimpleCruxItem implements CruxItem {
         return this;
     }
 
+    public SimpleCruxItem editThis(@NotNull Consumer<CruxItem> consumer){
+        consumer.accept(this);
+        return this;
+    }
+
     public <T extends ItemMeta> SimpleCruxItem editMeta(@NotNull Class<T> clazz, @NotNull Consumer<T> consumer){
         ItemMeta meta = meta();
         if(meta==null) return this;
