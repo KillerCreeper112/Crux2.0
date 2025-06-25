@@ -15,9 +15,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -196,6 +194,19 @@ public class CruxEntityDamager implements EntityDamager {
         return CruxEntityUtil.isDamageSourceBlocked(target, pos.toVector());
     }
 
+    public DamageType calcualteDamageType(){
+        DamageType type;
+        if(damager == null) type = DamageType.GENERIC;
+        else if(damager instanceof HumanEntity) type = DamageType.PLAYER_ATTACK;
+        else if(damager instanceof AbstractArrow) type = DamageType.ARROW;
+        else if(damager instanceof WitherSkull) type = DamageType.WITHER_SKULL;
+        else if(damager instanceof LlamaSpit) type = DamageType.SPIT;
+        else if(damager instanceof Trident) type = DamageType.TRIDENT;
+        else if(damager instanceof Projectile) type = DamageType.MOB_PROJECTILE;
+        else type = DamageType.MOB_ATTACK;
+        return type;
+    }
+
     public @Nullable CruxEntityDamageEvent attack(double damage, double kb, double upkb,
                                                   @NotNull Entity target,
                                                   @Nullable Entity damager, @Nullable Location attackLoc){
@@ -239,7 +250,8 @@ public class CruxEntityDamager implements EntityDamager {
                 }
             }
             if(event.getSource() == null){
-                DamageSource.Builder builder = DamageSource.builder(damager == null ? DamageType.GENERIC : DamageType.MOB_ATTACK);
+                DamageType type = calcualteDamageType();
+                DamageSource.Builder builder = DamageSource.builder(type);
                 if(damager != null) builder.withDirectEntity(damager).withCausingEntity(damager);
                 if(attackLoc == null){
                     if(damager != null) builder.withDamageLocation(damager.getLocation());
