@@ -49,6 +49,28 @@ public interface EntityDamager {
         return base;
     }
 
+    static @Nullable UUID getOwnerUUID(@NotNull Entity base){
+        UUID ownerUUID = CruxPersist.OWNER.get(base);
+        if(ownerUUID != null){
+            return ownerUUID;
+        }
+        if(base instanceof Projectile p){
+            if(p.getShooter() instanceof Entity e) return e.getUniqueId();
+        }
+        if(base instanceof Item i){
+            ownerUUID = i.getOwner();
+            if(ownerUUID != null){
+                return ownerUUID;
+            }
+
+            ownerUUID = i.getThrower();
+            if(ownerUUID != null){
+                return ownerUUID;
+            }
+        }
+        return base.getUniqueId();
+    }
+
     static @Nullable Entity getShooter(@NotNull Entity base){
         UUID ownerUUID = CruxPersist.OWNER.get(base);
         if(ownerUUID != null){
