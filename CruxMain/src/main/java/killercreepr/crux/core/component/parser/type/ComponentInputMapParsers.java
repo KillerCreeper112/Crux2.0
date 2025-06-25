@@ -5,6 +5,7 @@ import killercreepr.crux.api.component.parser.hybrid.PersistTextParser;
 import net.kyori.adventure.key.Key;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.enchantments.Enchantment;
 
 import java.util.Collection;
 import java.util.Map;
@@ -29,6 +30,12 @@ public class ComponentInputMapParsers {
     public final PersistTextParser<Map<Attribute, Collection<AttributeModifier>>> ATTRIBUTE_MAP = PersistTextParser.mapDynamicBuilder((Class<Map<Attribute, Collection<AttributeModifier>>>) (Class) Map.class)
         .keyParser(ComponentInputParsers.ATTRIBUTE)
         .valueParser(ComponentInputParsers.LIST.ATTRIBUTE_MODIFIER)
+        .mapToEncode(m -> m)
+        .apply(InputDecodeContext::get);
+
+    public final PersistTextParser<Map<Enchantment, Integer>> ENCHANTMENT_MAP = PersistTextParser.mapDynamicBuilder((Class<Map<Enchantment, Integer>>) (Class) Map.class)
+        .keyParser(ComponentInputParsers.ENCHANTMENT)
+        .valueParser(PersistTextParser.INTEGER)
         .mapToEncode(m -> m)
         .apply(InputDecodeContext::get);
 }

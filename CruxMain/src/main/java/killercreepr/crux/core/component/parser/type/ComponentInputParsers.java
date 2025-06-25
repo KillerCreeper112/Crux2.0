@@ -36,6 +36,7 @@ import org.bukkit.Registry;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.EquipmentSlotGroup;
@@ -53,6 +54,12 @@ public class ComponentInputParsers {
         .apply(ctx ->{
             Key key = ctx.get();
             return Registry.PARTICLE_TYPE.get(key);
+        });
+    public static PersistTextParser<Enchantment> ENCHANTMENT = PersistTextParser.elementBuilder(Enchantment.class)
+        .field(TextInputField.field(PersistTextParser.KEY, Keyed::key))
+        .apply(ctx ->{
+            Key key = ctx.get();
+            return RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).get(key);
         });
 
     public static PersistTextParser<UUID> UUID = PersistTextParser.elementBuilder(UUID.class)
