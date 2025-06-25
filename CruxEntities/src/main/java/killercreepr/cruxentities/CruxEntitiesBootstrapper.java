@@ -23,13 +23,13 @@ public class CruxEntitiesBootstrapper implements PluginBootstrap {
             event.registry().register(
                 RegistryKey.DAMAGE_TYPE.typedKey(Crux.key("entity_attack_calculate_custom")),
                 builder -> builder.exhaustion(0.2f)
-                    .messageId("entity_attack_calculate_custom")
+                    .messageId("mob")
                     .damageScaling(DamageScaling.ALWAYS)
             );
             event.registry().register(
                 RegistryKey.DAMAGE_TYPE.typedKey(Crux.key("entity_projectile_calculate_custom")),
                 builder -> builder.exhaustion(0.2f)
-                    .messageId("entity_projectile_calculate_custom")
+                    .messageId("mob")
                     .damageScaling(DamageScaling.ALWAYS)
             );
         }));
