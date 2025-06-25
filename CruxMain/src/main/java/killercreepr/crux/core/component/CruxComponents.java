@@ -10,9 +10,11 @@ import killercreepr.crux.core.component.parser.type.ComponentInputListParsers;
 import killercreepr.crux.core.component.parser.type.ComponentInputParsers;
 import killercreepr.crux.core.persistence.CruxPersistence;
 import killercreepr.crux.core.registries.CruxRegistries;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
 
@@ -48,6 +50,9 @@ public class CruxComponents {
 
     public static final DataComponentType<UUID> OWNER = register("owner", builder -> builder
         .persistTextParser(ComponentInputParsers.UUID.createInput(Crux.key("owner"))));
+
+    public static final DataComponentType<Map<Enchantment, Integer>> INHERITED_ENCHANTMENTS = register("inherited_enchantments", builder -> builder
+        .persistTextParser(ComponentInputParsers.MAP.ENCHANTMENT_MAP.createInput(Crux.key("inherited_enchantments"))));
 
     private static <T> DataComponentType<T> register(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator){
         return CruxRegistries.DATA_COMPONENT_TYPE.register(Crux.key(id), builderOperator.apply(DataComponentType.builder()).build());
