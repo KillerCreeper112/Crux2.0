@@ -6,6 +6,7 @@ import killercreepr.cruxattributes.api.equipment.CruxSlotGroup;
 import killercreepr.cruxtickables.api.equipment.SetBonus;
 import killercreepr.cruxtickables.core.entity.tickable.SimpleEntityTickableModifier;
 import net.kyori.adventure.key.Key;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,4 +33,16 @@ public interface EntityTickableModifier extends CruxKeyed {
     @NotNull
     CruxSlotGroup getSlotGroup();
     @Nullable SetBonus getSetBonus();
+
+    @Contract(pure = true)
+    EntityTickableModifier withData(Object data);
+    @Contract(pure = true)
+    EntityTickableModifier withKey(Key key);
+    @Contract(pure = true)
+    EntityTickableModifier withTickable(EntityTickable tickable);
+    @Contract(pure = true)
+    EntityTickableModifier withSlotGroup(CruxSlotGroup slotGroup);
+    @Contract(pure = true)
+    EntityTickableModifier withSetBonus(SetBonus setBonus);
+
 }

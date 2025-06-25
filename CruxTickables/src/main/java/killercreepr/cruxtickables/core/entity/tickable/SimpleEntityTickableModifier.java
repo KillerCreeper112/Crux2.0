@@ -70,6 +70,31 @@ public class SimpleEntityTickableModifier implements EntityTickableModifier {
     }
 
     @Override
+    public EntityTickableModifier withData(Object data) {
+        return new SimpleEntityTickableModifier(key, tickable, slot, setBonus, data);
+    }
+
+    @Override
+    public EntityTickableModifier withKey(Key key) {
+        return new SimpleEntityTickableModifier(key, tickable, slot, setBonus, data);
+    }
+
+    @Override
+    public EntityTickableModifier withTickable(EntityTickable tickable) {
+        return new SimpleEntityTickableModifier(key, tickable, slot, setBonus, data);
+    }
+
+    @Override
+    public EntityTickableModifier withSlotGroup(CruxSlotGroup slot) {
+        return new SimpleEntityTickableModifier(key, tickable, slot, setBonus, data);
+    }
+
+    @Override
+    public EntityTickableModifier withSetBonus(SetBonus setBonus) {
+        return new SimpleEntityTickableModifier(key, tickable, slot, setBonus, data);
+    }
+
+    @Override
     public @NotNull Key key() {
         return key;
     }
