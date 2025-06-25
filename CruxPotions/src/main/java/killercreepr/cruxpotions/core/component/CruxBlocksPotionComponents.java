@@ -6,6 +6,7 @@ import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxblocks.api.block.component.CruxEntityMoveInsideBlockComponent;
 import killercreepr.cruxblocks.api.block.component.CruxMinerMineComponent;
 import killercreepr.cruxpotions.api.potion.StoredPotion;
+import killercreepr.cruxpotions.core.component.impl.ConsumableCruxPotions;
 import killercreepr.cruxpotions.core.component.parser.PotionCompParsers;
 
 import java.util.List;
@@ -17,6 +18,11 @@ public class CruxBlocksPotionComponents {
         builder -> builder);
     public static final DataComponentType<CruxMinerMineComponent> GENERIC_CRUX_POTIONS_MINER_MINE = register("generic_crux_potions_miner_mine",
         builder -> builder);
+
+
+    public static final DataComponentType<ConsumableCruxPotions> CONSUMABLE_CRUX_POTIONS = register("consumable_crux_potions",
+        builder -> builder
+            .persistTextParser(PotionCompParsers.CONSUMABLE_CRUX_POTIONS.createInput(Crux.key("consumable_crux_potions"))));
 
     private static <T> DataComponentType<T> register(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator){
         return CruxRegistries.DATA_COMPONENT_TYPE.register(Crux.key(id), builderOperator.apply(DataComponentType.builder()).build());

@@ -1,16 +1,9 @@
 package killercreepr.cruxentities.listener;
 
-import killercreepr.cruxattributes.api.attribute.CruxAttribute;
-import killercreepr.cruxattributes.api.attribute.CruxAttributeInstance;
-import killercreepr.cruxentities.api.combat.EntityDamager;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Projectile;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.ProjectileHitEvent;
 
 public class EntityCombatListener implements Listener {
-    @EventHandler(ignoreCancelled = true)
+    /*@EventHandler(ignoreCancelled = true)
     public void onProjectileHit(ProjectileHitEvent event) {
         Projectile proj = event.getEntity();
         Entity hit = event.getHitEntity();
@@ -29,6 +22,6 @@ public class EntityCombatListener implements Listener {
         if(kbUpInstance != null){
             EntityDamager.entityDamager(hit, proj).attack();
         }
-    }
+    }*/
 
 }
