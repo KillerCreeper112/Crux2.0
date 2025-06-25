@@ -30,6 +30,10 @@ public class CruxPotionTags implements ObjectTag<CruxPotion> {
                 Color color = object.getColor();
                 return color == null ? "#FFFFFF" : CruxColor.colorToHex(color);
             }))
+            .add(Tag.string("color_formatted", (args, ctx) ->{
+                Color color = object.getColor();
+                return color == null ? "<#FFFFFF>" : ("<" + CruxColor.colorToHex(color) + ">");
+            }))
             .add(Tag.string("name", (args, ctx) ->{
                 return object.getName();
             }))
