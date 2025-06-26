@@ -26,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class EntityTickablesHolder extends EntityTickedDataHolder {
@@ -61,7 +62,10 @@ public class EntityTickablesHolder extends EntityTickedDataHolder {
             return;
         }
         activeTickables.values().removeIf(active ->{
-            if(tickables.containsKey(active.getTickable().key())) return false;
+            if(tickables.containsKey(active.getTickable().key())){
+                if(Objects.equals(active.getSlot(), tickables.get(active.getTickable().key()).getSlot())) return false;
+                //return false
+            }
             active.stopped();
             return true;
         });
