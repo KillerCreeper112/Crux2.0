@@ -1,5 +1,6 @@
 package killercreepr.cruxentities.world.entity;
 
+import killercreepr.crux.api.data.DataExchange;
 import killercreepr.cruxentities.entity.CruxMob;
 import killercreepr.cruxworlds.api.world.entity.NaturalEntityGroupPart;
 import killercreepr.cruxworlds.api.world.entity.SpawnContext;
@@ -15,6 +16,11 @@ public abstract class NaturalCruxMobSpawn extends SimpleNaturalEntitySpawn imple
     public NaturalCruxMobSpawn(int weight, float quality, @NotNull CruxMob mob) {
         super(weight, quality);
         this.mob = mob;
+    }
+
+    @Override
+    public @NotNull DataExchange info() {
+        return DataExchange.empty();
     }
 
     @Override

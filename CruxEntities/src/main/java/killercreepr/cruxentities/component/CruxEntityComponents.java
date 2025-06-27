@@ -4,8 +4,12 @@ import killercreepr.crux.api.component.DataComponentType;
 import killercreepr.crux.api.component.parser.InputDecodeContext;
 import killercreepr.crux.api.component.parser.hybrid.PersistTextParser;
 import killercreepr.crux.api.component.parser.hybrid.TextInputField;
+import killercreepr.crux.api.loot.LootTable;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.registries.CruxRegistries;
+import killercreepr.cruxworlds.api.world.entity.NaturalEntitySpawnGroup;
+import killercreepr.cruxworlds.core.component.CruxWorldsComponents;
+import killercreepr.cruxworlds.core.component.CruxWorldsParsers;
 import net.kyori.adventure.key.Key;
 
 import java.util.Map;
@@ -27,7 +31,6 @@ public class CruxEntityComponents {
             );
         });
 
-
     public static final DataComponentType<SpawnerData> CREATURE_SPAWNER_DATA = register("creature_spawner_data", builder -> builder
         .persistTextParser(PersistTextParser.mapBuilder(SpawnerData.class)
             .field("mob_map", TextInputField.field(
@@ -43,6 +46,10 @@ public class CruxEntityComponents {
                 );
             })
             .createInput(Crux.key("creature_spawner_data"))));
+
+    public static final DataComponentType<LootTable<NaturalEntitySpawnGroup>> CREATURE_SPAWNER_CONFIG = register("creature_spawner_config", builder -> builder
+        .persistTextParser(CruxWorldsParsers.NATURAL_ENTITY_SPAWN_GROUP
+            .createInput(Crux.key("creature_spawner_config"))));
 
     private static <T> DataComponentType<T> register(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator){
         return CruxRegistries.DATA_COMPONENT_TYPE.register(Crux.key(id), builderOperator.apply(DataComponentType.builder()).build());

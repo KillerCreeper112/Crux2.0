@@ -1,5 +1,6 @@
 package killercreepr.cruxworlds.core.config.handler;
 
+import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.entity.CruxEntitySnapshot;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
@@ -25,15 +26,26 @@ public class FileNaturalEntitySpawn implements FileObjectHandler<NaturalEntitySp
         if(!(e instanceof FileObject o)){
             CruxEntitySnapshot snapshot = registry.deserializeFromFile(CruxEntitySnapshot.class, e);
             if(snapshot == null) return null;
-            return new CfgNaturalEntitySpawn(1, 0f, snapshot, new SolidGroundSpawnValidator(), null, null);
+            return new CfgNaturalEntitySpawn(1, 0f, snapshot, new SolidGroundSpawnValidator(), DataExchange.empty());
         }
+
         CruxEntitySnapshot snapshot = registry.deserializeFromFile(CruxEntitySnapshot.class, o.get("entity"));
         if(snapshot == null) return null;
         int weight = o.getObject(Integer.class, "weight", 1);
         float quality = o.getObject(Float.class, "quality", 0f);
         SpawnValidator validator = registry.deserializeFromFile(SpawnValidator.class, o.get("spawn_conditions"));
+        @Deprecated
         Boolean persistent = o.getObject(Boolean.class, "persistent");
+        @Deprecated
         Boolean removeWhenFar = o.getObject(Boolean.class, "remove_when_far");
-        return new CfgNaturalEntitySpawn(weight, quality, snapshot, validator, persistent, removeWhenFar);
+        DataExchange data = registry.deserializeFromFile(DataExchange.class, o.get("data"));
+        if(data == null){
+            var builder = DataExchange.builder();
+            if(persistent != null) builder.put("persistent", persistent);
+            if(removeWhenFar != null) builder.put("remove_when_far", removeWhenFar);
+            data = builder.build();
+        }
+
+        return new CfgNaturalEntitySpawn(weight, quality, snapshot, validator, data);
     }
 }

@@ -1,5 +1,6 @@
 package killercreepr.cruxworlds.core.config.entity;
 
+import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.entity.CruxEntitySnapshot;
 import killercreepr.cruxworlds.api.world.entity.SpawnContext;
 import killercreepr.cruxworlds.api.world.spawning.SpawnValidator;
@@ -15,24 +16,22 @@ import java.util.function.Consumer;
 public class CfgNaturalEntitySpawn extends SimpleNaturalEntitySpawn {
     protected final @NotNull CruxEntitySnapshot entitySnapshot;
     protected final @Nullable SpawnValidator spawnValidator;
-    protected final Boolean persistent;
-    protected final Boolean removeWhenFarAway;
+    protected final DataExchange info;
     public CfgNaturalEntitySpawn(int weight, float quality, @NotNull CruxEntitySnapshot entitySnapshot, @Nullable SpawnValidator spawnValidator,
-                                 Boolean persistent, Boolean removeWhenFarAway) {
+                                 DataExchange info) {
         super(weight, quality);
         this.entitySnapshot = entitySnapshot;
         this.spawnValidator = spawnValidator;
-        this.persistent = persistent;
-        this.removeWhenFarAway = removeWhenFarAway;
+        this.info = info;
     }
 
     @Override
     public @Nullable Entity spawn(@NotNull SpawnContext ctx, @Nullable Consumer<Entity> consumer) {
         Location to = ctx.getPosition().toLocation(ctx.getWorld()).toCenterLocation().subtract(0, .4, 0);
         return entitySnapshot.createEntity(to, e ->{
-            if(persistent != null) e.setPersistent(persistent);
-            if(removeWhenFarAway != null){
-                if(e instanceof Mob m) m.setRemoveWhenFarAway(removeWhenFarAway);
+            if(info.has("persistent")) e.setPersistent(info.getOrDefault("persistent", Boolean.class, false));
+            if(info.has("remove_when_far_away") && e instanceof Mob m){
+                m.setRemoveWhenFarAway(info.getOrDefault("remove_when_far_away", Boolean.class, false));
             }
             if(consumer != null) consumer.accept(e);
         });
@@ -41,5 +40,10 @@ public class CfgNaturalEntitySpawn extends SimpleNaturalEntitySpawn {
     @Override
     public boolean canSpawn(@NotNull SpawnContext ctx) {
         return spawnValidator == null || spawnValidator.canSpawn(ctx);
+    }
+
+    @Override
+    public @NotNull DataExchange info() {
+        return info;
     }
 }

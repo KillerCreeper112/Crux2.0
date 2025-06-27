@@ -1,7 +1,10 @@
 package killercreepr.cruxentities.listener;
 
+import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.item.CruxItem;
+import killercreepr.crux.api.loot.LootContext;
 import killercreepr.crux.api.loot.LootTable;
+import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.component.SimpleBlockComponentWrapper;
 import killercreepr.crux.core.persistence.CruxPersist;
@@ -25,6 +28,8 @@ import org.bukkit.event.entity.TrialSpawnerSpawnEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Random;
+
 public class ComponentsListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onBlockPlace(BlockPlaceEvent event) {
@@ -46,20 +51,57 @@ public class ComponentsListener implements Listener {
             b = event.getTrialSpawner().getBlock();
         }catch (IllegalStateException ignored){ return; }
 
-        Block block = event.getEntity().getLocation().getBlock();
-        LootTable<NaturalEntitySpawnGroup> groups;
-        groups.populateLoot().forEach(group ->{
-            if(!group.canSpawn(SpawnContext.simple(block, CruxMath.random()))) return;
-            group.selectRandom(1, null).forEach(spawn ->{
-                spawn.spawn()
-            });
-        });
-
+        Entity e = event.getEntity();
         var components = new SimpleBlockComponentWrapper(b.getState());
+        LootTable<NaturalEntitySpawnGroup> cfg = components.get(CruxEntityComponents.CREATURE_SPAWNER_CONFIG);
+        if(cfg != null){
+            LootContext lootCtx = LootContext.builder()
+                .looted(b)
+                .location(b.getLocation())
+                .looter(event)
+                .build();
+            SpawnContext spawnCtx = SpawnContext.simple(
+                e.getWorld(), CruxPosition.precise(e.getLocation()),
+                CruxMath.random()
+            );
+            final var newBlock = ((CraftBlockState) b.getState()).getWorldHandle().getBlockEntity(new BlockPos(b.getX(), b.getY(), b.getZ()));
+            TrialSpawnerBlockEntity state = ((TrialSpawnerBlockEntity) newBlock);
+            cfg.populateLoot(lootCtx).forEach(group ->{
+                if(!group.canSpawn(spawnCtx)) return;
+                group.selectRandom(1, spawnCtx).forEach(spawn ->{
+                    DataExchange info = spawn.info();
+                    Entity newEntity = spawn.spawn(spawnCtx, spawned ->{
+                        CruxPersist.SPAWN_REASON.set(spawned, "trial_spawner");
+
+                        if(info.getOrDefault("inherit_equipment", Boolean.class, false)){
+                            if(spawned instanceof LivingEntity spawnedLiving && e instanceof LivingEntity living){
+                                var spawnedEquipment = spawnedLiving.getEquipment();
+                                var equipment = living.getEquipment();
+                                if(equipment != null && spawnedEquipment != null){
+                                    for(EquipmentSlot slot : EquipmentSlot.values()){
+                                        if(!living.canUseEquipmentSlot(slot) || !spawnedLiving.canUseEquipmentSlot(slot)) continue;
+                                        ItemStack current = spawnedEquipment.getItem(slot);
+                                        if(!CruxItem.isEmpty(current)) continue;
+                                        ItemStack newItem = equipment.getItem(slot);
+                                        if(CruxItem.isEmpty(newItem)) continue;
+
+                                        spawnedEquipment.setItem(slot, newItem, true);
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    if(newEntity != null){
+                        state.getTrialSpawner().getData().currentMobs.add(newEntity.getUniqueId());
+                    }
+                });
+            });
+            return;
+        }
+
         var spawnerData = components.get(CruxEntityComponents.CREATURE_SPAWNER_DATA);
         if(spawnerData == null) return;
 
-        Entity e = event.getEntity();
         var mobData = spawnerData.getFromVanillaToCustom().get(e.getType().key());
         if(mobData == null) return;
         CruxMob mob = CruxEntityRegistries.ENTITIES.get(mobData.getMobType());

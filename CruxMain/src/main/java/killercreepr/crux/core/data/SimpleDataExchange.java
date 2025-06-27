@@ -277,6 +277,7 @@ public class SimpleDataExchange implements DataExchange {
         }
 
         public @NotNull DataExchange build() {
+            if(data.isEmpty() && notExplictSet.isEmpty()) return DataExchange.empty();
             return new SimpleDataExchange(data, notExplictSet);
         }
     }
