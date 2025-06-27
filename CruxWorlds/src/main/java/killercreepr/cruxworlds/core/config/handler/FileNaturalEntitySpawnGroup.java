@@ -66,7 +66,8 @@ public class FileNaturalEntitySpawnGroup implements FileObjectHandler<NaturalEnt
         float quality = o.getObject(Float.class, "quality", 0f);
         SpawnValidator validator = registry.deserializeFromFile(SpawnValidator.class, o.get("spawn_conditions"));
         if(validator == null) validator = new SolidGroundSpawnValidator();
-        if(key != null) return new CfgKeyedNaturalEntitySpawnGroup(weight, quality, spawns, validator, key);
-        return new CfgNaturalEntitySpawnGroup(weight, quality, spawns, validator);
+        int rolls = o.getOrDefaultObject(Integer.class, "rolls", 1);
+        if(key != null) return new CfgKeyedNaturalEntitySpawnGroup(weight, quality, spawns, validator, rolls, key);
+        return new CfgNaturalEntitySpawnGroup(weight, quality, spawns, validator, rolls);
     }
 }

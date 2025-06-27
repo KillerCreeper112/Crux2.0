@@ -11,14 +11,22 @@ import java.util.Collection;
 
 public class CfgNaturalEntitySpawnGroup extends SimpleNaturalEntitySpawnGroup {
     protected final @Nullable SpawnValidator spawnValidator;
-    public CfgNaturalEntitySpawnGroup(int weight, float quality, @NotNull Collection<NaturalEntitySpawn> spawns, @Nullable SpawnValidator spawnValidator) {
+    protected final int rolls;
+    public CfgNaturalEntitySpawnGroup(int weight, float quality, @NotNull Collection<NaturalEntitySpawn> spawns, @Nullable SpawnValidator spawnValidator, int rolls) {
         super(weight, quality, spawns);
         this.spawnValidator = spawnValidator;
+        this.rolls = rolls;
     }
 
-    public CfgNaturalEntitySpawnGroup(int weight, float quality, @Nullable SpawnValidator spawnValidator, @NotNull NaturalEntitySpawn... spawns) {
+    public CfgNaturalEntitySpawnGroup(int weight, float quality, @Nullable SpawnValidator spawnValidator, int rolls, @NotNull NaturalEntitySpawn... spawns) {
         super(weight, quality, spawns);
         this.spawnValidator = spawnValidator;
+        this.rolls = rolls;
+    }
+
+    @Override
+    public @NotNull Collection<NaturalEntitySpawn> selectRandom(@NotNull SpawnContext ctx) {
+        return selectRandom(rolls, ctx);
     }
 
     @Override

@@ -7,6 +7,7 @@ import java.util.Collection;
 
 public interface NaturalEntitySpawnGroup extends WeightedObject {
     boolean canSpawn(@NotNull SpawnContext ctx);
+    @NotNull Collection<NaturalEntitySpawn> selectRandom(@NotNull SpawnContext ctx);
     @NotNull Collection<NaturalEntitySpawn> selectRandom(int rolls, @NotNull SpawnContext ctx);
     @NotNull Collection<NaturalEntitySpawn> getAllAvailableSpawns();
 }

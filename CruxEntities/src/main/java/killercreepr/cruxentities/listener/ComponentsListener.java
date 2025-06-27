@@ -81,7 +81,7 @@ public class ComponentsListener implements Listener {
             boolean ominous = state.getTrialSpawner().isOminous();
             cfg.populateLoot(lootCtx).forEach(group ->{
                 if(!group.canSpawn(spawnCtx)) return;
-                group.selectRandom(1, spawnCtx).forEach(spawn ->{
+                group.selectRandom(spawnCtx).forEach(spawn ->{
                     DataExchange info = spawn.info();
                     Entity newEntity = spawn.spawn(spawnCtx, spawned ->{
                         CruxPersist.SPAWN_REASON.set(spawned, "trial_spawner");

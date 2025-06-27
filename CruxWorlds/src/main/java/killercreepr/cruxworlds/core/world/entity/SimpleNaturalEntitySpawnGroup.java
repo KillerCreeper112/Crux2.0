@@ -8,6 +8,7 @@ import killercreepr.cruxworlds.api.world.entity.SpawnContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 public abstract class SimpleNaturalEntitySpawnGroup extends SimpleWeighted implements NaturalEntitySpawnGroup {
@@ -19,6 +20,11 @@ public abstract class SimpleNaturalEntitySpawnGroup extends SimpleWeighted imple
 
     public SimpleNaturalEntitySpawnGroup(int weight, float quality, @NotNull NaturalEntitySpawn... spawns) {
         this(weight, quality, Set.of(spawns));
+    }
+
+    @Override
+    public @NotNull Collection<NaturalEntitySpawn> selectRandom(@NotNull SpawnContext ctx) {
+        return selectRandom(1, ctx);
     }
 
     @NotNull

@@ -12,13 +12,13 @@ import java.util.Collection;
 public class CfgKeyedNaturalEntitySpawnGroup extends CfgNaturalEntitySpawnGroup implements KeyedNaturalEntitySpawnGroup {
     protected final @NotNull Key key;
 
-    public CfgKeyedNaturalEntitySpawnGroup(int weight, float quality, @NotNull Collection<NaturalEntitySpawn> spawns, @Nullable SpawnValidator spawnValidator, @NotNull Key key) {
-        super(weight, quality, spawns, spawnValidator);
+    public CfgKeyedNaturalEntitySpawnGroup(int weight, float quality, @NotNull Collection<NaturalEntitySpawn> spawns, @Nullable SpawnValidator spawnValidator, int rolls, @NotNull Key key) {
+        super(weight, quality, spawns, spawnValidator, rolls);
         this.key = key;
     }
 
-    public CfgKeyedNaturalEntitySpawnGroup(int weight, float quality, @NotNull Key key, @Nullable SpawnValidator spawnValidator, @NotNull NaturalEntitySpawn... spawns) {
-        super(weight, quality, spawnValidator, spawns);
+    public CfgKeyedNaturalEntitySpawnGroup(int weight, float quality, @NotNull Key key, @Nullable SpawnValidator spawnValidator, int rolls, @NotNull NaturalEntitySpawn... spawns) {
+        super(weight, quality, spawnValidator, rolls, spawns);
         this.key = key;
     }
 
