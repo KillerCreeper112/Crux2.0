@@ -1,6 +1,7 @@
 package killercreepr.cruxentities.listener;
 
 import killercreepr.crux.api.data.DataExchange;
+import killercreepr.crux.api.entity.consumer.CruxEntityConsumer;
 import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.loot.LootContext;
 import killercreepr.crux.api.loot.LootTable;
@@ -8,6 +9,7 @@ import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.component.SimpleBlockComponentWrapper;
 import killercreepr.crux.core.persistence.CruxPersist;
+import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxentities.component.CruxEntityComponents;
 import killercreepr.cruxentities.entity.CruxMob;
@@ -28,6 +30,7 @@ import org.bukkit.event.entity.TrialSpawnerSpawnEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Collection;
 import java.util.Random;
 
 public class ComponentsListener implements Listener {
@@ -98,6 +101,15 @@ public class ComponentsListener implements Listener {
                                     }
                                 }
                             }
+                        }
+                        if(info.get("ominous_states") instanceof Collection<?> list){
+                            list.forEach(stateKey ->{
+                                CruxEntityConsumer consumer = CruxRegistries.ENTITY_CONSUMER.get(
+                                    Crux.key(stateKey.toString())
+                                );
+                                if(consumer == null) throw new IllegalArgumentException("CruxEntityConsumer of " + stateKey + " not found!");
+                                consumer.accept(spawned);
+                            });
                         }
                     });
                     if(newEntity != null){

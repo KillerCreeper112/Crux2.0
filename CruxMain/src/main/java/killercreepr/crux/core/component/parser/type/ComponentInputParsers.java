@@ -9,6 +9,7 @@ import killercreepr.crux.api.component.parser.StringListEncodeComponent;
 import killercreepr.crux.api.component.parser.hybrid.PersistTextParser;
 import killercreepr.crux.api.component.parser.hybrid.TextInputField;
 import killercreepr.crux.api.data.ParticleBuilderSupplier;
+import killercreepr.crux.api.entity.consumer.CruxEntityConsumer;
 import killercreepr.crux.api.entity.predicate.EntityPredicate;
 import killercreepr.crux.api.item.component.ToolComponent;
 import killercreepr.crux.api.item.predicate.ItemPredicate;
@@ -81,6 +82,16 @@ public class ComponentInputParsers {
         .apply(ctx ->{
             String input = ctx.get();
             return NumberProvider.parseFromString(input);
+        });
+
+    public static PersistTextParser<CruxEntityConsumer> CRUX_ENTITY_CONSUMER = PersistTextParser.elementBuilder(CruxEntityConsumer.class)
+        .field(TextInputField.field(PersistTextParser.KEY, CruxEntityConsumer::key))
+        .apply(ctx ->{
+            Key key = ctx.get();
+            return Objects.requireNonNull(
+                CruxRegistries.ENTITY_CONSUMER.get(key),
+                "CruxEntityConsumer of " + key + " not found!"
+            );
         });
 
     public static PersistTextParser<NumberVector> NUMBER_VECTOR = PersistTextParser.mapBuilder(NumberVector.class)
