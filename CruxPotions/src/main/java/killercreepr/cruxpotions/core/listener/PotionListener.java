@@ -1,6 +1,7 @@
 package killercreepr.cruxpotions.core.listener;
 
 import com.destroystokyo.paper.event.entity.WitchConsumePotionEvent;
+import com.destroystokyo.paper.event.player.PlayerLaunchProjectileEvent;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.consumable.ConsumeEffect;
 import killercreepr.crux.api.entity.CruxEntity;
@@ -22,10 +23,7 @@ import org.bukkit.entity.ThrownPotion;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.AreaEffectCloudApplyEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.LingeringPotionSplashEvent;
-import org.bukkit.event.entity.PotionSplashEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -52,6 +50,47 @@ public class PotionListener implements Listener {
             data.clearPotions();
         }
     }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        Entity dmger = event.getDamager();
+        List<StoredPotion> potions = CruxEntity.entity(dmger).get(PotionComponents.STORED_CRUX_POTIONS);
+        if(potions == null || potions.isEmpty()) return;
+        Entity victim = event.getEntity();
+
+        PotionHolder holder = EntityMemory.getOrCreateDataHolder(victim, SimplePotionHolder.class, SimplePotionHolder::new);
+        if(holder == null) return;
+        PotionInflictor inflictor = new EntityInflictor(dmger);
+        potions.forEach(stored ->{
+            holder.addPotion(stored.create(victim, inflictor));
+        });
+    }
+
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onEntityShootBow(EntityShootBowEvent event) {
+        ItemStack consumable = event.getConsumable();
+        if(CruxItem.isEmpty(consumable)) return;
+
+        CruxItem crux = CruxItem.wrap(consumable);
+        List<StoredPotion> potions = crux.getOrDefaultData(PotionComponents.STORED_CRUX_POTIONS);
+        if(potions != null){
+            CruxEntity.entity(event.getProjectile()).set(PotionComponents.STORED_CRUX_POTIONS, potions);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onPlayerLaunchProjectile(PlayerLaunchProjectileEvent event) {
+        ItemStack consumable = event.getItemStack();
+        if(CruxItem.isEmpty(consumable)) return;
+
+        CruxItem crux = CruxItem.wrap(consumable);
+        List<StoredPotion> potions = crux.getOrDefaultData(PotionComponents.STORED_CRUX_POTIONS);
+        if(potions != null){
+            CruxEntity.entity(event.getProjectile()).set(PotionComponents.STORED_CRUX_POTIONS, potions);
+        }
+    }
+
 
     public void applyPotion(@NotNull Entity p, @Nullable ItemStack item){
         if(item==null) return;
