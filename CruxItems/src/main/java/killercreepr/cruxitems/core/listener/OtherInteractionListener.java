@@ -38,6 +38,11 @@ public class OtherInteractionListener implements Listener {
             components.set(CruxItemsComponents.DISPENSE_BLOCK_LOOT_TABLE, lootTable);
         }
 
+        lootTable = cruxItem.get(CruxItemsComponents.OMINOUS_DISPENSE_BLOCK_LOOT_TABLE);
+        if(lootTable != null){
+            components.set(CruxItemsComponents.OMINOUS_DISPENSE_BLOCK_LOOT_TABLE, lootTable);
+        }
+
 
         if(spawnerData == null || !(state instanceof Vault vault)) return;
 
@@ -45,10 +50,17 @@ public class OtherInteractionListener implements Listener {
         vault.update();
     }
 
+    public boolean isOminous(Block b){
+        return b.getBlockData() instanceof org.bukkit.block.data.type.Vault v && v.isOminous();
+    }
+
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onVaultDisplayItem(VaultDisplayItemEvent event) {
         var components = new SimpleBlockComponentWrapper(event.getBlock().getState());
-        var lootTableData = components.get(CruxItemsComponents.DISPENSE_BLOCK_LOOT_TABLE);
+        boolean ominous = isOminous(event.getBlock());
+        var lootTableData = components.get(
+            ominous ? CruxItemsComponents.OMINOUS_DISPENSE_BLOCK_LOOT_TABLE : CruxItemsComponents.DISPENSE_BLOCK_LOOT_TABLE
+        );
         if(lootTableData == null) return;
         if(!lootTableData.isOverrideVanilla() && CruxMath.random().nextBoolean()) return;
         event.setDisplayItem(getRandomItem(event, lootTableData.getLootTable()));
@@ -58,7 +70,10 @@ public class OtherInteractionListener implements Listener {
     public void onBlockDispenseLoot(BlockDispenseLootEvent event) {
         Block b = event.getBlock();
         var components = new SimpleBlockComponentWrapper(b.getState());
-        var lootTableData = components.get(CruxItemsComponents.DISPENSE_BLOCK_LOOT_TABLE);
+        boolean ominous = isOminous(event.getBlock());
+        var lootTableData = components.get(
+            ominous ? CruxItemsComponents.OMINOUS_DISPENSE_BLOCK_LOOT_TABLE : CruxItemsComponents.DISPENSE_BLOCK_LOOT_TABLE
+        );
         if(lootTableData == null) return;
 
         if(lootTableData.isOverrideVanilla()) event.setDispensedLoot(null);

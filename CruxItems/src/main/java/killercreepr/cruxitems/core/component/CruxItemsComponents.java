@@ -24,13 +24,12 @@ public class CruxItemsComponents {
             .createInput(Crux.key("vault_block_key"))));
 
     public static final DataComponentType<VaultBlockLootTable> DISPENSE_BLOCK_LOOT_TABLE = register("dispense_block_loot_table", builder -> builder
-        .persistTextParser(PersistTextParser.mapBuilder(VaultBlockLootTable.class)
-            .field("loot_table", TextInputField.field(ComponentInputParsers.ITEM_LOOT_TABLE, VaultBlockLootTable::getLootTable))
-            .field("override_vanilla", TextInputField.field(PersistTextParser.BOOLEAN, VaultBlockLootTable::isOverrideVanilla))
-            .apply(ctx ->{
-                return new VaultBlockLootTable(ctx.get("loot_table"), ctx.getOptional("override_vanilla", true));
-            })
+        .persistTextParser(CruxItemsCompParsers.DISPENSE_BLOCK_LOOT_TABLE
             .createInput(Crux.key("dispense_block_loot_table"))));
+
+    public static final DataComponentType<VaultBlockLootTable> OMINOUS_DISPENSE_BLOCK_LOOT_TABLE = register("ominous_dispense_block_loot_table", builder -> builder
+        .persistTextParser(CruxItemsCompParsers.DISPENSE_BLOCK_LOOT_TABLE
+            .createInput(Crux.key("ominous_dispense_block_loot_table"))));
 
 
     public static final DataComponentType<Key> PLUGIN_ITEM_REFERENCE = register("plugin_item_reference", builder -> builder
