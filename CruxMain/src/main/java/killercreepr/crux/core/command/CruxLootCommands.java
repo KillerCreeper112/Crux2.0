@@ -1,5 +1,6 @@
 package killercreepr.crux.core.command;
 
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -136,6 +137,26 @@ public class CruxLootCommands {
                                         .sendMessage("Generated and gave " + players.size() + " players loot from " + lootTable.key() + ".");
                                     return 1;
                                 })
+                                .then(
+                                    Commands.argument("amount", IntegerArgumentType.integer(1))
+                                        .executes(ctx ->{
+                                            Collection<Player> players = ctx.getArgument("targets", PlayerSelectorArgumentResolver.class)
+                                                .resolve(ctx.getSource());
+                                            ItemLootTable lootTable = ctx.getArgument("loot_table", ItemLootTable.class);
+
+                                            int amount = ctx.getArgument("amount", Integer.class);
+                                            for(Player p : players){
+                                                LootContext.Builder builder = LootContext.builder()
+                                                    .looter(p);
+                                                for(int i = 0; i < amount; i++){
+                                                    CruxEntityUtil.giveOrDrop(p, lootTable.populateLoot(builder.build()));
+                                                }
+                                            }
+                                            getExecutor(ctx.getSource())
+                                                .sendMessage("Generated and gave " + players.size() + " players loot from " + lootTable.key() + " " + amount + " times.");
+                                            return 1;
+                                        })
+                                )
                         )
                 )
         )
