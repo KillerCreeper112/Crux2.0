@@ -78,6 +78,7 @@ public class ComponentsListener implements Listener {
             TrialSpawnerBlockEntity state = ((TrialSpawnerBlockEntity) newBlock);
 
             e.remove();
+            boolean ominous = state.getTrialSpawner().isOminous();
             cfg.populateLoot(lootCtx).forEach(group ->{
                 if(!group.canSpawn(spawnCtx)) return;
                 group.selectRandom(1, spawnCtx).forEach(spawn ->{
@@ -102,14 +103,16 @@ public class ComponentsListener implements Listener {
                                 }
                             }
                         }
-                        if(info.get("ominous_states") instanceof Collection<?> list){
-                            list.forEach(stateKey ->{
-                                CruxEntityConsumer consumer = CruxRegistries.ENTITY_CONSUMER.get(
-                                    Crux.key(stateKey.toString())
-                                );
-                                if(consumer == null) throw new IllegalArgumentException("CruxEntityConsumer of " + stateKey + " not found!");
-                                consumer.accept(spawned);
-                            });
+                        if(ominous){
+                            if(info.get("ominous_states") instanceof Collection<?> list){
+                                list.forEach(stateKey ->{
+                                    CruxEntityConsumer consumer = CruxRegistries.ENTITY_CONSUMER.get(
+                                        Crux.key(stateKey.toString())
+                                    );
+                                    if(consumer == null) throw new IllegalArgumentException("CruxEntityConsumer of " + stateKey + " not found!");
+                                    consumer.accept(spawned);
+                                });
+                            }
                         }
                     });
                     if(newEntity != null){
