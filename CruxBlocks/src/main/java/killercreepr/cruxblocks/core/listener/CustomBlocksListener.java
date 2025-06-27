@@ -248,6 +248,24 @@ public class CustomBlocksListener implements Listener {
         event.getBlocks().forEach(b ->{
             ActiveCruxBlock crux = manager.getActiveBlock(b);
             if(crux == null) return;
+
+            if(crux instanceof ActiveCruxExplode explode){
+                var result = explode.exploded(event, miner);
+                switch (result){
+                    case DENY -> {
+                        return;
+                    }
+                    case BREAK_WITH_DROP -> {
+                        crux.breakBlock(miner, BlockBreakFlags.empty());
+                        return;
+                    }
+                    case BREAK_WITHOUT_DROP -> {
+                        crux.breakBlock(miner, BlockBreakFlags.flags(BlockBreakFlag.DISABLE_DROPS));
+                        return;
+                    }
+                }
+            }
+
             BlockBreakFlags flags;
             if(CruxMath.testChance(yield)){
                 flags = BlockBreakFlags.empty();
