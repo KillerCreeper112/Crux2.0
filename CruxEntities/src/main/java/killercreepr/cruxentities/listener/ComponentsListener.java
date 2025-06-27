@@ -1,12 +1,16 @@
 package killercreepr.cruxentities.listener;
 
 import killercreepr.crux.api.item.CruxItem;
+import killercreepr.crux.api.loot.LootTable;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.component.SimpleBlockComponentWrapper;
 import killercreepr.crux.core.persistence.CruxPersist;
+import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxentities.component.CruxEntityComponents;
 import killercreepr.cruxentities.entity.CruxMob;
 import killercreepr.cruxentities.registries.CruxEntityRegistries;
+import killercreepr.cruxworlds.api.world.entity.NaturalEntitySpawnGroup;
+import killercreepr.cruxworlds.api.world.entity.SpawnContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.TrialSpawnerBlockEntity;
 import org.bukkit.block.Block;
@@ -41,6 +45,15 @@ public class ComponentsListener implements Listener {
         try{
             b = event.getTrialSpawner().getBlock();
         }catch (IllegalStateException ignored){ return; }
+
+        Block block = event.getEntity().getLocation().getBlock();
+        LootTable<NaturalEntitySpawnGroup> groups;
+        groups.populateLoot().forEach(group ->{
+            if(!group.canSpawn(SpawnContext.simple(block, CruxMath.random()))) return;
+            group.selectRandom(1, null).forEach(spawn ->{
+                spawn.spawn()
+            });
+        });
 
         var components = new SimpleBlockComponentWrapper(b.getState());
         var spawnerData = components.get(CruxEntityComponents.CREATURE_SPAWNER_DATA);
