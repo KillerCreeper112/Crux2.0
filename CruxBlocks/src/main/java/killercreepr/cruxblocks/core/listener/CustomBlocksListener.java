@@ -242,7 +242,28 @@ public class CustomBlocksListener implements Listener {
     public void handleCustomExplosion(CustomExplodeEvent event, Miner miner){
         switch (event.getResult()){
             case DESTROY, DESTROY_WITH_DECAY -> {}
-            default -> { return; }
+            default -> {
+                event.getBlocks().forEach(b ->{
+                    ActiveCruxBlock crux = manager.getActiveBlock(b);
+                    if(crux == null) return;
+
+                    if(crux instanceof ActiveCruxExploded explode){
+                        var result = explode.exploded(event, miner);
+                        switch (result){
+                            case DENY -> {
+                                return;
+                            }
+                            case BREAK_WITH_DROP -> {
+                                crux.breakBlock(miner, BlockBreakFlags.empty());
+                            }
+                            case BREAK_WITHOUT_DROP -> {
+                                crux.breakBlock(miner, BlockBreakFlags.flags(BlockBreakFlag.DISABLE_DROPS));
+                            }
+                        }
+                    }
+                });
+                return;
+            }
         }
         float yield = event.getYield() * 100f;
         event.getBlocks().forEach(b ->{
