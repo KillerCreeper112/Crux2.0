@@ -45,7 +45,7 @@ public class PotionsLoreTag implements ObjectTag<ItemStack> {
             .add(Tag.stringList("potions", (args, context) ->{
                 List<String> format = potionsFormat.value();
                 if(format==null) return null;
-                Collection<StoredPotion> storedPotions = CruxItem.wrap(item).get(PotionComponents.STORED_CRUX_POTIONS);
+                Collection<StoredPotion> storedPotions = CruxItem.wrap(item).getOrDefaultData(PotionComponents.STORED_CRUX_POTIONS);
                 if(storedPotions==null) return List.of();
                 List<String> list = new ArrayList<>();
                 storedPotions.forEach(potion ->{
