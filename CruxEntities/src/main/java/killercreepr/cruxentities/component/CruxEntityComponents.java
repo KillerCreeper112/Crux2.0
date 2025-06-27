@@ -51,6 +51,10 @@ public class CruxEntityComponents {
         .persistTextParser(CruxEntityCompParsers.CREATURE_SPAWNER_CFG
             .createInput(Crux.key("creature_spawner_config"))));
 
+    public static final DataComponentType<CreatureSpawnerCfg> OMINOUS_CREATURE_SPAWNER_CONFIG = register("ominous_creature_spawner_config", builder -> builder
+        .persistTextParser(CruxEntityCompParsers.CREATURE_SPAWNER_CFG
+            .createInput(Crux.key("ominous_creature_spawner_config"))));
+
     private static <T> DataComponentType<T> register(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator){
         return CruxRegistries.DATA_COMPONENT_TYPE.register(Crux.key(id), builderOperator.apply(DataComponentType.builder()).build());
     }

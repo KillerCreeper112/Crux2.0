@@ -44,6 +44,11 @@ public class ComponentsListener implements Listener {
             var components = new SimpleBlockComponentWrapper(b.getState());
             components.set(CruxEntityComponents.CREATURE_SPAWNER_CONFIG, cfg);
         }
+        cfg = cruxItem.get(CruxEntityComponents.OMINOUS_CREATURE_SPAWNER_CONFIG);
+        if(cfg != null){
+            var components = new SimpleBlockComponentWrapper(b.getState());
+            components.set(CruxEntityComponents.OMINOUS_CREATURE_SPAWNER_CONFIG, cfg);
+        }
 
         var spawnerData = cruxItem.get(CruxEntityComponents.CREATURE_SPAWNER_DATA);
         if(spawnerData == null) return;
@@ -59,9 +64,14 @@ public class ComponentsListener implements Listener {
             b = event.getTrialSpawner().getBlock();
         }catch (IllegalStateException ignored){ return; }
 
+        final var newBlock = ((CraftBlockState) b.getState()).getWorldHandle().getBlockEntity(new BlockPos(b.getX(), b.getY(), b.getZ()));
+        TrialSpawnerBlockEntity state = ((TrialSpawnerBlockEntity) newBlock);
+        boolean ominous = state.getTrialSpawner().isOminous();
+
         Entity e = event.getEntity();
         var components = new SimpleBlockComponentWrapper(b.getState());
-        CreatureSpawnerCfg cfg = components.get(CruxEntityComponents.CREATURE_SPAWNER_CONFIG);
+        CreatureSpawnerCfg cfg =
+            components.get(ominous ? CruxEntityComponents.OMINOUS_CREATURE_SPAWNER_CONFIG : CruxEntityComponents.CREATURE_SPAWNER_CONFIG);
         if(cfg != null){
             LootContext lootCtx = LootContext.builder()
                 .looted(b)
@@ -72,11 +82,9 @@ public class ComponentsListener implements Listener {
                 e.getWorld(), CruxPosition.precise(e.getLocation()),
                 CruxMath.random()
             );
-            final var newBlock = ((CraftBlockState) b.getState()).getWorldHandle().getBlockEntity(new BlockPos(b.getX(), b.getY(), b.getZ()));
-            TrialSpawnerBlockEntity state = ((TrialSpawnerBlockEntity) newBlock);
+
 
             e.remove();
-            boolean ominous = state.getTrialSpawner().isOminous();
             cfg.getSpawns().populateLoot(lootCtx).forEach(group ->{
                 if(!group.canSpawn(spawnCtx)) return;
                 group.selectRandom(spawnCtx).forEach(spawn ->{
@@ -153,8 +161,8 @@ public class ComponentsListener implements Listener {
 
         });
 
-        final var newBlock = ((CraftBlockState) b.getState()).getWorldHandle().getBlockEntity(new BlockPos(b.getX(), b.getY(), b.getZ()));
-        TrialSpawnerBlockEntity state = ((TrialSpawnerBlockEntity) newBlock);
+        /*final var newBlock = ((CraftBlockState) b.getState()).getWorldHandle().getBlockEntity(new BlockPos(b.getX(), b.getY(), b.getZ()));
+        TrialSpawnerBlockEntity state = ((TrialSpawnerBlockEntity) newBlock);*/
         state.getTrialSpawner().getData().currentMobs.add(newEntity.getUniqueId());
     }
 
