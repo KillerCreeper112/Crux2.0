@@ -36,12 +36,19 @@ public class StandardFileLootFunctions {
                 if(!(e.get("enchants") instanceof FileArray oo)) return null;
                 Collection<ItemEnchantFunction.Enchant> enchants = new HashSet<>();
                 oo.forEach(ele ->{
-                    if(!(ele instanceof FileObject f)) return;
+                    if(!(ele instanceof FileObject f)){
+                        Key enchantKey = registry.deserializeFromFile(Key.class, ele);
+                        if(CruxObjects.checkNull(enchantKey)) return;
+                        enchants.add(
+                            new ItemEnchantFunction.Enchant(1, 0f, enchantKey, null)
+                        );
+                        return;
+                    }
                     int weight = f.getObject(Integer.class, "weight", 0);
                     float quality = f.getObject(Float.class, "quality", 0f);
                     Key enchantKey = registry.deserializeFromFile(Key.class, f.get("enchant"));
                     NumberProvider level = registry.deserializeFromFile(NumberProvider.class, f.get("level"));
-                    if(CruxObjects.checkNull(enchantKey, level)) return;
+                    if(CruxObjects.checkNull(enchantKey)) return;
                     enchants.add(
                         new ItemEnchantFunction.Enchant(weight, quality, enchantKey, level)
                     );

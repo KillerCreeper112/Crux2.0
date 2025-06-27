@@ -9,7 +9,9 @@ import killercreepr.crux.api.util.CruxWeightedSupplier;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.loot.SimpleWeighted;
 import killercreepr.crux.core.loot.functions.SimpleLootFunction;
+import killercreepr.crux.core.util.CruxMath;
 import net.kyori.adventure.key.Key;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,12 +43,18 @@ public class ItemEnchantFunction extends SimpleLootFunction<ItemStack> implement
             .applyContext(context)
             .build().rollList();
         for(Enchant e : random){
-            int level = e.getLevelProvider().sample(source).intValue();
+            Enchantment enchantment = RegistryAccess.registryAccess().getRegistry(
+                RegistryKey.ENCHANTMENT
+            ).get(e.getEnchant());
+
+            int level;
+            if(e.getLevelProvider() == null){
+                level = CruxMath.random(enchantment.getStartLevel(), enchantment.getMaxLevel());
+            }else level = e.getLevelProvider().sample(source).intValue();
+
             if(level < 1) continue;
             i.editMeta(meta ->{
-                meta.addEnchant(RegistryAccess.registryAccess().getRegistry(
-                    RegistryKey.ENCHANTMENT
-                ).get(e.getEnchant()), level, true);
+                meta.addEnchant(enchantment, level, true);
             });
         }
         return i;
@@ -54,8 +62,8 @@ public class ItemEnchantFunction extends SimpleLootFunction<ItemStack> implement
 
     public final static class Enchant extends SimpleWeighted {
         private final @NotNull Key enchant;
-        private final @NotNull NumberProvider levelProvider;
-        public Enchant(int weight, float quality, @NotNull Key enchant, @NotNull NumberProvider levelProvider) {
+        private final @Nullable NumberProvider levelProvider;
+        public Enchant(int weight, float quality, @NotNull Key enchant, @Nullable NumberProvider levelProvider) {
             super(weight, quality);
             this.enchant = enchant;
             this.levelProvider = levelProvider;
@@ -65,7 +73,7 @@ public class ItemEnchantFunction extends SimpleLootFunction<ItemStack> implement
             return enchant;
         }
 
-        public @NotNull NumberProvider getLevelProvider() {
+        public @Nullable NumberProvider getLevelProvider() {
             return levelProvider;
         }
     }
