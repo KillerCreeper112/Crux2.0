@@ -73,6 +73,8 @@ public class ComponentsListener implements Listener {
             );
             final var newBlock = ((CraftBlockState) b.getState()).getWorldHandle().getBlockEntity(new BlockPos(b.getX(), b.getY(), b.getZ()));
             TrialSpawnerBlockEntity state = ((TrialSpawnerBlockEntity) newBlock);
+
+            e.remove();
             cfg.populateLoot(lootCtx).forEach(group ->{
                 if(!group.canSpawn(spawnCtx)) return;
                 group.selectRandom(1, spawnCtx).forEach(spawn ->{
