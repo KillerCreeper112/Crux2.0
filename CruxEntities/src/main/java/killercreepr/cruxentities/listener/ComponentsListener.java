@@ -37,6 +37,13 @@ public class ComponentsListener implements Listener {
         ItemStack item = event.getItemInHand();
         CruxItem cruxItem = CruxItem.wrap(item);
 
+
+        LootTable<NaturalEntitySpawnGroup> cfg = cruxItem.get(CruxEntityComponents.CREATURE_SPAWNER_CONFIG);
+        if(cfg != null){
+            var components = new SimpleBlockComponentWrapper(b.getState());
+            components.set(CruxEntityComponents.CREATURE_SPAWNER_CONFIG, cfg);
+        }
+
         var spawnerData = cruxItem.get(CruxEntityComponents.CREATURE_SPAWNER_DATA);
         if(spawnerData == null) return;
 
