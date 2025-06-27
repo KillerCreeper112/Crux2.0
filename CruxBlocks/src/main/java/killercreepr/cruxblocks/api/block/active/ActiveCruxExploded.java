@@ -4,7 +4,7 @@ import killercreepr.cruxblocks.api.event.CustomExplodeEvent;
 import killercreepr.cruxblocks.api.mining.user.Miner;
 import org.jetbrains.annotations.NotNull;
 
-public interface ActiveCruxExplode {
+public interface ActiveCruxExploded {
     @NotNull Result exploded(CustomExplodeEvent event, Miner miner);
 
     enum Result {

@@ -249,7 +249,7 @@ public class CustomBlocksListener implements Listener {
             ActiveCruxBlock crux = manager.getActiveBlock(b);
             if(crux == null) return;
 
-            if(crux instanceof ActiveCruxExplode explode){
+            if(crux instanceof ActiveCruxExploded explode){
                 var result = explode.exploded(event, miner);
                 switch (result){
                     case DENY -> {
