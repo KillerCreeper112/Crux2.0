@@ -47,8 +47,8 @@ public class CruxEntityComponents {
             })
             .createInput(Crux.key("creature_spawner_data"))));
 
-    public static final DataComponentType<LootTable<NaturalEntitySpawnGroup>> CREATURE_SPAWNER_CONFIG = register("creature_spawner_config", builder -> builder
-        .persistTextParser(CruxWorldsParsers.NATURAL_ENTITY_SPAWN_GROUP
+    public static final DataComponentType<CreatureSpawnerCfg> CREATURE_SPAWNER_CONFIG = register("creature_spawner_config", builder -> builder
+        .persistTextParser(CruxEntityCompParsers.CREATURE_SPAWNER_CFG
             .createInput(Crux.key("creature_spawner_config"))));
 
     private static <T> DataComponentType<T> register(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator){

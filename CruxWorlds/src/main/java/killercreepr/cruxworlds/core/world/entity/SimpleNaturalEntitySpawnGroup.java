@@ -32,6 +32,7 @@ public abstract class SimpleNaturalEntitySpawnGroup extends SimpleWeighted imple
     public Collection<NaturalEntitySpawn> selectRandom(int rolls, @NotNull SpawnContext ctx) {
         return CruxWeightedSupplier.builder(spawns)
             .rolls(rolls)
+            .allowDuplicates(true)
             .filter(check -> check.canSpawn(ctx))
             .build().rollList();
     }

@@ -4,17 +4,16 @@ import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.entity.consumer.CruxEntityConsumer;
 import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.loot.LootContext;
-import killercreepr.crux.api.loot.LootTable;
 import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.component.SimpleBlockComponentWrapper;
 import killercreepr.crux.core.persistence.CruxPersist;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.core.util.CruxMath;
+import killercreepr.cruxentities.component.CreatureSpawnerCfg;
 import killercreepr.cruxentities.component.CruxEntityComponents;
 import killercreepr.cruxentities.entity.CruxMob;
 import killercreepr.cruxentities.registries.CruxEntityRegistries;
-import killercreepr.cruxworlds.api.world.entity.NaturalEntitySpawnGroup;
 import killercreepr.cruxworlds.api.world.entity.SpawnContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.TrialSpawnerBlockEntity;
@@ -31,7 +30,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
-import java.util.Random;
 
 public class ComponentsListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
@@ -41,7 +39,7 @@ public class ComponentsListener implements Listener {
         CruxItem cruxItem = CruxItem.wrap(item);
 
 
-        LootTable<NaturalEntitySpawnGroup> cfg = cruxItem.get(CruxEntityComponents.CREATURE_SPAWNER_CONFIG);
+        CreatureSpawnerCfg cfg = cruxItem.get(CruxEntityComponents.CREATURE_SPAWNER_CONFIG);
         if(cfg != null){
             var components = new SimpleBlockComponentWrapper(b.getState());
             components.set(CruxEntityComponents.CREATURE_SPAWNER_CONFIG, cfg);
@@ -63,7 +61,7 @@ public class ComponentsListener implements Listener {
 
         Entity e = event.getEntity();
         var components = new SimpleBlockComponentWrapper(b.getState());
-        LootTable<NaturalEntitySpawnGroup> cfg = components.get(CruxEntityComponents.CREATURE_SPAWNER_CONFIG);
+        CreatureSpawnerCfg cfg = components.get(CruxEntityComponents.CREATURE_SPAWNER_CONFIG);
         if(cfg != null){
             LootContext lootCtx = LootContext.builder()
                 .looted(b)
@@ -79,7 +77,7 @@ public class ComponentsListener implements Listener {
 
             e.remove();
             boolean ominous = state.getTrialSpawner().isOminous();
-            cfg.populateLoot(lootCtx).forEach(group ->{
+            cfg.getSpawns().populateLoot(lootCtx).forEach(group ->{
                 if(!group.canSpawn(spawnCtx)) return;
                 group.selectRandom(spawnCtx).forEach(spawn ->{
                     DataExchange info = spawn.info();
