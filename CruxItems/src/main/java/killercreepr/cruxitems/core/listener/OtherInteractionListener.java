@@ -7,8 +7,10 @@ import killercreepr.crux.core.component.SimpleBlockComponentWrapper;
 import killercreepr.crux.core.util.CruxCollection;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxitems.core.component.CruxItemsComponents;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.TrialSpawner;
 import org.bukkit.block.Vault;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -51,7 +53,8 @@ public class OtherInteractionListener implements Listener {
     }
 
     public boolean isOminous(Block b){
-        return b.getBlockData() instanceof org.bukkit.block.data.type.Vault v && v.isOminous();
+        if(b.getState() instanceof TrialSpawner v) return v.isOminous();
+        return b.getBlockData() instanceof org.bukkit.block.data.type.Vault v && v.isOminous() ;
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -71,6 +74,7 @@ public class OtherInteractionListener implements Listener {
         Block b = event.getBlock();
         var components = new SimpleBlockComponentWrapper(b.getState());
         boolean ominous = isOminous(event.getBlock());
+        Bukkit.broadcastMessage(ominous + "");
         var lootTableData = components.get(
             ominous ? CruxItemsComponents.OMINOUS_DISPENSE_BLOCK_LOOT_TABLE : CruxItemsComponents.DISPENSE_BLOCK_LOOT_TABLE
         );
