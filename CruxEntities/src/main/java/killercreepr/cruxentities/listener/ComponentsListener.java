@@ -122,7 +122,7 @@ public class ComponentsListener implements Listener {
                         }
                     });
                     if(newEntity != null){
-                        state.getTrialSpawner().getData().currentMobs.add(newEntity.getUniqueId());
+                        state.getTrialSpawner().getStateData().currentMobs.add(newEntity.getUniqueId());
                     }
                 });
             });
@@ -163,7 +163,7 @@ public class ComponentsListener implements Listener {
 
         /*final var newBlock = ((CraftBlockState) b.getState()).getWorldHandle().getBlockEntity(new BlockPos(b.getX(), b.getY(), b.getZ()));
         TrialSpawnerBlockEntity state = ((TrialSpawnerBlockEntity) newBlock);*/
-        state.getTrialSpawner().getData().currentMobs.add(newEntity.getUniqueId());
+        state.getTrialSpawner().getStateData().currentMobs.add(newEntity.getUniqueId());
     }
 
 }

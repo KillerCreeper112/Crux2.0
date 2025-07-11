@@ -26,10 +26,7 @@ import org.bukkit.persistence.PersistentDataHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 
 //todo change MobCategory[] to a set or list ._.
@@ -49,39 +46,79 @@ public interface CruxMob extends Keyed {
         return grim.key().equals(CruxEntitiesPersist.ENTITY.get(e, null));
     }
 
-    static boolean isInAllCategories(@NotNull Entity e, @NotNull MobCategory... check){
-        Collection<MobCategory> list = Arrays.asList(check);
-        return Arrays.stream(getCategories(e)).allMatch(list::contains);
+    static boolean isInAllCategories(@NotNull Entity e, @NotNull Collection<MobCategory> check) {
+        Set<MobCategory> entityCategories = getCategories(e);
+        for (MobCategory required : check) {
+            if (!entityCategories.contains(required)) return false;
+        }
+        return true;
+    }
+
+    static boolean isInAllCategories(@NotNull CruxMob e, @NotNull Collection<MobCategory> check){
+        Set<MobCategory> categories = e.getCategories();
+        if(categories==null || categories.isEmpty()) return false;
+        for (MobCategory required : check) {
+            if (!categories.contains(required)) return false;
+        }
+        return true;
+    }
+
+    static boolean isInAllCategories(@NotNull Entity e, @NotNull MobCategory... check) {
+        Set<MobCategory> entityCategories = getCategories(e);
+        for (MobCategory required : check) {
+            if (!entityCategories.contains(required)) return false;
+        }
+        return true;
     }
 
     static boolean isInAllCategories(@NotNull CruxMob e, @NotNull MobCategory... check){
-        MobCategory[] categories = e.getCategories();
-        if(categories==null || categories.length == 0) return false;
-        Collection<MobCategory> list = Arrays.asList(check);
-        return Arrays.stream(categories).allMatch(list::contains);
+        Set<MobCategory> categories = e.getCategories();
+        if(categories==null || categories.isEmpty()) return false;
+        for (MobCategory required : check) {
+            if (!categories.contains(required)) return false;
+        }
+        return true;
+    }
+
+    static boolean isInCategory(@NotNull Entity e, @NotNull Collection<MobCategory> check){
+        for (MobCategory category : getCategories(e)) {
+            if (check.contains(category)) return true;
+        }
+        return false;
+    }
+
+    static boolean isInCategory(@NotNull CruxMob e, @NotNull Collection<MobCategory> check){
+        Set<MobCategory> categories = e.getCategories();
+        if(categories==null || categories.isEmpty()) return false;
+        for (MobCategory category : categories) {
+            if (check.contains(category)) return true;
+        }
+        return false;
     }
 
     static boolean isInCategory(@NotNull Entity e, @NotNull MobCategory... check){
-        Collection<MobCategory> list = Arrays.asList(check);
-        return Arrays.stream(getCategories(e)).anyMatch(list::contains);
+        return isInCategory(e, Set.of(check));
     }
 
     static boolean isInCategory(@NotNull CruxMob e, @NotNull MobCategory... check){
-        MobCategory[] categories = e.getCategories();
-        if(categories==null || categories.length == 0) return false;
-        Collection<MobCategory> list = Arrays.asList(check);
-        return Arrays.stream(categories).anyMatch(list::contains);
+        Set<MobCategory> categories = e.getCategories();
+        if(categories==null || categories.isEmpty()) return false;
+        Set<MobCategory> checkSet = Set.of(check);
+        for (MobCategory category : categories) {
+            if (checkSet.contains(category)) return true;
+        }
+        return false;
     }
 
-    static MobCategory[] getCategories(@NotNull Entity e){
+    static Set<MobCategory> getCategories(@NotNull Entity e){
         CruxMob mob = get(e);
         if(mob==null) return getVanillaCategories(e);
-        MobCategory[] cat = mob.getCategories();
+        Set<MobCategory> cat = mob.getCategories();
         return cat == null ? getVanillaCategories(e) : cat;
     }
 
-    static @NotNull MobCategory[] getVanillaCategories(@NotNull Entity e){
-        Collection<MobCategory> list = new HashSet<>();
+    static @NotNull Set<MobCategory> getVanillaCategories(@NotNull Entity e){
+        Set<MobCategory> list = new HashSet<>();
         if(e instanceof Enemy) list.add(MobCategory.ENEMY);
         if(e instanceof Monster) list.add(MobCategory.MONSTER);
         if(e instanceof Animals) list.add(MobCategory.ANIMAL);
@@ -90,7 +127,7 @@ public interface CruxMob extends Keyed {
         switch (e.getType()){
             case WARDEN -> list.add(MobCategory.SCULK);
         }
-        return list.toArray(new MobCategory[0]);
+        return list;
     }
 
     static <T extends PersistentDataHolder> @Nullable Key getKey(@NotNull T e){
@@ -149,7 +186,7 @@ public interface CruxMob extends Keyed {
     default @NotNull String getName(){
         return CruxString.toTitleCase(key().value());
     }
-    default MobCategory[] getCategories(){
+    default @Nullable Set<MobCategory> getCategories(){
         return null;
     }
 }

@@ -537,11 +537,11 @@ public class CustomBlocksListener implements Listener {
                                InteractionHand hand,
                                Direction direction, BlockHitResult result, BlockPos nmsPos, BucketItem bucketItem){
         if(!bucketItem.emptyContents(
-            nmsPlayer, nmsPlayer.getCommandSenderWorld(), new BlockPos(placeBlock.getX(), placeBlock.getY(), placeBlock.getZ()),
+            nmsPlayer, nmsPlayer.level(), new BlockPos(placeBlock.getX(), placeBlock.getY(), placeBlock.getZ()),
             result, direction, nmsPos,
             nmsItem, hand
         )) return;
-        bucketItem.checkExtraContent(nmsPlayer, nmsPlayer.getCommandSenderWorld(), nmsItem, nmsPos);
+        bucketItem.checkExtraContent(nmsPlayer, nmsPlayer.level(), nmsItem, nmsPos);
         nmsPlayer.awardStat(Stats.ITEM_USED.get(bucketItem));
         net.minecraft.world.item.ItemStack itemStack = ItemUtils.createFilledResult(nmsItem, nmsPlayer, BucketItem.getEmptySuccessItem(nmsItem, nmsPlayer));
         nmsPlayer.setItemInHand(hand, itemStack);
@@ -648,7 +648,7 @@ public class CustomBlocksListener implements Listener {
                 InteractionResult nmsResult = nmsItem.useOn(ctx);
                 if(nmsResult == InteractionResult.PASS && checkForPass(item)){
                     nmsSkip.put(p.getUniqueId(), true);
-                    InteractionResult result2 = nmsItem.use(nmsPlayer.getCommandSenderWorld(), nmsPlayer, hand);
+                    InteractionResult result2 = nmsItem.use(nmsPlayer.level(), nmsPlayer, hand);
                     if(result2 instanceof InteractionResult.Success success && success.heldItemTransformedTo() != null){
                         if(MaterialSetTag.ITEMS_BOATS.isTagged(itemType)){
                             ItemStack gotted = p.getInventory().getItemInMainHand();
