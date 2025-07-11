@@ -3,7 +3,7 @@ package killercreepr.cruxenchants.core.util;
 import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.TypedKey;
 import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
-import io.papermc.paper.registry.event.RegistryFreezeEvent;
+import io.papermc.paper.registry.event.RegistryComposeEvent;
 import io.papermc.paper.registry.event.WritableRegistry;
 import killercreepr.crux.api.registry.KeyedRegistry;
 import killercreepr.crux.core.Crux;
@@ -17,9 +17,9 @@ import java.util.function.Consumer;
 public class EnchantRegistererUtil {
     protected final WritableRegistry<Enchantment, EnchantmentRegistryEntry.Builder> registry;
     protected final KeyedRegistry<CruxEnchant> wrapperRegistry;
-    protected final RegistryFreezeEvent<Enchantment, EnchantmentRegistryEntry.Builder> event;
+    protected final RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.Builder> event;
     public EnchantRegistererUtil(WritableRegistry<Enchantment, EnchantmentRegistryEntry.Builder> registry,
-                                 @Nullable KeyedRegistry<CruxEnchant> wrapperRegistry, RegistryFreezeEvent<Enchantment, EnchantmentRegistryEntry.Builder> event) {
+                                 @Nullable KeyedRegistry<CruxEnchant> wrapperRegistry, RegistryComposeEvent<Enchantment, EnchantmentRegistryEntry.Builder> event) {
         this.registry = registry;
         this.wrapperRegistry = wrapperRegistry;
         this.event = event;

@@ -22,13 +22,17 @@ import killercreepr.crux.core.util.GetNear;
 import killercreepr.cruxconfig.config.bukkit.file.CruxConfig;
 import killercreepr.cruxstructures.api.structure.StoredStructure;
 import killercreepr.cruxstructures.api.structure.Structure;
+import killercreepr.cruxstructures.api.structure.generation.StructureGenerator;
 import killercreepr.cruxstructures.api.world.module.StructureWorldModule;
 import killercreepr.cruxstructures.core.commands.argument.StructureArgs;
+import killercreepr.cruxstructures.core.manager.SimpleStructureWorldModule;
 import killercreepr.cruxstructures.core.manager.StructureManager;
 import killercreepr.cruxstructures.core.registries.StructureRegistries;
 import killercreepr.cruxstructures.core.structure.CfgFAWEStructure;
+import killercreepr.cruxstructures.core.structure.generation.InstantLocationSetListStructureGen;
 import killercreepr.cruxstructures.core.util.GetStructureNear;
 import killercreepr.cruxworlds.api.world.CruxWorld;
+import killercreepr.cruxworlds.core.command.arguments.CruxWorldArgs;
 import killercreepr.cruxworlds.core.command.arguments.CruxWorldArgument;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -40,6 +44,9 @@ import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
+import org.bukkit.plugin.RegisteredListener;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,9 +56,11 @@ import java.util.Objects;
 public class StructureCommands {
     protected final @NotNull CruxPlugin plugin;
     protected final @NotNull StructureManager structureManager;
+    protected final CruxWorldArgument CRUX_WORLD_ARG;
     public StructureCommands(@NotNull CruxPlugin plugin, @NotNull StructureManager structureManager) {
         this.plugin = plugin;
         this.structureManager = structureManager;
+        this.CRUX_WORLD_ARG = new CruxWorldArgument(structureManager.getWorldManager());
     }
 
     public void register(){
@@ -67,6 +76,32 @@ public class StructureCommands {
                                                                LifecycleEventManager<?> manager){
         //give <player> <id> <amount>
         dispatcher.then(
+            Commands.literal("gen")
+                .then(
+                    Commands.argument("world", CRUX_WORLD_ARG)
+                        .then(
+                            Commands.literal("stop")
+                                .executes(ctx ->{
+                                    var sender = getExecutor(ctx.getSource());
+                                    CruxWorld world = ctx.getArgument("world", CruxWorld.class);
+                                    StructureWorldModule module = world.getModule(StructureWorldModule.class);
+                                    sender.sendMessage("Checking:");
+                                    if(module instanceof SimpleStructureWorldModule simple){
+                                        for (StructureGenerator gen : simple.getStructureGenerators()) {
+                                            if(gen instanceof InstantLocationSetListStructureGen instant){
+                                                for (BukkitRunnable run : instant.getAlreadyGenerated().values()) {
+                                                    run.cancel();
+                                                }
+                                                instant.getAlreadyGenerated().clear();
+                                                sender.sendMessage("Gotted");
+                                            }
+                                        }
+                                    }
+                                    return 1;
+                                })
+                        )
+                )
+        ).then(
             Commands.literal("place")
                 .then(
                     Commands.argument("structure", StructureArgs.STRUCTURE)

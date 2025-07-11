@@ -95,11 +95,11 @@ public class CrazyAdvancementDisplay implements CruxAdvancementIcon {
 
     public @NotNull AdvancementDisplay toCrazy(@NotNull CrazyAdvancementManager manager){
         AdvancementDisplay display = new AdvancementDisplay(
-            icon.buildItem(TextParserContext.builder(Crux.format()).build()),
+            icon.buildItem(TextParserContext.empty()),
             title,
             description,
             frame,
-            backgroundTexture,
+            backgroundTexture == null ? "stone" : backgroundTexture,
             visibility
         );
         if(positionOrigin != null){

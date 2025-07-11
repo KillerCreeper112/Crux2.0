@@ -127,7 +127,7 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
         //storedStructures.removeIf(storedRemoveIf);
     }
 
-    //todo make support for namespace
+    //todo make support for namespace instead of using Crux.getMainPlugin()
     public @NotNull CruxFolder createWorldFolder(@NotNull Key world){
         return new CruxFolder(Crux.getMainPlugin(), "data/cruxstructures/structures/" + CruxKey.toFileName(world));
     }

@@ -6,7 +6,7 @@ plugins {
 }
 
 repositories{
-    maven("https://jitpack.io")
+    //maven("https://jitpack.io")
 }
 
 dependencies {
@@ -15,7 +15,7 @@ dependencies {
     compileOnly(project(":CruxConfigs"))
     compileOnly(project(":CruxMenus"))
     compileOnly(project(":CruxStats"))
-    compileOnly("com.github.ZockerAxel", "CrazyAdvancementsAPI", "2.1.19")
+    //compileOnly("com.github.ZockerAxel", "CrazyAdvancementsAPI", "2.1.19")
 
     compileOnly(fileTree("libs") {
         include("*.jar")

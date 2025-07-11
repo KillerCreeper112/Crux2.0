@@ -6,6 +6,7 @@ import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.util.CruxTag;
 import killercreepr.cruxstructures.api.structure.generation.StructureGenerator;
 import killercreepr.cruxstructures.api.structure.generation.result.GenerateResult;
+import net.kyori.adventure.key.Key;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.persistence.PersistentDataType;
@@ -34,14 +35,18 @@ public class InstantLocationSetListStructureGen extends LocationSetListStructure
         return CruxTag.has(world, "instant_location_set/" + id);
     }
 
-    protected final Map<String, BukkitRunnable> alreadyGenerated = new HashMap<>();
+    public Map<Key, BukkitRunnable> getAlreadyGenerated() {
+        return alreadyGenerated;
+    }
+
+    protected final Map<Key, BukkitRunnable> alreadyGenerated = new HashMap<>();
     @Override
     public @NotNull GenerateResult generate(@NotNull Chunk at) {
         if(setChunks != null) return GenerateResult.empty();
         World world = at.getWorld();
-        if(hasGeneratedIn(world) || alreadyGenerated.containsKey(world.getName())) return GenerateResult.empty();
+        if(hasGeneratedIn(world) || alreadyGenerated.containsKey(world.key())) return GenerateResult.empty();
         Crux.scheduler().runTask(() ->{
-            if(setChunks != null || alreadyGenerated.containsKey(world.getName()) || hasGeneratedIn(world)) return;
+            if(setChunks != null || alreadyGenerated.containsKey(world.key()) || hasGeneratedIn(world)) return;
             setChunks = generateSetChunks(world, minDistanceApart == null ? 0 : minDistanceApart.value().intValue());
             if(setChunks == null) return;
             CruxTag.set(world, "instant_location_set/" + id, PersistentDataType.BOOLEAN, true);
@@ -64,7 +69,7 @@ public class InstantLocationSetListStructureGen extends LocationSetListStructure
                     if((index+1) >= listChunks.size()){
                         cancel();
                         Crux.log(Level.INFO, world.getName() + " - Instant set location list has finished. " + id);
-                        alreadyGenerated.remove(world.getName());
+                        alreadyGenerated.remove(world.key());
                         onComplete(world, at);
                     }
 
@@ -77,7 +82,7 @@ public class InstantLocationSetListStructureGen extends LocationSetListStructure
                     });
                 }
             };
-            alreadyGenerated.put(world.getName(), runnable);
+            alreadyGenerated.put(world.key(), runnable);
             runnable.runTaskTimerAsynchronously(Crux.getMainPlugin(), 100L, 300L);
         });
 
