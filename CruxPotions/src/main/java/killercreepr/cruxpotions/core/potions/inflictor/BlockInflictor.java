@@ -3,13 +3,16 @@ package killercreepr.cruxpotions.core.potions.inflictor;
 import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.math.BlockPos;
+import killercreepr.cruxpotions.api.potion.inflictor.LocationedInflictor;
 import killercreepr.cruxpotions.api.potion.inflictor.PotionInflictor;
 import net.kyori.adventure.key.Key;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class BlockInflictor implements PotionInflictor, Holder<Block> {
+public class BlockInflictor implements PotionInflictor, Holder<Block>, LocationedInflictor {
     public static final String ID = "block";
     protected final @NotNull Key world;
     protected final @NotNull BlockPos pos;
@@ -44,5 +47,11 @@ public class BlockInflictor implements PotionInflictor, Holder<Block> {
     @Override
     public @NotNull String getTypeID() {
         return ID;
+    }
+
+    @Override
+    public @Nullable Location getLocation() {
+        World world = Crux.getServer().getWorld(this.world);
+        return pos.toLocation(world);
     }
 }

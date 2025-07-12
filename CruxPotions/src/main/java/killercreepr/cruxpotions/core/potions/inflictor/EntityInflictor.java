@@ -2,15 +2,17 @@ package killercreepr.cruxpotions.core.potions.inflictor;
 
 import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.core.Crux;
+import killercreepr.cruxpotions.api.potion.inflictor.LocationedInflictor;
 import killercreepr.cruxpotions.api.potion.inflictor.PotionInflictor;
 import net.kyori.adventure.key.Key;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public class EntityInflictor implements PotionInflictor, Holder<Entity> {
+public class EntityInflictor implements PotionInflictor, Holder<Entity>, LocationedInflictor {
     public static final String ID = "entity";
     protected final @NotNull UUID uuid;
     protected final @NotNull Holder<Entity> reference;
@@ -47,5 +49,11 @@ public class EntityInflictor implements PotionInflictor, Holder<Entity> {
     @Override
     public @NotNull String getTypeID() {
         return ID;
+    }
+
+    @Override
+    public @Nullable Location getLocation() {
+        Entity e = value();
+        return e == null ? null : e.getLocation();
     }
 }
