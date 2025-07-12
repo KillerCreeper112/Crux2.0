@@ -47,6 +47,10 @@ public interface ActivePotion{
      */
     default boolean hasInfiniteDuration(){ return getDuration() == -1; }
 
+    default boolean isActive(){
+        return hasInfiniteDuration() || getDuration() > 0;
+    }
+
     /**
      * @return Whether to remove this potion from the entity.
      */
