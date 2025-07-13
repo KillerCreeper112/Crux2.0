@@ -10,6 +10,7 @@ import killercreepr.cruxcrafting.api.crafting.recipe.CruxRecipe;
 import killercreepr.cruxcrafting.api.event.EntityDiscoverRecipeEvent;
 import killercreepr.cruxcrafting.core.commands.arg.CraftingArgs;
 import killercreepr.cruxcrafting.core.commands.arg.CruxRecipeResolver;
+import net.kyori.adventure.key.Keyed;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
@@ -48,7 +49,7 @@ public class CruxCraftingCmds {
                                                         EntitySelectorArgumentResolver.class).resolve(ctx.getSource());
                                                     CruxRecipeManager manager = ctx.getArgument("recipe_manager", CruxRecipeManager.class);
                                                     CruxRecipe recipe = ctx.getArgument("recipe", CruxRecipeResolver.class).resolve(manager);
-                                                    String name = recipe instanceof net.kyori.adventure.key.Keyed d ? d.key().asString() : recipe.toString();
+                                                    String name = recipe instanceof Keyed d ? d.key().asString() : recipe.toString();
                                                     for(Entity e : targets){
                                                         //todo revoke event
                                                         //EntityDiscoverRecipeEvent event = new EntityDiscoverRecipeEvent(e, manager, recipe);
@@ -56,6 +57,24 @@ public class CruxCraftingCmds {
                                                         if(false) value = false;
                                                         else value = manager.revokeRecipe(e, recipe);
                                                         sender.sendMessage("Revoked recipe " + name + " from " + e.getName() + "?: " + value);
+                                                    }
+                                                    return 1;
+                                                })
+                                        ).then(
+                                            Commands.literal("*")
+                                                .executes(ctx ->{
+                                                    CommandSender sender = CruxLootCommands.getExecutor(ctx.getSource());
+                                                    Collection<Entity> targets = ctx.getArgument("targets",
+                                                        EntitySelectorArgumentResolver.class).resolve(ctx.getSource());
+                                                    CruxRecipeManager manager = ctx.getArgument("recipe_manager", CruxRecipeManager.class);
+                                                    for(Entity e : targets){
+                                                        manager.getRecipes().forEach(recipe ->{
+                                                            EntityDiscoverRecipeEvent event = new EntityDiscoverRecipeEvent(e, manager, (CruxRecipe) recipe);
+                                                            boolean value;
+                                                            if(!event.callEvent()) value = false;
+                                                            else value = manager.revokeRecipe(e, (CruxRecipe) recipe);
+                                                        });
+                                                        sender.sendMessage("Revoked all recipes from " + e.getName());
                                                     }
                                                     return 1;
                                                 })
@@ -76,13 +95,31 @@ public class CruxCraftingCmds {
                                                         EntitySelectorArgumentResolver.class).resolve(ctx.getSource());
                                                     CruxRecipeManager manager = ctx.getArgument("recipe_manager", CruxRecipeManager.class);
                                                     CruxRecipe recipe = ctx.getArgument("recipe", CruxRecipeResolver.class).resolve(manager);
-                                                    String name = recipe instanceof net.kyori.adventure.key.Keyed d ? d.key().asString() : recipe.toString();
+                                                    String name = recipe instanceof Keyed d ? d.key().asString() : recipe.toString();
                                                     for(Entity e : targets){
                                                         EntityDiscoverRecipeEvent event = new EntityDiscoverRecipeEvent(e, manager, recipe);
                                                         boolean value;
                                                         if(!event.callEvent()) value = false;
                                                         else value = manager.grantRecipe(e, recipe);
-                                                        sender.sendMessage("Granted recipe " + name + " from " + e.getName() + "?: " + value);
+                                                        sender.sendMessage("Granted recipe " + name + " to " + e.getName() + "?: " + value);
+                                                    }
+                                                    return 1;
+                                                })
+                                        ).then(
+                                            Commands.literal("*")
+                                                .executes(ctx ->{
+                                                    CommandSender sender = CruxLootCommands.getExecutor(ctx.getSource());
+                                                    Collection<Entity> targets = ctx.getArgument("targets",
+                                                        EntitySelectorArgumentResolver.class).resolve(ctx.getSource());
+                                                    CruxRecipeManager manager = ctx.getArgument("recipe_manager", CruxRecipeManager.class);
+                                                    for(Entity e : targets){
+                                                        manager.getRecipes().forEach(recipe ->{
+                                                            EntityDiscoverRecipeEvent event = new EntityDiscoverRecipeEvent(e, manager, (CruxRecipe) recipe);
+                                                            boolean value;
+                                                            if(!event.callEvent()) value = false;
+                                                            else value = manager.grantRecipe(e, (CruxRecipe) recipe);
+                                                        });
+                                                        sender.sendMessage("Granted all recipes to " + e.getName());
                                                     }
                                                     return 1;
                                                 })
