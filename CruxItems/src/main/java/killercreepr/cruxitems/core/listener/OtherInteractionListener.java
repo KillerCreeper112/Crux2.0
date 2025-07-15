@@ -74,7 +74,6 @@ public class OtherInteractionListener implements Listener {
         Block b = event.getBlock();
         var components = new SimpleBlockComponentWrapper(b.getState());
         boolean ominous = isOminous(event.getBlock());
-        Bukkit.broadcastMessage(ominous + "");
         var lootTableData = components.get(
             ominous ? CruxItemsComponents.OMINOUS_DISPENSE_BLOCK_LOOT_TABLE : CruxItemsComponents.DISPENSE_BLOCK_LOOT_TABLE
         );
