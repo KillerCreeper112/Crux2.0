@@ -1,5 +1,7 @@
 package killercreepr.cruxattributes.core.listener;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.FoodProperties;
 import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
 import killercreepr.crux.api.entity.CruxEntity;
 import killercreepr.crux.api.event.ServerShutDownEvent;
@@ -8,15 +10,19 @@ import killercreepr.crux.core.Crux;
 import killercreepr.cruxattributes.api.attribute.*;
 import killercreepr.cruxattributes.api.equipment.CruxSlot;
 import killercreepr.cruxattributes.core.component.CruxAttributeComponents;
+import net.minecraft.core.component.DataComponents;
+import org.bukkit.craftbukkit.entity.CraftHumanEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.world.EntitiesUnloadEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.components.FoodComponent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,8 +36,28 @@ public class CruxAttributeListener implements Listener {
         double naturalHealBonus = CruxAttribute.get(event.getEntity(), CruxAttribute.NATURAL_HEAL_BONUS);
         if(naturalHealBonus == 0D) return;
 
-        double x = 1D + (naturalHealBonus / 100D);
+        double x = 1D + (naturalHealBonus);
         event.setAmount(event.getAmount() * x);
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
+        var p = event.getPlayer();
+        ItemStack item = event.getItem();
+        if (CruxItem.isEmpty(item)) return;
+
+        double saturationBonus = CruxAttribute.get(p, CruxAttribute.FOOD_SATURATION_BONUS);
+        if (saturationBonus == 0D) return;
+
+        FoodProperties food = item.getDataOrDefault(
+            DataComponentTypes.FOOD, item.getType().asItemType().getDefaultData(DataComponentTypes.FOOD)
+        );
+        if (food == null) return;
+
+        double baseSaturation = food.saturation();
+        double bonus = baseSaturation * (1D + saturationBonus);
+
+        p.setSaturation(p.getSaturation() + (float) bonus);
     }
 
     /**

@@ -39,6 +39,7 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
 
     CruxAttribute SHIELD_PIERCING = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("shield_piercing")));
     CruxAttribute NATURAL_HEAL_BONUS = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("natural_heal_bonus")));
+    CruxAttribute FOOD_SATURATION_BONUS = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("food_saturation_bonus")));
 
     CruxAttribute ATTACK_DAMAGE = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("attack_damage")));
     CruxAttribute ATTACK_SPEED = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("attack_speed")){
