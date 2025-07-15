@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Predicate;
 
 public class CruxCollection {
@@ -21,6 +22,16 @@ public class CruxCollection {
         }
 
         return randomElement;
+    }
+
+    public static <T> void shuffle(List<T> list, Random random) {
+        int size = list.size();
+
+        for(int i = size; i > 1; --i) {
+            int randomInt = random.nextInt(i);
+            list.set(i - 1, list.set(randomInt, list.get(i - 1)));
+        }
+
     }
 
     public static <T> T getRandom(@NotNull List<T> list){

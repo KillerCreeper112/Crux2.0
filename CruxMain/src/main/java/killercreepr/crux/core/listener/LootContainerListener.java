@@ -5,7 +5,10 @@ import killercreepr.crux.api.component.serialization.PersistentDataWrappers;
 import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.loot.LootContext;
 import killercreepr.crux.api.loot.item.ItemLootTable;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.component.CruxComponents;
+import net.minecraft.world.level.storage.loot.LootTable;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -54,6 +57,11 @@ public class LootContainerListener implements Listener {
         if(lootTable == null) return;
         Long time = handler.get(CruxComponents.LOOT_GENERATED_TIME);
         if(time != null) return;
+        if(p.getGameMode() == GameMode.SPECTATOR){
+            event.setCancelled(true);
+            p.sendActionBar(Crux.format().deserialize("<red>Loot not generated."));
+            return;
+        }
         handler.set(CruxComponents.LOOT_GENERATED_TIME, System.currentTimeMillis());
         state.update();
 
