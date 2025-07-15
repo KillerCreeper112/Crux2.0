@@ -41,13 +41,13 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
     CruxAttribute NATURAL_HEAL_BONUS = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("natural_heal_bonus")){
         @Override
         public String formatValue(double amount) {
-            return super.formatValue(amount*10D);
+            return super.formatValue(amount*100D);
         }
     });
     CruxAttribute FOOD_SATURATION_BONUS = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("food_saturation_bonus")){
         @Override
         public String formatValue(double amount) {
-            return super.formatValue(amount*10D);
+            return super.formatValue(amount*100D);
         }
     });
 
