@@ -6,6 +6,7 @@ import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.plugin.module.StandardModules;
 import killercreepr.crux.core.registries.CruxRegistries;
+import killercreepr.cruxattributes.api.equipment.CruxSlotGroup;
 import killercreepr.cruxattributes.api.values.ValuesProvider;
 import killercreepr.cruxattributes.core.command.CruxAttributeCommands;
 import killercreepr.cruxattributes.core.component.CruxAttributeComponents;
@@ -44,6 +45,7 @@ public class CruxAttributesModule implements CruxModule {
     @Override
     public void onLoad(@NotNull CruxPlugin plugin) {
         CruxModule.super.onLoad(plugin);
+        CruxSlotGroup.register();
         CruxAttributeComponents.register();
         if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS)){
             CruxAttributesCfgHook.onLoad();
