@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.world.EntitiesUnloadEvent;
 import org.bukkit.inventory.ItemStack;
@@ -23,6 +24,16 @@ import java.util.Collection;
 import java.util.UUID;
 
 public class CruxAttributeListener implements Listener {
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityRegainHealth(EntityRegainHealthEvent event) {
+        if(event.getRegainReason() != EntityRegainHealthEvent.RegainReason.SATIATED) return;
+        double naturalHealBonus = CruxAttribute.get(event.getEntity(), CruxAttribute.NATURAL_HEAL_BONUS);
+        if(naturalHealBonus == 0D) return;
+
+        double x = 1D + (naturalHealBonus / 100D);
+        event.setAmount(event.getAmount() * x);
+    }
+
     /**
      * @param mainSlot The main slot that the attributes are coming from.
      */

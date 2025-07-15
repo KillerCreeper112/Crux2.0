@@ -1,5 +1,6 @@
 package killercreepr.cruxattributes.core.attribute;
 
+import killercreepr.crux.core.util.CruxCollection;
 import killercreepr.cruxattributes.api.attribute.CruxAttribute;
 import killercreepr.cruxattributes.api.attribute.CruxAttributeModifier;
 import killercreepr.cruxattributes.api.equipment.CruxSlotGroup;
@@ -8,7 +9,9 @@ import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class SimpleCruxAttributeModifier implements CruxAttributeModifier {
     private final Key key;
@@ -88,6 +91,14 @@ public class SimpleCruxAttributeModifier implements CruxAttributeModifier {
         return new SimpleCruxAttributeModifier(
             key, amount, operation, slot, copyPath()
         );
+    }
+
+    @Override
+    public Key[] toPath() {
+        if (path == null || path.length == 0) return new Key[]{key};
+        Key[] result = Arrays.copyOf(path, path.length + 1);
+        result[path.length] = key;
+        return result;
     }
 
     /**

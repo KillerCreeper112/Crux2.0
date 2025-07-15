@@ -60,6 +60,8 @@ public interface CruxAttributeModifier extends Keyed {
     CruxAttributeModifier withAmount(double amount);
     CruxAttributeModifier withOperation(@NotNull CruxAttribute.Operation operation);
 
+    Key[] toPath();
+
     default boolean isBase(){
         return key().equals(CruxAttribute.k("base"));
     }
