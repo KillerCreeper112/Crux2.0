@@ -1,5 +1,6 @@
 package killercreepr.cruxattributes.api.attribute;
 
+import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxattributes.api.equipment.CruxSlotGroup;
 import killercreepr.cruxattributes.core.attribute.SimpleCruxAttributeModifier;
 import killercreepr.cruxattributes.core.attribute.container.CruxAttributeModData;

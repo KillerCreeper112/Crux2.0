@@ -114,6 +114,10 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
         return isNegative(modifier.getAmount());
     }
 
+    default String formatValue(double amount){
+        return CruxMath.format(processValue(amount));
+    }
+
     default boolean isNegative(double value){
         return value < 0D;
     }

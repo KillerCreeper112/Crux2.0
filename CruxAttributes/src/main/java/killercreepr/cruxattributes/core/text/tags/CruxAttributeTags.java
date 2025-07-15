@@ -37,6 +37,10 @@ public class CruxAttributeTags implements ObjectTag<CruxAttribute> {
                 double value = CruxMath.evaluate(ctx.deserializeString(args.get(0)));
                 return object.processValue(value) + "";
             }))
+            .add(Tag.string("format_value", (args, ctx) ->{
+                double value = CruxMath.evaluate(ctx.deserializeString(args.get(0)));
+                return object.formatValue(value) + "";
+            }))
             ;
     }
 }
