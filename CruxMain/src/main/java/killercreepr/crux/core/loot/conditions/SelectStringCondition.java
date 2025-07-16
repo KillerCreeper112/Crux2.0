@@ -13,12 +13,14 @@ public class SelectStringCondition extends BaseCondition {
     protected final String eva;
     protected final Collection<String> targets;
     protected final boolean ignoreCase;
-    public SelectStringCondition(@NotNull String target, String match, String eva, Collection<String> targets, boolean ignoreCase) {
+    protected final boolean startsWith;
+    public SelectStringCondition(@NotNull String target, String match, String eva, Collection<String> targets, boolean ignoreCase, boolean startsWith) {
         super(target);
         this.match = match;
         this.eva = eva;
         this.targets = targets;
         this.ignoreCase = ignoreCase;
+        this.startsWith = startsWith;
     }
 
     @Override
@@ -36,6 +38,13 @@ public class SelectStringCondition extends BaseCondition {
         }
 
         String check = Crux.format().deserializeString(eva, tags);
+        if(startsWith){
+            if(ignoreCase){
+                if(!check.toLowerCase().startsWith(match.toLowerCase())) return false;
+            }else if(!check.startsWith(match)) return false;
+            return true;
+        }
+
         if(ignoreCase){
             if(!match.equalsIgnoreCase(check)) return false;
         }else if(!match.equals(check)) return false;

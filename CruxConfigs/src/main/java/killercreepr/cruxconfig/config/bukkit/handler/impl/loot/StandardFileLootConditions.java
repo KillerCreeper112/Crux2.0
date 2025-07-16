@@ -298,8 +298,9 @@ public class StandardFileLootConditions {
                     new TypeToken<Set<String>>(){}.getType(), e.get("targets")
                 );
                 boolean ignoreCase = e.getOrDefaultObject(Boolean.class, "ignore_case", false);
+                boolean startsWith = e.getOrDefaultObject(Boolean.class, "starts_with", false);
                 return new SelectStringCondition(
-                    target, match, check, targets, ignoreCase
+                    target, match, check, targets, ignoreCase, startsWith
                 );
             }
         });
