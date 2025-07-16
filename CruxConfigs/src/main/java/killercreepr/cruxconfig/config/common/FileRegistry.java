@@ -19,6 +19,24 @@ public interface FileRegistry {
     <T> @Nullable T deserializeFromFile(@NotNull Type type, @Nullable FileElement o, @NotNull FileContext<?> context);
     <T> @Nullable T deserializeFromFile(@NotNull Class<T> clazz, @Nullable FileElement o);
     <T> @Nullable T deserializeFromFile(@NotNull Class<T> clazz, @Nullable FileElement o, @NotNull FileContext<?> context);
+
+    default <T> T deserializeFromFileOrDefault(@NotNull Type type, @Nullable FileElement o, T fallback){
+        T got = deserializeFromFile(type, o);
+        return got == null ? fallback : got;
+    }
+    default <T> T deserializeFromFileOrDefault(@NotNull Type type, @Nullable FileElement o, @NotNull FileContext<?> context, T fallback){
+        T got = deserializeFromFile(type, o, context);
+        return got == null ? fallback : got;
+    }
+    default <T> T deserializeFromFileOrDefault(@NotNull Class<T> clazz, @Nullable FileElement o, T fallback){
+        T got = deserializeFromFile(clazz, o);
+        return got == null ? fallback : got;
+    }
+    default <T> T deserializeFromFileOrDefault(@NotNull Class<T> clazz, @Nullable FileElement o, @NotNull FileContext<?> context, T fallback){
+        T got = deserializeFromFile(clazz, o, context);
+        return got == null ? fallback : got;
+    }
+
     @Nullable Object deserializeObjectFromFile(@NotNull FileElement o);
     <T extends FileObjectHandler<?>> void registerFileHandler(@NotNull Class<?> clazz, @NotNull T handler);
 
