@@ -280,6 +280,15 @@ public class CruxConfigHook {
                 return new PlaceEntityObjective(data, maxProgress);
             }
         });
+
+        fileAdvancementObjective.registerCustomHandler(new FileSimpleAdvanceObjective<>(Crux.key("crux_advancement_complete")) {
+            @Override
+            public @Nullable AdvancementObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new CruxAdvancementCompleteObjective(data, maxProgress);
+            }
+        });
     }
 
     public static void registerHandlers(){

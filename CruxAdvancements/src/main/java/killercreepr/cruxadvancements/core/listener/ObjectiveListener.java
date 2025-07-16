@@ -6,6 +6,7 @@ import io.papermc.paper.event.player.PlayerTradeEvent;
 import killercreepr.crux.api.entity.memory.EntityMemory;
 import killercreepr.crux.api.event.CruxEntityDeathEvent;
 import killercreepr.crux.core.Crux;
+import killercreepr.cruxadvancements.api.event.CruxAdvancementGrantEvent;
 import killercreepr.cruxadvancements.api.event.PlayerCraftItemEvent;
 import killercreepr.cruxadvancements.core.advancement.objective.standard.*;
 import killercreepr.cruxadvancements.core.entity.memory.AdvancementHolder;
@@ -67,13 +68,23 @@ public class ObjectiveListener implements Listener {
         });
     }
 
-
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerTrade(PlayerTradeEvent event) {
         Player p = event.getPlayer();
         AdvancementHolder holder = holder(p);
         if(holder==null) return;
         holder.getAdvancementTracker().apply(TradeObjective.class, (manager, advancement, objective) -> {
+            objective.trigger(p.getUniqueId(), manager, advancement, event);
+        });
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onCruxAdvancementGrant(CruxAdvancementGrantEvent event) {
+        Player p = Crux.getServer().getPlayer(event.getWho());
+        if(p == null) return;
+        AdvancementHolder holder = holder(p);
+        if(holder==null) return;
+        holder.getAdvancementTracker().apply(CruxAdvancementCompleteObjective.class, (manager, advancement, objective) -> {
             objective.trigger(p.getUniqueId(), manager, advancement, event);
         });
     }
