@@ -16,6 +16,7 @@ import killercreepr.crux.core.text.resolver.Tag;
 import killercreepr.crux.core.util.CruxColor;
 import killercreepr.crux.core.util.CruxString;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
 import org.bukkit.DyeColor;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -45,6 +46,25 @@ public class ItemStackTags implements ObjectTag<ItemStack> {
             .add(Tag.string("amount", stackAmount))
             .add(Tag.string("stack", stackAmount))
             .add(Tag.string("count", stackAmount))
+            .add(Tag.string("name", (args, ctx) ->{
+                Component name = Component.translatable(item.getType());
+                ItemMeta meta = item.getItemMeta();
+                if(meta != null){
+                    if(meta.hasDisplayName()) name = meta.displayName();
+                    else if(meta.hasItemName()) name = meta.itemName();
+                }
+                return name == null ? "" : ctx.serialize(name);
+            }))
+            .add(Tag.string("display_name", (args, ctx) ->{
+                ItemMeta meta = item.getItemMeta();
+                if(meta == null || !meta.hasDisplayName()) return "";
+                return ctx.serialize(meta.displayName());
+            }))
+            .add(Tag.string("item_name", (args, ctx) ->{
+                ItemMeta meta = item.getItemMeta();
+                if(meta == null || !meta.hasItemName()) return "";
+                return ctx.serialize(meta.itemName());
+            }))
             .add(Tag.string("max_stack_size", (args, context) -> CruxItem.getMaxStackSize(item) + ""))
             .add(Tag.string("max_durability", (args, context) -> CruxItem.getMaxDurability(item) + ""))
             .add(Tag.string("damage", (args, context) ->{
