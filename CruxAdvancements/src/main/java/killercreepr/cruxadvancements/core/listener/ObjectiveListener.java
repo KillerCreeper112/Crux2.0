@@ -2,9 +2,12 @@ package killercreepr.cruxadvancements.core.listener;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import io.papermc.paper.event.block.PlayerShearBlockEvent;
+import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
 import io.papermc.paper.event.player.PlayerTradeEvent;
 import killercreepr.crux.api.entity.memory.EntityMemory;
 import killercreepr.crux.api.event.CruxEntityDeathEvent;
+import killercreepr.crux.api.item.CruxItem;
+import killercreepr.crux.api.loot.LootContext;
 import killercreepr.crux.core.Crux;
 import killercreepr.cruxadvancements.api.event.CruxAdvancementGrantEvent;
 import killercreepr.cruxadvancements.api.event.PlayerCraftItemEvent;
@@ -24,6 +27,7 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -57,6 +61,22 @@ public class ObjectiveListener implements Listener {
             objective.trigger(p.getUniqueId(), manager, advancement, event);
         });
     }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerInventorySlotChange(PlayerInventorySlotChangeEvent event) {
+        ItemStack item = event.getNewItemStack();
+        if(CruxItem.isEmpty(item)) return;
+
+        Player p = event.getPlayer();
+        AdvancementHolder holder = holder(p);
+        if(holder==null) return;
+        holder.getAdvancementTracker().apply(ObtainItemObjective.class, (manager, advancement, objective) -> {
+            objective.trigger(p.getUniqueId(), manager, advancement,
+                LootContext.builder().looted(item).looter(p).build()
+            );
+        });
+    }
+
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerAdvancementDone(PlayerAdvancementDoneEvent event) {
