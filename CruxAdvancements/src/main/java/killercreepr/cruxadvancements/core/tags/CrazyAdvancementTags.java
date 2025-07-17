@@ -11,6 +11,7 @@ import killercreepr.crux.core.text.hook.StringHookedObjectTag;
 import killercreepr.crux.core.text.hook.StringListHookedObjectTag;
 import killercreepr.crux.core.text.resolver.Tag;
 import killercreepr.cruxadvancements.api.advancement.ObjectiveAdvancement;
+import killercreepr.cruxadvancements.api.advancement.flag.CruxAdvancementFlag;
 import killercreepr.cruxadvancements.api.advancement.icon.CriterionDisplay;
 import killercreepr.cruxadvancements.api.advancement.objective.AdvancementObjective;
 import killercreepr.cruxadvancements.api.advancement.objective.progress.ObjectiveProgress;
@@ -18,6 +19,7 @@ import killercreepr.cruxadvancements.api.advancement.objective.progress.Objectiv
 import killercreepr.cruxadvancements.api.advancement.progress.CruxAdvancementProgress;
 import killercreepr.cruxadvancements.core.advancement.objective.NumberObjective;
 import killercreepr.cruxadvancements.core.advancement.objective.progress.NumberObjectiveProgress;
+import killercreepr.cruxadvancements.crazy.advancement.CrazyAdvancement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -75,6 +77,13 @@ public class CrazyAdvancementTags implements ObjectTag<ObjectiveAdvancement> {
         return TagContainer.string(tags)
             .add(Tag.string("key", (args, ctx) -> object.key().asString()))
             .add(Tag.string("parent", (args, ctx) -> object.parent() + ""))
+            .add(Tag.string("has_flag", (args, ctx) ->{
+                if(object instanceof CrazyAdvancement a){
+                    CruxAdvancementFlag flag = CruxAdvancementFlag.valueOf(ctx.deserializeString(args.get(0)).toUpperCase());
+                    return a.hasFlag(flag) + "";
+                }
+                return "false";
+            }))
             .add(Tag.string("is_granted", ((args, ctx) -> {
                 UUID uuid = UUID.fromString(ctx.deserializeString(args.get(0)));
                 CruxAdvancementProgress progress = object.getProgressIfPresent(uuid);
