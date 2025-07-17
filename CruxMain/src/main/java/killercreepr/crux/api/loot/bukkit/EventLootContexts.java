@@ -16,6 +16,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
@@ -38,6 +39,17 @@ public interface EventLootContexts {
             .location(e.getLocation())
             .looter(killer)
             .looted(e)
+            ;
+    }
+    static LootContext.Builder builder(@NotNull InventoryClickEvent event){
+        return builder()
+            .info(
+                DataExchange.builder()
+                    .putAll(event.getCursor(), "cursor")
+                    .build()
+            )
+            .looter(event.getWhoClicked())
+            .looted(event.getCurrentItem())
             ;
     }
     static LootContext.Builder builder(@NotNull EntityPlaceEvent event){

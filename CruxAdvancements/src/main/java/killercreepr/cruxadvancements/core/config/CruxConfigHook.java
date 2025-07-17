@@ -298,6 +298,15 @@ public class CruxConfigHook {
                 return new ObtainItemObjective(data, maxProgress);
             }
         });
+
+        fileAdvancementObjective.registerCustomHandler(new FileSimpleAdvanceObjective<>(Crux.key("brew_item")) {
+            @Override
+            public @Nullable AdvancementObjective deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull ObjectiveCommonData data) {
+                Integer maxProgress = e.getObject(Integer.class, "amount");
+                if(maxProgress==null) maxProgress = 1;
+                return new BrewObjective(data, maxProgress);
+            }
+        });
     }
 
     public static void registerHandlers(){

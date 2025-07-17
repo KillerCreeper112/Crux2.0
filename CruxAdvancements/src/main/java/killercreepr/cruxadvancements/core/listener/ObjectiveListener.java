@@ -26,7 +26,10 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -228,7 +231,6 @@ public class ObjectiveListener implements Listener {
         });
     }
 
-
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onBlockBreak(BlockBreakEvent event) {
         Player p = event.getPlayer();
@@ -336,6 +338,30 @@ public class ObjectiveListener implements Listener {
         holder.getAdvancementTracker().apply(CraftItemObjective.class, (manager, advancement, objective) -> {
             objective.trigger(p.getUniqueId(), manager, advancement, event);
         });
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onInventoryClick(InventoryClickEvent event) {
+        if(!(event.getWhoClicked() instanceof Player p)) return;
+        Inventory clickedInv = event.getClickedInventory();
+        if(clickedInv == null) return;
+        if(clickedInv.getType() == InventoryType.BREWING){
+            int slot = event.getSlot();
+            if(slot >= 0 && slot <= 2){
+                ItemStack clicked = event.getCurrentItem();
+                if(CruxItem.isEmpty(clicked)) return;
+
+                AdvancementHolder holder = holder(p);
+                if(holder==null) return;
+                holder.getAdvancementTracker().apply(BrewObjective.class, (manager, advancement, objective) -> {
+                    objective.trigger(p.getUniqueId(), manager, advancement,
+                        LootContext.builder()
+                            .looter(p)
+                            .looted(clicked)
+                            .build());
+                });
+            }
+        }
     }
 
 }
