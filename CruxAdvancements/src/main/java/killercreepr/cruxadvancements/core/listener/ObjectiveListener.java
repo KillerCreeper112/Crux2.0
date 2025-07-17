@@ -1,6 +1,7 @@
 package killercreepr.cruxadvancements.core.listener;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
+import io.papermc.paper.event.block.CompostItemEvent;
 import io.papermc.paper.event.block.PlayerShearBlockEvent;
 import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
 import io.papermc.paper.event.player.PlayerTradeEvent;
@@ -28,6 +29,7 @@ import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.SmithItemEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -336,6 +338,16 @@ public class ObjectiveListener implements Listener {
         AdvancementHolder holder = holder(p);
         if(holder==null) return;
         holder.getAdvancementTracker().apply(CraftItemObjective.class, (manager, advancement, objective) -> {
+            objective.trigger(p.getUniqueId(), manager, advancement, event);
+        });
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onSmithItem(SmithItemEvent event) {
+        if(!(event.getWhoClicked() instanceof Player p)) return;
+        AdvancementHolder holder = holder(p);
+        if(holder==null) return;
+        holder.getAdvancementTracker().apply(SmithItemObjective.class, (manager, advancement, objective) -> {
             objective.trigger(p.getUniqueId(), manager, advancement, event);
         });
     }

@@ -58,6 +58,48 @@ public class PlayerCraftItemListener implements Listener {
         craftEvent.callEvent();
     }
 
+    /*@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onSmithItem(SmithItemEvent event) {
+        if ((event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR)
+            || event.getAction() == InventoryAction.NOTHING
+            || event.getAction() == InventoryAction.DROP_ONE_SLOT && event.getClick() == ClickType.DROP && (!CruxItem.isEmpty(event.getCursor())) // https://github.com/LMBishop/Quests/issues/430
+            || event.getAction() == InventoryAction.DROP_ALL_SLOT && event.getClick() == ClickType.CONTROL_DROP && (!CruxItem.isEmpty(event.getCursor())) // https://github.com/LMBishop/Quests/issues/430
+            || event.getAction() == InventoryAction.UNKNOWN && event.getClick() == ClickType.UNKNOWN // for better ViaVersion support
+            || !(event.getWhoClicked() instanceof Player player)
+            || event.getClick() == ClickType.SWAP_OFFHAND &&
+            !CruxItem.isEmpty(player.getInventory().getItemInOffHand())) {
+            return;
+        }
+
+        ItemStack item = event.getCurrentItem();
+
+        int eventAmount = item.getAmount();
+        if (event.isShiftClick() && event.getClick() != ClickType.CONTROL_DROP) { // https://github.com/LMBishop/Quests/issues/317
+            int maxAmount = event.getInventory().getMaxStackSize();
+            ItemStack[] matrix = event.getInventory().getMatrix();
+            for (ItemStack itemStack : matrix) {
+                if (itemStack != null && itemStack.getType() != Material.AIR) {
+                    int itemStackAmount = itemStack.getAmount();
+                    if (itemStackAmount < maxAmount && itemStackAmount > 0) {
+                        maxAmount = itemStackAmount;
+                    }
+                }
+            }
+            eventAmount *= maxAmount;
+            eventAmount = Math.min(eventAmount, getAvailableSpace(player, item));
+            if (eventAmount == 0) {
+                return;
+            }
+        }
+
+        ItemStack result = item.clone();
+        PlayerSmithItemEvent craftEvent = new PlayerSmithItemEvent(
+            event.getView(), event.getSlotType(), event.getSlot(), event.getClick(), event.getAction(),
+            event.getHotbarButton(), result, eventAmount
+        );
+        craftEvent.callEvent();
+    }*/
+
     public int getAvailableSpace(Player player, ItemStack newItemStack) {
         int availableSpace = 0;
         PlayerInventory inventory = player.getInventory();
