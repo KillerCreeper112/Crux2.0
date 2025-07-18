@@ -9,6 +9,7 @@ import killercreepr.cruxadvancements.api.event.objective.NumberObjectiveProgress
 import killercreepr.cruxadvancements.api.event.objective.PostNumberObjectiveProgressChangeEvent;
 import killercreepr.cruxadvancements.core.advancement.criteria.NumberCriteria;
 import killercreepr.cruxadvancements.core.advancement.objective.progress.NumberObjectiveProgress;
+import org.bukkit.event.Cancellable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -68,9 +69,18 @@ public class NumberObjective extends SimpleAdvancementObjective {
         p.setProgress(Math.min(event.getNewProgress(), maxProgress));
 
         if(shouldUpdateAdvancement(advancement,p)){
+            Cancellable criteriaEvent;
             if(advancement.getCriteria() instanceof NumberCriteria){
-                manager.setCriteriaProgress(who, advancement, advancement.getTotalProgress(who));
-            }else manager.grantCriteria(who, advancement, getCriterion());
+                criteriaEvent = manager.setCriteriaProgress(who, advancement, advancement.getTotalProgress(who));
+            }else{
+                criteriaEvent = manager.grantCriteria(who, advancement, getCriterion());
+            }
+            //revert changes
+            if(criteriaEvent != null && criteriaEvent.isCancelled()){
+                p.setProgress(event.getOldProgress());
+                return;
+            }
+
             if(advancement.isGranted(who)){
                 //clean up objective data since it isn't needed anymore.
                 advancement.setObjectiveProgress(who, null);
