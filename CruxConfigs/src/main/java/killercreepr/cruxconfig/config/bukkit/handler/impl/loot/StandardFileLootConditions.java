@@ -16,11 +16,13 @@ import killercreepr.crux.core.loot.conditions.block.BlockStateCondition;
 import killercreepr.crux.core.loot.conditions.debug.DevStringCondition;
 import killercreepr.crux.core.loot.conditions.entity.EntityCondition;
 import killercreepr.crux.core.loot.conditions.evaluation.EvaluationCondition;
+import killercreepr.crux.core.loot.conditions.evaluation.SelectNumberEvaluationCondition;
 import killercreepr.crux.core.loot.conditions.item.ItemStackCondition;
 import killercreepr.crux.core.loot.conditions.world.LocationCondition;
 import killercreepr.crux.core.loot.conditions.world.WorldCondition;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
+import killercreepr.cruxconfig.config.common.element.FileGeneric;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import net.kyori.adventure.key.Key;
 import org.bukkit.block.BlockFace;
@@ -369,6 +371,21 @@ public class StandardFileLootConditions {
                 BlockFace face = registry.deserializeFromFile(BlockFace.class, e.get("default_direction"));
                 return new BlockDirectionalInfoCondition(target, face,
                     e.getOrDefaultObject(Boolean.class, "opposite", false));
+            }
+        });
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("select_number_evaluation")) {
+            @Override
+            public @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                FileRegistry registry = ctx.getRegistry();
+                if(!(e.get("value") instanceof FileGeneric g)) return null;
+                String check = e.getObject(String.class, "check");
+                Collection<String> targets = ctx.getRegistry().deserializeFromFile(
+                    new TypeToken<Set<String>>(){}.getType(), e.get("targets")
+                );
+                return new SelectNumberEvaluationCondition(target,
+                    g.isNumber() ? g.getAsNumber() : g.getAsString(),
+                    check, targets, e.getOrDefaultObject(String.class, "operation", "=")
+                );
             }
         });
     }
