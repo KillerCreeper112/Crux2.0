@@ -20,6 +20,7 @@ import killercreepr.crux.core.loot.conditions.evaluation.SelectNumberEvaluationC
 import killercreepr.crux.core.loot.conditions.item.ItemStackCondition;
 import killercreepr.crux.core.loot.conditions.world.LocationCondition;
 import killercreepr.crux.core.loot.conditions.world.WorldCondition;
+import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileGeneric;

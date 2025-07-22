@@ -48,4 +48,12 @@ public class SimpleWrappedRecipeIngredient implements CruxRecipeIngredient {
         if(CruxItem.isEmpty(ingredient)) return false;
         return ingredient.getAmount() >= amount;
     }
+
+    public CruxRecipeIngredient getIngredient() {
+        return ingredient;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
 }

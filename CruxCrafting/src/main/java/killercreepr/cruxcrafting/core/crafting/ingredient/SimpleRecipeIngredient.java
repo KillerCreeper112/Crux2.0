@@ -42,4 +42,16 @@ public class SimpleRecipeIngredient implements CruxRecipeIngredient {
         if(ingredient.getAmount() < amount) return false;
         return predicate.test(ingredient);
     }
+
+    public ItemPredicate getPredicate() {
+        return predicate;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public List<ItemStack> getItemDisplays() {
+        return itemDisplays;
+    }
 }

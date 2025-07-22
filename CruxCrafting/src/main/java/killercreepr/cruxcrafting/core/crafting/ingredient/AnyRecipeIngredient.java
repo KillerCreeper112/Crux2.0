@@ -19,6 +19,14 @@ public class AnyRecipeIngredient implements CruxRecipeIngredient {
         this.displays = displays;
     }
 
+    public Collection<CruxRecipeIngredient> getTerms() {
+        return terms;
+    }
+
+    public List<ItemStack> getDisplays() {
+        return displays;
+    }
+
     @Override
     public ItemStack removeItem(@NotNull CruxIngredientContext ctx) {
         for(CruxRecipeIngredient in : terms){
