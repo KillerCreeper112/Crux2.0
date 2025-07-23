@@ -88,6 +88,15 @@ public class MathsResolver implements StringResolver {
                 double value = CruxMath.evaluate(ctx.deserializeString(args.get(1)));
                 return CruxMath.square(value) + "";
             }
+            case "sqrt" ->{
+                double value = CruxMath.evaluate(ctx.deserializeString(args.get(1)));
+                return Math.sqrt(value) + "";
+            }
+            case "pow" ->{
+                double value = CruxMath.evaluate(ctx.deserializeString(args.get(1)));
+                double b = CruxMath.evaluate(ctx.deserializeString(args.get(2)));
+                return Math.pow(value, b) + "";
+            }
         }
         return "0";
     }

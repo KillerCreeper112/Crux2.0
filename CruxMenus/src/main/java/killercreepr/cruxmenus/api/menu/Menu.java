@@ -159,6 +159,11 @@ public interface Menu extends CommonMenu, InventoryHolder {
         if(!slot.mayPlace(p, item) || (!isSlotted && !slot.mayTake(p, slotItem))) return new SlotResult(item, false);
 
         if(item != null && item.getAmount() > slot.getMaxStackSize(item)) return new SlotResult(item, false);
+
+        SlotContext ctx = SlotContext.context(p, item, slot.getItem());
+        slot.onChanged(ctx);
+        if(ctx.isCancelled()) return new SlotResult(null, false);
+
         setItem(slot.getIndex(), CruxItem.isEmpty(item)?slot.getSlottedItemReplacement():item, true);
         if(!skipUpdate) onUpdate();
         return new SlotResult(isSlotted ? null : slotItem, true);
