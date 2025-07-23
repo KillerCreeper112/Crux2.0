@@ -97,6 +97,14 @@ public class MathsResolver implements StringResolver {
                 double b = CruxMath.evaluate(ctx.deserializeString(args.get(2)));
                 return Math.pow(value, b) + "";
             }
+            case "floor" ->{
+                double value = CruxMath.evaluate(ctx.deserializeString(args.get(1)));
+                return Math.floor(value) + "";
+            }
+            case "ceil" ->{
+                double value = CruxMath.evaluate(ctx.deserializeString(args.get(1)));
+                return Math.ceil(value) + "";
+            }
         }
         return "0";
     }
