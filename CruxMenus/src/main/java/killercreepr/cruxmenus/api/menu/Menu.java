@@ -260,7 +260,7 @@ public interface Menu extends CommonMenu, InventoryHolder {
 
             int amountToTake = CruxItem.getMaxStackSize(item) - item.getAmount();
             if(amountToTake < 1) return;
-            for(Slot slot : getSlots().values()){
+            for(Slot slot : new HashSet<>(getSlots().values())){
                 if(slot.isSlottedItem(slot.getItem()) || !slot.mayTake(p, slot.getItem())) continue;
                 if(!item.isSimilar(slot.getItem())) continue;
                 amountToTake = CruxItem.getMaxStackSize(item) - item.getAmount();
@@ -280,7 +280,7 @@ public interface Menu extends CommonMenu, InventoryHolder {
         if(CruxItem.isEmpty(item)) return;
         HumanEntity p = event.getWhoClicked();
 
-        for(Slot slot : getSlots().values()){
+        for(Slot slot : new HashSet<>(getSlots().values())){
             if(!slot.isSlottedItem(slot.getItem()) && !slot.mayPlace(p, item)) continue;
             giveSlot(p, slot, item, item.getAmount());
         }
