@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ObjectiveListener implements Listener {
     private AdvancementHolder holder(@NotNull Player p){
-        return EntityMemory.getOrCreateDataHolder(p, AdvancementHolder.class);
+        return AdvancementHolder.holderIfLoaded(p);
     }
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerCruxCraftEvent(PlayerCruxCraftEvent event) {

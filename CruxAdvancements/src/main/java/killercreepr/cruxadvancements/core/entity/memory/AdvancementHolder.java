@@ -3,6 +3,8 @@ package killercreepr.cruxadvancements.core.entity.memory;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import killercreepr.crux.api.data.Loadable;
+import killercreepr.crux.api.entity.memory.DataHolder;
+import killercreepr.crux.api.entity.memory.EntityMemory;
 import killercreepr.crux.api.entity.memory.PlayerMemory;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.entity.memory.PlayerDataHolder;
@@ -20,6 +22,7 @@ import killercreepr.cruxconfig.config.common.json.registry.JsonRegistry;
 import killercreepr.cruxstats.api.bukkit.BukkitStatHolder;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,6 +30,17 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public class AdvancementHolder extends PlayerDataHolder implements Loadable {
+    public static AdvancementHolder holderIfLoaded(Entity p){
+        AdvancementHolder holder = holder(p);
+        if(holder == null) return null;
+        if(holder.isLoading()) return null;
+        return holder;
+    }
+
+    public static AdvancementHolder holder(Entity p){
+        return EntityMemory.getOrCreateDataHolder(p, AdvancementHolder.class);
+    }
+
     public static final Key KEY = Crux.key("advancement");
     protected final @NotNull Plugin plugin;
     public AdvancementHolder(@NotNull PlayerMemory parent, @NotNull Plugin plugin) {
@@ -51,6 +65,23 @@ public class AdvancementHolder extends PlayerDataHolder implements Loadable {
     }
 
     protected final AdvancementTracker advancementTracker = new AdvancementTracker();
+    protected final Collection<AdvancementLoaderHolder> loading = new HashSet<>();
+
+    public Collection<AdvancementLoaderHolder> getLoading() {
+        return loading;
+    }
+
+    public void addLoader(AdvancementLoaderHolder loader){
+        loading.add(loader);
+    }
+
+    public void removeLoader(AdvancementLoaderHolder loader){
+        loading.remove(loader);
+    }
+
+    public boolean isLoading(){
+        return !loading.isEmpty();
+    }
 
     public @NotNull Plugin getPlugin() {
         return plugin;
