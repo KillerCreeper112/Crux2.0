@@ -81,7 +81,6 @@ public class AdvancementHolder extends PlayerDataHolder implements Loadable {
     }
 
     public boolean isLoading(){
-        Bukkit.broadcastMessage(loading.isEmpty() + "");
         return !loading.isEmpty();
     }
 

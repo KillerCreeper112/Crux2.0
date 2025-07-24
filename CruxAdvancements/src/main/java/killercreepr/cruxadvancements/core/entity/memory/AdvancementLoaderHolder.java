@@ -4,8 +4,6 @@ import killercreepr.crux.api.entity.memory.PlayerMemory;
 import killercreepr.crux.core.entity.memory.PlayerTickedDataHolder;
 import killercreepr.cruxadvancements.core.config.loader.CfgCrazyAdvancementManagerCfgLoader;
 import net.kyori.adventure.key.Key;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -43,7 +41,6 @@ public class AdvancementLoaderHolder extends PlayerTickedDataHolder {
     public void adding() {
         super.adding();
         AdvancementHolder holder = parent.getDataHolder(AdvancementHolder.class);
-        Bukkit.broadcastMessage("ADDING " + holder);
         if(holder == null) return;
         holder.addLoader(this);
     }
@@ -52,7 +49,6 @@ public class AdvancementLoaderHolder extends PlayerTickedDataHolder {
     protected void removingFromMemory(@Nullable Player e) {
         super.removingFromMemory(e);
         AdvancementHolder holder = parent.getDataHolder(AdvancementHolder.class);
-        Bukkit.broadcastMessage("REMOVING " + holder);
         if(holder == null) return;
         holder.removeLoader(this);
     }
