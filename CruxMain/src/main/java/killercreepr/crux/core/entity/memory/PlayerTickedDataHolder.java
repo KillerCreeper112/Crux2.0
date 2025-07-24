@@ -41,6 +41,10 @@ public abstract class PlayerTickedDataHolder extends PlayerDataHolder implements
     @Override
     protected void removingFromMemory(@Nullable Entity e) {
         super.removingFromMemory(e);
+        if(e == null){
+            removingFromMemory((Player) null);
+            return;
+        }
         if(!(e instanceof Player p)) return;
         removingFromMemory(p);
     }

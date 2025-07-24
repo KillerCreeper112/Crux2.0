@@ -21,6 +21,7 @@ import killercreepr.cruxconfig.config.bukkit.file.CruxJson;
 import killercreepr.cruxconfig.config.common.json.registry.JsonRegistry;
 import killercreepr.cruxstats.api.bukkit.BukkitStatHolder;
 import net.kyori.adventure.key.Key;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -80,6 +81,7 @@ public class AdvancementHolder extends PlayerDataHolder implements Loadable {
     }
 
     public boolean isLoading(){
+        Bukkit.broadcastMessage(loading.isEmpty() + "");
         return !loading.isEmpty();
     }
 

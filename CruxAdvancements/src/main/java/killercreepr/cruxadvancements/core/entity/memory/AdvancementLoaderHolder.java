@@ -4,6 +4,7 @@ import killercreepr.crux.api.entity.memory.PlayerMemory;
 import killercreepr.crux.core.entity.memory.PlayerTickedDataHolder;
 import killercreepr.cruxadvancements.core.config.loader.CfgCrazyAdvancementManagerCfgLoader;
 import net.kyori.adventure.key.Key;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +33,7 @@ public class AdvancementLoaderHolder extends PlayerTickedDataHolder {
     }
 
     protected boolean loaded = false;
-    protected int tick = 0;
+    protected byte tick = 0;
     @Override
     public boolean shouldRemoveFromMemory(@Nullable Player e) {
         return super.shouldRemoveFromMemory(e) || loaded;
@@ -42,14 +43,16 @@ public class AdvancementLoaderHolder extends PlayerTickedDataHolder {
     public void adding() {
         super.adding();
         AdvancementHolder holder = parent.getDataHolder(AdvancementHolder.class);
+        Bukkit.broadcastMessage("ADDING " + holder);
         if(holder == null) return;
         holder.addLoader(this);
     }
 
     @Override
-    protected void removingFromMemory(@Nullable Entity e) {
+    protected void removingFromMemory(@Nullable Player e) {
         super.removingFromMemory(e);
         AdvancementHolder holder = parent.getDataHolder(AdvancementHolder.class);
+        Bukkit.broadcastMessage("REMOVING " + holder);
         if(holder == null) return;
         holder.removeLoader(this);
     }
@@ -58,18 +61,14 @@ public class AdvancementLoaderHolder extends PlayerTickedDataHolder {
     protected void onTick(@NotNull Player e) {
         super.onTick(e);
         tick++;
-        if(tick >= 20){
+        if(tick == 20){
             cfgManagerLoader.load(e);
             setLoaded(true);
         }
     }
 
-    public int getTick() {
+    public byte getTick() {
         return tick;
-    }
-
-    public void setTick(int tick) {
-        this.tick = tick;
     }
 
     public boolean isLoaded() {

@@ -19,6 +19,6 @@ public abstract class EntityTickedDataHolder extends EntityDataHolder implements
 
     @Override
     public void removing(@Nullable Entity e) {
-
+        removingFromMemory(e);
     }
 }

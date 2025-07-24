@@ -231,6 +231,7 @@ public class SimplePotionHolder extends EntityTickedDataHolder implements Potion
 
     @Override
     public void removing(@Nullable Entity e) {
+        super.removing(e);
         clearPotions();
     }
 
