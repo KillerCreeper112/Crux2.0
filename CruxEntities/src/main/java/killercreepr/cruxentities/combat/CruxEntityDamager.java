@@ -293,13 +293,13 @@ public class CruxEntityDamager implements EntityDamager {
      */
     public @Nullable CruxEntityDamageEvent attack(){
         return attack(EntityDamager.getDamage(damager),
-                CruxAttribute.get(damager, CruxAttribute.ATTACK_KNOCKBACK),
+            EntityDamager.getKnockback(damager),
                 CruxAttribute.get(damager, CruxAttribute.ATTACK_KNOCKBACK_UP));
     }
 
     public @Nullable CruxEntityDamageEvent attackWithMultiplier(double x){
         return attack(EntityDamager.getDamage(damager)*x,
-                CruxAttribute.get(damager, CruxAttribute.ATTACK_KNOCKBACK)*x,
+                EntityDamager.getKnockback(damager)*x,
                 CruxAttribute.get(damager, CruxAttribute.ATTACK_KNOCKBACK_UP)*x);
     }
 

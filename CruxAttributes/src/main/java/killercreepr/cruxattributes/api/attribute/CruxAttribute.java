@@ -290,7 +290,7 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
         if(i==null) return false;
 
         var cache = getCache(i);
-        if(cache != null) return true;
+        if(cache != null) return !cache.getInstances().isEmpty();
 
         PersistentDataContainer components = getComponents(i);
         if(components == null) return false;

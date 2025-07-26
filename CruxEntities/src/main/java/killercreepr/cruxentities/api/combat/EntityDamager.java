@@ -114,6 +114,16 @@ public interface EntityDamager {
         return x;
     }
 
+    static double getKnockback(@Nullable Entity dmger){
+        if(dmger == null) return 0D;
+        if(CruxAttribute.hasAttributeData(dmger, CruxAttribute.ATTACK_KNOCKBACK)){
+            return CruxAttribute.get(dmger, CruxAttribute.ATTACK_KNOCKBACK);
+        }
+
+        if(dmger instanceof ThrowableProjectile) return 10D;
+        return 0D;
+    }
+
     static double getDamage(@Nullable Entity dmger){
         if(dmger instanceof LivingEntity d && d.getAttribute(Attribute.ATTACK_DAMAGE) != null){
             return d.getAttribute(Attribute.ATTACK_DAMAGE).getValue() + CruxAttribute.get(dmger, CruxAttribute.ATTACK_DAMAGE);
