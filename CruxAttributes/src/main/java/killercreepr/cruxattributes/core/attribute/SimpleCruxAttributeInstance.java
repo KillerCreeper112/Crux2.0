@@ -185,6 +185,16 @@ public class SimpleCruxAttributeInstance implements CruxAttributeInstance {
         }
 
         @Override
+        public String toString() {
+            return "Dynamic{" +
+                "attribute=" + attribute +
+                ", modifiers=" + modifiers +
+                ", cachedValue=" + cachedValue +
+                ", dirty=" + dirty +
+                '}';
+        }
+
+        @Override
         public @NotNull DynamicCruxAttributeInstance copy() {
             Collection<CruxAttributeModifier> list = new ArrayList<>(modifiers);
             var copy = new SimpleCruxAttributeInstance.Dynamic(attribute, list);

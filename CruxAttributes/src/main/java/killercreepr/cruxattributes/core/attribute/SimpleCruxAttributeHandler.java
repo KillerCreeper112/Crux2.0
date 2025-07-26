@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class SimpleCruxAttributeHandler implements CruxAttributeHandler {
     protected final Map<CruxAttribute, DynamicCruxAttributeInstance> instances = new HashMap<>();
@@ -24,6 +25,24 @@ public class SimpleCruxAttributeHandler implements CruxAttributeHandler {
     }
 
     public SimpleCruxAttributeHandler() {
+    }
+
+    @Override
+    public String toString() {
+        return "SimpleCruxAttributeHandler{" +
+            "instances=" + instances +
+            '}';
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof SimpleCruxAttributeHandler that)) return false;
+        return Objects.equals(instances, that.instances);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(instances);
     }
 
     @Override
