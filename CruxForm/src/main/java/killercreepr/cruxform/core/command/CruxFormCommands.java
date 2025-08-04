@@ -97,9 +97,14 @@ public class CruxFormCommands {
     public static Holder<CruxLocation> holder(CommandContext<CommandSourceStack> ctx){
         var sender = getExecutor(ctx.getSource());
         return () ->{
-            Location loc = location(ctx.getArgument(
-                "pos", FinePositionResolver.class
-            ).resolve(ctx.getSource()), sender);
+            Location loc;
+            try{
+                loc = location(ctx.getArgument(
+                    "pos", FinePositionResolver.class
+                ).resolve(ctx.getSource()), sender);
+            } catch (CommandSyntaxException e) {
+                throw new RuntimeException(e);
+            }
             return CruxLocation.location(loc);
         };
     }

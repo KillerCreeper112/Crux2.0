@@ -40,7 +40,7 @@ public interface Holder <T>{
         return new Registry<>(key, registry);
     }
 
-    T value() throws CommandSyntaxException;
+    T value();
 
     default Holder<T> ifPresent(@NotNull Consumer<T> consumer){
         T value = value();
