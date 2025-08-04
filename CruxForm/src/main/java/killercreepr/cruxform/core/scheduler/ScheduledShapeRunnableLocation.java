@@ -17,11 +17,11 @@ public class ScheduledShapeRunnableLocation extends BukkitRunnable implements Sh
     protected final int totalTicks;
     protected boolean cancel = false;
 
-    private final double maxParEachIteration;
-    private double i = 0D; // start at 0 so we accumulate over time
-    private int index = -1;
-    protected CruxPosition l;
-    protected int tick = -1;
+    private final double pointsPerTick;
+    private double progress = 0.0;
+    private int index = 0;
+    private int tick = 0;
+    private CruxPosition l;
 
     public ScheduledShapeRunnableLocation(
         Consumer<ShapeTickLocationContext> locationConsumer,
@@ -35,54 +35,56 @@ public class ScheduledShapeRunnableLocation extends BukkitRunnable implements Sh
         this.cancelTask = cancelTask;
         this.list = list;
         this.totalTicks = totalTicksTime;
-        this.maxParEachIteration = (double) list.size() / (double) totalTicksTime;
-    }
-
-    public void onCancel(){
-        cancel();
-        if (cancelTask != null) cancelTask.run();
+        this.pointsPerTick = (double) list.size() / totalTicksTime;
     }
 
     @Override
     public void run() {
-        tick++;
-
-        if (list.isEmpty()) {
+        if (list.isEmpty() || cancel) {
             onCancel();
             return;
         }
 
         if (tickConsumer != null) {
             tickConsumer.accept(this);
-            if (wasCancelled()) {
+            if (cancel) {
                 onCancel();
                 return;
             }
         }
 
-        // Accumulate how many locations we should process this tick
-        i += maxParEachIteration;
-        int pointsToRun = (int) Math.floor(i);
-        if (pointsToRun == 0 && maxParEachIteration < 1D) {
-            // Optional: probabilistic inclusion for smoother distribution
-            if (Math.random() < maxParEachIteration) pointsToRun = 1;
-        }
-        i -= pointsToRun; // retain fractional remainder
+        tick++;
 
-        for (int x = 0; x < pointsToRun; x++) {
-            index++;
+        // Accumulate progress
+        progress += pointsPerTick;
+        int pointsToRun = (int) Math.floor(progress);
+        progress -= pointsToRun;
+
+        for (int i = 0; i < pointsToRun; i++) {
             if (index >= list.size()) {
-                onCancel();
+                onCancel(); // All points processed
                 return;
             }
+
             l = list.get(index);
             locationConsumer.accept(this);
+            index++;
 
-            if (wasCancelled()) {
+            if (cancel) {
                 onCancel();
                 return;
             }
         }
+
+        // Failsafe: in case ticks end before all points are shown
+        if (tick >= totalTicks && index >= list.size()) {
+            onCancel();
+        }
+    }
+
+    public void onCancel() {
+        cancel();
+        if (cancelTask != null) cancelTask.run();
     }
 
     @Override
@@ -117,9 +119,10 @@ public class ScheduledShapeRunnableLocation extends BukkitRunnable implements Sh
 
     @Override
     public void setCancelled(boolean value) {
-        cancel = value;
+        this.cancel = value;
     }
 }
+
 
 
 /*

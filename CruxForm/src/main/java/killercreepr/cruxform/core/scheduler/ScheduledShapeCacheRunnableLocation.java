@@ -14,11 +14,15 @@ public class ScheduledShapeCacheRunnableLocation extends BukkitRunnable implemen
     protected final Consumer<ShapeTickLocationContext> consumer;
     protected final Consumer<ShapeTickContext> tickConsumer;
     protected final Runnable cancelTask;
-    private final double maxParEachIteration;
-    private double i;
-    private int index = -1;
     protected final int maxTicks;
     protected boolean cancel = false;
+
+    private final double pointsPerTick;
+    private double pointProgress = 0.0;
+    private int index = -1;
+
+    protected CruxPosition l;
+    protected int tick = -1;
 
     public ScheduledShapeCacheRunnableLocation(CreateCachedShape cache, Consumer<ShapeTickLocationContext> consumer, Consumer<ShapeTickContext> tickConsumer, Runnable cancelTask, int totalTicksTime) {
         this.cache = cache;
@@ -26,23 +30,20 @@ public class ScheduledShapeCacheRunnableLocation extends BukkitRunnable implemen
         this.tickConsumer = tickConsumer;
         this.cancelTask = cancelTask;
         this.maxTicks = totalTicksTime;
-        this.maxParEachIteration = (double) cache.size() / (double) totalTicksTime;
-        this.i = 0D;
+
+        // Points per tick = how many points to run per tick
+        this.pointsPerTick = (double) cache.size() / totalTicksTime;
     }
 
-    public void onCancel(){
+    public void onCancel() {
         cancel();
-        if(cancelTask != null) cancelTask.run();
+        if (cancelTask != null) cancelTask.run();
     }
-
-    protected CruxPosition l;
-    protected int tick = -1;
 
     @Override
     public void run() {
         tick++;
-
-        if (isCancelled() || cache.size() < 1) {
+        if (isCancelled() || cache.size() == 0) {
             onCancel();
             return;
         }
@@ -55,19 +56,23 @@ public class ScheduledShapeCacheRunnableLocation extends BukkitRunnable implemen
             }
         }
 
-        i += maxParEachIteration;
-        int pointsToRun = (int) Math.floor(i);
-        if (pointsToRun == 0 && maxParEachIteration < 1D) {
-            if (Math.random() < maxParEachIteration) pointsToRun = 1;
-        }
-        i -= pointsToRun;
+        // Accumulate fractional progress
+        pointProgress += pointsPerTick;
+        int stepsThisTick = (int) pointProgress;
+        pointProgress -= stepsThisTick;
 
-        for (int x = 0; x < pointsToRun; x++) {
+        // Always process at least 1 point if pointsPerTick < 1
+        if (stepsThisTick == 0 && pointsPerTick < 1) {
+            stepsThisTick = 1;
+        }
+
+        for (int i = 0; i < stepsThisTick; i++) {
             index++;
             if (!cache.has(index)) {
                 onCancel();
                 return;
             }
+
             l = cache.perform(index);
             consumer.accept(this);
 
