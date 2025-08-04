@@ -1,5 +1,6 @@
 package killercreepr.crux.api.data;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import killercreepr.crux.api.registry.MappedRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -39,7 +40,7 @@ public interface Holder <T>{
         return new Registry<>(key, registry);
     }
 
-    T value();
+    T value() throws CommandSyntaxException;
 
     default Holder<T> ifPresent(@NotNull Consumer<T> consumer){
         T value = value();
