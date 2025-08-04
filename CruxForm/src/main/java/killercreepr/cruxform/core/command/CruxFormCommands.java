@@ -22,6 +22,7 @@ import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.cruxform.api.scheduler.ShapeScheduler;
 import killercreepr.cruxform.api.shape.*;
+import killercreepr.cruxform.core.shape.SimpleCreateSpiral;
 import net.kyori.adventure.key.Key;
 import net.minecraft.world.entity.ai.sensing.Sensing;
 import org.bukkit.Location;
@@ -185,6 +186,44 @@ public class CruxFormCommands {
                                                                                     .build()
                                                                             );
                                                                         })
+                                                                )
+                                                        )
+                                                ).then(
+                                                    Commands.literal("spiral")
+                                                        .then(
+                                                            Commands.argument("radius", DoubleArgumentType.doubleArg())
+                                                                .then(
+                                                                    Commands.argument("height", DoubleArgumentType.doubleArg())
+                                                                        .then(
+                                                                            Commands.argument("spacing", DoubleArgumentType.doubleArg())
+                                                                                .then(
+                                                                                    Commands.argument("turns", DoubleArgumentType.doubleArg())
+                                                                                        .then(
+                                                                                            Commands.argument("spiral_growth", DoubleArgumentType.doubleArg())
+                                                                                                .then(
+                                                                                                    Commands.argument("invert_x", BoolArgumentType.bool())
+                                                                                                        .then(
+                                                                                                            Commands.argument("invert_z", BoolArgumentType.bool())
+                                                                                                                .executes(ctx ->{
+                                                                                                                    return performShape(
+                                                                                                                        ctx,
+                                                                                                                        CreateSpiral.builder()
+                                                                                                                            .center(holder(ctx))
+                                                                                                                            .radius(ctx.getArgument("radius", Double.class))
+                                                                                                                            .height(ctx.getArgument("height", Double.class))
+                                                                                                                            .spacing(ctx.getArgument("spacing", Double.class))
+                                                                                                                            .turns(ctx.getArgument("turns", Double.class))
+                                                                                                                            .spiralGrowth(ctx.getArgument("spiral_growth", Double.class))
+                                                                                                                            .invertX(ctx.getArgument("invert_x", Boolean.class))
+                                                                                                                            .invertZ(ctx.getArgument("invert_z", Boolean.class))
+                                                                                                                            .build()
+                                                                                                                    );
+                                                                                                                })
+                                                                                                        )
+                                                                                                )
+                                                                                        )
+                                                                                )
+                                                                        )
                                                                 )
                                                         )
                                                 )
