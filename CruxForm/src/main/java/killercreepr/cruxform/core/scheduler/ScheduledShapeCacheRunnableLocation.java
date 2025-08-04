@@ -15,14 +15,10 @@ public class ScheduledShapeCacheRunnableLocation extends BukkitRunnable implemen
     protected final Consumer<ShapeTickContext> tickConsumer;
     protected final Runnable cancelTask;
     protected final int maxTicks;
+
+    protected double fractionalIndex = 0;
+    protected int index = -1;
     protected boolean cancel = false;
-
-    private final double pointsPerTick;
-    private double pointProgress = 0.0;
-    private int index = -1;
-
-    protected CruxPosition l;
-    protected int tick = -1;
 
     public ScheduledShapeCacheRunnableLocation(CreateCachedShape cache, Consumer<ShapeTickLocationContext> consumer, Consumer<ShapeTickContext> tickConsumer, Runnable cancelTask, int totalTicksTime) {
         this.cache = cache;
@@ -30,9 +26,6 @@ public class ScheduledShapeCacheRunnableLocation extends BukkitRunnable implemen
         this.tickConsumer = tickConsumer;
         this.cancelTask = cancelTask;
         this.maxTicks = totalTicksTime;
-
-        // Points per tick = how many points to run per tick
-        this.pointsPerTick = (double) cache.size() / totalTicksTime;
     }
 
     public void onCancel() {
@@ -40,10 +33,13 @@ public class ScheduledShapeCacheRunnableLocation extends BukkitRunnable implemen
         if (cancelTask != null) cancelTask.run();
     }
 
+    protected CruxPosition l;
+    protected int tick = -1;
+
     @Override
     public void run() {
         tick++;
-        if (isCancelled() || cache.size() == 0) {
+        if (isCancelled() || cache.size() < 1) {
             onCancel();
             return;
         }
@@ -56,17 +52,13 @@ public class ScheduledShapeCacheRunnableLocation extends BukkitRunnable implemen
             }
         }
 
-        // Accumulate fractional progress
-        pointProgress += pointsPerTick;
-        int stepsThisTick = (int) pointProgress;
-        pointProgress -= stepsThisTick;
+        double perTick = (double) cache.size() / maxTicks;
+        fractionalIndex += perTick;
 
-        // Always process at least 1 point if pointsPerTick < 1
-        if (stepsThisTick == 0 && pointsPerTick < 1) {
-            stepsThisTick = 1;
-        }
+        int pointsToProcess = (int) fractionalIndex;
+        fractionalIndex -= pointsToProcess;
 
-        for (int i = 0; i < stepsThisTick; i++) {
+        for (int i = 0; i < pointsToProcess; i++) {
             index++;
             if (!cache.has(index)) {
                 onCancel();
@@ -118,6 +110,7 @@ public class ScheduledShapeCacheRunnableLocation extends BukkitRunnable implemen
         cancel = value;
     }
 }
+
 
 
 /*
