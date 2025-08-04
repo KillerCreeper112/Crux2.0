@@ -23,6 +23,7 @@ import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.cruxform.api.scheduler.ShapeScheduler;
 import killercreepr.cruxform.api.shape.*;
 import net.kyori.adventure.key.Key;
+import net.minecraft.world.entity.ai.sensing.Sensing;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.World;
@@ -59,129 +60,132 @@ public class CruxFormCommands {
                                 .then(
                                     Commands.argument("cache", BoolArgumentType.bool())
                                         .then(
-
-                                            Commands.literal("swirl")
+                                            Commands.argument("dynamic_pos", BoolArgumentType.bool())
                                                 .then(
-                                                    Commands.argument("radius", DoubleArgumentType.doubleArg())
+
+                                                    Commands.literal("swirl")
                                                         .then(
-                                                            Commands.argument("height", DoubleArgumentType.doubleArg())
+                                                            Commands.argument("radius", DoubleArgumentType.doubleArg())
                                                                 .then(
-                                                                    Commands.argument("spacing", DoubleArgumentType.doubleArg())
+                                                                    Commands.argument("height", DoubleArgumentType.doubleArg())
                                                                         .then(
-                                                                            Commands.argument("turns", DoubleArgumentType.doubleArg())
-                                                                                .executes(ctx ->{
-                                                                                    return performShape(
-                                                                                        ctx,
-                                                                                        CreateSwirl.builder()
-                                                                                            .center(holder(ctx))
-                                                                                            .radius(ctx.getArgument("radius", Double.class))
-                                                                                            .height(ctx.getArgument("height", Double.class))
-                                                                                            .spacing(ctx.getArgument("spacing", Double.class))
-                                                                                            .turns(ctx.getArgument("turns", Double.class))
-                                                                                            .build()
-                                                                                    );
-                                                                                })
+                                                                            Commands.argument("spacing", DoubleArgumentType.doubleArg())
+                                                                                .then(
+                                                                                    Commands.argument("turns", DoubleArgumentType.doubleArg())
+                                                                                        .executes(ctx ->{
+                                                                                            return performShape(
+                                                                                                ctx,
+                                                                                                CreateSwirl.builder()
+                                                                                                    .center(holder(ctx))
+                                                                                                    .radius(ctx.getArgument("radius", Double.class))
+                                                                                                    .height(ctx.getArgument("height", Double.class))
+                                                                                                    .spacing(ctx.getArgument("spacing", Double.class))
+                                                                                                    .turns(ctx.getArgument("turns", Double.class))
+                                                                                                    .build()
+                                                                                            );
+                                                                                        })
+                                                                                )
                                                                         )
                                                                 )
                                                         )
-                                                )
 
-                                        ).then(
-                                            Commands.literal("circle")
-                                                .then(
-                                                    Commands.argument("radius", DoubleArgumentType.doubleArg())
+                                                ).then(
+                                                    Commands.literal("circle")
                                                         .then(
-                                                            Commands.argument("amount_multiplier", DoubleArgumentType.doubleArg())
+                                                            Commands.argument("radius", DoubleArgumentType.doubleArg())
+                                                                .then(
+                                                                    Commands.argument("amount_multiplier", DoubleArgumentType.doubleArg())
+                                                                        .then(
+                                                                            Commands.argument("spacing", DoubleArgumentType.doubleArg())
+                                                                                .then(
+                                                                                    Commands.argument("invert_x", BoolArgumentType.bool())
+                                                                                        .then(
+                                                                                            Commands.argument("invert_z", BoolArgumentType.bool())
+                                                                                                .then(
+                                                                                                    Commands.argument("type", StringArgumentType.word())
+                                                                                                        .suggests((ctx, builder) ->{
+                                                                                                            for(CreateCircle.Type type : CreateCircle.Type.values()){
+                                                                                                                builder.suggest(type.toString().toLowerCase());
+                                                                                                            }
+                                                                                                            return builder.buildFuture();
+                                                                                                        })
+                                                                                                        .executes(ctx ->{
+                                                                                                            return performShape(
+                                                                                                                ctx,
+                                                                                                                CreateCircle.builder()
+                                                                                                                    .center(holder(ctx))
+                                                                                                                    .radius(ctx.getArgument("radius", Double.class))
+                                                                                                                    .amountMultiplier(ctx.getArgument("amount_multiplier", Double.class))
+                                                                                                                    .spacing(ctx.getArgument("spacing", Double.class))
+                                                                                                                    .invertX(ctx.getArgument("invert_x", Boolean.class))
+                                                                                                                    .invertZ(ctx.getArgument("invert_z", Boolean.class))
+                                                                                                                    .type(CreateCircle.Type.valueOf(ctx.getArgument("type", String.class).toUpperCase()))
+                                                                                                                    .build()
+                                                                                                            );
+                                                                                                        })
+                                                                                                )
+                                                                                        )
+                                                                                )
+                                                                        )
+                                                                )
+                                                        )
+                                                ).then(
+                                                    Commands.literal("sphere")
+                                                        .then(
+                                                            Commands.argument("radius", DoubleArgumentType.doubleArg())
                                                                 .then(
                                                                     Commands.argument("spacing", DoubleArgumentType.doubleArg())
                                                                         .then(
                                                                             Commands.argument("invert_x", BoolArgumentType.bool())
                                                                                 .then(
-                                                                                    Commands.argument("invert_z", BoolArgumentType.bool())
+                                                                                    Commands.argument("invert_y", BoolArgumentType.bool())
                                                                                         .then(
-                                                                                            Commands.argument("type", StringArgumentType.word())
-                                                                                                .suggests((ctx, builder) ->{
-                                                                                                    for(CreateCircle.Type type : CreateCircle.Type.values()){
-                                                                                                        builder.suggest(type.toString().toLowerCase());
-                                                                                                    }
-                                                                                                    return builder.buildFuture();
-                                                                                                })
-                                                                                                .executes(ctx ->{
-                                                                                                    return performShape(
-                                                                                                        ctx,
-                                                                                                        CreateCircle.builder()
-                                                                                                            .center(holder(ctx))
-                                                                                                            .radius(ctx.getArgument("radius", Double.class))
-                                                                                                            .amountMultiplier(ctx.getArgument("amount_multiplier", Double.class))
-                                                                                                            .spacing(ctx.getArgument("spacing", Double.class))
-                                                                                                            .invertX(ctx.getArgument("invert_x", Boolean.class))
-                                                                                                            .invertZ(ctx.getArgument("invert_z", Boolean.class))
-                                                                                                            .type(CreateCircle.Type.valueOf(ctx.getArgument("type", String.class).toUpperCase()))
-                                                                                                            .build()
-                                                                                                    );
-                                                                                                })
+                                                                                            Commands.argument("invert_z", BoolArgumentType.bool())
+                                                                                                .then(
+                                                                                                    Commands.argument("type", StringArgumentType.word())
+                                                                                                        .suggests((ctx, builder) ->{
+                                                                                                            for(CreateSphere.Type type : CreateSphere.Type.values()){
+                                                                                                                builder.suggest(type.toString().toLowerCase());
+                                                                                                            }
+                                                                                                            return builder.buildFuture();
+                                                                                                        })
+                                                                                                        .executes(ctx ->{
+                                                                                                            return performShape(
+                                                                                                                ctx,
+                                                                                                                CreateSphere.builder()
+                                                                                                                    .center(holder(ctx))
+                                                                                                                    .radius(ctx.getArgument("radius", Double.class))
+                                                                                                                    .spacing(ctx.getArgument("spacing", Double.class))
+                                                                                                                    .invertX(ctx.getArgument("invert_x", Boolean.class))
+                                                                                                                    .invertX(ctx.getArgument("invert_y", Boolean.class))
+                                                                                                                    .invertZ(ctx.getArgument("invert_z", Boolean.class))
+                                                                                                                    .type(CreateSphere.Type.valueOf(ctx.getArgument("type", String.class).toUpperCase()))
+                                                                                                                    .build()
+                                                                                                            );
+                                                                                                        })
+                                                                                                )
                                                                                         )
                                                                                 )
                                                                         )
                                                                 )
                                                         )
-                                                )
-                                        ).then(
-                                            Commands.literal("sphere")
-                                                .then(
-                                                    Commands.argument("radius", DoubleArgumentType.doubleArg())
+                                                ).then(
+                                                    Commands.literal("line")
                                                         .then(
                                                             Commands.argument("spacing", DoubleArgumentType.doubleArg())
                                                                 .then(
-                                                                    Commands.argument("invert_x", BoolArgumentType.bool())
-                                                                        .then(
-                                                                            Commands.argument("invert_y", BoolArgumentType.bool())
-                                                                                .then(
-                                                                                    Commands.argument("invert_z", BoolArgumentType.bool())
-                                                                                        .then(
-                                                                                            Commands.argument("type", StringArgumentType.word())
-                                                                                                .suggests((ctx, builder) ->{
-                                                                                                    for(CreateSphere.Type type : CreateSphere.Type.values()){
-                                                                                                        builder.suggest(type.toString().toLowerCase());
-                                                                                                    }
-                                                                                                    return builder.buildFuture();
-                                                                                                })
-                                                                                                .executes(ctx ->{
-                                                                                                    return performShape(
-                                                                                                        ctx,
-                                                                                                        CreateSphere.builder()
-                                                                                                            .center(holder(ctx))
-                                                                                                            .radius(ctx.getArgument("radius", Double.class))
-                                                                                                            .spacing(ctx.getArgument("spacing", Double.class))
-                                                                                                            .invertX(ctx.getArgument("invert_x", Boolean.class))
-                                                                                                            .invertX(ctx.getArgument("invert_y", Boolean.class))
-                                                                                                            .invertZ(ctx.getArgument("invert_z", Boolean.class))
-                                                                                                            .type(CreateSphere.Type.valueOf(ctx.getArgument("type", String.class).toUpperCase()))
-                                                                                                            .build()
-                                                                                                    );
-                                                                                                })
-                                                                                        )
-                                                                                )
-                                                                        )
+                                                                    Commands.argument("end", ArgumentTypes.finePosition())
+                                                                        .executes(ctx ->{
+                                                                            return performShape(
+                                                                                ctx,
+                                                                                CreateLine.builder()
+                                                                                    .start(holderPos(ctx))
+                                                                                    .end(holderPos(ctx, "end"))
+                                                                                    .spacing(ctx.getArgument("spacing", Double.class))
+                                                                                    .build()
+                                                                            );
+                                                                        })
                                                                 )
-                                                        )
-                                                )
-                                        ).then(
-                                            Commands.literal("line")
-                                                .then(
-                                                    Commands.argument("spacing", DoubleArgumentType.doubleArg())
-                                                        .then(
-                                                            Commands.argument("end", ArgumentTypes.finePosition())
-                                                                .executes(ctx ->{
-                                                                    return performShape(
-                                                                        ctx,
-                                                                        CreateLine.builder()
-                                                                            .start(holderPos(ctx))
-                                                                            .end(holderPos(ctx, "end"))
-                                                                            .spacing(ctx.getArgument("spacing", Double.class))
-                                                                            .build()
-                                                                    );
-                                                                })
                                                         )
                                                 )
                                         )
@@ -207,6 +211,12 @@ public class CruxFormCommands {
 
     public static Holder<CruxLocation> holder(CommandContext<CommandSourceStack> ctx, String argID){
         var sender = getExecutor(ctx.getSource());
+        if(argID.equalsIgnoreCase("pos") && ctx.getArgument("dynamic_pos", Boolean.class)){
+            if(sender instanceof Entity e){
+                return () -> CruxLocation.location(e.getLocation());
+            }
+        }
+
         return () ->{
             Location loc;
             try{
