@@ -113,7 +113,7 @@ public class CruxEntityUtil {
 
         // Expand players hitbox by 0.3, which is the maximum size a player can be off a block
         // Whilst not falling off
-        BoundingBox entityBox = entity.getBoundingBox().expand(0.3);
+        BoundingBox entityBox = entity.getBoundingBox().expand(0, 0.3, 0);
         for (BlockFace face : BlockFace.values()) {
             if (!face.isCartesian() || face.getModY() != 0) continue;
             Block relative = blockBelow.getRelative(face);

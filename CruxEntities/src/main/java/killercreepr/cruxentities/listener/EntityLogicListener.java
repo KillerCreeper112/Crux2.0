@@ -27,6 +27,7 @@ public class EntityLogicListener implements Listener {
         var entity = event.getEntity();
         if(entity instanceof HumanEntity) return;
         var cruxMob = CruxMob.get(entity);
+        if(cruxMob == null) return;
         if(!(cruxMob instanceof CruxMobMountable mount) || !mount.canMount(entity, event.getMount())){
             if(CruxPersist.ALLOW_MOUNT.get(entity, false)) return;
             if(CruxPersist.ALLOW_MOUNT_TEMP.get(entity, false)){
