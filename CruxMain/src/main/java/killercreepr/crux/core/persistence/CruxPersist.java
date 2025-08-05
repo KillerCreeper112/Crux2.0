@@ -28,10 +28,14 @@ public class CruxPersist {
     public static final PersistTag<List<UUID>> IGNORE_ENTITIES_LIST = PersistTag.register(new PersistTag<>(CruxPersistence.LIST.UUID, "ignore_entities_list"));
     public static final PersistTag<Long> IGNORE_ENTITIES_TIME = PersistTag.register(new PersistTag<>(PersistentDataType.LONG, "ignore_entities_time"));
 
-    public static boolean hasIgnoreEntityWithin(Entity base, UUID check, long ticksWithin){
+    public static boolean hasIgnoreEntity(Entity base, UUID check){
         List<UUID> list = IGNORE_ENTITIES_LIST.get(base, null);
         if(list == null || list.isEmpty()) return false;
-        if(!list.contains(check)) return false;
+        return list.contains(check);
+    }
+
+    public static boolean hasIgnoreEntityWithin(Entity base, UUID check, long ticksWithin){
+        if(!hasIgnoreEntity(base, check)) return false;
 
         Long time = IGNORE_ENTITIES_TIME.get(base, null);
         if(time == null) return true;
