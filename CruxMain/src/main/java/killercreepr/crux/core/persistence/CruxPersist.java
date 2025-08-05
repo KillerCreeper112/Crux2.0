@@ -1,7 +1,9 @@
 package killercreepr.crux.core.persistence;
 
 import killercreepr.crux.api.loot.item.ItemLootTable;
+import killercreepr.crux.core.util.CruxMath;
 import net.kyori.adventure.key.Key;
+import org.bukkit.entity.Entity;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -25,4 +27,14 @@ public class CruxPersist {
     public static final PersistTag<PersistentDataContainer> COMPONENTS = PersistTag.register(new PersistTag<>(PersistentDataType.TAG_CONTAINER, "components"));
     public static final PersistTag<List<UUID>> IGNORE_ENTITIES_LIST = PersistTag.register(new PersistTag<>(CruxPersistence.LIST.UUID, "ignore_entities_list"));
     public static final PersistTag<Long> IGNORE_ENTITIES_TIME = PersistTag.register(new PersistTag<>(PersistentDataType.LONG, "ignore_entities_time"));
+
+    public static boolean hasIgnoreEntityWithin(Entity base, UUID check, long ticksWithin){
+        List<UUID> list = IGNORE_ENTITIES_LIST.get(base, null);
+        if(list == null || list.isEmpty()) return false;
+        if(!list.contains(check)) return false;
+
+        Long time = IGNORE_ENTITIES_TIME.get(base, null);
+        if(time == null) return true;
+        return CruxMath.hasOccurredWithin(time, ticksWithin);
+    }
 }
