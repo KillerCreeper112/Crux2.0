@@ -23,4 +23,6 @@ public class CruxPersist {
     public static final PersistTag<Key> RICOCHET_LAST_HIT_BLOCK_TYPE = PersistTag.register(new PersistTag<>(CruxPersistence.CRUX_KEY, "ricochet_last_hit_block_type"));
     public static final PersistTag<Key> RICOCHET_LAST_HIT_ENTITY_TYPE = PersistTag.register(new PersistTag<>(CruxPersistence.CRUX_KEY, "ricochet_last_hit_entity_type"));
     public static final PersistTag<PersistentDataContainer> COMPONENTS = PersistTag.register(new PersistTag<>(PersistentDataType.TAG_CONTAINER, "components"));
+    public static final PersistTag<List<UUID>> IGNORE_ENTITIES_LIST = PersistTag.register(new PersistTag<>(CruxPersistence.LIST.UUID, "ignore_entities_list"));
+    public static final PersistTag<Long> IGNORE_ENTITIES_TIME = PersistTag.register(new PersistTag<>(PersistentDataType.LONG, "ignore_entities_time"));
 }
