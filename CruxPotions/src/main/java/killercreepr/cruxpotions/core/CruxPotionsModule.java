@@ -63,7 +63,7 @@ public class CruxPotionsModule implements CruxModule {
         PotionComponents.register();
         if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS)){
             CruxPotionCfgHandler.POTION_INFLICTOR.register(BlockInflictor.ID, new AutoFileHandler<>(BlockInflictor.class));
-            CruxPotionCfgHandler.POTION_INFLICTOR.register(BlockInflictor.ID, new AutoFileHandler<>(EntityInflictor.class,
+            CruxPotionCfgHandler.POTION_INFLICTOR.register(EntityInflictor.ID, new AutoFileHandler<>(EntityInflictor.class,
                 AutoFileOptions.builder().disabledFields(field -> field.getName().equalsIgnoreCase("reference")).build()));
             CfgRegistries.SIMPLE_REGISTRY.forEach(reg ->{
                 reg.registerFileHandler(PotionInflictor.class, CruxPotionCfgHandler.POTION_INFLICTOR);
