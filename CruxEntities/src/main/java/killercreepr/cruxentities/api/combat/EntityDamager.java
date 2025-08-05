@@ -25,6 +25,11 @@ public interface EntityDamager {
         return new CruxEntityDamager(target, damager);
     }
 
+    static @NotNull Entity getOwnerOrSelf(@NotNull Entity base){
+        Entity owner = getOwner(base);
+        return owner == null ? base : owner;
+    }
+
     static @Nullable Entity getOwner(@NotNull Entity base){
         UUID ownerUUID = CruxPersist.OWNER.get(base);
         if(ownerUUID != null){
