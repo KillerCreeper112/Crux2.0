@@ -13,6 +13,8 @@ import java.util.UUID;
 public class CruxPersist {
     public static final PersistTag<Boolean> IGNORED_MOB_TARGET = PersistTag.register(new PersistTag<>(PersistentDataType.BOOLEAN, "ignored_mob_target"));
     public static final PersistTag<Boolean> ALLOW_MOUNT = PersistTag.register(new PersistTag<>(PersistentDataType.BOOLEAN, "allow_mount"));
+    public static final PersistTag<Boolean> DROP_ITEMS = PersistTag.register(new PersistTag<>(PersistentDataType.BOOLEAN, "drop_items"));
+    public static final PersistTag<Boolean> DROP_EXPERIENCE = PersistTag.register(new PersistTag<>(PersistentDataType.BOOLEAN, "drop_experience"));
     public static final PersistTag<Boolean> ALLOW_MOUNT_TEMP = PersistTag.register(new PersistTag<>(PersistentDataType.BOOLEAN, "allow_mount_temp"));
     //public static final PersistTag<Long> LOOT_GENERATED_TIME = PersistTag.register(new PersistTag<>(PersistentDataType.LONG, "loot_generated_time"));
     public static final PersistTag<ItemLootTable> ITEM_LOOT_TABLE = PersistTag.register(new PersistTag<>(CruxPersistence.ITEM_LOOT_TABLE, "item_loot_table"));

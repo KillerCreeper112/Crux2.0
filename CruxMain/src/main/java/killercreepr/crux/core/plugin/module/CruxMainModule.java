@@ -11,6 +11,7 @@ import killercreepr.crux.core.external.placeholderapi.FormatMillisecondsHook;
 import killercreepr.crux.core.external.placeholderapi.FormatTicksHook;
 import killercreepr.crux.core.external.placeholderapi.TagsExpansionHook;
 import killercreepr.crux.core.listener.EntityDataListener;
+import killercreepr.crux.core.listener.EntityMechanicsListener;
 import killercreepr.crux.core.listener.EntitySpawnListener;
 import killercreepr.crux.core.listener.LootContainerListener;
 import killercreepr.crux.core.plugin.CruxPlugin;
@@ -101,6 +102,7 @@ public class CruxMainModule implements CruxModule, Listener {
     public void onEnable(@NotNull CruxPlugin plugin) {
         plugin.registerListeners(
             new EntityDataListener(),
+            new EntityMechanicsListener(),
             new EntitySpawnListener(),
             new LootContainerListener(),
             this
