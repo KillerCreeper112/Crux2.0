@@ -105,11 +105,16 @@ public class CruxEntityUtil {
         return e.getLocation();
     }
 
+    public static boolean isGrounded(Entity entity){
+        Block block = getBlockStandingOn(entity);
+        return block != null && block.isSolid();
+    }
+
     public static @Nullable Block getBlockStandingOn(@NotNull Entity entity) {
         Block block = entity.getLocation().getBlock();
         Block blockBelow = block.getRelative(BlockFace.DOWN);
-        if (!block.getType().isEmpty() && block.getType() != Material.LIGHT) return block;
-        if (!blockBelow.getType().isEmpty()) return blockBelow;
+        if (!block.isEmpty() && block.getType() != Material.LIGHT) return block;
+        if (!blockBelow.isEmpty() && block.getType() != Material.LIGHT) return blockBelow;
 
         // Expand players hitbox by 0.3, which is the maximum size a player can be off a block
         // Whilst not falling off
@@ -117,7 +122,7 @@ public class CruxEntityUtil {
         for (BlockFace face : BlockFace.values()) {
             if (!face.isCartesian() || face.getModY() != 0) continue;
             Block relative = blockBelow.getRelative(face);
-            if (relative.getType() == Material.AIR) continue;
+            if (relative.isEmpty()) continue;
             if (relative.getBoundingBox().overlaps(entityBox)) return relative;
         }
 
