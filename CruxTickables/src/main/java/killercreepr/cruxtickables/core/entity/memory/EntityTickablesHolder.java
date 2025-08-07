@@ -55,6 +55,14 @@ public class EntityTickablesHolder extends EntityTickedDataHolder {
         });
     }
 
+    public ActiveEntityTickable getTickable(EntityTickable tickable){
+        return getTickable(tickable.key());
+    }
+
+    public ActiveEntityTickable getTickable(Key key){
+        return activeTickables.get(key);
+    }
+
     public void setActiveTickables(Map<Key, ActiveEntityTickable> tickables){
         if(tickables == null || tickables.isEmpty()){
             activeTickables.values().forEach(ManagedTicked::stopped);
