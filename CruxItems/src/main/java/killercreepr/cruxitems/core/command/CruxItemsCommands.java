@@ -28,11 +28,13 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
@@ -49,6 +51,26 @@ public class CruxItemsCommands {
             LiteralCommandNode<CommandSourceStack> cmd = build(Commands.literal("cruxitems")
                 .requires(source -> source.getSender().hasPermission("cruxitems.cmds.cruxitems.use")), plugin.getLifecycleManager());
             commands.register(cmd, List.of("ci", "cruxitem", "citem"));
+
+            commands.register(
+                Commands.literal("curse")
+                    .requires(ctx -> ctx.getSender().hasPermission("cruxitems.cmds.curse.use"))
+                    .then(
+                        Commands.argument("enchant", CruxItemsArguments.enchantment())
+                            .then(
+                                Commands.argument("level", IntegerArgumentType.integer())
+                                    .executes(ctx ->{
+                                        if(!(getExecutor(ctx.getSource()) instanceof Entity sender)) return -1;
+                                        return enchant(
+                                            ctx.getSource(), Set.of(sender),
+                                            ctx.getArgument("enchant", Enchantment.class),
+                                            ctx.getArgument("level", Integer.class)
+                                        );
+                                    })
+                            )
+                    )
+                    .build()
+            );
         });
     }
 
@@ -73,6 +95,31 @@ public class CruxItemsCommands {
                                             ctx.getArgument("targets", EntitySelectorArgumentResolver.class).resolve(ctx.getSource()),
                                             ctx.getArgument("item", PluginItem.class),
                                             ctx.getArgument("amount", Integer.class)
+                                        ))
+                                )
+                        )
+                )
+        ).then(
+            Commands.literal("enchant")
+                .then(
+                    Commands.argument("targets", ArgumentTypes.entities())
+                        .then(
+                            Commands.argument("enchant", CruxItemsArguments.enchantment())
+                                .executes(ctx -> enchant(
+                                    ctx.getSource(),
+                                    ctx.getArgument("targets", EntitySelectorArgumentResolver.class)
+                                        .resolve(ctx.getSource()),
+                                    ctx.getArgument("enchant", Enchantment.class),
+                                    1
+                                ))
+                                .then(
+                                    Commands.argument("level", IntegerArgumentType.integer())
+                                        .executes(ctx -> enchant(
+                                            ctx.getSource(),
+                                            ctx.getArgument("targets", EntitySelectorArgumentResolver.class)
+                                                .resolve(ctx.getSource()),
+                                            ctx.getArgument("enchant", Enchantment.class),
+                                            ctx.getArgument("level", Integer.class)
                                         ))
                                 )
                         )
@@ -441,6 +488,29 @@ public class CruxItemsCommands {
         }
         int result = given > 0 ? 1 : -1;
         Communicator.chat("Gave " + item.key() + " to " + CruxMath.format(given) + " entities.").use(getExecutor(source));
+        return result;
+    }
+
+    public static int enchant(@NotNull CommandSourceStack source, @NotNull Collection<Entity> targets, @NotNull Enchantment enchant, int level){
+        int given = 0;
+        for(Entity entity : targets){
+            if(!(entity instanceof LivingEntity e)) continue;
+
+            EntityEquipment equip = e.getEquipment();
+            if(equip == null) continue;
+            if(!e.canUseEquipmentSlot(EquipmentSlot.HAND)) continue;
+
+            ItemStack item = equip.getItem(EquipmentSlot.HAND);
+            if(CruxItem.isEmpty(item)) continue;
+            if(level == 0){
+                item.removeEnchantment(enchant);
+            }else{
+                item.addUnsafeEnchantment(enchant, level);
+            }
+            given++;
+        }
+        int result = given > 0 ? 1 : -1;
+        Communicator.chat("Enchanted main hand item with " + enchant.key() + " to " + CruxMath.format(given) + " entities.").use(getExecutor(source));
         return result;
     }
 }
