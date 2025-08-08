@@ -10,4 +10,8 @@ public final class CruxItemsArguments {
     public static EnchantmentArgument enchantment(){
         return ENCHANTMENT;
     }
+    private static final EnchantmentLevelArgument ENCHANTMENT_LEVEL = new EnchantmentLevelArgument();
+    public static EnchantmentLevelArgument enchantmentLevel(){
+        return ENCHANTMENT_LEVEL;
+    }
 }

@@ -57,8 +57,16 @@ public class CruxItemsCommands {
                     .requires(ctx -> ctx.getSender().hasPermission("cruxitems.cmds.curse.use"))
                     .then(
                         Commands.argument("enchant", CruxItemsArguments.enchantment())
+                            .executes(ctx ->{
+                                if(!(getExecutor(ctx.getSource()) instanceof Entity sender)) return -1;
+                                return enchant(
+                                    ctx.getSource(), Set.of(sender),
+                                    ctx.getArgument("enchant", Enchantment.class),
+                                    1
+                                );
+                            })
                             .then(
-                                Commands.argument("level", IntegerArgumentType.integer())
+                                Commands.argument("level", CruxItemsArguments.enchantmentLevel())
                                     .executes(ctx ->{
                                         if(!(getExecutor(ctx.getSource()) instanceof Entity sender)) return -1;
                                         return enchant(
@@ -113,7 +121,7 @@ public class CruxItemsCommands {
                                     1
                                 ))
                                 .then(
-                                    Commands.argument("level", IntegerArgumentType.integer())
+                                    Commands.argument("level", CruxItemsArguments.enchantmentLevel())
                                         .executes(ctx -> enchant(
                                             ctx.getSource(),
                                             ctx.getArgument("targets", EntitySelectorArgumentResolver.class)
