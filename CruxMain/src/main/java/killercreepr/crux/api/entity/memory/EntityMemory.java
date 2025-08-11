@@ -145,6 +145,11 @@ public interface EntityMemory extends Holder<Entity> {
         return mem.getDataHolderOrCompute(clazz, function);
     }
 
+    static DataHolder getOrCreateDataHolder(@NotNull Entity entity, @NotNull Key key, @NotNull Function<EntityMemory, DataHolder> function){
+        EntityMemory mem = getOrCreate(entity);
+        return mem.getDataHolderOrCompute(key, function);
+    }
+
     Map<UUID, CompletableFuture<Void>> REMOVING_FUTURES = new HashMap<>();
     ExecutorService CLEANUP_EXECUTOR = Executors.newFixedThreadPool(4);
 
@@ -174,6 +179,15 @@ public interface EntityMemory extends Holder<Entity> {
 
     default <T extends DataHolder> T getDataHolderOrCompute(@NotNull Class<T> clazz, @NotNull Function<EntityMemory, T> function){
         T holder = getDataHolder(clazz);
+        if(holder==null){
+            holder = function.apply(this);
+            if(holder != null) getDataHolders().register(holder);
+        }
+        return holder;
+    }
+
+    default DataHolder getDataHolderOrCompute(@NotNull Key key, @NotNull Function<EntityMemory, DataHolder> function){
+        DataHolder holder = getDataHolder(key);
         if(holder==null){
             holder = function.apply(this);
             if(holder != null) getDataHolders().register(holder);
