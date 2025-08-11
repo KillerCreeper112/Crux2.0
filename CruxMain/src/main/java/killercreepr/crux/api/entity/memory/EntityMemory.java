@@ -120,6 +120,21 @@ public interface EntityMemory extends Holder<Entity> {
         return mem.getDataHolder(clazz);
     }
 
+    static @Nullable DataHolder getDataHolder(@NotNull UUID uuid, @NotNull Key key){
+        EntityMemory mem = get(uuid);
+        if(mem == null) return null;
+        return mem.getDataHolder(key);
+    }
+
+    static <T extends DataHolder> @Nullable T getDataHolder(@NotNull UUID uuid, @NotNull Class<T> clazz, @NotNull Key key){
+        EntityMemory mem = get(uuid);
+        if(mem == null) return null;
+        DataHolder dataHolder = mem.getDataHolder(key);
+        if(dataHolder == null) return null;
+        if(!clazz.isAssignableFrom(dataHolder.getClass())) return null;
+        return clazz.cast(dataHolder);
+    }
+
     static <T extends DataHolder> @Nullable T getOrCreateDataHolder(@NotNull Entity entity, @NotNull Class<T> clazz){
         EntityMemory mem = getOrCreate(entity);
         return mem.getDataHolder(clazz);
