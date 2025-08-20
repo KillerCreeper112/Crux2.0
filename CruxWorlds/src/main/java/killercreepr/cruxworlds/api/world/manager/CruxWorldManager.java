@@ -6,6 +6,7 @@ import killercreepr.cruxworlds.api.world.CruxWorld;
 import killercreepr.cruxworlds.api.world.creator.CruxWorldCreator;
 import killercreepr.cruxworlds.api.world.creator.WorldModuleCreatorRegistry;
 import killercreepr.cruxworlds.api.world.type.CruxWorldType;
+import killercreepr.cruxworlds.core.component.CruxWorldsComponents;
 import net.kyori.adventure.key.Key;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
@@ -70,4 +71,24 @@ public interface CruxWorldManager {
     KeyedRegistry<CruxWorldType> getWorldTypeRegistry();
     @NotNull
     WorldModuleCreatorRegistry getModuleCreatorRegistry();
+
+    default boolean isWorldType(World world, CruxWorldType type){
+        CruxWorld crux = getWorld(world.key());
+        if(crux == null) return false;
+        return type.compare(crux.get(CruxWorldsComponents.WORLD_TYPE));
+    }
+    default boolean isAnyWorldType(World world, @Nullable CruxWorldType... types){
+        CruxWorld crux = getWorld(world.key());
+        if(crux == null) return false;
+        var type = crux.get(CruxWorldsComponents.WORLD_TYPE);
+        for(CruxWorldType compare : types){
+            if(compare == null){
+                if(type == null) return true;
+                continue;
+            }
+            if(type == null) continue;
+            if(type.compare(compare)) return true;
+        }
+        return false;
+    }
 }

@@ -1,5 +1,6 @@
 package killercreepr.cruxconfig.config.bukkit.handler;
 
+import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import killercreepr.crux.api.block.CruxBlockWrapper;
 import killercreepr.crux.api.block.predicate.BlockPredicate;
@@ -120,6 +121,7 @@ public class BukkitCfgHandlers {
     public static final FileDropFormula DROP_FORMULA = new FileDropFormula();
     public static final FileParticle PARTICLE = new FileParticle();
     public static final FileParticleBuilderSupplier PARTICLE_BUILDER_SUPPLIER = new FileParticleBuilderSupplier();
+    public static final FileGameRule GAME_RULE = new FileGameRule();
 
 
     public static final FileCruxLevelBasedValue CRUX_LEVEL_BASED_VALUE = new FileCruxLevelBasedValue();
@@ -178,6 +180,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(Particle.class, PARTICLE);
         registry.registerFileHandler(ParticleBuilderSupplier.class, PARTICLE_BUILDER_SUPPLIER);
         registry.registerFileHandler(PotionType.class, POTION_TYPE);
+        registry.registerFileHandler(GameRule.class, GAME_RULE);
 
         registry.registerFileHandler(StoredWorld.class, STORED_WORLD);
         registry.registerFileHandler(StoredChunk.class, STORED_CHUNK);
