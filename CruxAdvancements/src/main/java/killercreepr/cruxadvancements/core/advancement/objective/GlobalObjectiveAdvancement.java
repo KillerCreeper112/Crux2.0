@@ -32,7 +32,7 @@ public class GlobalObjectiveAdvancement extends SimpleObjectiveAdvancement{
 
     @Override
     public void onSaving(CruxAdvancementManager<?> manager) {
-        ((CruxAdvancementManager<ObjectiveAdvancement>)manager).saveProgress(USER_ID, this);
+        ((CruxAdvancementManager<ObjectiveAdvancement>)manager).saveAllUserProgress(this);
     }
 
     @Override

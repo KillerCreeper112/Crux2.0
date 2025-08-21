@@ -12,6 +12,7 @@ import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import killercreepr.crux.api.communication.Communicator;
 import killercreepr.crux.api.entity.memory.EntityMemory;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxadvancements.api.advancement.CruxAdvancement;
@@ -155,18 +156,22 @@ public class AdvancementCommands {
         ).then(
             Commands.literal("check")
                 .then(
-                    Commands.argument("target", ArgumentTypes.player())
+                    Commands.argument("target", StringArgumentType.string())
+                        .suggests((ctx, builder) ->{
+                            for(Player p : Crux.getServer().getOnlinePlayers()){
+                                builder.suggest(p.getUniqueId().toString());
+                            }
+                            return builder.buildFuture();
+                        })
                         .then(
                             Commands.argument("manager", AdvancementArguments.ADVANCEMENT_MANAGER)
                                 .then(
                                     Commands.argument("advancement", AdvancementArguments.ADVANCEMENT)
                                         .executes(ctx ->{
-                                            List<Player> targets = ctx.getArgument("target", PlayerSelectorArgumentResolver.class)
-                                                .resolve(ctx.getSource());
                                             CruxAdvancementManager<?> manager = ctx.getArgument("manager", CruxAdvancementManager.class);
                                             CruxAdvancement advancement = ctx.getArgument("advancement", CruxAdvancementResolver.class)
                                                 .resolve(manager);
-                                            return check(ctx.getSource(), targets.getFirst(), advancement);
+                                            return check(ctx.getSource(), ctx.getArgument("target", String.class), advancement);
                                         })
                                 )
                         )
@@ -282,14 +287,18 @@ public class AdvancementCommands {
                 ).then(
                     Commands.literal("check")
                         .then(
-                            Commands.argument("target", ArgumentTypes.player())
+                            Commands.argument("target", StringArgumentType.string())
+                                .suggests((ctx, builder) ->{
+                                    for(Player p : Crux.getServer().getOnlinePlayers()){
+                                        builder.suggest(p.getUniqueId().toString());
+                                    }
+                                    return builder.buildFuture();
+                                })
                                 .then(
                                     Commands.argument("advancements", AdvancementArguments.ADVANCEMENT_PAIR)
                                         .executes(ctx ->{
-                                            List<Player> targets = ctx.getArgument("target", PlayerSelectorArgumentResolver.class)
-                                                .resolve(ctx.getSource());
                                             var pair = ctx.getArgument("advancements", AdvancementPair.class);
-                                            return check(ctx.getSource(), targets.getFirst(), pair.getAdvancement());
+                                            return check(ctx.getSource(), ctx.getArgument("target", String.class), pair.getAdvancement());
                                         })
                                 )
                         )
@@ -407,10 +416,10 @@ public class AdvancementCommands {
         return Objects.requireNonNullElse(source.getExecutor(), source.getSender());
     }
 
-    public static int check(@NotNull CommandSourceStack source, @NotNull Player player,
+    public static int check(@NotNull CommandSourceStack source, @NotNull String name,
                             @NotNull CruxAdvancement advancement){
         CommandSender sender = getExecutor(source);
-        CruxAdvancementProgress progress = advancement.getProgressIfPresent(player.getUniqueId());
+        CruxAdvancementProgress progress = advancement.getProgressIfPresent(name);
 
         Communicator.chat("<blue>Advancement Progress: " + progress).use(sender);
         if(progress instanceof NumberAdvancementProgress p){
@@ -422,7 +431,7 @@ public class AdvancementCommands {
         }//else Communicator.chat()("  <aqua>Unsupported progress or not present " + progress).use(sender);
 
         if(advancement instanceof ObjectiveAdvancement objective){
-            ObjectiveProgression oProgress = objective.getObjectiveProgressIfPresent(player.getUniqueId());
+            ObjectiveProgression oProgress = objective.getObjectiveProgressIfPresent(name);
             if(oProgress != null){
                 Communicator.chat("<yellow>Objective Progression:").use(sender);
                 oProgress.getProgressMap().forEach((key, value) ->{

@@ -45,7 +45,7 @@ public class GlobalAdvancementManagerCfgLoader {
         advancementManagers.values().forEach(advancementManager ->{
             advancementManager.save();
         });
-        p.forEach(this::saveAndUnload);
+        //p.forEach(this::saveAndUnload);
     }
 
     public void saveAndUnload(Player p){
