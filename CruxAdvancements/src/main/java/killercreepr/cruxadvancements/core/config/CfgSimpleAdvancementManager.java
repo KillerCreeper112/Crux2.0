@@ -11,6 +11,7 @@ import killercreepr.cruxadvancements.api.advancement.manager.CruxAdvancementMana
 import killercreepr.cruxadvancements.api.advancement.objective.progress.ObjectiveProgression;
 import killercreepr.cruxadvancements.api.advancement.progress.CruxAdvancementProgress;
 import killercreepr.cruxadvancements.core.advancement.manager.SimpleAdvancementManager;
+import killercreepr.cruxadvancements.core.advancement.objective.GlobalObjectiveAdvancement;
 import killercreepr.cruxadvancements.core.advancement.objective.progress.SimpleObjectiveProgression;
 import killercreepr.cruxadvancements.core.config.handler.FileCruxAdvancementProgress;
 import killercreepr.cruxadvancements.core.config.handler.FileSimpleObjectiveProgression;
@@ -97,7 +98,7 @@ public class CfgSimpleAdvancementManager<T extends ObjectiveAdvancement> extends
         for(T a : parseAdvancements(getAdvancementsFolder(plugin).file())){
             registerAdvancement(a);
 
-            if(a instanceof GlobalAdvancementManagerCfgLoader){
+            if(a instanceof GlobalObjectiveAdvancement){
                 TrackedAdvancement tracked = new TrackedAdvancement(key(), a.key(), true, System.currentTimeMillis());
                 AdvancementRegistries.GLOBAL_ADVANCEMENTS.register(tracked);
             }
@@ -109,7 +110,7 @@ public class CfgSimpleAdvancementManager<T extends ObjectiveAdvancement> extends
 
     @Override
     public void saveProgress(@NotNull UUID uuid, @NotNull T... advancements) {
-        if(advancements.length == 0) advancements = (T[]) this.advancements.values().toArray(new CruxAdvancement[0]);
+        if(advancements.length == 0) advancements = (T[]) this.advancements.values().toArray(new ObjectiveAdvancement[0]);
 
         CruxJson cfg = getSaveFile(plugin, uuid);
         cfg.reloadIfNeeded();
@@ -139,7 +140,7 @@ public class CfgSimpleAdvancementManager<T extends ObjectiveAdvancement> extends
 
     @Override
     public void loadProgress(@NotNull UUID uuid, @NotNull T... advancements) {
-        if(advancements.length == 0) advancements = (T[]) this.advancements.values().toArray(new CrazyAdvancement[0]);
+        if(advancements.length == 0) advancements = (T[]) this.advancements.values().toArray(new ObjectiveAdvancement[0]);
 
         CruxJson cfg = getSaveFile(plugin, uuid);
         if(!cfg.file().exists()){
