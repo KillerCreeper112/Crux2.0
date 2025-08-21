@@ -37,6 +37,8 @@ public interface ObjectiveAdvancement extends CruxAdvancement{
     @NotNull ObjectiveProgression getObjectiveProgress(@NotNull UUID uuid);
 
     @Nullable ObjectiveProgression getObjectiveProgressIfPresent(@NotNull UUID uuid);
+    @ApiStatus.Experimental
+    @Nullable ObjectiveProgression getObjectiveProgressIfPresent(@NotNull String id);
 
     @NotNull Map<String, AdvancementObjective> getObjectives();
 

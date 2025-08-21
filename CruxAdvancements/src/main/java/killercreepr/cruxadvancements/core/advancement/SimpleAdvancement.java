@@ -53,12 +53,22 @@ public class SimpleAdvancement implements CruxAdvancement, CruxRewardAdvancement
 
     @Override
     public @NotNull CruxAdvancementProgress getProgress(@NotNull UUID uuid) {
-        return progressMap.computeIfAbsent(uuid.toString(), (u) -> buildProgress());
+        return getProgress(uuid.toString());
+    }
+
+    @Override
+    public @NotNull CruxAdvancementProgress getProgress(@NotNull String id) {
+        return progressMap.computeIfAbsent(id, (u) -> buildProgress());
     }
 
     @Override
     public @Nullable CruxAdvancementProgress getProgressIfPresent(@NotNull UUID uuid) {
-        return progressMap.get(uuid.toString());
+        return getProgressIfPresent(uuid.toString());
+    }
+
+    @Override
+    public @Nullable CruxAdvancementProgress getProgressIfPresent(@NotNull String id) {
+        return progressMap.get(id);
     }
 
     @Override
@@ -94,7 +104,12 @@ public class SimpleAdvancement implements CruxAdvancement, CruxRewardAdvancement
 
     @Override
     public boolean isGranted(@NotNull UUID uuid) {
-        return getProgress(uuid).isDone();
+        return isGranted(uuid.toString());
+    }
+
+    @Override
+    public boolean isGranted(@NotNull String id) {
+        return getProgress(id).isDone();
     }
 
     @Override

@@ -25,7 +25,12 @@ public interface CruxAdvancement extends Keyed {
     }
     @NotNull
     CruxAdvancementProgress getProgress(@NotNull UUID uuid);
+    @ApiStatus.Experimental
+    @NotNull
+    CruxAdvancementProgress getProgress(@NotNull String id);
     @Nullable CruxAdvancementProgress getProgressIfPresent(@NotNull UUID uuid);
+    @ApiStatus.Experimental
+    @Nullable CruxAdvancementProgress getProgressIfPresent(@NotNull String id);
     @NotNull
     Map<String, CruxAdvancementProgress> getProgressMap();
     void setProgress(@NotNull UUID uuid, @Nullable CruxAdvancementProgress progress);
@@ -38,6 +43,8 @@ public interface CruxAdvancement extends Keyed {
         return isGranted(p.getUniqueId());
     }
     boolean isGranted(@NotNull UUID uuid);
+    @ApiStatus.Experimental
+    boolean isGranted(@NotNull String id);
 
     @NotNull
     CruxAdvancementIcon getIcon();

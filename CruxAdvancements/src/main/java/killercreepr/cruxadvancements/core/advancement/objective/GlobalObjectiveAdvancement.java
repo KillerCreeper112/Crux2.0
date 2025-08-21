@@ -1,5 +1,6 @@
 package killercreepr.cruxadvancements.core.advancement.objective;
 
+import killercreepr.cruxadvancements.api.advancement.ObjectiveAdvancement;
 import killercreepr.cruxadvancements.api.advancement.criteria.CruxCriteria;
 import killercreepr.cruxadvancements.api.advancement.icon.CruxAdvancementIcon;
 import killercreepr.cruxadvancements.api.advancement.manager.CruxAdvancementManager;
@@ -26,18 +27,17 @@ public class GlobalObjectiveAdvancement extends SimpleObjectiveAdvancement{
     }
 
     public ObjectiveProgression getMainObjectiveProgress(){
-
         return objectiveProgress.computeIfAbsent(USER_ID.toString(), (u) -> buildObjectiveProgression());
     }
 
     @Override
-    public void onSaving(CruxAdvancementManager manager) {
-        manager.saveProgress(USER_ID, this);
+    public void onSaving(CruxAdvancementManager<?> manager) {
+        ((CruxAdvancementManager<ObjectiveAdvancement>)manager).saveProgress(USER_ID, this);
     }
 
     @Override
-    public void onLoading(CruxAdvancementManager manager) {
-        manager.loadProgress(USER_ID, this);
+    public void onLoading(CruxAdvancementManager<?> manager) {
+        ((CruxAdvancementManager<ObjectiveAdvancement>)manager).loadAllUserProgress(this);
     }
 
     @Override

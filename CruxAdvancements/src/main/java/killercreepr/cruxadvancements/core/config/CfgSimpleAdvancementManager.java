@@ -3,6 +3,7 @@ package killercreepr.cruxadvancements.core.config;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.data.util.Pair;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.cruxadvancements.api.advancement.ObjectiveAdvancement;
 import killercreepr.cruxadvancements.api.advancement.manager.CruxAdvancementManager;
@@ -49,6 +50,10 @@ public class CfgSimpleAdvancementManager extends SimpleAdvancementManager<Object
     }
 
     public @NotNull CruxJson getSaveFile(@NotNull Plugin plugin, @NotNull UUID player){
+        return getSaveFile(plugin, player.toString());
+    }
+
+    public @NotNull CruxJson getSaveFile(@NotNull Plugin plugin, @NotNull String player){
         return new CruxJson(plugin, "data/cruxadvancements/" + key.asString().replace(":", "_") +
             "/" + player);
     }
@@ -199,6 +204,51 @@ public class CfgSimpleAdvancementManager extends SimpleAdvancementManager<Object
                 a.setObjectiveProgress(uuid, objectiveProgression);
             }
         }
+    }
+
+    @Override
+    public void saveAllUserProgress(@NotNull ObjectiveAdvancement... advancements) {
+        if(advancements.length == 0) advancements = this.advancements.values().toArray(new ObjectiveAdvancement[0]);
+
+        Map<String, Pair<CruxJson, JsonObject>> loaded = new HashMap<>();
+        for(ObjectiveAdvancement a : advancements){
+            a.getProgressMap().keySet().forEach(name ->{
+                var loadedAlready = loaded.get(name);
+                CruxJson cfg;
+                JsonObject values;
+                if(loadedAlready == null){
+                    cfg = getSaveFile(plugin, name);
+                    cfg.reloadIfNeeded();
+                    values = new JsonObject();
+                    loaded.put(name, Pair.of(cfg, values));
+                }else{
+                    cfg = loadedAlready.getFirst();
+                    values = loadedAlready.getSecond();
+                }
+                JsonRegistry registry = cfg.jsonRegistry();
+                JsonContext ctx = new JsonContext(registry);
+
+                CruxAdvancementProgress progress = a.getProgressIfPresent(name);
+                ObjectiveProgression objectiveProgression = a.getObjectiveProgressIfPresent(name);
+                if(progress==null && objectiveProgression == null) return;
+
+                JsonObject completeProgress = new JsonObject();
+                if(progress != null){
+                    completeProgress.add("progress", CruxConfigHook.CRUX_ADVANCEMENT_PROGRESS.serializeToJson(ctx, progress));
+                }
+                if(objectiveProgression != null && !a.isGranted(name)){
+                    completeProgress.add("objective_progress",
+                        CruxConfigHook.SIMPLE_OBJECTIVE_PROGRESSION.serializeToJson(ctx, (SimpleObjectiveProgression) objectiveProgression));
+                }
+                values.add(a.key().asString(), completeProgress);
+            });
+        }
+        loaded.forEach((name, pair) ->{
+            CruxJson cfg = pair.getFirst();
+            JsonObject values = pair.getSecond();
+            cfg.json().add("values", values);
+            cfg.save();
+        });
     }
 
     @Override
