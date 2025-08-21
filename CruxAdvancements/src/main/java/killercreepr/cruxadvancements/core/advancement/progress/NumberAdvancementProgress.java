@@ -102,7 +102,7 @@ public class NumberAdvancementProgress extends SimpleCriterionProgress implement
         return false;
     }
 
-    protected boolean checkAllGranted(){
+    public boolean checkAllGranted(){
         return progress >= criteria.getMaxProgress();
     }
 

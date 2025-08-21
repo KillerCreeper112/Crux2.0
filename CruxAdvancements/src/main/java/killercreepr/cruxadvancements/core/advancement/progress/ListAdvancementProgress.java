@@ -33,12 +33,18 @@ public class ListAdvancementProgress extends SimpleCriterionProgress implements 
         });
     }
 
+    public void onProgressChanged(@NotNull String name, @Nullable CruxCriterionProgress progress){
+
+    }
+
     @Override
     public void revoke() {
         super.revoke();
         progressMap.clear();
         for(String name : criteria.getActionNames()){
-            progressMap.put(name, new SimpleCriterionProgress());
+            CruxCriterionProgress progress = new SimpleCriterionProgress();
+            progressMap.put(name, progress);
+            onProgressChanged(name, progress);
         }
     }
 
@@ -84,7 +90,7 @@ public class ListAdvancementProgress extends SimpleCriterionProgress implements 
         return progress != null && progress.isDone();
     }
 
-    protected boolean checkAllGranted(){
+    public boolean checkAllGranted(){
         return criteria.test(this::isCriterionDone);
         /*for(CruxCriterionProgress progress : progressMap.values()){
             if(!progress.isDone()) return false;
@@ -118,6 +124,7 @@ public class ListAdvancementProgress extends SimpleCriterionProgress implements 
             CruxCriterionProgress criterionProgress = this.getCriterionProgress(criterion);
             if(criterionProgress == null || criterionProgress.isDone()) continue;
             criterionProgress.grant();
+            onProgressChanged(criterion, criterionProgress);
 
             changed.add(criterion);
         }
@@ -133,6 +140,7 @@ public class ListAdvancementProgress extends SimpleCriterionProgress implements 
             CruxCriterionProgress criterionProgress = this.getCriterionProgress(criterion);
             if(criterionProgress == null || !criterionProgress.isDone()) continue;
             criterionProgress.revoke();
+            onProgressChanged(criterion, criterionProgress);
 
             changed.add(criterion);
         }

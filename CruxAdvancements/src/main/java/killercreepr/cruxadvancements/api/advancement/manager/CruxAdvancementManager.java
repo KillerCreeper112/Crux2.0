@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public interface CruxAdvancementManager<T extends CruxAdvancement> extends Keyed, Iterable<T>, PluginLoadable {
     default void registerAdvancement(@NotNull T... advancements){
@@ -103,5 +104,8 @@ public interface CruxAdvancementManager<T extends CruxAdvancement> extends Keyed
         return grantAdvancementReward(who.getUniqueId(), advancement);
     }
 
-    void refresh(@NotNull Plugin plugin);
+    default void refresh(@NotNull Plugin plugin){
+        refresh(plugin, null);
+    }
+    void refresh(@NotNull Plugin plugin, @Nullable Consumer<CruxAdvancementManager<?>> loadConsumer);
 }

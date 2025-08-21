@@ -3,6 +3,10 @@ package killercreepr.cruxadvancements.crazy.advancement;
 import eu.endercentral.crazy_advancements.advancement.AdvancementDisplay;
 import eu.endercentral.crazy_advancements.advancement.AdvancementFlag;
 import eu.endercentral.crazy_advancements.advancement.AdvancementVisibility;
+import killercreepr.cruxadvancements.api.advancement.ObjectiveAdvancement;
+import killercreepr.cruxadvancements.core.advancement.icon.AdvancementItemIcon;
+import killercreepr.cruxadvancements.core.config.handler.FileAdvancementItemIcon;
+import killercreepr.cruxadvancements.core.config.handler.FileObjectiveAdvancement;
 import killercreepr.cruxadvancements.core.config.handler.crazy.FileAdvancementVisibility;
 import killercreepr.cruxadvancements.core.config.handler.crazy.FileCrazyAdvancement;
 import killercreepr.cruxadvancements.core.config.handler.crazy.FileCrazyAdvancementDisplay;
@@ -13,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class CrazyAdvancementsHook {
     public static final FileCrazyAdvancement FILE_CRAZY_ADVANCEMENT = new FileCrazyAdvancement();
+    public static final FileObjectiveAdvancement FILE_OBJECTIVE_ADVANCEMENT = new FileObjectiveAdvancement();
     public static void registerHandlers(){
         CfgRegistries.FILE.forEach(CrazyAdvancementsHook::registerHandlers);
     }
@@ -21,6 +26,8 @@ public class CrazyAdvancementsHook {
         registry.registerFileHandler(AdvancementFlag.class, new FileGenericEnum<>(AdvancementFlag.class));
         registry.registerFileHandler(AdvancementVisibility.class, new FileAdvancementVisibility());
         registry.registerFileHandler(CrazyAdvancementDisplay.class, new FileCrazyAdvancementDisplay());
+        registry.registerFileHandler(AdvancementItemIcon.class, new FileAdvancementItemIcon());
         registry.registerFileHandler(CrazyAdvancement.class, FILE_CRAZY_ADVANCEMENT);
+        registry.registerFileHandler(ObjectiveAdvancement.class, FILE_OBJECTIVE_ADVANCEMENT);
     }
 }
