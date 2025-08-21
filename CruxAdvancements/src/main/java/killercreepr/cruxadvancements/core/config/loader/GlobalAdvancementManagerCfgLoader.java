@@ -3,6 +3,7 @@ package killercreepr.cruxadvancements.core.config.loader;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.cruxadvancements.api.advancement.manager.CruxAdvancementManager;
+import killercreepr.cruxadvancements.core.advancement.objective.GlobalObjectiveAdvancement;
 import killercreepr.cruxadvancements.core.config.CfgSimpleAdvancementManager;
 import killercreepr.cruxadvancements.core.registries.AdvancementRegistries;
 import killercreepr.cruxadvancements.crazy.config.CfgCrazyAdvancementManager;
@@ -41,14 +42,14 @@ public class GlobalAdvancementManagerCfgLoader {
     }
 
     public void saveAndUnload(Collection<? extends Player> p){
+        advancementManagers.values().forEach(advancementManager ->{
+            advancementManager.save();
+        });
         p.forEach(this::saveAndUnload);
     }
 
     public void saveAndUnload(Player p){
-        advancementManagers.values().forEach(advancementManager ->{
-            advancementManager.saveProgress(p.getUniqueId());
-            advancementManager.unloadProgress(p.getUniqueId());
-        });
+        saveAndUnload(p.getUniqueId());
     }
     public void save(Player p){
         advancementManagers.values().forEach(advancementManager ->{

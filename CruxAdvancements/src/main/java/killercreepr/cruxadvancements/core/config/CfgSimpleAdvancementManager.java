@@ -4,9 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.plugin.CruxPlugin;
-import killercreepr.cruxadvancements.api.advancement.CruxAdvancement;
 import killercreepr.cruxadvancements.api.advancement.ObjectiveAdvancement;
-import killercreepr.cruxadvancements.api.advancement.flag.CruxAdvancementFlag;
 import killercreepr.cruxadvancements.api.advancement.manager.CruxAdvancementManager;
 import killercreepr.cruxadvancements.api.advancement.objective.progress.ObjectiveProgression;
 import killercreepr.cruxadvancements.api.advancement.progress.CruxAdvancementProgress;
@@ -15,11 +13,9 @@ import killercreepr.cruxadvancements.core.advancement.objective.GlobalObjectiveA
 import killercreepr.cruxadvancements.core.advancement.objective.progress.SimpleObjectiveProgression;
 import killercreepr.cruxadvancements.core.config.handler.FileCruxAdvancementProgress;
 import killercreepr.cruxadvancements.core.config.handler.FileSimpleObjectiveProgression;
-import killercreepr.cruxadvancements.core.config.loader.GlobalAdvancementManagerCfgLoader;
 import killercreepr.cruxadvancements.core.config.loader.ObjectiveAdvancementCfgLoader;
 import killercreepr.cruxadvancements.core.data.TrackedAdvancement;
 import killercreepr.cruxadvancements.core.registries.AdvancementRegistries;
-import killercreepr.cruxadvancements.crazy.advancement.CrazyAdvancement;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxconfig.config.bukkit.file.CruxJson;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -105,6 +101,7 @@ public class CfgSimpleAdvancementManager<T extends ObjectiveAdvancement> extends
 
             Crux.log(Level.INFO, "Registered ObjectiveAdvancement: " + key() + " -> " + a.key());
         }
+        load();
         if(loadConsumer != null) loadConsumer.accept(this);
     }
 

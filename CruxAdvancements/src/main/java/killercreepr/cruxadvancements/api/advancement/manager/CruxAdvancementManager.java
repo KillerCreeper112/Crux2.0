@@ -27,6 +27,18 @@ public interface CruxAdvancementManager<T extends CruxAdvancement> extends Keyed
         }
     }
 
+    default void save(){
+        for(T advance : getAdvancements()){
+            advance.onSaving(this);
+        }
+    }
+
+    default void load(){
+        for(T advance : getAdvancements()){
+            advance.onLoading(this);
+        }
+    }
+
     default void saveProgress(@NotNull Player player, @NotNull T... advancements){
         saveProgress(player.getUniqueId(), advancements);
     }

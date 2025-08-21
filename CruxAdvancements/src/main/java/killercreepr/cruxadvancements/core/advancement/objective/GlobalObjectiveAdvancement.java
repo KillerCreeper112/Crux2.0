@@ -2,6 +2,7 @@ package killercreepr.cruxadvancements.core.advancement.objective;
 
 import killercreepr.cruxadvancements.api.advancement.criteria.CruxCriteria;
 import killercreepr.cruxadvancements.api.advancement.icon.CruxAdvancementIcon;
+import killercreepr.cruxadvancements.api.advancement.manager.CruxAdvancementManager;
 import killercreepr.cruxadvancements.api.advancement.objective.AdvancementObjective;
 import killercreepr.cruxadvancements.api.advancement.objective.progress.ObjectiveProgression;
 import killercreepr.cruxadvancements.api.advancement.progress.CruxAdvancementProgress;
@@ -14,18 +15,29 @@ import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.UUID;
 
 public class GlobalObjectiveAdvancement extends SimpleObjectiveAdvancement{
-    public static final String USER_ID = "_global_";
+    public static final UUID USER_ID = UUID.nameUUIDFromBytes("_global_".getBytes(StandardCharsets.UTF_8));
     public GlobalObjectiveAdvancement(@NotNull Key key, @Nullable Key parentKey, @NotNull CruxAdvancementIcon icon, @NotNull CruxCriteria criteria, @Nullable CruxAdvanceReward reward, @NotNull Map<String, AdvancementObjective> objectives, int updateAdvancementPeriod) {
         super(key, parentKey, icon, criteria, reward, objectives, updateAdvancementPeriod);
     }
 
     public ObjectiveProgression getMainObjectiveProgress(){
 
-        return objectiveProgress.computeIfAbsent(USER_ID, (u) -> buildObjectiveProgression());
+        return objectiveProgress.computeIfAbsent(USER_ID.toString(), (u) -> buildObjectiveProgression());
+    }
+
+    @Override
+    public void onSaving(CruxAdvancementManager manager) {
+        manager.saveProgress(USER_ID, this);
+    }
+
+    @Override
+    public void onLoading(CruxAdvancementManager manager) {
+        manager.loadProgress(USER_ID, this);
     }
 
     @Override
@@ -34,7 +46,7 @@ public class GlobalObjectiveAdvancement extends SimpleObjectiveAdvancement{
     }
 
     public CruxAdvancementProgress getMainProgress(){
-        return progressMap.computeIfAbsent(USER_ID, (s) -> super.buildProgress());
+        return progressMap.computeIfAbsent(USER_ID.toString(), (s) -> super.buildProgress());
     }
 
     @Override

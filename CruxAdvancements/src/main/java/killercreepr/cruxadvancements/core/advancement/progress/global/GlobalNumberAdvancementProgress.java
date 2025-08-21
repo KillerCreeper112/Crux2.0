@@ -27,7 +27,8 @@ public class GlobalNumberAdvancementProgress extends NumberAdvancementProgress {
     public @NotNull CriteriaResult setCriteriaProgress(int amount) {
         CriteriaResult result = super.setCriteriaProgress(amount);
         if(result == CriteriaResult.UNCHANGED) return CriteriaResult.UNCHANGED;
-        mainProgress.setCriteriaProgress(amount);
+        int difference = result.getNewProgress() - result.getPreviousProgress();
+        mainProgress.setCriteriaProgress(mainProgress.getCriteriaProgress() + difference);
         return result;
     }
 }
