@@ -156,17 +156,11 @@ public class AdvancementCommands {
         ).then(
             Commands.literal("check")
                 .then(
-                    Commands.argument("target", StringArgumentType.string())
-                        .suggests((ctx, builder) ->{
-                            for(Player p : Crux.getServer().getOnlinePlayers()){
-                                builder.suggest(p.getUniqueId().toString());
-                            }
-                            return builder.buildFuture();
-                        })
+                    Commands.argument("manager", AdvancementArguments.ADVANCEMENT_MANAGER)
                         .then(
-                            Commands.argument("manager", AdvancementArguments.ADVANCEMENT_MANAGER)
+                            Commands.argument("advancement", AdvancementArguments.ADVANCEMENT)
                                 .then(
-                                    Commands.argument("advancement", AdvancementArguments.ADVANCEMENT)
+                                    Commands.argument("target", AdvancementArguments.ADVANCEMENT_KEY)
                                         .executes(ctx ->{
                                             CruxAdvancementManager<?> manager = ctx.getArgument("manager", CruxAdvancementManager.class);
                                             CruxAdvancement advancement = ctx.getArgument("advancement", CruxAdvancementResolver.class)
@@ -287,15 +281,9 @@ public class AdvancementCommands {
                 ).then(
                     Commands.literal("check")
                         .then(
-                            Commands.argument("target", StringArgumentType.string())
-                                .suggests((ctx, builder) ->{
-                                    for(Player p : Crux.getServer().getOnlinePlayers()){
-                                        builder.suggest(p.getUniqueId().toString());
-                                    }
-                                    return builder.buildFuture();
-                                })
+                            Commands.argument("advancements", AdvancementArguments.ADVANCEMENT_PAIR)
                                 .then(
-                                    Commands.argument("advancements", AdvancementArguments.ADVANCEMENT_PAIR)
+                                    Commands.argument("target", AdvancementArguments.ADVANCEMENT_KEY)
                                         .executes(ctx ->{
                                             var pair = ctx.getArgument("advancements", AdvancementPair.class);
                                             return check(ctx.getSource(), ctx.getArgument("target", String.class), pair.getAdvancement());
