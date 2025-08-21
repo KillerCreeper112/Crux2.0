@@ -33,18 +33,20 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 
 public class CfgSimpleAdvancementManager<T extends ObjectiveAdvancement> extends SimpleAdvancementManager<T> {
-    public static CfgSimpleAdvancementManager<ObjectiveAdvancement> createNew(@NotNull Key key, @NotNull CruxPlugin plugin){
-        return new CfgSimpleAdvancementManager<>(key, plugin);
+    public static CfgSimpleAdvancementManager<ObjectiveAdvancement> createNew(@NotNull Key key, @NotNull CruxPlugin plugin, String fileLoadingPath){
+        return new CfgSimpleAdvancementManager<>(key, plugin, fileLoadingPath);
     }
 
     protected final @NotNull CruxPlugin plugin;
-    public CfgSimpleAdvancementManager(@NotNull Key key, @NotNull CruxPlugin plugin) {
+    protected final String fileLoadingPath;
+    public CfgSimpleAdvancementManager(@NotNull Key key, @NotNull CruxPlugin plugin, String fileLoadingPath) {
         super(key);
         this.plugin = plugin;
+        this.fileLoadingPath = fileLoadingPath;
     }
 
     public @NotNull CruxFolder getAdvancementsFolder(@NotNull Plugin plugin){
-        return new CruxFolder(plugin, "advancements/" + key.value());
+        return new CruxFolder(plugin, fileLoadingPath + "/" + key.value());
     }
 
     public @NotNull CruxJson getSaveFile(@NotNull Plugin plugin, @NotNull UUID player){

@@ -21,8 +21,10 @@ import java.util.logging.Level;
 
 public class GlobalAdvancementManagerCfgLoader {
     protected final CruxPlugin plugin;
-    public GlobalAdvancementManagerCfgLoader(CruxPlugin plugin) {
+    protected final String fileLoadingPath;
+    public GlobalAdvancementManagerCfgLoader(CruxPlugin plugin, String fileLoadingPath) {
         this.plugin = plugin;
+        this.fileLoadingPath = fileLoadingPath;
     }
 
     protected final Map<Key, CruxAdvancementManager<?>> advancementManagers = new HashMap<>();
@@ -76,7 +78,7 @@ public class GlobalAdvancementManagerCfgLoader {
     }
 
     public void refresh(Consumer<CruxAdvancementManager<?>> loadConsumer){
-        loadConfiguration(CruxFolder.file(plugin, "advancements"));
+        loadConfiguration(CruxFolder.file(plugin, fileLoadingPath));
         advancementManagers.values().forEach(c -> c.refresh(plugin, loadConsumer));
     }
 
@@ -89,7 +91,7 @@ public class GlobalAdvancementManagerCfgLoader {
             Key key = plugin.key(CruxFolder.withoutFileExtension(f.getName()));
             if(advancementManagers.containsKey(key)) continue;
 
-            CfgSimpleAdvancementManager<?> manager = CfgSimpleAdvancementManager.createNew(key, plugin);
+            CfgSimpleAdvancementManager<?> manager = CfgSimpleAdvancementManager.createNew(key, plugin, fileLoadingPath);
             advancementManagers.put(manager.key(), manager);
             AdvancementRegistries.ADVANCEMENT_MANAGERS.register(manager);
             Crux.log(Level.INFO, "Registered CfgSimpleAdvancementManager: " + manager.key());
