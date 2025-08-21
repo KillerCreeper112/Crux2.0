@@ -17,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class CrazyAdvancementsHook {
     public static final FileCrazyAdvancement FILE_CRAZY_ADVANCEMENT = new FileCrazyAdvancement();
-    public static final FileObjectiveAdvancement FILE_OBJECTIVE_ADVANCEMENT = new FileObjectiveAdvancement();
     public static void registerHandlers(){
         CfgRegistries.FILE.forEach(CrazyAdvancementsHook::registerHandlers);
     }
@@ -26,8 +25,6 @@ public class CrazyAdvancementsHook {
         registry.registerFileHandler(AdvancementFlag.class, new FileGenericEnum<>(AdvancementFlag.class));
         registry.registerFileHandler(AdvancementVisibility.class, new FileAdvancementVisibility());
         registry.registerFileHandler(CrazyAdvancementDisplay.class, new FileCrazyAdvancementDisplay());
-        registry.registerFileHandler(AdvancementItemIcon.class, new FileAdvancementItemIcon());
         registry.registerFileHandler(CrazyAdvancement.class, FILE_CRAZY_ADVANCEMENT);
-        registry.registerFileHandler(ObjectiveAdvancement.class, FILE_OBJECTIVE_ADVANCEMENT);
     }
 }

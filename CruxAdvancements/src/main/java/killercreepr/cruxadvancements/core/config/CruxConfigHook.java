@@ -1,12 +1,14 @@
 package killercreepr.cruxadvancements.core.config;
 
 import killercreepr.crux.core.Crux;
+import killercreepr.cruxadvancements.api.advancement.ObjectiveAdvancement;
 import killercreepr.cruxadvancements.api.advancement.criteria.CruxCriteria;
 import killercreepr.cruxadvancements.api.advancement.flag.CruxAdvancementFlag;
 import killercreepr.cruxadvancements.api.advancement.icon.CriterionDisplay;
 import killercreepr.cruxadvancements.api.advancement.objective.AdvancementObjective;
 import killercreepr.cruxadvancements.api.advancement.objective.progress.ObjectiveProgress;
 import killercreepr.cruxadvancements.api.advancement.reward.CruxAdvanceReward;
+import killercreepr.cruxadvancements.core.advancement.icon.AdvancementItemIcon;
 import killercreepr.cruxadvancements.core.advancement.objective.ObjectiveCommonData;
 import killercreepr.cruxadvancements.core.advancement.objective.progress.NumberObjectiveProgress;
 import killercreepr.cruxadvancements.core.advancement.objective.progress.SimpleObjectiveProgression;
@@ -27,6 +29,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class CruxConfigHook {
     private static final FileAdvancementObjective fileAdvancementObjective = CruxAdvanceCfgData.fileAdvancementObjective();
+    public static final FileObjectiveAdvancement FILE_OBJECTIVE_ADVANCEMENT = new FileObjectiveAdvancement();
     public static void load(){
         OBJECTIVE_PROGRESS.registerCustomHandler(NumberObjectiveProgress.class, new CustomFileObjectiveProgress<NumberObjectiveProgress>() {
             @Override
@@ -321,6 +324,10 @@ public class CruxConfigHook {
 
     public static void registerHandlers(){
         CfgRegistries.FILE.forEach(CruxConfigHook::registerHandlers);
+        CfgRegistries.SIMPLE_REGISTRY.forEach(registry ->{
+            registry.registerFileHandler(ObjectiveAdvancement.class, FILE_OBJECTIVE_ADVANCEMENT);
+            registry.registerFileHandler(AdvancementItemIcon.class, new FileAdvancementItemIcon());
+        });
     }
 
     public static final FileCruxAdvancementProgress CRUX_ADVANCEMENT_PROGRESS = new FileCruxAdvancementProgress();

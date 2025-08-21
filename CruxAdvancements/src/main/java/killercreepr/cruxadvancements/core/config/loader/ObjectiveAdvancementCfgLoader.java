@@ -2,6 +2,7 @@ package killercreepr.cruxadvancements.core.config.loader;
 
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.cruxadvancements.api.advancement.ObjectiveAdvancement;
+import killercreepr.cruxadvancements.core.config.CruxConfigHook;
 import killercreepr.cruxadvancements.crazy.advancement.CrazyAdvancement;
 import killercreepr.cruxadvancements.crazy.advancement.CrazyAdvancementsHook;
 import killercreepr.cruxconfig.config.bukkit.loader.CfgLoader;
@@ -32,7 +33,7 @@ public class ObjectiveAdvancementCfgLoader extends CfgLoader {
             }
 
             FileContext<?> ctx = new FileContext<>(cfg.fileRegistry());
-            table = CrazyAdvancementsHook.FILE_OBJECTIVE_ADVANCEMENT.deserializeFromFile(
+            table = CruxConfigHook.FILE_OBJECTIVE_ADVANCEMENT.deserializeFromFile(
                 ctx, root, plugin.key(path)
             );
 
