@@ -3,6 +3,7 @@ package killercreepr.cruxadvancements.core.advancement.objective;
 import killercreepr.cruxadvancements.api.advancement.criteria.CruxCriteria;
 import killercreepr.cruxadvancements.api.advancement.icon.CruxAdvancementIcon;
 import killercreepr.cruxadvancements.api.advancement.objective.AdvancementObjective;
+import killercreepr.cruxadvancements.api.advancement.objective.progress.ObjectiveProgression;
 import killercreepr.cruxadvancements.api.advancement.progress.CruxAdvancementProgress;
 import killercreepr.cruxadvancements.api.advancement.reward.CruxAdvanceReward;
 import killercreepr.cruxadvancements.core.advancement.criteria.ListCriteria;
@@ -22,9 +23,14 @@ public class GlobalObjectiveAdvancement extends SimpleObjectiveAdvancement{
         super(key, parentKey, icon, criteria, reward, objectives, updateAdvancementPeriod);
     }
 
+    public ObjectiveProgression getMainObjectiveProgress(){
+
+        return objectiveProgress.computeIfAbsent(USER_ID, (u) -> buildObjectiveProgression());
+    }
+
     @Override
-    public void setProgress(@NotNull UUID uuid, @Nullable CruxAdvancementProgress progress) {
-        super.setProgress(uuid, progress);
+    public @NotNull ObjectiveProgression getObjectiveProgress(@NotNull UUID uuid) {
+        return super.getObjectiveProgress(uuid);
     }
 
     public CruxAdvancementProgress getMainProgress(){

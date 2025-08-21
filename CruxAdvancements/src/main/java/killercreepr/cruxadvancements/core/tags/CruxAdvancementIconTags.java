@@ -5,8 +5,10 @@ import killercreepr.crux.api.text.hook.ObjectTag;
 import killercreepr.crux.api.text.resolver.StringResolver;
 import killercreepr.crux.api.text.tags.TagParser;
 import killercreepr.crux.api.text.tags.container.TagContainer;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.text.resolver.Tag;
 import killercreepr.cruxadvancements.api.advancement.icon.CruxAdvancementIcon;
+import killercreepr.cruxadvancements.core.advancement.icon.AdvancementItemIcon;
 import killercreepr.cruxadvancements.crazy.advancement.CrazyAdvancementDisplay;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,6 +31,9 @@ public class CruxAdvancementIconTags implements ObjectTag<CruxAdvancementIcon> {
         TagContainer<StringResolver> tag = TagContainer.string()
             .add(Tag.string("item", (ctx, args) -> Base64.getEncoder().encodeToString(object.getItem().serializeAsBytes())))
             ;
+        if(object instanceof AdvancementItemIcon display){
+            tag.add(Tag.string("title", (ctx, args) -> Crux.format().serialize(display.getItem().effectiveName())));
+        }
         if(object instanceof CrazyAdvancementDisplay display){
             tag.add(Tag.string("description", (ctx, args) -> display.getDescription()))
                 .add(Tag.string("title", (ctx, args) -> display.getTitle()))

@@ -68,7 +68,16 @@ public class NumberObjective extends SimpleAdvancementObjective {
 
         p.setProgress(Math.min(event.getNewProgress(), maxProgress));
 
-        if(shouldUpdateAdvancement(advancement,p)){
+        NumberObjectiveProgress mainProgress;
+        int oldMainProgress = 0;
+        if(advancement instanceof GlobalObjectiveAdvancement global){
+            int difference = p.getProgress() - event.getOldProgress();
+            mainProgress = global.getMainObjectiveProgress().getProgress(getCriterion()).toType(NumberObjectiveProgress.class);
+            oldMainProgress = mainProgress.getProgress();
+            mainProgress.setProgress(mainProgress.getProgress() + difference);
+        }else mainProgress = p;
+
+        if(shouldUpdateAdvancement(advancement, mainProgress)){
             Cancellable criteriaEvent;
             if(advancement.getCriteria() instanceof NumberCriteria){
                 criteriaEvent = manager.setCriteriaProgress(who, advancement, advancement.getTotalProgress(who));
@@ -78,6 +87,9 @@ public class NumberObjective extends SimpleAdvancementObjective {
             //revert changes
             if(criteriaEvent != null && criteriaEvent.isCancelled()){
                 p.setProgress(event.getOldProgress());
+                if(mainProgress != p){
+                    mainProgress.setProgress(oldMainProgress);
+                }
                 return;
             }
 

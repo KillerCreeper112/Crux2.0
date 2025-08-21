@@ -19,7 +19,11 @@ public class SimpleObjectiveProgression implements ObjectiveProgression {
 
     @Override
     public @NotNull ObjectiveProgress getProgress(@NotNull String taskID) {
-        return progressionMap.computeIfAbsent(taskID, id -> advancement.getObjective(taskID).createNewProgress());
+        return progressionMap.computeIfAbsent(taskID, id -> createNewProgress(taskID));
+    }
+
+    public ObjectiveProgress createNewProgress(String taskID){
+        return advancement.getObjective(taskID).createNewProgress();
     }
 
     @Override
