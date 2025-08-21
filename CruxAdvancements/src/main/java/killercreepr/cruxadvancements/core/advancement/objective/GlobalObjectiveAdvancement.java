@@ -16,18 +16,17 @@ import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.UUID;
 
 public class GlobalObjectiveAdvancement extends SimpleObjectiveAdvancement{
-    public static final UUID USER_ID = UUID.nameUUIDFromBytes("_global_".getBytes(StandardCharsets.UTF_8));
+    public static final String USER_ID = "_global_";//UUID.nameUUIDFromBytes("_global_".getBytes(StandardCharsets.UTF_8));
     public GlobalObjectiveAdvancement(@NotNull Key key, @Nullable Key parentKey, @NotNull CruxAdvancementIcon icon, @NotNull CruxCriteria criteria, @Nullable CruxAdvanceReward reward, @NotNull Map<String, AdvancementObjective> objectives, int updateAdvancementPeriod) {
         super(key, parentKey, icon, criteria, reward, objectives, updateAdvancementPeriod);
     }
 
     public ObjectiveProgression getMainObjectiveProgress(){
-        return objectiveProgress.computeIfAbsent(USER_ID.toString(), (u) -> buildObjectiveProgression());
+        return objectiveProgress.computeIfAbsent(USER_ID, (u) -> buildObjectiveProgression());
     }
 
     @Override
@@ -46,7 +45,24 @@ public class GlobalObjectiveAdvancement extends SimpleObjectiveAdvancement{
     }
 
     public CruxAdvancementProgress getMainProgress(){
-        return progressMap.computeIfAbsent(USER_ID.toString(), (s) -> super.buildProgress());
+        return progressMap.computeIfAbsent(USER_ID, (s) -> super.buildProgress());
+    }
+
+    @Override
+    public void setProgress(@NotNull String id, @Nullable CruxAdvancementProgress progress) {
+        if(id.equals(USER_ID) || progress instanceof GlobalListAdvancementProgress || progress instanceof GlobalNumberAdvancementProgress){
+            super.setProgress(id, progress);
+            return;
+        }
+        CruxAdvancementProgress newProgress;
+        if(getCriteria() instanceof ListCriteria c){
+            newProgress = new GlobalListAdvancementProgress(c, getMainProgress()).combine(progress);
+        }
+        else if(getCriteria() instanceof NumberCriteria c){
+            newProgress = new GlobalNumberAdvancementProgress(c, getMainProgress()).combine(progress);
+        }else throw new UnsupportedOperationException("Unsupported criteria " + getCriteria());
+
+        super.setProgress(id, newProgress);
     }
 
     @Override

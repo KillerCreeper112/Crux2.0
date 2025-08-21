@@ -13,6 +13,14 @@ public class GlobalNumberAdvancementProgress extends NumberAdvancementProgress {
         this.mainProgress = mainProgress;
     }
 
+
+    public GlobalNumberAdvancementProgress combine(CruxAdvancementProgress progress){
+        if(!(progress instanceof NumberAdvancementProgress list)) return this;
+        this.progress = list.getProgress();
+        this.setObtainedAt(list.getObtained());
+        return this;
+    }
+
     @Override
     public boolean checkAllGranted() {
         return ((NumberAdvancementProgress)mainProgress).checkAllGranted();

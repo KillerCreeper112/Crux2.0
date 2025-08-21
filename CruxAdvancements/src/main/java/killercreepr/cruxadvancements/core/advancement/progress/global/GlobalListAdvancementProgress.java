@@ -14,6 +14,13 @@ public class GlobalListAdvancementProgress extends ListAdvancementProgress {
         this.mainProgress = mainProgress;
     }
 
+    public GlobalListAdvancementProgress combine(CruxAdvancementProgress progress){
+        if(!(progress instanceof ListAdvancementProgress list)) return this;
+        progressMap.putAll(list.getProgressMap());
+        this.setObtainedAt(list.getObtained());
+        return this;
+    }
+
     @Override
     public boolean checkAllGranted() {
         return ((ListAdvancementProgress)mainProgress).checkAllGranted();
