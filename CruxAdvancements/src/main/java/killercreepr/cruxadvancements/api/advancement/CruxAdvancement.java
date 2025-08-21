@@ -8,6 +8,7 @@ import killercreepr.cruxadvancements.api.advancement.reward.CruxAdvanceReward;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,6 +29,8 @@ public interface CruxAdvancement extends Keyed {
     @NotNull
     Map<String, CruxAdvancementProgress> getProgressMap();
     void setProgress(@NotNull UUID uuid, @Nullable CruxAdvancementProgress progress);
+    @ApiStatus.Experimental
+    void setProgress(@NotNull String id, @Nullable CruxAdvancementProgress progress);
     @NotNull
     CruxCriteria getCriteria();
 

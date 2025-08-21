@@ -53,8 +53,13 @@ public class SimpleObjectiveAdvancement extends SimpleAdvancement implements Obj
     }
 
     public void setObjectiveProgress(@NotNull UUID uuid, @Nullable ObjectiveProgression progression){
-        if(progression==null) objectiveProgress.remove(uuid.toString());
-        else objectiveProgress.put(uuid.toString(), progression);
+        setObjectiveProgress(uuid.toString(), progression);
+    }
+
+    @Override
+    public void setObjectiveProgress(@NotNull String id, @Nullable ObjectiveProgression progression) {
+        if(progression==null) objectiveProgress.remove(id);
+        else objectiveProgress.put(id, progression);
     }
 
     public @Nullable AdvancementObjective getObjective(@NotNull String criterion){

@@ -92,7 +92,7 @@ public class GlobalAdvancementManagerCfgLoader {
             Key key = plugin.key(CruxFolder.withoutFileExtension(f.getName()));
             if(advancementManagers.containsKey(key)) continue;
 
-            CfgSimpleAdvancementManager<?> manager = CfgSimpleAdvancementManager.createNew(key, plugin, fileLoadingPath);
+            CfgSimpleAdvancementManager manager = CfgSimpleAdvancementManager.createNew(key, plugin, fileLoadingPath);
             advancementManagers.put(manager.key(), manager);
             AdvancementRegistries.ADVANCEMENT_MANAGERS.register(manager);
             Crux.log(Level.INFO, "Registered CfgSimpleAdvancementManager: " + manager.key());

@@ -2,6 +2,7 @@ package killercreepr.cruxadvancements.api.advancement;
 
 import killercreepr.cruxadvancements.api.advancement.objective.AdvancementObjective;
 import killercreepr.cruxadvancements.api.advancement.objective.progress.ObjectiveProgression;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,6 +29,8 @@ public interface ObjectiveAdvancement extends CruxAdvancement{
     }
 
     void setObjectiveProgress(@NotNull UUID uuid, @Nullable ObjectiveProgression progression);
+    @ApiStatus.Experimental
+    void setObjectiveProgress(@NotNull String id, @Nullable ObjectiveProgression progression);
 
     @Nullable AdvancementObjective getObjective(@NotNull String criterion);
 

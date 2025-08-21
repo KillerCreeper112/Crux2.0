@@ -48,6 +48,7 @@ public interface CruxAdvancementManager<T extends CruxAdvancement> extends Keyed
     default void unloadProgress(@NotNull Player player, @NotNull T... advancements){
         unloadProgress(player.getUniqueId(), advancements);
     }
+    void loadAllUserProgress(@NotNull T... advancements);
 
     void saveProgress(@NotNull UUID uuid, @NotNull T... advancements);
     void loadProgress(@NotNull UUID uuid, @NotNull T... advancements);

@@ -32,9 +32,7 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 
@@ -111,6 +109,62 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
         }
         if(loadConsumer != null) loadConsumer.accept(this);
         loadAllCrazyAdvancements();
+    }
+
+    public void forEachSaveFile(@NotNull Plugin plugin, @NotNull Consumer<File> consumer){
+        File[] files = CruxFolder.file(plugin, "data/cruxadvancements/" + key.asString().replace(":", "_"))
+            .listFiles();
+        if(files == null) return;
+        for(File f : files){
+            if(!f.getName().endsWith(".json")) continue;
+            consumer.accept(f);
+        }
+    }
+
+    @Override
+    public void loadAllUserProgress(@NotNull CrazyAdvancement... advancements) {
+        if(advancements.length == 0) advancements = this.advancements.values().toArray(new CrazyAdvancement[0]);
+
+        @NotNull CrazyAdvancement[] finalAdvancements = advancements;
+        forEachSaveFile(plugin, file ->{
+            CruxJson cfg = new CruxJson(file);
+            JsonObject json = cfg.json();
+            if(json==null){
+                cfg.close();
+                return;
+            }
+            if(!(json.get("values") instanceof JsonObject values)){
+                cfg.close();
+                return;
+            }
+            cfg.close();
+            JsonRegistry registry = cfg.jsonRegistry();
+            JsonContext ctx = new JsonContext(registry);
+
+            String uuid = CruxFolder.withoutFileExtension(file.getName());
+            for(CrazyAdvancement a : finalAdvancements){
+                if(!(values.get(a.key().asString()) instanceof JsonObject o)) continue;
+                JsonElement ele = o.get("progress");
+                if(ele != null){
+                    CruxAdvancementProgress progress = FileCruxAdvancementProgress.deserialize(
+                        ctx,
+                        FileElement.fromJson(ele),
+                        a.getCriteria()
+                    );
+                    if(progress!=null){
+                        a.setProgress(uuid, progress);
+                    }
+                }
+                ele = o.get("objective_progress");
+                if(ele != null && a instanceof ObjectiveAdvancement op){
+                    SimpleObjectiveProgression objectiveProgression = FileSimpleObjectiveProgression.deserialize(
+                        ctx, FileElement.fromJson(ele), op
+                    );
+                    if(objectiveProgression == null) continue;
+                    a.setObjectiveProgress(uuid, objectiveProgression);
+                }
+            }
+        });
     }
 
     @Override

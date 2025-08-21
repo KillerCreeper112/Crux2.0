@@ -27,15 +27,13 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 
-public class CfgSimpleAdvancementManager<T extends ObjectiveAdvancement> extends SimpleAdvancementManager<T> {
-    public static CfgSimpleAdvancementManager<ObjectiveAdvancement> createNew(@NotNull Key key, @NotNull CruxPlugin plugin, String fileLoadingPath){
-        return new CfgSimpleAdvancementManager<>(key, plugin, fileLoadingPath);
+public class CfgSimpleAdvancementManager extends SimpleAdvancementManager<ObjectiveAdvancement> {
+    public static CfgSimpleAdvancementManager createNew(@NotNull Key key, @NotNull CruxPlugin plugin, String fileLoadingPath){
+        return new CfgSimpleAdvancementManager(key, plugin, fileLoadingPath);
     }
 
     protected final @NotNull CruxPlugin plugin;
@@ -55,8 +53,18 @@ public class CfgSimpleAdvancementManager<T extends ObjectiveAdvancement> extends
             "/" + player);
     }
 
-    public @NotNull Collection<T> parseAdvancements(@NotNull File folder){
-        Collection list = new HashSet<>();
+    public void forEachSaveFile(@NotNull Plugin plugin, @NotNull Consumer<File> consumer){
+        File[] files = CruxFolder.file(plugin, "data/cruxadvancements/" + key.asString().replace(":", "_"))
+            .listFiles();
+        if(files == null) return;
+        for(File f : files){
+            if(!f.getName().endsWith(".json")) continue;
+            consumer.accept(f);
+        }
+    }
+
+    public @NotNull Collection<ObjectiveAdvancement> parseAdvancements(@NotNull File folder){
+        Collection<ObjectiveAdvancement> list = new HashSet<>();
         new ObjectiveAdvancementCfgLoader(plugin, list::add).loadConfiguration(folder, key().value());
         return list;
     }
@@ -75,7 +83,7 @@ public class CfgSimpleAdvancementManager<T extends ObjectiveAdvancement> extends
         for(Player p : plugin.getServer().getOnlinePlayers()){
             saveProgress(p.getUniqueId());
         }
-        for(T a : new HashSet<>(advancements.values())){
+        for(ObjectiveAdvancement a : new HashSet<>(advancements.values())){
             unregisterAdvancement(a);
         }
         load(plugin, loadConsumer);
@@ -91,7 +99,7 @@ public class CfgSimpleAdvancementManager<T extends ObjectiveAdvancement> extends
     }
 
     public void load(@NotNull Plugin plugin, Consumer<CruxAdvancementManager<?>> loadConsumer) {
-        for(T a : parseAdvancements(getAdvancementsFolder(plugin).file())){
+        for(ObjectiveAdvancement a : parseAdvancements(getAdvancementsFolder(plugin).file())){
             registerAdvancement(a);
 
             if(a instanceof GlobalObjectiveAdvancement){
@@ -106,8 +114,14 @@ public class CfgSimpleAdvancementManager<T extends ObjectiveAdvancement> extends
     }
 
     @Override
-    public void saveProgress(@NotNull UUID uuid, @NotNull T... advancements) {
-        if(advancements.length == 0) advancements = (T[]) this.advancements.values().toArray(new ObjectiveAdvancement[0]);
+    public void saveProgress(@NotNull UUID uuid, @NotNull ObjectiveAdvancement... advancements) {
+        /*List<ObjectiveAdvancement> advList;
+        if (advancements.length == 0) {
+            advList = new ArrayList<>(this.advancements.values());
+        } else {
+            advList = Arrays.asList(advancements);
+        }*/
+        if(advancements.length == 0) advancements = this.advancements.values().toArray(new ObjectiveAdvancement[0]);
 
         CruxJson cfg = getSaveFile(plugin, uuid);
         cfg.reloadIfNeeded();
@@ -115,7 +129,7 @@ public class CfgSimpleAdvancementManager<T extends ObjectiveAdvancement> extends
         JsonRegistry registry = cfg.jsonRegistry();
         JsonObject values = new JsonObject();
         JsonContext ctx = new JsonContext(registry);
-        for(T a : advancements){
+        for(ObjectiveAdvancement a : advancements){
             CruxAdvancementProgress progress = a.getProgressIfPresent(uuid);
             ObjectiveProgression objectiveProgression = a.getObjectiveProgressIfPresent(uuid);
             if(progress==null && objectiveProgression == null) continue;
@@ -136,8 +150,14 @@ public class CfgSimpleAdvancementManager<T extends ObjectiveAdvancement> extends
     }
 
     @Override
-    public void loadProgress(@NotNull UUID uuid, @NotNull T... advancements) {
-        if(advancements.length == 0) advancements = (T[]) this.advancements.values().toArray(new ObjectiveAdvancement[0]);
+    public void loadProgress(@NotNull UUID uuid, @NotNull ObjectiveAdvancement... advancements) {
+        if(advancements.length == 0) advancements = this.advancements.values().toArray(new ObjectiveAdvancement[0]);
+        //List<ObjectiveAdvancement> advList;
+        /*if (advancements.length == 0) {
+            advList = new ArrayList<>(this.advancements.values());
+        } else {
+            advList = Arrays.asList(advancements);
+        }*/
 
         CruxJson cfg = getSaveFile(plugin, uuid);
         if(!cfg.file().exists()){
@@ -157,7 +177,7 @@ public class CfgSimpleAdvancementManager<T extends ObjectiveAdvancement> extends
         JsonRegistry registry = cfg.jsonRegistry();
 
         JsonContext ctx = new JsonContext(registry);
-        for(T a : advancements){
+        for(ObjectiveAdvancement a : advancements){
             if(!(values.get(a.key().asString()) instanceof JsonObject o)) continue;
             JsonElement ele = o.get("progress");
             if(ele != null){
@@ -179,5 +199,57 @@ public class CfgSimpleAdvancementManager<T extends ObjectiveAdvancement> extends
                 a.setObjectiveProgress(uuid, objectiveProgression);
             }
         }
+    }
+
+    @Override
+    public void loadAllUserProgress(@NotNull ObjectiveAdvancement... advancements) {
+        if(advancements.length == 0) advancements = this.advancements.values().toArray(new ObjectiveAdvancement[0]);
+        /*List<ObjectiveAdvancement> advList;
+        if (advancements.length == 0) {
+            advList = new ArrayList<>(this.advancements.values());
+        } else {
+            advList = Arrays.asList(advancements);
+        }*/
+
+        @NotNull ObjectiveAdvancement[] finalAdvancements = advancements;
+        forEachSaveFile(plugin, file ->{
+            CruxJson cfg = new CruxJson(file);
+            JsonObject json = cfg.json();
+            if(json==null){
+                cfg.close();
+                return;
+            }
+            if(!(json.get("values") instanceof JsonObject values)){
+                cfg.close();
+                return;
+            }
+            cfg.close();
+            JsonRegistry registry = cfg.jsonRegistry();
+            JsonContext ctx = new JsonContext(registry);
+
+            String uuid = CruxFolder.withoutFileExtension(file.getName());
+            for(ObjectiveAdvancement a : finalAdvancements){
+                if(!(values.get(a.key().asString()) instanceof JsonObject o)) continue;
+                JsonElement ele = o.get("progress");
+                if(ele != null){
+                    CruxAdvancementProgress progress = FileCruxAdvancementProgress.deserialize(
+                        ctx,
+                        FileElement.fromJson(ele),
+                        a.getCriteria()
+                    );
+                    if(progress!=null){
+                        a.setProgress(uuid, progress);
+                    }
+                }
+                ele = o.get("objective_progress");
+                if(ele != null && a instanceof ObjectiveAdvancement op){
+                    SimpleObjectiveProgression objectiveProgression = FileSimpleObjectiveProgression.deserialize(
+                        ctx, FileElement.fromJson(ele), op
+                    );
+                    if(objectiveProgression == null) continue;
+                    a.setObjectiveProgress(uuid, objectiveProgression);
+                }
+            }
+        });
     }
 }
