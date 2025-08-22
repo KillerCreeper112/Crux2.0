@@ -1,5 +1,6 @@
 package killercreepr.cruxadvancements.core.advancement.progress.global;
 
+import killercreepr.crux.api.data.Holder;
 import killercreepr.cruxadvancements.api.advancement.progress.CruxAdvancementProgress;
 import killercreepr.cruxadvancements.api.advancement.progress.CruxCriterionProgress;
 import killercreepr.cruxadvancements.core.advancement.criteria.ListCriteria;
@@ -8,8 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GlobalListAdvancementProgress extends ListAdvancementProgress {
-    protected final CruxAdvancementProgress mainProgress;
-    public GlobalListAdvancementProgress(@NotNull ListCriteria criteria, CruxAdvancementProgress mainProgress) {
+    protected final Holder<CruxAdvancementProgress> mainProgress;
+    public GlobalListAdvancementProgress(@NotNull ListCriteria criteria, Holder<CruxAdvancementProgress> mainProgress) {
         super(criteria);
         this.mainProgress = mainProgress;
     }
@@ -30,9 +31,9 @@ public class GlobalListAdvancementProgress extends ListAdvancementProgress {
     public void onProgressChanged(@NotNull String name, @Nullable CruxCriterionProgress progress) {
         super.onProgressChanged(name, progress);
         if(progress == null || !progress.isDone()){
-            mainProgress.revokeCriteria(name);
+            mainProgress.value().revokeCriteria(name);
         }else{
-            mainProgress.grantCriteria(name);
+            mainProgress.value().grantCriteria(name);
         }
     }
 }

@@ -1,5 +1,6 @@
 package killercreepr.cruxadvancements.core.advancement.progress.global;
 
+import killercreepr.crux.api.data.Holder;
 import killercreepr.cruxadvancements.api.advancement.progress.CriteriaResult;
 import killercreepr.cruxadvancements.api.advancement.progress.CruxAdvancementProgress;
 import killercreepr.cruxadvancements.core.advancement.criteria.NumberCriteria;
@@ -7,8 +8,8 @@ import killercreepr.cruxadvancements.core.advancement.progress.NumberAdvancement
 import org.jetbrains.annotations.NotNull;
 
 public class GlobalNumberAdvancementProgress extends NumberAdvancementProgress {
-    protected final CruxAdvancementProgress mainProgress;
-    public GlobalNumberAdvancementProgress(@NotNull NumberCriteria criteria, CruxAdvancementProgress mainProgress) {
+    protected final Holder<CruxAdvancementProgress> mainProgress;
+    public GlobalNumberAdvancementProgress(@NotNull NumberCriteria criteria, Holder<CruxAdvancementProgress> mainProgress) {
         super(criteria);
         this.mainProgress = mainProgress;
     }
@@ -28,7 +29,7 @@ public class GlobalNumberAdvancementProgress extends NumberAdvancementProgress {
 
     @Override
     public int getCriteriaMaxProgress() {
-        return mainProgress.getCriteriaMaxProgress();
+        return mainProgress.value().getCriteriaMaxProgress();
     }
 
     @Override
@@ -36,7 +37,7 @@ public class GlobalNumberAdvancementProgress extends NumberAdvancementProgress {
         CriteriaResult result = super.setCriteriaProgress(amount);
         if(result == CriteriaResult.UNCHANGED) return CriteriaResult.UNCHANGED;
         int difference = result.getNewProgress() - result.getPreviousProgress();
-        mainProgress.setCriteriaProgress(mainProgress.getCriteriaProgress() + difference);
+        mainProgress.value().setCriteriaProgress(mainProgress.value().getCriteriaProgress() + difference);
         return result;
     }
 }

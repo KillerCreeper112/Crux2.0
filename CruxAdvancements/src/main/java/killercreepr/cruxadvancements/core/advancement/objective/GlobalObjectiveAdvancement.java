@@ -1,5 +1,6 @@
 package killercreepr.cruxadvancements.core.advancement.objective;
 
+import killercreepr.crux.api.data.Holder;
 import killercreepr.cruxadvancements.api.advancement.ObjectiveAdvancement;
 import killercreepr.cruxadvancements.api.advancement.criteria.CruxCriteria;
 import killercreepr.cruxadvancements.api.advancement.icon.CruxAdvancementIcon;
@@ -21,6 +22,7 @@ import java.util.UUID;
 
 public class GlobalObjectiveAdvancement extends SimpleObjectiveAdvancement{
     public static final String USER_ID = "_global_";//UUID.nameUUIDFromBytes("_global_".getBytes(StandardCharsets.UTF_8));
+    protected final Holder<CruxAdvancementProgress> mainProgressHolder = this::getMainProgress;
     public GlobalObjectiveAdvancement(@NotNull Key key, @Nullable Key parentKey, @NotNull CruxAdvancementIcon icon, @NotNull CruxCriteria criteria, @Nullable CruxAdvanceReward reward, @NotNull Map<String, AdvancementObjective> objectives, int updateAdvancementPeriod) {
         super(key, parentKey, icon, criteria, reward, objectives, updateAdvancementPeriod);
     }
@@ -56,10 +58,10 @@ public class GlobalObjectiveAdvancement extends SimpleObjectiveAdvancement{
         }
         CruxAdvancementProgress newProgress;
         if(getCriteria() instanceof ListCriteria c){
-            newProgress = new GlobalListAdvancementProgress(c, getMainProgress()).combine(progress);
+            newProgress = new GlobalListAdvancementProgress(c, mainProgressHolder).combine(progress);
         }
         else if(getCriteria() instanceof NumberCriteria c){
-            newProgress = new GlobalNumberAdvancementProgress(c, getMainProgress()).combine(progress);
+            newProgress = new GlobalNumberAdvancementProgress(c, mainProgressHolder).combine(progress);
         }else throw new UnsupportedOperationException("Unsupported criteria " + getCriteria());
 
         super.setProgress(id, newProgress);
@@ -68,10 +70,10 @@ public class GlobalObjectiveAdvancement extends SimpleObjectiveAdvancement{
     @Override
     public @NotNull CruxAdvancementProgress buildProgress(){
         if(getCriteria() instanceof ListCriteria c){
-            return new GlobalListAdvancementProgress(c, getMainProgress());
+            return new GlobalListAdvancementProgress(c, mainProgressHolder);
         }
         if(getCriteria() instanceof NumberCriteria c){
-            return new GlobalNumberAdvancementProgress(c, getMainProgress());
+            return new GlobalNumberAdvancementProgress(c, mainProgressHolder);
         }
         throw new UnsupportedOperationException(getCriteria() + " is an unsupported criteria!");
     }
