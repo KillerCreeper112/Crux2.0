@@ -5,7 +5,6 @@ import eu.endercentral.crazy_advancements.advancement.AdvancementDisplay;
 import eu.endercentral.crazy_advancements.advancement.AdvancementVisibility;
 import killercreepr.crux.api.item.dynamic.DynamicItem;
 import killercreepr.crux.api.text.context.TextParserContext;
-import killercreepr.crux.core.Crux;
 import killercreepr.cruxadvancements.api.advancement.icon.CriterionDisplay;
 import killercreepr.cruxadvancements.api.advancement.icon.CruxAdvancementIcon;
 import killercreepr.cruxadvancements.api.crazy.advancement.AdvancementFrame;

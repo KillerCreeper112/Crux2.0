@@ -7,16 +7,11 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
-import killercreepr.crux.core.command.argument.CruxKeyedArgument;
 import killercreepr.cruxadvancements.api.advancement.CruxAdvancement;
 import killercreepr.cruxadvancements.api.advancement.manager.CruxAdvancementManager;
 import killercreepr.cruxadvancements.core.data.AdvancementPair;
-import killercreepr.cruxadvancements.core.registries.AdvancementRegistries;
-import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 public class CruxAdvancementKeysArgument implements CustomArgumentType.Converted<String, String> {

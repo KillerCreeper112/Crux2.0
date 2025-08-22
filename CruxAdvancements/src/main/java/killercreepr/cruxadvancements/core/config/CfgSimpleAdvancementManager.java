@@ -10,13 +10,10 @@ import killercreepr.cruxadvancements.api.advancement.manager.CruxAdvancementMana
 import killercreepr.cruxadvancements.api.advancement.objective.progress.ObjectiveProgression;
 import killercreepr.cruxadvancements.api.advancement.progress.CruxAdvancementProgress;
 import killercreepr.cruxadvancements.core.advancement.manager.SimpleAdvancementManager;
-import killercreepr.cruxadvancements.core.advancement.objective.GlobalObjectiveAdvancement;
 import killercreepr.cruxadvancements.core.advancement.objective.progress.SimpleObjectiveProgression;
 import killercreepr.cruxadvancements.core.config.handler.FileCruxAdvancementProgress;
 import killercreepr.cruxadvancements.core.config.handler.FileSimpleObjectiveProgression;
 import killercreepr.cruxadvancements.core.config.loader.ObjectiveAdvancementCfgLoader;
-import killercreepr.cruxadvancements.core.data.TrackedAdvancement;
-import killercreepr.cruxadvancements.core.registries.AdvancementRegistries;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxconfig.config.bukkit.file.CruxJson;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -107,10 +104,10 @@ public class CfgSimpleAdvancementManager extends SimpleAdvancementManager<Object
         for(ObjectiveAdvancement a : parseAdvancements(getAdvancementsFolder(plugin).file())){
             registerAdvancement(a);
 
-            if(a instanceof GlobalObjectiveAdvancement){
+            /*if(a instanceof GlobalObjectiveAdvancement){
                 TrackedAdvancement tracked = new TrackedAdvancement(key(), a.key(), true, System.currentTimeMillis());
                 AdvancementRegistries.GLOBAL_ADVANCEMENTS.register(tracked);
-            }
+            }*/
 
             Crux.log(Level.INFO, "Registered ObjectiveAdvancement: " + key() + " -> " + a.key());
         }
@@ -219,7 +216,9 @@ public class CfgSimpleAdvancementManager extends SimpleAdvancementManager<Object
                 if(loadedAlready == null){
                     cfg = getSaveFile(plugin, name);
                     cfg.reloadIfNeeded();
-                    values = new JsonObject();
+                    if(cfg.get("values") instanceof JsonObject o){
+                        values = o;
+                    }else values = new JsonObject();
                     loaded.put(name, Pair.of(cfg, values));
                 }else{
                     cfg = loadedAlready.getFirst();
@@ -247,6 +246,38 @@ public class CfgSimpleAdvancementManager extends SimpleAdvancementManager<Object
             CruxJson cfg = pair.getFirst();
             JsonObject values = pair.getSecond();
             cfg.json().add("values", values);
+            cfg.save();
+        });
+    }
+
+    @Override
+    public void deleteAllUserProgress(@NotNull ObjectiveAdvancement... advancements) {
+        if(advancements.length == 0) advancements = this.advancements.values().toArray(new ObjectiveAdvancement[0]);
+        Map<String, Pair<CruxJson, JsonObject>> loaded = new HashMap<>();
+        for(ObjectiveAdvancement a : advancements){
+            a.getProgressMap().keySet().forEach(name ->{
+                var loadedAlready = loaded.get(name);
+                CruxJson cfg;
+                JsonObject values;
+                if(loadedAlready == null){
+                    cfg = getSaveFile(plugin, name);
+                    cfg.reloadIfNeeded();
+                    if(!(cfg.get("values") instanceof JsonObject o)) return;
+                    if(!o.has(a.key().asString())) return;
+                    values = o;
+                    loaded.put(name, Pair.of(cfg, values));
+                }else{
+                    cfg = loadedAlready.getFirst();
+                    values = loadedAlready.getSecond();
+                }
+                values.remove(a.key().asString());
+            });
+        }
+        loaded.forEach((name, pair) ->{
+            CruxJson cfg = pair.getFirst();
+            JsonObject values = pair.getSecond();
+            if(values.isEmpty()) cfg.json().remove("values");
+            else cfg.json().add("values", values);
             cfg.save();
         });
     }

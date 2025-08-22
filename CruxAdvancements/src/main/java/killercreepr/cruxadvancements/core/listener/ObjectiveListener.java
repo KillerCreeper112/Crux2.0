@@ -1,11 +1,9 @@
 package killercreepr.cruxadvancements.core.listener;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
-import io.papermc.paper.event.block.CompostItemEvent;
 import io.papermc.paper.event.block.PlayerShearBlockEvent;
 import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
 import io.papermc.paper.event.player.PlayerTradeEvent;
-import killercreepr.crux.api.entity.memory.EntityMemory;
 import killercreepr.crux.api.event.CruxEntityDeathEvent;
 import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.loot.LootContext;

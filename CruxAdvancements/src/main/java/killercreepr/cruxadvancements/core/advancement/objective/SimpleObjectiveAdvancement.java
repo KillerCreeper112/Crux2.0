@@ -6,7 +6,6 @@ import killercreepr.cruxadvancements.api.advancement.icon.CruxAdvancementIcon;
 import killercreepr.cruxadvancements.api.advancement.objective.AdvancementObjective;
 import killercreepr.cruxadvancements.api.advancement.objective.progress.ObjectiveProgress;
 import killercreepr.cruxadvancements.api.advancement.objective.progress.ObjectiveProgression;
-import killercreepr.cruxadvancements.api.advancement.progress.CruxAdvancementProgress;
 import killercreepr.cruxadvancements.api.advancement.reward.CruxAdvanceReward;
 import killercreepr.cruxadvancements.core.advancement.SimpleAdvancement;
 import killercreepr.cruxadvancements.core.advancement.objective.progress.NumberObjectiveProgress;

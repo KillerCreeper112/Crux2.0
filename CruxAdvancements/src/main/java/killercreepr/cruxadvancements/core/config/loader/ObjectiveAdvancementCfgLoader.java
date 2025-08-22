@@ -3,8 +3,6 @@ package killercreepr.cruxadvancements.core.config.loader;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.cruxadvancements.api.advancement.ObjectiveAdvancement;
 import killercreepr.cruxadvancements.core.config.CruxConfigHook;
-import killercreepr.cruxadvancements.crazy.advancement.CrazyAdvancement;
-import killercreepr.cruxadvancements.crazy.advancement.CrazyAdvancementsHook;
 import killercreepr.cruxconfig.config.bukkit.loader.CfgLoader;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileObject;

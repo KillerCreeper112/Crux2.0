@@ -218,6 +218,38 @@ public class CfgCrazyAdvancementManager extends CrazyAdvancementManager<CrazyAdv
     }
 
     @Override
+    public void deleteAllUserProgress(@NotNull CrazyAdvancement... advancements) {
+        if(advancements.length == 0) advancements = this.advancements.values().toArray(new CrazyAdvancement[0]);
+        Map<String, Pair<CruxJson, JsonObject>> loaded = new HashMap<>();
+        for(ObjectiveAdvancement a : advancements){
+            a.getProgressMap().keySet().forEach(name ->{
+                var loadedAlready = loaded.get(name);
+                CruxJson cfg;
+                JsonObject values;
+                if(loadedAlready == null){
+                    cfg = getSaveFile(plugin, name);
+                    cfg.reloadIfNeeded();
+                    if(!(cfg.get("values") instanceof JsonObject o)) return;
+                    if(!o.has(a.key().asString())) return;
+                    values = o;
+                    loaded.put(name, Pair.of(cfg, values));
+                }else{
+                    cfg = loadedAlready.getFirst();
+                    values = loadedAlready.getSecond();
+                }
+                values.remove(a.key().asString());
+            });
+        }
+        loaded.forEach((name, pair) ->{
+            CruxJson cfg = pair.getFirst();
+            JsonObject values = pair.getSecond();
+            if(values.isEmpty()) cfg.json().remove("values");
+            else cfg.json().add("values", values);
+            cfg.save();
+        });
+    }
+
+    @Override
     public void saveProgress(@NotNull UUID uuid, @NotNull CrazyAdvancement... advancements) {
         if(advancements.length == 0) advancements = this.advancements.values().toArray(new CrazyAdvancement[0]);
 
