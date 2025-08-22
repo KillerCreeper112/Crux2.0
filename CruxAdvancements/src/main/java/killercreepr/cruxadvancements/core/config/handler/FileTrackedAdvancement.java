@@ -1,6 +1,7 @@
 package killercreepr.cruxadvancements.core.config.handler;
 
 import killercreepr.crux.core.util.CruxObjects;
+import killercreepr.cruxadvancements.core.data.AdvancementPair;
 import killercreepr.cruxadvancements.core.data.TrackedAdvancement;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
@@ -27,7 +28,12 @@ public class FileTrackedAdvancement implements FileObjectHandler<TrackedAdvancem
         FileRegistry registry = ctx.getRegistry();
         Key manager = registry.deserializeFromFile(Key.class, o.get("manager"));
         Key advancement = registry.deserializeFromFile(Key.class, o.get("advancement"));
-        if(CruxObjects.checkNull(manager, advancement)) return null;
+        if(manager == null){
+            AdvancementPair pair = AdvancementPair.pair(advancement);
+            advancement = pair.getAdvancementKey();
+            manager = pair.getManagerKey();
+        }
+        if(CruxObjects.checkNull(advancement)) return null;
         long time = o.getOrDefaultObject(Long.class,"time_started", System.currentTimeMillis());
         return new TrackedAdvancement(manager, advancement, time);
     }
