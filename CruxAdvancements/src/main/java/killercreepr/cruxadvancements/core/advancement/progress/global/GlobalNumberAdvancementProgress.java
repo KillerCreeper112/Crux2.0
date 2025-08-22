@@ -24,7 +24,7 @@ public class GlobalNumberAdvancementProgress extends NumberAdvancementProgress {
 
     @Override
     public boolean checkAllGranted() {
-        return ((NumberAdvancementProgress)mainProgress).checkAllGranted();
+        return ((NumberAdvancementProgress)mainProgress.value()).checkAllGranted();
     }
 
     @Override
