@@ -105,9 +105,21 @@ public class ConfigMenu extends BukkitMenu implements CfgMenu {
     public Map<Integer, MenuItem> buildItems(@NotNull MenuItems items, @NotNull MenuContext menuContext){
         Entity viewer = info.getOrThrow("viewer", Entity.class);
         Map<Integer, MenuItem> map = new HashMap<>();
+        DataExchange info = menuContext.getAllMergedInfo();
         items.forEach(list -> list.forEach(menuItem ->{
             MenuItem i = menuItem.getDisplayItem(viewer, menuContext);
             Optional<List<Number>> slot = i.getSlots();
+            if(slot.isEmpty() && info.has("menu_items_slots")){
+                Number num = info.get("menu_items_slots", Number.class);
+                if(num != null){
+                    slot = Optional.of(List.of(num));
+                }else{
+                    List<Number> numList = info.get("menu_items_slots", List.class);
+                    if(numList != null){
+                        slot = Optional.of(numList);
+                    }
+                }
+            }
 
             if(slot.isEmpty() || !i.canDisplay()) return;
             slot.get().forEach(num -> map.put(num.intValue(), i));

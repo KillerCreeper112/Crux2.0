@@ -24,8 +24,13 @@ public class FileTrackedAdvancement implements FileObjectHandler<TrackedAdvancem
 
     @Override
     public @Nullable TrackedAdvancement deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
-        if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = ctx.getRegistry();
+        if(!(e instanceof FileObject o)){
+            Key advancement = registry.deserializeFromFile(Key.class,e);
+            if(advancement == null) return null;
+            AdvancementPair pair = AdvancementPair.pair(advancement);
+            return new TrackedAdvancement(pair.getManagerKey(), pair.getAdvancementKey(), System.currentTimeMillis());
+        }
         Key manager = registry.deserializeFromFile(Key.class, o.get("manager"));
         Key advancement = registry.deserializeFromFile(Key.class, o.get("advancement"));
         if(manager == null){
