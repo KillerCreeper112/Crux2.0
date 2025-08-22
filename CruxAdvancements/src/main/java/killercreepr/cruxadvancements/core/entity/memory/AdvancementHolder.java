@@ -129,14 +129,17 @@ public class AdvancementHolder extends PlayerDataHolder implements Loadable {
         cfg.save();
     }
 
+    public boolean loadGlobal(TrackedAdvancement tracked){
+        if(advancementTracker.isTracking(tracked)) return false;
+        CruxAdvancement advancement = tracked.getAdvancement();
+        if(advancement == null) return false;
+        if(advancement.isGranted(parent.getUUID())) return false;
+        advancementTracker.track(tracked);
+        return true;
+    }
+
     public void loadGlobal(){
-        AdvancementRegistries.GLOBAL_ADVANCEMENTS.forEach(tracked ->{
-            if(advancementTracker.isTracking(tracked)) return;
-            CruxAdvancement advancement = tracked.getAdvancement();
-            if(advancement == null) return;
-            if(advancement.isGranted(parent.getUUID())) return;
-            advancementTracker.track(tracked);
-        });
+        AdvancementRegistries.GLOBAL_ADVANCEMENTS.forEach(this::loadGlobal);
     }
 
     public int getDefaultMaxTrackedAdvancements(){
