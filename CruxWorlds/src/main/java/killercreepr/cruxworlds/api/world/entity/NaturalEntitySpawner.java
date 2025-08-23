@@ -13,22 +13,23 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public interface NaturalEntitySpawner {
-    default void navigate(@NotNull World world, @NotNull CruxPosition center){
-        navigate(world, center, null, null);
+    default CompletableFuture<List<Entity>> navigate(@NotNull World world, @NotNull CruxPosition center){
+        return navigate(world, center, null, null);
     }
-    void navigate(@NotNull World world, @NotNull CruxPosition center,
+    CompletableFuture<List<Entity>> navigate(@NotNull World world, @NotNull CruxPosition center,
                   @Nullable Predicate<NaturalEntitySpawner> canContinue,
                   @Nullable Consumer<NaturalEntitySpawner> onFinish,
                   @Nullable Consumer<Entity> spawnConsumer);
 
-    default void navigate(@NotNull World world, @NotNull CruxPosition center,
+    default CompletableFuture<List<Entity>> navigate(@NotNull World world, @NotNull CruxPosition center,
                   @Nullable Predicate<NaturalEntitySpawner> canContinue,
                   @Nullable Consumer<NaturalEntitySpawner> onFinish){
-        navigate(world, center, canContinue, onFinish, null);
+        return navigate(world, center, canContinue, onFinish, null);
     }
 
     static @NotNull List<Entity> spawn(@NotNull Collection<? extends NaturalEntitySpawn> poll, @NotNull SpawnContext ctx){

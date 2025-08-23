@@ -28,11 +28,6 @@ public class GlobalNumberAdvancementProgress extends NumberAdvancementProgress {
     }
 
     @Override
-    public int getCriteriaMaxProgress() {
-        return mainProgress.value().getCriteriaMaxProgress();
-    }
-
-    @Override
     public @NotNull CriteriaResult setCriteriaProgress(int amount) {
         CriteriaResult result = super.setCriteriaProgress(amount);
         if(result == CriteriaResult.UNCHANGED) return CriteriaResult.UNCHANGED;

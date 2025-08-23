@@ -19,9 +19,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
@@ -118,13 +116,87 @@ public class SimpleNaturalEntityWorldSpawner implements NaturalEntityWorldSpawne
 
     private final Collection<NaturalEntitySpawnGroup> CACHE = new HashSet<>();
     @Override
-    public void navigate(@NotNull World world, @NotNull CruxPosition center,
-                         @Nullable Predicate<NaturalEntitySpawner> canContinue,
-                         @Nullable Consumer<NaturalEntitySpawner> onFinish,
-                         @Nullable Consumer<Entity> spawnConsumer){
+    public CompletableFuture<List<Entity>> navigate(@NotNull World world,
+                                                    @NotNull CruxPosition center,
+                                                    @Nullable Predicate<NaturalEntitySpawner> canContinue,
+                                                    @Nullable Consumer<NaturalEntitySpawner> onFinish,
+                                                    @Nullable Consumer<Entity> spawnConsumer) {
+        CompletableFuture<List<Entity>> future = new CompletableFuture<>();
+        List<Entity> spawnedEntities = Collections.synchronizedList(new ArrayList<>());
+
+        if (!center.getBlock(world).getChunk().isLoaded()) {
+            if (onFinish != null) onFinish.accept(this);
+            future.complete(List.of()); // complete immediately
+            return future;
+        }
+
+        new BukkitRunnable() {
+            private Collection<Block> blocks;
+
+            @Override
+            public void run() {
+                if (blocks == null) {
+                    blocks = random(center.getBlock(world), radius, innerRadius,
+                        CruxMath.random(7500, 10000, random));
+                }
+
+                Block last = null;
+                int amount = CruxMath.random(50, 100);
+
+                for (Block b : new HashSet<>(blocks)) {
+                    blocks.remove(b);
+                    SpawnContext ctx = SpawnContext.simple(b, random);
+                    Collection<NaturalEntitySpawnGroup> list;
+
+                    if (last != null && b.getLocation().distanceSquared(last.getLocation()) < (48 * 48)) {
+                        list = CACHE;
+                    } else {
+                        list = CruxWeightedSupplier.builder(registry.values())
+                            .rolls(1)
+                            .filter(check -> check.canSpawn(ctx))
+                            .build()
+                            .rollList();
+                    }
+                    last = b;
+
+                    if (list.isEmpty()) {
+                        continue;
+                    }
+
+                    Crux.scheduler().runTask(() -> {
+                        for (NaturalEntitySpawnGroup m : list) {
+                            spawnedEntities.addAll(
+                                NaturalEntitySpawner.spawnCreature(
+                                    m.selectRandom(1, ctx), ctx, spawnConsumer
+                                )
+                            );
+                        }
+                    });
+
+                    amount--;
+                    if (amount < 1) break;
+                }
+
+                if (blocks.isEmpty() || (canContinue != null && !canContinue.test(SimpleNaturalEntityWorldSpawner.this))) {
+                    cancel();
+                    if (onFinish != null) onFinish.accept(SimpleNaturalEntityWorldSpawner.this);
+
+                    future.complete(List.copyOf(spawnedEntities));
+                }
+            }
+        }.runTaskTimerAsynchronously(plugin, 0L, 1L);
+
+        return future;
+    }
+
+    /*@Override
+    public CompletableFuture<List<Entity>> navigate(@NotNull World world, @NotNull CruxPosition center,
+                                                    @Nullable Predicate<NaturalEntitySpawner> canContinue,
+                                                    @Nullable Consumer<NaturalEntitySpawner> onFinish,
+                                                    @Nullable Consumer<Entity> spawnConsumer){
         if(!center.getBlock(world).getChunk().isLoaded()){
             if(onFinish != null) onFinish.accept(this);
-            return;
+            return CompletableFuture.completedFuture(List.of());
         }
         new BukkitRunnable(){
             private Collection<Block> blocks;
@@ -154,9 +226,9 @@ public class SimpleNaturalEntityWorldSpawner implements NaturalEntityWorldSpawne
 
                     Crux.scheduler().runTask(() ->{
                         for(NaturalEntitySpawnGroup m : list){
-                            /*NaturalEntitySpawner.spawn(
+                            *//*NaturalEntitySpawner.spawn(
                                 m.selectRandom(CruxMath.random(1, 5), ctx), ctx, spawnConsumer
-                            );*/
+                            );*//*
                             NaturalEntitySpawner.spawnCreature(
                                 m.selectRandom(1, ctx), ctx, spawnConsumer
                             );
@@ -172,7 +244,7 @@ public class SimpleNaturalEntityWorldSpawner implements NaturalEntityWorldSpawne
             }
         }.runTaskTimerAsynchronously(plugin, 0L, 1L);
     }
-
+*/
     public @NotNull Collection<Block> random(@NotNull Block center, int radius, int innerRadius, int rolls){
         Collection<Block> list = new CopyOnWriteArraySet<>();
         for(int i = 0; i < rolls; i++){

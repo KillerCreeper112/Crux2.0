@@ -51,6 +51,12 @@ public class GlobalObjectiveAdvancement extends SimpleObjectiveAdvancement{
     }
 
     @Override
+    public @NotNull CruxAdvancementProgress getProgress(@NotNull String id) {
+        if(id.equals(USER_ID)) return getMainProgress();
+        return super.getProgress(id);
+    }
+
+    @Override
     public void setProgress(@NotNull String id, @Nullable CruxAdvancementProgress progress) {
         if(id.equals(USER_ID) || progress instanceof GlobalListAdvancementProgress || progress instanceof GlobalNumberAdvancementProgress){
             super.setProgress(id, progress);

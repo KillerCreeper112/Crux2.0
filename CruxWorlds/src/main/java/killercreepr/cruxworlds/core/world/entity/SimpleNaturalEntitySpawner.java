@@ -11,13 +11,13 @@ import killercreepr.cruxworlds.api.world.entity.SpawnContext;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Random;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -87,34 +87,104 @@ public class SimpleNaturalEntitySpawner implements NaturalEntitySpawner {
     }
 
     @Override
-    public void navigate(@NotNull World world, @NotNull CruxPosition center,
-                         @Nullable Predicate<NaturalEntitySpawner> canContinue,
-                         @Nullable Consumer<NaturalEntitySpawner> onFinish,
-                         @Nullable Consumer<Entity> spawnConsumer){
-        if(!center.getBlock(world).getChunk().isLoaded()){
-            if(onFinish != null) onFinish.accept(this);
-            return;
+    public CompletableFuture<List<Entity>> navigate(@NotNull World world,
+                                                    @NotNull CruxPosition center,
+                                                    @Nullable Predicate<NaturalEntitySpawner> canContinue,
+                                                    @Nullable Consumer<NaturalEntitySpawner> onFinish,
+                                                    @Nullable Consumer<Entity> spawnConsumer) {
+        CompletableFuture<List<Entity>> future = new CompletableFuture<>();
+
+        if (!center.getBlock(world).getChunk().isLoaded()) {
+            if (onFinish != null) onFinish.accept(this);
+            future.complete(List.of());
+            return future;
         }
+
+        List<Entity> spawnedEntities = Collections.synchronizedList(new ArrayList<>());
         int spawnCount = this.spawnCount.value().intValue();
         int radius = this.radius.value().intValue();
         int innerRadius = this.innerRadius.value().intValue();
         int maxAttempts = maxSpawnAttempts.value().intValue();
         Block centerBlock = center.getBlock(world);
-        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, task ->{
-            for(int i = 0; i < spawnCount; i++){
-                Pair<Collection<NaturalEntitySpawnGroup>, SpawnContext> found = attemptFind(centerBlock, radius, innerRadius, yCheck.getMinValue().intValue(), yCheck.getMaxValue().intValue(), maxAttempts);
-                if(found == null) continue;
-                plugin.getServer().getScheduler().runTask(plugin, ignored ->{
+
+        AtomicInteger pending = new AtomicInteger(spawnCount);
+
+        for (int i = 0; i < spawnCount; i++) {
+            Pair<Collection<NaturalEntitySpawnGroup>, SpawnContext> found = attemptFind(
+                centerBlock, radius, innerRadius,
+                yCheck.getMinValue().intValue(), yCheck.getMaxValue().intValue(),
+                maxAttempts
+            );
+
+            if (found == null) {
+                // If attempt failed, decrement immediately
+                if (pending.decrementAndGet() == 0) {
+                    if (onFinish != null) onFinish.accept(this);
+                    future.complete(List.copyOf(spawnedEntities));
+                }
+                continue;
+            }
+
+            plugin.getServer().getScheduler().runTask(plugin, ignored -> {
+                try {
                     SpawnContext ctx = found.getSecond();
-                    for(NaturalEntitySpawnGroup m : found.getFirst()){
-                        NaturalEntitySpawner.spawn(
-                            m.selectRandom(groupSpawnAmount.value().intValue(), ctx), ctx, spawnConsumer
+                    for (NaturalEntitySpawnGroup m : found.getFirst()) {
+                        spawnedEntities.addAll(
+                            NaturalEntitySpawner.spawn(
+                                m.selectRandom(groupSpawnAmount.value().intValue(), ctx),
+                                ctx,
+                                spawnConsumer
+                            )
                         );
                     }
-                });
-            }
-        });
+                } finally {
+                    // When this task finishes, check if all are done
+                    if (pending.decrementAndGet() == 0) {
+                        if (onFinish != null) onFinish.accept(this);
+                        future.complete(List.copyOf(spawnedEntities));
+                    }
+                }
+            });
+        }
+
+        return future;
     }
+
+
+    /*@Override
+    public CompletableFuture<List<Entity>> navigate(@NotNull World world, @NotNull CruxPosition center,
+                                      @Nullable Predicate<NaturalEntitySpawner> canContinue,
+                                      @Nullable Consumer<NaturalEntitySpawner> onFinish,
+                                      @Nullable Consumer<Entity> spawnConsumer){
+        CompletableFuture<List<Entity>> future = new CompletableFuture<>();
+        if(!center.getBlock(world).getChunk().isLoaded()){
+            if(onFinish != null) onFinish.accept(this);
+            future.complete(List.of());
+            return future;
+        }
+        List<Entity> spawnedEntities = Collections.synchronizedList(new ArrayList<>());
+        int spawnCount = this.spawnCount.value().intValue();
+        int radius = this.radius.value().intValue();
+        int innerRadius = this.innerRadius.value().intValue();
+        int maxAttempts = maxSpawnAttempts.value().intValue();
+        Block centerBlock = center.getBlock(world);
+
+        for(int i = 0; i < spawnCount; i++){
+            Pair<Collection<NaturalEntitySpawnGroup>, SpawnContext> found = attemptFind(centerBlock, radius, innerRadius, yCheck.getMinValue().intValue(), yCheck.getMaxValue().intValue(), maxAttempts);
+            if(found == null) continue;
+            plugin.getServer().getScheduler().runTask(plugin, ignored ->{
+                SpawnContext ctx = found.getSecond();
+                for(NaturalEntitySpawnGroup m : found.getFirst()){
+                    spawnedEntities.addAll(
+                        NaturalEntitySpawner.spawn(
+                            m.selectRandom(groupSpawnAmount.value().intValue(), ctx), ctx, spawnConsumer
+                        )
+                    );
+                }
+            });
+        }
+        return future;
+    }*/
 
     public @Nullable Block random(@NotNull Block center, int radius, int innerRadius){
         int x = CruxMath.random(innerRadius, radius, random) * (random.nextBoolean() ? -1 : 1);
