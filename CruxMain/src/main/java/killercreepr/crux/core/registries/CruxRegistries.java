@@ -13,6 +13,7 @@ import killercreepr.crux.api.loot.LootTable;
 import killercreepr.crux.api.registry.KeyedRegistry;
 import killercreepr.crux.api.registry.MappedRegistry;
 import killercreepr.crux.api.registry.Registry;
+import killercreepr.crux.api.registry.index.Index;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.persistence.CruxPersistence;
 import killercreepr.crux.core.plugin.CruxPlugin;
@@ -43,6 +44,7 @@ public class CruxRegistries {
     public static final KeyedRegistry<CruxTick> MAIN_THREAD_TICK = new SimpleKeyedRegistry<>();
 
     public static final MappedRegistry<String, Boolean> BOOLEAN_MAPPED = SimpleMappedRegistry.fromHashMap();
+    public static final MappedRegistry<Key, Index<String, String>> STRING_INDEXES = SimpleMappedRegistry.fromHashMap();
 
     public static final KeyedRegistry<LootTable<ItemStack>> ITEM_LOOT_TABLE = new SimpleKeyedRegistry<>();
     public static final KeyedRegistry<LootTable<Key>> KEY_LOOT_TABLE = new SimpleKeyedRegistry<>();
