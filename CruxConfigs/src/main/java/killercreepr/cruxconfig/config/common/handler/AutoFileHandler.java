@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -61,6 +62,9 @@ public class AutoFileHandler<T> extends SimpleFileHandler<T> {
         FileObject map = new FileObject();
         FileRegistry registry = context.getRegistry();
         for(Field field : CruxReflect.getAllDeclaredFields(object.getClass(), CruxReflect.NON_STATIC(null))){
+            boolean isTransient = Modifier.isTransient(field.getModifiers());
+            if(isTransient) continue;
+
             if(options != null && options.testDisabled(field)) continue;
             try{
                 boolean x = field.canAccess(object);
@@ -90,6 +94,8 @@ public class AutoFileHandler<T> extends SimpleFileHandler<T> {
         Map<String, Object> fields = new LinkedHashMap<>();
         Map<String, FileElement> yamlMap = o.asMap();
         for(Field field : CruxReflect.getAllDeclaredFields(type, CruxReflect.NON_STATIC(null))){
+            boolean isTransient = Modifier.isTransient(field.getModifiers());
+            if(isTransient) continue;
             if(options != null && options.testDisabled(field)) continue;
             String fieldName = field.getName();
 
