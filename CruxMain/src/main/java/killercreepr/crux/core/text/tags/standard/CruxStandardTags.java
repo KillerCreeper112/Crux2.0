@@ -47,7 +47,8 @@ public class CruxStandardTags {
             new CurrentTimeResolver(),
             new ProgressBarResolver(),
             new RomanNumeralResolver(),
-            new HasOccurredWithinResolver()
+            new HasOccurredWithinResolver(),
+            new IndexedResolver()
         );
     }
 
