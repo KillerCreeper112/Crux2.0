@@ -14,10 +14,13 @@ public interface User {
     static User user(@NotNull OfflinePlayer entity){
         return user(entity.getUniqueId(), entity.getName());
     }
-    static User user(@NotNull UUID uuid, String name){
+    static User user(UUID uuid, String name){
         return new SimpleUser(uuid, name);
     }
+    static User userName(String name){
+        return new SimpleUser(null, name);
+    }
 
-    @NotNull UUID uuid();
+    UUID uuid();
     String name();
 }

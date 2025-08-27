@@ -16,17 +16,18 @@ public class SimpleUser implements User {
     }
 
     @Override
-    public @NotNull UUID uuid() {
+    public UUID uuid() {
         return uuid;
     }
 
     @Override
-    public @NotNull String name() {
+    public String name() {
         return name;
     }
 
     @Override
     public int hashCode() {
+        if(uuid == null) return Objects.hashCode(name);
         return Objects.hashCode(uuid);
     }
 
@@ -34,7 +35,11 @@ public class SimpleUser implements User {
     public boolean equals(Object obj) {
         if(obj == this) return true;
         if(!(obj instanceof User u)) return false;
-        return u.uuid().equals(uuid);
+        if(uuid == null){
+            if(u.uuid() != null) return false;
+            return Objects.equals(u.name(), name);
+        }
+        return Objects.equals(u.uuid(), uuid);
     }
 
     @Override
