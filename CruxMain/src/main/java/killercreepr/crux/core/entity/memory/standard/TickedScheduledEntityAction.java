@@ -12,6 +12,9 @@ public abstract class TickedScheduledEntityAction implements ScheduledEntityActi
         this.ticks = ticks;
         this.time = time;
     }
+    public TickedScheduledEntityAction(int ticks) {
+        this(ticks, System.currentTimeMillis());
+    }
 
     @Override
     public boolean isReady(Entity e) {
