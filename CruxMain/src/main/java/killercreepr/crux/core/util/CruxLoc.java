@@ -152,6 +152,24 @@ public class CruxLoc {
     @Contract(pure = true)
     public static @NotNull Location shift(@NotNull Location loc, @NotNull Vector dir, double forward, double up, double right){
         Location newLocation = loc.clone();
+
+        Vector forwardVec = dir.clone().normalize();
+        Vector upWorld = new Vector(0, 1, 0);
+
+        // Right = forward × upWorld
+        Vector rightVec = forwardVec.clone().crossProduct(upWorld).normalize();
+
+        // True up = right × forward (orthogonalize)
+        Vector upVec = rightVec.clone().crossProduct(forwardVec).normalize();
+
+        // Apply offsets
+        newLocation.add(forwardVec.multiply(forward));
+        newLocation.add(rightVec.multiply(right));
+        newLocation.add(upVec.multiply(up));
+
+        return newLocation;
+
+        /*Location newLocation = loc.clone();
         Location locDirection = loc.clone().setDirection(dir);
         //+ FORWARD - BACKWARD
         if(forward != 0D) newLocation.add(locDirection.getDirection().multiply(forward));
@@ -163,9 +181,9 @@ public class CruxLoc {
 
             newLocation.add(sideDirection.multiply(right));
 
-            /*locDirection.setYaw(90 - loc.getYaw());
+            *//*locDirection.setYaw(90 - loc.getYaw());
             locDirection.setPitch(0);
-            newLocation.add(locDirection.getDirection().multiply(right));*/
+            newLocation.add(locDirection.getDirection().multiply(right));*//*
         }
         //+ UP - DOWN
         if(up != 0D){
@@ -173,7 +191,7 @@ public class CruxLoc {
             locDirection.setPitch(loc.getPitch() - 90);
             newLocation.add(locDirection.getDirection().multiply(up));
         }
-        return newLocation;
+        return newLocation;*/
     }
 
     @Contract(pure = true)

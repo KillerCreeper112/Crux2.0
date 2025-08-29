@@ -112,6 +112,8 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
     CruxAttribute SWEEPING_DAMAGE_RATIO = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("sweeping_damage_ratio")));
     CruxAttribute SPAWN_REINFORCEMENTS = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("spawn_reinforcements")));
 
+    CruxAttribute PUSHBACK = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("pushback")));
+    CruxAttribute UPWARDS_PUSHBACK = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("upwards_pushback")));
 
     default double getDefaultValue(){
         return 0D;
