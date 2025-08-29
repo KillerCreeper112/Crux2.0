@@ -75,41 +75,6 @@ public class CruxMath {
         return distanceFalloff(dis, maxRange, effectiveness);
     }
 
-    /**
-     *
-     * @param right In degrees. Negative values will rotate to left
-     * @param up In degrees. Negative values will rotate downwards
-     */
-    @Contract(pure = true)
-    public @NotNull Vector rotateDirection(@NotNull Vector dir, double right, double up) {
-        // Normalize original direction
-        Vector forwardVec = dir.clone().normalize();
-
-        // Convert dir into yaw + pitch
-        double yaw = Math.atan2(-forwardVec.getX(), forwardVec.getZ()); // yaw in radians
-        double pitch = Math.asin(forwardVec.getY()); // pitch in radians
-
-        // Convert your inputs (degrees) to radians
-        double yawOffset = Math.toRadians(right);
-        double pitchOffset = Math.toRadians(up);
-
-        // Apply rotation
-        yaw += yawOffset;
-        pitch += pitchOffset;
-
-        // Clamp pitch to avoid flipping over (optional)
-        double maxPitch = Math.toRadians(89.9);
-        if (pitch > maxPitch) pitch = maxPitch;
-        if (pitch < -maxPitch) pitch = -maxPitch;
-
-        // Rebuild vector from yaw + pitch
-        double x = -Math.sin(yaw) * Math.cos(pitch);
-        double y = Math.sin(pitch);
-        double z = Math.cos(yaw) * Math.cos(pitch);
-
-        return new Vector(x, y, z).normalize();
-    }
-
 
     /**
      *
@@ -143,6 +108,24 @@ public class CruxMath {
     }
     public static long randomSkewed(Random random, long minValue, long maxValue, double skewFactor) {
         return (long) randomSkewed(random, (double) minValue, maxValue, skewFactor);
+    }
+
+    @Contract(pure = true)
+    public static Vector rotateDirection(Vector vector, float yaw, float pitch) {
+        double yawRad = Math.toRadians(-yaw); // Negative yaw for Minecraft coordinate system
+        double pitchRad = Math.toRadians(-pitch);
+
+        // First, rotate around the Y-axis (yaw)
+        double x = vector.getX();
+        double z = vector.getZ();
+        double newX = x * Math.cos(yawRad) - z * Math.sin(yawRad);
+        double newZ = x * Math.sin(yawRad) + z * Math.cos(yawRad);
+
+        // Then, rotate around the X-axis (pitch)
+        double y = vector.getY();
+        double newY = y * Math.cos(pitchRad) - newZ * Math.sin(pitchRad);  // Corrected Y rotation
+        newZ = y * Math.sin(pitchRad) + newZ * Math.cos(pitchRad);  // Corrected Z rotation
+        return new Vector(newX, newY, newZ);
     }
 
     public static void rotateVector(Vector vector, float yaw, float pitch) {
