@@ -399,11 +399,18 @@ public class ComponentInputParsers {
         .field("sound_id",TextInputField.field(PersistTextParser.KEY, e -> e.getSound().name()))
         .field("pitch",TextInputField.field(PersistTextParser.FLOAT, e -> e.getSound().pitch()))
         .field("volume",TextInputField.field(PersistTextParser.FLOAT, e -> e.getSound().volume()))
+        .field("source",TextInputField.field(PersistTextParser.STRING, e -> Sound.Source.NAMES.key(e.getSound().source())))
         .apply(ctx ->{
             Key key = ctx.get("sound_id");
-            float volume = ctx.getOptional("volume", 2f);
+            float volume = ctx.getOptional("volume", 1f);
             float pitch = ctx.getOptional("pitch", 1f);
-            return CreateSound.sound(key, Sound.Source.MASTER, volume, pitch);
+            String sourceID = ctx.getOptional("source");
+            Sound.Source source = Sound.Source.MASTER;
+            if(sourceID != null){
+                source = Sound.Source.NAMES.value(sourceID);
+                if(source == null) source = Sound.Source.MASTER;
+            }
+            return CreateSound.sound(key, source, volume, pitch);
         });
 
     public static PersistTextParser<KeyPredicate> SIMPLE_KEY_PREDICATE = PersistTextParser.elementBuilder(KeyPredicate.class)
