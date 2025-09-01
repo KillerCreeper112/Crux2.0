@@ -56,6 +56,7 @@ import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
@@ -122,6 +123,7 @@ public class BukkitCfgHandlers {
     public static final FileParticle PARTICLE = new FileParticle();
     public static final FileParticleBuilderSupplier PARTICLE_BUILDER_SUPPLIER = new FileParticleBuilderSupplier();
     public static final FileGameRule GAME_RULE = new FileGameRule();
+    public static final FileAttribute ATTRIBUTE = new FileAttribute();
 
 
     public static final FileCruxLevelBasedValue CRUX_LEVEL_BASED_VALUE = new FileCruxLevelBasedValue();
@@ -181,6 +183,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(ParticleBuilderSupplier.class, PARTICLE_BUILDER_SUPPLIER);
         registry.registerFileHandler(PotionType.class, POTION_TYPE);
         registry.registerFileHandler(GameRule.class, GAME_RULE);
+        registry.registerFileHandler(Attribute.class, ATTRIBUTE);
 
         registry.registerFileHandler(StoredWorld.class, STORED_WORLD);
         registry.registerFileHandler(StoredChunk.class, STORED_CHUNK);
