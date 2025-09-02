@@ -1,5 +1,6 @@
 package killercreepr.crux.core.util;
 
+import killercreepr.crux.core.Crux;
 import net.minecraft.util.Mth;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -8,6 +9,8 @@ import org.bukkit.entity.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +29,25 @@ public class CruxEntityUtil {
     };
     public static @NotNull EquipmentSlot[] getGeneralEntitySlots(){
         return GENERAL_SLOTS;
+    }
+
+    public static boolean areOnSameTeam(Entity first, Entity second, boolean trueIfNull){
+        return areOnSameTeam(first, second, trueIfNull, null);
+    }
+
+    public static boolean areOnSameTeam(Entity first, Entity second, boolean trueIfNull, @Nullable Predicate<Team> additionalCheck){
+        return areOnSameTeam(first, second, trueIfNull, additionalCheck, Crux.getServer().getScoreboardManager().getMainScoreboard());
+    }
+
+    public static boolean areOnSameTeam(Entity first, Entity second, boolean trueIfNull, @Nullable Predicate<Team> additionalCheck, Scoreboard board){
+        Team team1 = board.getEntityTeam(first);
+        Team team2 = board.getEntityTeam(second);
+        if(trueIfNull){
+            return Objects.equals(team1, team2) && (additionalCheck == null || additionalCheck.test(team1));
+        }
+        if(team1 == null || team2 == null) return false;
+
+        return Objects.equals(team1, team2) && (additionalCheck == null || additionalCheck.test(team1));
     }
 
     public static boolean isNonSurvival(Entity e){
