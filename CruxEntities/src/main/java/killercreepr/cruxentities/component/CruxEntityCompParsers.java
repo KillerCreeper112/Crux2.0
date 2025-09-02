@@ -2,6 +2,7 @@ package killercreepr.cruxentities.component;
 
 import killercreepr.crux.api.component.parser.hybrid.PersistTextParser;
 import killercreepr.crux.api.component.parser.hybrid.TextInputField;
+import killercreepr.crux.core.component.parser.type.ComponentInputParsers;
 import killercreepr.cruxworlds.core.component.CruxWorldsParsers;
 
 public class CruxEntityCompParsers {
@@ -10,5 +11,15 @@ public class CruxEntityCompParsers {
         .field("spawns", TextInputField.field(CruxWorldsParsers.NATURAL_ENTITY_SPAWN_GROUP, CreatureSpawnerCfg::getSpawns))
         .apply(ctx ->{
             return new CreatureSpawnerCfg(ctx.get("spawns"));
+        });
+    public static final PersistTextParser<LaunchDrops> LAUNCH_DROPS = PersistTextParser
+        .mapBuilder(LaunchDrops.class)
+        .field("force", TextInputField.field(ComponentInputParsers.NUMBER_PROVIDER, LaunchDrops::force))
+        .field("force_y", TextInputField.field(ComponentInputParsers.NUMBER_PROVIDER, LaunchDrops::yForce))
+        .apply(ctx ->{
+            return new LaunchDrops(
+                ctx.get("force"),
+                ctx.get("force_y")
+            );
         });
 }

@@ -1,13 +1,19 @@
 package killercreepr.cruxentities.listener;
 
 import com.destroystokyo.paper.event.entity.EntityZapEvent;
+import killercreepr.crux.api.entity.CruxEntity;
+import killercreepr.crux.api.event.CruxEntityDeathEvent;
 import killercreepr.crux.core.persistence.CruxPersist;
+import killercreepr.cruxentities.component.CruxEntityComponents;
+import killercreepr.cruxentities.component.LaunchDrops;
 import killercreepr.cruxentities.entity.CruxMob;
 import killercreepr.cruxentities.entity.CruxMobMountable;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityMountEvent;
 import org.bukkit.event.entity.EntityTransformEvent;
 
@@ -16,6 +22,20 @@ public class EntityLogicListener implements Listener {
     public void onEntityTransform(EntityTransformEvent event) {
         if(CruxMob.is(event.getEntity())) event.setCancelled(true);
     }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onEntityDeath(EntityDeathEvent event) {
+        if(event.getDrops().isEmpty()) return;
+
+        Entity e = event.getEntity();
+        CruxEntity crux = CruxEntity.entity(e);
+        LaunchDrops launchDrops = crux.get(CruxEntityComponents.LAUNCH_DROPS);
+        if(launchDrops != null){
+            launchDrops.launchDrops(e.getLocation(), event.getDrops());
+            event.getDrops().clear();
+        }
+    }
+
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onEntityZap(EntityZapEvent event) {

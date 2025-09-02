@@ -55,6 +55,10 @@ public class CruxEntityComponents {
         .persistTextParser(CruxEntityCompParsers.CREATURE_SPAWNER_CFG
             .createInput(Crux.key("ominous_creature_spawner_config"))));
 
+    public static final DataComponentType<LaunchDrops> LAUNCH_DROPS = register("launch_drops", builder -> builder
+        .persistTextParser(CruxEntityCompParsers.LAUNCH_DROPS
+            .createInput(Crux.key("launch_drops"))));
+
     private static <T> DataComponentType<T> register(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator){
         return CruxRegistries.DATA_COMPONENT_TYPE.register(Crux.key(id), builderOperator.apply(DataComponentType.builder()).build());
     }

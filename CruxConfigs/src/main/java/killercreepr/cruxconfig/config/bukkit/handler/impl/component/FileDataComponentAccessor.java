@@ -2,7 +2,6 @@ package killercreepr.cruxconfig.config.bukkit.handler.impl.component;
 
 import com.google.common.reflect.TypeToken;
 import killercreepr.crux.api.component.DataComponentAccessor;
-import killercreepr.crux.api.component.DataComponentHandler;
 import killercreepr.crux.api.component.TypedDataComponent;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;

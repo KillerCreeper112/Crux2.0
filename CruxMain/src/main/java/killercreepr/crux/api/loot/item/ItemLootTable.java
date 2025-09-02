@@ -11,10 +11,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public interface ItemLootTable extends LootTable<ItemStack> {
     static void fillInventory(List<ItemLootTable> lootTables, @NotNull Inventory inventory, @NotNull LootContext context){
@@ -51,7 +48,11 @@ public interface ItemLootTable extends LootTable<ItemStack> {
         return list;
     }
 
-    private void shuffleAndSplitItems(List<ItemStack> stacks, int emptySlotsCount, Random random) {
+    default void shuffleAndSplitItems(List<ItemStack> stacks, int emptySlotsCount, Random random){
+        defaultShuffleAndSplitItems(stacks, emptySlotsCount, random);
+    }
+
+    static void defaultShuffleAndSplitItems(Collection<ItemStack> stacks, int emptySlotsCount, Random random) {
         List<ItemStack> list = Lists.newArrayList();
         Iterator<ItemStack> iterator = stacks.iterator();
 
@@ -86,7 +87,9 @@ public interface ItemLootTable extends LootTable<ItemStack> {
         }
 
         stacks.addAll(list);
-        CruxCollection.shuffle(stacks, random);
+        if(stacks instanceof List<ItemStack> listCast){
+            CruxCollection.shuffle(listCast, random);
+        }
     }
 
     /*default void fillInventory(@NotNull Inventory inventory, @NotNull LootContext context) {
