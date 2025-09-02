@@ -1,5 +1,8 @@
 package killercreepr.crux.core.entity;
 
+import killercreepr.crux.api.component.DataComponentAccessor;
+import killercreepr.crux.api.component.DataComponentDefaultAccessor;
+import killercreepr.crux.api.entity.CruxEntity;
 import killercreepr.crux.api.entity.CruxEntitySnapshot;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -12,12 +15,20 @@ import java.util.function.Consumer;
 
 public class BukkitEntitySnapshot implements CruxEntitySnapshot {
     protected final @NotNull EntityType entityType;
-    public BukkitEntitySnapshot(@NotNull EntityType entityType) {
+    protected final DataComponentAccessor components;
+    public BukkitEntitySnapshot(@NotNull EntityType entityType, DataComponentAccessor components) {
         this.entityType = entityType;
+        this.components = components;
     }
 
     @Override
     public @NotNull Entity createEntity(@NotNull Location to, @Nullable Consumer<Entity> consumer) {
-        return to.getWorld().spawnEntity(to, entityType, CreatureSpawnEvent.SpawnReason.CUSTOM, consumer);
+        return to.getWorld().spawnEntity(to, entityType, CreatureSpawnEvent.SpawnReason.CUSTOM, e ->{
+            if(components != null){
+                CruxEntity crux = CruxEntity.entity(e);
+                components.forEach(crux::set);
+            }
+            if(consumer != null) consumer.accept(e);
+        });
     }
 }

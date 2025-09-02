@@ -5,6 +5,7 @@ import killercreepr.crux.api.block.tag.BlockTag;
 import killercreepr.crux.api.component.DataComponentType;
 import killercreepr.crux.api.component.parser.ComponentTextInputParser;
 import killercreepr.crux.api.data.CruxTick;
+import killercreepr.crux.api.entity.CruxEntitySnapshot;
 import killercreepr.crux.api.entity.consumer.CruxEntityConsumer;
 import killercreepr.crux.api.entity.tag.EntityTag;
 import killercreepr.crux.api.item.tag.ItemTag;
@@ -49,6 +50,7 @@ public class CruxRegistries {
     public static final KeyedRegistry<LootTable<ItemStack>> ITEM_LOOT_TABLE = new SimpleKeyedRegistry<>();
     public static final KeyedRegistry<LootTable<Key>> KEY_LOOT_TABLE = new SimpleKeyedRegistry<>();
     public static final KeyedRegistry<LootTable<NumberProvider>> NUMBER_LOOT_TABLE = new SimpleKeyedRegistry<>();
+    public static final KeyedRegistry<LootTable<CruxEntitySnapshot>> CRUX_ENTITY_SNAPSHOT_LOOT_TABLE = new SimpleKeyedRegistry<>();
 
     public static final KeyedRegistry<ItemTag> ITEM_TAG = new SimpleKeyedRegistry<>();
     public static final KeyedRegistry<BlockTag> BLOCK_TAG = new SimpleKeyedRegistry<>();

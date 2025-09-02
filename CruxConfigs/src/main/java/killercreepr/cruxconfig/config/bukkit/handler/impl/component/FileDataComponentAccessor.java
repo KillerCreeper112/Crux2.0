@@ -12,22 +12,22 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public class FileDataComponentHandler implements FileObjectHandler<DataComponentHandler> {
+public class FileDataComponentAccessor implements FileObjectHandler<DataComponentAccessor> {
     @Override
-    public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull DataComponentHandler object) {
+    public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull DataComponentAccessor object) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public @Nullable DataComponentHandler deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
+    public @Nullable DataComponentAccessor deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
         Collection<TypedDataComponent<?>> list = ctx.getRegistry().deserializeFromFile(
             new TypeToken<Collection<TypedDataComponent>>(){}.getType(), e
         );
-        return DataComponentHandler.simple(list);
+        return DataComponentAccessor.simple(list);
     }
 
     @Override
     public @NotNull String jsonSerializerID() {
-        return "data_component_handler";
+        return "data_component_accessor";
     }
 }

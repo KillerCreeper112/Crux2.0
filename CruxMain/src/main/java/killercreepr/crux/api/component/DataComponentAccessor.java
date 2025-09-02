@@ -11,6 +11,10 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public interface DataComponentAccessor extends Iterable<TypedDataComponent<?>> {
+    static DataComponentAccessor simple(Collection<TypedDataComponent<?>> types){
+        return new SimpleImmutable(types);
+    }
+
     @Nullable
     <T> T get(DataComponentType<? extends T> type);
 

@@ -9,6 +9,7 @@ import killercreepr.crux.api.block.tag.BlockTag;
 import killercreepr.crux.api.communication.CreateSound;
 import killercreepr.crux.api.communication.CreateTitle;
 import killercreepr.crux.api.communication.boss.CreateBossBar;
+import killercreepr.crux.api.component.DataComponentAccessor;
 import killercreepr.crux.api.component.DataComponentHandler;
 import killercreepr.crux.api.component.TypedDataComponent;
 import killercreepr.crux.api.data.ParticleBuilderSupplier;
@@ -26,6 +27,7 @@ import killercreepr.crux.api.item.predicate.ItemPredicate;
 import killercreepr.crux.api.item.tag.ItemTag;
 import killercreepr.crux.api.key.tag.KeyTag;
 import killercreepr.crux.api.loot.conditions.LootCondition;
+import killercreepr.crux.api.loot.entity.CruxEntitySnapshotLootTable;
 import killercreepr.crux.api.loot.item.ItemLootFunction;
 import killercreepr.crux.api.loot.item.ItemLootPool;
 import killercreepr.crux.api.loot.item.ItemLootPoolObject;
@@ -43,6 +45,7 @@ import killercreepr.crux.core.math.BlockPos;
 import killercreepr.crux.core.math.LocationPos;
 import killercreepr.crux.paper.ItemHolder;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.*;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileDataComponentAccessor;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileDataComponentHandler;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileTypedDataComponent;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.component.StandardCfgDataComponentTypes;
@@ -114,6 +117,7 @@ public class BukkitCfgHandlers {
     public static final FileCruxBlockWrapper CRUX_BLOCK_WRAPPER = new FileCruxBlockWrapper();
     public static final FileTypedDataComponent TYPED_DATA_COMPONENT = new FileTypedDataComponent();
     public static final FileDataComponentHandler DATA_COMPONENT_HANDLER = new FileDataComponentHandler();
+    public static final FileDataComponentAccessor DATA_COMPONENT_ACCESSOR = new FileDataComponentAccessor();
     public static final FileCruxEntitySnapshot CRUX_ENTITY_SNAPSHOT = new FileCruxEntitySnapshot();
     public static final FileVector VECTOR = new FileVector();
     public static final FileUser USER = new FileUser();
@@ -176,6 +180,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(DynamicAttributeModifier.class, DYNAMIC_ATTRIBUTE_MODIFIER);
         registry.registerFileHandler(KeyLootTable.class, CommonLootTableHandlers.KEY);
         registry.registerFileHandler(NumberLootTable.class, CommonLootTableHandlers.NUMBER);
+        registry.registerFileHandler(CruxEntitySnapshotLootTable.class, CommonLootTableHandlers.CRUX_ENTITY_SNAPSHOT);
         registry.registerFileHandler(User.class, USER);
         registry.registerFileHandler(CruxLevelBasedValue.class, CRUX_LEVEL_BASED_VALUE);
         registry.registerFileHandler(DropFormula.class, DROP_FORMULA);
@@ -191,6 +196,7 @@ public class BukkitCfgHandlers {
         StandardCfgDataComponentTypes.register(TYPED_DATA_COMPONENT.typeHandlers());
         registry.registerFileHandler(TypedDataComponent.class, TYPED_DATA_COMPONENT);
         registry.registerFileHandler(DataComponentHandler.class, DATA_COMPONENT_HANDLER);
+        registry.registerFileHandler(DataComponentAccessor.class, DATA_COMPONENT_ACCESSOR);
 
         StandardFileLootConditions.register(LOOT_CONDITION);
         StandardFileLootFunctions.register(ITEM_LOOT_FUNCTION);
