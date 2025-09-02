@@ -286,4 +286,45 @@ public class CruxEntityUtil {
         }
         return amount;
     }
+
+    public Collection<Entity> getEntitiesInCone(Location origin,
+                                                double range,
+                                                double angleDegrees,
+                                                Predicate<Entity> filter){
+        return getEntitiesInCone(origin, origin.getDirection(), range, angleDegrees, filter);
+    }
+
+    public Collection<Entity> getEntitiesInCone(Location origin, Vector direction,
+                                                double range,
+                                                double angleDegrees,
+                                                Predicate<Entity> filter) {
+        Collection<Entity> result = new ArrayList<>();
+        World world = origin.getWorld();
+        if (world == null) return result;
+
+        // Get all entities within the range
+        for (Entity entity : world.getNearbyEntities(origin, range, range, range)) {
+            if (!CruxEntityUtil.isValid(entity) || entity.getLocation().equals(origin)) continue;
+
+            Vector toEntity = entity.getLocation().toVector().subtract(origin.toVector());
+            double distance = toEntity.length();
+
+            if (distance == 0) continue;
+
+            toEntity.normalize();
+            Vector dirNormalized = direction.clone().normalize();
+
+            // Check if entity is within cone angle
+            double cosTheta = dirNormalized.dot(toEntity); // dot product
+            double theta = Math.acos(cosTheta); // angle in radians
+
+            if (theta <= Math.toRadians(angleDegrees / 2)) {
+                if(filter != null && !filter.test(entity)) continue;
+                result.add(entity);
+            }
+        }
+
+        return result;
+    }
+
 }
