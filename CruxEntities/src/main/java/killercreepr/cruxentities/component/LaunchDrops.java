@@ -37,9 +37,9 @@ public record LaunchDrops(NumberProvider force, NumberProvider yForce) {
             double x = Math.cos(angle);
             double z = Math.sin(angle);
 
-            Vector velocity = new Vector(x, yForce.sample(random).floatValue(), z).normalize().multiply(
+            Vector velocity = new Vector(x, 0, z).normalize().multiply(
                 force.sample(random).floatValue()
-            );
+            ).setY(yForce.sample(random).floatValue());
 
             dropped.setVelocity(velocity);
             i++;
