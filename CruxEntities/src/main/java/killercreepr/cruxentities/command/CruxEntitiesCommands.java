@@ -1,6 +1,7 @@
 package killercreepr.cruxentities.command;
 
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -11,6 +12,10 @@ import io.papermc.paper.math.Position;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import killercreepr.crux.api.communication.Communicator;
+import killercreepr.crux.api.component.DataComponentAccessor;
+import killercreepr.crux.api.component.TypedDataComponent;
+import killercreepr.crux.api.component.parser.DataComponentDecoder;
+import killercreepr.crux.api.entity.CruxEntity;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxentities.command.argument.CruxEntitiesArguments;
@@ -19,6 +24,7 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -61,6 +67,16 @@ public class CruxEntitiesCommands {
                                             ctx.getArgument("location", FinePositionResolver.class).resolve(ctx.getSource()),
                                             ctx.getArgument("amount", Integer.class)
                                         ))
+                                        .then(
+                                            Commands.argument("components", StringArgumentType.greedyString())
+                                                .executes(ctx -> spawn(
+                                                    ctx.getSource(),
+                                                    ctx.getArgument("entity", CruxMob.class),
+                                                    ctx.getArgument("location", FinePositionResolver.class).resolve(ctx.getSource()),
+                                                    ctx.getArgument("amount", Integer.class),
+                                                    DataComponentDecoder.componentDecoder().parseComponents(ctx.getArgument("components", String.class))
+                                                ))
+                                        )
                                 )
                         )
                 )
@@ -78,12 +94,28 @@ public class CruxEntitiesCommands {
         return spawn(source, mob, spawn, amount);
     }
 
+    public static int spawn(@NotNull CommandSourceStack source, @NotNull CruxMob mob, @NotNull Position location, int amount,
+                            Collection<TypedDataComponent<?>> components){
+        Location spawn = location.toLocation(source.getLocation().getWorld());
+        return spawn(source, mob, spawn, amount, components);
+    }
+
     public static int spawn(@NotNull CommandSourceStack source, @NotNull CruxMob mob, @NotNull Location spawn, int amount){
+        return spawn(source, mob, spawn, amount, null);
+    }
+
+    public static int spawn(@NotNull CommandSourceStack source, @NotNull CruxMob mob, @NotNull Location spawn, int amount,
+                            Collection<TypedDataComponent<?>> components){
         for(int i = 0; i < amount; i++){
-            mob.spawn(spawn);
+            mob.spawn(spawn, e ->{
+                if(components != null){
+                    CruxEntity crux = CruxEntity.entity(e);
+                    components.forEach(crux::set);
+                }
+            });
         }
         Communicator.chat("Spawned " + amount + " " + mob.getName() + "'s at " +
-            CruxMath.format(spawn.getX()) + ", " + CruxMath.format(spawn.getY()) + ", " + CruxMath.format(spawn.getZ()))
+                CruxMath.format(spawn.getX()) + ", " + CruxMath.format(spawn.getY()) + ", " + CruxMath.format(spawn.getZ()))
             .use(getExecutor(source));
         return 1;
     }
