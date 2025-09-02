@@ -4,8 +4,10 @@ import com.destroystokyo.paper.event.entity.EntityZapEvent;
 import killercreepr.crux.api.entity.CruxEntity;
 import killercreepr.crux.api.event.CruxEntityDeathEvent;
 import killercreepr.crux.core.persistence.CruxPersist;
+import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxentities.component.CruxEntityComponents;
 import killercreepr.cruxentities.component.LaunchDrops;
+import killercreepr.cruxentities.component.PreventMerge;
 import killercreepr.cruxentities.entity.CruxMob;
 import killercreepr.cruxentities.entity.CruxMobMountable;
 import org.bukkit.entity.Entity;
@@ -16,6 +18,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityMountEvent;
 import org.bukkit.event.entity.EntityTransformEvent;
+import org.bukkit.event.entity.ItemMergeEvent;
 
 public class EntityLogicListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
@@ -33,6 +36,19 @@ public class EntityLogicListener implements Listener {
         if(launchDrops != null){
             launchDrops.launchDrops(e.getLocation(), event.getDrops());
             event.getDrops().clear();
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onItemMerge(ItemMergeEvent event) {
+        Entity e = event.getEntity();
+        CruxEntity crux = CruxEntity.entity(e);
+        PreventMerge preventMerge = crux.get(CruxEntityComponents.PREVENT_MERGE);
+        if(preventMerge != null){
+            if(CruxMath.hasOccurredWithin(preventMerge.time(), preventMerge.ticks())){
+                event.setCancelled(true);
+                return;
+            }
         }
     }
 

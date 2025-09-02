@@ -22,4 +22,14 @@ public class CruxEntityCompParsers {
                 ctx.get("force_y")
             );
         });
+    public static final PersistTextParser<PreventMerge> PREVENT_MERGE = PersistTextParser
+        .mapBuilder(PreventMerge.class)
+        .field("time", TextInputField.field(PersistTextParser.LONG, PreventMerge::time))
+        .field("ticks", TextInputField.field(PersistTextParser.INTEGER, PreventMerge::ticks))
+        .apply(ctx ->{
+            return new PreventMerge(
+                ctx.get("time"),
+                ctx.get("ticks")
+            );
+        });
 }

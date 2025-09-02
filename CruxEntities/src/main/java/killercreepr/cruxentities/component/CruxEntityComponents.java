@@ -59,6 +59,10 @@ public class CruxEntityComponents {
         .persistTextParser(CruxEntityCompParsers.LAUNCH_DROPS
             .createInput(Crux.key("launch_drops"))));
 
+    public static final DataComponentType<PreventMerge> PREVENT_MERGE = register("prevent_merge", builder -> builder
+        .persistTextParser(CruxEntityCompParsers.PREVENT_MERGE
+            .createInput(Crux.key("prevent_merge"))));
+
     private static <T> DataComponentType<T> register(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator){
         return CruxRegistries.DATA_COMPONENT_TYPE.register(Crux.key(id), builderOperator.apply(DataComponentType.builder()).build());
     }

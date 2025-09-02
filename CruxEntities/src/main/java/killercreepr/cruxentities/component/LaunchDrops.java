@@ -1,5 +1,6 @@
 package killercreepr.cruxentities.component;
 
+import killercreepr.crux.api.entity.CruxEntity;
 import killercreepr.crux.api.loot.item.ItemLootTable;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.util.CruxMath;
@@ -18,7 +19,7 @@ public record LaunchDrops(NumberProvider force, NumberProvider yForce) {
         World world = center.getWorld();
         Random random = CruxMath.random();
 
-        ItemLootTable.defaultShuffleAndSplitItems(items, CruxMath.random(8, 16), random);
+        ItemLootTable.defaultShuffleAndSplitItems(items, CruxMath.random(27, 54), random);
 
         int count = items.size();
         double angleStep = (2 * Math.PI) / count;
@@ -26,7 +27,10 @@ public record LaunchDrops(NumberProvider force, NumberProvider yForce) {
         int i = 0;
         for (ItemStack item : items) {
             // spawn the item
-            Item dropped = world.dropItem(center, item);
+            Item dropped = world.dropItem(center, item, e ->{
+                CruxEntity crux = CruxEntity.entity(e);
+                crux.set(CruxEntityComponents.PREVENT_MERGE, new PreventMerge(System.currentTimeMillis(), 200));
+            });
 
             // calculate direction in a circle
             double angle = i * angleStep;
