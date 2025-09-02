@@ -287,7 +287,7 @@ public class CruxEntityUtil {
         return amount;
     }
 
-    public Collection<Entity> getEntitiesInCone(
+    public static Collection<Entity> getEntitiesInCone(
         Location origin,
         double range,
         double horizontalDegrees,
@@ -297,7 +297,7 @@ public class CruxEntityUtil {
         return getEntitiesInCone(origin, origin.getDirection(), range, horizontalDegrees, verticalDegrees, filter);
     }
 
-    public Collection<Entity> getEntitiesInCone(
+    public static Collection<Entity> getEntitiesInCone(
         Location origin,
         double range,
         double degrees,
@@ -306,7 +306,7 @@ public class CruxEntityUtil {
         return getEntitiesInCone(origin, range, degrees, degrees, filter);
     }
 
-    public Collection<Entity> getEntitiesInCone(
+    public static Collection<Entity> getEntitiesInCone(
         Location origin,
         Vector direction,
         double range,
@@ -316,7 +316,7 @@ public class CruxEntityUtil {
         return getEntitiesInCone(origin, direction, range, degrees, degrees, filter);
     }
 
-    public Collection<Entity> getEntitiesInCone(
+    public static Collection<Entity> getEntitiesInCone(
         Location origin,
         Vector direction,
         double range,
