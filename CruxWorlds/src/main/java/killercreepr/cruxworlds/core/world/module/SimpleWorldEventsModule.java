@@ -6,10 +6,10 @@ import killercreepr.cruxworlds.api.world.module.WorldEventsModule;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SimpleWorldEventsModule extends SimpleWorldModule implements WorldEventsModule {
-    protected final @NotNull Collection<WorldEvent> events = new HashSet<>();
+    protected final @NotNull Collection<WorldEvent> events = ConcurrentHashMap.newKeySet();
     public SimpleWorldEventsModule(@NotNull CruxWorld parent) {
         super(parent);
     }
