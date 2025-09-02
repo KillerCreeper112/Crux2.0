@@ -287,38 +287,72 @@ public class CruxEntityUtil {
         return amount;
     }
 
-    public Collection<Entity> getEntitiesInCone(Location origin,
-                                                double range,
-                                                double angleDegrees,
-                                                Predicate<Entity> filter){
-        return getEntitiesInCone(origin, origin.getDirection(), range, angleDegrees, filter);
+    public Collection<Entity> getEntitiesInCone(
+        Location origin,
+        double range,
+        double horizontalDegrees,
+        double verticalDegrees,
+        Predicate<Entity> filter
+    ){
+        return getEntitiesInCone(origin, origin.getDirection(), range, horizontalDegrees, verticalDegrees, filter);
     }
 
-    public Collection<Entity> getEntitiesInCone(Location origin, Vector direction,
-                                                double range,
-                                                double angleDegrees,
-                                                Predicate<Entity> filter) {
+    public Collection<Entity> getEntitiesInCone(
+        Location origin,
+        double range,
+        double degrees,
+        Predicate<Entity> filter
+    ){
+        return getEntitiesInCone(origin, range, degrees, degrees, filter);
+    }
+
+    public Collection<Entity> getEntitiesInCone(
+        Location origin,
+        Vector direction,
+        double range,
+        double degrees,
+        Predicate<Entity> filter
+    ){
+        return getEntitiesInCone(origin, direction, range, degrees, degrees, filter);
+    }
+
+    public Collection<Entity> getEntitiesInCone(
+        Location origin,
+        Vector direction,
+        double range,
+        double horizontalDegrees,
+        double verticalDegrees,
+        Predicate<Entity> filter
+    ) {
         Collection<Entity> result = new ArrayList<>();
         World world = origin.getWorld();
         if (world == null) return result;
 
-        // Get all entities within the range
+        direction = direction.clone().normalize();
+
         for (Entity entity : world.getNearbyEntities(origin, range, range, range)) {
             if (!CruxEntityUtil.isValid(entity) || entity.getLocation().equals(origin)) continue;
 
             Vector toEntity = entity.getLocation().toVector().subtract(origin.toVector());
             double distance = toEntity.length();
-
             if (distance == 0) continue;
 
+            // Normalize for angle calculations
             toEntity.normalize();
-            Vector dirNormalized = direction.clone().normalize();
 
-            // Check if entity is within cone angle
-            double cosTheta = dirNormalized.dot(toEntity); // dot product
-            double theta = Math.acos(cosTheta); // angle in radians
+            // Horizontal (XZ plane)
+            Vector dirHorizontal = new Vector(direction.getX(), 0, direction.getZ()).normalize();
+            Vector toEntityHorizontal = new Vector(toEntity.getX(), 0, toEntity.getZ()).normalize();
+            double horizontalCos = dirHorizontal.dot(toEntityHorizontal);
+            double horizontalAngle = Math.toDegrees(Math.acos(horizontalCos));
 
-            if (theta <= Math.toRadians(angleDegrees / 2)) {
+            // Vertical (Y axis)
+            double verticalCos = direction.getY() * toEntity.getY() +
+                Math.sqrt(direction.getX() * direction.getX() + direction.getZ() * direction.getZ()) *
+                    Math.sqrt(toEntity.getX() * toEntity.getX() + toEntity.getZ() * toEntity.getZ());
+            double verticalAngle = Math.toDegrees(Math.acos(verticalCos));
+
+            if (horizontalAngle <= horizontalDegrees / 2 && verticalAngle <= verticalDegrees / 2) {
                 if(filter != null && !filter.test(entity)) continue;
                 result.add(entity);
             }
@@ -326,5 +360,6 @@ public class CruxEntityUtil {
 
         return result;
     }
+
 
 }
