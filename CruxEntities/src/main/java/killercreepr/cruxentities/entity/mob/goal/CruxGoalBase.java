@@ -42,7 +42,8 @@ public class CruxGoalBase implements ICruxGoal {
         if(e.isInvisible()) return false;
         return e instanceof LivingEntity &&
             e.getType() != EntityType.ARMOR_STAND &&
-            !CruxPersist.IGNORED_MOB_TARGET.has(e);
+            !CruxPersist.IGNORED_MOB_TARGET.has(e) &&
+            !CruxMob.isInCategory(e, MobCategory.ETERNAL);
     };
 
     protected final GoalKey<Mob> key;

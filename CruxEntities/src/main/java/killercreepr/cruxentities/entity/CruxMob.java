@@ -32,7 +32,7 @@ import java.util.function.Predicate;
 public interface CruxMob extends Keyed {
     @NotNull Predicate<Entity> UNDESIRED_BEHAVIOR = e ->{
         if(!CruxEntityUtil.UNDESIRED_BEHAVIOR.test(e)) return false;
-        return !CruxMob.isInCategory(e, MobCategory.OBJECT, MobCategory.ETERNAL);
+        return !CruxMob.isInCategory(e, MobCategory.OBJECT);
     };
 
     static boolean is(@NotNull Entity e, @NotNull CruxMob@NotNull... grim){
