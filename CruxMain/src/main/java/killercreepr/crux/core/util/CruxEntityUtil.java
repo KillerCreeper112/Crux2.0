@@ -296,7 +296,7 @@ public class CruxEntityUtil {
         return amount;
     }
 
-    public static Collection<Entity> getEntitiesInCone(
+    public static List<Entity> getEntitiesInCone(
         Location origin,
         double range,
         double horizontalDegrees,
@@ -306,7 +306,7 @@ public class CruxEntityUtil {
         return getEntitiesInCone(origin, origin.getDirection(), range, horizontalDegrees, verticalDegrees, filter);
     }
 
-    public static Collection<Entity> getEntitiesInCone(
+    public static List<Entity> getEntitiesInCone(
         Location origin,
         double range,
         double degrees,
@@ -315,7 +315,7 @@ public class CruxEntityUtil {
         return getEntitiesInCone(origin, range, degrees, degrees, filter);
     }
 
-    public static Collection<Entity> getEntitiesInCone(
+    public static List<Entity> getEntitiesInCone(
         Location origin,
         Vector direction,
         double range,
@@ -325,7 +325,7 @@ public class CruxEntityUtil {
         return getEntitiesInCone(origin, direction, range, degrees, degrees, filter);
     }
 
-    public static Collection<Entity> getEntitiesInCone(
+    public static List<Entity> getEntitiesInCone(
         Location origin,
         Vector direction,
         double range,
@@ -333,7 +333,7 @@ public class CruxEntityUtil {
         double verticalDegrees,
         Predicate<Entity> filter
     ) {
-        Collection<Entity> result = new ArrayList<>();
+        List<Entity> result = new ArrayList<>();
         World world = origin.getWorld();
         if (world == null) return result;
 
