@@ -1,5 +1,6 @@
 package killercreepr.crux.core.util;
 
+import killercreepr.crux.core.persistence.CruxPersist;
 import net.minecraft.util.Mth;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -18,6 +19,14 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class CruxEntityUtil {
+    public final static @NotNull Predicate<Entity> UNDESIRED_BEHAVIOR = e ->{
+        if(e.getType() == EntityType.UNKNOWN) return false;
+        if(e instanceof Player p){
+            return (p.getGameMode() != GameMode.CREATIVE && p.getGameMode() != GameMode.SPECTATOR) && p.isValid();
+        }
+        return e.isValid();
+    };
+
     private static final @NotNull EquipmentSlot[] GENERAL_SLOTS = new EquipmentSlot[]{
         EquipmentSlot.HEAD,
         EquipmentSlot.CHEST,

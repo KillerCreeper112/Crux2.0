@@ -8,7 +8,9 @@ import killercreepr.crux.api.loot.bukkit.EventLootContexts;
 import killercreepr.crux.api.text.context.InputContext;
 import killercreepr.crux.api.text.tags.container.TagContainer;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
+import killercreepr.crux.core.persistence.CruxPersist;
 import killercreepr.crux.core.registries.CruxRegistries;
+import killercreepr.crux.core.util.CruxEntityUtil;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.crux.core.util.CruxString;
 import killercreepr.cruxentities.persistence.CruxEntitiesPersist;
@@ -16,10 +18,7 @@ import killercreepr.cruxentities.registries.CruxEntityRegistries;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import org.bukkit.Location;
-import org.bukkit.entity.Animals;
-import org.bukkit.entity.Enemy;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Monster;
+import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataHolder;
@@ -28,9 +27,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
-//todo change MobCategory[] to a set or list ._.
 public interface CruxMob extends Keyed {
+    @NotNull Predicate<Entity> UNDESIRED_BEHAVIOR = e ->{
+        if(!CruxEntityUtil.UNDESIRED_BEHAVIOR.test(e)) return false;
+        return !CruxMob.isInCategory(e, MobCategory.OBJECT, MobCategory.ETERNAL);
+    };
+
     static boolean is(@NotNull Entity e, @NotNull CruxMob@NotNull... grim){
         for(CruxMob x : grim){
             if(is(e, x)) return true;

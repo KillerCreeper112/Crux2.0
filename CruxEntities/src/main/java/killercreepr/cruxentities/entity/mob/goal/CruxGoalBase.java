@@ -6,6 +6,7 @@ import killercreepr.crux.api.event.CruxEntityDamageEvent;
 import killercreepr.crux.core.location.DynamicLocation;
 import killercreepr.crux.core.location.EntityLocation;
 import killercreepr.crux.core.persistence.CruxPersist;
+import killercreepr.crux.core.util.CruxEntityUtil;
 import killercreepr.crux.core.util.CruxGoalUtil;
 import killercreepr.crux.core.util.GetEntityNear;
 import killercreepr.crux.core.util.GetNear;
@@ -37,13 +38,11 @@ import java.util.function.Predicate;
 
 public class CruxGoalBase implements ICruxGoal {
     public final static @NotNull Predicate<Entity> UNDESIRED_BEHAVIOR = e ->{
-        if(e.getType() == EntityType.UNKNOWN) return false;
-        if(e instanceof Player p){
-            return (p.getGameMode() != GameMode.CREATIVE && p.getGameMode() != GameMode.SPECTATOR) && p.isValid();
-        }
+        if(!CruxMob.UNDESIRED_BEHAVIOR.test(e)) return false;
         if(e.isInvisible()) return false;
-        return e instanceof LivingEntity && e.getType() != EntityType.ARMOR_STAND && !CruxPersist.IGNORED_MOB_TARGET.has(e) && e.isValid()
-            && !CruxMob.isInCategory(e, MobCategory.OBJECT, MobCategory.ETERNAL);
+        return e instanceof LivingEntity &&
+            e.getType() != EntityType.ARMOR_STAND &&
+            !CruxPersist.IGNORED_MOB_TARGET.has(e);
     };
 
     protected final GoalKey<Mob> key;
