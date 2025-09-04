@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
@@ -192,7 +193,7 @@ public class CruxGoalUtil {
         return goal;
     }
 
-    public static void removeGoals(@NotNull Mob mob, @NotNull Set<String> keys){
+    public static void removeGoals(@NotNull Mob mob, @NotNull Collection<String> keys){
         for (Goal<Mob> goal : Crux.getServer().getMobGoals().getAllGoals(mob)) {
             if(keys.contains(goal.getKey().getNamespacedKey().asString())){
                 Crux.getServer().getMobGoals().removeGoal(mob, goal);
