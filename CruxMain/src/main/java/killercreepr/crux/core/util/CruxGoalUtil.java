@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -189,5 +190,13 @@ public class CruxGoalUtil {
         if(goal==null) return goal;
         Bukkit.getMobGoals().addGoal(mob, priority, goal);
         return goal;
+    }
+
+    public static void removeGoals(@NotNull Mob mob, @NotNull Set<String> keys){
+        for (Goal<Mob> goal : Crux.getServer().getMobGoals().getAllGoals(mob)) {
+            if(keys.contains(goal.getKey().getNamespacedKey().asString())){
+                Crux.getServer().getMobGoals().removeGoal(mob, goal);
+            }
+        }
     }
 }
