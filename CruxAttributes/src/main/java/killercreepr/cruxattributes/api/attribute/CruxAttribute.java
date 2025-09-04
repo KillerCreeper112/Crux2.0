@@ -115,6 +115,8 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
     CruxAttribute PUSHBACK = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("pushback")));
     CruxAttribute UPWARDS_PUSHBACK = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("upwards_pushback")));
 
+    CruxAttribute IMPACT_EFFECTIVENESS = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("impact_effectiveness")));
+
     default double getDefaultValue(){
         return 0D;
     }
