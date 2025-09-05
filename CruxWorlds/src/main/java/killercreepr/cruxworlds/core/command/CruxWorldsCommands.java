@@ -7,13 +7,17 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
+import io.papermc.paper.command.brigadier.argument.resolvers.FinePositionResolver;
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.EntitySelectorArgumentResolver;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.plugin.CruxPlugin;
+import killercreepr.crux.core.util.CruxMath;
 import killercreepr.crux.core.util.CruxWorldUtil;
 import killercreepr.cruxworlds.api.world.CruxWorld;
+import killercreepr.cruxworlds.api.world.entity.NaturalEntitySpawnGroup;
+import killercreepr.cruxworlds.api.world.entity.SpawnContext;
 import killercreepr.cruxworlds.api.world.manager.CruxWorldManager;
 import killercreepr.cruxworlds.api.world.type.CruxWorldType;
 import killercreepr.cruxworlds.core.command.arguments.CruxWorldArgs;
@@ -23,6 +27,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
+import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
@@ -283,9 +288,80 @@ public class CruxWorldsCommands {
                                 )
                         )
                 )
+        ).then(
+            Commands.literal("entity")
+                .then(
+                    Commands.literal("spawn")
+                        .then(
+                            Commands.argument("entity_group", CruxWorldArgs.NATURAL_ENTITY_SPAWN_GROUP)
+                                .executes(ctx ->{
+                                    var sender = getExecutor(ctx.getSource());
+                                    Location loc = getLocation(sender);
+                                    if(loc == null){
+                                        return -1;
+                                    }
+                                    var group = ctx.getArgument("entity_group", NaturalEntitySpawnGroup.class);
+                                    SpawnContext spawnCtx = SpawnContext.simple(loc.getBlock(), CruxMath.random());
+                                    group.selectRandom(1, spawnCtx).forEach(spawn ->{
+                                        spawn.spawn(spawnCtx);
+                                    });
+                                    sender.sendMessage("Spawned 1 roll of mobs.");
+                                    return 1;
+                                })
+                                .then(
+                                    Commands.argument("position", ArgumentTypes.finePosition())
+                                        .executes(ctx ->{
+                                            var sender = getExecutor(ctx.getSource());
+                                            Location loc = getLocation(sender);
+                                            if(loc == null){
+                                                return -1;
+                                            }
+                                            var pos = ctx.getArgument("position", FinePositionResolver.class)
+                                                .resolve(ctx.getSource());
+                                            loc = pos.toLocation(loc.getWorld());
+
+                                            var group = ctx.getArgument("entity_group", NaturalEntitySpawnGroup.class);
+                                            SpawnContext spawnCtx = SpawnContext.simple(loc.getBlock(), CruxMath.random());
+                                            group.selectRandom(1, spawnCtx).forEach(spawn ->{
+                                                spawn.spawn(spawnCtx);
+                                            });
+                                            sender.sendMessage("Spawned 1 roll of mobs.");
+                                            return 1;
+                                        })
+                                        .then(
+                                            Commands.argument("rolls", ArgumentTypes.integerRange())
+                                                .executes(ctx ->{
+                                                    var sender = getExecutor(ctx.getSource());
+                                                    Location loc = getLocation(sender);
+                                                    if(loc == null){
+                                                        return -1;
+                                                    }
+                                                    var pos = ctx.getArgument("position", FinePositionResolver.class)
+                                                        .resolve(ctx.getSource());
+                                                    loc = pos.toLocation(loc.getWorld());
+
+                                                    int rolls = ctx.getArgument("rolls", Integer.class);
+                                                    var group = ctx.getArgument("entity_group", NaturalEntitySpawnGroup.class);
+                                                    SpawnContext spawnCtx = SpawnContext.simple(loc.getBlock(), CruxMath.random());
+                                                    group.selectRandom(rolls, spawnCtx).forEach(spawn ->{
+                                                        spawn.spawn(spawnCtx);
+                                                    });
+                                                    sender.sendMessage("Spawned " + rolls + " rolls of mobs.");
+                                                    return 1;
+                                                })
+                                        )
+                                )
+                        )
+                )
         )
         ;
         return dispatcher.build();
+    }
+
+    public static Location getLocation(CommandSender sender){
+        if(sender instanceof Entity e) return e.getLocation();
+        if(sender instanceof BlockCommandSender s) return s.getBlock().getLocation().toCenterLocation();
+        return null;
     }
 
     public static @NotNull CommandSender getExecutor(@NotNull CommandSourceStack source){
