@@ -110,6 +110,81 @@ public class CruxMath {
         return (long) randomSkewed(random, (double) minValue, maxValue, skewFactor);
     }
 
+    public static int randomSkewedToward(int minValue, int maxValue, double skewFactor,
+                                         int biasPoint) {
+        return randomSkewedToward(random(), minValue, maxValue, skewFactor, biasPoint);
+    }
+    public static long randomSkewedToward(long minValue, long maxValue, double skewFactor, long biasPoint) {
+        return randomSkewedToward(random(), minValue, maxValue, skewFactor, biasPoint);
+    }
+    public static double randomSkewedToward(double minValue, double maxValue, double skewFactor, double biasPoint) {
+        return randomSkewedToward(random(), minValue, maxValue, skewFactor, biasPoint);
+    }
+    public static float randomSkewedToward(float minValue, float maxValue, double skewFactor, float biasPoint) {
+        return randomSkewedToward(random(), minValue, maxValue, skewFactor, biasPoint);
+    }
+
+    public static int randomSkewedToward(Random random, int minValue, int maxValue, double skewFactor,
+                                         int biasPoint) {
+        return (int) randomSkewedToward(random, (double) minValue, maxValue, skewFactor, biasPoint);
+    }
+
+    public static float randomSkewedToward(Random random, float minValue, float maxValue, double skewFactor,
+                                           float biasPoint) {
+        return (float) randomSkewedToward(random, (double) minValue, maxValue, skewFactor, biasPoint);
+    }
+
+    public static long randomSkewedToward(Random random, long minValue, long maxValue, double skewFactor,
+                                          long biasPoint) {
+        return (long) randomSkewedToward(random, (double) minValue, maxValue, skewFactor, biasPoint);
+    }
+    /**
+     * @param random     The source of randomness.
+     * @param minValue   The minimum value of the range (inclusive).
+     * @param maxValue   The maximum value of the range (inclusive).
+     * @param skewFactor Controls how strongly values are biased toward or away from the bias point.
+     *                   - A value greater than 1 makes results more likely to be closer to the bias point.
+     *                   - A value of 1 produces a uniform distribution (no skew).
+     *                   - A value between 0 and 1 makes results less likely near the bias point,
+     *                     instead clustering toward the edges of the range.
+     * @param biasPoint  The value within the range to skew results toward (or away from if skewFactor < 1).
+     * @return A random number within [minValue, maxValue], skewed based on the bias point and skew factor.
+     */
+    public static double randomSkewedToward(
+        Random random,
+        double minValue,
+        double maxValue,
+        double skewFactor,
+        double biasPoint
+    ) {
+        double randomValue = random.nextDouble();
+
+        // Normalize biasPoint into [0,1] relative to min/max
+        double biasNorm = (biasPoint - minValue) / (maxValue - minValue);
+
+        // If bias is outside the range, just clamp
+        biasNorm = Math.max(0, Math.min(1, biasNorm));
+
+        double skewed;
+        if (randomValue < biasNorm) {
+            // Left side: skew distribution toward biasNorm
+            double leftPortion = biasNorm;
+            double scaled = randomValue / leftPortion; // normalize into [0,1]
+            scaled = Math.pow(scaled, 1.0 / skewFactor);
+            skewed = scaled * leftPortion;
+        } else {
+            // Right side: skew distribution toward biasNorm
+            double rightPortion = 1.0 - biasNorm;
+            double scaled = (randomValue - biasNorm) / rightPortion; // normalize into [0,1]
+            scaled = 1 - Math.pow(1 - scaled, 1.0 / skewFactor);
+            skewed = biasNorm + scaled * rightPortion;
+        }
+
+        // Map back to [minValue, maxValue]
+        return minValue + skewed * (maxValue - minValue);
+    }
+
+
     @Contract(pure = true)
     public static Vector rotateDirection(Vector vector, float yaw, float pitch) {
         double yawRad = Math.toRadians(-yaw); // Negative yaw for Minecraft coordinate system

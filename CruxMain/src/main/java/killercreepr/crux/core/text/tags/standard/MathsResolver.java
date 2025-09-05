@@ -42,7 +42,7 @@ public class MathsResolver implements StringResolver {
                     CruxMath.evaluate(ctx.deserializeString(args.get(1)))
                 ) + "";
             }
-            case "randsigned", "randomsigned" ->{
+            case "randsigned", "randomsigned", "random_signed" ->{
                 if(args.has(2)){
                     return CruxMath.randomSigned(
                         CruxMath.evaluate(ctx.deserializeString(args.get(1))),
@@ -52,6 +52,34 @@ public class MathsResolver implements StringResolver {
                 return CruxMath.randomSigned(
                     0D,
                     CruxMath.evaluate(ctx.deserializeString(args.get(1)))
+                ) + "";
+            }
+            case "randskewed", "randomskewed", "random_skewed" ->{
+                if(args.has(3)){
+                    return CruxMath.randomSkewed(
+                        CruxMath.evaluate(ctx.deserializeString(args.get(1))),
+                        CruxMath.evaluate(ctx.deserializeString(args.get(2))),
+                        CruxMath.evaluate(ctx.deserializeString(args.get(3)))
+                    ) + "";
+                }
+                if(args.has(2)){
+                    return CruxMath.randomSkewed(
+                        CruxMath.evaluate(ctx.deserializeString(args.get(1))),
+                        CruxMath.evaluate(ctx.deserializeString(args.get(2))),
+                        1D
+                    ) + "";
+                }
+                return CruxMath.randomSkewed(
+                    0D,
+                    CruxMath.evaluate(ctx.deserializeString(args.get(1))), 1D
+                ) + "";
+            }
+            case "randskewedtoward", "randomskewedtoward", "random_skewed_toward" ->{
+                return CruxMath.randomSkewedToward(
+                    CruxMath.evaluate(ctx.deserializeString(args.get(1))),
+                    CruxMath.evaluate(ctx.deserializeString(args.get(2))),
+                    CruxMath.evaluate(ctx.deserializeString(args.get(3))),
+                    CruxMath.evaluate(ctx.deserializeString(args.get(4)))
                 ) + "";
             }
             case "clamp" ->{
