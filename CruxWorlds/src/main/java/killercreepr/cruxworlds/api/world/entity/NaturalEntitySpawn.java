@@ -1,5 +1,6 @@
 package killercreepr.cruxworlds.api.world.entity;
 
+import killercreepr.crux.api.component.DataComponentAccessor;
 import killercreepr.crux.api.data.holder.DataInfoHolder;
 import killercreepr.crux.api.loot.WeightedObject;
 import killercreepr.cruxworlds.core.world.entity.EmptyNaturalEntitySpawn;
@@ -17,6 +18,7 @@ public interface NaturalEntitySpawn extends WeightedObject, DataInfoHolder {
         return new EmptyNaturalEntitySpawn(weight, quality);
     }
 
+    default void appendComponentsIfNotPresent(DataComponentAccessor components){}
     default @Nullable Entity spawn(@NotNull SpawnContext ctx){
         return spawn(ctx, null);
     }

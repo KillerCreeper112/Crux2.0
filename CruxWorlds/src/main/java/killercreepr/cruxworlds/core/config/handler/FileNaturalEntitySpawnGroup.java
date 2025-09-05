@@ -1,6 +1,7 @@
 package killercreepr.cruxworlds.core.config.handler;
 
 import com.google.common.reflect.TypeToken;
+import killercreepr.crux.api.component.DataComponentAccessor;
 import killercreepr.crux.core.Crux;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
@@ -67,6 +68,12 @@ public class FileNaturalEntitySpawnGroup implements FileObjectHandler<NaturalEnt
         SpawnValidator validator = registry.deserializeFromFile(SpawnValidator.class, o.get("spawn_conditions"));
         //if(validator == null && o.has("spawn_conditions")) validator = new SolidGroundSpawnValidator();
         int rolls = o.getOrDefaultObject(Integer.class, "rolls", 1);
+
+        DataComponentAccessor defaultComponents = registry.deserializeFromFile(DataComponentAccessor.class, o.get("default_components"));
+        if(defaultComponents != null){
+            spawns.forEach(spawn -> spawn.appendComponentsIfNotPresent(defaultComponents));
+        }
+
         if(key != null) return new CfgKeyedNaturalEntitySpawnGroup(weight, quality, spawns, validator, rolls, key);
         return new CfgNaturalEntitySpawnGroup(weight, quality, spawns, validator, rolls);
     }

@@ -1,6 +1,7 @@
 package killercreepr.cruxworlds.core.config.entity;
 
 import killercreepr.crux.api.component.DataComponentAccessor;
+import killercreepr.crux.api.component.DataComponentHandler;
 import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.entity.CruxEntitySnapshot;
 import killercreepr.crux.api.text.context.TextParserContext;
@@ -28,14 +29,22 @@ public class CfgNaturalEntitySpawn extends SimpleNaturalEntitySpawn {
     protected final @NotNull CruxEntitySnapshot entitySnapshot;
     protected final @Nullable SpawnValidator spawnValidator;
     protected final DataExchange info;
-    protected final DataComponentAccessor components;
+    protected final DataComponentHandler components;
     public CfgNaturalEntitySpawn(int weight, float quality, @NotNull CruxEntitySnapshot entitySnapshot, @Nullable SpawnValidator spawnValidator,
-                                 DataExchange info, DataComponentAccessor components) {
+                                 DataExchange info, DataComponentHandler components) {
         super(weight, quality);
         this.entitySnapshot = entitySnapshot;
         this.spawnValidator = spawnValidator;
         this.info = info;
         this.components = components;
+    }
+
+    @Override
+    public void appendComponentsIfNotPresent(DataComponentAccessor components){
+        components.forEach(typed ->{
+            if(this.components.has(typed.getType())) return;
+            this.components.set(typed);
+        });
     }
 
     public @NotNull CruxEntitySnapshot getEntitySnapshot() {
