@@ -1,5 +1,6 @@
 package killercreepr.cruxworlds.core.config.handler;
 
+import killercreepr.crux.api.component.DataComponentAccessor;
 import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.entity.CruxEntitySnapshot;
 import killercreepr.cruxconfig.config.common.FileContext;
@@ -14,6 +15,8 @@ import killercreepr.cruxworlds.core.world.spawning.SolidGroundSpawnValidator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Set;
+
 public class FileNaturalEntitySpawn implements FileObjectHandler<NaturalEntitySpawn> {
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull NaturalEntitySpawn object) {
@@ -26,7 +29,8 @@ public class FileNaturalEntitySpawn implements FileObjectHandler<NaturalEntitySp
         if(!(e instanceof FileObject o)){
             CruxEntitySnapshot snapshot = registry.deserializeFromFile(CruxEntitySnapshot.class, e);
             if(snapshot == null) return null;
-            return new CfgNaturalEntitySpawn(1, 0f, snapshot, new SolidGroundSpawnValidator(), DataExchange.empty());
+            return new CfgNaturalEntitySpawn(1, 0f, snapshot, new SolidGroundSpawnValidator(), DataExchange.empty(),
+                DataComponentAccessor.simple(Set.of()));
         }
 
         CruxEntitySnapshot snapshot = registry.deserializeFromFile(CruxEntitySnapshot.class, o.get("entity"));
@@ -46,6 +50,8 @@ public class FileNaturalEntitySpawn implements FileObjectHandler<NaturalEntitySp
             data = builder.build();
         }
 
-        return new CfgNaturalEntitySpawn(weight, quality, snapshot, validator, data);
+        DataComponentAccessor components = registry.deserializeFromFileOrDefault(DataComponentAccessor.class, o.get("components"),
+            DataComponentAccessor.simple(Set.of()));
+        return new CfgNaturalEntitySpawn(weight, quality, snapshot, validator, data, components);
     }
 }

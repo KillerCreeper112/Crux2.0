@@ -16,6 +16,8 @@ public class CruxWorldsComponents {
     public static final DataComponentType<Long> WORLD_CREATED_AT_TIME = register("world/created_at_time", builder -> builder
         .persistTextParser(PersistTextParser.LONG.createInput(Crux.key("world/created_at_time"))));
 
+    public static final DataComponentType<EntitySpawnPassengers> ENTITY_SPAWN_PASSENGERS = register("entity_spawn/passengers", builder -> builder);
+
     private static <T> DataComponentType<T> register(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator){
         return CruxRegistries.DATA_COMPONENT_TYPE.register(Crux.key(id), builderOperator.apply(DataComponentType.builder()).build());
     }
