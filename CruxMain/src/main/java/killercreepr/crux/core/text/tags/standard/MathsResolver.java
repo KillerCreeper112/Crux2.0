@@ -133,6 +133,17 @@ public class MathsResolver implements StringResolver {
                 double value = CruxMath.evaluate(ctx.deserializeString(args.get(1)));
                 return Math.ceil(value) + "";
             }
+            case "abs", "absolute" ->{
+                double value = CruxMath.evaluate(ctx.deserializeString(args.get(1)));
+                return Math.abs(value) + "";
+            }
+            case "pi" ->{
+                return Math.PI + "";
+            }
+            case "exponent" ->{
+                double value = CruxMath.evaluate(ctx.deserializeString(args.get(1)));
+                return Math.getExponent(value) + "";
+            }
         }
         return "0";
     }
