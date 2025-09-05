@@ -1,6 +1,7 @@
 package killercreepr.cruxworlds.core.command;
 
 import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
@@ -329,7 +330,7 @@ public class CruxWorldsCommands {
                                             return 1;
                                         })
                                         .then(
-                                            Commands.argument("rolls", ArgumentTypes.integerRange())
+                                            Commands.argument("rolls", IntegerArgumentType.integer())
                                                 .executes(ctx ->{
                                                     var sender = getExecutor(ctx.getSource());
                                                     Location loc = getLocation(sender);
