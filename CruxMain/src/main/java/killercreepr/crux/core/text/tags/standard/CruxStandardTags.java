@@ -48,7 +48,8 @@ public class CruxStandardTags {
             new ProgressBarResolver(),
             new RomanNumeralResolver(),
             new HasOccurredWithinResolver(),
-            new IndexedResolver()
+            new IndexedResolver(),
+            new UUIDRandomResolver()
         );
     }
 

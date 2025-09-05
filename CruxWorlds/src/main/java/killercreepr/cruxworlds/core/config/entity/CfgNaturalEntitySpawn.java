@@ -3,13 +3,21 @@ package killercreepr.cruxworlds.core.config.entity;
 import killercreepr.crux.api.component.DataComponentAccessor;
 import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.entity.CruxEntitySnapshot;
+import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.cruxworlds.api.world.entity.SpawnContext;
 import killercreepr.cruxworlds.api.world.spawning.SpawnValidator;
 import killercreepr.cruxworlds.core.component.CruxWorldsComponents;
+import killercreepr.cruxworlds.core.component.EntitySpawnAttributes;
 import killercreepr.cruxworlds.core.component.EntitySpawnPassengers;
 import killercreepr.cruxworlds.core.world.entity.SimpleNaturalEntitySpawn;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -62,6 +70,25 @@ public class CfgNaturalEntitySpawn extends SimpleNaturalEntitySpawn {
                     Entity spawned = spawn.spawn(ctx);
                     if(spawned == null) return;
                     e.addPassenger(spawned);
+                });
+            }
+
+            EntitySpawnAttributes attributes = components.get(CruxWorldsComponents.ENTITY_SPAWN_ATTRIBUTES);
+            if(attributes != null && e instanceof LivingEntity living){
+                TextParserContext context = TextParserContext.empty();
+                attributes.attributes.forEach((keyObject, modObject) ->{
+                    NamespacedKey key = NamespacedKey.fromString(context.deserializeString(keyObject.toString()));
+                    if(key==null) return;
+
+                    Attribute attribute = Registry.ATTRIBUTE.get(key);
+                    if(attribute == null) return;
+                    AttributeInstance instance = living.getAttribute(attribute);
+                    if(instance == null) return;
+
+                    modObject.forEach(mod ->{
+                        AttributeModifier m = mod.buildModifier(attribute, context);
+                        instance.addModifier(m);
+                    });
                 });
             }
 

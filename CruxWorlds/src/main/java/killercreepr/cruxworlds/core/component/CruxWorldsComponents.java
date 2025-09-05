@@ -18,6 +18,8 @@ public class CruxWorldsComponents {
 
     public static final DataComponentType<EntitySpawnPassengers> ENTITY_SPAWN_PASSENGERS = register("entity_spawn/passengers", builder -> builder);
 
+    public static final DataComponentType<EntitySpawnAttributes> ENTITY_SPAWN_ATTRIBUTES = register("entity_spawn/attributes", builder -> builder);
+
     private static <T> DataComponentType<T> register(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator){
         return CruxRegistries.DATA_COMPONENT_TYPE.register(Crux.key(id), builderOperator.apply(DataComponentType.builder()).build());
     }
