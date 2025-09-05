@@ -5,6 +5,7 @@ import killercreepr.crux.api.component.DataComponentHandler;
 import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.entity.CruxEntitySnapshot;
 import killercreepr.crux.api.text.context.TextParserContext;
+import killercreepr.cruxworlds.api.world.entity.NaturalEntitySpawn;
 import killercreepr.cruxworlds.api.world.entity.SpawnContext;
 import killercreepr.cruxworlds.api.world.spawning.SpawnValidator;
 import killercreepr.cruxworlds.core.component.CruxWorldsComponents;
@@ -75,11 +76,17 @@ public class CfgNaturalEntitySpawn extends SimpleNaturalEntitySpawn {
 
             EntitySpawnPassengers passengers = components.get(CruxWorldsComponents.ENTITY_SPAWN_PASSENGERS);
             if(passengers != null){
-                passengers.passengers.forEach(spawn ->{
+                Entity lastPassenger = null;
+                for (NaturalEntitySpawn spawn : passengers.passengers) {
                     Entity spawned = spawn.spawn(ctx);
                     if(spawned == null) return;
-                    e.addPassenger(spawned);
-                });
+
+                    if(passengers.append && lastPassenger != null){
+                        lastPassenger.addPassenger(spawned);
+                    }else e.addPassenger(spawned);
+
+                    lastPassenger = spawned;
+                }
             }
 
             EntitySpawnAttributes attributes = components.get(CruxWorldsComponents.ENTITY_SPAWN_ATTRIBUTES);

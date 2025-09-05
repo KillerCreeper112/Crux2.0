@@ -27,7 +27,7 @@ public class CfgCruxWorldComponents {
                     CruxWorldsComponents.ENTITY_SPAWN_PASSENGERS,
                     new EntitySpawnPassengers(ctx.getRegistry().deserializeFromFile(
                         new TypeToken<List<NaturalEntitySpawn>>(){}.getType(), e.get("passengers")
-                    ))
+                    ), ctx.getRegistry().deserializeFromFileOrDefault(Boolean.class, e.get("append"), false))
                 );
             }
         });
