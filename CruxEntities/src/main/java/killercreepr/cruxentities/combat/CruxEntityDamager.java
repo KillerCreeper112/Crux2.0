@@ -7,12 +7,14 @@ import killercreepr.crux.api.event.CruxEntityDeathEvent;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.util.CruxEntityUtil;
 import killercreepr.cruxattributes.api.attribute.CruxAttribute;
+import killercreepr.cruxattributes.api.attribute.CruxAttributeAccessor;
 import killercreepr.cruxentities.api.combat.EntityDamager;
 import killercreepr.cruxentities.damage.type.CruxEntityDamageTypes;
 import killercreepr.cruxentities.registries.CruxEntityRegistries;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.craftbukkit.entity.CraftEntity;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.*;
@@ -47,6 +49,52 @@ public class CruxEntityDamager implements EntityDamager {
             if(damager != null) builder.withDamageLocation(damager.getLocation());
         }else builder.withDamageLocation(hitPosition);
         return builder;
+    }
+
+    @Override
+    public @Nullable CruxEntityDamageEvent attack(CruxAttributeAccessor attributes, boolean applySpecial) {
+        CruxEntityDamageEvent event = attack(
+            attributes.getValue(CruxAttribute.ATTACK_DAMAGE),
+            attributes.getValue(CruxAttribute.ATTACK_KNOCKBACK),
+            attributes.getValue(CruxAttribute.ATTACK_KNOCKBACK_UP)
+        );
+        if(event == null || event.isCancelled()) return event;
+        if(applySpecial) applySpecialAttacks(attributes);
+        return event;
+    }
+
+    @Override
+    public EntityDamager applySpecialAttacks(CruxAttributeAccessor attributes) {
+        int freezeTicks = (int) attributes.getValue(CruxAttribute.ATTACK_FREEZE_TICKS);
+        if(freezeTicks != 0){
+            int current = target.getFreezeTicks();
+            if(freezeTicks < 0){
+                if(current > 0){
+                    target.setFreezeTicks(Math.max(current - freezeTicks, 0));
+                }
+            }else{
+                int apply = target.getMaxFreezeTicks() + freezeTicks;
+                if(current < apply){
+                    target.setFreezeTicks(apply);
+                }
+            }
+        }
+
+        int fireTicks = (int) attributes.getValue(CruxAttribute.ATTACK_FIRE_TICKS);
+        if(fireTicks != 0){
+            int current = target.getFireTicks();
+            if(fireTicks < 0){
+                if(current > 0){
+                    target.setFireTicks(Math.max(current - fireTicks, 0));
+                }
+            }else{
+                int apply = fireTicks;
+                if(current < apply){
+                    target.setFireTicks(apply);
+                }
+            }
+        }
+        return this;
     }
 
     @Override

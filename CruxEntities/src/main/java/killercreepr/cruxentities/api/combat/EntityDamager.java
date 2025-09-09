@@ -5,6 +5,7 @@ import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.persistence.CruxPersist;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxattributes.api.attribute.CruxAttribute;
+import killercreepr.cruxattributes.api.attribute.CruxAttributeAccessor;
 import killercreepr.cruxentities.combat.CruxEntityDamager;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
@@ -148,6 +149,9 @@ public interface EntityDamager {
         }
         return 0D;
     }
+    @Nullable
+    CruxEntityDamageEvent attack(CruxAttributeAccessor attributes, boolean applySpecial);
+    EntityDamager applySpecialAttacks(CruxAttributeAccessor attributes);
 
     EntityDamager setCalculateCustomDamage();
 

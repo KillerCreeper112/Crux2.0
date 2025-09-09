@@ -14,6 +14,7 @@ import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class FileDynamicCruxAttributeInstance implements FileObjectHandler<DynamicCruxAttributeInstance> {
@@ -35,6 +36,12 @@ public class FileDynamicCruxAttributeInstance implements FileObjectHandler<Dynam
             new TypeToken<Collection<CruxAttributeModifier>>(){}.getType(),
             o.get("modifiers")
         );
+
+        if(o.has("base_amount") && o.get("base_amount").isFilePrimitive()){
+            if(modifiers == null) modifiers = new ArrayList<>();
+            modifiers.add(CruxAttributeModifier.baseModifier(o.get("base_amount").getAsDouble()));
+        }
+
         if(CruxObjects.checkNull(attribute, modifiers)) return null;
         return CruxAttributeInstance.dynamicInstance(attribute, modifiers);
     }

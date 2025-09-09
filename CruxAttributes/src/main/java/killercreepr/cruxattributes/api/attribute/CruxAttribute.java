@@ -117,6 +117,9 @@ public interface CruxAttribute extends CruxKeyed, Comparable<CruxAttribute> {
 
     CruxAttribute IMPACT_EFFECTIVENESS = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("impact_effectiveness")));
 
+    CruxAttribute ATTACK_FREEZE_TICKS = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("attack_freeze_ticks")));
+    CruxAttribute ATTACK_FIRE_TICKS = CruxAttributeRegistries.ATTRIBUTES.register(new GenericAttribute(k("attack_fire_ticks")));
+
     default double getDefaultValue(){
         return 0D;
     }
