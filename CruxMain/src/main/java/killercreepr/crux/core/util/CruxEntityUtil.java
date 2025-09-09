@@ -8,6 +8,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
@@ -35,6 +36,24 @@ public class CruxEntityUtil {
     };
     public static @NotNull EquipmentSlot[] getGeneralEntitySlots(){
         return GENERAL_SLOTS;
+    }
+
+    public static void applyOrRefreshPotionEffects(LivingEntity entity, Collection<PotionEffect> potions){
+        applyOrRefreshPotionEffects(entity, potions, 0.2f);
+    }
+
+    public static void applyOrRefreshPotionEffects(LivingEntity entity, Collection<PotionEffect> potions, float durationMultiplier){
+        potions.forEach(effect ->{
+            PotionEffect active = entity.getPotionEffect(effect.getType());
+            if(active == null || active.getAmplifier() != effect.getAmplifier()){
+                entity.addPotionEffect(effect);
+                return;
+            }
+            int durationTime = (int) (effect.getDuration() * durationMultiplier);
+            if(durationTime < 1 || active.getDuration() < durationTime){
+                entity.addPotionEffect(effect);
+            }
+        });
     }
 
     public static boolean isNonSurvival(Entity e){
