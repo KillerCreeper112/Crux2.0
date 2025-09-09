@@ -128,6 +128,7 @@ public class BukkitCfgHandlers {
     public static final FileParticleBuilderSupplier PARTICLE_BUILDER_SUPPLIER = new FileParticleBuilderSupplier();
     public static final FileGameRule GAME_RULE = new FileGameRule();
     public static final FileAttribute ATTRIBUTE = new FileAttribute();
+    public static final FileAttributeModifier ATTRIBUTE_MODIFIER = new FileAttributeModifier();
 
 
     public static final FileCruxLevelBasedValue CRUX_LEVEL_BASED_VALUE = new FileCruxLevelBasedValue();
@@ -189,6 +190,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(PotionType.class, POTION_TYPE);
         registry.registerFileHandler(GameRule.class, GAME_RULE);
         registry.registerFileHandler(Attribute.class, ATTRIBUTE);
+        registry.registerFileHandler(AttributeModifier.class, ATTRIBUTE_MODIFIER);
 
         registry.registerFileHandler(StoredWorld.class, STORED_WORLD);
         registry.registerFileHandler(StoredChunk.class, STORED_CHUNK);
