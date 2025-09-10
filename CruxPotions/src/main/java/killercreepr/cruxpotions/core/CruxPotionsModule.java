@@ -29,6 +29,7 @@ import killercreepr.cruxpotions.core.persistence.CruxPotionsPersistence;
 import killercreepr.cruxpotions.core.persistence.PotionPersistTags;
 import killercreepr.cruxpotions.core.potions.inflictor.BlockInflictor;
 import killercreepr.cruxpotions.core.potions.inflictor.EntityInflictor;
+import killercreepr.cruxpotions.core.potions.inflictor.WorldInflictor;
 import killercreepr.cruxpotions.core.tags.CruxPotionTags;
 import killercreepr.cruxpotions.core.tags.PlayerTags;
 import killercreepr.cruxpotions.core.tags.PotionsLoreTag;
@@ -62,6 +63,7 @@ public class CruxPotionsModule implements CruxModule {
         CruxPotionCommands.register(plugin);
         PotionComponents.register();
         if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS)){
+            CruxPotionCfgHandler.POTION_INFLICTOR.register(WorldInflictor.ID, new AutoFileHandler<>(WorldInflictor.class));
             CruxPotionCfgHandler.POTION_INFLICTOR.register(BlockInflictor.ID, new AutoFileHandler<>(BlockInflictor.class));
             CruxPotionCfgHandler.POTION_INFLICTOR.register(EntityInflictor.ID, new AutoFileHandler<>(EntityInflictor.class,
                 AutoFileOptions.builder().disabledFields(field -> field.getName().equalsIgnoreCase("reference")).build()));
