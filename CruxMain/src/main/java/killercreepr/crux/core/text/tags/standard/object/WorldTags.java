@@ -6,9 +6,11 @@ import killercreepr.crux.api.text.hook.ObjectTag;
 import killercreepr.crux.api.text.resolver.StringResolver;
 import killercreepr.crux.api.text.tags.TagParser;
 import killercreepr.crux.api.text.tags.container.TagContainer;
+import killercreepr.crux.api.world.MoonPhase;
 import killercreepr.crux.core.text.hook.StringHookedObjectTag;
 import killercreepr.crux.core.text.hook.StringListHookedObjectTag;
 import killercreepr.crux.core.text.resolver.Tag;
+import killercreepr.crux.core.util.CruxMath;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -47,6 +49,16 @@ public class WorldTags implements ObjectTag<World> {
             .add(Tag.string("view_distance", (args, ctx) -> object.getViewDistance() + ""))
             .add(Tag.string("simulation_distance", (args, ctx) -> object.getSimulationDistance() + ""))
             .add(Tag.string("send_view_distance", (args, ctx) -> object.getSendViewDistance() + ""))
+            .add(Tag.string("moon_phase", (args, ctx) -> MoonPhase.getByWorld(object).toString().toLowerCase()))
+            .add(Tag.string("moon_phase_ordinal", (args, ctx) -> MoonPhase.getByWorld(object).ordinal() + ""))
+            .add(Tag.string("is_full_moon", (args, ctx) -> MoonPhase.getByWorld(object).isFullMoon() + ""))
+            .add(Tag.string("is_new_moon", (args, ctx) -> MoonPhase.getByWorld(object).isNewMoon() + ""))
+            .add(Tag.string("next_moon_phase", (args, ctx) -> MoonPhase.getByWorld(object).getNextPhase().toString().toLowerCase()))
+            .add(Tag.string("previous_moon_phase", (args, ctx) -> MoonPhase.getByWorld(object).getPreviousPhase().toString().toLowerCase()))
+            .add(Tag.string("relative_moon_phase", (args, ctx) ->{
+                int offset = (int) CruxMath.evaluate(ctx.deserializeString(args.get(0)));
+                return MoonPhase.getByWorld(object).getRelativePhase(offset).toString().toLowerCase();
+            }))
             ;
     }
 

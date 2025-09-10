@@ -37,6 +37,7 @@ import killercreepr.crux.api.loot.number.NumberLootTable;
 import killercreepr.crux.api.math.CruxLocation;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.api.valueproviders.vector.NumberVector;
+import killercreepr.crux.api.world.predicate.WorldPredicate;
 import killercreepr.crux.core.communication.MsgContainer;
 import killercreepr.crux.core.item.StoredItem;
 import killercreepr.crux.core.item.dynamic.component.attribute.DynamicAttributeModifier;
@@ -114,6 +115,7 @@ public class BukkitCfgHandlers {
     public static final FileKeyTag KEY_TAG = new FileKeyTag();
     public static final FileBlockPredicate BLOCK_PREDICATE = new FileBlockPredicate();
     public static final FileEntityPredicate ENTITY_PREDICATE = new FileEntityPredicate();
+    public static final FileWorldPredicate WORLD_PREDICATE = new FileWorldPredicate();
     public static final FileCruxBlockWrapper CRUX_BLOCK_WRAPPER = new FileCruxBlockWrapper();
     public static final FileTypedDataComponent TYPED_DATA_COMPONENT = new FileTypedDataComponent();
     public static final FileDataComponentHandler DATA_COMPONENT_HANDLER = new FileDataComponentHandler();
@@ -191,6 +193,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(GameRule.class, GAME_RULE);
         registry.registerFileHandler(Attribute.class, ATTRIBUTE);
         registry.registerFileHandler(AttributeModifier.class, ATTRIBUTE_MODIFIER);
+        registry.registerFileHandler(WorldPredicate.class, WORLD_PREDICATE);
 
         registry.registerFileHandler(StoredWorld.class, STORED_WORLD);
         registry.registerFileHandler(StoredChunk.class, STORED_CHUNK);
