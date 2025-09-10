@@ -26,6 +26,23 @@ public enum MoonPhase {
     FIRST_QUARTER,
     WAXING_GIBBOUS;
 
+    /**
+     * Returns the fraction of the moon that is visible (0.0 – 1.0).
+     */
+    public double getVisibility() {
+        return switch (this) {
+            case FULL -> 1.0;
+            case WANING_GIBBOUS -> 0.75;
+            case LAST_QUARTER -> 0.5;
+            case WANING_CRESCENT -> 0.25;
+            case NEW -> 0.0;
+            case WAXING_CRESCENT -> 0.25;
+            case FIRST_QUARTER -> 0.5;
+            case WAXING_GIBBOUS -> 0.75;
+            default -> 0.0;
+        };
+    }
+
     public boolean isFullMoon() {
         return this == FULL;
     }
