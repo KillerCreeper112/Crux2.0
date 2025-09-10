@@ -1,7 +1,21 @@
 package killercreepr.crux.api.world;
 
 import org.bukkit.World;
-
+/**
+ * Represents the 8 phases of the Minecraft moon.
+ * <p>
+ * Cycle repeats every 8 Minecraft days (192,000 ticks).
+ * <ul>
+ *     <li>0 = FULL</li>
+ *     <li>1 = WANING_GIBBOUS</li>
+ *     <li>2 = LAST_QUARTER</li>
+ *     <li>3 = WANING_CRESCENT</li>
+ *     <li>4 = NEW</li>
+ *     <li>5 = WAXING_CRESCENT</li>
+ *     <li>6 = FIRST_QUARTER</li>
+ *     <li>7 = WAXING_GIBBOUS</li>
+ * </ul>
+ */
 public enum MoonPhase {
     FULL,
     WANING_GIBBOUS,
@@ -12,8 +26,32 @@ public enum MoonPhase {
     FIRST_QUARTER,
     WAXING_GIBBOUS;
 
-    public static MoonPhase getByID(int id){
-        return MoonPhase.values()[id];
+    public boolean isFullMoon() {
+        return this == FULL;
+    }
+
+    public boolean isNewMoon() {
+        return this == NEW;
+    }
+
+    public MoonPhase getRelativePhase(int offset) {
+        int length = values().length;
+        return values()[(this.ordinal() + offset % length + length) % length];
+    }
+
+    public MoonPhase getNextPhase() {
+        return getRelativePhase(1);
+    }
+
+    public MoonPhase getPreviousPhase() {
+        return getRelativePhase(-1);
+    }
+
+    public static MoonPhase getByID(int id) {
+        if (id < 0 || id >= values().length) {
+            throw new IllegalArgumentException("Invalid moon phase id: " + id);
+        }
+        return values()[id];
     }
 
     public static MoonPhase getByWorld(World world){
