@@ -3,6 +3,8 @@ package killercreepr.cruxconfig.config.bukkit.handler.impl;
 import com.google.common.reflect.TypeToken;
 import killercreepr.crux.api.entity.predicate.EntityPredicate;
 import killercreepr.crux.api.entity.tag.EntityTag;
+import killercreepr.crux.api.loot.conditions.LootCondition;
+import killercreepr.crux.api.world.predicate.WorldPredicate;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.entity.predicate.EntityAllPredicate;
 import killercreepr.crux.core.entity.predicate.EntityAnyPredicate;
@@ -67,6 +69,11 @@ public class FileEntityPredicate extends SimpleFileHandler<EntityPredicate> {
                 );
                 if(values==null) yield null;
                 yield new EntityAllPredicate(values);
+            }
+            case "loot" ->{
+                LootCondition loot = registry.deserializeFromFile(LootCondition.class, o.get("value"));
+                if(loot == null) yield null;
+                yield EntityPredicate.fromLootCondition(loot);
             }
             default ->{
                 Crux.log(Level.WARNING, "No entity predicate of " + type + " exists!");

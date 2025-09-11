@@ -1,6 +1,7 @@
 package killercreepr.crux.api.entity.predicate;
 
 import killercreepr.crux.api.data.tag.Tag;
+import killercreepr.crux.api.loot.conditions.LootCondition;
 import killercreepr.crux.core.entity.predicate.*;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Entity;
@@ -31,6 +32,9 @@ public interface EntityPredicate extends Predicate<Entity> {
     }
     static EntityPredicate fromInverted(@NotNull EntityPredicate tag){
         return new EntityInvertPredicate(tag);
+    }
+    static EntityPredicate fromLootCondition(@NotNull LootCondition condition){
+        return new EntityLootConditionPredicate(condition);
     }
     boolean test(@NotNull Entity entity);
 }

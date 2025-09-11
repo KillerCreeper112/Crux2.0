@@ -65,7 +65,7 @@ public class StandardFileLootConditions {
             public @NotNull BlockCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 FileRegistry registry = ctx.getRegistry();
                 BlockPredicate blockPredicate = registry.deserializeFromFile(BlockPredicate.class, e.get("block_predicate"));
-                return new BlockCondition(target, blockPredicate);
+                return new BlockCondition(target, blockPredicate, registry.deserializeFromFile(LootCondition.class, e.get("light_level")));
             }
         });
         file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("block_state")) {
