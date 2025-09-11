@@ -248,6 +248,19 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
             }
         });
 
+        COMPONENT_REGISTRY.register("dyed_color", new FileGenericSingleDynamicComponent<>(killercreepr.crux.core.item.dynamic.component.DynamicItemDyedColor.class) {
+            @Override
+            public @NotNull String jsonSerializerID() {
+                return "dynamic_item_dyed_color";
+            }
+
+            @Override
+            public @NotNull killercreepr.crux.core.item.dynamic.component.DynamicItemDyedColor deserialize(@NotNull Object object) {
+                return new killercreepr.crux.core.item.dynamic.component.DynamicItemDyedColor(object);
+            }
+        });
+
+
         COMPONENT_REGISTRY.register("flags", new FileDynamicItemComponent<>(killercreepr.crux.core.item.dynamic.component.DynamicItemFlags.class) {
             @Override
             public @NotNull String jsonSerializerID() {
