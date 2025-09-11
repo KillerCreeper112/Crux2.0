@@ -7,8 +7,10 @@ import killercreepr.crux.api.loot.LootContext;
 import killercreepr.crux.api.loot.conditions.LootCondition;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.loot.conditions.BaseCondition;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,6 +29,10 @@ public class BlockCondition extends BaseCondition {
         return blockPredicate;
     }
 
+    public @Nullable LootCondition getLightLevel() {
+        return lightLevel;
+    }
+
     @Override
     public boolean test(@NotNull LootContext ctx) {
         Block b = ctx.info().get(target, Block.class);
@@ -36,6 +42,14 @@ public class BlockCondition extends BaseCondition {
             try{
                 b = state.getBlock();
             }catch (IllegalStateException ignored){}
+        }
+        if(b == null){
+            Object o = ctx.info().get(target);
+            if(o instanceof Entity e){
+                b = e.getLocation().getBlock();
+            }else if(o instanceof Location e){
+                b = e.getBlock();
+            }
         }
         if(b==null) return false;
         CruxedBlock cruxed = Crux.handlers().block().getBlock(b);
