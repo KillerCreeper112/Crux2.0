@@ -39,7 +39,7 @@ public class CruxEntityUtil {
     }
 
     public static void applyOrRefreshPotionEffects(LivingEntity entity, Collection<PotionEffect> potions){
-        applyOrRefreshPotionEffects(entity, potions, 0.2f);
+        applyOrRefreshPotionEffects(entity, potions, 0.4f);
     }
 
     public static void applyOrRefreshPotionEffects(LivingEntity entity, Collection<PotionEffect> potions, float durationMultiplier){

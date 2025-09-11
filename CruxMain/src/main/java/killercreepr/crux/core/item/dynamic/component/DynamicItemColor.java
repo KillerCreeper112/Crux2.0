@@ -17,6 +17,10 @@ public class DynamicItemColor extends DynamicSingleValueComponent{
 
     @Override
     public void apply(@NotNull CruxItem item, @NotNull TextParserContext context) {
-        item.color(CruxColor.hexToColor(parseString(context)));
+        try{
+            item.color(CruxColor.hexToColor(parseString(context)));
+        }catch (IllegalArgumentException ignored){
+
+        }
     }
 }

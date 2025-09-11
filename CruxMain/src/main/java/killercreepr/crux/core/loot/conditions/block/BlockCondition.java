@@ -38,10 +38,11 @@ public class BlockCondition extends BaseCondition {
         Block b = ctx.info().get(target, Block.class);
         if(b == null){
             var state = ctx.info().get(target, BlockState.class);
-            if(state == null) return false;
-            try{
-                b = state.getBlock();
-            }catch (IllegalStateException ignored){}
+            if(state != null){
+                try{
+                    b = state.getBlock();
+                }catch (IllegalStateException ignored){}
+            }
         }
         if(b == null){
             Object o = ctx.info().get(target);
