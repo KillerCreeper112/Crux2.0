@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CruxMainModule implements CruxModule, Listener {
     public static final String NAMESPACE = StandardModules.CRUX_MAIN;
@@ -96,6 +97,8 @@ public class CruxMainModule implements CruxModule, Listener {
             new FormatTicksHook().register();
             new FormatMillisecondsHook().register();
         }
+
+        Logger.getLogger("com.joestelmach.natty").setLevel(Level.WARNING);
     }
 
     @Override

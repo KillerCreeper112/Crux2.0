@@ -70,6 +70,7 @@ public abstract class ActivePagedMenuModule<T> extends SimpleActiveMenuModuled i
         String prefix = MenuModule.buildTagPrefix(id);
         tags.add(Tag.parsed(prefix + "page", page+""));
         tags.add(Tag.parsed(prefix + "max_page", calculateMaxPages()+""));
+        tags.add(Tag.parsed(prefix + "total_values", (currentOpened == null ? 0 : currentOpened.size()) + ""));
         return tags;
     }
 
