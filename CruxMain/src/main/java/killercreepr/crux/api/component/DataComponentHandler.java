@@ -14,10 +14,10 @@ public interface DataComponentHandler extends DataComponentAccessor, DataCompone
     static DataComponentHandler simple(Collection<TypedDataComponent<?>> data){
         return new Simple(data);
     }
-    static DataComponentHandler mergedAccessor(Collection<TypedDataComponent<?>> data, Holder<DataComponentHandler> other){
+    static DataComponentHandler mergedAccessor(Collection<TypedDataComponent<?>> data, Holder<DataComponentAccessor> other){
         return new MergedAccessor(data, other);
     }
-    static DataComponentHandler mergedAccessor(Holder<DataComponentHandler> other){
+    static DataComponentHandler mergedAccessor(Holder<DataComponentAccessor> other){
         return new MergedAccessor(other);
     }
 
@@ -59,18 +59,18 @@ public interface DataComponentHandler extends DataComponentAccessor, DataCompone
     }
 
     class MergedAccessor extends Simple{
-        protected final Holder<DataComponentHandler> other;
+        protected final Holder<DataComponentAccessor> other;
 
-        public MergedAccessor(Holder<DataComponentHandler> other) {
+        public MergedAccessor(Holder<DataComponentAccessor> other) {
             this.other = other;
         }
 
-        public MergedAccessor(Map<DataComponentType<?>, Holder<?>> map, Holder<DataComponentHandler> other) {
+        public MergedAccessor(Map<DataComponentType<?>, Holder<?>> map, Holder<DataComponentAccessor> other) {
             super(map);
             this.other = other;
         }
 
-        public MergedAccessor(Collection<TypedDataComponent<?>> data, Holder<DataComponentHandler> other) {
+        public MergedAccessor(Collection<TypedDataComponent<?>> data, Holder<DataComponentAccessor> other) {
             super(data);
             this.other = other;
         }

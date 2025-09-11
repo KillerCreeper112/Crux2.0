@@ -14,6 +14,9 @@ public interface DataComponentAccessor extends Iterable<TypedDataComponent<?>> {
     static DataComponentAccessor simple(Collection<TypedDataComponent<?>> types){
         return new SimpleImmutable(types);
     }
+    static DataComponentAccessor mergedAccessor(Collection<TypedDataComponent<?>> data, Holder<DataComponentAccessor> other){
+        return new MergedAccessor(data, other);
+    }
 
     @Nullable
     <T> T get(DataComponentType<? extends T> type);
@@ -114,6 +117,53 @@ public interface DataComponentAccessor extends Iterable<TypedDataComponent<?>> {
             return "SimpleImmutableHandler{" +
                 "map=" + map +
                 '}';
+        }
+    }
+
+    class MergedAccessor extends DataComponentAccessor.SimpleImmutable {
+        protected final Holder<DataComponentAccessor> other;
+
+        public MergedAccessor(Map<DataComponentType<?>, Holder<?>> map, Holder<DataComponentAccessor> other) {
+            super(map);
+            this.other = other;
+        }
+
+        public MergedAccessor(Collection<TypedDataComponent<?>> data, Holder<DataComponentAccessor> other) {
+            super(data);
+            this.other = other;
+        }
+
+        @Override
+        public <T> @Nullable T get(DataComponentType<? extends T> type) {
+            T value = super.get(type);
+            if(value != null) return value;
+            var other = this.other.value();
+            if(other == null) return null;
+            return other.get(type);
+        }
+
+        @Override
+        public Set<DataComponentType<?>> keySet() {
+            var other = this.other.value();
+            if(other == null) return super.keySet();
+
+            Set<DataComponentType<?>> copy = new HashSet<>(super.keySet());
+            copy.addAll(other.keySet());
+            return copy;
+        }
+
+        public Collection<TypedDataComponent<?>> buildTypedCollection(){
+            Collection<TypedDataComponent<?>> list = super.buildTypedCollection();
+            var other = this.other.value();
+            if(other == null) return list;
+            other.forEach(list::add);
+            return list;
+        }
+
+        @NotNull
+        @Override
+        public Iterator<TypedDataComponent<?>> iterator() {
+            return buildTypedCollection().iterator();
         }
     }
 
