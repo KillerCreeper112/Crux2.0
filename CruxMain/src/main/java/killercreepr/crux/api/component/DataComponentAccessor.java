@@ -23,6 +23,67 @@ public interface DataComponentAccessor extends Iterable<TypedDataComponent<?>> {
 
     Set<DataComponentType<?>> keySet();
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
     default <T> Collection<T> getAllOfType(Class<T> type){
         if(isEmpty()) return Set.of();
         Collection<T> list = new HashSet<>();
