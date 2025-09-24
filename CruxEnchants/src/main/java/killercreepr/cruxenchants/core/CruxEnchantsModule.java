@@ -35,7 +35,7 @@ public class CruxEnchantsModule implements CruxModule {
 
     public void bootstrap(@NotNull BootstrapContext context) {
         // Register a new handled for the freeze lifecycle event on the enchantment registry
-        context.getLifecycleManager().registerEventHandler(RegistryEvents.ENCHANTMENT.freeze().newHandler(event -> {
+        context.getLifecycleManager().registerEventHandler(RegistryEvents.ENCHANTMENT.compose().newHandler(event -> {
             EnchantmentRegistryEntry. Builder d;
             event.registry().register(
                 // The key of the registry

@@ -18,7 +18,7 @@ import java.util.List;
 public class CruxEntitiesBootstrapper implements PluginBootstrap {
     @Override
     public void bootstrap(BootstrapContext context) {
-        context.getLifecycleManager().registerEventHandler(RegistryEvents.DAMAGE_TYPE.freeze().newHandler(event -> {
+        context.getLifecycleManager().registerEventHandler(RegistryEvents.DAMAGE_TYPE.compose().newHandler(event -> {
 
             event.registry().register(
                 RegistryKey.DAMAGE_TYPE.typedKey(Crux.key("entity_attack_calculate_custom")),
