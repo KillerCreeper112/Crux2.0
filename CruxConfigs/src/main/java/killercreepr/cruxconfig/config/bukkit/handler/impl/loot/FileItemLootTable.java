@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.UUID;
 
 public class FileItemLootTable implements FileObjectHandler<ItemLootTable> {
     @Override
@@ -37,8 +38,7 @@ public class FileItemLootTable implements FileObjectHandler<ItemLootTable> {
             return item;
         }
         FileRegistry registry = ctx.getRegistry();
-        Key key = registry.deserializeFromFile(Key.class, o.get("key"));
-        if(key==null) return null;
+        Key key = registry.deserializeFromFileOrDefault(Key.class, o.get("key"), Crux.key("not_set"));
         return deserializeFromFile(ctx, o, key);
     }
 
