@@ -22,6 +22,24 @@ public class BukkitItemHolder implements ItemHolder {
     }
 
     @Override
+    public String toString() {
+        return "BukkitItemHolder{" +
+            "key=" + key +
+            '}';
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof BukkitItemHolder that)) return false;
+        return Objects.equals(key, that.key);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(key);
+    }
+
+    @Override
     public @NotNull Key key() {
         return key;
     }

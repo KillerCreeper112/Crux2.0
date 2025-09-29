@@ -26,4 +26,22 @@ public class PluginItemHolder implements ItemHolder {
     public @NotNull Key key() {
         return key;
     }
+
+    @Override
+    public String toString() {
+        return "PluginItemHolder{" +
+            "key=" + key +
+            '}';
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof PluginItemHolder that)) return false;
+        return Objects.equals(key, that.key);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(key);
+    }
 }
