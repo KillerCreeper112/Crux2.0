@@ -8,7 +8,9 @@ import io.papermc.paper.registry.RegistryKey;
 import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.text.format.FormatPrefix;
 import killercreepr.crux.api.text.hook.ObjectTag;
+import killercreepr.crux.api.text.resolver.StringListResolver;
 import killercreepr.crux.api.text.tags.TagParser;
+import killercreepr.crux.api.text.tags.container.TagContainer;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.core.text.container.StringTagContainer;
@@ -25,7 +27,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 public class ItemStackTags implements ObjectTag<ItemStack> {
     @Override
@@ -36,6 +40,21 @@ public class ItemStackTags implements ObjectTag<ItemStack> {
     @Override
     public @NotNull FormatPrefix defaultPrefix() {
         return FormatPrefix.simple("item_");
+    }
+
+    @Override
+    public @Nullable TagContainer<StringListResolver> requestStringLists(@NotNull ItemStack object, @NotNull TagParser tags) {
+        return TagContainer.stringList(tags)
+            .add(Tag.stringList("lore", (args, ctx) ->{
+                List<Component> lore = object.lore();
+                if(lore == null || lore.isEmpty()) return List.of();
+                List<String> list = new ArrayList<>();
+                lore.forEach(c ->{
+                    list.add(ctx.serialize(c));
+                });
+                return list;
+            }))
+            ;
     }
 
     @Override
