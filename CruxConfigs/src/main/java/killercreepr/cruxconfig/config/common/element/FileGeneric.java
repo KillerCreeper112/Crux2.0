@@ -41,7 +41,7 @@ public class FileGeneric extends FileElement {
 
     @Override
     public boolean getAsBoolean() {
-        if (isBoolean()) return (Boolean) value;
+        if (isBoolean()) return (boolean) value;
         return Boolean.parseBoolean(getAsString());
     }
 
