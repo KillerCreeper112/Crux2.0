@@ -67,6 +67,7 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
     protected final StoredStructureChunkStorage storedStructures = new StoredStructureChunkStorage(new ConcurrentHashMap<>(), this);
     protected final WorldChunkStorage<ActiveStructure> activeStructures = new WorldBlockPosedStorage<>(new ConcurrentHashMap<>());
     //protected boolean dirty = false;
+    protected boolean loaded = false;
 
     public SimpleStructureWorldModule(@NotNull CruxWorld parent) {
         super(parent);
@@ -393,6 +394,14 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
         });
     }
 
+    public boolean isLoaded() {
+        return loaded;
+    }
+
+    public void setLoaded(boolean loaded) {
+        this.loaded = loaded;
+    }
+
     @Override
     public void onLoad() {
         super.onLoad();
@@ -403,6 +412,7 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
         Crux.log(Level.INFO, "Loading structures in world, " + world.key());
         if(files==null){
             Crux.log(Level.INFO, "No structures loaded in world, " + world.key());
+            setLoaded(true);
             return;
         }
 
@@ -425,6 +435,10 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
     public void onUnload(boolean save) {
         super.onUnload(save);
         if(!save) return;
+        if(!loaded){
+            Crux.log(Level.INFO, "Not saving structures in world: " + parent.key() + " because it hasn't been fully loaded " + loaded);
+            return;
+        }
         CruxWorld world = parent;
         Crux.log(Level.INFO, "Saving structures in world: " + world.key());
         Key worldUUID = world.key();
