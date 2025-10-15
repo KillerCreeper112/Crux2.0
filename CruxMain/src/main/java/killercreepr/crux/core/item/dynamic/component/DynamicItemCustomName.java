@@ -12,7 +12,7 @@ public class DynamicItemCustomName extends DynamicSingleValueComponent{
 
     @Override
     public @NotNull String name() {
-        return "display_name";
+        return "custom_name";
     }
 
     @Override
