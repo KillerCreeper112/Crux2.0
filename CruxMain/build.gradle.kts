@@ -21,6 +21,11 @@ tasks{
     shadowJar{
         archiveClassifier = null
         relocate("redempt", "killercreepr.crux.redempt")
+        /*relocate("com", "killercreepr.crux.com")
+        relocate("net", "killercreepr.crux.net")
+        relocate("org", "killercreepr.crux.org")
+        relocate("zoneinfo", "killercreepr.crux.zoneinfo")
+        relocate("edu", "killercreepr.crux.edu")*/
     }
 }
 paperweight.reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.MOJANG_PRODUCTION
