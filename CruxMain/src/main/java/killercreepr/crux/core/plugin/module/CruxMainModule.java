@@ -93,9 +93,13 @@ public class CruxMainModule implements CruxModule, Listener {
         CruxRegistries.ENTITY_CONSUMER.register(new OminousStandardEntityConsumer(Crux.key("ominous/standard")));
 
         if(plugin.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null){
-            new TagsExpansionHook("crux", Crux.format()).register();
-            new FormatTicksHook().register();
-            new FormatMillisecondsHook().register();
+            try{
+                new TagsExpansionHook("crux", Crux.format()).register();
+                new FormatTicksHook().register();
+                new FormatMillisecondsHook().register();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         Logger.getLogger("com.joestelmach.natty").setLevel(Level.WARNING);
