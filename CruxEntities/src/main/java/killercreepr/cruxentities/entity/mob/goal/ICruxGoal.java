@@ -17,4 +17,8 @@ public interface ICruxGoal {
     boolean knowsWhereTargetIs();
     boolean hasLineOfSight(@NotNull Entity e);
     boolean canAttack();
+
+    default boolean hasTarget(){
+        return getTarget() != null;
+    }
 }
