@@ -383,7 +383,7 @@ public class CruxGoalBase implements ICruxGoal {
 
         double range = instance.getValue();
         EntityHit.Result result = null;
-        if(distance <= range && attackCooldown <= 0){
+        if(distance <= range && canAttack()){
             result = hit(true, target);
             if(result != null) attackCooldown = (int) Math.ceil(CruxAttribute.ATTACK_SPEED.get(mob));
         }

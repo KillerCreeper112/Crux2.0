@@ -544,6 +544,11 @@ public class CustomBlockData implements PersistentDataContainer {
 
     }
 
+    @Override
+    public int getSize() {
+        return pdc.getSize();
+    }
+
     @NotNull
     @Override
     public PersistentDataAdapterContext getAdapterContext() {
