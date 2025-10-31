@@ -5,6 +5,7 @@ import killercreepr.crux.api.data.Loadable;
 import killercreepr.crux.api.entity.memory.EntityMemory;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.entity.memory.EntityDataHolder;
+import killercreepr.crux.core.entity.memory.EntityDataLoadHolder;
 import killercreepr.crux.core.util.CruxKey;
 import killercreepr.cruxconfig.config.bukkit.file.BukkitDataFile;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
@@ -19,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.HashSet;
 
-public class RecipesHolder extends EntityDataHolder implements Loadable {
+public class RecipesHolder extends EntityDataLoadHolder implements Loadable {
     protected final CruxRecipeManager<?> recipeManager;
 
     public RecipesHolder(@NotNull Key key, @NotNull EntityMemory parent, CruxRecipeManager<?> recipeManager) {
@@ -92,9 +93,13 @@ public class RecipesHolder extends EntityDataHolder implements Loadable {
     @Override
     public void load() {
         DataFile file = getDataFile(false);
-        if(file==null) return;
+        if(file==null){
+            setLoaded(true);
+            return;
+        }
         Collection<Key> parsed = file.deserialize("recipes", new TypeToken<Collection<Key>>(){}.getType());
         file.close();
         if(parsed != null) recipes.addAll(parsed);
+        setLoaded(true);
     }
 }

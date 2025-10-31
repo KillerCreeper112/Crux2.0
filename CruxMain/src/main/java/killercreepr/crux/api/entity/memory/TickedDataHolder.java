@@ -11,6 +11,5 @@ public interface TickedDataHolder extends DataHolder {
      * Called when the DataHolder is removed due to shouldRemovedFromMemory being true.
      */
     void removing(@Nullable Entity e);
-    default void adding(){}
     void tick(@NotNull Entity e);
 }

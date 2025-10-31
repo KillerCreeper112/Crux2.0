@@ -18,4 +18,10 @@ public interface DataHolder extends Keyed {
     default void onMemoryUnload(@NotNull Entity e){
 
     }
+    default void adding(){}
+
+    default boolean isLoaded(){ return true; }
+    default void setLoaded(boolean loaded){}
+    default boolean isDirty(){ return true; }
+    default void setDirty(){}
 }

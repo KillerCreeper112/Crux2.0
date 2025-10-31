@@ -150,6 +150,7 @@ public interface EntityMemory extends Holder<Entity> {
         return mem.getDataHolderOrCompute(key, function);
     }
 
+    Map<UUID, CompletableFuture<Void>> ADDING_FUTURES = new HashMap<>();
     Map<UUID, CompletableFuture<Void>> REMOVING_FUTURES = new HashMap<>();
     ExecutorService CLEANUP_EXECUTOR = Executors.newFixedThreadPool(4);
 

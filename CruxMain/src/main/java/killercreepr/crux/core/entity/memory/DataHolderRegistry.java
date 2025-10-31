@@ -24,8 +24,8 @@ public class DataHolderRegistry extends SimpleKeyedRegistry<DataHolder> {
     public <E extends DataHolder> void onRegistered(@NotNull Key key, @NotNull E value){
         if(value instanceof TickedDataHolder t){
             tickedHolders.put(key, t);
-            t.adding();
         }
+        value.adding();
     }
 
     public void onRemoved(@NotNull Key key){
