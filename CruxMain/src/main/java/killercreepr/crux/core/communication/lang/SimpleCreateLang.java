@@ -10,11 +10,16 @@ import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SimpleCreateLang implements CreateLang {
     protected final @NotNull Map<String, Communicator> messages = new HashMap<>();
+
+    public Collection<String> getTranslations(){
+        return messages.keySet();
+    }
 
     @Override
     public Communicator use(@NotNull String id, @NotNull Audience a, @NotNull TextParserContext ctx) {

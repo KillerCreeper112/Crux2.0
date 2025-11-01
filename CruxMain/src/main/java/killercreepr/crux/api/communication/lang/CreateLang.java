@@ -10,6 +10,8 @@ import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 public interface CreateLang {
     default Communicator use(@NotNull String id, @NotNull Audience a, @Nullable MergedTagContainer tags){
         return use(id, a, TextParserContext.builder().tags(tags).build());
@@ -26,7 +28,7 @@ public interface CreateLang {
 
     @Nullable Communicator get(@NotNull String id);
     void put(@NotNull String key, @NotNull Communicator communicator);
-
+    Collection<String> getTranslations();
     //convenience methods
 
     default @Nullable Communicator get(@NotNull Translatable id){
