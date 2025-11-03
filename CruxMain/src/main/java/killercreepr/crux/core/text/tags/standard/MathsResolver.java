@@ -24,6 +24,17 @@ public class MathsResolver implements StringResolver {
 
     public static @NotNull String resolve(@NotNull String function, @NotNull FormatArgs args, @NotNull TextParserContext ctx){
         switch (function.toLowerCase()){
+            case "progress" ->{
+                double value = CruxMath.evaluate(ctx.deserializeString(args.get(1)));
+                double min = args.has(3) ? CruxMath.evaluate(ctx.deserializeString(args.get(2))) : 0D;
+                double max = CruxMath.evaluate(ctx.deserializeString(args.get(
+                    args.has(3) ? 3 : 2
+                )));
+
+                // Normalize progress between 0 and 1
+                double progress = (value - min) / (max - min);
+                return CruxMath.clamp(progress, 0D, 1D) + "";
+            }
             case "less" ->{
                 double first = CruxMath.evaluate(ctx.deserializeString(args.get(1)));
                 double second = CruxMath.evaluate(ctx.deserializeString(args.get(2)));
