@@ -9,4 +9,5 @@ public interface CommonMenu {
     default void onUpdate(){}
 
     default void load(){}
+    default void onLoaded(){}
 }

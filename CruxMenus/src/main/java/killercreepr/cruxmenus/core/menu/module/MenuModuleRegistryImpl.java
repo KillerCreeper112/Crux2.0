@@ -32,6 +32,11 @@ public class MenuModuleRegistryImpl implements MenuModuleRegistry {
     }
 
     @Override
+    public void onLoaded() {
+        this.forEach(m -> m.onLoaded(menu));
+    }
+
+    @Override
     public void refresh() {
         this.forEach(m -> m.refresh(menu));
     }
