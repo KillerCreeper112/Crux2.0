@@ -14,6 +14,7 @@ import killercreepr.crux.api.component.DataComponentHandler;
 import killercreepr.crux.api.component.TypedDataComponent;
 import killercreepr.crux.api.data.ParticleBuilderSupplier;
 import killercreepr.crux.api.data.User;
+import killercreepr.crux.api.data.WorldPosition;
 import killercreepr.crux.api.data.world.StoredChunk;
 import killercreepr.crux.api.data.world.StoredWorld;
 import killercreepr.crux.api.enchantment.CruxLevelBasedValue;
@@ -39,6 +40,7 @@ import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.api.valueproviders.vector.NumberVector;
 import killercreepr.crux.api.world.predicate.WorldPredicate;
 import killercreepr.crux.core.communication.MsgContainer;
+import killercreepr.crux.core.data.SimpleWorldPosition;
 import killercreepr.crux.core.item.StoredItem;
 import killercreepr.crux.core.item.dynamic.component.attribute.DynamicAttributeModifier;
 import killercreepr.crux.core.loot.item.SimpleItemLootObject;
@@ -237,6 +239,7 @@ public class BukkitCfgHandlers {
 
         registry.registerFileHandler(BlockPos.class, new AutoFileHandler<>(BlockPos.class));
         registry.registerFileHandler(LocationPos.class, new AutoFileHandler<>(LocationPos.class));
+        registry.registerFileHandler(WorldPosition.class, new AutoFileHandler<>(SimpleWorldPosition.class));
         registry.registerFileHandler(ArmorTrim.class, new AutoFileHandler<>(ArmorTrim.class));
         registry.registerFileHandler(BoundingBox.class, new AutoFileHandler<>(BoundingBox.class));
     }
