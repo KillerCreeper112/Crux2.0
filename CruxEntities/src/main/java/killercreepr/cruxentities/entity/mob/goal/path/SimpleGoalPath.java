@@ -49,4 +49,9 @@ public class SimpleGoalPath implements GoalPath {
     public void reset() {
         currentIndex = 0;
     }
+
+    @Override
+    public int getCurrentNodeIndex() {
+        return currentIndex;
+    }
 }

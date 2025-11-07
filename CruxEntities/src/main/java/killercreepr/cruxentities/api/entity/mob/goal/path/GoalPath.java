@@ -2,6 +2,7 @@ package killercreepr.cruxentities.api.entity.mob.goal.path;
 
 import killercreepr.cruxentities.entity.mob.goal.path.SimpleGoalPath;
 import org.bukkit.entity.Entity;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 
@@ -18,4 +19,7 @@ public interface GoalPath {
     void finish();
 
     void reset();
+
+    @ApiStatus.Internal
+    int getCurrentNodeIndex();
 }
