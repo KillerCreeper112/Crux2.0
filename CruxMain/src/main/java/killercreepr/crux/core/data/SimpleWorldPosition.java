@@ -6,14 +6,14 @@ import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 
 public class SimpleWorldPosition extends LocationPos implements WorldPosition {
-    protected final Key worldKey;
-    public SimpleWorldPosition(double x, double y, double z, Key worldKey) {
+    protected final Key world;
+    public SimpleWorldPosition(double x, double y, double z, Key world) {
         super(x, y, z);
-        this.worldKey = worldKey;
+        this.world = world;
     }
 
     @Override
     public @NotNull Key worldKey() {
-        return worldKey;
+        return world;
     }
 }
