@@ -1,6 +1,7 @@
 package killercreepr.crux.core.util;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -45,7 +46,8 @@ public class CruxCollection {
         return list[(CruxMath.random(0, list.length-1))];
     }
 
-    public static <T> T getFirst(@NotNull Collection<T> list){
+    public static <T> T getFirst(@Nullable Collection<T> list){
+        if(list == null) return null;
         for(T t : list){
             return t;
         }
@@ -54,8 +56,33 @@ public class CruxCollection {
 
     @SafeVarargs
     public static <T> T getFirst(@NotNull T... list){
-        if(list.length < 1) return null;
+        if(list == null || list.length < 1) return null;
         return list[0];
+    }
+
+    public static <T> T getLast(@Nullable List<T> list){
+        if (list == null || list.isEmpty()) return null;
+        return list.getLast();
+    }
+
+    public static <T> T getLast(@Nullable Collection<T> list){
+        if (list == null || list.isEmpty()) return null;
+
+        if (list instanceof List<T> l) {
+            return getLast(l);
+        }
+
+        T last = null;
+        for (T item : list) {
+            last = item;
+        }
+        return last;
+    }
+
+    @SafeVarargs
+    public static <T> T getLast(@NotNull T... list){
+        if(list.length < 1) return null;
+        return list[list.length-1];
     }
 
     public static <T> boolean testAny(@NotNull Collection<T> collection, @NotNull Predicate<T> test){
