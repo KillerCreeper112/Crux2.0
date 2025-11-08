@@ -99,6 +99,96 @@ public class CruxString {
         }
     }
 
+    public static void buildDescription(@NotNull String text,
+                                        @NotNull Consumer<String> lineConsumer,
+                                        @NotNull Consumer<String> inBetweenConsumer,
+                                        int maxLength) {
+        if (text.isEmpty()) return;
+
+        String[] words = text.split(" ");
+        StringBuilder current = new StringBuilder();
+        int visibleLength = 0; // count only visible chars
+        boolean firstLine = true;
+
+        for (String word : words) {
+            int wordVisibleLength = getVisibleLength(word);
+
+            if (visibleLength + wordVisibleLength + (visibleLength > 0 ? 1 : 0) <= maxLength) {
+                if (visibleLength > 0) {
+                    current.append(' ');
+                    visibleLength++; // space counts as visible
+                }
+                current.append(word);
+                visibleLength += wordVisibleLength;
+            } else {
+                // Wrap line
+                if (current.length() > 0) {
+                    String line = current.toString();
+                    if (!firstLine) inBetweenConsumer.accept(line);
+                    else firstLine = false;
+                    lineConsumer.accept(line);
+                }
+                // Start new line
+                current = new StringBuilder(word);
+                visibleLength = wordVisibleLength;
+            }
+        }
+
+        // Last line
+        if (current.length() > 0) {
+            String line = current.toString();
+            if (!firstLine) inBetweenConsumer.accept(line);
+            lineConsumer.accept(line);
+        }
+    }
+
+    /** Returns the visible length of a word ignoring formatting tags like <bold> */
+    private static int getVisibleLength(String s) {
+        // Remove all <tags>
+        return s.replaceAll("<[^>]+>", "").length();
+    }
+
+
+    /*public static void buildDescription(@NotNull String text,
+                                        @NotNull Consumer<String> lineConsumer,
+                                        @NotNull Consumer<String> inBetweenConsumer,
+                                        int maxLength) {
+        if (text.isEmpty()) return;
+
+        String[] words = text.split(" ");
+        StringBuilder current = new StringBuilder();
+
+        boolean firstLine = true;
+
+        for (String word : words) {
+            if (current.length() + word.length() + 1 <= maxLength) {
+                current.append(word).append(' ');
+            } else {
+                // Remove trailing space
+                if (!current.isEmpty()) {
+                    String line = current.substring(0, current.length() - 1);
+
+                    // If not the first line, run the in-between handler
+                    if (!firstLine) inBetweenConsumer.accept(line);
+                    else firstLine = false;
+
+                    lineConsumer.accept(line);
+                }
+
+                // Start new line
+                current = new StringBuilder(word).append(' ');
+            }
+        }
+
+        if (!current.isEmpty()) {
+            String line = current.substring(0, current.length() - 1);
+
+            if (!firstLine) inBetweenConsumer.accept(line);
+            lineConsumer.accept(line);
+        }
+    }*/
+
+
     public static @NotNull String[] quoteSplit(@NotNull String input, @NotNull String delimiter) {
         List<String> result = new ArrayList<>();
 

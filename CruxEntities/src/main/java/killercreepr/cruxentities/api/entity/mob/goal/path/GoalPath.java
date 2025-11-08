@@ -16,6 +16,7 @@ public interface GoalPath {
     boolean hasFinished();
     boolean canMoveOn(Entity mob);
     void nextNode();
+    GoalNode getNextNode();
     void finish();
 
     void reset();

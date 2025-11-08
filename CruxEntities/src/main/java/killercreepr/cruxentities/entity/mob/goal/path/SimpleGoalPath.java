@@ -41,6 +41,12 @@ public class SimpleGoalPath implements GoalPath {
     }
 
     @Override
+    public GoalNode getNextNode() {
+        int nextIndex = currentIndex + 1;
+        return nextIndex >= nodes.size() ? null : nodes.get(nextIndex);
+    }
+
+    @Override
     public void finish() {
         currentIndex = nodes.size();
     }
