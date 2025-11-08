@@ -1,14 +1,16 @@
 package killercreepr.cruxentities.entity.mob.goal.path;
 
+import com.destroystokyo.paper.entity.ai.Goal;
 import killercreepr.cruxentities.api.entity.mob.goal.PathTargetMobGoal;
 import killercreepr.cruxentities.api.entity.mob.goal.path.GoalNode;
 import killercreepr.cruxentities.api.entity.mob.goal.path.GoalPath;
 import killercreepr.cruxentities.entity.mob.goal.CruxGoalBase;
+import killercreepr.cruxentities.entity.mob.goal.ICruxGoal;
 import org.bukkit.Location;
 import org.bukkit.entity.Mob;
 import org.jetbrains.annotations.Nullable;
 
-public class CruxGoalPathTargetMobGoal implements PathTargetMobGoal {
+public class CruxGoalPathTargetMobGoal implements PathTargetMobGoal.Goaled {
     protected final CruxGoalBase goal;
     protected final double speed;
     protected final boolean stopPathFindingWhenFinished;
@@ -72,5 +74,10 @@ public class CruxGoalPathTargetMobGoal implements PathTargetMobGoal {
 
         Location loc = new Location(getMob().getWorld(), node.x(), node.y(), node.z());
         getMob().getPathfinder().moveTo(loc, getSpeed());
+    }
+
+    @Override
+    public ICruxGoal getGoal() {
+        return goal;
     }
 }

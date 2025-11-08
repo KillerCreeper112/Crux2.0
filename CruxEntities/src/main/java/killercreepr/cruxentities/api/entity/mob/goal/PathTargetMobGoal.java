@@ -1,7 +1,9 @@
 package killercreepr.cruxentities.api.entity.mob.goal;
 
+import com.destroystokyo.paper.entity.ai.Goal;
 import killercreepr.cruxentities.api.entity.mob.goal.path.GoalPath;
 import killercreepr.cruxentities.entity.mob.goal.CruxGoalBase;
+import killercreepr.cruxentities.entity.mob.goal.ICruxGoal;
 import killercreepr.cruxentities.entity.mob.goal.path.CruxGoalPathTargetMobGoal;
 import killercreepr.cruxentities.entity.mob.goal.path.SimplePathTargetMobGoal;
 import org.bukkit.entity.Mob;
@@ -36,4 +38,8 @@ public interface PathTargetMobGoal {
         return getPath() != null;
     }
     void tick();
+
+    interface Goaled extends PathTargetMobGoal{
+        ICruxGoal getGoal();
+    }
 }
