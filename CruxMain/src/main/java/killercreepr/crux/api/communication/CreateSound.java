@@ -2,6 +2,7 @@ package killercreepr.crux.api.communication;
 
 
 import killercreepr.crux.core.communication.SimpleCreateSound;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.Location;
@@ -55,7 +56,7 @@ public interface CreateSound {
 
     CreateSound playAt(@NotNull Entity l);
 
-    CreateSound playFor(@NotNull Entity p);
+    CreateSound playFor(@NotNull Audience p);
 
     CreateSound playFrom(@NotNull Entity l);
 }

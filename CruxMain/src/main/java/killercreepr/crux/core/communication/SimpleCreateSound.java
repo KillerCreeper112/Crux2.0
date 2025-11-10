@@ -1,6 +1,7 @@
 package killercreepr.crux.core.communication;
 
 import killercreepr.crux.api.communication.CreateSound;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.Location;
 import org.bukkit.Registry;
@@ -47,7 +48,7 @@ public class SimpleCreateSound implements CreateSound {
         return this;
     }
 
-    public CreateSound playFor(@NotNull Entity p){
+    public CreateSound playFor(@NotNull Audience p){
         p.playSound(sound, Sound.Emitter.self());
         return this;
     }
