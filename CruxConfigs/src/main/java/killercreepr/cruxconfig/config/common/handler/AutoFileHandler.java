@@ -18,8 +18,6 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class AutoFileHandler<T> extends SimpleFileHandler<T> {
-    private static final Logger log = LoggerFactory.getLogger(AutoFileHandler.class);
-
     public static <T> AutoFileHandler<T> notNull(@NotNull Class<T> type){
         return new AutoFileHandler<>(
             type, AutoFileOptions.builder()

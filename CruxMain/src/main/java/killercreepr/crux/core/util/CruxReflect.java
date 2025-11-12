@@ -203,38 +203,72 @@ public class CruxReflect {
     }
 
 
-    public static <T> @Nullable T attemptCreation(@NotNull Class<T> type, @NotNull Map<String, Object> fields){
-        Object[] fieldsArray = fields.values().toArray(new Object[0]);
-        for(Constructor<?> constructor : type.getConstructors()){
-            try{
-                T object = (T) constructor.newInstance();
-                fields.forEach((key, value) ->{
-                    try {
-                        Field field = type.getField(key);
-                        boolean x = field.canAccess(object);
-                        field.setAccessible(true);
-                        field.set(object, value);
-                        field.setAccessible(x);
-                    } catch (NoSuchFieldException | IllegalAccessException ignored) {
-                        try {
-                            Field field = type.getDeclaredField(key);
-                            boolean x = field.canAccess(object);
-                            field.setAccessible(true);
-                            field.set(object, value);
-                            field.setAccessible(x);
-                        } catch (NoSuchFieldException | IllegalAccessException ignoredE) {
-                        }
-                    }
-                });
-                return object;
-            }catch (InvocationTargetException | InstantiationException |
-                    IllegalAccessException | IllegalArgumentException ignored){
-                try{
-                    T object = (T) constructor.newInstance(fieldsArray);
-                    return object;
-                }catch (InvocationTargetException | InstantiationException |
-                        IllegalAccessException | IllegalArgumentException ignoredAgain){
+    public static <T> @Nullable T attemptCreation(@NotNull Class<T> type, @NotNull Map<String, Object> fields) {
+        try {
+            // Try to find a no-args constructor first
+            Constructor<T> noArgsConstructor = null;
+            for (Constructor<?> constructor : type.getDeclaredConstructors()) {
+                if (constructor.getParameterCount() == 0) {
+                    //noinspection unchecked
+                    noArgsConstructor = (Constructor<T>) constructor;
+                    break;
                 }
+            }
+
+            T instance = null;
+            if (noArgsConstructor != null) {
+                noArgsConstructor.setAccessible(true);
+                instance = noArgsConstructor.newInstance();
+            } else {
+                // Try to find a constructor whose parameter count matches the map size
+                for (Constructor<?> constructor : type.getDeclaredConstructors()) {
+                    if (constructor.getParameterCount() == fields.size()) {
+                        try {
+                            constructor.setAccessible(true);
+                            Object[] args = fields.values().toArray(new Object[0]);
+                            //noinspection unchecked
+                            instance = (T) constructor.newInstance(args);
+                            break;
+                        } catch (Exception ignored) {}
+                    }
+                }
+            }
+
+            if (instance == null) return null;
+
+            // Now set fields
+            for (Map.Entry<String, Object> entry : fields.entrySet()) {
+                String name = entry.getKey();
+                Object value = entry.getValue();
+
+                try {
+                    Field field = findField(type, name);
+                    if(field == null) continue;
+
+                    boolean wasAccessible = field.canAccess(instance);
+                    field.setAccessible(true);
+                    try {
+                        field.set(instance, value);
+                    } finally {
+                        field.setAccessible(wasAccessible);
+                    }
+                } catch (ReflectiveOperationException ignored) {
+                }
+            }
+
+            return instance;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static @Nullable Field findField(Class<?> type, String name) {
+        Class<?> current = type;
+        while (current != null) {
+            try {
+                return current.getDeclaredField(name);
+            } catch (NoSuchFieldException ignored) {
+                current = current.getSuperclass();
             }
         }
         return null;
