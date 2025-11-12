@@ -1,5 +1,6 @@
 package killercreepr.cruxconfig.config.common.handler;
 
+import killercreepr.crux.core.util.CruxObjects;
 import killercreepr.crux.core.util.CruxReflect;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
@@ -104,6 +105,8 @@ public class AutoFileHandler<T> extends SimpleFileHandler<T> {
                 found = registry.deserializeFromFile(options.getTypeToken(fieldName).getType(), yamlMap.get(fieldName));
             }else{
                 found = registry.deserializeFromFile(field.getType(), yamlMap.get(fieldName));
+
+                found = CruxObjects.unboxIfNecessary(field.getType(), found, null);
             }
             if(options != null && !options.testIsValid(fieldName, found)) return null;
             fields.put(fieldName, found);

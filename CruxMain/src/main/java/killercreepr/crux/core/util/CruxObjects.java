@@ -4,6 +4,8 @@ import com.google.gson.internal.LazilyParsedNumber;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Type;
+
 public class CruxObjects {
     public static boolean checkNull(Object... objects){
         for(Object o : objects){
@@ -54,6 +56,39 @@ public class CruxObjects {
         }
         if(type.isAssignableFrom(o.getClass())) return type.cast(o);
         return null;
+    }
+
+    public static Object unboxIfNecessary(Type type, Object value, Object fallback){
+        if (value == null) return fallback;
+        if (type instanceof Class<?> clazz) {
+            if (clazz == double.class || Double.class.isAssignableFrom(clazz)) {
+                return ((Number) value).doubleValue();
+            }
+            if (clazz == float.class || Float.class.isAssignableFrom(clazz)) {
+                return ((Number) value).floatValue();
+            }
+            if (clazz == short.class || Short.class.isAssignableFrom(clazz)) {
+                return ((Number) value).shortValue();
+            }
+            if (clazz == long.class || Long.class.isAssignableFrom(clazz)) {
+                return ((Number) value).longValue();
+            }
+            if (clazz == int.class || Integer.class.isAssignableFrom(clazz)) {
+                return ((Number) value).intValue();
+            }
+            if (clazz == byte.class || Byte.class.isAssignableFrom(clazz)) {
+                return ((Number) value).byteValue();
+            }
+            if (clazz == char.class || Character.class.isAssignableFrom(clazz)) {
+                return (value instanceof Character)
+                    ? (Character) value
+                    : ((String) value).charAt(0);
+            }
+            if (clazz == boolean.class || Boolean.class.isAssignableFrom(clazz)) {
+                return ((Boolean) value).booleanValue();
+            }
+        }
+        return value;
     }
 
     public static Number parseNumber(Number n){
