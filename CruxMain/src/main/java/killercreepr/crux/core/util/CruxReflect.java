@@ -1,5 +1,6 @@
 package killercreepr.crux.core.util;
 
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -233,9 +234,6 @@ public class CruxReflect {
                     }
                 }
             }
-
-            if (instance == null) return null;
-
             // Now set fields
             for (Map.Entry<String, Object> entry : fields.entrySet()) {
                 String name = entry.getKey();
@@ -249,7 +247,8 @@ public class CruxReflect {
                     field.setAccessible(true);
                     try {
                         field.set(instance, value);
-                    } finally {
+                    } catch(IllegalArgumentException | NullPointerException e) {
+                    }finally {
                         field.setAccessible(wasAccessible);
                     }
                 } catch (ReflectiveOperationException ignored) {

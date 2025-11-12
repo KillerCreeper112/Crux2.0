@@ -41,7 +41,20 @@ public class CruxObjects {
     }
 
     public static <T> @Nullable T attemptCast(@NotNull Class<T> type, @NotNull Object o){
-        if(o instanceof Number n){
+        o = unboxIfNecessary(type, o, null);
+
+        if (type.isPrimitive()) {
+            if (type == boolean.class && o instanceof Boolean b) return (T) (Boolean) b;
+            if (type == byte.class && o instanceof Number n) return (T) (Byte) n.byteValue();
+            if (type == short.class && o instanceof Number n) return (T) (Short) n.shortValue();
+            if (type == int.class && o instanceof Number n) return (T) (Integer) n.intValue();
+            if (type == long.class && o instanceof Number n) return (T) (Long) n.longValue();
+            if (type == float.class && o instanceof Number n) return (T) (Float) n.floatValue();
+            if (type == double.class && o instanceof Number n) return (T) (Double) n.doubleValue();
+            if (type == char.class && o instanceof Character c) return (T) (Character) c;
+        }
+
+        /*if(o instanceof Number n){
             if (type == short.class || type == Short.class) {
                 return (T) Short.class.cast(n.shortValue());
             } else if (type == int.class || type == Integer.class) {
@@ -53,7 +66,7 @@ public class CruxObjects {
             } else if (type == double.class || type == Double.class) {
                 return (T) Double.class.cast(n.doubleValue());
             }
-        }
+        }*/
         if(type.isAssignableFrom(o.getClass())) return type.cast(o);
         return null;
     }
@@ -61,7 +74,14 @@ public class CruxObjects {
     public static Object unboxIfNecessary(Type type, Object value, Object fallback){
         if (value == null) return fallback;
         if (type instanceof Class<?> clazz) {
-            if (clazz == double.class || Double.class.isAssignableFrom(clazz)) {
+            if(Number.class.isAssignableFrom(clazz) && !(value instanceof Number)){
+                try{
+                    value = Double.parseDouble(value.toString());
+                } catch (IllegalArgumentException e) {
+                }
+            }
+
+            if (double.class.isAssignableFrom(clazz) || Double.class.isAssignableFrom(clazz)) {
                 return ((Number) value).doubleValue();
             }
             if (clazz == float.class || Float.class.isAssignableFrom(clazz)) {
@@ -85,6 +105,9 @@ public class CruxObjects {
                     : ((String) value).charAt(0);
             }
             if (clazz == boolean.class || Boolean.class.isAssignableFrom(clazz)) {
+                if(value instanceof String || value instanceof Number){
+                    return CruxString.parseBoolean(value.toString());
+                }
                 return ((Boolean) value).booleanValue();
             }
         }
