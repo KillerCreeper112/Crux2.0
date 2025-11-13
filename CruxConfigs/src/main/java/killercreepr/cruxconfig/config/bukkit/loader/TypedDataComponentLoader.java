@@ -30,6 +30,6 @@ public class TypedDataComponentLoader extends CfgLoader {
         }
         if(table == null || key == null) return;
         Crux.log(Level.INFO, "Registered typed data component: " + key);
-        CruxRegistries.TYPED_DATA_COMPONENTS.register(table);
+        CruxRegistries.TYPED_DATA_COMPONENTS.register(key, table);
     }
 }
