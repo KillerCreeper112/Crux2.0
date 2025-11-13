@@ -3,6 +3,7 @@ package killercreepr.crux.core.registries;
 import killercreepr.crux.api.block.sound.CreateBlockSoundGroup;
 import killercreepr.crux.api.block.tag.BlockTag;
 import killercreepr.crux.api.component.DataComponentType;
+import killercreepr.crux.api.component.TypedDataComponent;
 import killercreepr.crux.api.component.parser.ComponentTextInputParser;
 import killercreepr.crux.api.data.CruxTick;
 import killercreepr.crux.api.entity.CruxEntitySnapshot;
@@ -58,6 +59,7 @@ public class CruxRegistries {
     public static final KeyedRegistry<KeyTag> KEY_TAG = new SimpleKeyedRegistry<>();
     public static final KeyedRegistry<CruxEntityConsumer> ENTITY_CONSUMER = KeyedRegistry.keyedRegistry();
     public static final MappedRegistry<Key, CreateBlockSoundGroup> BLOCK_SOUND_GROUP = new SimpleMappedRegistry<>();
+    public static final MappedRegistry<Key, TypedDataComponent<?>> TYPED_DATA_COMPONENTS = new SimpleMappedRegistry<>();
 
     public static final MappedRegistry<Key, DataComponentType<?>> DATA_COMPONENT_TYPE = new SimpleMappedRegistry<>();
     public static final MappedRegistry<Class<?>, ComponentTextInputParser<?>> DATA_COMPONENT_TEXT_PARSER_TYPE = new SimpleMappedRegistry<>();

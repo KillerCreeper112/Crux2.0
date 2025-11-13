@@ -15,6 +15,8 @@ import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 public class AdvancementMenuDataParser extends SimpleItemDataParser {
     public AdvancementMenuDataParser(@NotNull Key key) {
         super(key);
@@ -35,6 +37,25 @@ public class AdvancementMenuDataParser extends SimpleItemDataParser {
             String key = format.deserializeString(info.getOrThrow("advancement_manager").toString(), ctx.getResolvers());
             CruxAdvancementManager<?> manager = AdvancementRegistries.ADVANCEMENT_MANAGERS.get(Crux.key(key));
             if(manager != null) builder.put(manager);
+        }
+        if(info.get("advancement_managers") instanceof List<?> list){
+            list.forEach(obj ->{
+                String key = format.deserializeString(obj + "", ctx.getResolvers());
+                String[] split = key.split(" ");
+
+                String prefix;
+                Key keyKey = Crux.key(split[0]);
+                if(split.length > 1){
+                    prefix = split[1];
+                }else prefix = null;
+
+                CruxAdvancementManager<?> manager = AdvancementRegistries.ADVANCEMENT_MANAGERS.get(keyKey);
+                if(manager != null){
+                    if(prefix != null){
+                        builder.put(prefix, manager);
+                    }else builder.put(manager);
+                }
+            });
         }
 
         if(info.has("advancement")){

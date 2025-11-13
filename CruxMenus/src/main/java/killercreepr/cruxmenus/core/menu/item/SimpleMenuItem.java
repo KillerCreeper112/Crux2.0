@@ -91,7 +91,7 @@ public class SimpleMenuItem implements MenuItem {
         resolvers.hookAll(base.info());
         resolvers.addAll(buildPrimitiveTags(inputtedContext.info()));
         resolvers.hookAll(inputtedContext.info());
-        resolvers.hookAll(evaluatedContext.info());
+        resolvers.hookAllWithPrefix(evaluatedContext.info());
         return resolvers;
     }
 
