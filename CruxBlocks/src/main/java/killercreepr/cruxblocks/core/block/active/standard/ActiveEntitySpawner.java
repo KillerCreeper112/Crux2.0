@@ -85,7 +85,7 @@ public class ActiveEntitySpawner extends SimpleActiveCruxBlock implements Active
             return;
         }
         delay = data.spawnDelay.value().intValue();
-        Crux.getServer().getScheduler().runTask(Crux.getMainPlugin(), task);
+        Crux.scheduler().runTaskMain(task);
     }
 
     protected int delay = 0;

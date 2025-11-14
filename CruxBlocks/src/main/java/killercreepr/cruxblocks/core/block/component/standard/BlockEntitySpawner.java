@@ -77,7 +77,7 @@ public class BlockEntitySpawner implements Ticked {
             return;
         }
         delay = data.spawnDelay.value().intValue();
-        Crux.getServer().getScheduler().runTask(Crux.getMainPlugin(), task);
+        Crux.scheduler().runTaskMain(task);
     }
 
     protected int delay = 0;
