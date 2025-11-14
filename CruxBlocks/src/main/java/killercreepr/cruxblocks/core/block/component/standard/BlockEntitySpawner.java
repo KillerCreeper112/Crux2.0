@@ -88,6 +88,7 @@ public class BlockEntitySpawner implements Ticked {
 
     public boolean isActive(){
         double range = data.requiredPlayerRange.value().doubleValue();
+        if(range == -1D) return true;
 
         if(data.ignoreCreativePlayers){
             return !block.getWorld().getNearbyEntitiesByType(Player.class, block.getLocation(), range, e -> switch (e.getGameMode()){
