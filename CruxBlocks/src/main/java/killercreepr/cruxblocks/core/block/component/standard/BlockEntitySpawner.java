@@ -16,6 +16,8 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public class BlockEntitySpawner implements Ticked {
@@ -45,8 +47,10 @@ public class BlockEntitySpawner implements Ticked {
         this.spawnConsumer = spawnConsumer;
     }
 
+    protected CompletableFuture<List<Entity>> lastSpawned = null;
     protected final Runnable task = () -> {
         if(!isActive()){
+            if(lastSpawned != null) lastSpawned.complete(null);
             failedNavigateSpawner();
             return;
         }
@@ -59,11 +63,21 @@ public class BlockEntitySpawner implements Ticked {
         }
     }
 
-    public void navigateSpawner(){
-        spawner.navigate(block.getWorld(), CruxPosition.block(block), null, null, e ->{
+    public CompletableFuture<List<Entity>> navigateSpawner(){
+        var future = spawner.navigate(block.getWorld(), CruxPosition.block(block), null, null, e ->{
             CruxPersist.SPAWN_REASON.set(e, "crux_spawner");
             onEntitySpawned(e);
         });
+        if(future != null){
+            if(lastSpawned != null){
+                future.whenComplete((result, throwable) ->{
+                    if(lastSpawned != null){
+                        lastSpawned.complete(result);
+                    }
+                });
+            }
+        }
+        return future;
     }
 
     public void onEntitySpawned(Entity e){
@@ -77,7 +91,12 @@ public class BlockEntitySpawner implements Ticked {
             return;
         }
         delay = data.spawnDelay.value().intValue();
+        lastSpawned = new CompletableFuture<>();
         Crux.scheduler().runTaskMain(task);
+    }
+
+    public CompletableFuture<List<Entity>> getLastSpawned() {
+        return lastSpawned;
     }
 
     protected int delay = 0;
