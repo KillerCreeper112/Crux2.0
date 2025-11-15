@@ -88,7 +88,9 @@ public class StandardFileLootConditions {
                     new TypeToken<Map<EquipmentSlot, LootCondition>>(){}.getType(), e.get("slots")
                 );
                 return new EntityCondition(
-                    target, entityPredicate, worldName, slots
+                    target, entityPredicate, worldName,
+                    registry.deserializeFromFile(Key.class, e.get("world_key")),
+                    slots
                 );
             }
         });
