@@ -68,6 +68,8 @@ public interface CruxItem extends Cloneable, PersistHolderComponentHandler, Data
 
     @NotNull Optional<ItemMeta> getMeta();
 
+    CruxItem hideTooltip();
+    CruxItem hideTooltip(boolean value);
     @Nullable Key itemModel();
     CruxItem itemModel(@Nullable Key key);
     CruxItem meta(@Nullable ItemMeta meta);

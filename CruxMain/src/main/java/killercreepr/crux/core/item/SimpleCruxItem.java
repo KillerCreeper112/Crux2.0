@@ -1,5 +1,7 @@
 package killercreepr.crux.core.item;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import killercreepr.crux.api.component.DataComponentType;
 import killercreepr.crux.api.component.TypedDataComponent;
 import killercreepr.crux.api.item.CruxItem;
@@ -49,6 +51,18 @@ public class SimpleCruxItem implements CruxItem {
     public SimpleCruxItem(@NotNull FormatSerializer format, @NotNull ItemStack item) {
         this.format = format;
         this.item = item;
+    }
+
+    public SimpleCruxItem hideTooltip(){
+        return hideTooltip(true);
+    }
+
+    @Override
+    public SimpleCruxItem hideTooltip(boolean value) {
+        if(!value){
+            item.unsetData(DataComponentTypes.TOOLTIP_DISPLAY);
+        }else item.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay().hideTooltip(true).build());
+        return this;
     }
 
     private Component cNoItalics(@Nullable String s){
