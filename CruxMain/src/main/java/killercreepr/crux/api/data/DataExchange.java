@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public interface DataExchange extends Iterable<Holder<?>> {
@@ -157,6 +158,10 @@ public interface DataExchange extends Iterable<Holder<?>> {
     }
 
     interface Builder {
+        default Builder edit(Consumer<Builder> consumer){
+            consumer.accept(this);
+            return this;
+        }
         <T> T getOrDefault(Class<T> type, T fallback);
 
         Builder putAll(@Nullable Object direct, @NotNull String... ids);

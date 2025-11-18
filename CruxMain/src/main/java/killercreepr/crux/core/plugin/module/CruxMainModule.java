@@ -92,6 +92,11 @@ public class CruxMainModule implements CruxModule, Listener {
 
         CruxRegistries.ENTITY_CONSUMER.register(new OminousStandardEntityConsumer(Crux.key("ominous/standard")));
 
+        Logger.getLogger("com.joestelmach.natty").setLevel(Level.WARNING);
+    }
+
+    @Override
+    public void onEnable(@NotNull CruxPlugin plugin) {
         if(plugin.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null){
             try{
                 new TagsExpansionHook("crux", Crux.format()).register();
@@ -101,12 +106,6 @@ public class CruxMainModule implements CruxModule, Listener {
                 e.printStackTrace();
             }
         }
-
-        Logger.getLogger("com.joestelmach.natty").setLevel(Level.WARNING);
-    }
-
-    @Override
-    public void onEnable(@NotNull CruxPlugin plugin) {
         plugin.registerListeners(
             new EntityDataListener(),
             new EntityMechanicsListener(),
