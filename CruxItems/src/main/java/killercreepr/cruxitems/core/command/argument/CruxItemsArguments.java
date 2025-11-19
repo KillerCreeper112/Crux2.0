@@ -6,6 +6,11 @@ public final class CruxItemsArguments {
         return PLUGIN_ITEM;
     }
 
+    private static final ItemHolderArgument ITEM_HOLDER = new ItemHolderArgument();
+    public static ItemHolderArgument itemHolder(){
+        return ITEM_HOLDER;
+    }
+
     private static final EnchantmentArgument ENCHANTMENT = new EnchantmentArgument();
     public static EnchantmentArgument enchantment(){
         return ENCHANTMENT;
