@@ -45,7 +45,7 @@ public interface NaturalEntitySpawner {
             for(int i = 0; i < maxGroup; i++){
                 Entity e;
                 if(spawned < 1){
-                    if(s.canSpawn(ctx)) e = s.spawn(ctx);
+                    if(s.canSpawn(ctx)) e = s.spawn(ctx, spawnConsumer);
                     else break;
                 }else{
                     e = spawnGroup(groupRadius, ctx, s, spawnConsumer);
@@ -78,7 +78,7 @@ public interface NaturalEntitySpawner {
                 Entity e;
                 if(spawned < 1){
                     if(s.canSpawn(ctx)){
-                        e = s.spawn(ctx);
+                        e = s.spawn(ctx, spawnConsumer);
                         if(e instanceof LivingEntity ee){
                             var event = new CreatureSpawnEvent(ee, CreatureSpawnEvent.SpawnReason.NATURAL);
                             if(!event.callEvent()){
@@ -125,8 +125,8 @@ public interface NaturalEntitySpawner {
                     if(b.equals(ctx.getBlock())) continue;
                     SpawnContext groupCtx = SpawnContext.simple(b, ctx.getRandom());
                     if(s.canSpawn(groupCtx)){
-                        Entity e = s.spawn(groupCtx);
-                        if(e != null && spawnConsumer != null) spawnConsumer.accept(e);
+                        Entity e = s.spawn(groupCtx, spawnConsumer);
+                        //if(e != null && spawnConsumer != null) spawnConsumer.accept(e);
                         return e;
                     }
                 }
