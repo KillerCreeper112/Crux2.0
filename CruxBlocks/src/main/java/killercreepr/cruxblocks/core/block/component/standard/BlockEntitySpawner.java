@@ -81,7 +81,7 @@ public class BlockEntitySpawner implements Ticked {
     }
 
     public void onEntitySpawned(Entity e){
-
+        if(spawnConsumer != null) spawnConsumer.accept(e);
     }
 
     public void spawnerTick(){
