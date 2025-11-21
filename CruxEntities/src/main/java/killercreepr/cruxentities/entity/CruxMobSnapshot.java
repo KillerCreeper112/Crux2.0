@@ -1,6 +1,7 @@
 package killercreepr.cruxentities.entity;
 
 import killercreepr.crux.api.component.DataComponentAccessor;
+import killercreepr.crux.api.component.type.EntitySnapshotComponent;
 import killercreepr.crux.api.entity.CruxEntity;
 import killercreepr.crux.api.entity.CruxEntitySnapshot;
 import org.bukkit.Location;
@@ -23,7 +24,11 @@ public class CruxMobSnapshot implements CruxEntitySnapshot {
         return mob.spawn(to, e ->{
             if(components != null){
                 CruxEntity crux = CruxEntity.entity(e);
-                components.forEach(crux::set);
+                components.forEach(typed ->{
+                    if(typed.getValue() instanceof EntitySnapshotComponent c){
+                        c.onCreate(crux);
+                    }else crux.set(typed);
+                });
             }
             if(consumer != null) consumer.accept(e);
         });
