@@ -1,6 +1,5 @@
 package killercreepr.cruxentities.entity.mob.goal.path;
 
-import com.destroystokyo.paper.entity.ai.Goal;
 import killercreepr.cruxentities.api.entity.mob.goal.PathTargetMobGoal;
 import killercreepr.cruxentities.api.entity.mob.goal.path.GoalNode;
 import killercreepr.cruxentities.api.entity.mob.goal.path.GoalPath;
