@@ -5,10 +5,12 @@ import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileGeneric;
 import killercreepr.cruxconfig.config.common.element.FilePrimitive;
 import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
+import killercreepr.cruxconfig.config.common.json.annotation.JsonSerializer;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@JsonSerializer(id = "named_text_color")
 public class FileNamedTextColor implements FileObjectHandler<NamedTextColor> {
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> ctx, @NotNull NamedTextColor object) {
@@ -19,5 +21,10 @@ public class FileNamedTextColor implements FileObjectHandler<NamedTextColor> {
     public @Nullable NamedTextColor deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
         if(!(e instanceof FileGeneric g)) return null;
         return NamedTextColor.NAMES.value(g.getAsString());
+    }
+
+    @Override
+    public @NotNull String jsonSerializerID() {
+        return "named_text_color";
     }
 }
