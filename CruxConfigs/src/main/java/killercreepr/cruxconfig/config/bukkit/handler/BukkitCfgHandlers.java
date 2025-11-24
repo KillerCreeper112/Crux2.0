@@ -63,6 +63,7 @@ import killercreepr.cruxconfig.config.common.handler.AutoFileHandler;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -135,6 +136,7 @@ public class BukkitCfgHandlers {
     public static final FileGameRule GAME_RULE = new FileGameRule();
     public static final FileAttribute ATTRIBUTE = new FileAttribute();
     public static final FileAttributeModifier ATTRIBUTE_MODIFIER = new FileAttributeModifier();
+    public static final FileNamedTextColor NAMED_TEXT_COLOR = new FileNamedTextColor();
 
 
     public static final FileCruxLevelBasedValue CRUX_LEVEL_BASED_VALUE = new FileCruxLevelBasedValue();
@@ -198,6 +200,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(Attribute.class, ATTRIBUTE);
         registry.registerFileHandler(AttributeModifier.class, ATTRIBUTE_MODIFIER);
         registry.registerFileHandler(WorldPredicate.class, WORLD_PREDICATE);
+        registry.registerFileHandler(NamedTextColor.class, NAMED_TEXT_COLOR);
 
         registry.registerFileHandler(StoredWorld.class, STORED_WORLD);
         registry.registerFileHandler(StoredChunk.class, STORED_CHUNK);
