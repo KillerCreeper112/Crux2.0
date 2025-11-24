@@ -137,6 +137,7 @@ public class BukkitCfgHandlers {
     public static final FileAttribute ATTRIBUTE = new FileAttribute();
     public static final FileAttributeModifier ATTRIBUTE_MODIFIER = new FileAttributeModifier();
     public static final FileNamedTextColor NAMED_TEXT_COLOR = new FileNamedTextColor();
+    public static final FileWorldLocation WORLD_LOCATION = new FileWorldLocation();
 
 
     public static final FileCruxLevelBasedValue CRUX_LEVEL_BASED_VALUE = new FileCruxLevelBasedValue();
@@ -201,6 +202,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(AttributeModifier.class, ATTRIBUTE_MODIFIER);
         registry.registerFileHandler(WorldPredicate.class, WORLD_PREDICATE);
         registry.registerFileHandler(NamedTextColor.class, NAMED_TEXT_COLOR);
+        registry.registerFileHandler(WorldLocation.class, WORLD_LOCATION);
 
         registry.registerFileHandler(StoredWorld.class, STORED_WORLD);
         registry.registerFileHandler(StoredChunk.class, STORED_CHUNK);
@@ -245,7 +247,6 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(BlockPos.class, new AutoFileHandler<>(BlockPos.class));
         registry.registerFileHandler(LocationPos.class, new AutoFileHandler<>(LocationPos.class));
         registry.registerFileHandler(WorldPosition.class, new AutoFileHandler<>(SimpleWorldPosition.class));
-        registry.registerFileHandler(WorldLocation.class, new AutoFileHandler<>(SimpleWorldLocation.class));
         registry.registerFileHandler(ArmorTrim.class, new AutoFileHandler<>(ArmorTrim.class));
         registry.registerFileHandler(BoundingBox.class, new AutoFileHandler<>(BoundingBox.class));
     }
