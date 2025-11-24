@@ -26,7 +26,11 @@ public interface CreateBossBar {
     default @Nullable ActiveBossBar showBossBar(@NotNull Audience audience){
         return showBossBar(audience, TextParserContext.empty());
     }
+    default @Nullable ActiveBossBar hideBossBar(@NotNull Audience audience){
+        return hideBossBar(audience, TextParserContext.empty());
+    }
 
+    @Nullable ActiveBossBar hideBossBar(@NotNull Audience audience, @NotNull TextParserContext ctx);
     @Nullable ActiveBossBar showBossBar(@NotNull Audience audience, @NotNull TextParserContext ctx);
 
     @NotNull

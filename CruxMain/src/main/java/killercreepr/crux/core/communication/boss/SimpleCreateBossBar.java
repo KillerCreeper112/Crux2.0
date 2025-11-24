@@ -11,6 +11,7 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -91,6 +92,15 @@ public class SimpleCreateBossBar implements CreateBossBar {
     public @NotNull Key parseKey(@NotNull TextParserContext ctx){
         if(key == null) return Crux.key(UUID.randomUUID().toString());
         return Crux.key(ctx.deserializeString(key));
+    }
+
+    @Override
+    public @Nullable ActiveBossBar hideBossBar(@NotNull Audience audience, @NotNull TextParserContext ctx) {
+        if(!BossBarHolder.isValidBossBarHolder(audience)) return null;
+        BossBarHolder holder = BossBarHolder.getIfPresent(audience);
+        if(holder == null) return null;
+        Key key = parseKey(ctx);
+        return holder.removeBossBar(key);
     }
 
     @Override
