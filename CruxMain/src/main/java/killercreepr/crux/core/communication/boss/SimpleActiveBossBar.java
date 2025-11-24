@@ -14,7 +14,7 @@ import java.time.Duration;
 
 public class SimpleActiveBossBar implements ActiveBossBar {
     protected final @NotNull Key key;
-    protected final @NotNull CreateBossBar bossBar;
+    protected @NotNull CreateBossBar bossBar;
     protected final @NotNull BossBar bar;
     protected final @Nullable Duration duration;
     protected long ticksRemaining;
@@ -38,8 +38,25 @@ public class SimpleActiveBossBar implements ActiveBossBar {
     }
 
     @Override
+    public ActiveBossBar createBossBar(@NotNull CreateBossBar bossBar) {
+        this.bossBar = bossBar;
+        return this;
+    }
+
+    @Override
     public void update(@NotNull TextParserContext ctx) {
         bossBar.updateBossBar(bar, ctx);
+        /*var name = bar.name();
+        var overlay = bar.overlay();
+        var color = bar.color();*/
+        /*if(!name.equals(bar.name()) || !overlay.equals(bar.overlay()) || !color.equals(bar.color())){
+            for (BossBarViewer viewer : bar.viewers()) {
+                if(!(viewer instanceof Audience audience)) continue;
+                bar.removeViewer(audience);
+                bar.addViewer(audience);
+                Bukkit.broadcastMessage("changed");
+            }
+        }*/
     }
 
     @Override

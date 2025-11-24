@@ -118,7 +118,7 @@ public class SimpleCreateBossBar implements CreateBossBar {
 
         if(active != null){
             active.resetTimer();
-            active.update(ctx);
+            active.createBossBar(this).update(ctx);
             return active;
         }
         if(holder == null) holder = BossBarHolder.getOrAdd(audience);

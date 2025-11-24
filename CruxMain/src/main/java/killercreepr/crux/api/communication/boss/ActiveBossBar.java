@@ -14,6 +14,7 @@ public interface ActiveBossBar extends Keyed {
     @Nullable Duration duration();
     @NotNull
     BossBar bossBar();
+    ActiveBossBar createBossBar(@NotNull CreateBossBar bossBar);
     void update(@NotNull TextParserContext ctx);
     void added(@NotNull Audience viewer);
     void removed(@NotNull Audience viewer);
