@@ -36,6 +36,35 @@ public class CruxWorldUtil {
         return loc.getWorld() != null && isLoaded(loc.getWorld(), loc);
     }
 
+    public static File copyWorld(String name, String copyName, boolean overwrite) {
+        File source = getWorldFolder(name);
+        if (source == null) return null;
+
+        File destination = new File(source.getParentFile(), copyName);
+
+        try {
+            if (destination.exists()) {
+                if (!overwrite) {
+                    return null;
+                }
+                FileUtils.deleteDirectory(destination);
+            }
+
+            FileUtils.copyDirectory(source, destination);
+            return destination;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static World copyAndLoadWorld(String name, String copyName, boolean overwrite){
+        File copied = copyWorld(name, copyName, overwrite);
+        if(copied == null) return null;
+        return Crux.getServer().createWorld(new WorldCreator(copyName));
+    }
+
     public static boolean deleteWorld(@NotNull World world){
         if(Crux.getServer().getWorld(world.getUID()) != null){
             if(Crux.getServer().isTickingWorlds()){
@@ -56,22 +85,6 @@ public class CruxWorldUtil {
                 e.printStackTrace();
                 return false;
             }
-            /*boolean foundLevel = false;
-            for(File folderF : f.listFiles()){
-                if(folderF.getName().equals("level.dat")){
-                    foundLevel = true;
-                    break;
-                }
-            }
-            if(foundLevel){
-                try{
-                    FileUtils.deleteDirectory(f);
-                    return true;
-                }catch (IOException e){
-                    e.printStackTrace();
-                    return false;
-                }
-            }*/
         }
         return false;
     }
@@ -95,6 +108,15 @@ public class CruxWorldUtil {
         if(world != null) return world;
 
         return getOrLoadWorld(key.value());
+    }
+
+    public static File getWorldFolder(String name){
+        for(File f : Crux.getServer().getWorldContainer().listFiles()){
+            if(!f.getName().equals(name)) continue;
+            if(!f.isDirectory()) continue;
+            return f;
+        }
+        return null;
     }
 
     public static World getOrLoadWorld(@NotNull String name){
