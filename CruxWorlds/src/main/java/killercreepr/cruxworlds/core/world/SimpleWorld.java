@@ -112,6 +112,12 @@ public class SimpleWorld implements CruxWorld, PersistenceComponentHandler, Relo
     }
 
     @Override
+    public void addModule(WorldModule module) {
+        modules.add(module);
+        if(module instanceof Ticked t) tickedModules.add(t);
+    }
+
+    @Override
     public @Nullable PersistentDataContainer getComponentsPersistentContainer() {
         return world.getPersistentDataContainer();
     }

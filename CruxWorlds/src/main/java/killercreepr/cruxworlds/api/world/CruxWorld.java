@@ -5,6 +5,7 @@ import killercreepr.crux.api.data.CruxKeyed;
 import killercreepr.cruxworlds.api.world.module.WorldModule;
 import org.bukkit.Chunk;
 import org.bukkit.World;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -74,4 +75,6 @@ public interface CruxWorld extends CruxKeyed, DataComponentHandler {
 
     @NotNull
     Collection<WorldModule> getModules();
+    @ApiStatus.Experimental
+    void addModule(WorldModule module);
 }
