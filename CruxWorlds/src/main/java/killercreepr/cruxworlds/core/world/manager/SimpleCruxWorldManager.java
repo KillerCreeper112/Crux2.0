@@ -1,8 +1,8 @@
 package killercreepr.cruxworlds.core.world.manager;
 
-import killercreepr.crux.api.data.tick.Ticked;
 import killercreepr.crux.api.registry.KeyedRegistry;
 import killercreepr.crux.api.registry.MappedRegistry;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.registry.SimpleMappedRegistry;
 import killercreepr.crux.core.util.CruxWorldUtil;
 import killercreepr.cruxworlds.api.event.CruxWorldDeleteEvent;
@@ -71,7 +71,17 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
     }
 
     public void tick(){
-        active.getTicked().forEach(Ticked::tick);
+        active.getTicked().forEach(tick ->{
+            if(tick.shouldStop()){
+                tick.stopped();
+                if(tick instanceof CruxWorld w && w.scheduledUnload()){
+                    Crux.scheduler().runTask(() -> unloadWorld(w, w.scheduledUnloadSave()));
+                }
+                return; //true;
+            }
+            tick.tick();
+            //return false;
+        });
     }
 
     protected final Map<Key, CruxWorldType> defaultWorldTypes = new HashMap<>();

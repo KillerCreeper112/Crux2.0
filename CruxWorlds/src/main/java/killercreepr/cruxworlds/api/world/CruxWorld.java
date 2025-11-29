@@ -24,6 +24,10 @@ public interface CruxWorld extends CruxKeyed, DataComponentHandler {
     boolean shouldSaveOnNextUnload();
     void setShouldSaveOnNextUnload(boolean value);
 
+    void scheduleUnload(boolean save);
+    boolean scheduledUnload();
+    boolean scheduledUnloadSave();
+
     default void onCreate(){
         getModules().forEach(WorldModule::onCreate);
     }

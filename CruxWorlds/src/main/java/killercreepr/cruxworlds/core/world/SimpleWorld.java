@@ -24,6 +24,8 @@ public class SimpleWorld implements CruxWorld, PersistenceComponentHandler, Relo
     protected final @NotNull Random random;
     protected final @NotNull Collection<WorldModule> modules;
     protected final @NotNull Collection<Ticked> tickedModules;
+    protected boolean scheduleUnload;
+    protected boolean scheduleUnloadSave;
 
     public SimpleWorld(@NotNull World world, @NotNull Collection<CruxWorldModuleCreator> modules) {
         this(world, new Random(world.getSeed()), modules);
@@ -41,6 +43,8 @@ public class SimpleWorld implements CruxWorld, PersistenceComponentHandler, Relo
         });
 
     }
+
+
 
     @Override
     public void reload(@NotNull CruxPlugin plugin) {
@@ -104,6 +108,27 @@ public class SimpleWorld implements CruxWorld, PersistenceComponentHandler, Relo
     @Override
     public void setShouldSaveOnNextUnload(boolean value) {
         this.saveOnNextUnload = value;
+    }
+
+    @Override
+    public boolean shouldStop() {
+        return scheduleUnload;
+    }
+
+    @Override
+    public void scheduleUnload(boolean save) {
+        this.scheduleUnload = true;
+        this.scheduleUnloadSave = save;
+    }
+
+    @Override
+    public boolean scheduledUnload() {
+        return scheduleUnload;
+    }
+
+    @Override
+    public boolean scheduledUnloadSave() {
+        return scheduleUnloadSave;
     }
 
     @Override
