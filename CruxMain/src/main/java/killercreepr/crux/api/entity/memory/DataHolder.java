@@ -18,6 +18,11 @@ public interface DataHolder extends Keyed {
     default void onMemoryUnload(@NotNull Entity e){
 
     }
+
+    /**
+     * Only called on DataHolders that were added in before the parent memory was loaded in
+     */
+    default void onMemoryRegistered(){}
     default void adding(){}
 
     default boolean isLoaded(){ return true; }

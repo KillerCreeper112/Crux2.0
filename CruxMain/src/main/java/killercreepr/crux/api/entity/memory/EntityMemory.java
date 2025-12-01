@@ -81,6 +81,9 @@ public interface EntityMemory extends Holder<Entity> {
             return tick;
         }
         REGISTRY.register(tick.getUUID(), tick);
+        for (DataHolder data : tick.getDataHolders()) {
+            data.onMemoryRegistered();
+        }
         return tick;
     }
 
