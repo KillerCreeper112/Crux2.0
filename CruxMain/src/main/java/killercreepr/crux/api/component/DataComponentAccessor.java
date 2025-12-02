@@ -52,7 +52,7 @@ public interface DataComponentAccessor extends Iterable<TypedDataComponent<?>> {
         }
     }
 
-    default <T> void forEachAllOfTypeWithCollection(Class<T> type, Consumer<T> consumer){
+    default <T> void forEachAllOfTypeAndCollection(Class<T> type, Consumer<T> consumer){
         if(isEmpty()) return;
         for(TypedDataComponent<?> typed : this){
             Object o = typed.getValue();
