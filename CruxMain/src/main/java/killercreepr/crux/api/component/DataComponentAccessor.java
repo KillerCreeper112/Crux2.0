@@ -23,67 +23,6 @@ public interface DataComponentAccessor extends Iterable<TypedDataComponent<?>> {
 
     Set<DataComponentType<?>> keySet();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
     default <T> Collection<T> getAllOfType(Class<T> type){
         if(isEmpty()) return Set.of();
         Collection<T> list = new HashSet<>();
@@ -110,6 +49,27 @@ public interface DataComponentAccessor extends Iterable<TypedDataComponent<?>> {
             Object o = typed.getValue();
             if(o == null) continue;
             if(type.isAssignableFrom(o.getClass())) consumer.accept(type.cast(o));
+        }
+    }
+
+    default <T> void forEachAllOfTypeWithCollection(Class<T> type, Consumer<T> consumer){
+        if(isEmpty()) return;
+        for(TypedDataComponent<?> typed : this){
+            Object o = typed.getValue();
+            if(o == null) continue;
+            if(type.isAssignableFrom(o.getClass())){
+                consumer.accept(type.cast(o));
+                continue;
+            }
+            if(o instanceof Collection<?> collection){
+                if(collection.isEmpty()) continue;
+                collection.forEach(obj ->{
+                    if(obj == null) return;
+                    if(type.isAssignableFrom(obj.getClass())){
+                        consumer.accept(type.cast(obj));
+                    }
+                });
+            }
         }
     }
 
