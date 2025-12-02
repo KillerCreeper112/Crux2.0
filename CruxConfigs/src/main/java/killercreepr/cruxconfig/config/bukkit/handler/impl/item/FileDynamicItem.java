@@ -248,18 +248,6 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
             }
         });
 
-        COMPONENT_REGISTRY.register("dyed_color", new FileGenericSingleDynamicComponent<>(killercreepr.crux.core.item.dynamic.component.DynamicItemDyedColor.class) {
-            @Override
-            public @NotNull String jsonSerializerID() {
-                return "dynamic_item_dyed_color";
-            }
-
-            @Override
-            public @NotNull killercreepr.crux.core.item.dynamic.component.DynamicItemDyedColor deserialize(@NotNull Object object) {
-                return new killercreepr.crux.core.item.dynamic.component.DynamicItemDyedColor(object);
-            }
-        });
-
 
         COMPONENT_REGISTRY.register("flags", new FileDynamicItemComponent<>(killercreepr.crux.core.item.dynamic.component.DynamicItemFlags.class) {
             @Override
@@ -404,6 +392,31 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
             @Override
             public @NotNull killercreepr.crux.core.item.dynamic.component.DynamicItemPages deserialize(@NotNull Object object) {
                 return new killercreepr.crux.core.item.dynamic.component.DynamicItemPages(object);
+            }
+        });
+
+        COMPONENT_REGISTRY.register("dye", new FileGenericSingleDynamicComponent<>(DynamicItemDyedColor.class) {
+            @Override
+            public @NotNull String jsonSerializerID() {
+                return "dynamic_item_dye_color";
+            }
+
+            @Override
+            public @NotNull DynamicItemDyedColor deserialize(@NotNull Object object) {
+                return new DynamicItemDyedColor(object);
+            }
+        });
+
+
+        COMPONENT_REGISTRY.register("dyed_color", new FileGenericSingleDynamicComponent<>(killercreepr.crux.core.item.dynamic.component.DynamicItemDyedColor.class) {
+            @Override
+            public @NotNull String jsonSerializerID() {
+                return "dynamic_item_dyed_color";
+            }
+
+            @Override
+            public @NotNull killercreepr.crux.core.item.dynamic.component.DynamicItemDyedColor deserialize(@NotNull Object object) {
+                return new killercreepr.crux.core.item.dynamic.component.DynamicItemDyedColor(object);
             }
         });
     }

@@ -19,8 +19,17 @@ public class DynamicItemDyedColor extends DynamicSingleValueComponent{
 
     @Override
     public void apply(@NotNull CruxItem item, @NotNull TextParserContext context) {
+        String parsed = parseString(context);
+        if(parsed.equalsIgnoreCase("unset")){
+            item.item().unsetData(DataComponentTypes.DYED_COLOR);
+            return;
+        }
+        if(parsed.equalsIgnoreCase("reset")){
+            item.item().resetData(DataComponentTypes.DYED_COLOR);
+            return;
+        }
         try{
-            item.item().setData(DataComponentTypes.DYED_COLOR, DyedItemColor.dyedItemColor(CruxColor.hexToColor(parseString(context))));
+            item.item().setData(DataComponentTypes.DYED_COLOR, DyedItemColor.dyedItemColor().color(CruxColor.hexToColor(parsed)).build());
         }catch (IllegalArgumentException ignored){
 
         }
