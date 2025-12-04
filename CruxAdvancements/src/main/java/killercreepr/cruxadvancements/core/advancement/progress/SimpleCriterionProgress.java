@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import java.time.Instant;
 
 public class SimpleCriterionProgress implements CruxCriterionProgress {
-    private @Nullable Instant obtained;
+    protected @Nullable Instant obtained;
     public SimpleCriterionProgress() {}
 
     public SimpleCriterionProgress(@Nullable Instant obtainedTime) {
