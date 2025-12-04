@@ -24,6 +24,22 @@ public class CruxInv {
         return removed;
     }
 
+    public static boolean hasItems(Inventory inv, Predicate<ItemStack> filter, int amount){
+        return getItemCount(inv, filter, amount) >= amount;
+    }
+
+    public static int getItemCount(Inventory inv, Predicate<ItemStack> filter, int maxAmount){
+        int has = 0;
+        for (ItemStack item : inv) {
+            if(CruxItem.isEmpty(item)) continue;
+            if(!filter.test(item)) continue;
+
+            has += item.getAmount();
+            if(maxAmount > 0 && has >= maxAmount) break;
+        }
+        return has;
+    }
+
     public static int firstPartial(Inventory inv, ItemStack item) {
         ItemStack[] inventory = inv.getStorageContents();
         if (item != null) {

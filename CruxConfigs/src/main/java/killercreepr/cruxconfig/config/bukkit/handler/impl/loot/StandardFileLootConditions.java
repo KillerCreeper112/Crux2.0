@@ -17,6 +17,7 @@ import killercreepr.crux.core.loot.conditions.debug.DevStringCondition;
 import killercreepr.crux.core.loot.conditions.entity.EntityCondition;
 import killercreepr.crux.core.loot.conditions.evaluation.EvaluationCondition;
 import killercreepr.crux.core.loot.conditions.evaluation.SelectNumberEvaluationCondition;
+import killercreepr.crux.core.loot.conditions.item.InventoryHasItemCondition;
 import killercreepr.crux.core.loot.conditions.item.ItemStackCondition;
 import killercreepr.crux.core.loot.conditions.world.LocationCondition;
 import killercreepr.crux.core.loot.conditions.world.WorldCondition;
@@ -106,6 +107,18 @@ public class StandardFileLootConditions {
                 );
                 return new ItemStackCondition(
                     target, itemType, amount, enchants
+                );
+            }
+        });
+
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("inventory_has_item")) {
+            @Override
+            public @NotNull LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                FileRegistry registry = ctx.getRegistry();
+                return new InventoryHasItemCondition(
+                    target,
+                    registry.deserializeFromFile(LootCondition.class, e.get("item_condition")),
+                    registry.deserializeFromFileOrDefault(Integer.class, e.get("amount"), 1)
                 );
             }
         });
