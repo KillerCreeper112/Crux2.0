@@ -1,12 +1,29 @@
 package killercreepr.crux.core.util;
 
+import killercreepr.crux.api.item.CruxItem;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public class CruxInv {
+    public static int removeItems(Inventory inv, Predicate<ItemStack> filter, int amount){
+        int removed = 0;
+        for (ItemStack item : inv) {
+            if(CruxItem.isEmpty(item)) continue;
+            if(!filter.test(item)) continue;
+            int canRemove = Math.min(amount - removed, item.getAmount());
+            if(canRemove < 1) continue;
+
+            item.setAmount(item.getAmount() - canRemove);
+            removed += canRemove;
+            if(removed >= amount) break;
+        }
+        return removed;
+    }
+
     public static int firstPartial(Inventory inv, ItemStack item) {
         ItemStack[] inventory = inv.getStorageContents();
         if (item != null) {
