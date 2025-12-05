@@ -3,6 +3,7 @@ package killercreepr.cruxmenus.core.menu.holder;
 import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.api.item.dynamic.DynamicItem;
+import killercreepr.crux.api.item.dynamic.MergeOption;
 import killercreepr.crux.api.text.tags.container.MergedTagContainer;
 import killercreepr.crux.core.text.container.SimpleMergedTagContainer;
 import killercreepr.cruxmenus.api.menu.action.click.ClickActions;
@@ -13,20 +14,52 @@ import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
+
 public class SimpleMenuItemHolder implements MenuItemHolder {
     protected final @NotNull Holder<DynamicItem> item;
     protected final @NotNull DataExchange info;
     protected final @Nullable ClickActions clickActions;
+    protected final Map<String, MergeOption> itemMergeOptions;
 
     public SimpleMenuItemHolder(@NotNull Holder<DynamicItem> item, @NotNull DataExchange info,
-                                @Nullable ClickActions clickActions) {
+                                @Nullable ClickActions clickActions, Map<String, MergeOption> itemMergeOptions) {
         this.item = item;
         this.info = info;
         this.clickActions = clickActions;
+        this.itemMergeOptions = itemMergeOptions;
     }
 
     public @NotNull DataExchange info() {
         return info;
+    }
+
+    @Override
+    public MenuItemHolder withItem(Holder<DynamicItem> item) {
+        return new SimpleMenuItemHolder(
+            item, info, clickActions, itemMergeOptions
+        );
+    }
+
+    @Override
+    public MenuItemHolder withClickActions(ClickActions clickActions) {
+        return new SimpleMenuItemHolder(
+            item, info, clickActions, itemMergeOptions
+        );
+    }
+
+    @Override
+    public MenuItemHolder withItemMergeOptions(Map<String, MergeOption> itemMergeOptions) {
+        return new SimpleMenuItemHolder(
+            item, info, clickActions, itemMergeOptions
+        );
+    }
+
+    @Override
+    public MenuItemHolder withInfo(DataExchange info) {
+        return new SimpleMenuItemHolder(
+            item, info, clickActions, itemMergeOptions
+        );
     }
 
     public @NotNull MenuItem getDisplayItem(@NotNull Entity p, @NotNull MenuContext info) {
@@ -40,6 +73,11 @@ public class SimpleMenuItemHolder implements MenuItemHolder {
 
     public @Nullable ClickActions getClickActions() {
         return clickActions;
+    }
+
+    @Override
+    public Map<String, MergeOption> getItemMergeOptions() {
+        return itemMergeOptions;
     }
 
     public static class Evaluation implements MenuItemHolder.InfoEvaluator{

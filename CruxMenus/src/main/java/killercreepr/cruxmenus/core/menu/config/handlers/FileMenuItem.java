@@ -4,6 +4,7 @@ import com.google.common.reflect.TypeToken;
 import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.api.item.dynamic.DynamicItem;
+import killercreepr.crux.api.item.dynamic.MergeOption;
 import killercreepr.crux.core.Crux;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
@@ -17,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 public class FileMenuItem extends SimpleFileMenuModuled<MenuItemHolder> {
@@ -74,9 +76,12 @@ public class FileMenuItem extends SimpleFileMenuModuled<MenuItemHolder> {
             int size = base.size()-2;
             while(size >= 0){
                 if(i == null) break;
-                baseClone = base.get(size).getItem().value();
+                var baseHolder = base.get(size);
+                baseClone = baseHolder.getItem().value();
                 if(baseClone != null) baseClone = baseClone.clone();
-                if(baseClone != null) i = i.mergeItem(baseClone);
+                if(baseClone != null){
+                    i = i.mergeItem(baseClone, baseHolder.getItemMergeOptions());
+                }
                 size--;
             }
         }
@@ -89,7 +94,8 @@ public class FileMenuItem extends SimpleFileMenuModuled<MenuItemHolder> {
         return MenuItemHolder.holder(
             Holder.direct(i),
             extraInfo.build(),
-            clickActions
+            clickActions,
+            registry.deserializeFromFile(new TypeToken<Map<String, MergeOption>>(){}.getType(), o.get("item_merge_options"))
         );
     }
 

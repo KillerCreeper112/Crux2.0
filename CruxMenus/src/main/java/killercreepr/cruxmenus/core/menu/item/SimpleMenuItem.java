@@ -87,11 +87,15 @@ public class SimpleMenuItem implements MenuItem {
         resolvers.hook(base);
         resolvers.hook(SimpleMenuItem.this);
 
-        resolvers.addAll(buildPrimitiveTags(base.info()));
-        resolvers.hookAll(base.info());
+        //base used to be here
+
         resolvers.addAll(buildPrimitiveTags(inputtedContext.info()));
         resolvers.hookAll(inputtedContext.info());
         resolvers.hookAllWithPrefix(evaluatedContext.info());
+
+
+        resolvers.addAll(buildPrimitiveTags(base.info()));
+        resolvers.hookAll(base.info());
         return resolvers;
     }
 
@@ -108,7 +112,7 @@ public class SimpleMenuItem implements MenuItem {
                 }catch (Exception ignored){
                     stringed = new ArrayList<>();
                     List<String> finalStringed = stringed;
-                    e.forEach(ee -> finalStringed.add(e + ""));
+                    e.forEach(ee -> finalStringed.add(ee + ""));
                 }
                 tags.add(Tag.parsed(FORMAT_DATA_PREFIX + id, stringed));
                 return;

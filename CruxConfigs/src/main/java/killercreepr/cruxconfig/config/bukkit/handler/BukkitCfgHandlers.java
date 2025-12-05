@@ -25,6 +25,7 @@ import killercreepr.crux.api.entity.CruxEntitySnapshot;
 import killercreepr.crux.api.entity.predicate.EntityPredicate;
 import killercreepr.crux.api.entity.tag.EntityTag;
 import killercreepr.crux.api.item.dynamic.DynamicItem;
+import killercreepr.crux.api.item.dynamic.MergeOption;
 import killercreepr.crux.api.item.dynamic.component.persistence.TypedDynamicPersistentTag;
 import killercreepr.crux.api.item.predicate.ItemPredicate;
 import killercreepr.crux.api.item.tag.ItemTag;
@@ -140,6 +141,7 @@ public class BukkitCfgHandlers {
     public static final FileAttributeModifier ATTRIBUTE_MODIFIER = new FileAttributeModifier();
     public static final FileNamedTextColor NAMED_TEXT_COLOR = new FileNamedTextColor();
     public static final FileWorldLocation WORLD_LOCATION = new FileWorldLocation();
+    public static final FileMergeOption MERGE_OPTION = new FileMergeOption();
 
 
     public static final FileCruxLevelBasedValue CRUX_LEVEL_BASED_VALUE = new FileCruxLevelBasedValue();
@@ -205,6 +207,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(WorldPredicate.class, WORLD_PREDICATE);
         registry.registerFileHandler(NamedTextColor.class, NAMED_TEXT_COLOR);
         registry.registerFileHandler(WorldLocation.class, WORLD_LOCATION);
+        registry.registerFileHandler(MergeOption.class, MERGE_OPTION);
 
         registry.registerFileHandler(StoredWorld.class, STORED_WORLD);
         registry.registerFileHandler(StoredChunk.class, STORED_CHUNK);

@@ -32,10 +32,8 @@ public class SimpleFillMenuModuleBuilder extends SimpleFileMenuModuled<MenuModul
     public @Nullable Function<MenuItemHolder, MenuItemHolder> itemsFunction(@NotNull String id){
         return item ->{
             if(item.info().has("slot")) return item;
-            return MenuItemHolder.holder(
-                item.getItem(),
-                item.info().append("slot", Holder.directObject(new EquationNumber("<"+MenuModule.buildTag(id, "slot") + ">"))),
-                item.getClickActions()
+            return item.withInfo(
+                item.info().append("slot", Holder.directObject(new EquationNumber("<"+MenuModule.buildTag(id, "slot") + ">")))
             );
         };
     }

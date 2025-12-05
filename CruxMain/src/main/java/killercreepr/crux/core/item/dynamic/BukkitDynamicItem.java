@@ -3,6 +3,7 @@ package killercreepr.crux.core.item.dynamic;
 import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.item.dynamic.DynamicItem;
 import killercreepr.crux.api.item.dynamic.DynamicItemComponent;
+import killercreepr.crux.api.item.dynamic.MergeOption;
 import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.crux.api.text.tags.container.TagContainer;
 import killercreepr.crux.core.Crux;
@@ -82,6 +83,29 @@ public class BukkitDynamicItem implements DynamicItem {
         DynamicItem i = this;
         for(DynamicItemComponent c : components.values()){
             i = i.mergeComponent(c);
+        }
+        return i;
+    }
+
+    @Override
+    public @NotNull DynamicItem mergeItem(@NotNull DynamicItem item, Map<String, MergeOption> overwrite) {
+        if(overwrite == null || overwrite.isEmpty()) return mergeItem(item);
+
+        Map<String, DynamicItemComponent> components = item.components();
+        if(components == null) return this;
+        DynamicItem i = this;
+        for(DynamicItemComponent c : components.values()){
+            MergeOption option = overwrite.get(c.name());
+            if(option == null || option == MergeOption.MERGE){
+                i = i.mergeComponent(c);
+                continue;
+            }
+            if(option == MergeOption.IGNORE){
+                continue;
+            }
+            if(option == MergeOption.OVERWRITE){
+                i = i.withComponent(c);
+            }
         }
         return i;
     }

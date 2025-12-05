@@ -49,6 +49,11 @@ public class SimpleActionContext extends SimpleMenuContext implements ActionCont
     }
 
     @Override
+    public @NotNull DataExchange getAllMergedInfo() {
+        return super.getAllMergedInfo().append(item.getBase().info());
+    }
+
+    @Override
     public @NotNull MergedTagContainer getAllMergedResolvers() {
         return super.getAllMergedResolvers().addAll(item.buildTags());
     }

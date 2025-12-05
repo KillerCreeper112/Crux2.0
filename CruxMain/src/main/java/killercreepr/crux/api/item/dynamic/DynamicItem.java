@@ -4,6 +4,7 @@ import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.crux.core.item.dynamic.BukkitDynamicItem;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,6 +26,8 @@ public interface DynamicItem extends Cloneable {
     @NotNull DynamicItem withComponent(@NotNull DynamicItemComponent component);
     @NotNull DynamicItem mergeComponent(@NotNull DynamicItemComponent component);
     @NotNull DynamicItem mergeItem(@NotNull DynamicItem item);
+    @ApiStatus.Experimental
+    @NotNull DynamicItem mergeItem(@NotNull DynamicItem item, Map<String, MergeOption> overwrite);
 
     @Nullable
     CruxItem build(@NotNull TextParserContext context);

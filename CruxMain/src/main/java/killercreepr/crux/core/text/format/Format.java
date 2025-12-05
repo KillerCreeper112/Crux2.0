@@ -221,11 +221,16 @@ public class Format implements FormatSerializer {
             if(addons != null){
                 List<String> first = addons.getFirst();
                 if(first != null){
-                    first.forEach(s ->{
+                    context.deserializeStringList(first).forEach(s ->{
                         addon.add(
                             text.replace("{" + matched + "}", s)
                         );
                     });
+                    /*first.forEach(s ->{
+                        addon.add(
+                            text.replace("{" + matched + "}", s)
+                        );
+                    });*/
                 }
                 found = true;
             }

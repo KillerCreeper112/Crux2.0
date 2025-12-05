@@ -14,6 +14,9 @@ import killercreepr.crux.core.text.resolver.Tag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.function.Function;
 
 public class SimpleMergedTagContainer implements MergedTagContainer {
@@ -83,6 +86,13 @@ public class SimpleMergedTagContainer implements MergedTagContainer {
             TagsPrefixBuilder prefix = prefixConsumer == null ? TagsPrefixBuilder.overwriteBase(id + "_") : prefixConsumer.apply(id);
 
             if(isPrimitive(value)) add(Tag.parsed(id, value.toString()));
+            if(value instanceof Collection<?> list){
+                List<String> strings = new ArrayList<>(list.size());
+                for (Object object : list) {
+                    strings.add(object == null ? "null" : object.toString());
+                }
+                add(Tag.parsed(id, strings));
+            }
 
             hook(value, prefix);
         });
