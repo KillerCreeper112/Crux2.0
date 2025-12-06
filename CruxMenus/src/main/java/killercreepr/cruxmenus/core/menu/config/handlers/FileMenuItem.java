@@ -6,6 +6,7 @@ import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.api.item.dynamic.DynamicItem;
 import killercreepr.crux.api.item.dynamic.MergeOption;
 import killercreepr.crux.core.Crux;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.FileMergeOption;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileElement;
@@ -53,6 +54,9 @@ public class FileMenuItem extends SimpleFileMenuModuled<MenuItemHolder> {
                     context, menuContext.get("items").getAsFileObject().get(s), menuContext
                 );
                 if (possibleBase != null){
+                    if(s.equalsIgnoreCase("far")){
+                        Crux.logInfo("INFO=" + possibleBase.getItemMergeOptions());
+                    }
                     base.add(possibleBase);
                 }else{
                     Crux.log(Level.WARNING, "No item base of " + s + " found!");

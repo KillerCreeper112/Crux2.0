@@ -6,8 +6,10 @@ import killercreepr.crux.api.block.CruxBlockWrapper;
 import killercreepr.crux.api.block.predicate.BlockPredicate;
 import killercreepr.crux.api.block.sound.CreateBlockSoundGroup;
 import killercreepr.crux.api.block.tag.BlockTag;
+import killercreepr.crux.api.communication.Communicator;
 import killercreepr.crux.api.communication.CreateSound;
 import killercreepr.crux.api.communication.CreateTitle;
+import killercreepr.crux.api.communication.animation.TextAnimation;
 import killercreepr.crux.api.communication.boss.CreateBossBar;
 import killercreepr.crux.api.component.DataComponentAccessor;
 import killercreepr.crux.api.component.DataComponentHandler;
@@ -53,6 +55,7 @@ import killercreepr.crux.core.math.BlockPos;
 import killercreepr.crux.core.math.LocationPos;
 import killercreepr.crux.paper.ItemHolder;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.*;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.communication.StandardCommunicators;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileDataComponentAccessor;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileDataComponentHandler;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileTypedDataComponent;
@@ -60,6 +63,7 @@ import killercreepr.cruxconfig.config.bukkit.handler.impl.component.StandardCfgD
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.FileDynamicItem;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.FileDynamicPersistentTag;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.*;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.text.animation.StandardTextAnimations;
 import killercreepr.cruxconfig.config.bukkit.standard.CommonLootTableHandlers;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.handler.AutoFileHandler;
@@ -142,6 +146,8 @@ public class BukkitCfgHandlers {
     public static final FileNamedTextColor NAMED_TEXT_COLOR = new FileNamedTextColor();
     public static final FileWorldLocation WORLD_LOCATION = new FileWorldLocation();
     public static final FileMergeOption MERGE_OPTION = new FileMergeOption();
+    public static final FileTextAnimation TEXT_ANIMATION = new FileTextAnimation();
+    public static final FileCommunicator COMMUNICATOR = new FileCommunicator();
 
 
     public static final FileCruxLevelBasedValue CRUX_LEVEL_BASED_VALUE = new FileCruxLevelBasedValue();
@@ -208,6 +214,8 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(NamedTextColor.class, NAMED_TEXT_COLOR);
         registry.registerFileHandler(WorldLocation.class, WORLD_LOCATION);
         registry.registerFileHandler(MergeOption.class, MERGE_OPTION);
+        registry.registerFileHandler(TextAnimation.class, TEXT_ANIMATION);
+        registry.registerFileHandler(Communicator.class, COMMUNICATOR);
 
         registry.registerFileHandler(StoredWorld.class, STORED_WORLD);
         registry.registerFileHandler(StoredChunk.class, STORED_CHUNK);
@@ -220,6 +228,8 @@ public class BukkitCfgHandlers {
         StandardFileLootConditions.register(LOOT_CONDITION);
         StandardFileLootFunctions.register(ITEM_LOOT_FUNCTION);
         StandardFileLootPoolObjects.register(ITEM_LOOT_POOL_OBJECT);
+        StandardTextAnimations.register(TEXT_ANIMATION);
+        StandardCommunicators.register(COMMUNICATOR);
 
         registry.registerFileHandler(SimpleItemLootObject.class, SIMPLE_LOOT_OBJECT);
 

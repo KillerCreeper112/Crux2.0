@@ -1,8 +1,14 @@
 package killercreepr.crux.core.listener;
 
 import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
+import killercreepr.crux.api.communication.Communicator;
+import killercreepr.crux.api.communication.CreateTitle;
 import killercreepr.crux.api.entity.memory.EntityMemory;
 import killercreepr.crux.api.entity.memory.PlayerMemory;
+import killercreepr.crux.api.text.tags.container.TagContainer;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
+import killercreepr.crux.core.communication.animation.AnimatedMsg;
+import killercreepr.crux.core.communication.animation.LetterCycleTextAnimation;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
@@ -12,7 +18,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class EntityDataListener implements Listener {
@@ -65,4 +74,32 @@ public class EntityDataListener implements Listener {
             ignored.printStackTrace();
         }
     }
+
+    //todo remove testing
+    @EventHandler
+    public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
+        Player p = event.getPlayer();
+        AnimatedMsg msg = new AnimatedMsg(
+            List.of(
+                new AnimatedMsg.Entry(
+                    Communicator.title(CreateTitle.title(
+                        "<text_animation_output:test>",
+                        "",
+                        0, 30, 0
+                    )),
+                    20
+                )
+            ),
+            Map.of("test", new LetterCycleTextAnimation(
+                "This is a text",
+                "<bold><green><output>",
+                List.of("<yellow><char></yellow>"),
+                2, 20,
+                true
+            )),
+            NumberProvider.equation("<max_animation_length>")
+        );
+        msg.use(p, TagContainer.merged().hook(p));
+    }
+
 }

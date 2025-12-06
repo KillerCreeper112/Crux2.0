@@ -89,6 +89,7 @@ public class BukkitDynamicItem implements DynamicItem {
 
     @Override
     public @NotNull DynamicItem mergeItem(@NotNull DynamicItem item, Map<String, MergeOption> overwrite) {
+
         if(overwrite == null || overwrite.isEmpty()) return mergeItem(item);
 
         Map<String, DynamicItemComponent> components = item.components();
