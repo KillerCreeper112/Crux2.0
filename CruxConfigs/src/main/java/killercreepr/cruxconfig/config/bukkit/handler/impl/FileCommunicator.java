@@ -4,6 +4,7 @@ import killercreepr.crux.api.communication.Communicator;
 import killercreepr.crux.api.communication.animation.TextAnimation;
 import killercreepr.crux.core.communication.MsgContainer;
 import killercreepr.crux.core.util.CruxColor;
+import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileObject;
@@ -27,6 +28,9 @@ public class FileCommunicator extends SimpleFileHandler<Communicator> {
     }
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull Communicator object) {
+        if(object instanceof MsgContainer msg){
+            return BukkitCfgHandlers.MSG_CONTAINER.serializeToFile(context, msg);
+        }
         return null;//todo
     }
 
