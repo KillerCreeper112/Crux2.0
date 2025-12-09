@@ -3,6 +3,7 @@ package killercreepr.cruxconfig.config.bukkit.handler.impl.text.animation;
 import com.google.common.reflect.TypeToken;
 import killercreepr.crux.api.communication.animation.TextAnimation;
 import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.communication.animation.CycleTextAnimation;
 import killercreepr.crux.core.communication.animation.LetterCycleTextAnimation;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.FileTextAnimation;
 import killercreepr.cruxconfig.config.common.FileContext;
@@ -28,6 +29,17 @@ public class StandardTextAnimations {
                     r.deserializeFromFileOrDefault(Integer.class, o.get("highlight_width"), 1),
                     r.deserializeFromFileOrDefault(Integer.class, o.get("delay"), 1),
                     r.deserializeFromFileOrDefault(Boolean.class, o.get("ignore_blank_spaces"), true)
+                );
+            }
+        });
+        file.registerCustomHandler(Crux.key("text_cycle"), new GetterFileHandler<>() {
+            @Override
+            public @Nullable TextAnimation deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
+                if(!(e instanceof FileObject o)) return null;
+                var r = ctx.getRegistry();
+                return new CycleTextAnimation(
+                    r.deserializeFromFile(new TypeToken<List<String>>(){}.getType(), o.get("values")),
+                    r.deserializeFromFileOrDefault(Integer.class, o.get("delay"), 1)
                 );
             }
         });
