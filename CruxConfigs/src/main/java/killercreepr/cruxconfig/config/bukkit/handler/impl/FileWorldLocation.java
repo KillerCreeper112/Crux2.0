@@ -7,10 +7,7 @@ import killercreepr.crux.core.data.SimpleWorldLocation;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
-import killercreepr.cruxconfig.config.common.element.FileArray;
-import killercreepr.cruxconfig.config.common.element.FileElement;
-import killercreepr.cruxconfig.config.common.element.FileGeneric;
-import killercreepr.cruxconfig.config.common.element.FileObject;
+import killercreepr.cruxconfig.config.common.element.*;
 import killercreepr.cruxconfig.config.common.handler.SimpleFileHandler;
 import killercreepr.cruxconfig.config.common.json.annotation.JsonSerializer;
 import net.kyori.adventure.key.Key;
@@ -24,14 +21,10 @@ import java.util.List;
 public class FileWorldLocation extends SimpleFileHandler<WorldLocation> {
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull WorldLocation loc) {
-        return new FileObject()
-            .add("world", context.getRegistry().serializeToFile(loc.worldKey()))
-            .addProperty("x", loc.x())
-            .addProperty("y", loc.y())
-            .addProperty("z", loc.z())
-            .addProperty("yaw", loc.yaw())
-            .addProperty("pitch", loc.pitch())
-            ;
+        if(!(context.getRegistry().serializeToFile(loc.location()) instanceof FileObject o)){
+            return FileNull.INSTANCE;
+        }
+        return o.add("world", context.getRegistry().serializeToFile(loc.worldKey()));
     }
 
     @Override
@@ -50,8 +43,8 @@ public class FileWorldLocation extends SimpleFileHandler<WorldLocation> {
                     if(generic.isString()) list.add(CruxMath.evaluate(generic.getAsString()));
                     else list.add(generic.getAsNumber());
                 }
-                if(list.isEmpty()) return new SimpleWorldLocation(0D, 0D, 0D, 0f, 0f, null);
-                return new SimpleWorldLocation(
+                if(list.isEmpty()) return WorldLocation.worldLocation(0D, 0D, 0D, 0f, 0f, null);
+                return WorldLocation.worldLocation(
                     list.get(0).doubleValue(),
                     list.size() > 1 ? list.get(1).doubleValue() : 0D,
                     list.size() > 2 ? list.get(2).doubleValue() : 0D,
@@ -69,7 +62,7 @@ public class FileWorldLocation extends SimpleFileHandler<WorldLocation> {
         Number z = registry.deserializeFromFile(Number.class, o.get("z"));
         Number yaw = registry.deserializeFromFile(Number.class, o.get("yaw"));
         Number pitch = registry.deserializeFromFile(Number.class, o.get("pitch"));
-        return new SimpleWorldLocation(
+        return WorldLocation.worldLocation(
             x == null ? 0D : x.doubleValue(), y == null ? 0D : y.doubleValue(), z == null ? 0D : z.doubleValue(),
             yaw == null ? 0f : yaw.floatValue(),
             pitch == null ? 0f : pitch.floatValue(),

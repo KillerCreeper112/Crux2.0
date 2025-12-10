@@ -30,6 +30,10 @@ public class ActiveCruxWorldRegistry extends SimpleMappedRegistry<Key, CruxWorld
         return TICKED;
     }
 
+    public boolean removeTicked(ManagedTicked ticked){
+        return TICKED.remove(ticked);
+    }
+
     @Override
     public <E extends CruxWorld> @NotNull E register(@NotNull Key key, @NotNull E value) {
         //BY_NAME.put(value.getName(), value);

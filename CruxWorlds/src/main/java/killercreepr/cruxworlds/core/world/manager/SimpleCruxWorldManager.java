@@ -1,5 +1,6 @@
 package killercreepr.cruxworlds.core.world.manager;
 
+import killercreepr.crux.api.data.tick.ManagedTicked;
 import killercreepr.crux.api.registry.KeyedRegistry;
 import killercreepr.crux.api.registry.MappedRegistry;
 import killercreepr.crux.core.Crux;
@@ -70,17 +71,32 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
         };
     }
 
+
+    Collection<CruxWorld> toStop = new HashSet<>();
     public void tick(){
+        toStop.clear();
         active.getTicked().forEach(tick ->{
             if(tick.shouldStop()){
                 tick.stopped();
                 if(tick instanceof CruxWorld w && w.scheduledUnload()){
-                    Crux.scheduler().runTask(() -> unloadWorld(w, w.scheduledUnloadSave()));
+                    toStop.add(w);
                 }
                 return; //true;
             }
             tick.tick();
             //return false;
+        });
+        if(toStop.isEmpty()) return;
+        for (CruxWorld crux : toStop) {
+            if(crux instanceof ManagedTicked ticked){
+                active.removeTicked(ticked);
+            }
+        }
+        Collection<CruxWorld> copied = new HashSet<>(toStop);
+        Crux.scheduler().runTaskMain(() ->{
+            for (CruxWorld w : copied) {
+                unloadWorld(w, w.scheduledUnloadSave());
+            }
         });
     }
 
@@ -261,6 +277,10 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
         World world = event.getWorld();
         CruxWorld crux = getWorld(world.key());
         if(crux==null) return;
+        onWorldUnload(crux);
+    }
+
+    public void onWorldUnload(CruxWorld crux){
         active.remove(crux.key());
         crux.onUnload(crux.shouldSaveOnNextUnload());
     }

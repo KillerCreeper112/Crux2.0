@@ -1,19 +1,28 @@
 package killercreepr.crux.core.data;
 
 import killercreepr.crux.api.data.WorldLocation;
+import killercreepr.crux.api.math.CruxLocation;
 import killercreepr.crux.core.math.SimpleCruxLocation;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 
-public class SimpleWorldLocation extends SimpleCruxLocation implements WorldLocation {
+public class SimpleWorldLocation implements WorldLocation {
     protected final Key world;
-    public SimpleWorldLocation(double x, double y, double z, float yaw, float pitch, Key world) {
-        super(x, y, z, yaw, pitch);
+    protected final CruxLocation location;
+
+    public SimpleWorldLocation(Key world, CruxLocation location) {
         this.world = world;
+        this.location = location;
     }
+
 
     @Override
     public @NotNull Key worldKey() {
         return world;
+    }
+
+    @Override
+    public CruxLocation location() {
+        return location;
     }
 }
