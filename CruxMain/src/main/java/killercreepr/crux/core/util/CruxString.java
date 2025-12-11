@@ -5,9 +5,13 @@ import killercreepr.crux.core.registries.CruxRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -27,6 +31,27 @@ public class CruxString {
         return Stream.of(string.replaceAll("_", " ").split(" ")).
                 map(w -> w.toUpperCase().charAt(0)+ w.toLowerCase().substring(1)).
                 reduce((s, s2) -> s + " " + s2).orElse("");
+    }
+
+    public static UUID stringToUUID(String input) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hashBytes = digest.digest(input.getBytes(StandardCharsets.UTF_8));
+
+            // Take the first 16 bytes of the hash to form the UUID
+            long mostSigBits = 0;
+            long leastSigBits = 0;
+
+            for (int i = 0; i < 8; i++) {
+                mostSigBits |= ((long) hashBytes[i] & 0xff) << (8 * (7 - i));
+                leastSigBits |= ((long) hashBytes[i + 8] & 0xff) << (8 * (7 - i));
+            }
+
+            // Return the UUID based on the hash
+            return new UUID(mostSigBits, leastSigBits);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("SHA-256 algorithm not found", e);
+        }
     }
 
     public static int parseInt(@Nullable String string, int defaultValue){

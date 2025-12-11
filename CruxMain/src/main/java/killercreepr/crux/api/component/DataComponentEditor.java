@@ -9,6 +9,12 @@ public interface DataComponentEditor {
      */
     @Nullable
     <T> T set(DataComponentType<? super T> type, @Nullable T value);
+
+    @Nullable
+    default <T> T unset(DataComponentType<? super T> type){
+        return set(type, null);
+    }
+
     /**
      * @return The previous value, if any.
      */
