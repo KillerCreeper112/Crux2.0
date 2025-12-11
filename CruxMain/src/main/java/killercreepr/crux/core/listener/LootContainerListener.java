@@ -2,6 +2,7 @@ package killercreepr.crux.core.listener;
 
 import killercreepr.crux.api.component.serialization.PersistHolderComponentHandler;
 import killercreepr.crux.api.component.serialization.PersistentDataWrappers;
+import killercreepr.crux.api.event.CruxItemLootGenerateEvent;
 import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.loot.LootContext;
 import killercreepr.crux.api.loot.item.ItemLootTable;
@@ -66,7 +67,10 @@ public class LootContainerListener implements Listener {
         state.update();
 
         LootContext ctx = LootContext.builder().looted(b).location(inv.getLocation()).looter(p).build();
-        lootTable.forEach(loot -> loot.fillInventory(inv, ctx));
+
+        lootTable.forEach(loot ->{
+            ItemLootTable.eventFillInventory(loot, ctx, inv);
+        });
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -88,9 +92,13 @@ public class LootContainerListener implements Listener {
 
         LootContext ctx = LootContext.builder().looted(b).location(b.getLocation()).looter(p).build();
         List<Item> itemDrops = event.getItems();
-        lootTable.forEach(loot -> loot.populateLoot(ctx).forEach(item ->{
-            itemDrops.add(world.dropItem(spawn, item));
-        }));
+        lootTable.forEach(loot ->{
+            CruxItemLootGenerateEvent lootEvent = ItemLootTable.eventGenerate(loot, ctx);
+            if(lootEvent.isCancelled()) return;
+            lootEvent.getLoot().forEach(item ->{
+                itemDrops.add(world.dropItem(spawn, item));
+            });
+        });
     }
 
 }

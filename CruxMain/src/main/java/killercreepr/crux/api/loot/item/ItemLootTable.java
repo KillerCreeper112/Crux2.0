@@ -1,6 +1,7 @@
 package killercreepr.crux.api.loot.item;
 
 import com.google.common.collect.Lists;
+import killercreepr.crux.api.event.CruxItemLootGenerateEvent;
 import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.api.loot.LootContext;
 import killercreepr.crux.api.loot.LootTable;
@@ -18,12 +19,39 @@ public interface ItemLootTable extends LootTable<ItemStack> {
 
     }
 
+    static CruxItemLootGenerateEvent eventFillInventory(ItemLootTable lootTable, LootContext ctx, Inventory inv){
+        CruxItemLootGenerateEvent event = eventGenerate(lootTable, ctx);
+        if(event.isCancelled()) return event;
+        lootTable.fillInventory(inv, event.getLoot(), CruxMath.random());
+        return event;
+    }
+
+    static CruxItemLootGenerateEvent eventGenerate(LootTable<ItemStack> lootTable, LootContext ctx){
+        List<ItemStack> loot = lootTable.populateLoot(ctx);
+        CruxItemLootGenerateEvent event = new CruxItemLootGenerateEvent(lootTable, ctx, loot);
+        if(!event.callEvent()) return event;
+        return event;
+    }
+
     default void fillInventory(@NotNull Inventory inventory, @NotNull LootContext context){
         fillInventory(inventory, context, CruxMath.random());
     }
 
     default void fillInventory(@NotNull Inventory inventory, @NotNull LootContext context, Random random) {
         List<ItemStack> randomItems = populateLoot(context);
+        List<Integer> availableSlots = this.getAvailableSlots(inventory, random);
+
+        this.shuffleAndSplitItems(randomItems, availableSlots.size(), random);
+        for (ItemStack itemStack : randomItems) {
+            if (availableSlots.isEmpty()) {
+                Crux.logWarning("Tried to over-fill a container");
+                return;
+            }
+            inventory.setItem(availableSlots.remove(availableSlots.size() - 1), itemStack);
+        }
+    }
+
+    default void fillInventory(@NotNull Inventory inventory, List<ItemStack> randomItems, Random random) {
         List<Integer> availableSlots = this.getAvailableSlots(inventory, random);
 
         this.shuffleAndSplitItems(randomItems, availableSlots.size(), random);
