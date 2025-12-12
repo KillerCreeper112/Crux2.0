@@ -10,10 +10,7 @@ import killercreepr.crux.core.entity.consumer.OminousStandardEntityConsumer;
 import killercreepr.crux.core.external.placeholderapi.FormatMillisecondsHook;
 import killercreepr.crux.core.external.placeholderapi.FormatTicksHook;
 import killercreepr.crux.core.external.placeholderapi.TagsExpansionHook;
-import killercreepr.crux.core.listener.EntityDataListener;
-import killercreepr.crux.core.listener.EntityMechanicsListener;
-import killercreepr.crux.core.listener.EntitySpawnListener;
-import killercreepr.crux.core.listener.LootContainerListener;
+import killercreepr.crux.core.listener.*;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.registries.CruxRegistries;
 import org.bukkit.command.CommandSender;
@@ -111,6 +108,7 @@ public class CruxMainModule implements CruxModule, Listener {
             new EntityMechanicsListener(),
             new EntitySpawnListener(),
             new LootContainerListener(),
+            new ItemUpdaterListener(),
             this
         );
         Crux.buildTickTask().runTaskTimerAsynchronously(plugin, 20L, 1L);
