@@ -25,6 +25,7 @@ import org.bukkit.Chunk;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.*;
 import org.bukkit.plugin.Plugin;
@@ -255,7 +256,7 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
         crux.onChunkPopulate(chunk);
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onWorldInit(WorldInitEvent event) {
         World world = event.getWorld();
         CruxWorld crux = create(world);

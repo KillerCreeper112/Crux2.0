@@ -15,6 +15,8 @@ public interface InputDecodeContext {
 
     <T> T get();
 
+    Object getUnchecked();
+
     <T> T get(String id);
     default <T> T getOptional(String id){
         return getOptional(id, null);

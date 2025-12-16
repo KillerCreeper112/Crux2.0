@@ -1,9 +1,11 @@
 package killercreepr.crux.core.util;
 
+import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.api.item.CruxItem;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -36,6 +38,26 @@ public class CruxInv {
 
             has += item.getAmount();
             if(maxAmount > 0 && has >= maxAmount) break;
+        }
+        return has;
+    }
+
+    public static boolean hasItems(Iterable<Holder<Iterable<ItemStack>>> inv, Predicate<ItemStack> filter, int amount){
+        return getItemCount(inv, filter, amount) >= amount;
+    }
+
+    public static int getItemCount(Iterable<Holder<Iterable<ItemStack>>> inv, Predicate<ItemStack> filter, int maxAmount){
+        int has = 0;
+        for (Holder<Iterable<ItemStack>> holder : inv) {
+            var items = holder.value();
+            if(items == null) continue;
+            for (ItemStack item : items) {
+                if(CruxItem.isEmpty(item)) continue;
+                if(!filter.test(item)) continue;
+
+                has += item.getAmount();
+                if(maxAmount > 0 && has >= maxAmount) break;
+            }
         }
         return has;
     }

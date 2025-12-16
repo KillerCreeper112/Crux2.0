@@ -38,6 +38,7 @@ public class SimpleWorld implements CruxWorld, PersistenceComponentHandler, Relo
         this.tickedModules = new HashSet<>();
         modules.forEach(creator ->{
             WorldModule module = creator.create(this);
+            if(module == null) return;
             this.modules.add(module);
             if(module instanceof Ticked t) tickedModules.add(t);
         });

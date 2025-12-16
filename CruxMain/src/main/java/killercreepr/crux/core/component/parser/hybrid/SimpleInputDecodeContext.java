@@ -29,6 +29,11 @@ public class SimpleInputDecodeContext implements InputDecodeContext {
     }
 
     @Override
+    public Object getUnchecked() {
+        return value;
+    }
+
+    @Override
     public <T> T get(String id) {
         return (T) toMap().get(id);
     }
