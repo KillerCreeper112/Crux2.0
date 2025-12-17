@@ -109,6 +109,39 @@ public class CruxLoc {
         return x >= x1 && x <= x2 && y >= y1 && y <= y2 && z >= z1 && z <= z2;
     }
 
+    public static boolean inRegion(@NotNull Location checkLoc,
+                                   @NotNull Vector pos1,
+                                   @NotNull Vector pos2) {
+
+        return inRegion(
+            checkLoc,
+            pos1.getX(), pos1.getY(), pos1.getZ(),
+            pos2.getX(), pos2.getY(), pos2.getZ()
+        );
+    }
+
+    public static boolean inRegion(@NotNull Location checkLoc,
+                                   double posX1, double posY1, double posZ1,
+                                   double posX2, double posY2, double posZ2) {
+
+        double x1 = Math.min(posX1, posX2);
+        double y1 = Math.min(posY1, posY2);
+        double z1 = Math.min(posZ1, posZ2);
+
+        double x2 = Math.max(posX1, posX2);
+        double y2 = Math.max(posY1, posY2);
+        double z2 = Math.max(posZ1, posZ2);
+
+        double x = checkLoc.getX();
+        double y = checkLoc.getY();
+        double z = checkLoc.getZ();
+
+        return x >= x1 && x <= x2
+            && y >= y1 && y <= y2
+            && z >= z1 && z <= z2;
+    }
+
+
     private static final double EPSILON = Math.ulp(1.0d) * 2d;
     private static boolean isSignificant(double value) {
         return Math.abs(value) >= EPSILON;

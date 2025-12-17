@@ -19,6 +19,7 @@ import killercreepr.crux.core.loot.conditions.evaluation.EvaluationCondition;
 import killercreepr.crux.core.loot.conditions.evaluation.SelectNumberEvaluationCondition;
 import killercreepr.crux.core.loot.conditions.item.InventoryHasItemCondition;
 import killercreepr.crux.core.loot.conditions.item.ItemStackCondition;
+import killercreepr.crux.core.loot.conditions.location.LocationInRegionCondition;
 import killercreepr.crux.core.loot.conditions.world.LocationCondition;
 import killercreepr.crux.core.loot.conditions.world.WorldCondition;
 import killercreepr.crux.core.util.CruxMath;
@@ -29,6 +30,7 @@ import killercreepr.cruxconfig.config.common.element.FileObject;
 import net.kyori.adventure.key.Key;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -401,6 +403,16 @@ public class StandardFileLootConditions {
                 return new SelectNumberEvaluationCondition(target,
                     g.isNumber() ? g.getAsNumber() : g.getAsString(),
                     check, targets, e.getOrDefaultObject(String.class, "operation", "=")
+                );
+            }
+        });
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("location_in_region")) {
+            @Override
+            public @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                var r = ctx.getRegistry();
+                return new LocationInRegionCondition(target,
+                    r.deserializeFromFile(Vector.class, e.get("pos1")),
+                    r.deserializeFromFile(Vector.class, e.get("pos2"))
                 );
             }
         });
