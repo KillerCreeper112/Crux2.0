@@ -39,7 +39,7 @@ public class CruxAttributeCommands {
         plugin.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event ->{
             final Commands commands = event.registrar();
             LiteralCommandNode<CommandSourceStack> cmd = build(Commands.literal("cruxattribute")
-                .requires(source -> source.getSender().hasPermission("cruxattributes.cmds.cruxattribute.use")),
+                .requires(source -> source.getSender().hasPermission("cruxattributes.command.cruxattribute")),
                 plugin.getLifecycleManager());
             commands.register(cmd, List.of("cattribute", "catt"));
         });

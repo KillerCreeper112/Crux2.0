@@ -41,6 +41,22 @@ public interface EventLootContexts {
             .looted(e)
             ;
     }
+    static LootContext.Builder builder(@NotNull PlayerInteractEntityEvent event){
+        Player p = event.getPlayer();
+        Entity e = event.getRightClicked();
+        return builder()
+            .info(
+                DataExchange.builder()
+                    .putAll(e, "right_click")
+                    .putAll(event.getHand(), "hand")
+                    //.putAll(p, "player")
+                    .build()
+            )
+            .location(e.getLocation())
+            .looter(p)
+            .looted(e)
+            ;
+    }
     static LootContext.Builder builder(@NotNull InventoryClickEvent event){
         return builder()
             .info(

@@ -14,6 +14,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class CruxWorldUtil {
     public static boolean isLoaded(@NotNull World world, int x, int z) {
@@ -37,6 +39,10 @@ public class CruxWorldUtil {
     }
 
     public static File copyWorld(String name, String copyName, boolean overwrite) {
+        return copyWorld(name, copyName, overwrite, false);
+    }
+
+    public static File copyWorld(String name, String copyName, boolean overwrite, boolean includeUID) {
         File source = getWorldFolder(name);
         if (source == null) return null;
 
@@ -51,6 +57,20 @@ public class CruxWorldUtil {
             }
 
             FileUtils.copyDirectory(source, destination);
+
+            if(!includeUID){
+                applyToChildren(
+                    destination,
+                    file ->{
+                        if(file.getName().equals("uid.dat")){
+                            file.delete();
+                            return true;
+                        }
+                        return false;
+                    }
+                );
+            }
+
             return destination;
 
         } catch (IOException e) {
@@ -59,8 +79,21 @@ public class CruxWorldUtil {
         }
     }
 
+    public static void applyToChildren(File folder, Function<File, Boolean> consumer){
+        File[] list = folder.listFiles();
+        if(list == null) return;
+        for (File file : list) {
+            var result = consumer.apply(file);
+            if(result) break;
+        }
+    }
+
     public static World copyAndLoadWorld(String name, String copyName, boolean overwrite){
-        File copied = copyWorld(name, copyName, overwrite);
+        return copyAndLoadWorld(name, copyName, overwrite, false);
+    }
+
+    public static World copyAndLoadWorld(String name, String copyName, boolean overwrite, boolean includeUID){
+        File copied = copyWorld(name, copyName, overwrite, includeUID);
         if(copied == null) return null;
         return Crux.getServer().createWorld(new WorldCreator(copyName));
     }

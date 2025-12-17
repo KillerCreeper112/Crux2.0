@@ -45,9 +45,9 @@ public class AdvancementCommands {
         plugin.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event ->{
             final Commands commands = event.registrar();
             LiteralCommandNode<CommandSourceStack> cmd = build(Commands.literal("cruxadvancement")
-                    .requires(source -> source.getSender().hasPermission("cruxadvancements.cmds.cruxadvancement.use")),
+                    .requires(source -> source.getSender().hasPermission("cruxadvancements.command.cruxadvancement")),
                 plugin.getLifecycleManager());
-            commands.register(cmd, List.of("cquest", "cadvance"));
+            commands.register(cmd, List.of("cadvance"));
         });
     }
 
