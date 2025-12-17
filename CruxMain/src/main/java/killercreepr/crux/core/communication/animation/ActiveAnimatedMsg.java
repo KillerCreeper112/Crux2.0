@@ -74,6 +74,13 @@ public class ActiveAnimatedMsg implements Ticked {
     public void tick() {
         frame++;
         for (AnimatedMsg.Entry entry : messages) {
+            if(entry.frame() != 0){
+                if(entry.frame() == frame){
+                    sendToAudience(entry);
+                    continue;
+                }
+            }
+
             if(entry.sendRate() == -1) continue;
             if(frame == 1 || entry.sendRate() == 0 || frame % entry.sendRate() == 0){
                 sendToAudience(entry);

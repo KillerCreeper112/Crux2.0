@@ -32,9 +32,11 @@ public class StandardCommunicators {
                 if(o.get("entries") instanceof FileArray a){
                     a.forEach(ele ->{
                         if(!(ele instanceof FileObject oo)) return;
+                        Integer sendRate = r.deserializeFromFileOrDefault(Integer.class, oo.get("send_rate"), null);
                         entries.add(new AnimatedMsg.Entry(
                             r.deserializeFromFile(Communicator.class, oo.get("msg")),
-                            r.deserializeFromFileOrDefault(Integer.class, oo.get("send_rate"), 0)
+                            sendRate == null ? (oo.has("frame") ? -1 : 0) : sendRate,
+                            r.deserializeFromFileOrDefault(Integer.class, oo.get("frame"), 0)
                         ));
                     });
                 }

@@ -55,6 +55,6 @@ public class AnimatedMsg implements Communicator {
         );
     }
 
-    public record Entry(Communicator msg, int sendRate){
+    public record Entry(Communicator msg, int sendRate, int frame){
     }
 }
