@@ -416,5 +416,14 @@ public class StandardFileLootConditions {
                 );
             }
         });
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("interact_action")) {
+            @Override
+            public @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                var r = ctx.getRegistry();
+                return new InteractActionCondition(target,
+                    r.deserializeFromFile(String.class, e.get("action"))
+                );
+            }
+        });
     }
 }
