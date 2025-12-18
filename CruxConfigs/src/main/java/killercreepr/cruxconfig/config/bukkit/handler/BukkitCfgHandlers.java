@@ -148,6 +148,7 @@ public class BukkitCfgHandlers {
     public static final FileMergeOption MERGE_OPTION = new FileMergeOption();
     public static final FileTextAnimation TEXT_ANIMATION = new FileTextAnimation();
     public static final FileCommunicator COMMUNICATOR = new FileCommunicator();
+    public static final FileBlockPos BLOCK_POS = new FileBlockPos();
 
 
     public static final FileCruxLevelBasedValue CRUX_LEVEL_BASED_VALUE = new FileCruxLevelBasedValue();
@@ -216,6 +217,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(MergeOption.class, MERGE_OPTION);
         registry.registerFileHandler(TextAnimation.class, TEXT_ANIMATION);
         registry.registerFileHandler(Communicator.class, COMMUNICATOR);
+        registry.registerFileHandler(BlockPos.class, BLOCK_POS);
 
         registry.registerFileHandler(StoredWorld.class, STORED_WORLD);
         registry.registerFileHandler(StoredChunk.class, STORED_CHUNK);
@@ -259,7 +261,7 @@ public class BukkitCfgHandlers {
             Axis.class
         );
 
-        registry.registerFileHandler(BlockPos.class, new AutoFileHandler<>(BlockPos.class));
+        //registry.registerFileHandler(BlockPos.class, new AutoFileHandler<>(BlockPos.class));
         registry.registerFileHandler(LocationPos.class, new AutoFileHandler<>(LocationPos.class));
         registry.registerFileHandler(WorldPosition.class, new AutoFileHandler<>(SimpleWorldPosition.class));
         registry.registerFileHandler(ArmorTrim.class, new AutoFileHandler<>(ArmorTrim.class));
