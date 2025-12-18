@@ -58,6 +58,52 @@ public class CruxLoc {
         return result;
     }
 
+    /**
+     *
+     * @param eye
+     * @param target
+     * @param maxDistance
+     * @param dotThreshold 5°	0.996	Very precise
+     *   8°	0.990	Tight
+     *   10°	0.985	Perfect wall-buy feel
+     *   12°	0.978	Forgiving
+     *   15°	0.966	Very forgiving
+     * @return
+     */
+    public static boolean isLookingAt(
+        Location eye,
+        Location target,
+        double maxDistance,
+        double dotThreshold
+    ) {
+        // Vector player is looking in
+        Vector viewDir = eye.getDirection().normalize();
+        return isLookingAt(viewDir, eye.toVector(), target, maxDistance, dotThreshold);
+    }
+
+    public static boolean isLookingAt(
+        Vector viewDir, Vector eye,
+        Location target,
+        double maxDistance,
+        double dotThreshold
+    ) {
+        // Vector from eye to target
+        Vector toTarget = target.toVector().subtract(eye);
+        double distance = toTarget.length();
+
+        // Distance check
+        if (distance > maxDistance) return false;
+
+        // Normalize for dot product
+        toTarget.normalize();
+
+        // Dot product check
+        double dot = viewDir.dot(toTarget);
+
+        return dot >= dotThreshold;
+    }
+
+
     public static Set<Block> getNearbyBlocks(Block center, int radius){
         Set<Block> list = new HashSet<>();
         for (int x = radius; x >= -radius; x--) {
