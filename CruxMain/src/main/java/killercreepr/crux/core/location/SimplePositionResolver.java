@@ -20,6 +20,22 @@ public class SimplePositionResolver implements LocationResolver {
         this.world = world;
     }
 
+    public NumberProvider getX() {
+        return x;
+    }
+
+    public NumberProvider getY() {
+        return y;
+    }
+
+    public NumberProvider getZ() {
+        return z;
+    }
+
+    public String getWorld() {
+        return world;
+    }
+
     @Override
     public Location resolveLocation(InputContext ctx) {
         return new Location(
