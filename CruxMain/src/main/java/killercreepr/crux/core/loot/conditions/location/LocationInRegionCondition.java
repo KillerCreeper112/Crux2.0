@@ -5,6 +5,7 @@ import killercreepr.crux.api.loot.LootCtxObjects;
 import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.core.loot.conditions.BaseCondition;
 import killercreepr.crux.core.util.CruxLoc;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -24,6 +25,7 @@ public class LocationInRegionCondition extends BaseCondition {
     }
 
     public Location parseLocation(Object o, World world){
+        Bukkit.broadcastMessage(o + "");
         if(o instanceof Location l) return l;
         if(o instanceof Entity e) return e.getLocation();
         if(o instanceof Block e) return e.getLocation();

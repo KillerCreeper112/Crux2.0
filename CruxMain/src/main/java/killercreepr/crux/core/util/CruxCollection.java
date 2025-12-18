@@ -25,6 +25,11 @@ public class CruxCollection {
         return randomElement;
     }
 
+    public static <T> T getOrDefault(List<T> list, int index, T fallback){
+        if(index < 0 || index >= list.size()) return fallback;
+        return list.get(index);
+    }
+
     public static <T> void shuffle(List<T> list, Random random) {
         int size = list.size();
 
