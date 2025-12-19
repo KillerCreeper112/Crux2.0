@@ -34,4 +34,6 @@ public interface MobCategory extends Keyed {
      */
     MobCategory ETERNAL = CruxEntityRegistries.MOB_CATEGORY.register(new SimpleMobCategory(Crux.key("eternal")));
     MobCategory COSMETIC = CruxEntityRegistries.MOB_CATEGORY.register(new SimpleMobCategory(Crux.key("cosmetic")));
+    MobCategory HUMAN = CruxEntityRegistries.MOB_CATEGORY.register(new SimpleMobCategory(Crux.key("human")));
+    MobCategory PLAYER = CruxEntityRegistries.MOB_CATEGORY.register(new SimpleMobCategory(Crux.key("player")));
 }

@@ -15,6 +15,7 @@ import killercreepr.crux.core.loot.conditions.block.BlockDirectionalNearbyCondit
 import killercreepr.crux.core.loot.conditions.block.BlockStateCondition;
 import killercreepr.crux.core.loot.conditions.debug.DevStringCondition;
 import killercreepr.crux.core.loot.conditions.entity.EntityCondition;
+import killercreepr.crux.core.loot.conditions.entity.EntityPersistTagsCondition;
 import killercreepr.crux.core.loot.conditions.evaluation.EvaluationCondition;
 import killercreepr.crux.core.loot.conditions.evaluation.SelectNumberEvaluationCondition;
 import killercreepr.crux.core.loot.conditions.item.InventoryHasItemCondition;
@@ -95,6 +96,16 @@ public class StandardFileLootConditions {
                     registry.deserializeFromFile(Key.class, e.get("world_key")),
                     slots,
                     registry.deserializeFromFile(String.class, e.get("uuid"))
+                );
+            }
+        });
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("entity_has_tags")) {
+
+            @Override
+            public @NotNull LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                FileRegistry registry = ctx.getRegistry();
+                return new EntityPersistTagsCondition(
+                    target, registry.deserializeFromFile(new TypeToken<Collection<String>>(){}.getType(), e.get("tags"))
                 );
             }
         });

@@ -131,6 +131,8 @@ public interface CruxMob extends Keyed {
         switch (e.getType()){
             case WARDEN -> list.add(MobCategory.SCULK);
         }
+        if(e instanceof HumanEntity) list.add(MobCategory.HUMAN);
+        if(e instanceof Player) list.add(MobCategory.PLAYER);
         return list;
     }
 
