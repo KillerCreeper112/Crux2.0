@@ -413,7 +413,8 @@ public class StandardFileLootConditions {
                 var r = ctx.getRegistry();
                 return new LocationInRegionCondition(target,
                     r.deserializeFromFile(Vector.class, e.get("pos1")),
-                    r.deserializeFromFile(Vector.class, e.get("pos2"))
+                    r.deserializeFromFile(Vector.class, e.get("pos2")),
+                    r.deserializeFromFileOrDefault(Boolean.class, e.get("use_block_pos"), false)
                 );
             }
         });

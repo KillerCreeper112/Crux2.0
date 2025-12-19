@@ -54,9 +54,9 @@ public class FileMenuItem extends SimpleFileMenuModuled<MenuItemHolder> {
                     context, menuContext.get("items").getAsFileObject().get(s), menuContext
                 );
                 if (possibleBase != null){
-                    if(s.equalsIgnoreCase("far")){
+                    /*if(s.equalsIgnoreCase("far")){
                         Crux.logInfo("INFO=" + possibleBase.getItemMergeOptions());
-                    }
+                    }*/
                     base.add(possibleBase);
                 }else{
                     Crux.log(Level.WARNING, "No item base of " + s + " found!");

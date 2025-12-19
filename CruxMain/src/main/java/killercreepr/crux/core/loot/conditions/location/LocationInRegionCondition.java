@@ -16,12 +16,13 @@ import org.jetbrains.annotations.NotNull;
 public class LocationInRegionCondition extends BaseCondition {
     protected final Vector pos1;
     protected final Vector pos2;
+    protected final boolean useBlockPos;
 
-
-    public LocationInRegionCondition(@NotNull String target, Vector pos1, Vector pos2) {
+    public LocationInRegionCondition(@NotNull String target, Vector pos1, Vector pos2, boolean useBlockPos) {
         super(target);
         this.pos1 = pos1;
         this.pos2 = pos2;
+        this.useBlockPos = useBlockPos;
     }
 
     public Location parseLocation(Object o, World world){
@@ -42,6 +43,7 @@ public class LocationInRegionCondition extends BaseCondition {
     public boolean test(@NotNull LootContext context) {
         Location b = parseLocation(context.info().get(target), parseWorld(context));
         if(b == null) return false;
+        if(useBlockPos) b = b.toBlockLocation();
         return CruxLoc.inRegion(b, pos1, pos2);
     }
 }
