@@ -22,6 +22,7 @@ import killercreepr.cruxentities.command.argument.CruxEntitiesArguments;
 import killercreepr.cruxentities.entity.CruxMob;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Mob;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -80,6 +81,45 @@ public class CruxEntitiesCommands {
                                 )
                         )
                 )
+        ).then(
+            Commands.literal("spawnpersistent")
+                .then(
+                    Commands.argument("entity", CruxEntitiesArguments.cruxMob())
+                        .executes(ctx -> spawnPersistent(
+                            ctx.getSource(),
+                            ctx.getArgument("entity", CruxMob.class),
+                            ctx.getSource().getLocation(),
+                            1
+                        ))
+                        .then(
+                            Commands.argument("location", ArgumentTypes.finePosition())
+                                .executes(ctx -> spawnPersistent(
+                                    ctx.getSource(),
+                                    ctx.getArgument("entity", CruxMob.class),
+                                    ctx.getArgument("location", FinePositionResolver.class).resolve(ctx.getSource()),
+                                    1
+                                ))
+                                .then(
+                                    Commands.argument("amount", IntegerArgumentType.integer(1))
+                                        .executes(ctx -> spawnPersistent(
+                                            ctx.getSource(),
+                                            ctx.getArgument("entity", CruxMob.class),
+                                            ctx.getArgument("location", FinePositionResolver.class).resolve(ctx.getSource()),
+                                            ctx.getArgument("amount", Integer.class)
+                                        ))
+                                        .then(
+                                            Commands.argument("components", StringArgumentType.greedyString())
+                                                .executes(ctx -> spawnPersistent(
+                                                    ctx.getSource(),
+                                                    ctx.getArgument("entity", CruxMob.class),
+                                                    ctx.getArgument("location", FinePositionResolver.class).resolve(ctx.getSource()),
+                                                    ctx.getArgument("amount", Integer.class),
+                                                    DataComponentDecoder.componentDecoder().parseComponents(ctx.getArgument("components", String.class))
+                                                ))
+                                        )
+                                )
+                        )
+                )
         )
         ;
         return dispatcher.build();
@@ -115,6 +155,43 @@ public class CruxEntitiesCommands {
             });
         }
         Communicator.chat("Spawned " + amount + " " + mob.getName() + "'s at " +
+                CruxMath.format(spawn.getX()) + ", " + CruxMath.format(spawn.getY()) + ", " + CruxMath.format(spawn.getZ()))
+            .use(getExecutor(source));
+        return 1;
+    }
+    //
+
+
+    public static int spawnPersistent(@NotNull CommandSourceStack source, @NotNull CruxMob mob, @NotNull Position location, int amount){
+        Location spawn = location.toLocation(source.getLocation().getWorld());
+        return spawnPersistent(source, mob, spawn, amount);
+    }
+
+    public static int spawnPersistent(@NotNull CommandSourceStack source, @NotNull CruxMob mob, @NotNull Position location, int amount,
+                            Collection<TypedDataComponent<?>> components){
+        Location spawn = location.toLocation(source.getLocation().getWorld());
+        return spawnPersistent(source, mob, spawn, amount, components);
+    }
+
+    public static int spawnPersistent(@NotNull CommandSourceStack source, @NotNull CruxMob mob, @NotNull Location spawn, int amount){
+        return spawnPersistent(source, mob, spawn, amount, null);
+    }
+
+    public static int spawnPersistent(@NotNull CommandSourceStack source, @NotNull CruxMob mob, @NotNull Location spawn, int amount,
+                            Collection<TypedDataComponent<?>> components){
+        for(int i = 0; i < amount; i++){
+            mob.spawn(spawn, e ->{
+                e.setPersistent(true);
+                if(e instanceof Mob m){
+                    m.setRemoveWhenFarAway(false);
+                }
+                if(components != null){
+                    CruxEntity crux = CruxEntity.entity(e);
+                    components.forEach(crux::set);
+                }
+            });
+        }
+        Communicator.chat("Spawned persistent " + amount + " " + mob.getName() + "'s at " +
                 CruxMath.format(spawn.getX()) + ", " + CruxMath.format(spawn.getY()) + ", " + CruxMath.format(spawn.getZ()))
             .use(getExecutor(source));
         return 1;
