@@ -93,7 +93,8 @@ public class StandardFileLootConditions {
                 return new EntityCondition(
                     target, entityPredicate, worldName,
                     registry.deserializeFromFile(Key.class, e.get("world_key")),
-                    slots
+                    slots,
+                    registry.deserializeFromFile(String.class, e.get("uuid"))
                 );
             }
         });

@@ -14,18 +14,21 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.UUID;
 
 public class EntityCondition extends BaseCondition {
     protected final @Nullable EntityPredicate entityPredicate;
     protected final @Nullable String worldName;
     protected final @Nullable Key world;
     protected final @Nullable Map<EquipmentSlot, LootCondition> slots;
-    public EntityCondition(@NotNull String target, @Nullable EntityPredicate entityPredicate, @Nullable String worldName, @Nullable Key world, @Nullable Map<EquipmentSlot, LootCondition> slots) {
+    protected final String uuid;
+    public EntityCondition(@NotNull String target, @Nullable EntityPredicate entityPredicate, @Nullable String worldName, @Nullable Key world, @Nullable Map<EquipmentSlot, LootCondition> slots, String uuid) {
         super(target);
         this.entityPredicate = entityPredicate;
         this.worldName = worldName;
         this.world = world;
         this.slots = slots;
+        this.uuid = uuid;
     }
 
     @Override
@@ -35,6 +38,7 @@ public class EntityCondition extends BaseCondition {
         if(entityPredicate != null && !entityPredicate.test(e)) return false;
         if(world != null && !e.getWorld().key().equals(world)) return false;
         if(worldName != null && !e.getWorld().getName().equals(worldName)) return false;
+        if(uuid != null && !e.getUniqueId().toString().equals(uuid)) return false;
         if(slots != null){
             EntityEquipment equipment = e instanceof LivingEntity dd ? dd.getEquipment() : null;
             for(Map.Entry<EquipmentSlot, LootCondition> entry : slots.entrySet()){
