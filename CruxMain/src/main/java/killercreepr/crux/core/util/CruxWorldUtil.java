@@ -7,6 +7,7 @@ import org.apache.commons.io.FileUtils;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -106,6 +108,43 @@ public class CruxWorldUtil {
             Crux.getServer().unloadWorld(world, false);
         }
         return deleteWorld(world.getName());
+    }
+
+    public static CompletableFuture<Boolean> deleteWorldWhenSafe(@NotNull World world){
+        if(Crux.getServer().getWorld(world.getUID()) != null){
+            return unloadWorldWhenSafe(world, false).thenCompose(unloadSuccess -> {
+                if (unloadSuccess) {
+                    // Once the world is unloaded successfully, delete it
+                    return CompletableFuture.completedFuture(deleteWorld(world.getName()));
+                } else {
+                    // If unloading failed, return a completed future with 'false' indicating failure
+                    return CompletableFuture.completedFuture(false);
+                }
+            });
+        }
+        return CompletableFuture.completedFuture(deleteWorld(world.getName()));
+    }
+
+    public static CompletableFuture<Boolean> unloadWorldWhenSafe(World world, boolean save){
+        if(!Crux.getServer().isTickingWorlds()){
+            return CompletableFuture.completedFuture(Crux.getServer().unloadWorld(world, save));
+        }
+        Key key = world.key();
+        CompletableFuture<Boolean> resultFuture = new CompletableFuture<>();
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                if(Crux.getServer().getWorld(key) == null){
+                    cancel();
+                    resultFuture.complete(false);
+                    return;
+                }
+                if(Crux.getServer().isTickingWorlds()) return;
+                cancel();
+                resultFuture.complete(Crux.getServer().unloadWorld(world, save));
+            }
+        }.runTaskTimer(Crux.getMainPlugin(), 0L, 1L);
+        return resultFuture;
     }
 
     public static boolean deleteWorld(@NotNull String name){

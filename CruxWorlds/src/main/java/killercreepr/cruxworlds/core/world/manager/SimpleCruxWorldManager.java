@@ -179,7 +179,8 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
     @Override
     public CompletableFuture<Boolean> unloadWorld(@NotNull CruxWorld world, boolean save) {
         world.setShouldSaveOnNextUnload(save);
-        return CompletableFuture.completedFuture(server.unloadWorld(world.toBukkitWorld(), save));
+        return CruxWorldUtil.unloadWorldWhenSafe(world.toBukkitWorld(), save);
+        //return CompletableFuture.completedFuture(server.unloadWorld(world.toBukkitWorld(), save));
     }
 
     @Override
