@@ -501,6 +501,23 @@ public class CruxLoc {
         return locs;
     }
 
+    public static @NotNull List<Block> getBlockRegion(@NotNull Location pos1, @NotNull Location pos2) {
+        List<Block> locs = new ArrayList<>();
+
+        Vector max = Vector.getMaximum(pos1.toVector(), pos2.toVector());
+        Vector min = Vector.getMinimum(pos1.toVector(), pos2.toVector());
+
+        for (int x = min.getBlockX(); x <= max.getBlockX(); x++) {
+            for (int y = min.getBlockY(); y <= max.getBlockY(); y++) {
+                for (int z = min.getBlockZ(); z <= max.getBlockZ(); z++) {
+                    locs.add(pos1.getWorld().getBlockAt(x, y, z));
+                }
+            }
+        }
+
+        return locs;
+    }
+
     public static @NotNull Location lookAt(@NotNull Location loc, @NotNull Location target){
         return loc.setDirection(target.toVector().subtract(loc.toVector()));
     }
