@@ -3,6 +3,8 @@ package killercreepr.crux.core.loot.conditions.entity;
 import killercreepr.crux.api.entity.predicate.EntityPredicate;
 import killercreepr.crux.api.loot.LootContext;
 import killercreepr.crux.api.loot.conditions.LootCondition;
+import killercreepr.crux.api.text.tags.container.TagContainer;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.loot.conditions.BaseCondition;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Entity;
@@ -35,10 +37,13 @@ public class EntityCondition extends BaseCondition {
     public boolean test(@NotNull LootContext ctx) {
         Entity e = ctx.info().get(target, Entity.class);
         if(e==null) return false;
+
+        var tags = TagContainer.merged().hookAllWithPrefix(ctx.info());
+
         if(entityPredicate != null && !entityPredicate.test(e)) return false;
         if(world != null && !e.getWorld().key().equals(world)) return false;
         if(worldName != null && !e.getWorld().getName().equals(worldName)) return false;
-        if(uuid != null && !e.getUniqueId().toString().equals(uuid)) return false;
+        if(uuid != null && !e.getUniqueId().toString().equals(Crux.format().deserializeString(uuid, tags))) return false;
         if(slots != null){
             EntityEquipment equipment = e instanceof LivingEntity dd ? dd.getEquipment() : null;
             for(Map.Entry<EquipmentSlot, LootCondition> entry : slots.entrySet()){
