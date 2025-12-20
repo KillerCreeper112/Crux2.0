@@ -69,6 +69,14 @@ public class SimpleDataExchange implements DataExchange {
         return new SimpleDataExchange(data, notExplictSet);
     }
 
+    @Override
+    public String toString() {
+        return "SimpleDataExchange{" +
+            "data=" + data +
+            ", notExplictSet=" + notExplictSet +
+            '}';
+    }
+
     /**
      * @return A new DataExchange with the appended object.
      */
