@@ -138,6 +138,13 @@ public class CruxMath {
                                           long biasPoint) {
         return (long) randomSkewedToward(random, (double) minValue, maxValue, skewFactor, biasPoint);
     }
+    //1.0 – 1.1 → almost uniform
+    //
+    //1.15 – 1.25 → subtle, natural bias
+    //
+    //1.3 – 1.5 → strong, obvious bias
+    //
+    //2.0+ → extreme clustering near biasPoint
     /**
      * @param random     The source of randomness.
      * @param minValue   The minimum value of the range (inclusive).
@@ -147,6 +154,10 @@ public class CruxMath {
      *                   - A value of 1 produces a uniform distribution (no skew).
      *                   - A value between 0 and 1 makes results less likely near the bias point,
      *                     instead clustering toward the edges of the range.
+     *                     1.0 – 1.1 → almost uniform
+     *                     1.15 – 1.25 → subtle, natural bias
+     *                     1.3 – 1.5 → strong, obvious bias
+     *                     2.0+ → extreme clustering near biasPoint
      * @param biasPoint  The value within the range to skew results toward (or away from if skewFactor < 1).
      * @return A random number within [minValue, maxValue], skewed based on the bias point and skew factor.
      */
