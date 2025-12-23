@@ -4,6 +4,7 @@ import killercreepr.crux.api.communication.Communicator;
 import killercreepr.crux.api.communication.CreateSound;
 import killercreepr.crux.api.communication.CreateTitle;
 import killercreepr.crux.api.communication.boss.CreateBossBar;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.communication.MsgContainer;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
@@ -40,6 +41,10 @@ public class FileMsgContainer extends SimpleFileHandler<MsgContainer> {
     @Override
     public @Nullable MsgContainer deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
         if(e instanceof FileGeneric chat){
+            String s = chat.getAsString();
+            if(s.startsWith("#")){
+                return (MsgContainer) Crux.lang().get(s.substring(1));
+            }
             return (MsgContainer) Communicator.chat(chat.getAsString());
         }
         if(e instanceof FileArray a){

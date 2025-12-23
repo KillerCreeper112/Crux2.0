@@ -1,12 +1,14 @@
 package killercreepr.crux.core;
 
 import killercreepr.crux.api.CruxHandlers;
+import killercreepr.crux.api.communication.lang.CreateLang;
 import killercreepr.crux.api.data.CruxTick;
 import killercreepr.crux.api.entity.memory.EntityMemory;
 import killercreepr.crux.api.registry.KeyedRegistry;
 import killercreepr.crux.api.scheduler.CruxScheduler;
 import killercreepr.crux.api.text.format.FormatSerializer;
 import killercreepr.crux.api.text.tags.TagParser;
+import killercreepr.crux.core.communication.lang.SimpleCreateLang;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.crux.core.scheduler.CruxSimpleScheduler;
@@ -32,6 +34,10 @@ import java.util.logging.Logger;
 public final class Crux {
     public static short debug = 0;
 
+    public final static CreateLang lang = new SimpleCreateLang();
+    public static CreateLang lang(){
+        return lang;
+    }
 
     public static String namespace(){
         return NAMESPACE;

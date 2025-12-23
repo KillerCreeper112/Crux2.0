@@ -2,11 +2,13 @@ package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
 import killercreepr.crux.api.communication.Communicator;
 import killercreepr.crux.api.communication.animation.TextAnimation;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.communication.MsgContainer;
 import killercreepr.crux.core.util.CruxColor;
 import killercreepr.cruxconfig.config.bukkit.handler.BukkitCfgHandlers;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileElement;
+import killercreepr.cruxconfig.config.common.element.FileGeneric;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.element.FilePrimitive;
 import killercreepr.cruxconfig.config.common.handler.FileObjectHandler;
@@ -37,6 +39,13 @@ public class FileCommunicator extends SimpleFileHandler<Communicator> {
     @Override
     public @Nullable Communicator deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
         var r = ctx.getRegistry();
+        if(e instanceof FileGeneric chat){
+            String s = chat.getAsString();
+            if(s.startsWith("#")){
+                return Crux.lang().get(s.substring(1));
+            }
+        }
+
         if(!(e instanceof FileObject o)) return r.deserializeFromFile(MsgContainer.class, e);
         Key type = r.deserializeFromFile(Key.class, o.get("type"));
         if(type == null) return r.deserializeFromFile(MsgContainer.class, e);
