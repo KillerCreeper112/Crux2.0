@@ -4,6 +4,7 @@ import killercreepr.crux.api.entity.memory.EntityMemory;
 import killercreepr.crux.api.event.CruxEntityDamageEvent;
 import killercreepr.crux.core.persistence.CruxPersist;
 import killercreepr.cruxentities.entity.memory.PreventVanillaAttackHolder;
+import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Mob;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -45,6 +46,8 @@ public class EntityCombatListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if(!(event.getDamager() instanceof Mob mob)) return;
+        var type = event.getDamageSource().getDamageType();
+        if(type != DamageType.MOB_ATTACK && type != DamageType.MOB_ATTACK_NO_AGGRO && type != DamageType.PLAYER_ATTACK) return;
         if(!CruxPersist.DISABLE_VANILLA_ATTACK.get(mob, false)) return;
         if(EntityMemory.getDataHolder(mob.getUniqueId(), PreventVanillaAttackHolder.KEY) instanceof PreventVanillaAttackHolder data){
             event.setCancelled(true);
