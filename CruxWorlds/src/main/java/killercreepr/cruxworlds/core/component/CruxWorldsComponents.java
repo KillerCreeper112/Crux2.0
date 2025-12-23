@@ -20,6 +20,7 @@ public class CruxWorldsComponents {
 
     public static final DataComponentType<EntitySpawnAttributes> ENTITY_SPAWN_ATTRIBUTES = register("entity_spawn/attributes", builder -> builder);
     public static final DataComponentType<EntitySpawnEquipment> ENTITY_SPAWN_EQUIPMENT = register("entity_spawn/equipment", builder -> builder);
+    public static final DataComponentType<EntitySpawnApplier> ENTITY_SPAWN_APPLIER = register("entity_spawn/applier", builder -> builder);
 
     private static <T> DataComponentType<T> register(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator){
         return CruxRegistries.DATA_COMPONENT_TYPE.register(Crux.key(id), builderOperator.apply(DataComponentType.builder()).build());

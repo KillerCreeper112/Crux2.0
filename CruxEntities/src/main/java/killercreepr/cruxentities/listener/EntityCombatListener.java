@@ -47,12 +47,11 @@ public class EntityCombatListener implements Listener {
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if(!(event.getDamager() instanceof Mob mob)) return;
         var type = event.getDamageSource().getDamageType();
-        if(type != DamageType.MOB_ATTACK && type != DamageType.MOB_ATTACK_NO_AGGRO && type != DamageType.PLAYER_ATTACK) return;
+        if(type != DamageType.MOB_ATTACK && type != DamageType.MOB_ATTACK_NO_AGGRO) return;
         if(!CruxPersist.DISABLE_VANILLA_ATTACK.get(mob, false)) return;
-        if(EntityMemory.getDataHolder(mob.getUniqueId(), PreventVanillaAttackHolder.KEY) instanceof PreventVanillaAttackHolder data){
+        if(!(EntityMemory.getDataHolder(mob.getUniqueId(), PreventVanillaAttackHolder.KEY) instanceof PreventVanillaAttackHolder data)){
             event.setCancelled(true);
-            data.time += 50 * 10;
-        }
+        }else data.time += 10 * 50L;
     }
 
 }

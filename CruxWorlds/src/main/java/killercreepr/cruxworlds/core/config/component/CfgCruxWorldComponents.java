@@ -2,6 +2,7 @@ package killercreepr.cruxworlds.core.config.component;
 
 import com.google.common.reflect.TypeToken;
 import killercreepr.crux.api.component.TypedDataComponent;
+import killercreepr.crux.api.entity.dynamic.DynamicEntityApplier;
 import killercreepr.crux.api.loot.LootTable;
 import killercreepr.crux.api.loot.item.ItemLootTable;
 import killercreepr.crux.core.item.dynamic.component.attribute.DynamicAttributeModifier;
@@ -13,10 +14,7 @@ import killercreepr.cruxconfig.config.common.element.FileArray;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxworlds.api.component.EntitySpawnComponent;
 import killercreepr.cruxworlds.api.world.entity.NaturalEntitySpawn;
-import killercreepr.cruxworlds.core.component.CruxWorldsComponents;
-import killercreepr.cruxworlds.core.component.EntitySpawnAttributes;
-import killercreepr.cruxworlds.core.component.EntitySpawnEquipment;
-import killercreepr.cruxworlds.core.component.EntitySpawnPassengers;
+import killercreepr.cruxworlds.core.component.*;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -74,6 +72,20 @@ public class CfgCruxWorldComponents {
                 return TypedDataComponent.create(
                     CruxWorldsComponents.ENTITY_SPAWN_EQUIPMENT,
                     new EntitySpawnEquipment(map)
+                );
+            }
+        });
+
+        registry.register("entity_spawn/applier", new FileDataComponentType<EntitySpawnApplier>() {
+            @Override
+            public @Nullable TypedDataComponent<EntitySpawnApplier> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
+                FileRegistry registry = ctx.getRegistry();
+                DynamicEntityApplier map = registry.deserializeFromFile(DynamicEntityApplier.class, e.get("value"));
+                if(map == null) return null;
+
+                return TypedDataComponent.create(
+                    CruxWorldsComponents.ENTITY_SPAWN_APPLIER,
+                    new EntitySpawnApplier(map)
                 );
             }
         });

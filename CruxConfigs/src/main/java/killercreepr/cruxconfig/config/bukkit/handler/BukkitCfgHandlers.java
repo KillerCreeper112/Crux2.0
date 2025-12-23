@@ -24,6 +24,7 @@ import killercreepr.crux.api.data.world.StoredWorld;
 import killercreepr.crux.api.enchantment.CruxLevelBasedValue;
 import killercreepr.crux.api.enchantment.DropFormula;
 import killercreepr.crux.api.entity.CruxEntitySnapshot;
+import killercreepr.crux.api.entity.dynamic.DynamicEntityApplier;
 import killercreepr.crux.api.entity.predicate.EntityPredicate;
 import killercreepr.crux.api.entity.tag.EntityTag;
 import killercreepr.crux.api.item.dynamic.DynamicItem;
@@ -60,6 +61,7 @@ import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileDataComp
 import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileDataComponentHandler;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileTypedDataComponent;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.component.StandardCfgDataComponentTypes;
+import killercreepr.cruxconfig.config.bukkit.handler.impl.entity.FileDynamicEntityApplier;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.FileDynamicItem;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.item.component.FileDynamicPersistentTag;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.*;
@@ -106,6 +108,7 @@ public class BukkitCfgHandlers {
     public static final FileComponent COMPONENT = new FileComponent();
     //todo not used public static final FileItemStack ITEM_STACK = new FileItemStack();
     public static final FileDynamicItem DYNAMIC_ITEM = new FileDynamicItem();
+    public static final FileDynamicEntityApplier DYNAMIC_ENTITY_APPLIER = new FileDynamicEntityApplier();
     public static final FileUUID UUID = new FileUUID();
     public static final FileColor COLOR = new FileColor();
     public static final FileKey KEY = new FileKey();
@@ -173,6 +176,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(Component.class, COMPONENT);
         //registry.registerHandler(ItemStack.class, ITEM_STACK);
         registry.registerFileHandler(DynamicItem.class, DYNAMIC_ITEM);
+        registry.registerFileHandler(DynamicEntityApplier.class, DYNAMIC_ENTITY_APPLIER);
         registry.registerFileHandler(UUID.class, UUID);
         registry.registerFileHandler(Color.class, COLOR);
         registry.registerFileHandler(Key.class, KEY);
@@ -238,6 +242,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(SimpleItemLootObject.class, SIMPLE_LOOT_OBJECT);
 
         DYNAMIC_ITEM.registerComponents(registry);
+        DYNAMIC_ENTITY_APPLIER.registerComponents(registry);
 
         registry.registerFileHandler(TrimMaterial.class, new FileGenericKeyedRegistry<>(RegistryKey.TRIM_MATERIAL){
             @Override
