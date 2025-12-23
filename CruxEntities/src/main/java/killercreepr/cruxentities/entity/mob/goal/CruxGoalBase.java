@@ -59,6 +59,7 @@ public class CruxGoalBase implements ICruxGoal {
 
     protected int findTargetCooldown;
     protected int lostTarget;
+    protected boolean attacking;
 
     public static @NotNull GoalKey<Mob> defaultKey(){
         return CruxGoalUtil.defaultKey();

@@ -31,7 +31,11 @@ public class FileTypedDataComponent implements FileObjectHandler<TypedDataCompon
             String string = ctx.getRegistry().deserializeFromFile(String.class, e);
             if(string == null) return null;
             if(string.startsWith("#")){
-                return CruxRegistries.TYPED_DATA_COMPONENTS.get(Crux.key(string.substring(1)));
+                var typed = CruxRegistries.TYPED_DATA_COMPONENTS.get(Crux.key(string.substring(1)));
+                if(typed == null){
+                    Crux.logError("Cannot find typed data component: " + string);
+                }
+                return typed;
             }
             return CruxCollection.getFirst(DataComponentDecoder.componentDecoder().parseComponents(string));
         }

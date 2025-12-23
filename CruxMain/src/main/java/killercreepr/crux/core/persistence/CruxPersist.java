@@ -29,6 +29,7 @@ public class CruxPersist {
     public static final PersistTag<PersistentDataContainer> COMPONENTS = PersistTag.register(new PersistTag<>(PersistentDataType.TAG_CONTAINER, "components"));
     public static final PersistTag<List<UUID>> IGNORE_ENTITIES_LIST = PersistTag.register(new PersistTag<>(CruxPersistence.LIST.UUID, "ignore_entities_list"));
     public static final PersistTag<Long> IGNORE_ENTITIES_TIME = PersistTag.register(new PersistTag<>(PersistentDataType.LONG, "ignore_entities_time"));
+    public static final PersistTag<Boolean> DISABLE_VANILLA_ATTACK = PersistTag.register(new PersistTag<>(PersistentDataType.BOOLEAN, "disable_vanilla_attack"));
 
     public static boolean hasIgnoreEntity(Entity base, UUID check){
         List<UUID> list = IGNORE_ENTITIES_LIST.get(base, null);
