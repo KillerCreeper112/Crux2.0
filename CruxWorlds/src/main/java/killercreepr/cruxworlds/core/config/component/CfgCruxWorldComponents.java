@@ -16,6 +16,7 @@ import killercreepr.cruxworlds.api.component.EntitySpawnComponent;
 import killercreepr.cruxworlds.api.world.entity.NaturalEntitySpawn;
 import killercreepr.cruxworlds.core.component.*;
 import org.bukkit.inventory.ItemStack;
+import org.checkerframework.checker.units.qual.C;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,6 +56,26 @@ public class CfgCruxWorldComponents {
                 return TypedDataComponent.create(
                     CruxWorldsComponents.ENTITY_SPAWN_ATTRIBUTES,
                     new EntitySpawnAttributes(attributes)
+                );
+            }
+        });
+
+        registry.register("entity_spawn/base_attributes", new FileDataComponentType<EntitySpawnBaseAttributes>() {
+            @Override
+            public @Nullable TypedDataComponent<EntitySpawnBaseAttributes> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
+                if(!(e.get("attributes") instanceof FileObject o)) return null;
+                FileRegistry registry = ctx.getRegistry();
+                Map<Object, Object> attributes = new HashMap<>();
+                o.forEach((id, obj) ->{
+                    var got = registry.deserializeObjectFromFile(obj);
+                    if(got == null) return;
+                    attributes.put(id, got);
+                });
+                if(attributes.isEmpty()) return null;
+
+                return TypedDataComponent.create(
+                    CruxWorldsComponents.ENTITY_SPAWN_BASE_ATTRIBUTES,
+                    new EntitySpawnBaseAttributes(attributes)
                 );
             }
         });

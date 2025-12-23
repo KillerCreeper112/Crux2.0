@@ -19,6 +19,7 @@ public class CruxWorldsComponents {
     public static final DataComponentType<EntitySpawnPassengers> ENTITY_SPAWN_PASSENGERS = register("entity_spawn/passengers", builder -> builder);
 
     public static final DataComponentType<EntitySpawnAttributes> ENTITY_SPAWN_ATTRIBUTES = register("entity_spawn/attributes", builder -> builder);
+    public static final DataComponentType<EntitySpawnBaseAttributes> ENTITY_SPAWN_BASE_ATTRIBUTES = register("entity_spawn/base_attributes", builder -> builder);
     public static final DataComponentType<EntitySpawnEquipment> ENTITY_SPAWN_EQUIPMENT = register("entity_spawn/equipment", builder -> builder);
     public static final DataComponentType<EntitySpawnApplier> ENTITY_SPAWN_APPLIER = register("entity_spawn/applier", builder -> builder);
 
