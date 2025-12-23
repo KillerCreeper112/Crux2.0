@@ -2,6 +2,8 @@ package killercreepr.cruxworlds.core.config.component;
 
 import com.google.common.reflect.TypeToken;
 import killercreepr.crux.api.component.TypedDataComponent;
+import killercreepr.crux.api.loot.LootTable;
+import killercreepr.crux.api.loot.item.ItemLootTable;
 import killercreepr.crux.core.item.dynamic.component.attribute.DynamicAttributeModifier;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileDataComponentType;
 import killercreepr.cruxconfig.config.bukkit.registry.FileDataComponentRegistry;
@@ -9,10 +11,13 @@ import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileArray;
 import killercreepr.cruxconfig.config.common.element.FileObject;
+import killercreepr.cruxworlds.api.component.EntitySpawnComponent;
 import killercreepr.cruxworlds.api.world.entity.NaturalEntitySpawn;
 import killercreepr.cruxworlds.core.component.CruxWorldsComponents;
 import killercreepr.cruxworlds.core.component.EntitySpawnAttributes;
+import killercreepr.cruxworlds.core.component.EntitySpawnEquipment;
 import killercreepr.cruxworlds.core.component.EntitySpawnPassengers;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,6 +57,23 @@ public class CfgCruxWorldComponents {
                 return TypedDataComponent.create(
                     CruxWorldsComponents.ENTITY_SPAWN_ATTRIBUTES,
                     new EntitySpawnAttributes(attributes)
+                );
+            }
+        });
+
+        registry.register("entity_spawn/equipment", new FileDataComponentType<EntitySpawnEquipment>() {
+            @Override
+            public @Nullable TypedDataComponent<EntitySpawnEquipment> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
+                if(!(e.get("equipment") instanceof FileObject o)) return null;
+                FileRegistry registry = ctx.getRegistry();
+                Map<Object, LootTable<ItemStack>> map = registry.deserializeFromFile(
+                    new TypeToken<Map<String, ItemLootTable>>(){}.getType(), o
+                );
+                if(map == null || map.isEmpty()) return null;
+
+                return TypedDataComponent.create(
+                    CruxWorldsComponents.ENTITY_SPAWN_EQUIPMENT,
+                    new EntitySpawnEquipment(map)
                 );
             }
         });

@@ -23,6 +23,11 @@ public interface TextParserContext extends InputContext {
     static @NotNull Builder builder(@NotNull FormatSerializer format){
         return new FormatParserContext.Builder(format);
     }
+
+    static TextParserContext tags(MergedTagContainer tags){
+        return new FormatParserContext(Crux.format(), null, null, tags);
+    }
+
     static @NotNull TextParserContext empty(@NotNull FormatSerializer format){
         if(format.equals(Crux.format())) return EMPTY_CRUX; //optimize
         return new FormatParserContext(format, null, null, null);

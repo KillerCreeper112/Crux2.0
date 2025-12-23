@@ -5,6 +5,8 @@ import killercreepr.crux.api.component.DataComponentHandler;
 import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.entity.CruxEntitySnapshot;
 import killercreepr.crux.api.text.context.TextParserContext;
+import killercreepr.crux.api.text.tags.container.TagContainer;
+import killercreepr.cruxworlds.api.component.EntitySpawnComponent;
 import killercreepr.cruxworlds.api.world.entity.NaturalEntitySpawn;
 import killercreepr.cruxworlds.api.world.entity.SpawnContext;
 import killercreepr.cruxworlds.api.world.spawning.SpawnValidator;
@@ -74,7 +76,11 @@ public class CfgNaturalEntitySpawn extends SimpleNaturalEntitySpawn {
                 m.setRemoveWhenFarAway(info.getOrDefault("remove_when_far_away", Boolean.class, false));
             }
 
-            EntitySpawnPassengers passengers = components.get(CruxWorldsComponents.ENTITY_SPAWN_PASSENGERS);
+            var textCtx = TextParserContext.tags(TagContainer.merged().hook(e));
+
+            components.forEachAllOfTypeDeep(EntitySpawnComponent.class, c -> c.onCreateEntity(ctx, e, textCtx));
+
+            /*EntitySpawnPassengers passengers = components.get(CruxWorldsComponents.ENTITY_SPAWN_PASSENGERS);
             if(passengers != null){
                 Entity lastPassenger = null;
                 for (NaturalEntitySpawn spawn : passengers.passengers) {
@@ -87,9 +93,9 @@ public class CfgNaturalEntitySpawn extends SimpleNaturalEntitySpawn {
 
                     lastPassenger = spawned;
                 }
-            }
+            }*/
 
-            EntitySpawnAttributes attributes = components.get(CruxWorldsComponents.ENTITY_SPAWN_ATTRIBUTES);
+            /*EntitySpawnAttributes attributes = components.get(CruxWorldsComponents.ENTITY_SPAWN_ATTRIBUTES);
             if(attributes != null && e instanceof LivingEntity living){
                 TextParserContext context = TextParserContext.empty();
                 attributes.attributes.forEach((keyObject, modObject) ->{
@@ -106,7 +112,7 @@ public class CfgNaturalEntitySpawn extends SimpleNaturalEntitySpawn {
                         instance.addModifier(m);
                     });
                 });
-            }
+            }*/
 
             if(consumer != null) consumer.accept(e);
         });
