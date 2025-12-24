@@ -15,4 +15,11 @@ public class InvertCondition extends BaseCondition {
     public boolean test(@NotNull LootContext ctx) {
         return !condition.test(ctx);
     }
+
+    @Override
+    public String toString() {
+        return "InvertCondition{" +
+            "condition=" + condition +
+            '}';
+    }
 }

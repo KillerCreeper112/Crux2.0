@@ -44,7 +44,7 @@ public class CruxBlocksCommands {
         plugin.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event ->{
             final Commands commands = event.registrar();
             LiteralCommandNode<CommandSourceStack> cmd = build(Commands.literal("cruxblocks")
-                .requires(source -> source.getSender().hasPermission("cruxblocks.cmds.cruxblocks.use")), plugin.getLifecycleManager());
+                .requires(source -> source.getSender().hasPermission("cruxblocks.command.cruxblocks")), plugin.getLifecycleManager());
             commands.register(cmd, List.of("cb", "cruxblock", "cblock"));
         });
     }
