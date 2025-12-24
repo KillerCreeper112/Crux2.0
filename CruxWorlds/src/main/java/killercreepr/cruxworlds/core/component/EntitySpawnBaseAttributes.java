@@ -1,6 +1,7 @@
 package killercreepr.cruxworlds.core.component;
 
 import killercreepr.crux.api.text.context.TextParserContext;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.item.dynamic.component.attribute.DynamicAttributeModifier;
 import killercreepr.crux.core.util.CruxAttributeUtil;
 import killercreepr.crux.core.util.CruxMath;
@@ -19,9 +20,9 @@ import java.util.Collection;
 import java.util.Map;
 
 public class EntitySpawnBaseAttributes implements EntitySpawnComponent {
-    public final Map<Object, Object> attributes;
+    public final Map<Object, NumberProvider> attributes;
 
-    public EntitySpawnBaseAttributes(Map<Object, Object> attributes) {
+    public EntitySpawnBaseAttributes(Map<Object, NumberProvider> attributes) {
         this.attributes = attributes;
     }
 
@@ -35,7 +36,7 @@ public class EntitySpawnBaseAttributes implements EntitySpawnComponent {
 
             Attribute attribute = Registry.ATTRIBUTE.get(key);
             if(attribute == null) return;
-            double value = CruxMath.evaluate(textCtx.deserializeString(modObject + ""));
+            double value = modObject.sample(textCtx).doubleValue();
             CruxAttributeUtil.editInstance(living, attribute, instance -> instance.setBaseValue(value));
         });
     }

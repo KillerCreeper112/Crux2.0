@@ -5,10 +5,7 @@ import killercreepr.crux.api.entity.dynamic.DynamicEntityApplierComponent;
 import killercreepr.crux.api.entity.dynamic.DynamicEntityApplierSingleComponent;
 import killercreepr.crux.api.registry.MappedRegistry;
 import killercreepr.crux.core.Crux;
-import killercreepr.crux.core.entity.dynamic.component.DynamicEntityApplierGlowing;
-import killercreepr.crux.core.entity.dynamic.component.DynamicEntityApplierInvisible;
-import killercreepr.crux.core.entity.dynamic.component.DynamicEntityApplierPersistent;
-import killercreepr.crux.core.entity.dynamic.component.DynamicEntityApplierRemoveWhenFarAway;
+import killercreepr.crux.core.entity.dynamic.component.*;
 import killercreepr.crux.core.registry.SimpleMappedRegistry;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.entity.component.FileDynamicEntityApplierComponent;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.entity.component.FileSingleDynamicEntityApplierComponent;
@@ -80,6 +77,30 @@ public class FileDynamicEntityApplier extends SimpleFileHandler<DynamicEntityApp
             @Override
             public @NotNull String jsonSerializerID() {
                 return "dynamic_entity_applier_remove_when_far_away";
+            }
+        });
+        COMPONENT_REGISTRY.register("should_burn_in_day", new FileSingleDynamicEntityApplierComponent<>(DynamicEntityApplierSingleComponent.class) {
+
+            @Override
+            public DynamicEntityApplierSingleComponent deserialize(Object value) {
+                return new DynamicEntityApplierShouldBurnInDay(value);
+            }
+
+            @Override
+            public @NotNull String jsonSerializerID() {
+                return "dynamic_entity_applier_should_burn_in_day";
+            }
+        });
+        COMPONENT_REGISTRY.register("immune_to_zombification", new FileSingleDynamicEntityApplierComponent<>(DynamicEntityApplierSingleComponent.class) {
+
+            @Override
+            public DynamicEntityApplierSingleComponent deserialize(Object value) {
+                return new DynamicEntityApplierImmuneToZombification(value);
+            }
+
+            @Override
+            public @NotNull String jsonSerializerID() {
+                return "dynamic_entity_applier_immune_to_zombification";
             }
         });
     }

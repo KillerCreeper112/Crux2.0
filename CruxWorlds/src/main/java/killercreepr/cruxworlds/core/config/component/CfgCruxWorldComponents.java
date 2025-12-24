@@ -5,6 +5,7 @@ import killercreepr.crux.api.component.TypedDataComponent;
 import killercreepr.crux.api.entity.dynamic.DynamicEntityApplier;
 import killercreepr.crux.api.loot.LootTable;
 import killercreepr.crux.api.loot.item.ItemLootTable;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.item.dynamic.component.attribute.DynamicAttributeModifier;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileDataComponentType;
 import killercreepr.cruxconfig.config.bukkit.registry.FileDataComponentRegistry;
@@ -65,9 +66,9 @@ public class CfgCruxWorldComponents {
             public @Nullable TypedDataComponent<EntitySpawnBaseAttributes> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e) {
                 if(!(e.get("attributes") instanceof FileObject o)) return null;
                 FileRegistry registry = ctx.getRegistry();
-                Map<Object, Object> attributes = new HashMap<>();
+                Map<Object, NumberProvider> attributes = new HashMap<>();
                 o.forEach((id, obj) ->{
-                    var got = registry.deserializeObjectFromFile(obj);
+                    var got = registry.deserializeFromFile(NumberProvider.class, obj);
                     if(got == null) return;
                     attributes.put(id, got);
                 });

@@ -1,5 +1,6 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.item.dynamic.component.attribute.DynamicAttributeModifier;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
@@ -30,12 +31,12 @@ public class FileDynamicAttributeModifier extends SimpleFileHandler<DynamicAttri
         if(!(e instanceof FileObject o)) return null;
         FileRegistry reg = ctx.getRegistry();
 
-        Object amount;
-        FileElement amountElement = o.get("amount");
+        NumberProvider amount = reg.deserializeFromFileOrDefault(NumberProvider.class, o.get("amount"), NumberProvider.zero());
+        /*FileElement amountElement = o.get("amount");
         if(amountElement instanceof FilePrimitive prim){
             if(prim.isNumber()) amount = prim.getAsNumber();
             else amount = prim.getAsString();
-        }else amount = reg.deserializeFromFile(String.class, amountElement);
+        }else amount = reg.deserializeFromFile(String.class, amountElement);*/
 
         return new DynamicAttributeModifier(
             reg.deserializeFromFile(String.class, o.get("key")),

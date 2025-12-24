@@ -1,6 +1,7 @@
 package killercreepr.crux.core.item.dynamic.component.attribute;
 
 import killercreepr.crux.api.text.context.TextParserContext;
+import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.util.CruxMath;
 import org.bukkit.NamespacedKey;
@@ -12,11 +13,11 @@ import org.jetbrains.annotations.Nullable;
 
 public class DynamicAttributeModifier {
     protected final @Nullable Object key;
-    protected final @NotNull Object amount;
+    protected final @NotNull NumberProvider amount;
     protected final @Nullable Object operation;
     protected final @Nullable Object equipmentSlotGroup;
 
-    public DynamicAttributeModifier(@Nullable Object key, @NotNull Object amount, @Nullable Object operation, @Nullable Object equipmentSlotGroup) {
+    public DynamicAttributeModifier(@Nullable Object key, @NotNull NumberProvider amount, @Nullable Object operation, @Nullable Object equipmentSlotGroup) {
         this.key = key;
         this.amount = amount;
         this.operation = operation;
@@ -28,7 +29,7 @@ public class DynamicAttributeModifier {
         if(key == null) k = Crux.key(attribute.key().value());
         else k = Crux.key(context.deserializeString(key.toString()));
 
-        double a = amount instanceof Number n ? n.doubleValue() : CruxMath.evaluate(context.deserializeString(amount.toString()));
+        double a = amount.sample(context).doubleValue();//amount instanceof Number n ? n.doubleValue() : CruxMath.evaluate(context.deserializeString(amount.toString()));
         AttributeModifier.Operation o;
         String opString = operation == null ? null : operation.toString();
         if(operation == null) o = AttributeModifier.Operation.ADD_NUMBER;
