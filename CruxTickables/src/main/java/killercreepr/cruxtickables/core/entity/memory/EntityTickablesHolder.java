@@ -2,6 +2,7 @@ package killercreepr.cruxtickables.core.entity.memory;
 
 import killercreepr.crux.api.data.tick.ManagedTicked;
 import killercreepr.crux.api.entity.memory.EntityMemory;
+import killercreepr.crux.api.entity.memory.TickedDataHolder;
 import killercreepr.crux.api.item.CruxItem;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.entity.memory.EntityTickedDataHolder;
@@ -39,20 +40,50 @@ public class EntityTickablesHolder extends EntityTickedDataHolder {
     }
     protected final Map<Key, ActiveEntityTickable> activeTickables = new ConcurrentHashMap<>();
 
+    protected ActiveEntityTickable[] removeBuffer = new ActiveEntityTickable[16];
+    protected int removeCount = 0;
+    protected void bufferRemove(){
+        for (int i = 0; i < removeCount; i++) {
+            activeTickables.remove(removeBuffer[i].getTickable().key());
+            removeBuffer[i] = null;
+        }
+        removeCount = 0;
+    }
+
+    protected void addRemove(ActiveEntityTickable holder) {
+        if (removeCount == removeBuffer.length) {
+            ActiveEntityTickable[] newBuf =
+                new ActiveEntityTickable[removeBuffer.length * 2];
+            System.arraycopy(removeBuffer, 0, newBuf, 0, removeBuffer.length);
+            removeBuffer = newBuf;
+        }
+        removeBuffer[removeCount++] = holder;
+    }
+
     public void updateTickables(Entity user){
         if(!(user instanceof LivingEntity e)) return;
         setActiveTickables(calculateTickables(e));
     }
 
     public void tickTickables(){
-        activeTickables.values().removeIf(active ->{
+        removeCount = 0;
+        for (ActiveEntityTickable value : activeTickables.values()) {
+            if(value.shouldStop()){
+                addRemove(value);
+                continue;
+            }
+            value.tick();
+        }
+        bufferRemove();
+
+        /*activeTickables.values().removeIf(active ->{
             if(active.shouldStop()){
                 active.stopped();
                 return true;
             }
             active.tick();
             return false;
-        });
+        });*/
     }
 
     public ActiveEntityTickable getTickable(EntityTickable tickable){

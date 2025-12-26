@@ -73,10 +73,47 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
     }
 
 
-    Collection<CruxWorld> toStop = new HashSet<>();
+    protected CruxWorld[] removeBuffer = new CruxWorld[16];
+    protected int removeCount = 0;
+    protected void bufferRemove(){
+        for (int i = 0; i < removeCount; i++) {
+            var crux = removeBuffer[i];
+            if(crux instanceof ManagedTicked ticked){
+                active.removeTicked(ticked);
+            }
+            unloadWorld(crux, crux.scheduledUnloadSave());
+            removeBuffer[i] = null;
+        }
+        removeCount = 0;
+    }
+
+    protected void addRemove(CruxWorld holder) {
+        if (removeCount == removeBuffer.length) {
+            CruxWorld[] newBuf =
+                new CruxWorld[removeBuffer.length * 2];
+            System.arraycopy(removeBuffer, 0, newBuf, 0, removeBuffer.length);
+            removeBuffer = newBuf;
+        }
+        removeBuffer[removeCount++] = holder;
+    }
     public void tick(){
-        toStop.clear();
-        active.getTicked().forEach(tick ->{
+        removeCount = 0;
+        for (ManagedTicked tick : active.getTicked()) {
+            if(tick.shouldStop()){
+                tick.stopped();
+                if(tick instanceof CruxWorld w && w.scheduledUnload()){
+                    addRemove(w);
+                }
+                continue;
+            }
+            tick.tick();
+        }
+        if(removeCount > 0){
+            Crux.scheduler().runTaskMain(this::bufferRemove);
+        }
+
+
+        /*active.getTicked().forEach(tick ->{
             if(tick.shouldStop()){
                 tick.stopped();
                 if(tick instanceof CruxWorld w && w.scheduledUnload()){
@@ -86,8 +123,8 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
             }
             tick.tick();
             //return false;
-        });
-        if(toStop.isEmpty()) return;
+        });*/
+        /*if(toStop.isEmpty()) return;
         for (CruxWorld crux : toStop) {
             if(crux instanceof ManagedTicked ticked){
                 active.removeTicked(ticked);
@@ -98,7 +135,7 @@ public class SimpleCruxWorldManager implements CruxWorldManager, Listener {
             for (CruxWorld w : copied) {
                 unloadWorld(w, w.scheduledUnloadSave());
             }
-        });
+        });*/
     }
 
     protected final Map<Key, CruxWorldType> defaultWorldTypes = new HashMap<>();

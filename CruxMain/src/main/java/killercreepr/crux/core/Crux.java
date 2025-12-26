@@ -215,16 +215,73 @@ public final class Crux {
             };
         }
         return new BukkitRunnable(){
+            EntityMemory[] removeBuffer = new EntityMemory[64];
+            int removeCount = 0;
+
+            CruxTick[] tickedRemoveBuffer = new CruxTick[16];
+            int tickedRemoveCount = 0;
             @Override
             public void run() {
-                registry.values().removeIf(t ->{
+                tickedRemoveCount = 0;
+                for (CruxTick value : registry) {
+                    if(value.markedForRemoval()){
+                        tickedAddRemove(value);
+                        continue;
+                    }
+                    value.tick();
+                }
+                tickedBufferRemove();
+
+                removeCount = 0;
+                for (EntityMemory holder : EntityMemory.MAIN_THREAD_REGISTRY) {
+                    if(holder.tick()){
+                        addRemove(holder);
+                    }
+                }
+                bufferRemove();
+
+                /*registry.values().removeIf(t ->{
                     if(t.markedForRemoval()){
                         return true;
                     }
                     t.tick();
                     return false;
                 });
-                EntityMemory.MAIN_THREAD_REGISTRY.values().removeIf(EntityMemory::tick);
+                EntityMemory.MAIN_THREAD_REGISTRY.values().removeIf(EntityMemory::tick);*/
+            }
+
+            void bufferRemove(){
+                for (int i = 0; i < removeCount; i++) {
+                    EntityMemory.MAIN_THREAD_REGISTRY.unregister(removeBuffer[i]);
+                    removeBuffer[i] = null;
+                }
+                removeCount = 0;
+            }
+            void addRemove(EntityMemory holder) {
+                if (removeCount == removeBuffer.length) {
+                    EntityMemory[] newBuf =
+                        new EntityMemory[removeBuffer.length * 2];
+                    System.arraycopy(removeBuffer, 0, newBuf, 0, removeBuffer.length);
+                    removeBuffer = newBuf;
+                }
+                removeBuffer[removeCount++] = holder;
+            }
+
+            void tickedBufferRemove(){
+                for (int i = 0; i < tickedRemoveCount; i++) {
+                    registry.unregister(tickedRemoveBuffer[i]);
+                    tickedRemoveBuffer[i] = null;
+                }
+                tickedRemoveCount = 0;
+            }
+            void tickedAddRemove(CruxTick holder) {
+                if (tickedRemoveCount == tickedRemoveBuffer.length) {
+                    CruxTick[] newBuf =
+                        new CruxTick[tickedRemoveBuffer.length * 2];
+                    System.arraycopy(tickedRemoveBuffer, 0, newBuf, 0, tickedRemoveBuffer.length);
+                    tickedRemoveBuffer = newBuf;
+                }
+                tickedRemoveBuffer[tickedRemoveCount++] = holder;
             }
         };
     }
