@@ -48,6 +48,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -336,6 +337,18 @@ public class CustomBlockData implements PersistentDataContainer {
                 .map(key -> getBlockFromKey(key, chunk))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());*/
+    }
+
+    public static void forEachBlocksWithCustomData(final @NotNull Chunk chunk, final @NotNull NamespacedKey namespace, Consumer<Block> consumer){
+        final PersistentDataContainer chunkPDC = chunk.getPersistentDataContainer();
+        for(NamespacedKey key : chunkPDC.getKeys()){
+            PersistentDataContainer pdc = chunkPDC.get(key, PersistentDataType.TAG_CONTAINER);
+            if(pdc == null) continue;
+            Block b = getBlockFromKey(key, chunk);
+            if(b == null) continue;
+            if(!pdc.has(namespace)) continue;
+            consumer.accept(b);
+        }
     }
 
     /**

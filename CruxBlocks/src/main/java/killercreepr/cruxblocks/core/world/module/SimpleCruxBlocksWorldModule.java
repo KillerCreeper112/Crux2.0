@@ -1,6 +1,7 @@
 package killercreepr.cruxblocks.core.world.module;
 
 import killercreepr.crux.api.data.tick.ManagedTicked;
+import killercreepr.crux.api.entity.memory.TickedDataHolder;
 import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.core.Crux;
 import killercreepr.cruxblocks.api.block.CruxBlock;
@@ -36,17 +37,53 @@ public class SimpleCruxBlocksWorldModule extends SimpleWorldModule implements Cr
     @Override
     public void onUnload(boolean save) {
         super.onUnload(save);
-        active.values().forEach(b ->{
-            if(!(b instanceof ManagedTicked ticked)) return;
+        for (ActiveCruxBlock b : active.values()) {
+            if(!(b instanceof ManagedTicked ticked)) continue;
             ticked.stopped();
-        });
+        }
         active.clear();
         chunkToActive.clear();
     }
 
+    protected ActiveCruxBlock[] removeBuffer = new ActiveCruxBlock[64];
+    protected int removeCount = 0;
+    protected void bufferRemove(){
+        for (int i = 0; i < removeCount; i++) {
+            active.remove(CruxPosition.block(removeBuffer[i].getBlock()));
+            removeBuffer[i] = null;
+        }
+        removeCount = 0;
+    }
+
+    protected void addRemove(ActiveCruxBlock holder) {
+        if (removeCount == removeBuffer.length) {
+            ActiveCruxBlock[] newBuf =
+                new ActiveCruxBlock[removeBuffer.length * 2];
+            System.arraycopy(removeBuffer, 0, newBuf, 0, removeBuffer.length);
+            removeBuffer = newBuf;
+        }
+        removeBuffer[removeCount++] = holder;
+    }
+
     @Override
     public void tick() {
-        active.values().removeIf(a ->{
+        removeCount = 0;
+        for (ActiveCruxBlock a : active.values()) {
+            if(!(a instanceof ManagedTicked t)){
+                removeFromChunk(a);
+                continue;
+            }
+            if(!a.isValid() || t.shouldStop() || !a.getBlock().getChunk().isLoaded()){
+                t.stopped();
+                removeFromChunk(a);
+                addRemove(a);
+                continue;
+            }
+            t.tick();
+        }
+        bufferRemove();
+
+       /* active.values().removeIf(a ->{
             if(!(a instanceof ManagedTicked t)){
                 removeFromChunk(a);
                 return true;
@@ -58,26 +95,34 @@ public class SimpleCruxBlocksWorldModule extends SimpleWorldModule implements Cr
             }
             t.tick();
             return false;
-        });
+        });*/
     }
 
     @Override
     public void onChunkUnload(@NotNull Chunk chunk) {
         Collection<ActiveCruxBlock> active = this.chunkToActive.remove(chunk.getChunkKey());
         if(active == null) return;
-        active.forEach(block ->{
+        for (ActiveCruxBlock block : active) {
+            ActiveCruxBlock removed = this.active.remove(CruxPosition.block(block.getBlock()));
+            if(!(removed instanceof ManagedTicked ticked)){
+                Crux.log(Level.WARNING, block.getBlock() + " was supposed to be an active ticked block but was not registered properly!");
+                continue;
+            }
+            ticked.stopped();
+        }
+        /*active.forEach(block ->{
             ActiveCruxBlock removed = this.active.remove(CruxPosition.block(block.getBlock()));
             if(!(removed instanceof ManagedTicked ticked)){
                 Crux.log(Level.WARNING, block.getBlock() + " was supposed to be an active ticked block but was not registered properly!");
                 return;
             }
             ticked.stopped();
-        });
+        });*/
     }
 
     @Override
     public void onChunkLoad(@NotNull Chunk chunk) {
-        CustomBlockData.getBlocksWithCustomData(chunk, ActiveCruxTickedBlock.CUSTOM_TICKED_KEY).forEach(this::getActiveBlock);
+        CustomBlockData.forEachBlocksWithCustomData(chunk, ActiveCruxTickedBlock.CUSTOM_TICKED_KEY, this::getActiveBlock);
     }
 
     @Override
