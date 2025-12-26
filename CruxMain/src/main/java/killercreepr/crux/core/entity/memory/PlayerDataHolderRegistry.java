@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
 public class PlayerDataHolderRegistry extends DataHolderRegistry {
@@ -18,7 +19,11 @@ public class PlayerDataHolderRegistry extends DataHolderRegistry {
     public PlayerDataHolderRegistry() {
     }
 
-    protected final @NotNull Map<Key, PlayerTickDataHolder> playerTickedHolders = new HashMap<>();
+    public @NotNull Map<Key, PlayerTickDataHolder> getPlayerTickedHolders() {
+        return playerTickedHolders;
+    }
+
+    protected final @NotNull Map<Key, PlayerTickDataHolder> playerTickedHolders = new ConcurrentHashMap<>();
 
     @Override
     public <E extends DataHolder> void onRegistered(@NotNull Key key, @NotNull E value) {
@@ -43,6 +48,7 @@ public class PlayerDataHolderRegistry extends DataHolderRegistry {
     }
 
     public void removePlayerTickedIf(@NotNull Predicate<PlayerTickDataHolder> predicate){
+        if(playerTickedHolders.isEmpty()) return;
         new HashSet<>(playerTickedHolders.values()).forEach(holder ->{
             if(predicate.test(holder)){
                 unregister(holder);

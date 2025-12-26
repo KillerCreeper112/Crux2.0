@@ -3,6 +3,7 @@ package killercreepr.crux.core.entity.memory;
 import killercreepr.crux.api.data.Holder;
 import killercreepr.crux.api.entity.memory.DataHolder;
 import killercreepr.crux.api.entity.memory.EntityMemory;
+import killercreepr.crux.api.entity.memory.TickedDataHolder;
 import killercreepr.crux.api.registry.KeyedRegistry;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Entity;
@@ -22,6 +23,10 @@ public class SimpleEntityMemory implements EntityMemory {
     protected final DataHolderRegistry dataHolders;
     protected final UUID uuid;
     protected final Holder<? extends Entity> entity;
+
+    protected TickedDataHolder[] removeBuffer = new TickedDataHolder[16];
+    protected int removeCount = 0;
+
     public SimpleEntityMemory(@NotNull Entity e, DataHolderRegistry dataHolders) {
         this(dataHolders, e.getUniqueId(), Holder.weakReference(e));
     }
@@ -38,6 +43,24 @@ public class SimpleEntityMemory implements EntityMemory {
 
     public SimpleEntityMemory(@NotNull UUID uuid, @NotNull Holder<? extends Entity> holder){
         this(new DataHolderRegistry(new ConcurrentHashMap<>()), uuid, holder);
+    }
+
+    protected void bufferRemove(){
+        for (int i = 0; i < removeCount; i++) {
+            dataHolders.unregister(removeBuffer[i]);
+            removeBuffer[i] = null;
+        }
+        removeCount = 0;
+    }
+
+    protected void addRemove(TickedDataHolder holder) {
+        if (removeCount == removeBuffer.length) {
+            TickedDataHolder[] newBuf =
+                new TickedDataHolder[removeBuffer.length * 2];
+            System.arraycopy(removeBuffer, 0, newBuf, 0, removeBuffer.length);
+            removeBuffer = newBuf;
+        }
+        removeBuffer[removeCount++] = holder;
     }
 
     @Override
@@ -58,14 +81,19 @@ public class SimpleEntityMemory implements EntityMemory {
     @Override
     public boolean tick(){
         Entity e = value();
-        dataHolders.removeTickedIf(holder ->{
-            if(holder.shouldRemoveFromMemory(e)){
+        removeCount = 0;
+
+        for (TickedDataHolder holder : dataHolders.getTickedHolders().values()) {
+            if (holder.shouldRemoveFromMemory(e)) {
                 holder.removing(e);
-                return true;
+                addRemove(holder);
+            } else if (e != null) {
+                holder.tick(e);
             }
-            if(e != null) holder.tick(e);
-            return false;
-        });
+        }
+
+        bufferRemove();
+
         if(shouldRemoveFromMemory(e)){
             removeDataHolders(e);
             return true;

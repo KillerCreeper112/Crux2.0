@@ -4,6 +4,7 @@ import killercreepr.crux.api.CruxHandlers;
 import killercreepr.crux.api.communication.lang.CreateLang;
 import killercreepr.crux.api.data.CruxTick;
 import killercreepr.crux.api.entity.memory.EntityMemory;
+import killercreepr.crux.api.entity.memory.TickedDataHolder;
 import killercreepr.crux.api.registry.KeyedRegistry;
 import killercreepr.crux.api.scheduler.CruxScheduler;
 import killercreepr.crux.api.text.format.FormatSerializer;
@@ -26,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -133,16 +135,66 @@ public final class Crux {
             };
         }
         return new BukkitRunnable(){
+            EntityMemory[] removeBuffer = new EntityMemory[64];
+            int removeCount = 0;
+
+            CruxTick[] tickedRemoveBuffer = new CruxTick[16];
+            int tickedRemoveCount = 0;
+
             @Override
             public void run() {
-                registry.values().removeIf(t ->{
-                    if(t.markedForRemoval()){
-                        return true;
+                tickedRemoveCount = 0;
+                for (CruxTick value : registry) {
+                    if(value.markedForRemoval()){
+                        tickedAddRemove(value);
+                        continue;
                     }
-                    t.tick();
-                    return false;
-                });
-                EntityMemory.REGISTRY.values().removeIf(EntityMemory::tick);
+                    value.tick();
+                }
+                tickedBufferRemove();
+
+                removeCount = 0;
+                for (EntityMemory holder : EntityMemory.REGISTRY) {
+                    if(holder.tick()){
+                        addRemove(holder);
+                    }
+                }
+                bufferRemove();
+
+                //EntityMemory.REGISTRY.values().removeIf(EntityMemory::tick);
+            }
+            void bufferRemove(){
+                for (int i = 0; i < removeCount; i++) {
+                    EntityMemory.REGISTRY.unregister(removeBuffer[i]);
+                    removeBuffer[i] = null;
+                }
+                removeCount = 0;
+            }
+            void addRemove(EntityMemory holder) {
+                if (removeCount == removeBuffer.length) {
+                    EntityMemory[] newBuf =
+                        new EntityMemory[removeBuffer.length * 2];
+                    System.arraycopy(removeBuffer, 0, newBuf, 0, removeBuffer.length);
+                    removeBuffer = newBuf;
+                }
+                removeBuffer[removeCount++] = holder;
+            }
+
+            void tickedBufferRemove(){
+                for (int i = 0; i < tickedRemoveCount; i++) {
+                    registry.unregister(tickedRemoveBuffer[i]);
+                    tickedRemoveBuffer[i] = null;
+                }
+                tickedRemoveCount = 0;
+            }
+            void tickedAddRemove(CruxTick holder) {
+                if (tickedRemoveCount == tickedRemoveBuffer.length) {
+                    CruxTick[] newBuf =
+                        new CruxTick[tickedRemoveBuffer.length * 2];
+                    System.arraycopy(tickedRemoveBuffer, 0, newBuf, 0, tickedRemoveBuffer.length);
+                    tickedRemoveBuffer = newBuf;
+                }
+                tickedRemoveBuffer[tickedRemoveCount++] = holder;
             }
         };
     }

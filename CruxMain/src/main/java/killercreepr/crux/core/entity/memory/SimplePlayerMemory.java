@@ -1,7 +1,10 @@
 package killercreepr.crux.core.entity.memory;
 
 import killercreepr.crux.api.data.Holder;
+import killercreepr.crux.api.entity.memory.DataHolder;
 import killercreepr.crux.api.entity.memory.PlayerMemory;
+import killercreepr.crux.api.entity.memory.PlayerTickDataHolder;
+import killercreepr.crux.api.entity.memory.TickedDataHolder;
 import killercreepr.crux.api.registry.KeyedRegistry;
 import killercreepr.crux.core.registry.SimpleKeyedRegistry;
 import org.bukkit.entity.Entity;
@@ -23,6 +26,7 @@ public class SimplePlayerMemory extends SimpleEntityMemory implements PlayerMemo
 
     protected final Holder<Player> entity;
     protected final PlayerDataHolderRegistry playerDataHolders;
+
     public SimplePlayerMemory(@NotNull Player e) {
         this(e.getUniqueId(), Holder.weakReference(e));
     }
@@ -56,23 +60,26 @@ public class SimplePlayerMemory extends SimpleEntityMemory implements PlayerMemo
     @Override
     public boolean tick() {
         Player e = value();
-        playerDataHolders.removeTickedIf(holder -> {
-            if (holder.shouldRemoveFromMemory(e)) {
-                holder.removing(e);
-                return true;
-            }
-            if (e != null) holder.tick(e);
-            return false;
-        });
+        removeCount = 0;
 
-        playerDataHolders.removePlayerTickedIf(holder -> {
+        for (TickedDataHolder holder : playerDataHolders.getTickedHolders().values()) {
             if (holder.shouldRemoveFromMemory(e)) {
                 holder.removing(e);
-                return true;
+                addRemove(holder);
+            } else if (e != null) {
+                holder.tick(e);
             }
-            if (e != null) holder.tick(e);
-            return false;
-        });
+        }
+        for (PlayerTickDataHolder holder : playerDataHolders.getPlayerTickedHolders().values()) {
+            if (holder.shouldRemoveFromMemory(e)) {
+                holder.removing(e);
+                addRemove(holder);
+            } else if (e != null) {
+                holder.tick(e);
+            }
+        }
+
+        bufferRemove();
 
         if (shouldRemoveFromMemory(e)) {
             removeDataHolders(e);
