@@ -47,7 +47,9 @@ public class SimpleEntityMemory implements EntityMemory {
 
     protected void bufferRemove(){
         for (int i = 0; i < removeCount; i++) {
-            dataHolders.unregister(removeBuffer[i]);
+            var got = removeBuffer[i];
+            if(got == null) continue;
+            dataHolders.unregister(got);
             removeBuffer[i] = null;
         }
         removeCount = 0;

@@ -26,7 +26,7 @@ public class CruxMobSnapshot implements CruxEntitySnapshot {
                 CruxEntity crux = CruxEntity.entity(e);
                 components.forEach(typed ->{
                     if(typed.getValue() instanceof EntitySnapshotComponent c){
-                        c.onCreate(crux);
+                        c.onCreateEntity(crux);
                     }else crux.set(typed);
                 });
             }
