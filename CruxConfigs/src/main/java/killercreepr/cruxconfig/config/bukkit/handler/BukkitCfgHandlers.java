@@ -152,6 +152,7 @@ public class BukkitCfgHandlers {
     public static final FileTextAnimation TEXT_ANIMATION = new FileTextAnimation();
     public static final FileCommunicator COMMUNICATOR = new FileCommunicator();
     public static final FileBlockPos BLOCK_POS = new FileBlockPos();
+    public static final FileLocationPos LOCATION_POS = new FileLocationPos();
     public static final FileLocationResolver LOCATION_RESOLVER = new FileLocationResolver();
 
 
@@ -223,6 +224,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(TextAnimation.class, TEXT_ANIMATION);
         registry.registerFileHandler(Communicator.class, COMMUNICATOR);
         registry.registerFileHandler(BlockPos.class, BLOCK_POS);
+        registry.registerFileHandler(LocationPos.class, LOCATION_POS);
         registry.registerFileHandler(LocationResolver.class, LOCATION_RESOLVER);
 
         registry.registerFileHandler(StoredWorld.class, STORED_WORLD);
@@ -269,7 +271,7 @@ public class BukkitCfgHandlers {
         );
 
         //registry.registerFileHandler(BlockPos.class, new AutoFileHandler<>(BlockPos.class));
-        registry.registerFileHandler(LocationPos.class, new AutoFileHandler<>(LocationPos.class));
+        //registry.registerFileHandler(LocationPos.class, new AutoFileHandler<>(LocationPos.class));
         registry.registerFileHandler(WorldPosition.class, new AutoFileHandler<>(SimpleWorldPosition.class));
         registry.registerFileHandler(ArmorTrim.class, new AutoFileHandler<>(ArmorTrim.class));
         registry.registerFileHandler(BoundingBox.class, new AutoFileHandler<>(BoundingBox.class));
