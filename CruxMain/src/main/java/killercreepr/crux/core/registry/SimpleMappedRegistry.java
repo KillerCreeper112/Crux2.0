@@ -21,6 +21,10 @@ public class SimpleMappedRegistry<K, V> implements MappedRegistry<K, V> {
         this.map = map;
     }
 
+    public Map<K, V> getMap() {
+        return map;
+    }
+
     /**
      * Creates a registry using a HashMap.
      */

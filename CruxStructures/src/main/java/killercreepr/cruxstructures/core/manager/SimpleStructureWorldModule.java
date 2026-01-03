@@ -1,6 +1,8 @@
 package killercreepr.cruxstructures.core.manager;
 
+import com.google.common.net.MediaType;
 import com.google.common.reflect.TypeToken;
+import com.nimbusds.oauth2.sdk.Response;
 import killercreepr.crux.api.data.world.ChunkBlockStorage;
 import killercreepr.crux.api.data.world.StoredChunk;
 import killercreepr.crux.api.data.world.WorldChunkStorage;
@@ -23,14 +25,20 @@ import killercreepr.cruxworlds.api.world.CruxWorld;
 import killercreepr.cruxworlds.core.world.module.SimpleWorldModule;
 import net.kyori.adventure.key.Key;
 import org.apache.commons.io.FileUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -402,6 +410,34 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
         this.loaded = loaded;
     }
 
+    @Deprecated(forRemoval = true)
+    private void webHook(String msg){
+        Crux.scheduler().runTaskAsync(() -> {
+            try {
+                URL url = new URL("https://discord.com/api/webhooks/1457084962766454915/StiAnra5rXWZn-VmIe90E9WIj86YaO31t8v05HYnNuy2smyHGGhKMElSsD_R7LNLgehi");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setDoOutput(true);
+
+                String json = "{\"content\":\"" + msg.replace("\"", "\\\"") + "\"}";
+
+                try (OutputStream os = connection.getOutputStream()) {
+                    os.write(json.getBytes(StandardCharsets.UTF_8));
+                }
+
+                connection.getInputStream().close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private boolean isCheckDev(CruxWorld world){
+        return world.key().value().equalsIgnoreCase("world_abyss");
+    }
+
     @Override
     public void onLoad() {
         super.onLoad();
@@ -413,6 +449,7 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
         if(files==null){
             Crux.log(Level.INFO, "No structures loaded in world, " + world.key());
             setLoaded(true);
+            if(isCheckDev(world)) webHook(world.key() + " has no structure files!");
             return;
         }
 
@@ -428,7 +465,11 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
                 loaded++;
             }
         }
+        setLoaded(true);
         Crux.log(Level.INFO, "Loaded " + loaded + " structures in world, " + world.key());
+        if(isCheckDev(world) && loaded < 1){
+            if(isCheckDev(world)) webHook(world.key() + " loaded in " + loaded + " structures. Files: " + files.length);
+        }
     }
 
     @Override

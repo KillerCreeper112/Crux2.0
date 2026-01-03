@@ -142,10 +142,12 @@ public class CruxStructuresModule implements CruxModule {
 
         var simpleStored = new FileSimpleStoredStructure<SimpleStoredStructure>();
         CfgRegistries.JSON_REGISTRY.forEach(registry ->{
+            Crux.logError("JSONREGISTRY=" + registry);
             registry.registerFileHandler(SimpleStoredStructure.class, simpleStored);
             registry.registerFileHandler(SimpleTickedStoredStructure.class, simpleStored);
             //registry.registerFileHandler(CfgStoredStructure.class, new FileCfgStoredStructure<>());
         });
+        Crux.logError("JSONREGISTRY=" + CfgRegistries.JSON_TAGGED.REGISTRY.keySet());
 
         fileLocationFinder.TYPE_HANDLERS.register("nearby_solid_block", new FileNearbySolidBlockFinder());
         fileLocationFinder.TYPE_HANDLERS.register("dummy", new FileDummyLocationFinder());

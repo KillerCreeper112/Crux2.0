@@ -1,6 +1,7 @@
 package killercreepr.cruxstructures.core.config;
 
 import killercreepr.crux.api.data.world.StoredChunk;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.math.BlockPos;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
@@ -43,12 +44,19 @@ public class FileSimpleStoredStructure<T extends StoredStructure> extends Simple
         if(!(e instanceof FileObject o)) return null;
         FileRegistry registry = context.getRegistry();
         Key structureKey = registry.deserializeFromFile(Key.class, o.get("structure"));
-        if(structureKey==null) return null;
+        if(structureKey==null){
+            Crux.logError( e + " structureKey=" + structureKey);
+            return null;
+        }
 
         StoredChunk chunk = registry.deserializeFromFile(StoredChunk.class, o.get("chunk"));
         BlockPos center = registry.deserializeFromFile(BlockPos.class, o.get("center"));
 
-        if(chunk == null || center == null) return null;
+        if(chunk == null || center == null){
+            Crux.logError(e + " chunk=" + chunk);
+            Crux.logError(e + " center=" + center);
+            return null;
+        }
 
         Double rotation = registry.deserializeFromFile(Double.class, o.get("rotation"));
         if(rotation==null) rotation = 0D;
@@ -61,7 +69,10 @@ public class FileSimpleStoredStructure<T extends StoredStructure> extends Simple
         else data = new FileObject();
 
         StoredStructure stored = structure.buildStored(chunk, center, rotation);
-        if(stored == null) return null;
+        if(stored == null){
+            Crux.logError("Cannot load stored structure from " + structure + " " + e);
+            return null;
+        }
         //SimpleStoredStructure stored = new SimpleStoredStructure(structure, chunk, center, rotation);
         structure.getAllOfType(StructureComponent.class).forEach(component ->{
             component.onFileLoad(context, data, stored);

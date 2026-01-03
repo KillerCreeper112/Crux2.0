@@ -2,6 +2,7 @@ package killercreepr.cruxstructures.core.file;
 
 import com.google.gson.JsonArray;
 import killercreepr.crux.api.math.CruxPosition;
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxconfig.config.bukkit.file.CruxJson;
 import killercreepr.cruxconfig.config.common.json.registry.JsonRegistry;
 import killercreepr.cruxconfig.config.registry.CfgRegistries;
@@ -48,13 +49,14 @@ public class StorageChunkFile extends CruxJson {
     }
 
     public @NotNull Map<CruxPosition, StoredStructure> structures(){
-        reloadIfExists();
+        reloadIfNeeded();
         if(json==null) return new HashMap<>();
         Map<CruxPosition, StoredStructure> map = new HashMap<>();
 
         if(!(json.get("structures") instanceof JsonArray a)) return map;
 
         a.forEach(ele ->{
+            Crux.logError("eleayo=" + ele);
             if(!(jsonRegistry.deserializeFromJson(ele) instanceof StoredStructure str)) return;
             map.put(str.getPosition(), str);
         });
