@@ -56,7 +56,6 @@ public class StorageChunkFile extends CruxJson {
         if(!(json.get("structures") instanceof JsonArray a)) return map;
 
         a.forEach(ele ->{
-            Crux.logError("eleayo=" + ele);
             if(!(jsonRegistry.deserializeFromJson(ele) instanceof StoredStructure str)) return;
             map.put(str.getPosition(), str);
         });

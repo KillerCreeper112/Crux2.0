@@ -45,7 +45,7 @@ public class FileSimpleStoredStructure<T extends StoredStructure> extends Simple
         FileRegistry registry = context.getRegistry();
         Key structureKey = registry.deserializeFromFile(Key.class, o.get("structure"));
         if(structureKey==null){
-            Crux.logError( e + " structureKey=" + structureKey);
+            Crux.logError( e + " structureKey=null");
             return null;
         }
 
