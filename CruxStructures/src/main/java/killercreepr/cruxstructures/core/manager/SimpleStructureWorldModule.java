@@ -1,8 +1,6 @@
 package killercreepr.cruxstructures.core.manager;
 
-import com.google.common.net.MediaType;
 import com.google.common.reflect.TypeToken;
-import com.nimbusds.oauth2.sdk.Response;
 import killercreepr.crux.api.data.world.ChunkBlockStorage;
 import killercreepr.crux.api.data.world.StoredChunk;
 import killercreepr.crux.api.data.world.WorldChunkStorage;

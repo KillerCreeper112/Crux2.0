@@ -5,6 +5,7 @@ import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.data.SimpleWorldLocation;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.jetbrains.annotations.ApiStatus;
 
 public interface WorldLocation {
@@ -17,8 +18,12 @@ public interface WorldLocation {
     }
 
     default Location toLocation(){
+        return toLocation(worldKey() == null ? null : Crux.getServer().getWorld(worldKey()));
+    }
+
+    default Location toLocation(World world){
         return new Location(
-            worldKey() == null ? null : Crux.getServer().getWorld(worldKey()),
+            world,
             location().x(), location().y(), location().z(),
             location().yaw(), location().pitch()
         );

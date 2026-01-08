@@ -1,7 +1,5 @@
 package killercreepr.crux.core.util;
 
-import killercreepr.crux.core.persistence.CruxPersist;
-import net.minecraft.util.Mth;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -101,10 +99,10 @@ public class CruxEntityUtil {
     public static Vector calculateViewVector(float pitch, float yaw) {
         float f2 = pitch * 0.017453292F;
         float f3 = -yaw * 0.017453292F;
-        float f4 = Mth.cos(f3);
-        float f5 = Mth.sin(f3);
-        float f6 = Mth.cos(f2);
-        float f7 = Mth.sin(f2);
+        float f4 = (float) Math.cos(f3);
+        float f5 = (float) Math.sin(f3);
+        float f6 = (float) Math.cos(f2);
+        float f7 = (float) Math.sin(f2);
 
         return new Vector((f5 * f6), (-f7), (f4 * f6));
     }
