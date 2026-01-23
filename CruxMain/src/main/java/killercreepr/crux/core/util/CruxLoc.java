@@ -31,6 +31,46 @@ public class CruxLoc {
         return list;
     }
 
+    public static Vector worldToLocal(Location center, Location worldPos, boolean ignoreRotation) {
+      Vector diff = worldPos.toVector().subtract(center.toVector());
+
+        if (ignoreRotation) {
+            // No orientation applied — just relative world offset
+            return diff;
+        }
+
+        // Compute basis vectors
+        Vector forward = center.getDirection().normalize();
+        Vector up = new Vector(0, 1, 0);
+        Vector right = forward.clone().crossProduct(up).normalize();
+        up = right.clone().crossProduct(forward).normalize();
+
+        // Project onto basis
+        double localX = diff.dot(right);
+        double localY = diff.dot(up);
+        double localZ = diff.dot(forward);
+
+        return new Vector(localX, localY, localZ);
+    }
+
+    public static Location localToWorld(Location center, double right, double up, double forward, boolean ignoreRotation) {
+      if (ignoreRotation) {
+            // Treat right=X, up=Y, forward=Z as world axes
+            return center.clone().add(new Vector(right, up, forward));
+        }
+
+        Vector f = center.getDirection().normalize();
+        Vector u = new Vector(0, 1, 0);
+        Vector r = f.clone().crossProduct(u).normalize();
+        u = r.clone().crossProduct(f).normalize();
+
+        Vector offset = r.multiply(right)
+          .add(u.multiply(up))
+          .add(f.multiply(forward));
+
+        return center.clone().add(offset);
+    }
+
     public List<Location> getHollowCube(Location pos1, Location pos2, double distance) {
         List<Location> result = new ArrayList<>();
         World world = pos1.getWorld();

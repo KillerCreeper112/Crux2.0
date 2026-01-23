@@ -118,42 +118,42 @@ public abstract class FileElement implements DataNode {
 
     @Override
     public boolean isObjectData() {
-        throw new UnsupportedOperationException(getClass().getSimpleName());
+        return isFileObject();
     }
 
     @Override
     public boolean isArrayData() {
-        throw new UnsupportedOperationException(getClass().getSimpleName());
+        return isFileArray();
     }
 
     @Override
     public boolean isString() {
-        throw new UnsupportedOperationException(getClass().getSimpleName());
+        return false;
     }
 
     @Override
     public boolean isNumber() {
-        throw new UnsupportedOperationException(getClass().getSimpleName());
+        return false;
     }
 
     @Override
     public boolean isBoolean() {
-        throw new UnsupportedOperationException(getClass().getSimpleName());
+        return false;
     }
 
     @Override
     public boolean isNull() {
-        throw new UnsupportedOperationException(getClass().getSimpleName());
+        return false;
     }
 
     @Override
     public DataObject asObjectData() {
-        throw new UnsupportedOperationException(getClass().getSimpleName());
+        return getAsFileObject();
     }
 
     @Override
     public DataArray asArrayData() {
-        throw new UnsupportedOperationException(getClass().getSimpleName());
+        return getAsFileArray();
     }
 
     @Override

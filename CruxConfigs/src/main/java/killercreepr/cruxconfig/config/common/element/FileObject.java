@@ -3,6 +3,7 @@ package killercreepr.cruxconfig.config.common.element;
 import com.google.gson.JsonObject;
 import killercreepr.crux.api.codec.node.DataNode;
 import killercreepr.crux.api.codec.node.DataObject;
+import killercreepr.crux.core.codec.node.ObjectDataNode;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,6 +23,12 @@ public class FileObject extends FileElement implements Iterable<Map.Entry<String
     public static @NotNull FileObject fromYaml(@NotNull YamlObject e){
         FileObject obj = new FileObject();
         e.asMap().forEach((key, value) -> obj.add(key, FileElement.fromYaml(value)));
+        return obj;
+    }
+
+    public static @NotNull FileObject fromDataNode(@NotNull ObjectDataNode e){
+        FileObject obj = new FileObject();
+        e.forEachDataPair((key, value) -> obj.add(key, FileElement.fromDataNode(value)));
         return obj;
     }
 

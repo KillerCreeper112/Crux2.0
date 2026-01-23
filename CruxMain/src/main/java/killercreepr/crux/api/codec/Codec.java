@@ -20,6 +20,8 @@ public interface Codec<T> {
     ShortCodec SHORT = new ShortCodec();
     FloatCodec FLOAT = new FloatCodec();
 
+    KeyCodec KEY = new KeyCodec();
+
     CruxCodecLists LIST = new CruxCodecLists();
 
     static <T> ListCodec<T> listCodec(Codec<T> codec) {

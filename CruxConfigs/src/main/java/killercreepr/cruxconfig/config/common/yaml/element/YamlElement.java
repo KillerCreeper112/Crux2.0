@@ -135,12 +135,12 @@ public abstract class YamlElement implements DataNode {
 
     @Override
     public DataObject asObjectData() {
-        return getAsYamlObject().asObjectData();
+        return getAsYamlObject();
     }
 
     @Override
     public DataArray asArrayData() {
-        return getAsYamlArray().asArrayData();
+        return getAsYamlArray();
     }
 
     @Override
