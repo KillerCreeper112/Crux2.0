@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 public class FileNull extends FileElement{
     public static final FileNull INSTANCE = new FileNull();
 
-    @Deprecated(since = "See FileNull#INSTANCE")
+    @Deprecated(since = "See FileNull#INSTANCE", forRemoval = true)
     public FileNull() {
     }
 
@@ -21,5 +21,10 @@ public class FileNull extends FileElement{
     @Override
     public @NotNull YamlElement toYaml() {
         return YamlNull.INSTANCE;
+    }
+
+    @Override
+    public boolean isNull() {
+        return true;
     }
 }

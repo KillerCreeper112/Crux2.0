@@ -5,7 +5,6 @@ import killercreepr.crux.api.entity.predicate.EntityPredicate;
 import killercreepr.crux.api.loot.conditions.LootCondition;
 import killercreepr.crux.api.world.predicate.WorldPredicate;
 import killercreepr.crux.core.Crux;
-import killercreepr.cruxconfig.config.bukkit.handler.impl.loot.FileLootCondition;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileArray;

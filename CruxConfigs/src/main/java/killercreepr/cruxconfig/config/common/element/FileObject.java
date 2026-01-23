@@ -1,6 +1,8 @@
 package killercreepr.cruxconfig.config.common.element;
 
 import com.google.gson.JsonObject;
+import killercreepr.crux.api.codec.node.DataNode;
+import killercreepr.crux.api.codec.node.DataObject;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlObject;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,7 +12,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
-public class FileObject extends FileElement implements Iterable<Map.Entry<String, FileElement>> {
+public class FileObject extends FileElement implements Iterable<Map.Entry<String, FileElement>>, DataObject {
     public static @NotNull FileObject fromJson(@NotNull JsonObject e){
         FileObject obj = new FileObject();
         e.asMap().forEach((key, value) -> obj.add(key, FileElement.fromJson(value)));
@@ -79,6 +81,16 @@ public class FileObject extends FileElement implements Iterable<Map.Entry<String
 
     public FileElement get(String memberName) {
         return members.get(memberName);
+    }
+
+    @Override
+    public void put(String key, DataNode value) {
+        members.put(key, FileElement.fromDataNode(value));
+    }
+
+    @Override
+    public void forEachDataPair(BiConsumer<String, DataNode> consumer) {
+        members.forEach(consumer);
     }
 
     /**

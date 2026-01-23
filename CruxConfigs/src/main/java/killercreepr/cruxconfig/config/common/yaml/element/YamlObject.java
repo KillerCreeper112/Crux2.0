@@ -1,5 +1,7 @@
 package killercreepr.cruxconfig.config.common.yaml.element;
 
+import killercreepr.crux.api.codec.node.DataNode;
+import killercreepr.crux.api.codec.node.DataObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
@@ -8,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
-public class YamlObject extends YamlElement implements Iterable<Map.Entry<String, YamlElement>> {
+public class YamlObject extends YamlElement implements Iterable<Map.Entry<String, YamlElement>>, DataObject {
     protected final Map<String, YamlElement> members = new LinkedHashMap<>();
     public YamlObject add(String property, YamlElement value) {
         members.put(property, value);
@@ -61,6 +63,16 @@ public class YamlObject extends YamlElement implements Iterable<Map.Entry<String
 
     public YamlElement get(String memberName) {
         return members.get(memberName);
+    }
+
+    @Override
+    public void put(String key, DataNode value) {
+        members.put(key, YamlElement.fromDataNode(value));
+    }
+
+    @Override
+    public void forEachDataPair(BiConsumer<String, DataNode> consumer) {
+        members.forEach(consumer);
     }
 
     /**

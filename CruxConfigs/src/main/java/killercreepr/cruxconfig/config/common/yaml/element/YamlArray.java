@@ -1,10 +1,13 @@
 package killercreepr.cruxconfig.config.common.yaml.element;
 
+import killercreepr.crux.api.codec.node.DataArray;
+import killercreepr.crux.api.codec.node.DataNode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.function.Consumer;
 
-public class YamlArray extends YamlElement implements Iterable<YamlElement> {
+public class YamlArray extends YamlElement implements Iterable<YamlElement>, DataArray {
     protected final List<YamlElement> elements;
     public YamlArray() {
         elements = new ArrayList<>();
@@ -59,6 +62,11 @@ public class YamlArray extends YamlElement implements Iterable<YamlElement> {
         return elements.size();
     }
 
+    @Override
+    public void forEachDataNode(Consumer<DataNode> consumer) {
+        forEach(consumer);
+    }
+
     public boolean isEmpty() {
         return elements.isEmpty();
     }
@@ -70,6 +78,10 @@ public class YamlArray extends YamlElement implements Iterable<YamlElement> {
 
     public YamlElement get(int i) {
         return elements.get(i);
+    }
+
+    @Override
+    public void add(DataNode value) {
     }
 
     private YamlElement getAsSingleElement() {

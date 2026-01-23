@@ -1,6 +1,7 @@
 package killercreepr.cruxconfig.config.common.element;
 
 import com.google.gson.JsonPrimitive;
+import killercreepr.crux.api.codec.node.DataNode;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlPrimitive;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,6 +17,13 @@ public class FilePrimitive extends FileGeneric {
         if(e.isString()) return new FilePrimitive(e.getAsString());
         if(e.isBoolean()) return new FilePrimitive(e.getAsBoolean());
         if(e.isNumber()) return new FilePrimitive(e.getAsNumber());
+        throw new UnsupportedOperationException(e.getClass().getSimpleName());
+    }
+
+    public static @NotNull FilePrimitive fromDataNode(@NotNull DataNode e){
+        if(e.isString()) return new FilePrimitive(e.asString());
+        if(e.isBoolean()) return new FilePrimitive(e.asBoolean());
+        if(e.isNumber()) return new FilePrimitive(e.asNumber());
         throw new UnsupportedOperationException(e.getClass().getSimpleName());
     }
 

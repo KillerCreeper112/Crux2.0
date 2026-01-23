@@ -4,7 +4,6 @@ import com.google.common.reflect.TypeToken;
 import killercreepr.crux.api.entity.predicate.EntityPredicate;
 import killercreepr.crux.api.entity.tag.EntityTag;
 import killercreepr.crux.api.loot.conditions.LootCondition;
-import killercreepr.crux.api.world.predicate.WorldPredicate;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.entity.predicate.EntityAllPredicate;
 import killercreepr.crux.core.entity.predicate.EntityAnyPredicate;

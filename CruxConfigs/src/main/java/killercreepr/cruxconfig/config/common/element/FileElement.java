@@ -2,11 +2,17 @@
 package killercreepr.cruxconfig.config.common.element;
 
 import com.google.gson.*;
+import killercreepr.crux.api.codec.node.DataArray;
+import killercreepr.crux.api.codec.node.DataNode;
+import killercreepr.crux.api.codec.node.DataObject;
+import killercreepr.crux.core.codec.node.ArrayDataNode;
+import killercreepr.crux.core.codec.node.GenericDataNode;
+import killercreepr.crux.core.codec.node.ObjectDataNode;
 import killercreepr.cruxconfig.config.common.yaml.element.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class FileElement {
+public abstract class FileElement implements DataNode {
     public static @NotNull FileElement fromJson(@Nullable JsonElement e){
         if(e == null || e instanceof JsonNull) return FileNull.INSTANCE;
         if(e instanceof JsonPrimitive s) return FilePrimitive.fromJson(s);
@@ -21,6 +27,16 @@ public abstract class FileElement {
         if(e instanceof YamlGeneric s) return FileGeneric.fromYaml(s);
         if(e instanceof YamlArray s) return FileArray.fromYaml(s);
         if(e instanceof YamlObject s) return FileObject.fromYaml(s);
+        throw new UnsupportedOperationException(e.getClass().getSimpleName());
+    }
+
+    public static @NotNull FileElement fromDataNode(@Nullable DataNode e){
+        if(e == null) return FileNull.INSTANCE;
+        if(e instanceof FileElement d) return d;
+
+        if(e instanceof GenericDataNode s) return FilePrimitive.fromDataNode(s);
+        if(e instanceof ArrayDataNode s) return FileArray.fromDataNode(s);
+        if(e instanceof ObjectDataNode s) return FileObject.fromDataNode(s);
         throw new UnsupportedOperationException(e.getClass().getSimpleName());
     }
 
@@ -98,5 +114,60 @@ public abstract class FileElement {
 
     public short getAsShort() {
         throw new UnsupportedOperationException(getClass().getSimpleName());
+    }
+
+    @Override
+    public boolean isObjectData() {
+        throw new UnsupportedOperationException(getClass().getSimpleName());
+    }
+
+    @Override
+    public boolean isArrayData() {
+        throw new UnsupportedOperationException(getClass().getSimpleName());
+    }
+
+    @Override
+    public boolean isString() {
+        throw new UnsupportedOperationException(getClass().getSimpleName());
+    }
+
+    @Override
+    public boolean isNumber() {
+        throw new UnsupportedOperationException(getClass().getSimpleName());
+    }
+
+    @Override
+    public boolean isBoolean() {
+        throw new UnsupportedOperationException(getClass().getSimpleName());
+    }
+
+    @Override
+    public boolean isNull() {
+        throw new UnsupportedOperationException(getClass().getSimpleName());
+    }
+
+    @Override
+    public DataObject asObjectData() {
+        throw new UnsupportedOperationException(getClass().getSimpleName());
+    }
+
+    @Override
+    public DataArray asArrayData() {
+        throw new UnsupportedOperationException(getClass().getSimpleName());
+    }
+
+    @Override
+    public String asString() {
+        return getAsString();
+    }
+
+    @Override
+    public Number asNumber() {
+        return getAsNumber();
+    }
+
+    @Override
+    public boolean asBoolean() {
+        return getAsBoolean();
     }
 }

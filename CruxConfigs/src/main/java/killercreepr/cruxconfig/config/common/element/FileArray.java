@@ -1,12 +1,16 @@
 package killercreepr.cruxconfig.config.common.element;
 
 import com.google.gson.JsonArray;
+import killercreepr.crux.api.codec.node.DataArray;
+import killercreepr.crux.api.codec.node.DataNode;
+import killercreepr.crux.core.codec.node.ArrayDataNode;
 import killercreepr.cruxconfig.config.common.yaml.element.YamlArray;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.function.Consumer;
 
-public class FileArray extends FileElement implements Iterable<FileElement> {
+public class FileArray extends FileElement implements Iterable<FileElement>, DataArray {
     public static @NotNull FileArray fromJson(@NotNull JsonArray json){
         FileArray a = new FileArray();
         json.forEach(value -> a.add(FileElement.fromJson(value)));
@@ -16,6 +20,11 @@ public class FileArray extends FileElement implements Iterable<FileElement> {
     public static @NotNull FileArray fromYaml(@NotNull YamlArray json){
         FileArray a = new FileArray();
         json.forEach(value -> a.add(FileElement.fromYaml(value)));
+        return a;
+    }
+    public static @NotNull FileArray fromDataNode(@NotNull ArrayDataNode json){
+        FileArray a = new FileArray();
+        json.forEachDataNode(value -> a.add(FileElement.fromDataNode(value)));
         return a;
     }
 
@@ -73,6 +82,11 @@ public class FileArray extends FileElement implements Iterable<FileElement> {
         return elements.size();
     }
 
+    @Override
+    public void forEachDataNode(Consumer<DataNode> consumer) {
+        forEach(consumer);
+    }
+
     public boolean isEmpty() {
         return elements.isEmpty();
     }
@@ -84,6 +98,11 @@ public class FileArray extends FileElement implements Iterable<FileElement> {
 
     public FileElement get(int i) {
         return elements.get(i);
+    }
+
+    @Override
+    public void add(DataNode value) {
+        elements.add(FileElement.fromDataNode(value));
     }
 
     private FileElement getAsSingleElement() {

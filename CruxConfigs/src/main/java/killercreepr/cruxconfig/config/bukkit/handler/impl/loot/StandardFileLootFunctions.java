@@ -2,7 +2,6 @@ package killercreepr.cruxconfig.config.bukkit.handler.impl.loot;
 
 import com.google.common.reflect.TypeToken;
 import killercreepr.crux.api.component.parser.DataComponentDecoder;
-import killercreepr.crux.api.component.parser.DataComponentEncoder;
 import killercreepr.crux.api.enchantment.DropFormula;
 import killercreepr.crux.api.loot.conditions.LootCondition;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;

@@ -6,4 +6,9 @@ public class YamlNull extends YamlElement {
     @Deprecated(since = "See YamlNull#INSTANCE")
     public YamlNull() {
     }
+
+    @Override
+    public boolean isNull() {
+        return true;
+    }
 }
