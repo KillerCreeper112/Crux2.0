@@ -5,6 +5,7 @@ import killercreepr.crux.api.codec.DecodeException;
 import killercreepr.crux.api.codec.node.DataNode;
 import killercreepr.crux.api.codec.node.DataObject;
 import killercreepr.crux.core.codec.node.StringDataNode;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Map;
 
@@ -15,6 +16,18 @@ public final class PolymorphicCodec<T> implements Codec<T> {
     public PolymorphicCodec(String typeField, Map<String, Codec<? extends T>> codecs) {
         this.typeField = typeField;
         this.codecs = codecs;
+    }
+
+    //mainly here for other plugins to add their own things
+    @ApiStatus.Experimental
+    public PolymorphicCodec<T> register(String type, Codec<? extends T> codec) {
+        codecs.put(type, codec);
+        return this;
+    }
+
+    public <I extends T> Codec<I> registerWith(String type, Codec<I> codec) {
+        codecs.put(type, codec);
+        return codec;
     }
 
     @Override

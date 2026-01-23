@@ -15,6 +15,11 @@ public interface Codec<T> {
     BoolCodec BOOLEAN = new BoolCodec();
     DoubleCodec DOUBLE = new DoubleCodec();
     IntCodec INTEGER = new IntCodec();
+    ByteCodec BYTE = new ByteCodec();
+    LongCodec LONG = new LongCodec();
+    ShortCodec SHORT = new ShortCodec();
+
+    CruxCodecLists LIST = new CruxCodecLists();
 
     static <T> ListCodec<T> listCodec(Codec<T> codec) {
         return new ListCodec<>(codec);
