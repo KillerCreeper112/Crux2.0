@@ -231,6 +231,35 @@ public class CruxLoc {
     @Contract(pure = true)
     public static @NotNull Location shift(@NotNull Location loc, @NotNull Vector dir, double forward, double up, double right){
         Location newLocation = loc.clone();
+        if (forward != 0) {
+            Vector forwardVec = dir.clone();
+            if (forwardVec.lengthSquared() > 1.0E-6) {
+                forwardVec.normalize().multiply(forward);
+                newLocation.add(forwardVec);
+            }
+        }
+
+        if (right != 0 || up != 0) {
+            Vector forwardVec = dir.clone().normalize();
+            Vector upWorld = new Vector(0, 1, 0);
+
+            Vector rightVec = forwardVec.clone().crossProduct(upWorld);
+            if (rightVec.lengthSquared() > 1.0E-6) {
+                rightVec.normalize();
+
+                if (right != 0) {
+                    newLocation.add(rightVec.clone().multiply(right));
+                }
+
+                if (up != 0) {
+                    Vector upVec = rightVec.clone().crossProduct(forwardVec).normalize();
+                    newLocation.add(upVec.multiply(up));
+                }
+            }
+        }
+        return  newLocation;
+
+        /*Location newLocation = loc.clone();
 
         Vector forwardVec = dir.clone().normalize();
         Vector upWorld = new Vector(0, 1, 0);
@@ -246,7 +275,7 @@ public class CruxLoc {
         newLocation.add(rightVec.multiply(right));
         newLocation.add(upVec.multiply(up));
 
-        return newLocation;
+        return newLocation;*/
 
         /*Location newLocation = loc.clone();
         Location locDirection = loc.clone().setDirection(dir);
