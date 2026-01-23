@@ -18,6 +18,7 @@ public interface Codec<T> {
     ByteCodec BYTE = new ByteCodec();
     LongCodec LONG = new LongCodec();
     ShortCodec SHORT = new ShortCodec();
+    FloatCodec FLOAT = new FloatCodec();
 
     CruxCodecLists LIST = new CruxCodecLists();
 
