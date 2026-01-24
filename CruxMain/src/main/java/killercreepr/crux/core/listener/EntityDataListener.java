@@ -39,18 +39,35 @@ public class EntityDataListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player p = event.getPlayer();
         PlayerMemory data = PlayerMemory.get(p);
-        if(data==null) return;
-        try{
-            data.scheduleForRemoval(p);
-        }catch (Exception ignored){
-            ignored.printStackTrace();
+        if(data!=null){
+            try{
+                data.scheduleForRemoval(p);
+            }catch (Exception ignored){
+                ignored.printStackTrace();
+            }
+
+            try{
+                data.onMemoryUnload(p);
+            }catch (Exception ignored){
+                ignored.printStackTrace();
+            }
         }
 
-        try{
-            data.onMemoryUnload(p);
-        }catch (Exception ignored){
-            ignored.printStackTrace();
-        }
+        var main = EntityMemory.getMain(p.getUniqueId());
+        if(main == null || main.equals(data)) return;
+        if(!(main instanceof PlayerMemory e)) return;
+        data = e;
+      try {
+        data.scheduleForRemoval(p);
+      } catch (Exception ignored) {
+        ignored.printStackTrace();
+      }
+
+      try{
+          data.onMemoryUnload(p);
+      }catch (Exception ignored){
+          ignored.printStackTrace();
+      }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
