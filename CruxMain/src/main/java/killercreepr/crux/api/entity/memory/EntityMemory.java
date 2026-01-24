@@ -87,6 +87,19 @@ public interface EntityMemory extends Holder<Entity> {
         return tick;
     }
 
+    static <T extends EntityMemory> T registerSilent(@NotNull T tick){
+        if(!tick.isAsync()){
+            MAIN_THREAD_REGISTRY.register(tick.getUUID(), tick);
+            return tick;
+        }
+        REGISTRY.register(tick.getUUID(), tick);
+        for (DataHolder data : tick.getDataHolders()) {
+            data.onMemoryRegistered();
+        }
+        return tick;
+    }
+
+
     static boolean register(@NotNull EntityMemory tick, boolean override){
         if(!tick.isAsync()){
             if(!override && MAIN_THREAD_REGISTRY.containsKey(tick.getUUID())) return false;
