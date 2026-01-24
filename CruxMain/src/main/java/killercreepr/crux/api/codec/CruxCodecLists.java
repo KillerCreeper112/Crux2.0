@@ -1,6 +1,7 @@
 package killercreepr.crux.api.codec;
 
 import killercreepr.crux.core.codec.ListCodec;
+import net.kyori.adventure.key.Key;
 import org.bukkit.util.Vector;
 
 import java.util.UUID;
@@ -26,6 +27,9 @@ public class CruxCodecLists {
 
   public final ListCodec<Short> SHORT =
     Codec.listCodec(Codec.SHORT);
+
+  public final ListCodec<Key> KEY =
+    Codec.listCodec(Codec.KEY);
 
 
 

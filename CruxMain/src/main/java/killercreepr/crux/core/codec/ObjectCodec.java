@@ -32,7 +32,8 @@ public final class ObjectCodec<T> implements Codec<T> {
         for (Field<T, ?> f : fields) {
             DataNode child = obj.get(f.name);
             if (child == null) {
-                throw new DecodeException("Missing field: " + f.name);
+                if(!f.optional) throw new DecodeException("Missing field: " + f.name);
+                else continue;
             }
 
             decodeField(instance, f, child);
