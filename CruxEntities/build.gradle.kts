@@ -9,6 +9,7 @@ dependencies {
     compileOnly(project(":CruxMain"))
     compileOnly(project(":CruxAttributes"))
     compileOnly(project(":CruxWorlds"))
+    compileOnly(project(":CruxConfigs"))
     //todo for some reason gradle won't compile unless these are here.... .___.
     compileOnly(project(":CruxExternal"))
     compileOnly(project(":CruxGeneration"))

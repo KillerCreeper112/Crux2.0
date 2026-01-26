@@ -3,9 +3,32 @@ package killercreepr.cruxadvancements.core.advancement.criteria;
 import killercreepr.cruxadvancements.api.advancement.criteria.CruxCriteria;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
 public class ListCriteria implements CruxCriteria {
+    public static ListCriteria listCriteria(List<String[]> requirements){
+        List<String> actionNames = new ArrayList<>();
+        for(String[] r : requirements){
+            for(String s : r){
+                if(!actionNames.contains(s)) actionNames.add(s);
+            }
+        }
+
+        return new ListCriteria(actionNames.toArray(new String[0]), requirements.toArray(new String[][]{}));
+    }
+    public static ListCriteria listCriteriaFromList(List<List<String>> requirements){
+        List<String> actionNames = new ArrayList<>();
+        for(var r : requirements){
+            for(String s : r){
+                if(!actionNames.contains(s)) actionNames.add(s);
+            }
+        }
+
+        return new ListCriteria(actionNames.toArray(new String[0]), requirements.toArray(new String[][]{}));
+    }
+
     protected final @NotNull String[] actionNames;
     protected final @NotNull String[][] requirements;
 

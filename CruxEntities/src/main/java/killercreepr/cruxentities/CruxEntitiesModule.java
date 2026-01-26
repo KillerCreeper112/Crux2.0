@@ -4,8 +4,10 @@ import killercreepr.crux.api.plugin.module.CruxModule;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.plugin.module.StandardModules;
+import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxentities.command.CruxEntitiesCommands;
 import killercreepr.cruxentities.component.CruxEntityComponents;
+import killercreepr.cruxentities.config.hook.CruxEntitiesCfgHook;
 import killercreepr.cruxentities.damage.type.CruxEntityDamageTypes;
 import killercreepr.cruxentities.entity.MobCategory;
 import killercreepr.cruxentities.handler.CruxEntitiesEntityHandler;
@@ -26,6 +28,9 @@ public class CruxEntitiesModule implements CruxModule {
         CruxEntityComponents.register();
         CruxEntityDamageTypes.register();
         Crux.handlers().setEntity(new CruxEntitiesEntityHandler());
+        if(CruxRegistries.MODULES.containsKey(StandardModules.CRUX_CONFIGS)){
+            new CruxEntitiesCfgHook().register();
+        }
     }
 
     @Override
