@@ -41,6 +41,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -617,6 +618,9 @@ public class CustomBlocksListener implements Listener {
                     p.swingMainHand();
                     return;
                 }
+                if(result == Event.Result.DENY){
+                    return;
+                }
             }
         }
         if((clickedBlock.getType() == Material.NOTE_BLOCK)){
@@ -644,6 +648,7 @@ public class CustomBlocksListener implements Listener {
                 Material itemType = item.getType();
 
 
+                ItemStack clonedItem = item.clone();
                 UseOnContext ctx = new UseOnContext(nmsPlayer, hand, result);
                 InteractionResult nmsResult = nmsItem.useOn(ctx);
                 if(nmsResult == InteractionResult.PASS && checkForPass(item)){
@@ -655,9 +660,15 @@ public class CustomBlocksListener implements Listener {
                             if(!CruxItem.isEmpty(gotted)){
                                 gotted.setAmount(gotted.getAmount()-1);
                             }
-                        }else nmsPlayer.setItemInHand(hand, success.heldItemTransformedTo());
+                        }else{
+                            nmsPlayer.setItemInHand(hand, success.heldItemTransformedTo());
+                        }
                     }
                     nmsSkip.remove(p.getUniqueId());
+                }else if(nmsResult == InteractionResult.FAIL){
+                    if(item.getAmount() != clonedItem.getAmount()){
+                        item.setAmount(clonedItem.getAmount());
+                    }
                 }
                 /*Block placeBlock = getPlaceBlock(clickedBlock, blockFace);
                 if(item.getType().isSolid()){

@@ -2,7 +2,9 @@ package killercreepr.crux.api.loot.bukkit;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import io.papermc.paper.event.block.PlayerShearBlockEvent;
+import io.papermc.paper.event.player.PlayerTrackEntityEvent;
 import io.papermc.paper.event.player.PlayerTradeEvent;
+import io.papermc.paper.event.player.PlayerUntrackEntityEvent;
 import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.event.CruxEntityDamageEvent;
 import killercreepr.crux.api.event.CruxEntityDeathEvent;
@@ -25,6 +27,36 @@ import org.jetbrains.annotations.NotNull;
 public interface EventLootContexts {
     static LootContext.Builder builder(){
         return LootContext.builder();
+    }
+    static LootContext.Builder builder(@NotNull PlayerTrackEntityEvent event){
+        var e = event.getEntity();
+        var p = event.getPlayer();
+        return builder()
+          .info(
+            DataExchange.builder()
+              .putAll(e, "entity")
+              .putAll(p, "player")
+              .build()
+          )
+          .location(e.getLocation())
+          .looter(p)
+          .looted(e)
+          ;
+    }
+    static LootContext.Builder builder(@NotNull PlayerUntrackEntityEvent event){
+        var e = event.getEntity();
+        var p = event.getPlayer();
+        return builder()
+          .info(
+            DataExchange.builder()
+              .putAll(e, "entity")
+              .putAll(p, "player")
+              .build()
+          )
+          .location(e.getLocation())
+          .looter(p)
+          .looted(e)
+          ;
     }
     static LootContext.Builder builder(@NotNull EntityDeathEvent event){
         LivingEntity e = event.getEntity();
