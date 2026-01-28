@@ -18,11 +18,52 @@ import killercreepr.cruxconfig.config.common.handler.SimpleFileHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
+import java.util.function.Function;
 import java.util.logging.Level;
 
 public class FileEntityPredicate extends SimpleFileHandler<EntityPredicate> {
+    /*public final Codec<EntityPredicate> CODEC = PolymorphicCodecBuilder.polymorphicBuilder(EntityPredicate.class, "type")
+      .register("all_of", new Codec<>() {
+          @Override
+          public EntityPredicate decode(DataNode node) throws DecodeException {
+              if(!(node instanceof ObjectDataNode o)) return null;
+              var values = o.get("values");
+              if(values == null) return null;
+              Collection<EntityPredicate> valueList = LIST_CODEC.decode(values);
+              if(valueList==null) return null;
+
+              return new EntityAllPredicate(valueList);
+          }
+
+          @Override
+          public DataNode encode(EntityPredicate value) {
+              return null;
+          }
+      })
+      .register("any_of", new Codec<>() {
+          @Override
+          public EntityPredicate decode(DataNode node) throws DecodeException {
+              if(!(node instanceof ObjectDataNode o)) return null;
+              var values = o.get("values");
+              if(values == null) return null;
+              Collection<EntityPredicate> valueList = LIST_CODEC.decode(values);
+              if(valueList==null) return null;
+
+              return new EntityAnyPredicate(valueList);
+          }
+
+          @Override
+          public DataNode encode(EntityPredicate value) {
+              return null;
+          }
+      })
+      .build();
+
+    public final Codec<List<EntityPredicate>> LIST_CODEC = Codec.listCodec(CODEC);*/
+
+    public final Map<String, Function<String, EntityPredicate>> NAMESPACED_TYPES = new HashMap<>();
+
     @Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull EntityPredicate object) {
         throw new UnsupportedOperationException("unsupported");
@@ -37,6 +78,13 @@ public class FileEntityPredicate extends SimpleFileHandler<EntityPredicate> {
                 EntityTag tag = CruxRegistries.ENTITY_TAG.get(Crux.key(key.substring(1)));
                 if(tag==null) return null;
                 return EntityPredicate.fromTag(tag);
+            }
+            var split = key.split(":");
+            if(split.length > 1){
+                var function = NAMESPACED_TYPES.get(split[0]);
+                if(function != null){
+                    return function.apply(split[1]);
+                }
             }
             return EntityPredicate.fromType(Crux.key(key));
         }

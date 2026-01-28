@@ -2,7 +2,8 @@ package killercreepr.crux.api.codec.builder;
 
 import com.google.common.collect.ImmutableMap;
 import killercreepr.crux.api.codec.Codec;
-import killercreepr.crux.core.codec.PolymorphicCodec;
+import killercreepr.crux.api.codec.PolymorphicCodec;
+import killercreepr.crux.core.codec.SimplePolymorphicCodec;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,10 +26,10 @@ public final class PolymorphicCodecBuilder<T> {
     }
 
     public PolymorphicCodec<T> build() {
-        return new PolymorphicCodec<>(typeField, codecs);
+        return new SimplePolymorphicCodec<>(typeField, codecs);
     }
 
     public PolymorphicCodec<T> buildImmutable() {
-        return new PolymorphicCodec<>(typeField, ImmutableMap.copyOf(codecs));
+        return new SimplePolymorphicCodec<>(typeField, ImmutableMap.copyOf(codecs));
     }
 }
