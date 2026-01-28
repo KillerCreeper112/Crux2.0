@@ -148,6 +148,11 @@ public class SimpleLootContext extends DataComponentAccessor.SimpleImmutableHand
         }*/
 
         @Override
+        public DataExchange info() {
+            return info;
+        }
+
+        @Override
         public LootContext.Builder info(DataExchange info) {
             this.info = info;
             return this;

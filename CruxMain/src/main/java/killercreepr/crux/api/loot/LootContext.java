@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
+import java.util.function.Consumer;
 
 public interface LootContext extends DataComponentAccessor.ImmutableHandler {
     static Builder builder(){
@@ -42,6 +43,12 @@ public interface LootContext extends DataComponentAccessor.ImmutableHandler {
     LootContext withInfo(@NotNull DataExchange info);
 
     interface Builder extends DataComponentHandler {
+        default Builder edit(Consumer<Builder> consumer){
+            consumer.accept(this);
+            return this;
+        }
+        DataExchange info();
+
         Builder info(DataExchange info);
 
         Builder random(Random random);
