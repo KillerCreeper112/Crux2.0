@@ -79,7 +79,7 @@ public class FileEntityPredicate extends SimpleFileHandler<EntityPredicate> {
                 if(tag==null) return null;
                 return EntityPredicate.fromTag(tag);
             }
-            var split = key.split(":");
+            var split = key.split(":", 2);
             if(split.length > 1){
                 var function = NAMESPACED_TYPES.get(split[0]);
                 if(function != null){
