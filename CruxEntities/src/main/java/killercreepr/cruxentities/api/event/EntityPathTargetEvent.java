@@ -12,6 +12,14 @@ public class EntityPathTargetEvent extends Event {
   protected final Entity entity;
   protected final PathTargetMobGoal goal;
 
+  public PathTargetMobGoal getGoal() {
+    return goal;
+  }
+
+  public Entity getEntity() {
+    return entity;
+  }
+
   /**
    * The default constructor is defined for cleaner code. This constructor
    * assumes the event is synchronous.
