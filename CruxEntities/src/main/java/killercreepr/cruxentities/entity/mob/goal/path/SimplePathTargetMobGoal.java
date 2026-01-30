@@ -3,6 +3,8 @@ package killercreepr.cruxentities.entity.mob.goal.path;
 import killercreepr.cruxentities.api.entity.mob.goal.PathTargetMobGoal;
 import killercreepr.cruxentities.api.entity.mob.goal.path.GoalNode;
 import killercreepr.cruxentities.api.entity.mob.goal.path.GoalPath;
+import killercreepr.cruxentities.api.event.EntityPathTargetFinishEvent;
+import killercreepr.cruxentities.api.event.EntityPathTargetStartEvent;
 import org.bukkit.Location;
 import org.bukkit.entity.Mob;
 import org.jetbrains.annotations.Nullable;
@@ -31,10 +33,14 @@ public class SimplePathTargetMobGoal implements PathTargetMobGoal {
             if(current != null) current.onFinish(this);
         }
         this.path = path;
+        if(this.path != null){
+            new EntityPathTargetStartEvent(mob, this).callEvent();
+        }
     }
 
     public void onPathFinish(){
         if(stopPathFindingWhenFinished) mob.getPathfinder().stopPathfinding();
+        new EntityPathTargetFinishEvent(mob, this).callEvent();
     }
 
     @Override
