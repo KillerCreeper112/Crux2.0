@@ -30,6 +30,12 @@ public class CruxCollection {
         return list.get(index);
     }
 
+    public static <T> T getOrDefaultNonNull(List<T> list, int index, T fallback){
+        if(index < 0 || index >= list.size()) return fallback;
+        var got = list.get(index);
+        return got == null ? fallback : got;
+    }
+
     public static <T> void shuffle(List<T> list, Random random) {
         int size = list.size();
 
