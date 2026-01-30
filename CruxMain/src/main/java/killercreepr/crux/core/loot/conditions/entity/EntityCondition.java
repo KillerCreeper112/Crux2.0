@@ -5,6 +5,7 @@ import killercreepr.crux.api.loot.LootContext;
 import killercreepr.crux.api.loot.conditions.LootCondition;
 import killercreepr.crux.api.text.tags.container.TagContainer;
 import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.loot.CruxLootHelper;
 import killercreepr.crux.core.loot.conditions.BaseCondition;
 import net.kyori.adventure.key.Key;
 import org.bukkit.entity.Entity;
@@ -35,7 +36,7 @@ public class EntityCondition extends BaseCondition {
 
     @Override
     public boolean test(@NotNull LootContext ctx) {
-        Entity e = ctx.info().get(target, Entity.class);
+        Entity e = CruxLootHelper.parseEntity(ctx.info().get(target));
         if(e==null) return false;
 
         var tags = TagContainer.merged().hookAllWithPrefix(ctx.info());

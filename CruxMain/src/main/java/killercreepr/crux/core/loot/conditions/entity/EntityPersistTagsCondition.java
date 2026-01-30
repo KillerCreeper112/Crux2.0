@@ -1,6 +1,7 @@
 package killercreepr.crux.core.loot.conditions.entity;
 
 import killercreepr.crux.api.loot.LootContext;
+import killercreepr.crux.core.loot.CruxLootHelper;
 import killercreepr.crux.core.loot.conditions.BaseCondition;
 import killercreepr.crux.core.util.CruxTag;
 import org.bukkit.entity.Entity;
@@ -18,7 +19,7 @@ public class EntityPersistTagsCondition extends BaseCondition {
 
     @Override
     public boolean test(@NotNull LootContext ctx) {
-        Entity e = ctx.info().get(target, Entity.class);
+        Entity e = CruxLootHelper.parseEntity(ctx.info().get(target));
         if(e==null) return false;
 
         if(tags != null){
