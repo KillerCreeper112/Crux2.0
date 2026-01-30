@@ -36,6 +36,18 @@ public class CruxEntityUtil {
         return GENERAL_SLOTS;
     }
 
+    public static void forEachPassenger(Entity e, Consumer<Entity> consumer, boolean deep){
+        e.getPassengers().forEach(passenger ->{
+            consumer.accept(passenger);
+            if(deep) forEachPassenger(passenger, consumer, deep);
+        });
+    }
+
+    public static void applyBaseForEachPassenger(Entity e, Consumer<Entity> consumer, boolean deep){
+        consumer.accept(e);
+        forEachPassenger(e, consumer, deep);
+    }
+
     public static void applyOrRefreshPotionEffects(LivingEntity entity, Collection<PotionEffect> potions){
         applyOrRefreshPotionEffects(entity, potions, 0.4f);
     }
