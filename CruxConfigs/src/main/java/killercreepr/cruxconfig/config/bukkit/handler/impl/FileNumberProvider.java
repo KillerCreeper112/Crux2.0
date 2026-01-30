@@ -55,7 +55,13 @@ public class FileNumberProvider extends SimpleFileHandler<killercreepr.crux.api.
     public @Nullable killercreepr.crux.api.valueproviders.number.NumberProvider deserializeFromFile(@NotNull FileContext<?> context, @NotNull FileElement e) {
         FileRegistry registry = context.getRegistry();
         if(e instanceof FileGeneric g){
-            if(g.isNumber()) return new killercreepr.crux.core.valueproviders.number.ConstantNumber(g.getAsNumber());
+            if(g.isNumber()){
+                var number = g.getAsNumber();
+                if(number.doubleValue() == 0D){
+                    return NumberProvider.zero();
+                }
+                return new killercreepr.crux.core.valueproviders.number.ConstantNumber(g.getAsNumber());
+            }
             String text = g.getAsString();
             return killercreepr.crux.api.valueproviders.number.NumberProvider.parseFromString(text);
         }

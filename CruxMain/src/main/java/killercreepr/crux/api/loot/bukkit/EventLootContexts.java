@@ -1,5 +1,6 @@
 package killercreepr.crux.api.loot.bukkit;
 
+import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import io.papermc.paper.event.block.PlayerShearBlockEvent;
 import io.papermc.paper.event.player.PlayerTrackEntityEvent;
@@ -40,6 +41,21 @@ public interface EventLootContexts {
           )
           .location(e.getLocation())
           .looter(p)
+          .looted(e)
+          ;
+    }
+    static LootContext.Builder builder(@NotNull EntityRemoveFromWorldEvent event){
+        var e = event.getEntity();
+        var world = event.getWorld();
+        return builder()
+          .info(
+            DataExchange.builder()
+              .putAll(e, "entity", "removed_entity")
+              .putAll(world, "world")
+              .build()
+          )
+          .location(e.getLocation())
+          .looter(world)
           .looted(e)
           ;
     }
