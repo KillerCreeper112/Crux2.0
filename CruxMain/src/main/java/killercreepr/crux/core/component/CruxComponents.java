@@ -54,6 +54,9 @@ public class CruxComponents {
     public static final DataComponentType<Map<Enchantment, Integer>> INHERITED_ENCHANTMENTS = register("inherited_enchantments", builder -> builder
         .persistTextParser(ComponentInputParsers.MAP.ENCHANTMENT_MAP.createInput(Crux.key("inherited_enchantments"))));
 
+    public static final DataComponentType<String> NPC_ID = register("npc_id", builder -> builder
+      .persistTextParser(PersistTextParser.STRING.createInput(Crux.key("npc_id"))));
+
     private static <T> DataComponentType<T> register(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator){
         return CruxRegistries.DATA_COMPONENT_TYPE.register(Crux.key(id), builderOperator.apply(DataComponentType.builder()).build());
     }

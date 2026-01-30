@@ -7,6 +7,7 @@ import killercreepr.crux.api.loot.conditions.LootCondition;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.entity.predicate.EntityAllPredicate;
 import killercreepr.crux.core.entity.predicate.EntityAnyPredicate;
+import killercreepr.crux.core.entity.predicate.EntityStringComponentPredicate;
 import killercreepr.crux.core.registries.CruxRegistries;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
@@ -15,6 +16,7 @@ import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileGeneric;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.SimpleFileHandler;
+import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -122,6 +124,11 @@ public class FileEntityPredicate extends SimpleFileHandler<EntityPredicate> {
                 if(loot == null) yield null;
                 yield EntityPredicate.fromLootCondition(loot);
             }
+            case "string_component" -> new EntityStringComponentPredicate(
+              registry.deserializeFromFile(Key.class, o.get("component")),
+              registry.deserializeFromFile(String.class, o.get("match")),
+              registry.deserializeFromFileOrDefault(Boolean.class, o.get("ignore_case"), true)
+            );
             default ->{
                 Crux.log(Level.WARNING, "No entity predicate of " + type + " exists!");
                 yield null;
