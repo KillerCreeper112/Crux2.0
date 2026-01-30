@@ -154,6 +154,7 @@ public class BukkitCfgHandlers {
     public static final FileBlockPos BLOCK_POS = new FileBlockPos();
     public static final FileLocationPos LOCATION_POS = new FileLocationPos();
     public static final FileLocationResolver LOCATION_RESOLVER = new FileLocationResolver();
+    public static final FileWorldPosition WORLD_POSITION = new FileWorldPosition();
 
 
     public static final FileCruxLevelBasedValue CRUX_LEVEL_BASED_VALUE = new FileCruxLevelBasedValue();
@@ -226,6 +227,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(BlockPos.class, BLOCK_POS);
         registry.registerFileHandler(LocationPos.class, LOCATION_POS);
         registry.registerFileHandler(LocationResolver.class, LOCATION_RESOLVER);
+        registry.registerFileHandler(WorldPosition.class, WORLD_POSITION);
 
         registry.registerFileHandler(StoredWorld.class, STORED_WORLD);
         registry.registerFileHandler(StoredChunk.class, STORED_CHUNK);
@@ -272,7 +274,7 @@ public class BukkitCfgHandlers {
 
         //registry.registerFileHandler(BlockPos.class, new AutoFileHandler<>(BlockPos.class));
         //registry.registerFileHandler(LocationPos.class, new AutoFileHandler<>(LocationPos.class));
-        registry.registerFileHandler(WorldPosition.class, new AutoFileHandler<>(SimpleWorldPosition.class));
+        //registry.registerFileHandler(WorldPosition.class, new AutoFileHandler<>(SimpleWorldPosition.class));
         registry.registerFileHandler(ArmorTrim.class, new AutoFileHandler<>(ArmorTrim.class));
         registry.registerFileHandler(BoundingBox.class, new AutoFileHandler<>(BoundingBox.class));
     }
