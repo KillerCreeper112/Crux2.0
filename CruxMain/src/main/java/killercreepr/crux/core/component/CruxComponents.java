@@ -57,6 +57,9 @@ public class CruxComponents {
     public static final DataComponentType<String> NPC_ID = register("npc_id", builder -> builder
       .persistTextParser(PersistTextParser.STRING.createInput(Crux.key("npc_id"))));
 
+
+    public static final DataComponentType<List<Object>> GENERIC_COMPONENTS_LIST = register("generic_components_list", builder -> builder);
+
     private static <T> DataComponentType<T> register(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator){
         return CruxRegistries.DATA_COMPONENT_TYPE.register(Crux.key(id), builderOperator.apply(DataComponentType.builder()).build());
     }
