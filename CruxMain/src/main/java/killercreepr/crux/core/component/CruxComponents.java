@@ -43,7 +43,7 @@ public class CruxComponents {
         .persistTextParser(ComponentInputParsers.ITEM_LOOT_TABLE.createInput(Crux.key("item_loot_table"))));
 
     public static final DataComponentType<List<ItemLootTable>> ITEM_LOOT_TABLES = register("item_loot_tables", builder -> builder
-        .persistTextParser(ComponentInputListParsers.ITEM_LOOT_TABLE.createInput(Crux.key("item_loot_tables"))));
+        .persistTextParser(ComponentInputParsers.LIST.ITEM_LOOT_TABLE.createInput(Crux.key("item_loot_tables"))));
 
     public static final DataComponentType<Long> LOOT_GENERATED_TIME = register("loot_generated_time", builder -> builder
         .persistTextParser(PersistTextParser.LONG.createInput(Crux.key("loot_generated_time"))));

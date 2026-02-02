@@ -3,6 +3,7 @@ package killercreepr.cruxentities.loot.condition;
 import com.destroystokyo.paper.entity.ai.Goal;
 import killercreepr.crux.api.loot.LootContext;
 import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.loot.CruxLootHelper;
 import killercreepr.crux.core.loot.conditions.BaseCondition;
 import killercreepr.cruxentities.api.entity.mob.goal.PathTargetMobGoal;
 import org.bukkit.entity.Entity;
@@ -16,7 +17,7 @@ public class MobHasPathTargetCondition extends BaseCondition {
 
     @Override
     public boolean test(@NotNull LootContext ctx) {
-        Entity entity = ctx.info().get(target, Entity.class);
+        Entity entity = CruxLootHelper.parseEntity(ctx.info().get(target));//ctx.info().get(target, Entity.class);
         if(entity == null) return false;
         if(!(entity instanceof Mob mob)) return false;
 

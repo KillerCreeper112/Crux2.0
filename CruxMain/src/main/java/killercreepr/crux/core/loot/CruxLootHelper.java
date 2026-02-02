@@ -7,6 +7,7 @@ import org.bukkit.entity.Entity;
 import java.lang.ref.Reference;
 
 public class CruxLootHelper {
+  //todo open this up to make it data driven
   public static Entity parseEntity(Object o){
     if(o instanceof Entity e) return e;
     if(o instanceof Holder<?> holder){

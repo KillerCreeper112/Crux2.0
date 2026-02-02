@@ -2,6 +2,7 @@ package killercreepr.cruxentities.loot.condition;
 
 import killercreepr.crux.api.loot.LootContext;
 import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.loot.CruxLootHelper;
 import killercreepr.crux.core.loot.conditions.BaseCondition;
 import killercreepr.cruxentities.entity.CruxMob;
 import killercreepr.cruxentities.registries.CruxEntityRegistries;
@@ -17,7 +18,7 @@ public class CruxMobCategoryLootCondition extends BaseCondition {
 
   @Override
   public boolean test(@NotNull LootContext ctx) {
-    Entity entity = ctx.info().get(target, Entity.class);
+    Entity entity = CruxLootHelper.parseEntity(ctx.info().get(target));
     if(entity == null) return false;
 
     if(category != null){
