@@ -8,6 +8,7 @@ import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxentities.loot.condition.CruxMobCategoryLootCondition;
 import killercreepr.cruxentities.loot.condition.CruxMobLootCondition;
+import killercreepr.cruxentities.loot.condition.MobHasPathTargetCondition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,6 +32,15 @@ public class CruxEntitiesCfgHook {
         return new CruxMobCategoryLootCondition(
           target,
           r.deserializeFromFile(String.class, e.get("mob_category"))
+        );
+      }
+    });
+    lootConditions.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("mob_has_path_target")) {
+      @Override
+      public @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+        var r = ctx.getRegistry();
+        return new MobHasPathTargetCondition(
+          target
         );
       }
     });
