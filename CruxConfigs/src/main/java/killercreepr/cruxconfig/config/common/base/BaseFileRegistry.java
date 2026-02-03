@@ -133,6 +133,9 @@ public class BaseFileRegistry implements FileRegistry {
     }
 
     public @Nullable Object deserializeObjectRaw(@NotNull Type type, @NotNull FileElement from, @NotNull FileContext<?> context){
+        var raw = context.deserializeObjectRaw(type, from);
+        if(raw != null) return raw;
+
         if(isSubtypeOfCollection(type)){
             Type[] args = CruxReflect.getTypeArguments(type);
             Class<?> rawType = (Class<?>) ((ParameterizedType) type).getRawType();

@@ -20,4 +20,19 @@ public class FileContext<T extends FileRegistry> implements IFileContext {
     public @Nullable Object deserializeObjectRaw(@NotNull Type type, @NotNull FileElement from) {
         return null;
     }
+
+    /*@Override
+    public @NotNull FileElement serializeToFile(@Nullable Object object) {
+        return null;
+    }
+
+    @Override
+    public @org.jspecify.annotations.Nullable <T> T deserializeFromFile(@NotNull Type type, @Nullable FileElement o) {
+        return null;
+    }
+
+    @Override
+    public @org.jspecify.annotations.Nullable <T> T deserializeFromFile(@NotNull Class<T> clazz, @Nullable FileElement o) {
+        return null;
+    }*/
 }
