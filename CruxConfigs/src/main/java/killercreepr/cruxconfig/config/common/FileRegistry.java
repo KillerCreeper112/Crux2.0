@@ -11,6 +11,9 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Type;
 
 public interface FileRegistry {
+    @NotNull Object deserializeObject(@NotNull Object o);
+    @Nullable Object deserializeObjectRaw(@NotNull Type type, @NotNull FileElement from, @NotNull FileContext<?> context);
+
     @NotNull
     FileElement serializeToFile(@Nullable Object object);
     @NotNull

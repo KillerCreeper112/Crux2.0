@@ -1,6 +1,7 @@
 package killercreepr.cruxconfig.config.common.base;
 
 import com.google.gson.JsonElement;
+import killercreepr.crux.api.codec.node.DataNode;
 import killercreepr.crux.core.util.CruxObjects;
 import killercreepr.crux.core.util.CruxReflect;
 import killercreepr.cruxconfig.config.common.FileContext;
@@ -272,7 +273,8 @@ public class BaseFileRegistry implements FileRegistry {
         return object;
     }
 
-    public <T> @Nullable T deserializeFromFile(@NotNull Class<T> clazz, @NotNull FileElement from, @NotNull FileContext<?> context){
+    public <T> @Nullable T deserializeFromFile(@NotNull Class<T> clazz, @Nullable FileElement from, @NotNull FileContext<?> context){
+        if(from == null) return null;
         Object object = deserializeObject(clazz, from, context);
         if(object==null) return null;
         return CruxObjects.castOrThrow(clazz, object);
@@ -294,6 +296,7 @@ public class BaseFileRegistry implements FileRegistry {
         }
         if(o instanceof Map<?,?> l) return deserializeMap(l);
         if(o instanceof FileElement g) return deserializeObject(g.getAsObject());
+        if(o instanceof DataNode n) return deserializeObject(FileElement.fromDataNode(n));
         return o;
     }
 
@@ -303,6 +306,7 @@ public class BaseFileRegistry implements FileRegistry {
         if(o instanceof FileElement d) return d;
         if(o instanceof YamlElement d) return FileElement.fromYaml(d);
         if(o instanceof JsonElement d) return FileElement.fromJson(d);
+        if(o instanceof DataNode d) return FileElement.fromDataNode(d);
         if(o instanceof String s) return new FilePrimitive(s);
         if(o instanceof Character s) return new FilePrimitive(s.toString());
         if(o instanceof Number s) return new FilePrimitive(s);

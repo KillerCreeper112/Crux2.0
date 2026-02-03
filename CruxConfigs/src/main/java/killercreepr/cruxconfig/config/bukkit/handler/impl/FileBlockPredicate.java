@@ -4,6 +4,7 @@ import com.google.common.reflect.TypeToken;
 import killercreepr.crux.api.block.predicate.BlockPredicate;
 import killercreepr.crux.api.block.tag.BlockTag;
 import killercreepr.crux.core.Crux;
+import killercreepr.crux.core.block.predicate.BlockPositionPredicate;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;
 import killercreepr.cruxconfig.config.common.element.FileArray;
@@ -11,6 +12,7 @@ import killercreepr.cruxconfig.config.common.element.FileElement;
 import killercreepr.cruxconfig.config.common.element.FileGeneric;
 import killercreepr.cruxconfig.config.common.element.FileObject;
 import killercreepr.cruxconfig.config.common.handler.SimpleFileHandler;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -74,6 +76,13 @@ public class FileBlockPredicate extends SimpleFileHandler<BlockPredicate> {
                 );
                 if(values==null) yield null;
                 yield BlockPredicate.fromInverted(values);
+            }
+            case "position" ->{
+                Vector vector = registry.deserializeFromFile(
+                  Vector.class, o.get("position")
+                );
+                if(vector == null) yield null;
+                yield new BlockPositionPredicate(vector.getBlockX(), vector.getBlockY(), vector.getBlockZ());
             }
             default ->{
                 Crux.log(Level.WARNING, "No block predicate of " + type + " exists!");

@@ -257,6 +257,11 @@ public class TaggedJsonRegistry implements FileRegistry, JsonRegistry {
         return o;
     }
 
+    @Override
+    public @Nullable Object deserializeObjectRaw(@NotNull Type type, @NotNull FileElement from, @NotNull FileContext<?> context) {
+        return deserializeObject(from);
+    }
+
     public @NotNull Collection<Object> deserializeCollection(@NotNull Collection<?> list){
         Collection<Object> array = new ArrayList<>(list.size());
         for(Object o : list){
