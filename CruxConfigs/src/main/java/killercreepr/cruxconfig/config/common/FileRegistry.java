@@ -9,10 +9,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Type;
+import java.util.function.Supplier;
 
 public interface FileRegistry {
     @NotNull Object deserializeObject(@NotNull Object o);
     @Nullable Object deserializeObjectRaw(@NotNull Type type, @NotNull FileElement from, @NotNull FileContext<?> context);
+
+    Supplier<FileContext<?>> contextSupplier();
+    void contextSupplier(Supplier<FileContext<?>> suppler);
 
     @NotNull
     FileElement serializeToFile(@Nullable Object object);

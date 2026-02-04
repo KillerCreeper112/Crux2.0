@@ -28,6 +28,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.function.Supplier;
 
 public class TaggedJsonRegistry implements FileRegistry, JsonRegistry {
     public final String DESERIALIZE_METHOD_NAME = "deserializeFromJson";
@@ -260,6 +261,16 @@ public class TaggedJsonRegistry implements FileRegistry, JsonRegistry {
     @Override
     public @Nullable Object deserializeObjectRaw(@NotNull Type type, @NotNull FileElement from, @NotNull FileContext<?> context) {
         return deserializeObject(from);
+    }
+
+    @Override
+    public Supplier<FileContext<?>> contextSupplier() {
+        return null;//todo
+    }
+
+    @Override
+    public void contextSupplier(Supplier<FileContext<?>> suppler) {
+
     }
 
     public @NotNull Collection<Object> deserializeCollection(@NotNull Collection<?> list){

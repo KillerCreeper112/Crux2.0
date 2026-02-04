@@ -28,7 +28,7 @@ public class FileTypedDataComponent implements FileObjectHandler<TypedDataCompon
     @Override
     public @Nullable TypedDataComponent<?> deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileElement e) {
         if(!(e instanceof FileObject o)){
-            String string = ctx.getRegistry().deserializeFromFile(String.class, e);
+            String string = ctx.getRegistry().deserializeFromFile(String.class, e, ctx);
             if(string == null) return null;
             if(string.startsWith("#")){
                 var typed = CruxRegistries.TYPED_DATA_COMPONENTS.get(Crux.key(string.substring(1)));
@@ -39,7 +39,7 @@ public class FileTypedDataComponent implements FileObjectHandler<TypedDataCompon
             }
             return CruxCollection.getFirst(DataComponentDecoder.componentDecoder().parseComponents(string));
         }
-        Key type = ctx.getRegistry().deserializeFromFile(Key.class, o.get("component"));
+        Key type = ctx.getRegistry().deserializeFromFile(Key.class, o.get("component"), ctx);
         if(type == null) return null;
         FileDataComponentType<?> file = typeHandlers().get(type);
         if(file == null) throw new IllegalArgumentException("FileDataComponentType of " + type + " does not exist!");

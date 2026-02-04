@@ -9,12 +9,14 @@ import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
 import java.lang.reflect.Type;
+import java.util.function.Supplier;
 
 public class WrappedFileRegistry implements FileRegistry {
   protected final FileRegistry fileRegistry;
 
   public WrappedFileRegistry(FileRegistry fileRegistry) {
     this.fileRegistry = fileRegistry;
+    fileRegistry.contextSupplier(() -> new FileContext<>(this));
   }
 
   public FileRegistry getFileRegistry() {
@@ -28,7 +30,17 @@ public class WrappedFileRegistry implements FileRegistry {
 
   @Override
   public @Nullable Object deserializeObjectRaw(@NotNull Type type, @NotNull FileElement from, @NotNull FileContext<?> context) {
-    return  fileRegistry.deserializeObjectRaw(type, from, context);
+    return fileRegistry.deserializeObjectRaw(type, from, context);
+  }
+
+  @Override
+  public Supplier<FileContext<?>> contextSupplier() {
+    return fileRegistry.contextSupplier();
+  }
+
+  @Override
+  public void contextSupplier(Supplier<FileContext<?>> suppler) {
+    fileRegistry.contextSupplier(suppler);
   }
 
   @Override
