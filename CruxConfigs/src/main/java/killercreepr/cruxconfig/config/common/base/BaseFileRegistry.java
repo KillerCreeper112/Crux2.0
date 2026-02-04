@@ -18,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.function.Supplier;
 
 /**
  * Represents a registry specifically developed to handle YAML syntax.
@@ -126,6 +127,21 @@ public class BaseFileRegistry implements FileRegistry {
         return false;
     }
 
+    protected Supplier<FileContext<?>> contextSupplier;
+    public FileContext<?> createNewContext(){
+        return contextSupplier == null ? new FileContext<>(this) : contextSupplier.get();
+    }
+
+    @Override
+    public Supplier<FileContext<?>> contextSupplier() {
+        return contextSupplier;
+    }
+
+    @Override
+    public void contextSupplier(Supplier<FileContext<?>> supplier) {
+        this.contextSupplier = supplier;
+    }
+
     @Contract("_, _, null -> null")
     public @Nullable Object parseObjectFromHandlers(@NotNull FileElement from, @NotNull FileContext<?> context, @Nullable Object object){
         if(object==null) return null;
@@ -139,11 +155,11 @@ public class BaseFileRegistry implements FileRegistry {
         if(isSubtypeOfCollection(type)){
             Type[] args = CruxReflect.getTypeArguments(type);
             Class<?> rawType = (Class<?>) ((ParameterizedType) type).getRawType();
-            return deserializeObjectCollection(rawType, args[0], from);
+            return deserializeObjectCollection(rawType, args[0], from, context);
         }else if(isSubtypeOfMap(type)){
             Type[] args = CruxReflect.getTypeArguments(type);
             Class<?> rawType = (Class<?>) ((ParameterizedType) type).getRawType();
-            return deserializeObjectMap(rawType, args[0], args[1], from.getAsFileObject());
+            return deserializeObjectMap(rawType, args[0], args[1], from.getAsFileObject(), context);
         }
 
         if(!(type instanceof Class<?> clazz)){
@@ -211,11 +227,11 @@ public class BaseFileRegistry implements FileRegistry {
 
     public @Nullable Object deserializeObject(@NotNull Type type, @Nullable FileElement from){
         if(from==null) return null;
-        return deserializeObject(type, from, new FileContext<>(this));
+        return deserializeObject(type, from, createNewContext());
     }
 
     public @Nullable Object deserializeObjectCollection(@NotNull Class<?> collectionClazz, @NotNull Type firstType,
-                                                 @NotNull FileElement from){
+                                                 @NotNull FileElement from, FileContext<?> context){
         Object createdMap = CruxReflect.attemptCreation(collectionClazz);
         if(createdMap == null){
             if(Set.class.isAssignableFrom(collectionClazz)){
@@ -226,27 +242,27 @@ public class BaseFileRegistry implements FileRegistry {
         Collection<Object> map = (Collection<Object>) createdMap;
         if(from.isFileArray()){
             from.getAsFileArray().forEach((value) ->{
-                Object parsedValue = deserializeObject(firstType, value);
+                Object parsedValue = deserializeObject(firstType, value, context);
                 if(parsedValue==null) return;
                 map.add(parsedValue);
             });
         }else{
-            Object parsedValue = deserializeObject(firstType, from);
+            Object parsedValue = deserializeObject(firstType, from, context);
             if(parsedValue!=null) map.add(parsedValue);
         }
         return createdMap;
     }
 
     public @Nullable Object deserializeObjectMap(@NotNull Class<?> mapClazz, @NotNull Type firstType, @NotNull Type secondType,
-                                                 @NotNull FileObject from){
+                                                 @NotNull FileObject from, FileContext<?> context){
         Object createdMap = CruxReflect.attemptCreation(mapClazz);
         if(createdMap == null) createdMap = new HashMap<>();
 
         Map<Object, Object> map = (Map<Object, Object>) createdMap;
         from.asMap().forEach((key, value) ->{
-            Object parsedValue = deserializeObject(secondType, value);
+            Object parsedValue = deserializeObject(secondType, value, context);
             if(parsedValue == null) return;
-            Object parsedKey = deserializeObject(firstType, new FilePrimitive(key));
+            Object parsedKey = deserializeObject(firstType, new FilePrimitive(key), context);
             /*if(firstType == Integer.class){
                 parsedKey = Integer.parseInt(key);
             }else if(firstType == Double.class){
@@ -326,7 +342,7 @@ public class BaseFileRegistry implements FileRegistry {
 
     @Override
     public @NotNull FileElement serializeToFile(@Nullable Object object) {
-        return serializeObject(object, new FileContext<>(this));
+        return serializeObject(object, createNewContext());
     }
 
     @Override
