@@ -46,7 +46,7 @@ public class StandardFileLootConditions {
             public @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 Collection<LootCondition> conditions = ctx.getRegistry().deserializeFromFile(
                     new TypeToken<Collection<LootCondition>>(){}.getType(),
-                    e.get("terms")
+                    e.get("terms"), ctx
                 );
                 if(conditions==null||conditions.isEmpty()) return null;
                 return new killercreepr.crux.core.loot.conditions.AllOfCondition(conditions);
@@ -58,7 +58,7 @@ public class StandardFileLootConditions {
             public @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 Collection<LootCondition> conditions = ctx.getRegistry().deserializeFromFile(
                     new TypeToken<Collection<LootCondition>>(){}.getType(),
-                    e.get("terms")
+                    e.get("terms"), ctx
                 );
                 if(conditions==null||conditions.isEmpty()) return null;
                 return new killercreepr.crux.core.loot.conditions.AnyOfCondition(conditions);
@@ -68,7 +68,7 @@ public class StandardFileLootConditions {
             @Override
             public @NotNull BlockCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 FileRegistry registry = ctx.getRegistry();
-                BlockPredicate blockPredicate = registry.deserializeFromFile(BlockPredicate.class, e.get("block_predicate"));
+                BlockPredicate blockPredicate = registry.deserializeFromFile(BlockPredicate.class, e.get("block_predicate"), ctx);
                 return new BlockCondition(target, blockPredicate, registry.deserializeFromFile(LootCondition.class, e.get("light_level")));
             }
         });
@@ -86,7 +86,7 @@ public class StandardFileLootConditions {
             @Override
             public @NotNull EntityCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
                 FileRegistry registry = ctx.getRegistry();
-                EntityPredicate entityPredicate = registry.deserializeFromFile(EntityPredicate.class, e.get("entity_predicate"));
+                EntityPredicate entityPredicate = registry.deserializeFromFile(EntityPredicate.class, e.get("entity_predicate"), ctx);
                 String worldName = registry.deserializeFromFile(String.class, e.get("world"));
                 Map<EquipmentSlot, LootCondition> slots = registry.deserializeFromFile(
                     new TypeToken<Map<EquipmentSlot, LootCondition>>(){}.getType(), e.get("slots")

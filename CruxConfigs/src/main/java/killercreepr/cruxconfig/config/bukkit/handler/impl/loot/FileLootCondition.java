@@ -36,7 +36,7 @@ public class FileLootCondition implements FileObjectHandler<LootCondition> {
         if(!(e instanceof FileObject o)){
             if(e instanceof FileArray){
                 Collection<LootCondition> conditions = ctx.getRegistry().deserializeFromFile(
-                    new TypeToken<Collection<LootCondition>>(){}.getType(), e
+                    new TypeToken<Collection<LootCondition>>(){}.getType(), e, ctx
                 );
                 if(conditions == null) return null;
                 return new AllOfCondition(conditions);
@@ -44,7 +44,7 @@ public class FileLootCondition implements FileObjectHandler<LootCondition> {
             return null;
         }
         FileRegistry reg = ctx.getRegistry();
-        Key type = reg.deserializeFromFile(Key.class, o.get("condition"));
+        Key type = reg.deserializeFromFile(Key.class, o.get("condition"), ctx);
         if(type==null) return null;
         CustomFileLootCondition<?> handler = CUSTOM_HANDLERS.get(type);
         if(handler==null) throw new IllegalStateException("LootCondition type " + type + " does not exist!");
