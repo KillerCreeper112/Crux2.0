@@ -21,6 +21,7 @@ import killercreepr.crux.core.loot.conditions.evaluation.SelectNumberEvaluationC
 import killercreepr.crux.core.loot.conditions.item.InventoryHasItemCondition;
 import killercreepr.crux.core.loot.conditions.item.ItemStackCondition;
 import killercreepr.crux.core.loot.conditions.location.LocationInRegionCondition;
+import killercreepr.crux.core.loot.conditions.location.LocationIsNearCondition;
 import killercreepr.crux.core.loot.conditions.world.LocationCondition;
 import killercreepr.crux.core.loot.conditions.world.WorldCondition;
 import killercreepr.crux.core.util.CruxMath;
@@ -426,6 +427,17 @@ public class StandardFileLootConditions {
                     r.deserializeFromFile(Vector.class, e.get("pos1")),
                     r.deserializeFromFile(Vector.class, e.get("pos2")),
                     r.deserializeFromFileOrDefault(Boolean.class, e.get("use_block_pos"), false)
+                );
+            }
+        });
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("location_near")) {
+            @Override
+            public @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                var r = ctx.getRegistry();
+                return new LocationIsNearCondition(target,
+                  r.deserializeFromFile(String.class, e.get("location")),
+                  r.deserializeFromFile(Double.class, e.get("distance")),
+                  r.deserializeFromFileOrDefault(Boolean.class, e.get("invert"), false)
                 );
             }
         });
