@@ -322,6 +322,18 @@ public class StandardFileLootConditions {
                 );
             }
         });
+
+        file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("string_starts_with")) {
+            @Override
+            public @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
+                String match = e.getObject(String.class, "match");
+                boolean ignoreCase = e.getOrDefaultObject(Boolean.class, "ignore_case", false);
+                boolean parseVariables = e.getOrDefaultObject(Boolean.class, "parse_variables", false);
+                return new StringStartsWithCondition(
+                  target, match, ignoreCase, parseVariables
+                );
+            }
+        });
         file.registerCustomHandler(new SimpleFileLootCondition<>(Crux.key("select_string")) {
             @Override
             public @Nullable LootCondition deserializeFromFile(@NotNull FileContext<?> ctx, @NotNull FileObject e, @NotNull String target) {
