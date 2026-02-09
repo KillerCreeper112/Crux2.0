@@ -3,6 +3,7 @@ package killercreepr.crux.core.entity.dynamic.component;
 import killercreepr.crux.api.entity.CruxEntity;
 import killercreepr.crux.api.entity.dynamic.DynamicEntityApplierSingleComponent;
 import killercreepr.crux.api.text.context.TextParserContext;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.*;
 import org.jetbrains.annotations.NotNull;
 

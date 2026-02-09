@@ -130,7 +130,7 @@ public class NoteBlockSoundsListener implements Listener {
 
         if (breakerPlaySound.containsKey(block)) {
             BreakerSound sound = removeBreakerSound(block);
-            sound.cancel();
+            if(sound != null) sound.cancel();
         }
 
         CruxBlock crux = registry.getByBlock(block);

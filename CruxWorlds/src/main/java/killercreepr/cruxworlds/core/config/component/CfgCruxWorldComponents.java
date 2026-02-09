@@ -6,6 +6,7 @@ import killercreepr.crux.api.entity.dynamic.DynamicEntityApplier;
 import killercreepr.crux.api.loot.LootTable;
 import killercreepr.crux.api.loot.item.ItemLootTable;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.item.dynamic.component.attribute.DynamicAttributeModifier;
 import killercreepr.cruxconfig.config.bukkit.handler.impl.component.FileDataComponentType;
 import killercreepr.cruxconfig.config.bukkit.registry.FileDataComponentRegistry;
