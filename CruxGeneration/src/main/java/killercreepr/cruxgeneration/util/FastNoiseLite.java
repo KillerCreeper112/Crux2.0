@@ -150,6 +150,20 @@ public class FastNoiseLite
     {
         SetSeed(seed);
     }
+    public FastNoiseLite(long seed)
+    {
+        SetSeed(seed);
+    }
+
+    public void SetSeed(long seed) {
+        // splitmix64-style finalizer to avalanche bits, then fold to 32-bit
+        long z = seed + 0x9E3779B97F4A7C15L;
+        z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
+        z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
+        z = z ^ (z >>> 31);
+
+        mSeed = Long.hashCode(z);
+    }
 
     /// <summary>
     /// Sets seed used for all noise types

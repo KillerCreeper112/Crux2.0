@@ -42,7 +42,7 @@ public class StructureChunkNoiseRequirement implements StructureChunkRequirement
 
     @Override
     public boolean test(@NotNull Structure structure, @NotNull Chunk chunk) {
-        float x = noise.noise(chunk.getX(), chunk.getZ());
+        double x = noise.noise(chunk.getX(), chunk.getZ());
         return x >= min && x <= max;
     }
 }

@@ -4,37 +4,40 @@ public interface CruxNoise {
     static CruxNoise fast(int seed){
         return new CruxFastNoise(seed);
     }
+    static CruxNoise fast(long seed){
+        return new CruxFastNoise(seed);
+    }
     static CruxNoise fast(){
         return new CruxFastNoise();
     }
 
     CruxNoise seed(int seed);
-    CruxNoise frequency(float value);
+    CruxNoise frequency(double value);
     CruxNoise noiseType(NoiseType noiseType);
     CruxNoise rotationType3D(RotationType3D rotationType3D);
     CruxNoise fractalType(FractalType fractalType);
     CruxNoise fractalOctaves(int octaves);
-    CruxNoise fractalLacunarity(float lacunarity);
-    CruxNoise fractalGain(float gain);
-    CruxNoise fractalWeightedStrength(float weightedStrength);
-    CruxNoise fractalPingPongStrength(float pingPongStrength);
+    CruxNoise fractalLacunarity(double lacunarity);
+    CruxNoise fractalGain(double gain);
+    CruxNoise fractalWeightedStrength(double weightedStrength);
+    CruxNoise fractalPingPongStrength(double pingPongStrength);
     CruxNoise cellularDistanceFunction(CellularDistanceFunction cellularDistanceFunction);
     CruxNoise cellularReturnType(CellularReturnType cellularReturnType);
-    CruxNoise cellularJitter(float cellularJitter);
+    CruxNoise cellularJitter(double cellularJitter);
     CruxNoise domainWarpType(DomainWarpType domainWarpType);
-    CruxNoise domainWarpAmp(float domainWarpAmp);
+    CruxNoise domainWarpAmp(double domainWarpAmp);
 
-    float noise(float x, float y);
-    float noise(float x,float y, float z);
+    double noise(double x, double y);
+    double noise(double x,double y, double z);
 
     CruxNoise domainWarp(Vector2 coord);
     CruxNoise domainWarp(Vector3 coord);
 
     class Vector2
     {
-        public final /*FNLfloat*/ float x;
-        public final /*FNLfloat*/ float y;
-        public Vector2(/*FNLfloat*/ float x, /*FNLfloat*/ float y)
+        public final /*FNLdouble*/ double x;
+        public final /*FNLdouble*/ double y;
+        public Vector2(/*FNLdouble*/ double x, /*FNLdouble*/ double y)
         {
             this.x = x;
             this.y = y;
@@ -43,10 +46,10 @@ public interface CruxNoise {
 
     class Vector3
     {
-        public final /*FNLfloat*/ float x;
-        public final /*FNLfloat*/ float y;
-        public final /*FNLfloat*/ float z;
-        public Vector3(/*FNLfloat*/ float x, /*FNLfloat*/ float y, /*FNLfloat*/ float z)
+        public final /*FNLdouble*/ double x;
+        public final /*FNLdouble*/ double y;
+        public final /*FNLdouble*/ double z;
+        public Vector3(/*FNLdouble*/ double x, /*FNLdouble*/ double y, /*FNLdouble*/ double z)
         {
             this.x = x;
             this.y = y;

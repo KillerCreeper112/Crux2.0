@@ -9,6 +9,9 @@ public class CruxFastNoise implements CruxNoise{
     public CruxFastNoise(int seed){
         this(new FastNoiseLite(seed));
     }
+    public CruxFastNoise(long seed){
+        this(new FastNoiseLite(seed));
+    }
 
     public CruxFastNoise(){
         this(new FastNoiseLite());
@@ -21,8 +24,8 @@ public class CruxFastNoise implements CruxNoise{
     }
 
     @Override
-    public CruxNoise frequency(float value) {
-        fastNoiseLite.SetFrequency(value);
+    public CruxNoise frequency(double value) {
+        fastNoiseLite.SetFrequency((float) value);
         return this;
     }
 
@@ -51,26 +54,26 @@ public class CruxFastNoise implements CruxNoise{
     }
 
     @Override
-    public CruxNoise fractalLacunarity(float lacunarity) {
-        fastNoiseLite.SetFractalLacunarity(lacunarity);
+    public CruxNoise fractalLacunarity(double lacunarity) {
+        fastNoiseLite.SetFractalLacunarity((float) lacunarity);
         return this;
     }
 
     @Override
-    public CruxNoise fractalGain(float gain) {
-        fastNoiseLite.SetFractalGain(gain);
+    public CruxNoise fractalGain(double gain) {
+        fastNoiseLite.SetFractalGain((float) gain);
         return this;
     }
 
     @Override
-    public CruxNoise fractalWeightedStrength(float weightedStrength) {
-        fastNoiseLite.SetFractalWeightedStrength(weightedStrength);
+    public CruxNoise fractalWeightedStrength(double weightedStrength) {
+        fastNoiseLite.SetFractalWeightedStrength((float) weightedStrength);
         return this;
     }
 
     @Override
-    public CruxNoise fractalPingPongStrength(float pingPongStrength) {
-        fastNoiseLite.SetFractalPingPongStrength(pingPongStrength);
+    public CruxNoise fractalPingPongStrength(double pingPongStrength) {
+        fastNoiseLite.SetFractalPingPongStrength((float) pingPongStrength);
         return this;
     }
 
@@ -87,8 +90,8 @@ public class CruxFastNoise implements CruxNoise{
     }
 
     @Override
-    public CruxNoise cellularJitter(float cellularJitter) {
-        fastNoiseLite.SetCellularJitter(cellularJitter);
+    public CruxNoise cellularJitter(double cellularJitter) {
+        fastNoiseLite.SetCellularJitter((float) cellularJitter);
         return this;
     }
 
@@ -99,30 +102,30 @@ public class CruxFastNoise implements CruxNoise{
     }
 
     @Override
-    public CruxNoise domainWarpAmp(float domainWarpAmp) {
-        fastNoiseLite.SetDomainWarpAmp(domainWarpAmp);
+    public CruxNoise domainWarpAmp(double domainWarpAmp) {
+        fastNoiseLite.SetDomainWarpAmp((float) domainWarpAmp);
         return this;
     }
 
     @Override
-    public float noise(float x, float y) {
-        return fastNoiseLite.GetNoise(x, y);
+    public double noise(double x, double y) {
+        return fastNoiseLite.GetNoise((float) x, (float) y);
     }
 
     @Override
-    public float noise(float x, float y, float z) {
-        return fastNoiseLite.GetNoise(x, y, z);
+    public double noise(double x, double y, double z) {
+        return fastNoiseLite.GetNoise((float) x, (float) y, (float) z);
     }
 
     @Override
     public CruxNoise domainWarp(Vector2 coord) {
-        fastNoiseLite.DomainWarp(new FastNoiseLite.Vector2(coord.x, coord.y));
+        fastNoiseLite.DomainWarp(new FastNoiseLite.Vector2((float) coord.x, (float) coord.y));
         return this;
     }
 
     @Override
     public CruxNoise domainWarp(Vector3 coord) {
-        fastNoiseLite.DomainWarp(new FastNoiseLite.Vector3(coord.x, coord.y, coord.z));
+        fastNoiseLite.DomainWarp(new FastNoiseLite.Vector3((float) coord.x, (float) coord.y, (float) coord.z));
         return this;
     }
 }
