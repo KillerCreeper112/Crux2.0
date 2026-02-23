@@ -159,7 +159,10 @@ public class LocationPos implements CruxPosition {
 
     @Override
     public int hashCode() {
-        return Objects.hash(x, y, z);
+        int result = Double.hashCode(x);
+        result = 31 * result + Double.hashCode(y);
+        result = 31 * result + Double.hashCode(z);
+        return result;
     }
 
     @Override

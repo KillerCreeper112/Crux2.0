@@ -15,9 +15,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Random;
+import java.util.*;
 
 public class SimpleWorld implements CruxWorld, PersistenceComponentHandler, Reloadable, ManagedTicked {
     protected final @NotNull World world;
@@ -26,6 +24,7 @@ public class SimpleWorld implements CruxWorld, PersistenceComponentHandler, Relo
     protected final @NotNull Collection<Ticked> tickedModules;
     protected boolean scheduleUnload;
     protected boolean scheduleUnloadSave;
+    protected final Map<Class<? extends WorldModule>, WorldModule> moduleLookupCache = new HashMap<>();
 
     public SimpleWorld(@NotNull World world, @NotNull Collection<CruxWorldModuleCreator> modules) {
         this(world, new Random(world.getSeed()), modules);
@@ -45,7 +44,19 @@ public class SimpleWorld implements CruxWorld, PersistenceComponentHandler, Relo
 
     }
 
+    @Override
+    public <T extends WorldModule> @Nullable T getModule(@NotNull Class<T> type) {
+        WorldModule cached = moduleLookupCache.get(type);
+        if (cached != null) return type.cast(cached);
 
+        for (WorldModule module : getModules()) {
+            if (type.isInstance(module)) {
+                moduleLookupCache.put(type, module);
+                return type.cast(module);
+            }
+        }
+        return null;
+    }
 
     @Override
     public void reload(@NotNull CruxPlugin plugin) {

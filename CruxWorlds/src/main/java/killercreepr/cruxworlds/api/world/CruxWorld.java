@@ -64,7 +64,7 @@ public interface CruxWorld extends CruxKeyed, DataComponentHandler {
 
     default <T extends WorldModule> @Nullable T getModule(@NotNull Class<T> type){
         for(WorldModule module : getModules()){
-            if(type.isAssignableFrom(module.getClass())) return type.cast(module);
+            if(type.isInstance(module)) return type.cast(module);
         }
         return null;
     }
@@ -72,7 +72,7 @@ public interface CruxWorld extends CruxKeyed, DataComponentHandler {
     default <T extends WorldModule> @NotNull Collection<T> getModulesOfType(@NotNull Class<T> type){
         Collection<T> list = new HashSet<>();
         for(WorldModule module : getModules()){
-            if(type.isAssignableFrom(module.getClass())) list.add(type.cast(module));
+            if(type.isInstance(module)) list.add(type.cast(module));
         }
         return list;
     }
