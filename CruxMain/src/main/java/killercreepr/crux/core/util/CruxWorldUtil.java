@@ -14,12 +14,16 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class CruxWorldUtil {
+    public static final Map<String, Function<String, WorldCreator>> customWorldCreators = new HashMap<>();
+
     public static boolean isLoaded(@NotNull World world, int x, int z) {
         return world.isChunkLoaded(x >> 4, z >> 4);
     }
@@ -94,10 +98,21 @@ public class CruxWorldUtil {
         return copyAndLoadWorld(name, copyName, overwrite, false);
     }
 
+    public static WorldCreator getWorldCreator(String name){
+        return getWorldCreator(name, false);
+    }
+
+    public static WorldCreator getWorldCreator(String name, boolean ignoreCustom){
+        if(ignoreCustom) return new WorldCreator(name);
+        var custom = customWorldCreators.get(name);
+        if(custom == null) return new WorldCreator(name);
+        return custom.apply(name);
+    }
+
     public static World copyAndLoadWorld(String name, String copyName, boolean overwrite, boolean includeUID){
         File copied = copyWorld(name, copyName, overwrite, includeUID);
         if(copied == null) return null;
-        return Crux.getServer().createWorld(new WorldCreator(copyName));
+        return Crux.getServer().createWorld(getWorldCreator(copyName));
     }
 
     public static boolean deleteWorld(@NotNull World world){
@@ -205,7 +220,7 @@ public class CruxWorldUtil {
                 }
             }
             if(!foundLevel) break;*/
-            return Crux.getServer().createWorld(new WorldCreator(name));
+            return Crux.getServer().createWorld(getWorldCreator(name));
         }
         return null;
     }
