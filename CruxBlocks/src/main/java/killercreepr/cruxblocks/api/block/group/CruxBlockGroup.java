@@ -7,6 +7,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.generator.LimitedRegion;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,6 +43,9 @@ public interface CruxBlockGroup extends Keyed, CruxBlockData, Iterable<CruxBlock
     }
 
     default void setBlock(@NotNull LimitedRegion region, int x, int y, int z){
+        getBaseBlock().setBlock(region, x, y, z);
+    }
+    default void setBlock(@NotNull ChunkGenerator.ChunkData region, int x, int y, int z){
         getBaseBlock().setBlock(region, x, y, z);
     }
 }

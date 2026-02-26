@@ -6,8 +6,10 @@ import org.bukkit.Instrument;
 import org.bukkit.Material;
 import org.bukkit.Note;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockType;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.NoteBlock;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.generator.LimitedRegion;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -105,6 +107,11 @@ public class NoteTextureData implements TextureData {
     public void setBlock(@NotNull LimitedRegion region, int x, int y, int z){
         region.setType(x, y, z, Material.NOTE_BLOCK);
         region.setBlockData(x, y, z, applyToBlockData(region.getBlockData(x, y, z)));
+    }
+
+    @Override
+    public void setBlock(ChunkGenerator.@NotNull ChunkData chunkData, int x, int y, int z) {
+        chunkData.setBlock(x,y,z, applyToBlockData(BlockType.NOTE_BLOCK.createBlockData()));
     }
 
     public static final class Builder {

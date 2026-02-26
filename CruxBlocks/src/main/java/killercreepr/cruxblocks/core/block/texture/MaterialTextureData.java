@@ -5,6 +5,7 @@ import killercreepr.cruxblocks.api.block.texture.TextureData;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.generator.LimitedRegion;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -75,6 +76,11 @@ public class MaterialTextureData implements TextureData {
     @Override
     public void setBlock(@NotNull LimitedRegion region, int x, int y, int z) {
         region.setType(x, y, z, material);
+    }
+
+    @Override
+    public void setBlock(ChunkGenerator.@NotNull ChunkData chunkData, int x, int y, int z) {
+        chunkData.setBlock(x,y,z, material);
     }
 
     public static final class Builder {

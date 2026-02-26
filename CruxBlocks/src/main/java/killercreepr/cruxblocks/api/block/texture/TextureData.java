@@ -8,6 +8,7 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.NoteBlock;
 import org.bukkit.block.data.type.Tripwire;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.generator.LimitedRegion;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -59,4 +60,5 @@ public interface TextureData {
     }
     void setBlock(@NotNull Block block, boolean applyPhysics, boolean removeTags, Consumer<Block> consumer);
     void setBlock(@NotNull LimitedRegion region, int x, int y, int z);
+    void setBlock(@NotNull ChunkGenerator.ChunkData chunkData, int x,  int y, int z);
 }

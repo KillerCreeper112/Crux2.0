@@ -24,6 +24,7 @@ import killercreepr.cruxblocks.core.persistence.CruxBlocksPersistTags;
 import killercreepr.cruxblocks.core.registries.CruxBlocksRegistries;
 import net.kyori.adventure.key.Keyed;
 import org.bukkit.block.Block;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.generator.LimitedRegion;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -144,6 +145,11 @@ public interface CruxBlock extends CruxKeyed, CruxBlockData {
     default void setBlock(@NotNull LimitedRegion region, int x, int y, int z){
         TextureData data = getTextureData();
         data.setBlock(region, x, y, z);
+    }
+
+    default void setBlock(@NotNull ChunkGenerator.ChunkData chunkData, int x, int y, int z){
+        TextureData data = getTextureData();
+        data.setBlock(chunkData, x, y, z);
     }
 
     @Override
