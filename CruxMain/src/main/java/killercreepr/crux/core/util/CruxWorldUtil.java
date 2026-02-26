@@ -18,11 +18,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class CruxWorldUtil {
-    public static final Map<String, Function<String, WorldCreator>> customWorldCreators = new HashMap<>();
+    public static final Map<String, Function<String, WorldCreator>> CUSTOM_WORLD_CREATORS = new HashMap<>();
 
     public static boolean isLoaded(@NotNull World world, int x, int z) {
         return world.isChunkLoaded(x >> 4, z >> 4);
@@ -104,7 +103,7 @@ public class CruxWorldUtil {
 
     public static WorldCreator getWorldCreator(String name, boolean ignoreCustom){
         if(ignoreCustom) return new WorldCreator(name);
-        var custom = customWorldCreators.get(name);
+        var custom = CUSTOM_WORLD_CREATORS.get(name);
         if(custom == null) return new WorldCreator(name);
         return custom.apply(name);
     }
