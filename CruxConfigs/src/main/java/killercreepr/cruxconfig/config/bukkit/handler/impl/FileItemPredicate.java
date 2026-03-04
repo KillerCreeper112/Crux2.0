@@ -3,6 +3,7 @@ package killercreepr.cruxconfig.config.bukkit.handler.impl;
 import killercreepr.crux.api.codec.Codec;
 import killercreepr.crux.api.item.predicate.ItemPredicate;
 import killercreepr.cruxconfig.config.common.handler.FromCodecFileHandler;
+import org.jetbrains.annotations.NotNull;
 
 public class FileItemPredicate extends FromCodecFileHandler<ItemPredicate> {
     public FileItemPredicate(Codec<ItemPredicate> codec) {
@@ -66,4 +67,8 @@ public class FileItemPredicate extends FromCodecFileHandler<ItemPredicate> {
     public @NotNull String jsonSerializerID() {
         return "item_predicate";
     }*/
+    @Override
+    public @NotNull String jsonSerializerID() {
+        return "item_predicate";
+    }
 }

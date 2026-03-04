@@ -2,6 +2,7 @@ package killercreepr.crux.api.item.predicate;
 
 import killercreepr.crux.api.codec.Codec;
 import killercreepr.crux.api.codec.DecodeException;
+import killercreepr.crux.api.codec.PolymorphicCodec;
 import killercreepr.crux.api.codec.builder.PolymorphicCodecBuilder;
 import killercreepr.crux.api.codec.node.DataArray;
 import killercreepr.crux.api.codec.node.DataNode;
@@ -46,7 +47,7 @@ public interface ItemPredicate extends Predicate<ItemStack> {
         }
     };
 
-    Codec<ItemPredicate> CODEC = PolymorphicCodecBuilder.polymorphicBuilder(ItemPredicate.class, "type")
+    PolymorphicCodec<ItemPredicate> CODEC = PolymorphicCodecBuilder.polymorphicBuilder(ItemPredicate.class, "type")
       .defaultCodec(SIMPLE_CODEC)
       .register("all_of", new Codec<>() {
           @Override
