@@ -124,7 +124,7 @@ public class BukkitCfgHandlers {
     public static final FileItemLootPoolObject ITEM_LOOT_POOL_OBJECT = new FileItemLootPoolObject();
     public static final FileCreateBlockSoundGroup CREATE_BLOCK_SOUND_GROUP = new FileCreateBlockSoundGroup();
     public static final FileItemTag ITEM_TAG = new FileItemTag();
-    public static final FileItemPredicate ITEM_PREDICATE = new FileItemPredicate();
+    public static final FileItemPredicate ITEM_PREDICATE = new FileItemPredicate(ItemPredicate.CODEC);
     public static final FileBlockTag BLOCK_TAG = new FileBlockTag();
     public static final FileEntityTag ENTITY_TAG = new FileEntityTag();
     public static final FileKeyTag KEY_TAG = new FileKeyTag();

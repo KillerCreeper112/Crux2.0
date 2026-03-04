@@ -1,28 +1,15 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
-import com.google.common.reflect.TypeToken;
+import killercreepr.crux.api.codec.Codec;
 import killercreepr.crux.api.item.predicate.ItemPredicate;
-import killercreepr.crux.api.item.tag.ItemTag;
-import killercreepr.crux.core.Crux;
-import killercreepr.crux.core.item.predicate.ItemAllPredicate;
-import killercreepr.crux.core.item.predicate.ItemAnyPredicate;
-import killercreepr.crux.core.item.predicate.ItemTypePredicate;
-import killercreepr.cruxconfig.config.common.FileContext;
-import killercreepr.cruxconfig.config.common.FileRegistry;
-import killercreepr.cruxconfig.config.common.element.FileArray;
-import killercreepr.cruxconfig.config.common.element.FileElement;
-import killercreepr.cruxconfig.config.common.element.FileGeneric;
-import killercreepr.cruxconfig.config.common.element.FileObject;
-import killercreepr.cruxconfig.config.common.handler.SimpleFileHandler;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import killercreepr.cruxconfig.config.common.handler.FromCodecFileHandler;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.logging.Level;
+public class FileItemPredicate extends FromCodecFileHandler<ItemPredicate> {
+    public FileItemPredicate(Codec<ItemPredicate> codec) {
+        super(codec);
+    }
 
-public class FileItemPredicate extends SimpleFileHandler<ItemPredicate> {
-    @Override
+    /*@Override
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull ItemPredicate object) {
         throw new UnsupportedOperationException("unsupported");
     }
@@ -78,5 +65,5 @@ public class FileItemPredicate extends SimpleFileHandler<ItemPredicate> {
     @Override
     public @NotNull String jsonSerializerID() {
         return "item_predicate";
-    }
+    }*/
 }
