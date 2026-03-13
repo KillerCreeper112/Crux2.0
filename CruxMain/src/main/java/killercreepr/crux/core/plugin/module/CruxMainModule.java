@@ -7,9 +7,7 @@ import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.command.CruxLootCommands;
 import killercreepr.crux.core.component.CruxComponents;
 import killercreepr.crux.core.entity.consumer.OminousStandardEntityConsumer;
-import killercreepr.crux.core.external.placeholderapi.FormatMillisecondsHook;
-import killercreepr.crux.core.external.placeholderapi.FormatTicksHook;
-import killercreepr.crux.core.external.placeholderapi.TagsExpansionHook;
+import killercreepr.crux.core.external.placeholderapi.CruxMainPlaceholderAPIHook;
 import killercreepr.crux.core.listener.*;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.registries.CruxRegistries;
@@ -23,7 +21,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -95,13 +92,7 @@ public class CruxMainModule implements CruxModule, Listener {
     @Override
     public void onEnable(@NotNull CruxPlugin plugin) {
         if(plugin.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null){
-            try{
-                new TagsExpansionHook("crux", Crux.format()).register();
-                new FormatTicksHook().register();
-                new FormatMillisecondsHook().register();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            CruxMainPlaceholderAPIHook.onEnable(plugin);
         }
         plugin.registerListeners(
             new EntityDataListener(),

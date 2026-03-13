@@ -1,11 +1,13 @@
 package killercreepr.cruxworlds.core.world.entity;
 
+import ca.spottedleaf.moonrise.common.util.WorldUtil;
 import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.api.registry.Registry;
 import killercreepr.crux.api.util.CruxWeightedSupplier;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.persistence.CruxPersist;
 import killercreepr.crux.core.util.CruxMath;
+import killercreepr.crux.core.util.CruxWorldUtil;
 import killercreepr.cruxworlds.api.world.entity.NaturalEntitySpawnGroup;
 import killercreepr.cruxworlds.api.world.entity.NaturalEntitySpawner;
 import killercreepr.cruxworlds.api.world.entity.NaturalEntityWorldSpawner;
@@ -247,6 +249,7 @@ public class SimpleNaturalEntityWorldSpawner implements NaturalEntityWorldSpawne
 */
     public @NotNull Collection<Block> random(@NotNull Block center, int radius, int innerRadius, int rolls){
         Collection<Block> list = new CopyOnWriteArraySet<>();
+        World world = center.getWorld();
         for(int i = 0; i < rolls; i++){
             int x = CruxMath.random(innerRadius, radius, random) * (random.nextBoolean() ? -1 : 1);
             int y = CruxMath.random(innerRadius, radius, random) * (random.nextBoolean() ? -1 : 1);
@@ -262,8 +265,11 @@ public class SimpleNaturalEntityWorldSpawner implements NaturalEntityWorldSpawne
                 y = CruxMath.random(-radius, radius);
                 z = CruxMath.random(-radius, radius);
             }*/
+            int chunkX = (center.getX() + x) >> 4;
+            int chunkZ = (center.getZ() + z) >> 4;
+            if(!world.isChunkLoaded(chunkX, chunkZ)) continue;
             Block b = center.getRelative(x,y,z);
-            if(b.getChunk().isLoaded() && b.getWorld().getWorldBorder().isInside(b.getLocation())) list.add(b);
+            if(b.getWorld().getWorldBorder().isInside(b.getLocation())) list.add(b);
         }
         return list;
     }

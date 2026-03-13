@@ -180,6 +180,37 @@ public class CruxWorldsCommands {
                                             return 1;
                                         })
                                 )
+                              .then(
+                                Commands.argument("tp", BoolArgumentType.bool())
+                                  .executes(ctx ->{
+                                    CommandSender sender = getExecutor(ctx.getSource());
+                                    CruxWorldType type = ctx.getArgument("type", CruxWorldType.class);
+                                    Key name = ctx.getArgument("name", Key.class);
+                                    boolean overwrite = ctx.getArgument("overwrite", Boolean.class);
+                                    boolean tp = ctx.getArgument("tp", Boolean.class);
+                                    if(!overwrite && worldManager.getWorld(name) != null){
+                                      sender.sendMessage(name + " world already exists.");
+                                      return 0;
+                                    }
+                                    if(overwrite){
+                                      sender.sendMessage("Deleting previous world if exists...");
+                                      worldManager.deleteWorld(name);
+                                    }
+                                    sender.sendMessage("Creating world...");
+                                    CruxWorld world = worldManager.getOrCreateWorld(type, name);
+                                    if(world == null){
+                                      sender.sendMessage("Could not get or create world, " + name + " from type, " + type.key() + ".");
+                                      return 0;
+                                    }
+                                    sender.sendMessage("Got world " + world.key() + " from type " + type.key() + "!");
+                                    if(tp){
+                                      if(sender instanceof Entity e){
+                                        e.teleport(world.toBukkitWorld().getSpawnLocation());
+                                      }
+                                    }
+                                    return 1;
+                                  })
+                              )
                         )
                 )
         ).then(
