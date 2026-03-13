@@ -5,6 +5,7 @@ import killercreepr.crux.api.math.Pos2D;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.util.CruxTag;
+import killercreepr.cruxstructures.api.structure.Structure;
 import killercreepr.cruxstructures.api.structure.generation.StructureGenerator;
 import killercreepr.cruxstructures.api.structure.generation.result.GenerateResult;
 import org.bukkit.Chunk;
@@ -16,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
 public class InstantLocationSetTableStructureGen extends LocationSetTableStructureGen {
@@ -30,10 +32,10 @@ public class InstantLocationSetTableStructureGen extends LocationSetTableStructu
     }
 
     @Override
-    public @NotNull GenerateResult generate(@NotNull Chunk at) {
-        if(setChunks != null || hasGeneratedIn(at.getWorld())) return GenerateResult.empty();
+    public @NotNull CompletableFuture<GenerateResult> generate(@NotNull Structure structure, @NotNull Chunk at) {
+        if(setChunks != null || hasGeneratedIn(at.getWorld())) return CompletableFuture.completedFuture(GenerateResult.empty());
         setChunks = generateSetChunks(at.getWorld(), minDistanceApart == null ? 0 : minDistanceApart.value().intValue());
-        if(setChunks == null) return GenerateResult.empty();
+        if(setChunks == null) return CompletableFuture.completedFuture(GenerateResult.empty());
 
         List<Pos2D> listChunks = new ArrayList<>(setChunks);
         World world = at.getWorld();
@@ -55,12 +57,13 @@ public class InstantLocationSetTableStructureGen extends LocationSetTableStructu
                 List<StructureGenerator> populated = populateLoot(at);
                 if(populated.isEmpty()) return;
                 StructureGenerator gen = populated.getFirst();
-                gen.generate(chunk);
+                var genStructure = gen.generateStructure(chunk);
+                if(genStructure != null) gen.generate(genStructure, chunk);
             }
         }.runTaskTimer(Crux.getMainPlugin(), 100L, 200L);
 
         CruxTag.set(world, "instant_location_set/" + id, PersistentDataType.BOOLEAN, true);
 
-        return GenerateResult.empty();
+        return CompletableFuture.completedFuture(GenerateResult.empty());
     }
 }

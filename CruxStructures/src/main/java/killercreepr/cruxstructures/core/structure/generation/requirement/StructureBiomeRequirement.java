@@ -8,6 +8,8 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.CompletableFuture;
+
 public class StructureBiomeRequirement implements StructureRequirement {
     protected final @NotNull Key biomeKey;
     public StructureBiomeRequirement(@NotNull Key biomeKey) {
@@ -15,7 +17,7 @@ public class StructureBiomeRequirement implements StructureRequirement {
     }
 
     @Override
-    public boolean test(@NotNull Structure structure, @NotNull Chunk chunk, @NotNull Location location) {
-        return BiomeUtils.getBiome(location).equals(biomeKey);
+    public CompletableFuture<Boolean> test(@NotNull Structure structure, @NotNull Chunk chunk, @NotNull Location location) {
+        return CompletableFuture.completedFuture(BiomeUtils.getBiome(location).equals(biomeKey));
     }
 }

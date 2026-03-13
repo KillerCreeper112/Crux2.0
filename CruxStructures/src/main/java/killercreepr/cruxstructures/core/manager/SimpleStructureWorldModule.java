@@ -377,14 +377,62 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
     @Override
     public void onChunkPopulate(Chunk c) {
         List<StructureGenerator> list = structureGenerators;
-        Crux.scheduler().runTaskAsync(() ->{
+
+        Crux.scheduler().runTaskAsync(() -> {
+            List<StructureGenerator> newList = new ArrayList<>(list);
+            Collections.shuffle(newList);
+
+            tryGenerateSequentially(newList, c, 0);
+        });
+        /*Crux.scheduler().runTaskAsync(() ->{
             List<StructureGenerator> newList = new ArrayList<>(list);
             Collections.shuffle(newList);
             for(StructureGenerator gen : newList){
-                GenerateResult result = gen.generate(c);
-                if(result.getPlaceEvent() == null || result.getPlaceEvent().isCancelled()) continue;
+                if(!gen.canPlace(c)) continue;
+                var structure = gen.generateStructure(c);
+                if(structure == null) continue;
+
+                var result = gen.generate(structure, c);
+                result.whenComplete()
+
+                //GenerateResult result = gen.generate(c);
+                //if(result.getPlaceEvent() == null || result.getPlaceEvent().isCancelled()) continue;
                 break;
             }
+        });*/
+    }
+
+    private void tryGenerateSequentially(List<StructureGenerator> generators, Chunk chunk, int index) {
+        if (index >= generators.size()) {
+            return;
+        }
+
+        StructureGenerator gen = generators.get(index);
+
+        if (!gen.canPlace(chunk)) {
+            tryGenerateSequentially(generators, chunk, index + 1);
+            return;
+        }
+
+        var structure = gen.generateStructure(chunk);
+        if (structure == null) {
+            tryGenerateSequentially(generators, chunk, index + 1);
+            return;
+        }
+
+        gen.generate(structure, chunk).whenComplete((result, throwable) -> {
+            if (throwable != null) {
+                throwable.printStackTrace();
+                tryGenerateSequentially(generators, chunk, index + 1);
+                return;
+            }
+
+            if (result == null || !result.wasPlaced()) {
+                tryGenerateSequentially(generators, chunk, index + 1);
+                return;
+            }
+
+            // success: stop here so only one structure generates in this chunk
         });
     }
 

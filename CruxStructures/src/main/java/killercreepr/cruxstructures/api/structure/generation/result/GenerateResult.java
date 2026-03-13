@@ -15,4 +15,9 @@ public interface GenerateResult {
     }
 
     @Nullable StructurePlaceEvent getPlaceEvent();
+
+    default boolean wasPlaced(){
+        var event = getPlaceEvent();
+        return event != null && !event.isCancelled();
+    }
 }

@@ -5,14 +5,17 @@ import killercreepr.cruxstructures.api.structure.generation.result.GenerateResul
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.concurrent.CompletableFuture;
 
 public interface StructureGenerator {
+    boolean canPlace(@NotNull Chunk at);
+
+    @Nullable Structure generateStructure(@NotNull Chunk at);
+
     @NotNull
-    GenerateResult
-    generate(@NotNull Structure structure, @NotNull Chunk at);
-    @NotNull GenerateResult generate(@NotNull Chunk at);
+    CompletableFuture<GenerateResult> generate(@NotNull Structure structure, @NotNull Chunk at);
 
-    @NotNull GenerateResult generate(@NotNull Location at);
-
-    @NotNull GenerateResult generate(@NotNull Structure structure, @NotNull Location at);
+    @NotNull CompletableFuture<GenerateResult> generate(@NotNull Structure structure, @NotNull Location at);
 }

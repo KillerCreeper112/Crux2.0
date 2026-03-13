@@ -8,6 +8,7 @@ import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxstructures.api.structure.Structure;
 import killercreepr.cruxstructures.api.structure.generation.StructureGenerator;
 import killercreepr.cruxstructures.api.structure.generation.result.GenerateResult;
+import killercreepr.cruxstructures.core.registries.StructureRegistries;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -17,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class LocationSetStructureGen implements StructureGenerator {
     protected final @Nullable NumberProvider chunkRangeX;
@@ -71,33 +73,39 @@ public abstract class LocationSetStructureGen implements StructureGenerator {
     }
 
     @Override
-    public @NotNull GenerateResult generate(@NotNull Structure structure, @NotNull Chunk at) {
-        throw new UnsupportedOperationException();
+    public boolean canPlace(@NotNull Chunk at) {
+        return true;
+    }
+
+    //return any structure
+    @Override
+    public @Nullable Structure generateStructure(@NotNull Chunk at) {
+        for (Structure structure : StructureRegistries.STRUCTURES) {
+            return structure;
+        }
+        return null;
     }
 
     @Override
-    public @NotNull GenerateResult generate(@NotNull Chunk at) {
+    public @NotNull CompletableFuture<GenerateResult> generate(@NotNull Structure structure, @NotNull Chunk at) {
         if(setChunks == null) setChunks = generateSetChunks(at.getWorld(), minDistanceApart == null ? 0 : minDistanceApart.value().intValue());
-        if(setChunks == null) return GenerateResult.empty();
-        if(!setChunks.contains(Pos2D.at(at.getX(), at.getZ()))) return GenerateResult.empty();
+        if(setChunks == null) return CompletableFuture.completedFuture(GenerateResult.empty());
+        if(!setChunks.contains(Pos2D.at(at.getX(), at.getZ()))) return CompletableFuture.completedFuture(GenerateResult.empty());
         List<StructureGenerator> populated = populateLoot(at);
-        if(populated.isEmpty()) return GenerateResult.empty();
+        if(populated.isEmpty()) return CompletableFuture.completedFuture(GenerateResult.empty());
         StructureGenerator gen = populated.getFirst();
-        return gen.generate(at);
+        Structure genStructure = gen.generateStructure(at);
+        if(genStructure == null) return CompletableFuture.completedFuture(GenerateResult.empty());
+        return gen.generate(genStructure, at);
+    }
+
+    @Override
+    public @NotNull CompletableFuture<GenerateResult> generate(@NotNull Structure structure, @NotNull Location at) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public abstract List<StructureGenerator> populateLoot(@NotNull Chunk at);
     public abstract int getGenerateStructureAmount(@NotNull InputContext ctx);
-
-    @Override
-    public @NotNull GenerateResult generate(@NotNull Location at) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public @NotNull GenerateResult generate(@NotNull Structure structure, @NotNull Location at) {
-        throw new UnsupportedOperationException();
-    }
 
     public @Nullable NumberProvider getChunkRangeX() {
         return chunkRangeX;

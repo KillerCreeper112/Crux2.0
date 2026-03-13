@@ -4,6 +4,7 @@ import killercreepr.crux.api.math.Pos2D;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.util.CruxTag;
+import killercreepr.cruxstructures.api.structure.Structure;
 import killercreepr.cruxstructures.api.structure.generation.StructureGenerator;
 import killercreepr.cruxstructures.api.structure.generation.result.GenerateResult;
 import net.kyori.adventure.key.Key;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
 public class InstantLocationSetListStructureGen extends LocationSetListStructureGen {
@@ -40,11 +42,12 @@ public class InstantLocationSetListStructureGen extends LocationSetListStructure
     }
 
     protected final Map<Key, BukkitRunnable> alreadyGenerated = new HashMap<>();
+
     @Override
-    public @NotNull GenerateResult generate(@NotNull Chunk at) {
-        if(setChunks != null) return GenerateResult.empty();
+    public @NotNull CompletableFuture<GenerateResult> generate(@NotNull Structure structure, @NotNull Chunk at) {
+        if(setChunks != null) return CompletableFuture.completedFuture(GenerateResult.empty());
         World world = at.getWorld();
-        if(hasGeneratedIn(world) || alreadyGenerated.containsKey(world.key())) return GenerateResult.empty();
+        if(hasGeneratedIn(world) || alreadyGenerated.containsKey(world.key())) return CompletableFuture.completedFuture(GenerateResult.empty());
         Crux.scheduler().runTask(() ->{
             if(setChunks != null || alreadyGenerated.containsKey(world.key()) || hasGeneratedIn(world)) return;
             setChunks = generateSetChunks(world, minDistanceApart == null ? 0 : minDistanceApart.value().intValue());
@@ -61,7 +64,7 @@ public class InstantLocationSetListStructureGen extends LocationSetListStructure
                     double tps = Crux.getServer().getTPS()[0];
                     if(tps < 14.3){
                         Crux.log(Level.INFO, world.getName() + " - Instant set location list " + id +
-                            ": TPS low, skipping... " + tps);
+                          ": TPS low, skipping... " + tps);
                         return;
                     }
                     index++;
@@ -78,7 +81,8 @@ public class InstantLocationSetListStructureGen extends LocationSetListStructure
                         List<StructureGenerator> populated = populateLoot(at);
                         if(populated.isEmpty()) return;
                         StructureGenerator gen = populated.getFirst();
-                        gen.generate(chunk);
+                        var genStructure = gen.generateStructure(chunk);
+                        if(genStructure != null) gen.generate(genStructure, chunk);
                     });
                 }
             };
@@ -86,7 +90,7 @@ public class InstantLocationSetListStructureGen extends LocationSetListStructure
             runnable.runTaskTimerAsynchronously(Crux.getMainPlugin(), 100L, 300L);
         });
 
-        return GenerateResult.empty();
+        return CompletableFuture.completedFuture(GenerateResult.empty());
     }
 
     public void onComplete(World world, Chunk chunk){

@@ -13,7 +13,7 @@ public class StructureChunkChanceRequirement implements StructureChunkRequiremen
     }
 
     @Override
-    public boolean test(@NotNull Structure structure, @NotNull Chunk chunk) {
+    public boolean test(@NotNull Chunk chunk) {
         return CruxMath.testChance(chance);
     }
 }

@@ -23,9 +23,7 @@ import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 
 public class FileCfgStructureGen extends PureYamlFileHandler<StructureGenerator> {
@@ -56,7 +54,7 @@ public class FileCfgStructureGen extends PureYamlFileHandler<StructureGenerator>
         );
         if(structurePool==null) return null;
 
-        Collection<StructureRequirement> requirements = new HashSet<>();
+        List<StructureRequirement> requirements = new ArrayList<>();
         if(o.get("requirements") instanceof FileArray aa){
             aa.forEach(ele ->{
                 StructureRequirement req = registry.deserializeFromFile(StructureRequirement.class, ele);
@@ -67,12 +65,12 @@ public class FileCfgStructureGen extends PureYamlFileHandler<StructureGenerator>
             });
         }
 
-        Collection<StructureChunkRequirement> chunkRequirements = registry.deserializeFromFile(
-            new TypeToken<Collection<StructureChunkRequirement>>(){}.getType(), o.get("chunk_requirements")
+        List<StructureChunkRequirement> chunkRequirements = registry.deserializeFromFile(
+            new TypeToken<List<StructureChunkRequirement>>(){}.getType(), o.get("chunk_requirements")
         );
 
         return new CfgStructureGen(
-            structurePool, center, requirements, chunkRequirements == null ? Set.of() : chunkRequirements
+            structurePool, center, requirements, chunkRequirements == null ? List.of() : chunkRequirements
         );
     }
 }

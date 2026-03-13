@@ -3,6 +3,7 @@ package killercreepr.cruxstructures.core.structure.generation.requirement;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.craftbukkit.block.CraftBlock;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;

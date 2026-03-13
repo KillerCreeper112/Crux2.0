@@ -18,7 +18,7 @@ public class StructureChunkPerRequirement implements StructureChunkRequirement {
     }
 
     @Override
-    public boolean test(@NotNull Structure structure, @NotNull Chunk chunk) {
+    public boolean test(@NotNull Chunk chunk) {
         return ThreadLocalRandom.current().nextDouble() <= cache;
     }
 }

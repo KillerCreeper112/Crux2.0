@@ -7,6 +7,8 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.CompletableFuture;
+
 public class StructureChanceRequirement implements StructureRequirement {
     protected final float chance;
     public StructureChanceRequirement(float chance) {
@@ -14,7 +16,7 @@ public class StructureChanceRequirement implements StructureRequirement {
     }
 
     @Override
-    public boolean test(@NotNull Structure structure, @NotNull Chunk chunk, @NotNull Location location) {
-        return CruxMath.testChance(chance);
+    public CompletableFuture<Boolean> test(@NotNull Structure structure, @NotNull Chunk chunk, @NotNull Location location) {
+        return CompletableFuture.completedFuture(CruxMath.testChance(chance));
     }
 }

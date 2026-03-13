@@ -5,7 +5,9 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.CompletableFuture;
+
 public interface StructureRequirement {
-    boolean test(@NotNull Structure structure, @NotNull Chunk chunk, @NotNull Location location);
+    CompletableFuture<Boolean> test(@NotNull Structure structure, @NotNull Chunk chunk, @NotNull Location location);
 
 }
