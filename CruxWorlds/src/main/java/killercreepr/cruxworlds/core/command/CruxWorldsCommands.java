@@ -31,11 +31,13 @@ import org.bukkit.WorldType;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
 public class CruxWorldsCommands {
@@ -122,6 +124,30 @@ public class CruxWorldsCommands {
               });
               return 1;
             })
+            .then(
+              Commands.argument("tp_players_world", worldArg)
+                .executes(ctx ->{
+                  CommandSender sender = getExecutor(ctx.getSource());
+                  CruxWorld world = ctx.getArgument("world", CruxWorld.class);
+                  sender.sendMessage("Deleting world " + world.key() + "...");
+
+                  CruxWorld spawn = ctx.getArgument("tp_players_world", CruxWorld.class);
+                  Location tp = spawn.toBukkitWorld().getSpawnLocation();
+                  for (Player player : world.toBukkitWorld().getPlayers()) {
+                    player.teleport(tp);
+                  }
+
+                  worldManager.deleteWorld(world).whenComplete((success, throwable) -> {
+                    if (throwable != null) Crux.log(Level.SEVERE, throwable.getMessage());
+                    if (!success) {
+                      sender.sendMessage("Could not delete world, " + world.key() + "...");
+                      return;
+                    }
+                    sender.sendMessage("Deleted world, " + world.key() + ".");
+                  });
+                  return 1;
+                })
+            )
         )
     ).then(
       Commands.literal("create")
@@ -171,18 +197,23 @@ public class CruxWorldsCommands {
                         sender.sendMessage(name + " world already exists.");
                         return 0;
                       }
+                      CompletableFuture<Boolean> safeToContinue;
                       if (overwrite) {
                         sender.sendMessage("Deleting previous world if exists...");
-                        worldManager.deleteWorld(name);
-                      }
-                      sender.sendMessage("Creating world...");
-                      CruxWorld world = name.value().equalsIgnoreCase("-default") ? worldManager.getOrCreateWorld(type) :
-                        worldManager.getOrCreateWorld(type, name);
-                      if (world == null) {
-                        sender.sendMessage("Could not get or create world, " + name + " from type, " + type.key() + ".");
-                        return 0;
-                      }
-                      sender.sendMessage("Got world " + world.key() + " from type " + type.key() + "!");
+                        safeToContinue = worldManager.deleteWorld(name);
+                      }else safeToContinue = CompletableFuture.completedFuture(true);
+
+                      safeToContinue.whenComplete((value, throwable) ->{
+                        if(throwable != null) throwable.printStackTrace();
+                        sender.sendMessage("Creating world...");
+                        CruxWorld world = name.value().equalsIgnoreCase("-default") ? worldManager.getOrCreateWorld(type) :
+                          worldManager.getOrCreateWorld(type, name);
+                        if (world == null) {
+                          sender.sendMessage("Could not get or create world, " + name + " from type, " + type.key() + ".");
+                          return;
+                        }
+                        sender.sendMessage("Got world " + world.key() + " from type " + type.key() + "!");
+                      });
                       return 1;
                     })
                     .then(
@@ -197,23 +228,28 @@ public class CruxWorldsCommands {
                             sender.sendMessage(name + " world already exists.");
                             return 0;
                           }
+                          CompletableFuture<Boolean> safeToContinue;
                           if (overwrite) {
                             sender.sendMessage("Deleting previous world if exists...");
-                            worldManager.deleteWorld(name);
-                          }
-                          sender.sendMessage("Creating world...");
-                          CruxWorld world = name.value().equalsIgnoreCase("-default") ? worldManager.getOrCreateWorld(type) :
-                            worldManager.getOrCreateWorld(type, name);
-                          if (world == null) {
-                            sender.sendMessage("Could not get or create world, " + name + " from type, " + type.key() + ".");
-                            return 0;
-                          }
-                          sender.sendMessage("Got world " + world.key() + " from type " + type.key() + "!");
-                          if (tp) {
-                            if (sender instanceof Entity e) {
-                              e.teleport(world.toBukkitWorld().getSpawnLocation());
+                            safeToContinue = worldManager.deleteWorld(name);
+                          }else safeToContinue = CompletableFuture.completedFuture(true);
+
+                          safeToContinue.whenComplete((value, throwable) ->{
+                            if(throwable != null) throwable.printStackTrace();
+                            sender.sendMessage("Creating world...");
+                            CruxWorld world = name.value().equalsIgnoreCase("-default") ? worldManager.getOrCreateWorld(type) :
+                              worldManager.getOrCreateWorld(type, name);
+                            if (world == null) {
+                              sender.sendMessage("Could not get or create world, " + name + " from type, " + type.key() + ".");
+                              return;
                             }
-                          }
+                            sender.sendMessage("Got world " + world.key() + " from type " + type.key() + "!");
+                            if (tp) {
+                              if (sender instanceof Entity e) {
+                                e.teleport(world.toBukkitWorld().getSpawnLocation());
+                              }
+                            }
+                          });
                           return 1;
                         })
                     )
