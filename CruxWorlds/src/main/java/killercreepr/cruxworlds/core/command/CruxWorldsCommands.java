@@ -175,10 +175,10 @@ public class CruxWorldsCommands {
                 .executes(ctx -> {
                   CommandSender sender = getExecutor(ctx.getSource());
                   CruxWorldType type = ctx.getArgument("type", CruxWorldType.class);
-                  Key name = ctx.getArgument("name", Key.class);
+                  Key nameRaw = ctx.getArgument("name", Key.class);
+                  Key name = nameRaw.value().equalsIgnoreCase("-default") ? type.defaultWorldKey() : nameRaw;
                   sender.sendMessage("Getting or creating world...");
-                  CruxWorld world = name.value().equalsIgnoreCase("-default") ? worldManager.getOrCreateWorld(type) :
-                    worldManager.getOrCreateWorld(type, name);
+                  CruxWorld world = worldManager.getOrCreateWorld(type, name);
                   if (world == null) {
                     sender.sendMessage("Could not get or create world, " + name + " from type, " + type.key() + ".");
                     return 0;
@@ -191,7 +191,8 @@ public class CruxWorldsCommands {
                     .executes(ctx -> {
                       CommandSender sender = getExecutor(ctx.getSource());
                       CruxWorldType type = ctx.getArgument("type", CruxWorldType.class);
-                      Key name = ctx.getArgument("name", Key.class);
+                      Key nameRaw = ctx.getArgument("name", Key.class);
+                      Key name = nameRaw.value().equalsIgnoreCase("-default") ? type.defaultWorldKey() : nameRaw;
                       boolean overwrite = ctx.getArgument("overwrite", Boolean.class);
                       if (!overwrite && worldManager.getWorld(name) != null) {
                         sender.sendMessage(name + " world already exists.");
@@ -221,7 +222,9 @@ public class CruxWorldsCommands {
                         .executes(ctx -> {
                           CommandSender sender = getExecutor(ctx.getSource());
                           CruxWorldType type = ctx.getArgument("type", CruxWorldType.class);
-                          Key name = ctx.getArgument("name", Key.class);
+
+                          Key nameRaw = ctx.getArgument("name", Key.class);
+                          Key name = nameRaw.value().equalsIgnoreCase("-default") ? type.defaultWorldKey() : nameRaw;
                           boolean overwrite = ctx.getArgument("overwrite", Boolean.class);
                           boolean tp = ctx.getArgument("tp", Boolean.class);
                           if (!overwrite && worldManager.getWorld(name) != null) {

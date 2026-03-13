@@ -7,6 +7,8 @@ import org.apache.commons.io.FileUtils;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -22,6 +24,13 @@ import java.util.function.Function;
 
 public class CruxWorldUtil {
     public static final Map<String, Function<String, WorldCreator>> CUSTOM_WORLD_CREATORS = new HashMap<>();
+
+    public static boolean isLoaded(Block block, int offsetX, int offsetZ){
+        return isLoaded(block.getWorld(), block.getX() + offsetX, block.getZ() + offsetZ);
+    }
+    public static boolean isLoaded(Block block, BlockFace offset){
+        return isLoaded(block, offset.getModX(), offset.getModZ());
+    }
 
     public static boolean isLoaded(@NotNull World world, int x, int z) {
         return world.isChunkLoaded(x >> 4, z >> 4);

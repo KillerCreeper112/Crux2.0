@@ -143,12 +143,24 @@ public class CruxLoc {
         return dot >= dotThreshold;
     }
 
-
     public static Set<Block> getNearbyBlocks(Block center, int radius){
         Set<Block> list = new HashSet<>();
         for (int x = radius; x >= -radius; x--) {
             for (int y = radius; y >= -radius; y--) {
                 for (int z = radius; z >= -radius; z--) {
+                    list.add(center.getRelative(x, y, z));
+                }
+            }
+        }
+        return list;
+    }
+
+    public static Set<Block> getNearbyBlocksOrEmptyIfUnloaded(Block center, int radius){
+        Set<Block> list = new HashSet<>();
+        for (int x = radius; x >= -radius; x--) {
+            for (int y = radius; y >= -radius; y--) {
+                for (int z = radius; z >= -radius; z--) {
+                    if(!CruxWorldUtil.isLoaded(center, x, z)) return Set.of();
                     list.add(center.getRelative(x, y, z));
                 }
             }
@@ -173,6 +185,29 @@ public class CruxLoc {
         list.add(center.getRelative(BlockFace.NORTH));
 
         if(includeUpDown){
+            list.add(center.getRelative(BlockFace.UP));
+            list.add(center.getRelative(BlockFace.DOWN));
+        }
+        return list;
+    }
+
+    public static @NotNull List<Block> getAdjBlocksOrEmptyIfUnloaded(@NotNull Block center, boolean includeCenter, boolean includeUpDown){
+        if(!CruxWorldUtil.isLoaded(center, BlockFace.WEST)) return List.of();
+        if(!CruxWorldUtil.isLoaded(center, BlockFace.EAST)) return List.of();
+        if(!CruxWorldUtil.isLoaded(center, BlockFace.SOUTH)) return List.of();
+        if(!CruxWorldUtil.isLoaded(center, BlockFace.NORTH)) return List.of();
+
+        List<Block> list = new ArrayList<>();
+        if(includeCenter) list.add(center);
+
+        list.add(center.getRelative(BlockFace.WEST));
+        list.add(center.getRelative(BlockFace.EAST));
+        list.add(center.getRelative(BlockFace.SOUTH));
+        list.add(center.getRelative(BlockFace.NORTH));
+
+        if(includeUpDown){
+            //not needed since chunks are not 3D if(!CruxWorldUtil.isLoaded(center, BlockFace.UP)) return List.of();
+            //if(!CruxWorldUtil.isLoaded(center, BlockFace.DOWN)) return List.of();
             list.add(center.getRelative(BlockFace.UP));
             list.add(center.getRelative(BlockFace.DOWN));
         }
