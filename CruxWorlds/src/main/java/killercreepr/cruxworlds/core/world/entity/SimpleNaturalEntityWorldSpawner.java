@@ -166,6 +166,8 @@ public class SimpleNaturalEntityWorldSpawner implements NaturalEntityWorldSpawne
                     }
 
                     Crux.scheduler().runTask(() -> {
+                        //make sure block from ctx is still loaded
+                        if(!CruxWorldUtil.isLoaded(ctx.getBlock())) return;
                         for (NaturalEntitySpawnGroup m : list) {
                             spawnedEntities.addAll(
                                 NaturalEntitySpawner.spawnCreature(

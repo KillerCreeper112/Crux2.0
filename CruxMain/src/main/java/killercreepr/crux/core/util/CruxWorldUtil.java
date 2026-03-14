@@ -25,6 +25,9 @@ import java.util.function.Function;
 public class CruxWorldUtil {
     public static final Map<String, Function<String, WorldCreator>> CUSTOM_WORLD_CREATORS = new HashMap<>();
 
+    public static boolean isLoaded(Block block){
+        return isLoaded(block.getWorld(), block.getX(), block.getZ());
+    }
     public static boolean isLoaded(Block block, int offsetX, int offsetZ){
         return isLoaded(block.getWorld(), block.getX() + offsetX, block.getZ() + offsetZ);
     }

@@ -5,6 +5,7 @@ import killercreepr.crux.api.util.CruxWeightedSupplier;
 import killercreepr.crux.api.valueproviders.number.NumberProvider;
 import killercreepr.crux.core.data.util.Pair;
 import killercreepr.crux.core.util.CruxMath;
+import killercreepr.crux.core.util.CruxWorldUtil;
 import killercreepr.cruxworlds.api.world.entity.NaturalEntitySpawnGroup;
 import killercreepr.cruxworlds.api.world.entity.NaturalEntitySpawner;
 import killercreepr.cruxworlds.api.world.entity.SpawnContext;
@@ -128,14 +129,16 @@ public class SimpleNaturalEntitySpawner implements NaturalEntitySpawner {
             plugin.getServer().getScheduler().runTask(plugin, ignored -> {
                 try {
                     SpawnContext ctx = found.getSecond();
-                    for (NaturalEntitySpawnGroup m : found.getFirst()) {
-                        spawnedEntities.addAll(
-                            NaturalEntitySpawner.spawn(
+                    if(CruxWorldUtil.isLoaded(ctx.getBlock())){
+                        for (NaturalEntitySpawnGroup m : found.getFirst()) {
+                            spawnedEntities.addAll(
+                              NaturalEntitySpawner.spawn(
                                 m.selectRandom(groupSpawnAmount.value().intValue(), ctx),
                                 ctx,
                                 spawnConsumer
-                            )
-                        );
+                              )
+                            );
+                        }
                     }
                 } finally {
                     // When this task finishes, check if all are done

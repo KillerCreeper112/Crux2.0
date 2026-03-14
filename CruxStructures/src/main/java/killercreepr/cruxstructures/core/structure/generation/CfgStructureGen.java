@@ -98,7 +98,7 @@ public class CfgStructureGen implements StructureGenerator {
         return FutureUtil.allMatchSequentially(
           requirements,
           requirement -> requirement.test(structure, chunk, at)
-        ).thenApply(passed ->
+        ).thenApplyAsync(passed ->
           passed
             ? GenerateResult.result(structure.place(at))
             : GenerateResult.empty()

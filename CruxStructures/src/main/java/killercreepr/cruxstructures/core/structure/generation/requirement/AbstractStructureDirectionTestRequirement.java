@@ -70,8 +70,8 @@ public abstract class AbstractStructureDirectionTestRequirement implements Struc
         }
 
         var world = b.getWorld();
-        int chunkX = b.getX() >> 4;
-        int chunkZ = b.getZ() >> 4;
+        int chunkX = (b.getX() + face.getModX()) >> 4;
+        int chunkZ = (b.getZ() + face.getModZ()) >> 4;
 
         return world.getChunkAtAsync(chunkX, chunkZ).thenCompose(chunk -> {
             Block next = b.getRelative(face);

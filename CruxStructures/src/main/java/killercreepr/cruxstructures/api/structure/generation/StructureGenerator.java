@@ -10,6 +10,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.CompletableFuture;
 
 public interface StructureGenerator {
+    default int chunkPopulateRadius(){
+        return 2;
+    }
+
     boolean canPlace(@NotNull Chunk at);
 
     @Nullable Structure generateStructure(@NotNull Chunk at);

@@ -10,6 +10,8 @@ import killercreepr.crux.core.data.world.WorldBlockPosedStorage;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.util.CruxCollection;
 import killercreepr.crux.core.util.CruxKey;
+import killercreepr.crux.core.util.CruxLoc;
+import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxstructures.api.structure.ActiveStructure;
 import killercreepr.cruxstructures.api.structure.StoredStructure;
@@ -19,12 +21,14 @@ import killercreepr.cruxstructures.api.world.module.StructureWorldModule;
 import killercreepr.cruxstructures.core.config.loader.StructureGeneratorLoader;
 import killercreepr.cruxstructures.core.data.world.StoredStructureChunkStorage;
 import killercreepr.cruxstructures.core.file.StorageChunkFile;
+import killercreepr.cruxstructures.core.structure.pending.PendingStructure;
 import killercreepr.cruxworlds.api.world.CruxWorld;
 import killercreepr.cruxworlds.core.world.module.SimpleWorldModule;
 import net.kyori.adventure.key.Key;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -358,6 +362,10 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
     @Override
     public void onChunkLoad(Chunk chunk) {
         long chunkKey = chunk.getChunkKey();
+        var world = chunk.getWorld();
+
+        updatePendings(world, chunkKey, true);
+
         ChunkBlockStorage<StoredStructure> cached = storedStructures.get(chunkKey);
         if(cached==null) return;
         new HashSet<>(cached.getData().values()).forEach(data ->{
@@ -375,30 +383,70 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
     }
 
     @Override
+    public void onChunkUnload(Chunk chunk) {
+        long chunkKey = chunk.getChunkKey();
+        var world = chunk.getWorld();
+        updatePendings(world, chunkKey, false);
+
+        ChunkBlockStorage<ActiveStructure> registered = activeStructures.get(chunkKey); //structureManager.getActive().get(chunk.getWorld().getUID(), chunkKey);
+        if(registered==null) return;
+        new HashSet<>(registered.getData().values()).forEach(block ->{
+            registered.remove(block);
+            block.stopped();
+            //todo maybe addCache(block);
+        });
+    }
+
+    public final Map<Long, Collection<PendingStructure>> pendingStructuresByRequired = new ConcurrentHashMap<>();
+
+    public void addPendingStructure(PendingStructure structure){
+        structure.requiredChunks.forEach((key, value) ->{
+            pendingStructuresByRequired.computeIfAbsent(key, k -> new HashSet<>()).add(structure);
+        });
+    }
+
+    public void removePendingStructure(PendingStructure structure){
+        structure.requiredChunks.forEach((key, value) ->{
+            pendingStructuresByRequired.computeIfPresent(key, (k,v) ->{
+                v.remove(structure);
+                return v.isEmpty() ? null : v;
+            });
+        });
+    }
+
+    public void updatePendings(World world, Long chunk, boolean loaded){
+        var pendingList = pendingStructuresByRequired.get(chunk);
+        if(pendingList==null) return;
+
+        var place = new ArrayList<PendingStructure>();
+
+        for (PendingStructure pending : new HashSet<>(pendingList)) {
+            pending.requiredChunks.put(chunk, loaded);
+            if(pending.canPlace()){
+                removePendingStructure(pending);
+                place.add(pending);
+            }
+        }
+        if(place.isEmpty()) return;
+        Crux.scheduler().runTaskAsync(() ->{
+            for (PendingStructure pending : place) {
+                world.getChunkAtAsync(pending.centerChunkX, pending.centerChunkZ).thenAccept(gotChunk ->{
+                    pending.generator.generate(pending.structure, gotChunk);
+                });
+            }
+        });
+    }
+
+    @Override
     public void onChunkPopulate(Chunk c) {
         List<StructureGenerator> list = structureGenerators;
 
-        Crux.scheduler().runTaskAsync(() -> {
-            List<StructureGenerator> newList = new ArrayList<>(list);
-            Collections.shuffle(newList);
+        updatePendings(c.getWorld(), c.getChunkKey(), true);
+        List<StructureGenerator> newList = new ArrayList<>(list);
+        Collections.shuffle(newList);
 
-            tryGenerateSequentially(newList, c, 0);
-        });
-        /*Crux.scheduler().runTaskAsync(() ->{
-            List<StructureGenerator> newList = new ArrayList<>(list);
-            Collections.shuffle(newList);
-            for(StructureGenerator gen : newList){
-                if(!gen.canPlace(c)) continue;
-                var structure = gen.generateStructure(c);
-                if(structure == null) continue;
-
-                var result = gen.generate(structure, c);
-                result.whenComplete()
-
-                //GenerateResult result = gen.generate(c);
-                //if(result.getPlaceEvent() == null || result.getPlaceEvent().isCancelled()) continue;
-                break;
-            }
+        tryGenerateSequentially(newList, c, 0);
+        /*Crux.scheduler().runTaskAsync(() -> {
         });*/
     }
 
@@ -420,6 +468,31 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
             return;
         }
 
+        World world = chunk.getWorld();
+        int centerChunkX = chunk.getX();
+        int centerChunkZ = chunk.getZ();
+
+        boolean hasAll = true;
+        int radius = gen.chunkPopulateRadius();
+        Map<Long, Boolean> requiredChunks = new HashMap<>();
+        for(int x = -radius; x <= radius; x++){
+            for(int z = -radius; z <= radius; z++){
+                long key = Chunk.getChunkKey(centerChunkX + x, centerChunkZ + z);
+                if(world.isChunkLoaded(centerChunkX + x, centerChunkZ + z)){
+                    requiredChunks.put(key, true);
+                }else{
+                    requiredChunks.put(key, false);
+                    hasAll = false;
+                }
+            }
+        }
+        if(!hasAll){
+            PendingStructure pending = new PendingStructure(gen, structure, centerChunkX, centerChunkZ, Chunk.getChunkKey(centerChunkX, centerChunkZ));
+            pending.requiredChunks.putAll(requiredChunks);
+            addPendingStructure(pending);
+            return;
+        }
+
         gen.generate(structure, chunk).whenComplete((result, throwable) -> {
             if (throwable != null) {
                 throwable.printStackTrace();
@@ -433,18 +506,6 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
             }
 
             // success: stop here so only one structure generates in this chunk
-        });
-    }
-
-    @Override
-    public void onChunkUnload(Chunk chunk) {
-        long chunkKey = chunk.getChunkKey();
-        ChunkBlockStorage<ActiveStructure> registered = activeStructures.get(chunkKey); //structureManager.getActive().get(chunk.getWorld().getUID(), chunkKey);
-        if(registered==null) return;
-        new HashSet<>(registered.getData().values()).forEach(block ->{
-            registered.remove(block);
-            block.stopped();
-            //todo maybe addCache(block);
         });
     }
 

@@ -1,6 +1,7 @@
 package killercreepr.cruxworlds.api.world.entity;
 
 import killercreepr.crux.api.math.CruxPosition;
+import killercreepr.crux.core.util.CruxWorldUtil;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.entity.CraftEntity;
@@ -68,7 +69,9 @@ public interface NaturalEntitySpawner {
         });
     }
 
-    static @NotNull List<Entity> spawnCreature(@NotNull Collection<? extends NaturalEntitySpawn> poll, @NotNull SpawnContext ctx, @Nullable Consumer<Entity> spawnConsumer){
+    static @NotNull List<Entity> spawnCreature(@NotNull Collection<? extends NaturalEntitySpawn> poll,
+                                               @NotNull SpawnContext ctx,
+                                               @Nullable Consumer<Entity> spawnConsumer){
         List<Entity> list = new ArrayList<>();
         for(NaturalEntitySpawn s : poll){
             int spawned = 0;
@@ -117,10 +120,13 @@ public interface NaturalEntitySpawner {
     }
 
     static @Nullable Entity spawnGroup(int groupRadius, @NotNull SpawnContext ctx, @NotNull NaturalEntitySpawn s, @Nullable Consumer<Entity> spawnConsumer){
+        var block = ctx.getBlock();
         for(int x = groupRadius; x >= -groupRadius; --x) {
             for(int y = groupRadius; y >= -groupRadius; --y) {
                 for(int z = groupRadius; z >= -groupRadius; --z) {
                     if(x== 0 && y == 0 && z == 0) continue;
+                    if(!CruxWorldUtil.isLoaded(block, x, z)) continue;
+
                     Block b = ctx.getBlock().getRelative(x,y,z);
                     if(b.equals(ctx.getBlock())) continue;
                     SpawnContext groupCtx = SpawnContext.simple(b, ctx.getRandom());
