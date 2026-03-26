@@ -51,16 +51,22 @@ public class InstantLocationSetTableStructureGen extends LocationSetTableStructu
                     cancel();
                     Crux.log(Level.INFO, world.getName() + " - Instant set location table has finished. " + id);
                 }
+                final var finalIndex = index;
 
                 if(world.isChunkGenerated(pos.x(), pos.z()) && !(at.getX() == pos.x() && at.getZ() == pos.z())) return;
                 Chunk chunk = world.getChunkAt(pos.x(), pos.z());
                 List<StructureGenerator> populated = populateLoot(at);
+                Crux.logInfo(finalIndex + " - " + world.getName() + " - Instant set location table structure generating: " + populated.size());
                 if(populated.isEmpty()) return;
                 StructureGenerator gen = populated.getFirst();
                 var genStructure = gen.generateStructure(chunk);
-                if(genStructure != null) gen.generate(genStructure, chunk);
+                if(genStructure != null){
+                    gen.generate(genStructure, chunk).thenAccept(result -> {
+                        Crux.logInfo(finalIndex + " - " + world.getName() + " - Instant set location table structure generated!");
+                    });
+                }
             }
-        }.runTaskTimer(Crux.getMainPlugin(), 100L, 200L);
+        }.runTaskTimer(Crux.getMainPlugin(), 100L, 100L);
 
         CruxTag.set(world, "instant_location_set/" + id, PersistentDataType.BOOLEAN, true);
 

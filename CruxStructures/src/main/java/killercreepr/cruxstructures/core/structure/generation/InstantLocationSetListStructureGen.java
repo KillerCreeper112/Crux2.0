@@ -62,7 +62,7 @@ public class InstantLocationSetListStructureGen extends LocationSetListStructure
                 @Override
                 public void run() {
                     double tps = Crux.getServer().getTPS()[0];
-                    if(tps < 14.3){
+                    if(tps < 13.5){
                         Crux.log(Level.INFO, world.getName() + " - Instant set location list " + id +
                           ": TPS low, skipping... " + tps);
                         return;
@@ -75,19 +75,25 @@ public class InstantLocationSetListStructureGen extends LocationSetListStructure
                         alreadyGenerated.remove(world.key());
                         onComplete(world, at);
                     }
+                    final var finalIndex = index;
 
                     if(world.isChunkGenerated(pos.x(), pos.z()) && !(at.getX() == pos.x() && at.getZ() == pos.z())) return;
                     world.getChunkAtAsync(pos.x(), pos.z()).whenComplete((chunk, throwable) ->{
                         List<StructureGenerator> populated = populateLoot(at);
+                        Crux.logInfo(finalIndex + " - " + world.getName() + " - Instant set location list structure generating: " + populated.size());
                         if(populated.isEmpty()) return;
                         StructureGenerator gen = populated.getFirst();
                         var genStructure = gen.generateStructure(chunk);
-                        if(genStructure != null) gen.generate(genStructure, chunk);
+                        if(genStructure != null){
+                            gen.generate(genStructure, chunk).thenAccept(result -> {
+                                Crux.logInfo(finalIndex + " - " + world.getName() + " - Instant set location list structure generated!");
+                            });
+                        }
                     });
                 }
             };
             alreadyGenerated.put(world.key(), runnable);
-            runnable.runTaskTimerAsynchronously(Crux.getMainPlugin(), 100L, 300L);
+            runnable.runTaskTimerAsynchronously(Crux.getMainPlugin(), 100L, 100L);
         });
 
         return CompletableFuture.completedFuture(GenerateResult.empty());
