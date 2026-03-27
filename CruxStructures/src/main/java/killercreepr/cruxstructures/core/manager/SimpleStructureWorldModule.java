@@ -10,13 +10,10 @@ import killercreepr.crux.core.data.world.WorldBlockPosedStorage;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.util.CruxCollection;
 import killercreepr.crux.core.util.CruxKey;
-import killercreepr.crux.core.util.CruxLoc;
-import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxconfig.config.bukkit.file.CruxFolder;
 import killercreepr.cruxstructures.api.structure.ActiveStructure;
 import killercreepr.cruxstructures.api.structure.StoredStructure;
 import killercreepr.cruxstructures.api.structure.generation.StructureGenerator;
-import killercreepr.cruxstructures.api.structure.generation.result.GenerateResult;
 import killercreepr.cruxstructures.api.world.module.StructureWorldModule;
 import killercreepr.cruxstructures.core.config.loader.StructureGeneratorLoader;
 import killercreepr.cruxstructures.core.data.world.StoredStructureChunkStorage;
@@ -26,14 +23,12 @@ import killercreepr.cruxworlds.api.world.CruxWorld;
 import killercreepr.cruxworlds.core.world.module.SimpleWorldModule;
 import net.kyori.adventure.key.Key;
 import org.apache.commons.io.FileUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -401,7 +396,7 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
 
     public void addPendingStructure(PendingStructure structure){
         structure.requiredChunks.forEach((key, value) ->{
-            pendingStructuresByRequired.computeIfAbsent(key, k -> new HashSet<>()).add(structure);
+            pendingStructuresByRequired.computeIfAbsent(key, k -> ConcurrentHashMap.newKeySet()).add(structure);
         });
     }
 
@@ -430,9 +425,13 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
         if(place.isEmpty()) return;
         Crux.scheduler().runTaskAsync(() ->{
             for (PendingStructure pending : place) {
-                world.getChunkAtAsync(pending.centerChunkX, pending.centerChunkZ).thenAccept(gotChunk ->{
-                    pending.generator.generate(pending.structure, gotChunk);
-                });
+                world.getChunkAtAsync(pending.centerChunkX, pending.centerChunkZ)
+                  .thenCompose(gotChunk -> pending.generator.generate(pending.structure, gotChunk))
+                  .whenComplete((result, throwable) -> {
+                      if (throwable != null) {
+                          throwable.printStackTrace();
+                      }
+                  });
             }
         });
     }

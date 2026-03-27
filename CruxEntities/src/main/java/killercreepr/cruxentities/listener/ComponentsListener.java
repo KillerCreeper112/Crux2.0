@@ -86,7 +86,7 @@ public class ComponentsListener implements Listener {
 
             e.remove();
             cfg.getSpawns().populateLoot(lootCtx).forEach(group ->{
-                if(!group.canSpawn(spawnCtx)) return;
+                //if(!group.canSpawn(spawnCtx)) return;
                 group.selectRandom(spawnCtx).forEach(spawn ->{
                     DataExchange info = spawn.info();
                     Entity newEntity = spawn.spawn(spawnCtx, spawned ->{
@@ -123,6 +123,8 @@ public class ComponentsListener implements Listener {
                     });
                     if(newEntity != null){
                         state.getTrialSpawner().getStateData().currentMobs.add(newEntity.getUniqueId());
+                    }else{
+                        Crux.logError("Trial spawner at " + b + " tried spawning an invalid CruxMob! " + spawn);
                     }
                 });
             });

@@ -1,6 +1,5 @@
 package killercreepr.cruxworlds.core.config.handler;
 
-import killercreepr.crux.api.component.DataComponentAccessor;
 import killercreepr.crux.api.component.DataComponentHandler;
 import killercreepr.crux.api.data.DataExchange;
 import killercreepr.crux.api.entity.CruxEntitySnapshot;
