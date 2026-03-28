@@ -23,7 +23,7 @@ public class SimpleKeyTag implements KeyTag, KeyTypeTag {
 
     @Override
     public boolean isTagged(@NotNull Key item) {
-        return item.equals(type);
+        return type.contains(item);
     }
 
     @Override
