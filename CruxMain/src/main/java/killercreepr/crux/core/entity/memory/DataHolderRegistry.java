@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
 public class DataHolderRegistry extends SimpleKeyedRegistry<DataHolder> {
@@ -19,7 +20,7 @@ public class DataHolderRegistry extends SimpleKeyedRegistry<DataHolder> {
     public DataHolderRegistry() {
     }
 
-    protected final @NotNull Map<Key, TickedDataHolder> tickedHolders = new HashMap<>();
+    protected final @NotNull Map<Key, TickedDataHolder> tickedHolders = new ConcurrentHashMap<>();
 
     public <E extends DataHolder> void onRegistered(@NotNull Key key, @NotNull E value){
         if(value instanceof TickedDataHolder t){
@@ -38,27 +39,30 @@ public class DataHolderRegistry extends SimpleKeyedRegistry<DataHolder> {
 
     @Override
     public <E extends DataHolder> @NotNull E register(@NotNull Key key, @NotNull E value) {
+        var out = super.register(key, value);
         onRegistered(key, value);
-        return super.register(key, value);
+        return out;
     }
 
     @Override
     public @Nullable DataHolder remove(@NotNull Key key) {
+        var out = super.remove(key);
         onRemoved(key);
-        return super.remove(key);
+        return out;
     }
 
     @Override
     public boolean remove(@NotNull Key key, @NotNull DataHolder value) {
+        var out = super.remove(key, value);
         onRemoved(key, value);
-        return super.remove(key, value);
+        return out;
     }
 
     public @NotNull Map<Key, TickedDataHolder> getTickedHolders() {
         return tickedHolders;
     }
 
-    public void removeTickedIf(@NotNull Predicate<TickedDataHolder> predicate){
+    /*public void removeTickedIf(@NotNull Predicate<TickedDataHolder> predicate){
         tickedHolders.values().removeIf(holder ->{
             if(predicate.test(holder)){
                 //unregister(holder);
@@ -67,5 +71,5 @@ public class DataHolderRegistry extends SimpleKeyedRegistry<DataHolder> {
             }
             return false;
         });
-    }
+    }*/
 }

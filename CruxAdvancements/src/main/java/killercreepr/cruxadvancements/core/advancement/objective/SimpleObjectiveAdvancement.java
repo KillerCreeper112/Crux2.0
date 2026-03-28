@@ -18,11 +18,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 
 public class SimpleObjectiveAdvancement extends SimpleAdvancement implements ObjectiveAdvancement {
     protected final @NotNull Map<String, AdvancementObjective> objectives;
-    protected final @NotNull Map<String, ObjectiveProgression> objectiveProgress = new HashMap<>();
+    protected final @NotNull Map<String, ObjectiveProgression> objectiveProgress = new ConcurrentHashMap<>();
     protected final int updateAdvancementPeriod;
     public SimpleObjectiveAdvancement(@NotNull Key key, @Nullable Key parentKey,
                                 @NotNull CruxAdvancementIcon icon,

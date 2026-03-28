@@ -47,12 +47,12 @@ public class PlayerDataHolderRegistry extends DataHolderRegistry {
         if(value instanceof PlayerTickDataHolder t) playerTickedHolders.remove(key, t);
     }
 
-    public void removePlayerTickedIf(@NotNull Predicate<PlayerTickDataHolder> predicate){
+    /*public void removePlayerTickedIf(@NotNull Predicate<PlayerTickDataHolder> predicate){
         if(playerTickedHolders.isEmpty()) return;
         new HashSet<>(playerTickedHolders.values()).forEach(holder ->{
             if(predicate.test(holder)){
                 unregister(holder);
             }
         });
-    }
+    }*/
 }
