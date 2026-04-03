@@ -51,7 +51,8 @@ public class CruxStandardTags {
             new HasOccurredWithinResolver(),
             new IndexedResolver(),
             new UUIDRandomResolver(),
-            new AddIfResolver()
+            new AddIfResolver(),
+          new NullElseResolver()
         );
     }
 

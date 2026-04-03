@@ -29,6 +29,7 @@ public class WorldTags implements ObjectTag<World> {
     @Override
     public @Nullable TagContainer<StringResolver> requestStrings(@NotNull World object, @NotNull TagParser tags) {
         return TagContainer.string(tags)
+          .add(Tag.string("key", (args, ctx) -> object.key().asString()))
             .add(Tag.string("name", (args, ctx) -> object.getName()))
             .add(Tag.string("uuid", (args, ctx) -> object.getUID().toString()))
             .add(Tag.string("min_height", (args, ctx) -> object.getMinHeight() + ""))
