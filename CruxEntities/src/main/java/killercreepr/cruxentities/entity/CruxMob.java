@@ -126,6 +126,9 @@ public interface CruxMob extends Keyed {
         if(e instanceof Enemy) list.add(MobCategory.ENEMY);
         if(e instanceof Monster) list.add(MobCategory.MONSTER);
         if(e instanceof Animals) list.add(MobCategory.ANIMAL);
+        if(e instanceof Boss) list.add(MobCategory.BOSS);
+        if(e instanceof ElderGuardian) list.add(MobCategory.ELITE);
+        if(e instanceof Warden) list.add(MobCategory.ELITE);
         if(EntityTags.UNDEADS.isTagged(e.getType())) list.add(MobCategory.UNDEAD);
         if(EntitySetTag.ENTITY_TYPES_ARTHROPOD.isTagged(e.getType())) list.add(MobCategory.ARTHROPOD);
         switch (e.getType()){

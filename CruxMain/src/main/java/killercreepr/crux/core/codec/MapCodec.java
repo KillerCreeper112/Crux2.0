@@ -4,6 +4,7 @@ import killercreepr.crux.api.codec.Codec;
 import killercreepr.crux.api.codec.DecodeException;
 import killercreepr.crux.api.codec.node.DataNode;
 import killercreepr.crux.api.codec.node.DataObject;
+import killercreepr.crux.core.Crux;
 import killercreepr.crux.core.codec.node.ObjectDataNode;
 import killercreepr.crux.core.codec.node.StringDataNode;
 
@@ -44,7 +45,9 @@ public final class MapCodec<K, V> implements Codec<Map<K, V>> {
       var node = new ObjectDataNode();
       value.forEach((k, v) -> {
           var keyNode = keyCodec.encodeUnchecked(k);
-          if(keyNode == null) return;
+          if(keyNode == null){
+            return;
+          }
           var valueNode = valueCodec.encodeUnchecked(v);
           if(valueNode == null) return;
           node.put(

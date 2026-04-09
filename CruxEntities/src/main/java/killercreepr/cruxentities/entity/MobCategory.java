@@ -7,6 +7,8 @@ import net.kyori.adventure.key.Keyed;
 public interface MobCategory extends Keyed {
     static void register(){}
 
+    MobCategory BOSS = CruxEntityRegistries.MOB_CATEGORY.register(new SimpleMobCategory(Crux.key("boss")));
+    MobCategory ELITE = CruxEntityRegistries.MOB_CATEGORY.register(new SimpleMobCategory(Crux.key("elite")));
     /**
      * Represents mobs that are not aggressive in nature.
      */
