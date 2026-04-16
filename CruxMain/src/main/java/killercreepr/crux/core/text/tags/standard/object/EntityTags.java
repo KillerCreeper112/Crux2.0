@@ -35,6 +35,10 @@ public class EntityTags implements ObjectTag<Entity> {
             .add(Tag.string("x", (args, ctx) -> p.getX() + ""))
             .add(Tag.string("y", (args, ctx) -> p.getY() + ""))
             .add(Tag.string("z", (args, ctx) -> p.getZ() + ""))
+          .add(Tag.string("width", (args, ctx) -> p.getWidth() + ""))
+          .add(Tag.string("height", (args, ctx) -> p.getHeight() + ""))
+          .add(Tag.string("type", (args, ctx) -> p.getType().key().asString()))
+          .add(Tag.string("crux_type", (args, ctx) -> Crux.handlers().entity().getType(p).asString()))
             .add(Tag.string("crux_persist_tag", (args, ctx) ->{
                 String tagID = ctx.deserializeString(args.get(0));
                 PersistTag<?> tag = PersistTag.REGISTRY.get(tagID);
