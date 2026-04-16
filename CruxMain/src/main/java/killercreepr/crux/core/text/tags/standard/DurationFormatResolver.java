@@ -62,6 +62,13 @@ public class DurationFormatResolver implements StringResolver {
         return excluded.contains("day") || excluded.contains("d");
     }
 
+    private static String highestUnit(long days, long hours, long minutes, long seconds) {
+        if (days > 0) return "d";
+        if (hours > 0) return "h";
+        if (minutes > 0) return "m";
+        return "s";
+    }
+
     //Parameters:
     //1: time in milliseconds
     //2: Format
@@ -87,19 +94,21 @@ public class DurationFormatResolver implements StringResolver {
         StringBuilder result = new StringBuilder();
 
         // Only append each time unit if it's non-zero and not excluded
-        if (!hasDays(excluded) && (displayZero || days > 0)) {
+        String highest = highestUnit(days, hours, minutes, seconds);
+
+        if ((!hasDays(excluded) || highest.equals("d")) && (displayZero || days > 0)) {
             if(!result.isEmpty()) result.append(separator);
             result.append(ctx.deserializeString(format.get(0).replace("%d", days + "")));
         }
-        if (!hasHours(excluded) && (displayZero || hours > 0)) {
+        if ((!hasHours(excluded) || highest.equals("h")) && (displayZero || hours > 0)) {
             if(!result.isEmpty()) result.append(separator);
             result.append(ctx.deserializeString(format.get(1).replace("%h", hours + "")));
         }
-        if (!hasMinutes(excluded) && (displayZero || minutes > 0)) {
+        if ((!hasMinutes(excluded) || highest.equals("m")) && (displayZero || minutes > 0)) {
             if(!result.isEmpty()) result.append(separator);
             result.append(ctx.deserializeString(format.get(2).replace("%m", minutes + "")));
         }
-        if (!hasSeconds(excluded) && (displayZero || seconds > 0)) {
+        if ((!hasSeconds(excluded) || highest.equals("s")) && (displayZero || seconds > 0)) {
             if(!result.isEmpty()) result.append(separator);
             result.append(ctx.deserializeString(format.get(3).replace("%s", seconds + "")));
         }
