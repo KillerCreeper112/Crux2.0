@@ -35,8 +35,8 @@ public abstract class FileElement implements DataNode {
         if(e instanceof FileElement d) return d;
 
         if(e instanceof GenericDataNode s) return FilePrimitive.fromDataNode(s);
-        if(e instanceof ArrayDataNode s) return FileArray.fromDataNode(s);
-        if(e instanceof ObjectDataNode s) return FileObject.fromDataNode(s);
+        if(e instanceof DataArray s) return FileArray.fromDataNode(s);
+        if(e instanceof DataObject s) return FileObject.fromDataNode(s);
         throw new UnsupportedOperationException(e.getClass().getSimpleName());
     }
 

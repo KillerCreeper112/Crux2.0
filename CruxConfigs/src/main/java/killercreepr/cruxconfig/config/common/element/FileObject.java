@@ -26,7 +26,7 @@ public class FileObject extends FileElement implements Iterable<Map.Entry<String
         return obj;
     }
 
-    public static @NotNull FileObject fromDataNode(@NotNull ObjectDataNode e){
+    public static @NotNull FileObject fromDataNode(@NotNull DataObject e){
         FileObject obj = new FileObject();
         e.forEachDataPair((key, value) -> obj.add(key, FileElement.fromDataNode(value)));
         return obj;

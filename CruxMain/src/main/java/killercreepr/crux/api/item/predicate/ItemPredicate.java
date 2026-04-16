@@ -6,10 +6,10 @@ import killercreepr.crux.api.codec.PolymorphicCodec;
 import killercreepr.crux.api.codec.builder.PolymorphicCodecBuilder;
 import killercreepr.crux.api.codec.node.DataArray;
 import killercreepr.crux.api.codec.node.DataNode;
+import killercreepr.crux.api.codec.node.DataObject;
 import killercreepr.crux.api.data.tag.Tag;
 import killercreepr.crux.api.item.tag.ItemTag;
 import killercreepr.crux.core.Crux;
-import killercreepr.crux.core.codec.node.ObjectDataNode;
 import killercreepr.crux.core.item.predicate.*;
 import net.kyori.adventure.key.Key;
 import org.bukkit.inventory.ItemStack;
@@ -52,7 +52,7 @@ public interface ItemPredicate extends Predicate<ItemStack> {
       .register("all_of", new Codec<>() {
           @Override
           public ItemPredicate decode(DataNode node) throws DecodeException {
-              if(!(node instanceof ObjectDataNode o)) return null;
+              if(!(node instanceof DataObject o)) return null;
               var values = o.get("values");
               if(values == null) return null;
               Collection<ItemPredicate> valueList = LIST_CODEC.decode(values);
@@ -69,7 +69,7 @@ public interface ItemPredicate extends Predicate<ItemStack> {
       .register("any_of", new Codec<>() {
           @Override
           public ItemPredicate decode(DataNode node) throws DecodeException {
-              if(!(node instanceof ObjectDataNode o)) return null;
+              if(!(node instanceof DataObject o)) return null;
               var values = o.get("values");
               if(values == null) return null;
               Collection<ItemPredicate> valueList = LIST_CODEC.decode(values);
