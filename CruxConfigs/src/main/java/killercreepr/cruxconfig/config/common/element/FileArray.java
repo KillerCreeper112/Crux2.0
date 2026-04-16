@@ -22,7 +22,7 @@ public class FileArray extends FileElement implements Iterable<FileElement>, Dat
         json.forEach(value -> a.add(FileElement.fromYaml(value)));
         return a;
     }
-    public static @NotNull FileArray fromDataNode(@NotNull ArrayDataNode json){
+    public static @NotNull FileArray fromDataNode(@NotNull DataArray json){
         FileArray a = new FileArray();
         json.forEachDataNode(value -> a.add(FileElement.fromDataNode(value)));
         return a;
