@@ -304,11 +304,14 @@ public final class Crux {
         return key.asString();
     }
 
-    public static @NotNull NamespacedKey key(@NotNull String key){
-        return key(key.split(":"));
+    public static @NotNull NamespacedKey key(@NotNull String key) {
+        int colon = key.indexOf(':');
+        return colon == -1
+          ? new NamespacedKey(NAMESPACE, key)
+          : new NamespacedKey(key.substring(0, colon), key.substring(colon + 1));
     }
 
-    public static @NotNull NamespacedKey key(@NotNull String[] key){
+    public static @NotNull NamespacedKey key(@NotNull String[] key) {
         return key.length > 1 ? new NamespacedKey(key[0], key[1]) : new NamespacedKey(NAMESPACE, key[0]);
     }
 

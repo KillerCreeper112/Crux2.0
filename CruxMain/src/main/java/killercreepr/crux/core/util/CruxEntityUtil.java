@@ -267,61 +267,97 @@ public class CruxEntityUtil {
         return entities;
     }
 
-    public static @NotNull Collection<Entity> getEntitiesNearChunk(@NotNull Chunk chunk, int radius, @Nullable Predicate<Entity> predicate){
+    public static @NotNull Collection<Entity> getEntitiesNearChunk(@NotNull Chunk chunk, int radius, @Nullable Predicate<Entity> predicate) {
+        World world = chunk.getWorld();
+        int baseX = chunk.getX();
+        int baseZ = chunk.getZ();
         Collection<Entity> list = new HashSet<>();
-        for(int x = -radius; x < radius; x++){
-            for(int z = -radius; z < radius; z++){
-                if(!chunk.getWorld().isChunkLoaded(chunk.getX()+x, chunk.getZ()+z)) continue;
-                Chunk c = chunk.getWorld().getChunkAt(chunk.getX()+x, chunk.getZ()+z);
-                if(predicate == null) list.addAll(List.of(c.getEntities()));
-                else{
-                    for(Entity e : c.getEntities()){
-                        if(predicate.test(e)) list.add(e);
+
+        if (predicate == null) {
+            for (int x = -radius; x < radius; x++) {
+                for (int z = -radius; z < radius; z++) {
+                    if(!world.isChunkLoaded(baseX + x, baseZ + z)) continue;
+                    Chunk c = world.getChunkAt(baseX + x, baseZ + z);
+                    if (!c.isEntitiesLoaded()) continue;
+                    Collections.addAll(list, c.getEntities());
+                }
+            }
+        } else {
+            for (int x = -radius; x < radius; x++) {
+                for (int z = -radius; z < radius; z++) {
+                    if(!world.isChunkLoaded(baseX + x, baseZ + z)) continue;
+                    Chunk c = world.getChunkAt(baseX + x, baseZ + z);
+                    if (!c.isEntitiesLoaded()) continue;
+                    for (Entity e : c.getEntities()) {
+                        if (predicate.test(e)) list.add(e);
                     }
                 }
             }
         }
+
         return list;
     }
 
-    public static boolean checkNearbyEntityChunkAmount(@NotNull Chunk chunk, int radius, int amount, @Nullable Predicate<Entity> predicate){
+    public static boolean checkNearbyEntityChunkAmount(@NotNull Chunk chunk, int radius, int amount, @Nullable Predicate<Entity> predicate) {
+        World world = chunk.getWorld();
+        int baseX = chunk.getX();
+        int baseZ = chunk.getZ();
         int entityAmount = 0;
-        for(int x = -radius; x < radius; x++){
-            for(int z = -radius; z < radius; z++){
-                if(!chunk.getWorld().isChunkLoaded(chunk.getX()+x, chunk.getZ()+z)) continue;
-                Chunk c = chunk.getWorld().getChunkAt(chunk.getX()+x, chunk.getZ()+z);
-                if(predicate == null){
-                    amount += c.getEntities().length;
-                    entityAmount++;
-                    if(entityAmount >= amount) return true;
-                } else{
-                    for(Entity e : c.getEntities()){
-                        if(predicate.test(e)){
-                            amount++;
-                            entityAmount++;
-                            if(entityAmount >= amount) return true;
-                        }
+
+        if (predicate == null) {
+            for (int x = -radius; x < radius; x++) {
+                for (int z = -radius; z < radius; z++) {
+                    if(!world.isChunkLoaded(baseX + x, baseZ + z)) continue;
+                    Chunk c = world.getChunkAt(baseX + x, baseZ + z);
+                    if (!c.isEntitiesLoaded()) continue;
+                    entityAmount += c.getEntities().length;
+                    if (entityAmount >= amount) return true;
+                }
+            }
+        } else {
+            for (int x = -radius; x < radius; x++) {
+                for (int z = -radius; z < radius; z++) {
+                    if(!world.isChunkLoaded(baseX + x, baseZ + z)) continue;
+                    Chunk c = world.getChunkAt(baseX + x, baseZ + z);
+                    if (!c.isEntitiesLoaded()) continue;
+                    for (Entity e : c.getEntities()) {
+                        if (predicate.test(e) && ++entityAmount >= amount) return true;
                     }
                 }
             }
         }
+
         return false;
     }
 
-    public static int getEntityAmountNearChunk(@NotNull Chunk chunk, int radius, @Nullable Predicate<Entity> predicate){
+    public static int getEntityAmountNearChunk(@NotNull Chunk chunk, int radius, @Nullable Predicate<Entity> predicate) {
+        World world = chunk.getWorld();
+        int baseX = chunk.getX();
+        int baseZ = chunk.getZ();
         int amount = 0;
-        for(int x = -radius; x < radius; x++){
-            for(int z = -radius; z < radius; z++){
-                if(!chunk.getWorld().isChunkLoaded(chunk.getX()+x, chunk.getZ()+z)) continue;
-                Chunk c = chunk.getWorld().getChunkAt(chunk.getX()+x, chunk.getZ()+z);
-                if(predicate == null) amount += c.getEntities().length;
-                else{
-                    for(Entity e : c.getEntities()){
-                        if(predicate.test(e)) amount++;
+
+        if (predicate == null) {
+            for (int x = -radius; x < radius; x++) {
+                for (int z = -radius; z < radius; z++) {
+                    if(!world.isChunkLoaded(baseX+x, baseZ+z)) continue;
+                    Chunk c = world.getChunkAt(baseX + x, baseZ + z);
+                    if (!c.isEntitiesLoaded()) continue;
+                    amount += c.getEntities().length;
+                }
+            }
+        } else {
+            for (int x = -radius; x < radius; x++) {
+                for (int z = -radius; z < radius; z++) {
+                    if(!world.isChunkLoaded(baseX+x, baseZ+z)) continue;
+                    Chunk c = world.getChunkAt(baseX + x, baseZ + z);
+                    if (!c.isEntitiesLoaded()) continue;
+                    for (Entity e : c.getEntities()) {
+                        if (predicate.test(e)) amount++;
                     }
                 }
             }
         }
+
         return amount;
     }
 

@@ -10,11 +10,14 @@ public interface CruxModule extends Reloadable {
     default void onLoad(@NotNull CruxPlugin plugin){}
     default void onEnable(@NotNull CruxPlugin plugin){}
     default void onDisable(@NotNull CruxPlugin plugin){}
-    default @NotNull NamespacedKey key(@NotNull String key){
-        return key(key.split(":"));
+    default @NotNull NamespacedKey key(@NotNull String key) {
+        int colon = key.indexOf(':');
+        return colon == -1
+          ? new NamespacedKey(name().toLowerCase(), key)
+          : new NamespacedKey(key.substring(0, colon), key.substring(colon + 1));
     }
 
-    default @NotNull NamespacedKey key(@NotNull String[] key){
+    default @NotNull NamespacedKey key(@NotNull String[] key) {
         return key.length > 1 ? new NamespacedKey(key[0], key[1]) : new NamespacedKey(name().toLowerCase(), key[0]);
     }
 
