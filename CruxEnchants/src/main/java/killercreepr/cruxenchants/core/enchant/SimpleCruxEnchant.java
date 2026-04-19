@@ -2,6 +2,7 @@ package killercreepr.cruxenchants.core.enchant;
 
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
+import killercreepr.crux.api.component.DataComponentHandler;
 import killercreepr.cruxenchants.api.enchant.ApplicableItemGroup;
 import killercreepr.cruxenchants.api.enchant.ApplicableItemType;
 import killercreepr.cruxenchants.api.enchant.CruxEnchant;
@@ -14,16 +15,19 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 public class SimpleCruxEnchant implements CruxEnchant {
     protected final Key key;
     protected final String description;
     protected final ApplicableItemGroup applicableItemGroup;
+    protected final DataComponentHandler components;
 
-    public SimpleCruxEnchant(Key key, String description, ApplicableItemGroup applicableItemGroup) {
+    public SimpleCruxEnchant(Key key, String description, ApplicableItemGroup applicableItemGroup, DataComponentHandler components) {
         this.key = key;
         this.description = description;
         this.applicableItemGroup = applicableItemGroup;
+      this.components = components;
     }
 
     @Override
@@ -63,11 +67,17 @@ public class SimpleCruxEnchant implements CruxEnchant {
         return key;
     }
 
+    @Override
+    public DataComponentHandler getComponents() {
+        return components;
+    }
+
     public static class Builder implements CruxEnchant.Builder{
         protected Key key;
         protected String description;
         protected Collection<ApplicableItemType> types;
         protected ApplicableItemGroup group;
+        protected DataComponentHandler components;
 
         @Override
         public CruxEnchant.Builder key(Key key) {
@@ -94,7 +104,19 @@ public class SimpleCruxEnchant implements CruxEnchant {
         }
 
         @Override
+        public CruxEnchant.Builder editComponents(Consumer<DataComponentHandler> consumer) {
+            components();
+            consumer.accept(components);
+            return this;
+        }
+
+        private void components(){
+            if(components == null) components = DataComponentHandler.simple();
+        }
+
+        @Override
         public CruxEnchant build() {
+            components();
             if(description == null) description = "";
             ApplicableItemGroup group;
             if(this.types != null){
@@ -103,7 +125,7 @@ public class SimpleCruxEnchant implements CruxEnchant {
                 if(this.group != null) builder.add(this.group);
                 group = builder.build();
             }else group = this.group;
-            return new SimpleCruxEnchant(key, description, group);
+            return new SimpleCruxEnchant(key, description, group, components);
         }
     }
 }
