@@ -4,6 +4,7 @@ import killercreepr.crux.api.math.CruxPosition;
 import killercreepr.crux.core.Crux;
 import net.kyori.adventure.key.Key;
 import org.apache.commons.io.FileUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
@@ -15,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,7 +78,9 @@ public class CruxWorldUtil {
             FileUtils.copyDirectory(source, destination);
 
             if(!includeUID){
-                applyToChildren(
+                destination.toPath().resolve("data/paper/metadata.dat").toFile().delete();
+
+                /*applyToChildren(
                     destination,
                     file ->{
                         if(file.getName().equals("uid.dat")){
@@ -85,7 +89,7 @@ public class CruxWorldUtil {
                         }
                         return false;
                     }
-                );
+                );*/
             }
 
             return destination;
@@ -174,7 +178,7 @@ public class CruxWorldUtil {
     }
 
     public static boolean deleteWorld(@NotNull String name){
-        for(File f : Crux.getServer().getWorldContainer().listFiles()){
+        for(File f : getWorldContainer().listFiles()){
             if(!f.getName().equals(name) || !f.isDirectory()) continue;
             try{
                 FileUtils.deleteDirectory(f);
@@ -189,14 +193,9 @@ public class CruxWorldUtil {
 
     public static List<String> getWorldsFromContainer(){
         List<String> list = new ArrayList<>();
-        for(File f : Crux.getServer().getWorldContainer().listFiles()){
+        for(File f : getWorldContainer().listFiles()){
             if(!f.isDirectory()) continue;
-            for(File folderF : f.listFiles()){
-                if(folderF.getName().equals("level.dat")){
-                    list.add(f.getName());
-                    break;
-                }
-            }
+            list.add(f.getName());
         }
         return list;
     }
@@ -208,31 +207,38 @@ public class CruxWorldUtil {
         return getOrLoadWorld(key.value());
     }
 
+    public static Path getWorldPath(){
+        if(Crux.getServer().getMinecraftVersion().startsWith("1.")){
+            return Crux.getServer().getWorldContainer().toPath();
+        }
+        return Crux.getServer().getWorld(Key.key("overworld")).getWorldPath().getParent();
+    }
+
+    public static File getWorldContainer(){
+        if(Crux.getServer().getMinecraftVersion().startsWith("1.")){
+            return Crux.getServer().getWorldContainer();
+        }
+        return Crux.getServer().getWorld(Key.key("overworld")).getWorldPath().getParent().toFile();
+        //return Crux.getMainPlugin().getDataPath().getParent().getParent().resolve("world/dimensions/minecraft").toFile();
+    }
+
     public static File getWorldFolder(String name){
-        for(File f : Crux.getServer().getWorldContainer().listFiles()){
+        var file = getWorldPath().resolve(name).toFile();
+        if(!file.exists()) return null;
+        return file;
+        /*for(File f : getWorldContainer().listFiles()){
             if(!f.getName().equals(name)) continue;
             if(!f.isDirectory()) continue;
             return f;
         }
-        return null;
+        return null;*/
     }
 
     public static World getOrLoadWorld(@NotNull String name){
         World world = Crux.getServer().getWorld(name);
         if(world != null) return world;
-        for(File f : Crux.getServer().getWorldContainer().listFiles()){
-            if(!f.getName().equals(name)) continue;
-            if(!f.isDirectory()) continue;
-            /*boolean foundLevel = false;
-            for(File folderF : f.listFiles()){
-                if(folderF.getName().equals("level.dat")){
-                    foundLevel = true;
-                    break;
-                }
-            }
-            if(!foundLevel) break;*/
-            return Crux.getServer().createWorld(getWorldCreator(name));
-        }
-        return null;
+        File f = getWorldFolder(name);
+        if(f == null) return null;
+        return Crux.getServer().createWorld(getWorldCreator(name));
     }
 }

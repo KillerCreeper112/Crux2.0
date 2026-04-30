@@ -61,9 +61,17 @@ public class MapPersistTextParser<T> implements PersistTextParser<T> {
         TextInputField<T,?> base = elements.getOrDefault("", elements.get(null));
         if(base != null){
             if(base instanceof TextInputField.Holder<T,?> holder){
+                var inputParser = holder.getInputParser(object);
+                if(inputParser == null){
+                    throw new IllegalArgumentException("Input parser is null! " + object);
+                }
                 return (T) holder.getInputParser(object).decodeObject(object);
             }
-            return (T) base.inputParser().decodeObject(object);
+            var inputParser = base.inputParser();
+            if(inputParser == null){
+                throw new IllegalArgumentException("Input parser is null! " + object);
+            }
+            return (T) inputParser.decodeObject(object);
         }
 
         Map<String, Object> parsed = new HashMap<>();
