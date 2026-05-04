@@ -479,7 +479,7 @@ public class Format implements FormatSerializer {
                     unresolved.put(replace, replacement);
                     replacement = replace;
                 }
-                matcher.appendReplacement(result, replacement);
+                matcher.appendReplacement(result, Matcher.quoteReplacement(replacement));
             }
             matcher.appendTail(result);
             text = result.toString();
