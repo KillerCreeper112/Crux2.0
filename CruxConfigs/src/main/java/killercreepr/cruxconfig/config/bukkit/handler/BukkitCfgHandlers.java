@@ -79,6 +79,7 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemRarity;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
@@ -146,6 +147,7 @@ public class BukkitCfgHandlers {
     public static final FileGameRule GAME_RULE = new FileGameRule();
     public static final FileAttribute ATTRIBUTE = new FileAttribute();
     public static final FileAttributeModifier ATTRIBUTE_MODIFIER = new FileAttributeModifier();
+    public static final FileEquipmentSlotGroup EQUIPMENT_SLOT_GROUP = new FileEquipmentSlotGroup();
     public static final FileNamedTextColor NAMED_TEXT_COLOR = new FileNamedTextColor();
     public static final FileWorldLocation WORLD_LOCATION = new FileWorldLocation();
     public static final FileMergeOption MERGE_OPTION = new FileMergeOption();
@@ -218,6 +220,7 @@ public class BukkitCfgHandlers {
         registry.registerFileHandler(GameRule.class, GAME_RULE);
         registry.registerFileHandler(Attribute.class, ATTRIBUTE);
         registry.registerFileHandler(AttributeModifier.class, ATTRIBUTE_MODIFIER);
+        registry.registerFileHandler(EquipmentSlotGroup.class, EQUIPMENT_SLOT_GROUP);
         registry.registerFileHandler(WorldPredicate.class, WORLD_PREDICATE);
         registry.registerFileHandler(NamedTextColor.class, NAMED_TEXT_COLOR);
         registry.registerFileHandler(WorldLocation.class, WORLD_LOCATION);

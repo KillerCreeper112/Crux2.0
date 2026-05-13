@@ -21,7 +21,7 @@ public class FileAttributeModifier extends SimpleFileHandler<AttributeModifier> 
     public @NotNull FileElement serializeToFile(@NotNull FileContext<?> context, @NotNull AttributeModifier object) {
         FileRegistry registry = context.getRegistry();
         return new FileObject()
-                .addProperty("name", object.getName())
+                .addProperty("key", object.getName())
                 .addProperty("amount", object.getAmount())
                 .add("operation", registry.serializeToFile(object.getOperation()))
                 .add("slot", registry.serializeToFile(object.getSlotGroup()))
@@ -44,10 +44,7 @@ public class FileAttributeModifier extends SimpleFileHandler<AttributeModifier> 
             };
         }
         if(op == null) op = AttributeModifier.Operation.ADD_NUMBER;
-        EquipmentSlotGroup slot;
-        if(o.has("slot")) slot = EquipmentSlotGroup.getByName(o.get("slot").getAsString());
-        else slot = EquipmentSlotGroup.ANY;
-        if(slot == null) slot = EquipmentSlotGroup.ANY;
+        EquipmentSlotGroup slot = r.deserializeFromFileOrDefault(EquipmentSlotGroup.class, o.get("slot"), EquipmentSlotGroup.ANY);
         return new AttributeModifier(
             CruxKey.key(r.deserializeFromFile(Key.class, o.get("key"))),
             r.deserializeFromFile(Double.class, o.get("amount")),
