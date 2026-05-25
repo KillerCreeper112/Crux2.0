@@ -117,7 +117,22 @@ public class CruxJson extends CruxFolder implements DataFile, ICruxJson {
     @Override
     public void serialize(@NotNull String path, @Nullable Object value) {
         reloadIfNeeded();
-        Pair<FileElement, String> element = buildElementPath(path, value == null ? null : jsonRegistry.serializeToFile(value));
+        var serialized = value == null ? null : jsonRegistry.serializeToFile(value);
+        if(path.isBlank()){
+          if(serialized == null){
+            json.asMap().clear();
+            return;
+          }
+          if(serialized instanceof FileObject){
+            var object = (JsonObject) serialized.toJson();
+            object.asMap().forEach((k, v) ->{
+              json.add(k, v);
+            });
+          }else throw new IllegalArgumentException("Serialized object must be a FileObject to save in the root! Value: " + value + ", Serialized: " + serialized);
+          return;
+        }
+
+        Pair<FileElement, String> element = buildElementPath(path, serialized);
         if(element.getFirst() == null){
             json.remove(element.getSecond());
             return;

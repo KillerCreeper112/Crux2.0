@@ -3,6 +3,7 @@ package killercreepr.crux.core.text.tags.standard;
 import killercreepr.crux.api.text.context.TextParserContext;
 import killercreepr.crux.api.text.resolver.StringResolver;
 import killercreepr.crux.core.text.format.FormatArgs;
+import killercreepr.crux.core.util.CruxCollection;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.crux.core.util.CruxString;
 import org.jetbrains.annotations.NotNull;
@@ -98,19 +99,19 @@ public class DurationFormatResolver implements StringResolver {
 
         if ((!hasDays(excluded) || highest.equals("d")) && (displayZero || days > 0)) {
             if(!result.isEmpty()) result.append(separator);
-            result.append(ctx.deserializeString(format.get(0).replace("%d", days + "")));
+            result.append(ctx.deserializeString(CruxCollection.getOrDefault(format, 0, "%dd").replace("%d", days + "")));
         }
         if ((!hasHours(excluded) || highest.equals("h")) && (displayZero || hours > 0)) {
             if(!result.isEmpty()) result.append(separator);
-            result.append(ctx.deserializeString(format.get(1).replace("%h", hours + "")));
+            result.append(ctx.deserializeString(CruxCollection.getOrDefault(format, 1, "%hh").replace("%h", hours + "")));
         }
         if ((!hasMinutes(excluded) || highest.equals("m")) && (displayZero || minutes > 0)) {
             if(!result.isEmpty()) result.append(separator);
-            result.append(ctx.deserializeString(format.get(2).replace("%m", minutes + "")));
+            result.append(ctx.deserializeString(CruxCollection.getOrDefault(format, 2, "%mm").replace("%m", minutes + "")));
         }
         if ((!hasSeconds(excluded) || highest.equals("s")) && (displayZero || seconds > 0)) {
             if(!result.isEmpty()) result.append(separator);
-            result.append(ctx.deserializeString(format.get(3).replace("%s", seconds + "")));
+            result.append(ctx.deserializeString(CruxCollection.getOrDefault(format, 3, "%ss").replace("%s", seconds + "")));
         }
 
         // Trim any trailing whitespace and return the result

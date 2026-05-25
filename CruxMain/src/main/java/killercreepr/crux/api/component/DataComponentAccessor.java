@@ -11,6 +11,12 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public interface DataComponentAccessor extends Iterable<TypedDataComponent<?>> {
+    DataComponentAccessor NONE = new SimpleImmutable(Map.of());
+
+    static DataComponentAccessor none(){
+        return NONE;
+    }
+
     static DataComponentAccessor simple(Collection<TypedDataComponent<?>> types){
         return new SimpleImmutable(types);
     }
