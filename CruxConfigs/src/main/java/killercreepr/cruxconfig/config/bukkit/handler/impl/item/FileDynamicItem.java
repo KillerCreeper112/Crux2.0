@@ -480,7 +480,7 @@ public class FileDynamicItem extends SimpleFileHandler<DynamicItem> {
                 switch (entry.getKey().toLowerCase()){
                     case "material", "amount" -> { continue; }
                 }
-                Crux.log(Level.WARNING, "Component " + entry.getKey() + " does not exist for DynamicItem! " + o.asMap());
+                //todo Crux.log(Level.WARNING, "Component " + entry.getKey() + " does not exist for DynamicItem! " + o.asMap());
                 continue;
             }
             DynamicItemComponent component = handler.deserializeFromFile(context, entry.getValue());

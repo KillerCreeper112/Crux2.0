@@ -41,6 +41,7 @@ public class DynamicItemAttributes extends SimpleDynamicItemComponent {
 
             modObject.forEach(mod ->{
                 AttributeModifier m = mod.buildModifier(attribute, context);
+                item.editMeta(meta -> meta.removeAttributeModifier(attribute, m));
                 item.addAttribute(attribute, m);
             });
         });

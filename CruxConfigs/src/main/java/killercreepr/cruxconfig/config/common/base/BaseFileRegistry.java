@@ -162,8 +162,9 @@ public class BaseFileRegistry implements FileRegistry {
             return deserializeObjectMap(rawType, args[0], args[1], from.getAsFileObject(), context);
         }
 
-        if(!(type instanceof Class<?> clazz)){
-            throw new UnsupportedOperationException(type + " is not a class instance!");
+        Type unwrappedType = CruxReflect.unwrapType(type);
+        if(!(unwrappedType instanceof Class<?> clazz)){
+            throw new UnsupportedOperationException(unwrappedType + " is not a class instance! Checking from: " + type);
         }
 
 

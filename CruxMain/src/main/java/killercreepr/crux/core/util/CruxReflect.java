@@ -16,6 +16,26 @@ public class CruxReflect {
         };
     }
 
+    public static Type unwrapType(Type type) {
+        while (true) {
+            if (type instanceof WildcardType wildcard) {
+                if (wildcard.getLowerBounds().length > 0) {
+                    type = wildcard.getLowerBounds()[0];
+                } else {
+                    type = wildcard.getUpperBounds()[0];
+                }
+                continue;
+            }
+
+            if (type instanceof TypeVariable<?> variable) {
+                type = variable.getBounds()[0];
+                continue;
+            }
+
+            return type;
+        }
+    }
+
     public static Type[] getTypeArguments(@NotNull Type type){
         if(type instanceof ParameterizedType t){
             return t.getActualTypeArguments();

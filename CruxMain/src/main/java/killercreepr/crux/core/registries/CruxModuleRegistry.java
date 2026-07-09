@@ -65,7 +65,7 @@ public class CruxModuleRegistry extends SimpleMappedRegistry<String, CruxModule>
 
     public CruxModuleRegistry load(@NotNull CruxPlugin plugin){
         for(CruxModule m : this){
-            Crux.log(Level.INFO, "Loading module " + m.name() + "...");
+            //Crux.log(Level.INFO, "Loading module " + m.name() + "...");
             m.onLoad(plugin);
         }
         return this;

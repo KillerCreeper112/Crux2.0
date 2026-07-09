@@ -79,6 +79,13 @@ public class CruxMainModule implements CruxModule, Listener {
         handleStopRestartLogic(cmd, event.getPlayer());
     }
 
+    /*@Override
+    public void onDisable(@NotNull CruxPlugin plugin) {
+        for(EntityMemory data : EntityMemory.REGISTRY){
+            data.forceRemoveDataHolders(data.value());
+        }
+    }*/
+
     @Override
     public void onLoad(@NotNull CruxPlugin plugin) {
         CruxComponents.register();
