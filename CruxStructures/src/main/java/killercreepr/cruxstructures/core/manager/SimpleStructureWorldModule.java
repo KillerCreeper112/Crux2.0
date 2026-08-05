@@ -518,26 +518,6 @@ public class SimpleStructureWorldModule extends SimpleWorldModule implements Str
 
     @Deprecated(forRemoval = true)
     private void webHook(String msg){
-        Crux.scheduler().runTaskAsync(() -> {
-            try {
-                URL url = new URL("https://discord.com/api/webhooks/1457084962766454915/StiAnra5rXWZn-VmIe90E9WIj86YaO31t8v05HYnNuy2smyHGGhKMElSsD_R7LNLgehi");
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-                connection.setRequestMethod("POST");
-                connection.setRequestProperty("Content-Type", "application/json");
-                connection.setDoOutput(true);
-
-                String json = "{\"content\":\"" + msg.replace("\"", "\\\"") + "\"}";
-
-                try (OutputStream os = connection.getOutputStream()) {
-                    os.write(json.getBytes(StandardCharsets.UTF_8));
-                }
-
-                connection.getInputStream().close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
     }
 
     private boolean isCheckDev(CruxWorld world){
