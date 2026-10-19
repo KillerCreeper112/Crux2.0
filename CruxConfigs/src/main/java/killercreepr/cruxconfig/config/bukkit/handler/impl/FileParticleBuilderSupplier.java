@@ -60,6 +60,8 @@ public class FileParticleBuilderSupplier extends SimpleFileHandler<ParticleBuild
             Float size = context.getRegistry().deserializeFromFile(Float.class, o.get("size"));
             if(size == null) size = 1f;
             data = Holder.directObject(new Particle.DustOptions(color, size));
+        }else if(o.has("raw_color")){
+            data = Holder.directObject(context.getRegistry().deserializeFromFile(Color.class, o.get("color")));
         }
         return ParticleBuilderSupplier.builder()
             .particle(context.getRegistry().deserializeFromFile(Particle.class, o.get("particle")))
