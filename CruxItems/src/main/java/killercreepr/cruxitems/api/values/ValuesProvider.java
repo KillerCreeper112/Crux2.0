@@ -14,6 +14,7 @@ public interface ValuesProvider extends Reloadable {
     @NotNull Holder<List<String>> generalItemLoreFormat();
     @NotNull Holder<String> generalItemNameFormat();
     @NotNull Holder<Map<Key, CfgItemType>> itemTypes();
+    @NotNull Holder<Boolean> disableItemFormatting();
     @Override
     default void reload(@NotNull CruxPlugin plugin){}
 }

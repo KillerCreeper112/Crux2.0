@@ -30,4 +30,9 @@ public class DefaultValues implements ValuesProvider {
     public @NotNull Holder<Map<Key, CfgItemType>> itemTypes() {
         return Holder.empty();
     }
+
+    @Override
+    public @NotNull Holder<Boolean> disableItemFormatting() {
+        return Holder.direct(false);
+    }
 }

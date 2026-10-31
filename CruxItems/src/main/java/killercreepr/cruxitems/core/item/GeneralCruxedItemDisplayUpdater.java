@@ -4,6 +4,8 @@ import killercreepr.crux.core.Crux;
 import killercreepr.cruxitems.api.item.CruxedItem;
 import killercreepr.cruxitems.api.item.CruxedItemUpdater;
 import killercreepr.cruxitems.api.item.ItemDisplayFormatter;
+import killercreepr.cruxitems.core.CruxItemsModule;
+import killercreepr.cruxitems.core.config.Config;
 import net.kyori.adventure.key.Key;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -13,12 +15,18 @@ import java.util.List;
 public class GeneralCruxedItemDisplayUpdater implements CruxedItemUpdater {
     public static final Key KEY = Crux.key("general_item_display");
     protected final @NotNull ItemDisplayFormatter formatter;
-    public GeneralCruxedItemDisplayUpdater(@NotNull ItemDisplayFormatter formatter) {
+    protected final CruxItemsModule module;
+    public GeneralCruxedItemDisplayUpdater(@NotNull ItemDisplayFormatter formatter, CruxItemsModule module) {
         this.formatter = formatter;
+        this.module = module;
     }
 
     @Override
     public void onUpdate(@NotNull CruxedItemUpdateContext context) {
+        if(module.values().disableItemFormatting().valueOr(false)){
+            return;
+        }
+
         CruxedItem item = context.getItem();
         ItemStack i = item.item();
         String name = formatter.getNameFormat(i);

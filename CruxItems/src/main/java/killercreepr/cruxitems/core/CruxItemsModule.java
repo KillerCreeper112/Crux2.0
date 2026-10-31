@@ -65,7 +65,7 @@ public class CruxItemsModule implements CruxModule, ItemHandler {
     }
 
     public CruxItemsModule registerGeneralDisplayFormatter(int priority){
-        CruxItemRegistries.ITEM_UPDATERS.register(priority, new GeneralCruxedItemDisplayUpdater(new ItemDisplayFormatter.General(values)));
+        CruxItemRegistries.ITEM_UPDATERS.register(priority, new GeneralCruxedItemDisplayUpdater(new ItemDisplayFormatter.General(values), this));
         return this;
     }
 
@@ -98,7 +98,7 @@ public class CruxItemsModule implements CruxModule, ItemHandler {
             new OtherInteractionListener()
         );
 
-        CruxItemsCommands.register(plugin);
+        CruxItemsCommands.register(plugin, this);
     }
 
     @Override

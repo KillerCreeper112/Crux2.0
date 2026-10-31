@@ -21,12 +21,15 @@ import killercreepr.crux.core.command.argument.CruxCmdArguments;
 import killercreepr.crux.core.item.dynamic.component.DynamicItemCruxComponents;
 import killercreepr.crux.core.plugin.CruxPlugin;
 import killercreepr.crux.core.registries.CruxRegistries;
+import killercreepr.crux.core.util.CruxLoc;
 import killercreepr.crux.core.util.CruxMath;
 import killercreepr.cruxitems.api.item.plugin.PluginItem;
+import killercreepr.cruxitems.core.CruxItemsModule;
 import killercreepr.cruxitems.core.command.argument.CruxItemsArguments;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
+import org.bukkit.block.Container;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -42,14 +45,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 public class CruxItemsCommands {
-    public static void register(@NotNull CruxPlugin plugin){
+    public static void register(@NotNull CruxPlugin plugin, CruxItemsModule module){
         plugin.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event ->{
             final Commands commands = event.registrar();
             LiteralCommandNode<CommandSourceStack> cmd = build(Commands.literal("cruxitems")
-                .requires(source -> source.getSender().hasPermission("cruxitems.cmds.cruxitems.use")), plugin.getLifecycleManager());
+                .requires(source -> source.getSender().hasPermission("cruxitems.cmds.cruxitems.use")), plugin.getLifecycleManager(),
+              module);
             commands.register(cmd, List.of("ci", "cruxitem", "citem"));
 
             commands.register(
@@ -83,7 +88,7 @@ public class CruxItemsCommands {
     }
 
     public static LiteralCommandNode<CommandSourceStack> build(LiteralArgumentBuilder<CommandSourceStack> dispatcher,
-                                                               LifecycleEventManager<?> manager){
+                                                               LifecycleEventManager<?> manager, CruxItemsModule module){
         //give <player> <id> <amount>
         dispatcher.then(
             Commands.literal("give")
@@ -337,6 +342,47 @@ public class CruxItemsCommands {
                         )
                 )
 
+        ).then(
+          Commands.literal("dev")
+            .then(
+              Commands.literal("updateNearby")
+                .then(
+                  Commands.argument("target", ArgumentTypes.entities())
+                    .then(
+                      Commands.argument("range", IntegerArgumentType.integer())
+                        .executes(ctx ->{
+                          var source = ctx.getSource();
+                          var sender = getExecutor(source);
+                          var targets = ctx.getArgument("target", EntitySelectorArgumentResolver.class).resolve(source);
+                          var range = ctx.getArgument("range", Integer.class);
+                          var disabled = module.values().disableItemFormatting().valueOr(false);
+                          targets.forEach(target ->{
+                            var center = target.getLocation().getBlock();
+                            var updatedItems = new AtomicInteger(0);
+                            CruxLoc.getNearbyBlocks(center, range).forEach(block ->{
+                              var state = block.getState(false);
+                              if(!(state instanceof Container container)) return;
+                              var inv = container.getInventory();
+                              int slot = -1;
+                              for (ItemStack item : inv) {
+                                slot++;
+                                if(CruxItem.isEmpty(item)) continue;
+                                item = Crux.handlers().item().update(item);
+                                if(disabled){
+                                  item.lore(null);
+                                }
+                                inv.setItem(slot, item);
+                                updatedItems.addAndGet(1);
+                              }
+                            });
+                            sender.sendMessage("Updated " + updatedItems.get() + " items from surrounding containers for " + target.getName());
+                          });
+                          if(disabled) sender.sendMessage("Disable Item Formatting is true, so item lore has been removed");
+                          return 1;
+                        })
+                    )
+                )
+            )
         )
         ;
         return dispatcher.build();

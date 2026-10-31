@@ -24,6 +24,7 @@ public class Config extends Cfg implements ValuesProvider {
     public final CfgValue<List<String>> GENERAL_ITEM_LORE_FORMAT = new CommonValue<>(DefaultValues.GENERAL_ITEM_LORE_FORMAT.value()){};
     public final CfgValue<String> GENERAL_ITEM_NAME_FORMAT = new CommonValue<>(DefaultValues.GENERAL_ITEM_NAME_FORMAT.value()){};
     public final CfgValue<Map<Key, CfgItemType>> ITEM_TYPES = new CommonValue<>(){};
+    public final CfgValue<Boolean> DISABLE_ITEM_FORMATTING = new CommonValue<>(false){};
     public Config(@NotNull Plugin plugin, @NotNull String path) {
         super(plugin, path);
     }
@@ -49,6 +50,11 @@ public class Config extends Cfg implements ValuesProvider {
     @Override
     public @NotNull Holder<Map<Key, CfgItemType>> itemTypes() {
         return ITEM_TYPES;
+    }
+
+    @Override
+    public @NotNull Holder<Boolean> disableItemFormatting() {
+        return DISABLE_ITEM_FORMATTING;
     }
 
     @Override
