@@ -99,7 +99,7 @@ public interface ActiveCruxBlock {
             new ParticleBuilder(Particle.BLOCK)
                 .count(10)
                 .offset(.3, .3, .3)
-                .extra(.1)
+                .speed(.1)
                 .data(data)
                 .location(block.getLocation().toCenterLocation().subtract(0, .5, 0))
                 .spawn()

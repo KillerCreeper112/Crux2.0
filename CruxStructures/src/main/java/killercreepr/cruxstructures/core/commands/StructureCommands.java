@@ -244,7 +244,7 @@ public class StructureCommands {
                                     sender.sendMessage(Component.text(
                                         "- " + stored.getStructureKey() + " -> " + pos.blockX() + ", " + pos.blockY() + ", " + pos.blockZ()
                                     ).hoverEvent(HoverEvent.showText(Component.text("Click to teleport")))
-                                        .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/teleport " + pos.blockX() + " " + pos.blockY() + " " + pos.blockZ())));
+                                        .clickEvent(ClickEvent.suggestCommand("/teleport " + pos.blockX() + " " + pos.blockY() + " " + pos.blockZ())));
                                 });
                             });
                             return 1;
@@ -311,9 +311,7 @@ public class StructureCommands {
         p.sendMessage(
             Component.text("Structure, " + nearest.getStructureKey() + " found at " + pos.x() + ", " + pos.y() + ", " + pos.z())
                 .hoverEvent(HoverEvent.showText(Component.text("Click to teleport to\n" + nearest.getStructureKey())))
-                .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND,
-                    "/teleport " + pos.x() + " " + pos.y() + " " + pos.z()
-                ))
+                .clickEvent(ClickEvent.runCommand("/teleport " + pos.x() + " " + pos.y() + " " + pos.z()))
         );
 
         return 1;

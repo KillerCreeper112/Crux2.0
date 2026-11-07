@@ -1,9 +1,10 @@
 package killercreepr.cruxadvancements.core.util;
 
-import eu.endercentral.crazy_advancements.NameKey;
 import eu.endercentral.crazy_advancements.advancement.Advancement;
 import eu.endercentral.crazy_advancements.advancement.AdvancementDisplay;
 import eu.endercentral.crazy_advancements.advancement.AdvancementVisibility;
+import killercreepr.crux.core.Crux;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -65,8 +66,9 @@ public class AdvancementMsg {
 
     private Advancement buildAdvancement(){
         return new Advancement(
-            new NameKey("message", UUID.randomUUID().toString()),
-            new AdvancementDisplay(icon , title, description, AdvancementDisplay.AdvancementFrame.valueOf(frame.toString()),
+            new NamespacedKey("message", UUID.randomUUID().toString()),
+            new AdvancementDisplay(icon , Crux.format().deserialize(title), Crux.format().deserialize(description),
+              AdvancementDisplay.AdvancementFrame.valueOf(frame.toString()),
                 AdvancementVisibility.ALWAYS)
         );
     }

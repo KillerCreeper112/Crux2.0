@@ -33,7 +33,7 @@ public class WorldBorderTags implements ObjectTag<WorldBorder> {
             .add(Tag.string("max_size", (args, ctx) -> object.getMaxSize() + ""))
             .add(Tag.string("damage_amount", (args, ctx) -> object.getDamageAmount() + ""))
             .add(Tag.string("damage_buffer", (args, ctx) -> object.getDamageBuffer() + ""))
-            .add(Tag.string("warning_time", (args, ctx) -> object.getWarningTime() + ""))
+            .add(Tag.string("warning_time", (args, ctx) -> object.getWarningTimeTicks() + ""))
             .add(Tag.string("warning_distance", (args, ctx) -> object.getWarningDistance() + ""))
             .add(Tag.string("max_center_coordinate", (args, ctx) -> object.getMaxCenterCoordinate() + ""))
             ;

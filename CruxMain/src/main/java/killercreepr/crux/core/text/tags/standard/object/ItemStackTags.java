@@ -2,7 +2,6 @@ package killercreepr.crux.core.text.tags.standard.object;
 
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.DyedItemColor;
-import io.papermc.paper.datacomponent.item.MapItemColor;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import killercreepr.crux.api.item.CruxItem;
@@ -142,8 +141,8 @@ public class ItemStackTags implements ObjectTag<ItemStack> {
                         if(color != null) return CruxColor.colorToHex(color.color());
                         DyeColor base = item.getData(DataComponentTypes.BASE_COLOR);
                         if(base != null) return CruxColor.colorToHex(base.getColor());
-                        MapItemColor map = item.getData(DataComponentTypes.MAP_COLOR);
-                        if(map != null) return CruxColor.colorToHex(map.color());
+                        /*MapItemColor map = item.getData(DataComponentTypes.MAP_COLOR);
+                        if(map != null) return CruxColor.colorToHex(map.color());*/
                         return "none";
                     }
                 }

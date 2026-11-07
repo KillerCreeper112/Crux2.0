@@ -77,7 +77,7 @@ public class SimpleParticleBuilderSupplier implements ParticleBuilderSupplier {
     public @NotNull ParticleBuilder build() {
         ParticleBuilder build = new ParticleBuilder(particle.value())
             .offset(0, 0, 0)
-            .extra(0);
+            .speed(0);
         if(count != null){
             build.count(count.value().intValue());
         }
@@ -89,7 +89,7 @@ public class SimpleParticleBuilderSupplier implements ParticleBuilderSupplier {
             );
         }
         if(extra != null){
-            build.extra(extra.value().doubleValue());
+            build.speed(extra.value().doubleValue());
         }
         if(data != null){
             build.data(data.value());

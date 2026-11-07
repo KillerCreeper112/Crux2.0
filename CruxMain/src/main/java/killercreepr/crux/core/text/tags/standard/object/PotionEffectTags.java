@@ -9,6 +9,7 @@ import killercreepr.crux.core.text.resolver.Tag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionEffectTypeCategory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -32,7 +33,7 @@ public class PotionEffectTags implements ObjectTag<PotionEffect> {
             .add(Tag.string("amplifier", (args, ctx) -> object.getAmplifier() + ""))
             .add(Tag.string("infinite", (args, ctx) -> object.isInfinite() + ""))
             .add(Tag.string("instant", (args, ctx) -> object.getType().isInstant() + ""))
-            .add(Tag.string("harmful", (args, ctx) -> (object.getType().getCategory() == PotionEffectTypeCategory.HARMFUL) + ""))
+            .add(Tag.string("harmful", (args, ctx) -> (object.getType().getEffectCategory() == PotionEffectType.Category.HARMFUL) + ""))
             .add(Tag.string("name", (args, ctx) -> PlainTextComponentSerializer.plainText().serialize(Component.translatable(object.getType()))))
             ;
     }

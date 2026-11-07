@@ -170,11 +170,11 @@ public abstract class CrazyAdvancementManager<T extends CrazyAdvancement> extend
 
     public void registerCrazyAdvancement(@NotNull Advancement crazy){
         crazyManager.addAdvancement(crazy);
-        crazyAdvancements.put(CrazyUtil.toKey(crazy.getName()), crazy);
+        crazyAdvancements.put(crazy.getName(), crazy);
     }
 
     public void unregisterCrazyAdvancement(@NotNull Advancement crazy){
         crazyManager.removeAdvancement(crazy);
-        crazyAdvancements.remove(CrazyUtil.toKey(crazy.getName()));
+        crazyAdvancements.remove(crazy.getName());
     }
 }

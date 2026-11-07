@@ -2,6 +2,7 @@ package killercreepr.crux.paper.nms.biome;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.QuartPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.chunk.LevelChunk;
@@ -59,11 +60,10 @@ public class BiomeUtils {
 
     public static void setBiome(int x, int y, int z, @NotNull ServerLevel w, @NotNull Holder<Biome> bb) {
         BlockPos pos = new BlockPos(x, 0, z);
-        if (w.isLoaded(pos)) {
+        if (w.hasChunkAt(pos)) {
             LevelChunk chunk = w.getChunkAt(pos);
-            chunk.setBiome(x >> 2, y >> 2, z >> 2, bb);
+            chunk.setNoiseBiome(QuartPos.fromBlock(x), QuartPos.fromBlock(y), QuartPos.fromBlock(z), bb);
             chunk.markUnsaved();
-            //chunk.setUnsaved(true);
         }
     }
 

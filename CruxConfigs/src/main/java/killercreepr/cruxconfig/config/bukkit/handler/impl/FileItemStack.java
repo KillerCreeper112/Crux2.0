@@ -1,5 +1,6 @@
 package killercreepr.cruxconfig.config.bukkit.handler.impl;
 
+import io.papermc.paper.registry.keys.tags.DamageTypeTagKeys;
 import killercreepr.crux.api.item.CruxItem;
 import killercreepr.cruxconfig.config.common.FileContext;
 import killercreepr.cruxconfig.config.common.FileRegistry;

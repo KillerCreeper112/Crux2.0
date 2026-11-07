@@ -5,6 +5,7 @@ import eu.endercentral.crazy_advancements.advancement.AdvancementDisplay;
 import eu.endercentral.crazy_advancements.advancement.AdvancementVisibility;
 import killercreepr.crux.api.item.dynamic.DynamicItem;
 import killercreepr.crux.api.text.context.TextParserContext;
+import killercreepr.crux.core.Crux;
 import killercreepr.cruxadvancements.api.advancement.icon.CriterionDisplay;
 import killercreepr.cruxadvancements.api.advancement.icon.CruxAdvancementIcon;
 import killercreepr.cruxadvancements.api.crazy.advancement.AdvancementFrame;
@@ -95,8 +96,8 @@ public class CrazyAdvancementDisplay implements CruxAdvancementIcon {
     public @NotNull AdvancementDisplay toCrazy(@NotNull CrazyAdvancementManager manager){
         AdvancementDisplay display = new AdvancementDisplay(
             icon.buildItem(TextParserContext.empty()),
-            title,
-            description,
+          Crux.format().deserialize(title),
+            Crux.format().deserialize(description),
             frame,
             backgroundTexture == null ? "stone" : backgroundTexture,
             visibility
